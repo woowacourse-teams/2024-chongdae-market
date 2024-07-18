@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">chongdae</string>
+    <string name="detail_product_url_title">물품 링크 : </string>
+    <string name="detail_product_url_text">바로가기</string>
+    <string name="detail_divided_money_title">엔빵 가격</string>
+    <string name="detail_report_text">신고하기</string>
 </resources>
