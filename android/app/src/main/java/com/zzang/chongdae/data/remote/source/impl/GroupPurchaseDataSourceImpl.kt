@@ -1,10 +1,10 @@
 package com.zzang.chongdae.data.remote.source.impl
 
 import com.zzang.chongdae.data.remote.api.GroupPurchaseApiService
-import com.zzang.chongdae.data.remote.dto.GroupPurchaseDetailResponse
-import com.zzang.chongdae.data.remote.dto.GroupPurchasesResponse
-import com.zzang.chongdae.data.remote.dto.ParticipationRequest
-import com.zzang.chongdae.data.remote.dto.ParticipationResponse
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchaseDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchasesResponse
+import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
+import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 import com.zzang.chongdae.data.remote.source.GroupPurchaseDataSource
 
 class GroupPurchaseDataSourceImpl(

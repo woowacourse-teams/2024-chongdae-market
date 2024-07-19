@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.remote.dto
+package com.zzang.chongdae.data.remote.dto.response
 
 import kotlinx.serialization.SerialName
 

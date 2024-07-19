@@ -1,9 +1,9 @@
 package com.zzang.chongdae.data.remote.api
 
-import com.zzang.chongdae.data.remote.dto.GroupPurchaseDetailResponse
-import com.zzang.chongdae.data.remote.dto.GroupPurchasesResponse
-import com.zzang.chongdae.data.remote.dto.ParticipationRequest
-import com.zzang.chongdae.data.remote.dto.ParticipationResponse
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchaseDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchasesResponse
+import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
+import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

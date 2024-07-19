@@ -1,9 +1,9 @@
 package com.zzang.chongdae.data.remote.source
 
-import com.zzang.chongdae.data.remote.dto.GroupPurchaseDetailResponse
-import com.zzang.chongdae.data.remote.dto.GroupPurchasesResponse
-import com.zzang.chongdae.data.remote.dto.ParticipationRequest
-import com.zzang.chongdae.data.remote.dto.ParticipationResponse
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchaseDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchasesResponse
+import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
+import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 
 interface GroupPurchaseDataSource {
     suspend fun getGroupPurchases(): Result<GroupPurchasesResponse>

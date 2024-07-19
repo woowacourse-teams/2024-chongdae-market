@@ -1,6 +1,6 @@
 package com.zzang.chongdae.data.mapper
 
-import com.zzang.chongdae.data.remote.dto.GroupPurchase
+import com.zzang.chongdae.data.remote.dto.response.GroupPurchase
 import com.zzang.chongdae.domain.model.Article
 
 

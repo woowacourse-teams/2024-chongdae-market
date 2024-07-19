@@ -1,6 +1,6 @@
 package com.zzang.chongdae.data.mapper
 
-import com.zzang.chongdae.data.remote.dto.PurchaseStatus
+import com.zzang.chongdae.data.remote.dto.response.PurchaseStatus
 import com.zzang.chongdae.domain.model.ArticleStatus
 
 fun PurchaseStatus.toDomain(): ArticleStatus {
