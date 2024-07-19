@@ -33,6 +33,5 @@ object NetworkManager {
         return instance!!
     }
 
-    fun service(): GroupPurchaseApiService =
-        getRetrofit().create(GroupPurchaseApiService::class.java)
+    fun service(): GroupPurchaseApiService = getRetrofit().create(GroupPurchaseApiService::class.java)
 }

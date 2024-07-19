@@ -7,7 +7,7 @@ data class ArticleDetail(
     val title: String,
     val nickname: String,
     val productUrl: String,
-    val thumbnailUrl:String,
+    val thumbnailUrl: String,
     val splitPrice: Int,
     val totalPrice: Int,
     val dueDateTime: LocalDateTime,
