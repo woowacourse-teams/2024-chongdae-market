@@ -23,9 +23,3 @@ fun GroupPurchaseDetailResponse.toDomain() =
         description = this.description,
         status = this.status.toDomain(),
     )
-
-fun String.toLocalDateTime(): LocalDateTime =
-    LocalDateTime.parse(this, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-
-fun Int.toCurrentCount() = CurrentCount(this)
-
