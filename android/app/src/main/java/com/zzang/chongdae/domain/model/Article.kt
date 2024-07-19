@@ -10,6 +10,6 @@ data class Article(
     val meetingAddress: String,
     val splitPrice: Int,
     val totalCount: Int,
-    var currentCount: Int,
+    val currentCount: Int,
     val isClosed: Boolean,
 )
