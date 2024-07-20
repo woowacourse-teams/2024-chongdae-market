@@ -11,8 +11,8 @@ import com.zzang.chongdae.domain.repository.GroupPurchaseRepository
 class GroupPurchaseRepositoryImpl(
     private val groupPurchaseDataSource: GroupPurchaseDataSource,
 ) : GroupPurchaseRepository {
-    override suspend fun getGroupPurchases(): Result<List<Article>> {
-        return groupPurchaseDataSource.getGroupPurchases().mapCatching {
+    override suspend fun fetchGroupPurchases(): Result<List<Article>> {
+        return groupPurchaseDataSource.fetchGroupPurchases().mapCatching {
             it.responses.map { it.toDomain() }
         }
     }

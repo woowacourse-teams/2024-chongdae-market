@@ -10,7 +10,7 @@ import com.zzang.chongdae.data.remote.source.GroupPurchaseDataSource
 class GroupPurchaseDataSourceImpl(
     private val service: GroupPurchaseApiService,
 ) : GroupPurchaseDataSource {
-    override suspend fun getGroupPurchases(): Result<GroupPurchasesResponse> =
+    override suspend fun fetchGroupPurchases(): Result<GroupPurchasesResponse> =
         runCatching {
             service.getArticles().body() ?: throw IllegalStateException()
         }
