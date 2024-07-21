@@ -17,8 +17,8 @@ class GroupPurchaseRepositoryImpl(
         }
     }
 
-    override suspend fun getGroupPurchaseDetail(id: Long): Result<ArticleDetail> {
-        return groupPurchaseDataSource.getGroupPurchaseDetail(id = id).mapCatching {
+    override suspend fun fetchGroupPurchaseDetail(id: Long): Result<ArticleDetail> {
+        return groupPurchaseDataSource.fetchGroupPurchaseDetail(id = id).mapCatching {
             it.toDomain()
         }
     }
