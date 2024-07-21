@@ -9,21 +9,22 @@ plugins {
 android {
     namespace = "com.zzang.chongdae"
     compileSdk = 34
-    
+
     defaultConfig {
         applicationId = "com.zzang.chongdae"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        testInstrumentationRunnerArguments["runnerBuilder"] =
+            "de.mannodermaus.junit5.AndroidJUnit5Builder"
         vectorDrawables {
             useSupportLibrary = true
         }
     }
-    
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -49,7 +50,7 @@ android {
     buildFeatures {
         dataBinding = true
     }
-    
+
     dataBinding {
         enable = true
     }
@@ -73,26 +74,26 @@ dependencies {
     androidTestImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.3.0")
     androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.3.0")
-    
+
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("com.google.code.gson:gson:2.8.8")
-    
+
     implementation("com.github.bumptech.glide:glide:4.12.0")
     kapt("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     implementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    
+
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    
+
     implementation("androidx.room:room-ktx:2.6.1")
-    
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    
+
     kapt("com.github.bumptech.glide:compiler:4.13.2")
-    
+
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.activity:activity-ktx:1.9.0")
