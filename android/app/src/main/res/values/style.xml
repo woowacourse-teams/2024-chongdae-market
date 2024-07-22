@@ -53,4 +53,12 @@
         <item name="android:textColor">@color/offering_full</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Bold.Black1000.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/font_size_14</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black_1000</item>
+    </style>
+
 </resources>

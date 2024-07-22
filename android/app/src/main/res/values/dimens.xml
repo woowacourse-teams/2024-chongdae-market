@@ -83,7 +83,7 @@
     <dimen name="font_size_17">17sp</dimen>
     <dimen name="font_size_16">16sp</dimen>
     <dimen name="font_size_15">15sp</dimen>
-    <dimen name="font_size_14">14dp</dimen>
+    <dimen name="font_size_14">14sp</dimen>
     <dimen name="font_size_13">13sp</dimen>
     <dimen name="font_size_12">12sp</dimen>
     <dimen name="font_size_11">11sp</dimen>
