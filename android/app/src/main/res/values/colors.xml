@@ -13,4 +13,5 @@
     <color name="gray_500">#FF7A7A7A</color>
     <color name="gray_900">#FF3F3F3F</color>
     <color name="horizon_line">#FFDDDDDD</color>
+    <color name="nav_item_inactive">#BABABA</color>
 </resources>
