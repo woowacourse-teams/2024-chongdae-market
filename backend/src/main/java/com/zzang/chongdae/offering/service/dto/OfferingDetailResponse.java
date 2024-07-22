@@ -36,7 +36,7 @@ public record OfferingDetailResponse(Long id,
                 offering.getThumbnailUrl(),
                 offeringPrice.calculateDividedPrice(),
                 offering.getTotalPrice(),
-                offeringStatus.decideOfferingStatus()
+                offeringStatus.decideOfferingCondition()
         );
     }
 }

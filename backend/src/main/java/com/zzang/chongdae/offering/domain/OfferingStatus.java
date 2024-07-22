@@ -13,32 +13,23 @@ public class OfferingStatus {
     private final boolean isManualConfirmed;
     private final int currentCount;
 
-    public OfferingCondition decideOfferingStatus() {
-        if (isCountFull()) {
-            return OfferingCondition.FULL;
-        }
-        if (isDeadlineOver()) {
-            return OfferingCondition.TIME_OUT;
-        }
-        if (isManualConfirmed() || isAutoConfirmed()) {
-            return OfferingCondition.CONFIRMED;
-        }
-        return OfferingCondition.AVAILABLE;
+    public OfferingCondition decideOfferingCondition() {
+        return OfferingCondition.decideBy(this);
     }
 
-    private boolean isCountFull() {
+    public boolean isCountFull() {
         return this.totalCount == this.currentCount;
     }
 
-    private boolean isDeadlineOver() {
+    public boolean isDeadlineOver() {
         return LocalDateTime.now().isAfter(this.deadline);
     }
 
-    private boolean isAutoConfirmed() {
+    public boolean isAutoConfirmed() {
         return isCountFull() && isDeadlineOver();
     }
 
-    private boolean isManualConfirmed() {
+    public boolean isManualConfirmed() {
         return isManualConfirmed;
     }
 }
