@@ -9,10 +9,29 @@
         android:layout_height="match_parent"
         tools:context=".presentation.view.home.MainActivity">
 
-        <TextView
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment_container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/app_name"/>
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/main_bottom_navigation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/bottom_menu_navigation" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/main_bottom_navigation"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_navigation_height"
+            app:itemIconSize="@dimen/bottom_navigation_icon_size"
+            app:labelVisibilityMode="labeled"
+            app:itemIconTint="@drawable/bottom_nav_item_color"
+            app:itemTextColor="@drawable/bottom_nav_item_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
