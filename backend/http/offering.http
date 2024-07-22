@@ -1,2 +1,2 @@
 ### 공동구매 상세 조회 API
-GET {{base-url}}/offerings
+GET {{base-url}}/offerings/1
