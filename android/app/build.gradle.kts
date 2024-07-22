@@ -18,8 +18,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["runnerBuilder"] =
-            "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -57,6 +56,7 @@ android {
 }
 
 dependencies {
+    val navigationVersion = "2.7.7"
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
@@ -74,6 +74,8 @@ dependencies {
     androidTestImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.3.0")
     androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.3.0")
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$navigationVersion")
 
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
@@ -100,4 +102,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.7.0")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation(libs.androidx.core.ktx)
+
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 }
