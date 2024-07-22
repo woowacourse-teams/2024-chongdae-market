@@ -2,7 +2,7 @@ package com.zzang.chongdae.comment.repository;
 
 import com.zzang.chongdae.common.repository.BaseTimeEntity;
 import com.zzang.chongdae.member.repository.Member;
-import com.zzang.chongdae.offering.repository.Offering;
+import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class Comment extends BaseTimeEntity {
     private Member member;
 
     @ManyToOne
-    private Offering offering;
+    private OfferingEntity offering;
 
     @Column(length = 80)
     private String content;
