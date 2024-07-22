@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_product"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_radius_10dp"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="120:110"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_main_default_image" />
+
+        <TextView
+            android:id="@+id/tv_offering_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="7dp"
+            android:textSize="@dimen/font_size_12"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/iv_product"
+            app:layout_constraintTop_toTopOf="@id/iv_product"
+            tools:text="@string/main_offering_closed" />
+
+        <TextView
+            android:id="@+id/tv_offering_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_900"
+            android:textSize="@dimen/font_size_16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_offering_status"
+            tools:text="제목" />
+
+        <TextView
+            android:id="@+id/tv_meeting_address"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
+            tools:text="내발산동" />
+
+        <TextView
+            android:id="@+id/tv_divided_price_title"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_divided_price_title"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address" />
+
+        <TextView
+            android:id="@+id/tv_divided_price"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tv_divided_price_title"
+            app:layout_constraintTop_toTopOf="@id/tv_divided_price_title"
+            tools:text="4,000원" />
+
+        <TextView
+            android:id="@+id/tv_participant_count_title"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_participant_count_title"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_divided_price_title" />
+
+        <TextView
+            android:id="@+id/tv_participant_count"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tv_participant_count_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_divided_price"
+            tools:text="5명/5명" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

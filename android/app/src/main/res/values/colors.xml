@@ -11,7 +11,11 @@
     <color name="main_color">#FFF15642</color>
     <color name="gray_300">#FFD9D9D9</color>
     <color name="gray_500">#FF7A7A7A</color>
+    <color name="gray_700">#FF697C7A</color>
     <color name="gray_900">#FF3F3F3F</color>
     <color name="horizon_line">#FFDDDDDD</color>
     <color name="nav_item_inactive">#BABABA</color>
+    <color name="offering_closed">#FF7B7B7B</color>
+    <color name="offering_continue">#FF2EBC93</color>
+    <color name="offering_full">#FFF15642</color>
 </resources>

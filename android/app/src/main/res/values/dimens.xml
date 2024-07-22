@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--    bottom_navigation-->
     <dimen name="bottom_navigation_height">54dp</dimen>
     <dimen name="bottom_navigation_icon_size">20dp</dimen>
+
+    <!--    floating_button-->
+    <dimen name="design_fab_size_normal" tools:override="true">60dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">60dp</dimen>
 
     <!-- size -->
     <dimen name="size_0">0dp</dimen>
