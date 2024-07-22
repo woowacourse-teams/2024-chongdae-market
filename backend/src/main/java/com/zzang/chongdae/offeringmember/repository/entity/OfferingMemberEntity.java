@@ -1,7 +1,7 @@
 package com.zzang.chongdae.offeringmember.repository.entity;
 
-import com.zzang.chongdae.common.repository.BaseTimeEntity;
-import com.zzang.chongdae.member.repository.Member;
+import com.zzang.chongdae.common.repository.entity.BaseTimeEntity;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    private Member member;
+    private MemberEntity member;
 
     @ManyToOne
     private OfferingEntity offering;

@@ -1,11 +1,12 @@
-package com.zzang.chongdae.member.repository;
+package com.zzang.chongdae.member.repository.entity;
 
-import com.zzang.chongdae.common.repository.BaseTimeEntity;
+import com.zzang.chongdae.common.repository.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
+@Table(name = "member")
 @Entity
-public class Member extends BaseTimeEntity {
+public class MemberEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
