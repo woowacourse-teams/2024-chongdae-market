@@ -49,5 +49,17 @@
             app:layout_constraintTop_toBottomOf="@id/et_search"
             tools:listitem="@layout/item_offering"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_create_offering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="@color/main_color"
+            app:backgroundTint="@color/main_color"
+            android:src="@drawable/ic_main_create_offering"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
