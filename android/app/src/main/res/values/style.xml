@@ -5,7 +5,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/gray_900</item>
     </style>
 
@@ -13,7 +13,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/suit_medium</item>
         <item name="android:textColor">@color/gray_500</item>
 
     </style>
@@ -22,7 +22,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/suit_medium</item>
         <item name="android:textColor">@color/gray_500</item>
     </style>
 
@@ -31,7 +31,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/font_size_12</item>
         <item name="android:text">@string/main_offering_continue</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/offering_continue</item>
     </style>
 
@@ -40,7 +40,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">@string/main_offering_closed</item>
         <item name="android:textSize">@dimen/font_size_12</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/offering_closed</item>
     </style>
 
@@ -49,7 +49,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/font_size_12</item>
         <item name="android:text">@string/main_offering_full</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/offering_full</item>
     </style>
 
@@ -57,7 +57,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/font_size_14</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/black_1000</item>
     </style>
 

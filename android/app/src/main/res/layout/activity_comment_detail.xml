@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.view.commentdetail.CommentDetailActivity">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_150"
+            android:background="@color/main_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/icon_size_24"
+            android:layout_height="@dimen/icon_size_24"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_30"
+            android:contentDescription="@string/comment_detail"
+            android:src="@drawable/btn_left_vector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_6"
+            android:ellipsize="end"
+            android:fontFamily="@font/suit_medium"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_20"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            app:layout_constraintEnd_toStartOf="@id/iv_more"
+            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintTop_toTopOf="@+id/iv_back"
+            tools:text="엄청나게 긴 제목이 들어가는 것을 표현하는 중 입니다" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/icon_size_24"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:contentDescription="@string/comment_detail"
+            android:src="@drawable/btn_more"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_text" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_offering_condition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/bg_white_radius_16dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_text">
+
+            <ImageView
+                android:id="@+id/ic_offering_status"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/margin_20"
+                android:contentDescription="@string/comment_detail"
+                android:src="@drawable/ic_recruiting"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_20"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_confirm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ic_offering_status"
+                app:layout_constraintWidth_percent="0.5"
+                tools:text="수정" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_20"
+                android:background="@color/main_color"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_edit"
+                app:layout_constraintTop_toBottomOf="@id/ic_offering_status"
+                app:layout_constraintWidth_percent="0.5"
+                tools:text="인원확정" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/foldable_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_36"
+            android:background="@color/gray_100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_offering_condition">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_15"
+                android:layout_height="@dimen/icon_size_15"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:src="@drawable/btn_under_vector"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_location"
+                android:layout_width="@dimen/icon_size_15"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:contentDescription="@string/comment_detail"
+                android:src="@drawable/ic_comment_detail_location"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/comment_detail_place_time_title"
+                android:textColor="@color/gray_font"
+                android:textSize="@dimen/size_11"
+                app:layout_constraintBottom_toBottomOf="@id/iv_location"
+                app:layout_constraintStart_toEndOf="@id/iv_location"
+                app:layout_constraintTop_toTopOf="@id/iv_location" />
+
+            <ImageView
+                android:id="@+id/iv_calendar"
+                android:layout_width="@dimen/icon_size_15"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:contentDescription="@string/comment_detail"
+                android:src="@drawable/ic_comment_detail_calendar"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_location" />
+
+            <TextView
+                android:id="@+id/tv_calendar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/comment_detail_place_time_title"
+                android:textColor="@color/gray_font"
+                android:textSize="@dimen/size_11"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_calendar"
+                app:layout_constraintStart_toEndOf="@id/iv_calendar"
+                app:layout_constraintTop_toTopOf="@id/iv_calendar" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_50"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_30"
+            android:background="@drawable/bg_gray100_radius_16dp"
+            android:drawableRight="@drawable/btn_comment_detail_send"
+            android:fontFamily="@font/suit_medium"
+            android:hint="@string/comment_detail_message_hint"
+            android:padding="@dimen/size_10"
+            android:textColorHint="@color/gray_500"
+            android:textSize="@dimen/size_15"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+
