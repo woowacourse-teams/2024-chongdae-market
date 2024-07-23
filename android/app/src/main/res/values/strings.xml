@@ -48,5 +48,6 @@
     <string name="comment_detail">comment_detail</string>
     <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
     <string name="comment_detail_message_hint">메세지를 입력하세요.</string>
+    <string name="detail_deadline_comment_text">마감 시간</string>
 
 </resources>
