@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/comment_room_fragment"
-        android:name="com.zzang.chongdae.presentation.view.CommentRoomFragment"
+        android:name="com.zzang.chongdae.presentation.view.comment.CommentRoomFragment"
         android:label="fragment_comment_room"
         tools:layout="@layout/fragment_comment_room" />
     <fragment
