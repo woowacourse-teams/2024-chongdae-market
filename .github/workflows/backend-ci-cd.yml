@@ -3,7 +3,6 @@ name: Backend CI/CD Workflow
 on:
   pull_request:
     branches: [ "develop-BE" ]
-    paths: [ "backend/**" ]
 
 jobs:
 
@@ -27,6 +26,7 @@ jobs:
 
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build
+        working-directory: ./backend
 
       - name: Docker build and push
         run: |
