@@ -19,5 +19,5 @@ data class OfferingDetailResponse(
     @SerialName("thumbnailUrl") val thumbnailUrl: String,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
-    @SerialName("condition") val status: RemoteOfferingCondition,
+    @SerialName("condition") val condition: RemoteOfferingCondition,
 )

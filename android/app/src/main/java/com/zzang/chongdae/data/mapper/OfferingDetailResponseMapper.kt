@@ -8,6 +8,7 @@ fun OfferingDetailResponse.toDomain() =
         id = this.id,
         title = this.title,
         nickname = this.nickname,
+        memberId = this.memberId.toString(),
         productUrl = this.productUrl,
         splitPrice = this.dividedPrice,
         thumbnailUrl = this.thumbnailUrl,
@@ -18,5 +19,5 @@ fun OfferingDetailResponse.toDomain() =
         meetingAddress = this.meetingAddress,
         meetingAddressDetail = this.meetingAddressDetail,
         description = this.description,
-        status = this.status.toDomain(),
+        condition = this.condition.toDomain(),
     )
