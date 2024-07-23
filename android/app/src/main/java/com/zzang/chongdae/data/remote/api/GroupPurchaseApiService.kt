@@ -14,11 +14,6 @@ interface GroupPurchaseApiService {
     @GET("/offerings")
     suspend fun getArticles(): Response<GroupPurchasesResponse>
 
-    @GET("/offerings/{id}")
-    suspend fun getArticleDetail(
-        @Path("id") id: Long,
-    ): Response<OfferingDetailResponse>
-
     @POST("/participation")
     suspend fun postParticipation(
         @Body participationRequest: ParticipationRequest,
