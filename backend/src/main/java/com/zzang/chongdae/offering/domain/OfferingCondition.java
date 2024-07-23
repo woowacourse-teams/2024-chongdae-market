@@ -9,14 +9,18 @@ public enum OfferingCondition {
 
     public static OfferingCondition decideBy(OfferingStatus offeringStatus) {
         if (offeringStatus.isCountFull()) {
-            return OfferingCondition.FULL;
+            return FULL;
         }
         if (offeringStatus.isDeadlineOver()) {
-            return OfferingCondition.TIME_OUT;
+            return TIME_OUT;
         }
         if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()) {
-            return OfferingCondition.CONFIRMED;
+            return CONFIRMED;
         }
-        return OfferingCondition.AVAILABLE;
+        return AVAILABLE;
+    }
+
+    public boolean isClosed() {
+        return this != AVAILABLE;
     }
 }
