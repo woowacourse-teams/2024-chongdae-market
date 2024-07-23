@@ -1,5 +1,7 @@
 package com.zzang.chongdae.offering.service;
 
+import com.zzang.chongdae.member.repository.MemberRepository;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
@@ -20,6 +22,7 @@ public class OfferingService {
 
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
+    private final MemberRepository memberRepository;
 
     public OfferingDetailResponse getOfferingDetail(Long id) {
         OfferingEntity offering = offeringRepository.findById(id)
@@ -29,7 +32,11 @@ public class OfferingService {
         int currentCount = offeringMemberRepository.countByOffering(offering);
         OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
 
-        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus);
+        MemberEntity member = memberRepository.findById(1L)
+                .orElseThrow(); // TODO: 로그인 추가하면 교체 필요
+        Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
+
+        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
     }
 
     public OfferingAllResponse getAllOffering(Long lastId, Integer pageSize) {
