@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view
+package com.zzang.chongdae.presentation.view.comment
 
 import android.os.Bundle
 import android.view.LayoutInflater

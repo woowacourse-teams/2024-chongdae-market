@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.adapter
+package com.zzang.chongdae.presentation.view.comment.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.zzang.chongdae.databinding.ItemCommentRoomBinding
 import com.zzang.chongdae.domain.model.CommentRoom
-import com.zzang.chongdae.presentation.view.CommentRoomViewModel
+import com.zzang.chongdae.presentation.view.comment.CommentRoomViewModel
 
 class CommentRoomAdapter(
     private val commentRoomViewModel: CommentRoomViewModel,
