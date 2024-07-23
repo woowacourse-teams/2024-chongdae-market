@@ -24,15 +24,15 @@ public class OfferingService {
     private final OfferingMemberRepository offeringMemberRepository;
     private final MemberRepository memberRepository;
 
-    public OfferingDetailResponse getOfferingDetail(Long id) {
-        OfferingEntity offering = offeringRepository.findById(id)
+    public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(); // TODO: 예외 처리하기
 
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         int currentCount = offeringMemberRepository.countByOffering(offering);
         OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
 
-        MemberEntity member = memberRepository.findById(1L)
+        MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(); // TODO: 로그인 추가하면 교체 필요
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
 
