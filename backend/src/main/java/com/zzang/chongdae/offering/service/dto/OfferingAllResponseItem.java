@@ -13,7 +13,7 @@ public record OfferingAllResponseItem(Long id,
                                       String thumbnailUrl,
                                       Integer dividedPrice,
                                       OfferingCondition condition,
-                                      Boolean isClosed) {
+                                      Boolean isOpen) {
 
     public OfferingAllResponseItem(
             OfferingEntity offering, OfferingPrice offeringPrice, OfferingStatus offeringStatus) {
@@ -25,7 +25,7 @@ public record OfferingAllResponseItem(Long id,
                 offering.getThumbnailUrl(),
                 offeringPrice.calculateDividedPrice().intValue(),
                 offeringStatus.decideOfferingCondition(),
-                offeringStatus.decideOfferingCondition().isClosed()
+                offeringStatus.decideOfferingCondition().isOpen()
         );
     }
 }

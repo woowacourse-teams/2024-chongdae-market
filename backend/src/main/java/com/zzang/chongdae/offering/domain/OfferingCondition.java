@@ -20,7 +20,7 @@ public enum OfferingCondition {
         return AVAILABLE;
     }
 
-    public boolean isClosed() {
-        return this != AVAILABLE;
+    public boolean isOpen() {
+        return this == AVAILABLE;
     }
 }
