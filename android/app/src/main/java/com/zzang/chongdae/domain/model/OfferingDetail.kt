@@ -1,8 +1,25 @@
-package com.zzang.chongdae.data.remote.dto.response
+package com.zzang.chongdae.domain.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
+data class OfferingDetail(
+    val id: Long,
+    val title: String,
+    val nickname: String,
+    val productUrl: String,
+    val thumbnailUrl: String,
+    val splitPrice: Int,
+    val totalPrice: Int,
+    val dueDateTime: LocalDateTime,
+    val currentCount: CurrentCount,
+    val totalCount: Int,
+    val meetingAddress: String,
+    val meetingAddressDetail: String,
+    val description: String,
+    val status: OfferingCondition,
+)
+
+/*
 @Serializable
 data class OfferingDetailResponse(
     @SerialName("id") val id: Long,
@@ -19,5 +36,5 @@ data class OfferingDetailResponse(
     @SerialName("thumbnailUrl") val thumbnailUrl: String,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
-    @SerialName("condition") val status: RemoteOfferingCondition,
-)
+    @SerialName("condition") val status: OfferingCondition,
+)*/

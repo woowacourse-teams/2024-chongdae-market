@@ -1,6 +1,6 @@
 package com.zzang.chongdae.domain.model
 
 data class Participation(
-    val status: ArticleStatus,
+    val status: OfferingCondition,
     val currentCount: CurrentCount,
 )
