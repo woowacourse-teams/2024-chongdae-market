@@ -32,7 +32,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_detail_default_image"/>
+                    tools:src="@drawable/img_detail_product_default"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
                         app:layout_constraintTop_toBottomOf="@id/horizon_line" />
 
                     <TextView
-                        android:id="@+id/tv_split_price"
+                        android:id="@+id/tv_divided_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -189,8 +189,8 @@
                         android:layout_marginTop="8dp"
                         android:textColor="@color/gray_500"
                         android:textSize="11sp"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_split_price"
-                        app:layout_constraintStart_toEndOf="@id/tv_split_price"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
+                        app:layout_constraintStart_toEndOf="@id/tv_divided_price"
                         app:layout_constraintTop_toBottomOf="@id/iv_money"
                         tools:text="(총 가격 40,000원)" />
 
@@ -201,7 +201,7 @@
                         android:layout_marginTop="23dp"
                         android:src="@drawable/ic_detail_clock"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
-                        app:layout_constraintTop_toBottomOf="@id/tv_split_price" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
                         android:id="@+id/tv_due_datetime_comment"
@@ -211,7 +211,7 @@
                         android:text="마감 시간"
                         app:layout_constraintBottom_toBottomOf="@id/iv_time"
                         app:layout_constraintStart_toEndOf="@id/iv_time"
-                        app:layout_constraintTop_toBottomOf="@id/tv_split_price" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
                         android:id="@+id/tv_due_datetime"
@@ -229,7 +229,7 @@
                         android:layout_marginTop="23dp"
                         android:src="@drawable/ic_detail_location"
                         app:layout_constraintStart_toEndOf="@id/tv_due_datetime_comment"
-                        app:layout_constraintTop_toBottomOf="@id/tv_split_price" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
                         android:id="@+id/tv_recruit_location_comment"
@@ -238,7 +238,7 @@
                         android:text="모집 장소"
                         app:layout_constraintBottom_toBottomOf="@id/iv_location"
                         app:layout_constraintStart_toEndOf="@id/iv_location"
-                        app:layout_constraintTop_toBottomOf="@id/tv_split_price" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
                         android:id="@+id/tv_meeting_address"

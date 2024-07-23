@@ -1,12 +1,38 @@
 <resources>
+
     <string name="app_name">chongdae</string>
+
+    <!--    all-->
+    <string name="all_money_amount_text">%,d원</string>
+
     <!--    menu-->
     <string name="bottom_home">홈</string>
     <string name="bottom_chat">채팅방</string>
     <string name="bottom_my_page">마이페이지</string>
 
-    <string name="detail_product_url_title">물품 링크 : </string>
+    <!--    main-->
+    <string name="main_search_hint_text">검색할 내용을 입력해주세요.</string>
+    <string name="main_offering_continue">모집 중</string>
+    <string name="main_offering_closed">공구 마감</string>
+    <string name="main_offering_full">인원 만석</string>
+    <string name="main_divided_price_title">엔빵 가격:&#160;</string>
+    <string name="main_participant_count_title">모집인원:&#160;</string>
+    <string name="main_participant_count">%d명/%d명</string>
+
+    <!--    my_page-->
+    <string name="my_page_welcome_text">안녕하세요</string>
+    <string name="my_page_nickname_title">&#160;님</string>
+
+    <!--    offering_detail-->
+    <string name="detail_product_url_title">물품 링크:&#160;</string>
     <string name="detail_product_url_text">바로가기</string>
     <string name="detail_divided_money_title">엔빵 가격</string>
     <string name="detail_report_text">신고하기</string>
+    <string name="my_page_title_text">마이페이지</string>
+    <string name="my_page_offerings_text">내가 올린 공구</string>
+    <string name="my_page_terms_of_use_text">이용약관</string>
+    <string name="my_page_privacy_text">개인정보처리 방침</string>
+    <string name="my_page_logout_text">로그아웃</string>
+    <string name="my_page_withdrawal_text">회원 탈퇴</string>
+
 </resources>
