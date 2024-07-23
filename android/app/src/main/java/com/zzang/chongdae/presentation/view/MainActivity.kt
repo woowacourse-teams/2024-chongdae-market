@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         initBinding()
         initNavController()
         setupBottomNavigation()
-        OfferingDetailActivity.startActivity(this, 1L)
     }
 
     private fun initBinding() {

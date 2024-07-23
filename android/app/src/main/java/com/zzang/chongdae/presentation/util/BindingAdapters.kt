@@ -11,11 +11,12 @@ import com.zzang.chongdae.domain.model.OfferingCondition
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@BindingAdapter("imageUrl")
+@BindingAdapter("detailProductImageUrl")
 fun ImageView.setImageResource(imageUrl: String?) {
     imageUrl.let {
         Glide.with(context)
             .load(it)
+            .placeholder(R.drawable.img_detail_product_default)
             .into(this)
     }
 }
