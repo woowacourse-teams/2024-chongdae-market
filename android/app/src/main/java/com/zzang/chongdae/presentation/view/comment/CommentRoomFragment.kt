@@ -16,7 +16,7 @@ class CommentRoomFragment : Fragment() {
     private lateinit var _commentRoomAdapter: CommentRoomAdapter
     val commentRoomAdapter get() = _commentRoomAdapter
 
-    private val viewModel by viewModels<CommentRoomViewModel> {
+    val viewModel by viewModels<CommentRoomViewModel> {
         CommentRoomViewModel.factory()
     }
 
@@ -29,6 +29,9 @@ class CommentRoomFragment : Fragment() {
         binding.fragmentCommentRoom = this
         _commentRoomAdapter = CommentRoomAdapter(viewModel)
         binding.rvCommentRoom.adapter = _commentRoomAdapter
+        viewModel.commentRooms.observe(viewLifecycleOwner) {
+            commentRoomAdapter.submitList(it)
+        }
         commentRoomAdapter.submitList(viewModel.commentRooms.value)
 
         return binding.root

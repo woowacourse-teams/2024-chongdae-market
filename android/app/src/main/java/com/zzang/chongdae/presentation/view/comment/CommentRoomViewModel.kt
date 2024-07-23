@@ -11,7 +11,7 @@ class CommentRoomViewModel : ViewModel() {
     private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
     val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms
 
-    init {
+    fun initCommentRooms() {
         _commentRooms.value = listOf(CommentRoom(1, "알송", "알송이에용", LocalTime.now()))
     }
 
