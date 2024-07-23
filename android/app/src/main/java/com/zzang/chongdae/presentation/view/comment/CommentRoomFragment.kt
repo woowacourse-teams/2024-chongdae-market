@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.zzang.chongdae.R
+import androidx.fragment.app.viewModels
 import com.zzang.chongdae.databinding.FragmentCommentRoomBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomAdapter
 
@@ -16,19 +16,21 @@ class CommentRoomFragment : Fragment() {
     private lateinit var _commentRoomAdapter: CommentRoomAdapter
     val commentRoomAdapter get() = _commentRoomAdapter
 
-    private val viewModel = CommentRoomViewModel()
-
+    private val viewModel by viewModels<CommentRoomViewModel> {
+        CommentRoomViewModel.factory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentCommentRoomBinding.inflate(inflater, container, false)
         binding.fragmentCommentRoom = this
         _commentRoomAdapter = CommentRoomAdapter(viewModel)
         binding.rvCommentRoom.adapter = _commentRoomAdapter
+        commentRoomAdapter.submitList(viewModel.commentRooms.value)
 
-        return inflater.inflate(R.layout.fragment_comment_room, container, false)
+        return binding.root
     }
 }
