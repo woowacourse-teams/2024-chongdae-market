@@ -1,9 +1,9 @@
 package com.zzang.chongdae.data.mapper
 
-import com.zzang.chongdae.data.remote.dto.response.GroupPurchaseDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import com.zzang.chongdae.domain.model.ArticleDetail
 
-fun GroupPurchaseDetailResponse.toDomain() =
+fun OfferingDetailResponse.toDomain() =
     ArticleDetail(
         id = this.id,
         title = this.title,

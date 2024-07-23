@@ -2,7 +2,7 @@ package com.zzang.chongdae.data.remote.source.impl
 
 import com.zzang.chongdae.data.remote.api.GroupPurchaseApiService
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
-import com.zzang.chongdae.data.remote.dto.response.GroupPurchaseDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.dto.response.GroupPurchasesResponse
 import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 import com.zzang.chongdae.data.remote.source.GroupPurchaseDataSource
@@ -15,7 +15,7 @@ class GroupPurchaseDataSourceImpl(
             service.getArticles().body() ?: throw IllegalStateException()
         }
 
-    override suspend fun fetchGroupPurchaseDetail(id: Long): Result<GroupPurchaseDetailResponse> =
+    override suspend fun fetchGroupPurchaseDetail(id: Long): Result<OfferingDetailResponse> =
         runCatching {
             service.getArticleDetail(id = id).body() ?: throw IllegalStateException()
         }
