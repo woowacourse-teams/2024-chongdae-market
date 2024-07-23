@@ -6,5 +6,5 @@ import com.zzang.chongdae.domain.model.Participation
 fun ParticipationResponse.toDomain() =
     Participation(
         status = this.status.toDomain(),
-        this.currentCount.toCurrentCount(),
+        currentCount = this.currentCount.toCurrentCount(),
     )
