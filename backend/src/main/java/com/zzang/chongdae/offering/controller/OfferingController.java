@@ -21,8 +21,9 @@ public class OfferingController {
 
     @Operation(summary = "공모 상세 조회", description = "공모 id를 통해 공모의 상세 정보를 조회합니다.")
     @GetMapping("/offerings/{offering-id}")
-    public ResponseEntity<OfferingDetailResponse> getOfferingDetail(@PathVariable(value = "offering-id") Long id) {
-        OfferingDetailResponse response = offeringService.getOfferingDetail(id);
+    public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
+            @PathVariable(value = "offering-id") Long offeringId, @RequestParam(value = "member-id") Long memberId) {
+        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, memberId);
         return ResponseEntity.ok(response);
     }
 
