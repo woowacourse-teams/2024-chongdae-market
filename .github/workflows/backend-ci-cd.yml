@@ -48,6 +48,6 @@ jobs:
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker stop ${{ secrets.DOCKERHUB_CONTAINER_NAME }} | true
           docker rm ${{ secrets.DOCKERHUB_CONTAINER_NAME }} | true
-          docker rmi -f ${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
           docker run --name ${{ secrets.DOCKERHUB_CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
