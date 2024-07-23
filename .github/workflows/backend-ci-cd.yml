@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "develop-BE" ]
     paths: [ "backend/**" ]
-  pull_request:
-     branches: [ "develop-BE" ]
+#  pull_request:
+#     branches: [ "develop-BE" ]
 
 jobs:
 
@@ -24,8 +24,18 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
+      - name: Gradle Caching
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+#      - name: Set up Gradle
+#        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build
