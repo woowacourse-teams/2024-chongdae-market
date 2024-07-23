@@ -45,4 +45,4 @@ jobs:
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
           docker stop ${{ secrets.DOCKERHUB_CONTAINER_NAME }} | true
           docker rm ${{ secrets.DOCKERHUB_CONTAINER_NAME }} | true
-          docker run --name ${{ secrets.DOCKERHUB_CONTAINER_NAME }} -p 80:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
+          docker run --name ${{ secrets.DOCKERHUB_CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
