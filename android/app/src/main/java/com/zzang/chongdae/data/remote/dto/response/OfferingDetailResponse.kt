@@ -7,8 +7,6 @@ import kotlinx.serialization.Serializable
 data class OfferingDetailResponse(
     @SerialName("id") val id: Long,
     @SerialName("title") val title: String,
-    @SerialName("nickname") val nickname: String,
-    @SerialName("memberId") val memberId: Long,
     @SerialName("productUrl") val productUrl: String,
     @SerialName("meetingAddress") val meetingAddress: String,
     @SerialName("meetingAddressDetail") val meetingAddressDetail: String,
@@ -20,4 +18,7 @@ data class OfferingDetailResponse(
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
     @SerialName("condition") val condition: RemoteOfferingCondition,
+    @SerialName("memberId") val memberId: Long,
+    @SerialName("nickname") val nickname: String,
+    @SerialName("isParticipated") val isParticipated: Boolean,
 )

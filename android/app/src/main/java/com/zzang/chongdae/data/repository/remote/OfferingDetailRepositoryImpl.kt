@@ -7,9 +7,15 @@ import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 
 class OfferingDetailRepositoryImpl(
     private val offeringDetailDataSource: OfferingDetailDataSource,
-    ) : OfferingDetailRepository {
-    override suspend fun fetchGroupPurchaseDetail(id: Long): Result<OfferingDetail> {
-        return offeringDetailDataSource.fetchOfferingDetail(id = id).mapCatching {
+) : OfferingDetailRepository {
+    override suspend fun fetchOfferingDetail(
+        offeringId: Long,
+        memberId: Long
+    ): Result<OfferingDetail> {
+        return offeringDetailDataSource.fetchOfferingDetail(
+            offeringId = offeringId,
+            memberId = memberId
+        ).mapCatching {
             it.toDomain()
         }
     }

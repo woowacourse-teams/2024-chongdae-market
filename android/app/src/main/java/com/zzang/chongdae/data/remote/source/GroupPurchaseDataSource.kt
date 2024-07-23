@@ -1,7 +1,6 @@
 package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
-import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.dto.response.GroupPurchasesResponse
 import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 
@@ -10,6 +9,3 @@ interface GroupPurchaseDataSource {
 
     suspend fun participateGroupPurchase(participationRequest: ParticipationRequest): Result<ParticipationResponse>
 }
-
-
-

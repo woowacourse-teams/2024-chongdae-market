@@ -4,10 +4,12 @@ import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OfferingDetailApiService {
-    @GET("/offerings/{id}")
+    @GET("/offerings/{offering-id}")
     suspend fun getOfferingDetail(
-        @Path("id") id: Long,
+        @Path("offering-id") offeringId: Long,
+        @Query("member-id") memberId: Long,
     ): Response<OfferingDetailResponse>
 }
