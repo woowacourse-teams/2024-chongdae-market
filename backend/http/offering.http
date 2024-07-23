@@ -1,2 +1,5 @@
-### 공동구매 상세 조회 API
+### 공모 상세 조회 API
 GET {{base-url}}/offerings/1
+
+### 공모 목록 조회 API
+GET {{base-url}}/offerings?last-id=0&page-size=10
