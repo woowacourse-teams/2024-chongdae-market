@@ -1,61 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="80dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="commentRoom"
+            type="com.zzang.chongdae.domain.model.CommentRoom" />
+    </data>
 
-    <View
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_300"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="80dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_300"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/iv_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="18dp"
-        android:src="@drawable/img_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/img_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_offering_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="14.25dp"
-        android:textColor="@color/black_900"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/iv_profile"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="공구 제목 이름이 들어가요" />
+        <TextView
+            android:id="@+id/tv_offering_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="14.25dp"
+            android:textColor="@color/black_900"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/iv_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="공구 제목 이름이 들어가요"
+            android:text="@{commentRoom.title}"/>
 
-    <TextView
-        android:id="@+id/tv_offering_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3.25dp"
-        android:textColor="@color/gray_500"
-        app:layout_constraintStart_toStartOf="@id/tv_offering_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
-        tools:text="물품에 대해 설명 드릴게요."/>
+        <TextView
+            android:id="@+id/tv_offering_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3.25dp"
+            android:textColor="@color/gray_500"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
+            tools:text="물품에 대해 설명 드릴게요."
+            android:text="@{commentRoom.description}"/>
 
-    <TextView
-        android:id="@+id/tv_last_comment_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="4dp"
-        android:layout_marginTop="14dp"
-        android:textColor="@color/gray_900"
-        tools:text="오전 10:33"/>
+        <TextView
+            android:id="@+id/tv_last_comment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/gray_900"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="오전 10:33" />
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
