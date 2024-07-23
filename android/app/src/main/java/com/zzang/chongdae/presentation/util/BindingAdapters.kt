@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
+import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.OfferingCondition
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -45,6 +46,11 @@ fun TextView.bindStatusComment(
         return
     }
     this.text = condition?.toComment(this.context, currentCount, totalCount)
+}
+
+@BindingAdapter("app:showEmptyState")
+fun showEmptyState(view: View, data: List<CommentRoom>?) {
+    view.visibility = if (data?.isEmpty() == true) View.VISIBLE else View.GONE
 }
 
 private fun OfferingCondition.toComment(
