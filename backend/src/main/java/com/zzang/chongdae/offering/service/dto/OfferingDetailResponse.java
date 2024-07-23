@@ -4,7 +4,6 @@ import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record OfferingDetailResponse(Long id,
@@ -18,8 +17,8 @@ public record OfferingDetailResponse(Long id,
                                      Integer currentCount,
                                      Integer totalCount,
                                      String thumbnailUrl,
-                                     BigDecimal dividedPrice,
-                                     BigDecimal totalPrice,
+                                     Integer dividedPrice,
+                                     Integer totalPrice,
                                      OfferingCondition status) {
 
     public OfferingDetailResponse(OfferingEntity offering, OfferingPrice offeringPrice, OfferingStatus offeringStatus) {
@@ -34,8 +33,8 @@ public record OfferingDetailResponse(Long id,
                 offeringStatus.getCurrentCount(),
                 offering.getTotalCount(),
                 offering.getThumbnailUrl(),
-                offeringPrice.calculateDividedPrice(),
-                offering.getTotalPrice(),
+                offeringPrice.calculateDividedPrice().intValue(),
+                offering.getTotalPrice().intValue(),
                 offeringStatus.decideOfferingCondition()
         );
     }
