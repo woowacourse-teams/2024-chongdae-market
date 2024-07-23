@@ -8,7 +8,8 @@ import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 interface GroupPurchaseDataSource {
     suspend fun fetchGroupPurchases(): Result<GroupPurchasesResponse>
 
-    suspend fun fetchGroupPurchaseDetail(id: Long): Result<OfferingDetailResponse>
-
     suspend fun participateGroupPurchase(participationRequest: ParticipationRequest): Result<ParticipationResponse>
 }
+
+
+

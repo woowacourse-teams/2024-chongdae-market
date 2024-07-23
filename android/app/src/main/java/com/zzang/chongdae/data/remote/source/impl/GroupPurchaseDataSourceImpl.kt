@@ -15,11 +15,6 @@ class GroupPurchaseDataSourceImpl(
             service.getArticles().body() ?: throw IllegalStateException()
         }
 
-    override suspend fun fetchGroupPurchaseDetail(id: Long): Result<OfferingDetailResponse> =
-        runCatching {
-            service.getArticleDetail(id = id).body() ?: throw IllegalStateException()
-        }
-
     override suspend fun participateGroupPurchase(participationRequest: ParticipationRequest): Result<ParticipationResponse> =
         runCatching {
             service.postParticipation(participationRequest = participationRequest)

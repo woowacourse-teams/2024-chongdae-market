@@ -4,7 +4,6 @@ import com.zzang.chongdae.data.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.source.GroupPurchaseDataSource
 import com.zzang.chongdae.domain.model.Article
-import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.model.Participation
 import com.zzang.chongdae.domain.repository.GroupPurchaseRepository
 
@@ -14,12 +13,6 @@ class GroupPurchaseRepositoryImpl(
     override suspend fun fetchGroupPurchases(): Result<List<Article>> {
         return groupPurchaseDataSource.fetchGroupPurchases().mapCatching {
             it.responses.map { it.toDomain() }
-        }
-    }
-
-    override suspend fun fetchGroupPurchaseDetail(id: Long): Result<OfferingDetail> {
-        return groupPurchaseDataSource.fetchGroupPurchaseDetail(id = id).mapCatching {
-            it.toDomain()
         }
     }
 
