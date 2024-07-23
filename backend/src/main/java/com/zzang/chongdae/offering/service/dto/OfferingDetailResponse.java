@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 
 public record OfferingDetailResponse(Long id,
                                      String title,
-                                     String nickname,
-                                     Long memberId,
                                      String productUrl,
                                      String meetingAddress,
                                      String meetingAddressDetail,
@@ -20,13 +18,17 @@ public record OfferingDetailResponse(Long id,
                                      String thumbnailUrl,
                                      Integer dividedPrice,
                                      Integer totalPrice,
-                                     OfferingCondition condition) {
+                                     OfferingCondition condition,
+                                     Long memberId,
+                                     String nickname,
+                                     Boolean isParticipated) {
 
-    public OfferingDetailResponse(OfferingEntity offering, OfferingPrice offeringPrice, OfferingStatus offeringStatus) {
+    public OfferingDetailResponse(OfferingEntity offering,
+                                  OfferingPrice offeringPrice,
+                                  OfferingStatus offeringStatus,
+                                  Boolean isParticipated) {
         this(offering.getId(),
                 offering.getTitle(),
-                offering.getMember().getNickname(),
-                offering.getMember().getId(),
                 offering.getProductUrl(),
                 offering.getMeetingAddress(),
                 offering.getMeetingAddressDetail(),
@@ -37,7 +39,10 @@ public record OfferingDetailResponse(Long id,
                 offering.getThumbnailUrl(),
                 offeringPrice.calculateDividedPrice().intValue(),
                 offering.getTotalPrice().intValue(),
-                offeringStatus.decideOfferingCondition()
+                offeringStatus.decideOfferingCondition(),
+                offering.getMember().getId(),
+                offering.getMember().getNickname(),
+                isParticipated
         );
     }
 }
