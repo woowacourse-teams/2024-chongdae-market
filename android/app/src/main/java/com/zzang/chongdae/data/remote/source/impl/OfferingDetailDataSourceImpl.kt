@@ -11,7 +11,7 @@ class OfferingDetailDataSourceImpl(
 ) : OfferingDetailDataSource {
     override suspend fun fetchOfferingDetail(
         offeringId: Long,
-        memberId: Long
+        memberId: Long,
     ): Result<OfferingDetailResponse> =
         runCatching {
             service.getOfferingDetail(offeringId = offeringId, memberId = memberId).body()

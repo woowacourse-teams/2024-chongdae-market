@@ -1,10 +1,8 @@
 package com.zzang.chongdae.data.repository.remote
 
 import com.zzang.chongdae.data.mapper.toDomain
-import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.source.GroupPurchaseDataSource
 import com.zzang.chongdae.domain.model.Article
-import com.zzang.chongdae.domain.model.Participation
 import com.zzang.chongdae.domain.repository.GroupPurchaseRepository
 
 class GroupPurchaseRepositoryImpl(

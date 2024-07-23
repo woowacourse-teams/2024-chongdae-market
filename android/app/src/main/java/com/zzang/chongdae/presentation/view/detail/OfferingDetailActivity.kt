@@ -53,10 +53,9 @@ class OfferingDetailActivity : AppCompatActivity() {
         fun startActivity(
             context: Context,
             offeringId: Long,
-        ) =
-            Intent(context, OfferingDetailActivity::class.java).run {
-                putExtra(EXTRA_OFFERING_ID_KEY, offeringId)
-                context.startActivity(this)
-            }
+        ) = Intent(context, OfferingDetailActivity::class.java).run {
+            putExtra(EXTRA_OFFERING_ID_KEY, offeringId)
+            context.startActivity(this)
+        }
     }
 }

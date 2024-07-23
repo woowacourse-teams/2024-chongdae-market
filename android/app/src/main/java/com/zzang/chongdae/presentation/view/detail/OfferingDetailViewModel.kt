@@ -37,10 +37,10 @@ class OfferingDetailViewModel(
 
     private fun loadArticle() {
         viewModelScope.launch {
-            //memberId를 가져 오는 로직 수정 예정(로그인 기능 구현 시)
+            // memberId를 가져 오는 로직 수정 예정(로그인 기능 구현 시)
             offeringDetailRepository.fetchOfferingDetail(
                 memberId = BuildConfig.TOKEN.toLong(),
-                offeringId = offeringId
+                offeringId = offeringId,
             )
                 .onSuccess {
                     _offeringDetail.value = it
@@ -58,7 +58,7 @@ class OfferingDetailViewModel(
         viewModelScope.launch {
             offeringDetailRepository.saveParticipation(
                 memberId = BuildConfig.TOKEN.toLong(),
-                offeringId = offeringId
+                offeringId = offeringId,
             ).onSuccess {
                 _isAvailable.value = false
             }.onFailure {
@@ -69,9 +69,8 @@ class OfferingDetailViewModel(
 
     private fun isParticipationEnabled(
         offeringCondition: OfferingCondition,
-        isParticipated: Boolean
-    ) =
-        offeringCondition.isAvailable() && !isParticipated
+        isParticipated: Boolean,
+    ) = offeringCondition.isAvailable() && !isParticipated
 
     // 총대여부를 확인하는 메서드(로그인 기능 구현 시 수정 예정)
     private fun isRepresentative(it: OfferingDetail) = it.memberId == BuildConfig.TOKEN

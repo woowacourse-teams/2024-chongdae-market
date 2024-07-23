@@ -22,5 +22,3 @@ interface OfferingDetailApiService {
         @Body participationRequest: ParticipationRequest,
     ): Response<ParticipationResponse>
 }
-
-

@@ -11,7 +11,7 @@ class CommentDetailActivity : AppCompatActivity() {
     private val binding get() = _binding!!
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()

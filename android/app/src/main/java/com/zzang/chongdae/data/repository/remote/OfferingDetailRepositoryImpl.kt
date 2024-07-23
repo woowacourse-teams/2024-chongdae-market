@@ -12,20 +12,21 @@ class OfferingDetailRepositoryImpl(
 ) : OfferingDetailRepository {
     override suspend fun fetchOfferingDetail(
         memberId: Long,
-        offeringId: Long
-    ): Result<OfferingDetail> = offeringDetailDataSource.fetchOfferingDetail(
-        offeringId = offeringId,
-        memberId = memberId
-    ).mapCatching {
-        it.toDomain()
-    }
+        offeringId: Long,
+    ): Result<OfferingDetail> =
+        offeringDetailDataSource.fetchOfferingDetail(
+            offeringId = offeringId,
+            memberId = memberId,
+        ).mapCatching {
+            it.toDomain()
+        }
 
     override suspend fun saveParticipation(
         memberId: Long,
-        offeringId: Long
+        offeringId: Long,
     ): Result<Participation> =
         offeringDetailDataSource.saveParticipation(
-            participationRequest = ParticipationRequest(memberId, offeringId)
+            participationRequest = ParticipationRequest(memberId, offeringId),
         ).mapCatching {
             it.toDomain()
         }

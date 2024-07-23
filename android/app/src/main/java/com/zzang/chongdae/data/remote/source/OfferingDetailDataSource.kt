@@ -7,7 +7,7 @@ import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 interface OfferingDetailDataSource {
     suspend fun fetchOfferingDetail(
         offeringId: Long,
-        memberId: Long
+        memberId: Long,
     ): Result<OfferingDetailResponse>
 
     suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<ParticipationResponse>
