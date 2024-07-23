@@ -38,4 +38,8 @@ public class OfferingMemberEntity extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private OfferingMemberRole role;
+
+    public OfferingMemberEntity(MemberEntity member, OfferingEntity offering, OfferingMemberRole role) {
+        this(null, member, offering, role);
+    }
 }

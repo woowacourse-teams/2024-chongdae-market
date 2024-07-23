@@ -25,7 +25,7 @@ public record OfferingAllResponseItem(Long id,
                 offering.getThumbnailUrl(),
                 offeringPrice.calculateDividedPrice().intValue(),
                 offeringStatus.decideOfferingCondition(),
-                offeringStatus.decideOfferingCondition().isOpen()
+                offeringStatus.isOpen()
         );
     }
 }
