@@ -23,7 +23,7 @@
             app:layout_constraintDimensionRatio="120:110"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_main_default_image" />
+            tools:src="@drawable/img_main_product_default" />
 
         <TextView
             android:id="@+id/tv_offering_status"

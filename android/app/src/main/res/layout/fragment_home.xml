@@ -57,7 +57,7 @@
             android:layout_marginBottom="30dp"
             android:backgroundTint="@color/main_color"
             app:backgroundTint="@color/main_color"
-            android:src="@drawable/ic_main_create_offering"
+            android:src="@drawable/btn_main_create_offering"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
