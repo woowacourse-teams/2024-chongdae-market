@@ -38,4 +38,8 @@
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
 
+    <!--    offering_status-->
+    <string name="comment_detail">comment_detail</string>
+    <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
+
 </resources>
