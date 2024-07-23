@@ -5,6 +5,4 @@ import com.zzang.chongdae.domain.model.Participation
 
 interface GroupPurchaseRepository {
     suspend fun fetchGroupPurchases(): Result<List<Article>>
-
-    suspend fun participateGroupPurchase(articleId: Long): Result<Participation>
 }

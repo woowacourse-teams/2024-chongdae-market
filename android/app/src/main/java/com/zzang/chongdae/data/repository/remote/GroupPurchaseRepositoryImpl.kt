@@ -15,10 +15,4 @@ class GroupPurchaseRepositoryImpl(
             it.responses.map { it.toDomain() }
         }
     }
-
-    override suspend fun participateGroupPurchase(articleId: Long): Result<Participation> {
-        return groupPurchaseDataSource.participateGroupPurchase(
-            participationRequest = ParticipationRequest(articleId),
-        ).mapCatching { it.toDomain() }
-    }
 }

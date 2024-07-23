@@ -11,8 +11,8 @@ class OfferingDetailRepositoryImpl(
     private val offeringDetailDataSource: OfferingDetailDataSource,
 ) : OfferingDetailRepository {
     override suspend fun fetchOfferingDetail(
-        offeringId: Long,
-        memberId: Long
+        memberId: Long,
+        offeringId: Long
     ): Result<OfferingDetail> = offeringDetailDataSource.fetchOfferingDetail(
         offeringId = offeringId,
         memberId = memberId
@@ -20,8 +20,13 @@ class OfferingDetailRepositoryImpl(
         it.toDomain()
     }
 
-    override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Participation> =
-        offeringDetailDataSource.saveParticipation(participationRequest).mapCatching {
+    override suspend fun saveParticipation(
+        memberId: Long,
+        offeringId: Long
+    ): Result<Participation> =
+        offeringDetailDataSource.saveParticipation(
+            participationRequest = ParticipationRequest(memberId, offeringId)
+        ).mapCatching {
             it.toDomain()
         }
 }
