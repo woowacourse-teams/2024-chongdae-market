@@ -30,10 +30,16 @@
     <string name="detail_report_text">신고하기</string>
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
+    <string name="total_price">(총 가격 %,d원)</string>
+    <string name="due_datetime">M월 dd일 HH시</string>
     <string name="my_page_terms_of_use_text">이용약관</string>
     <string name="my_page_privacy_text">개인정보처리 방침</string>
     <string name="my_page_logout_text">로그아웃</string>
     <string name="my_page_withdrawal_text">회원 탈퇴</string>
+    <string name="participant_count">참여하기(%d/%d)</string>
+    <string name="participant_full">인원이 다 찼어요!</string>
+    <string name="participant_already">이미 참여중이에요!</string>
+    <string name="participant_end">마감되었어요!</string>
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>

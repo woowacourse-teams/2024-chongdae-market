@@ -1,0 +1,57 @@
+package com.zzang.chongdae.presentation.view.detail
+
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
+import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import kotlinx.coroutines.launch
+
+class OfferingDetailViewModel(
+    private val offeringId: Long,
+    private val offeringDetailRepository: OfferingDetailRepository,
+) : ViewModel() {
+    private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
+    val offeringDetail: LiveData<OfferingDetail> = _offeringDetail
+
+    private val _currentCount: MutableLiveData<Int> = MutableLiveData()
+    val currentCount: LiveData<Int> = _currentCount
+
+    private val _offeringCondition: MutableLiveData<OfferingCondition> = MutableLiveData()
+    val offeringCondition: LiveData<OfferingCondition> = _offeringCondition
+
+    private val _isAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isAvailable: LiveData<Boolean> = _isAvailable
+
+    private val _isRepresentative: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isRepresentative: LiveData<Boolean> = _isRepresentative
+
+    init {
+        loadArticle()
+    }
+
+    private fun loadArticle() {
+        viewModelScope.launch {
+            //memberId를 가져 오는 로직 수정 예정(로그인 기능 구현 시)
+            offeringDetailRepository.fetchOfferingDetail(offeringId, memberId = BuildConfig.TOKEN.toLong())
+                .onSuccess {
+                    Log.e("seogi", "${it}")
+                    _offeringDetail.value = it
+                    _currentCount.value = it.currentCount.value
+                    _offeringCondition.value = it.condition
+                    _isAvailable.value = it.condition.isAvailable()
+                    _isRepresentative.value = isRepresentative(it)
+                }.onFailure {
+                Log.e("seogi", it.message.toString())
+            }
+        }
+    }
+
+    // 총대여부를 확인하는 메서드(로그인 기능 구현 시 수정 예정)
+    private fun isRepresentative(it: OfferingDetail) = it.memberId == BuildConfig.TOKEN
+}
