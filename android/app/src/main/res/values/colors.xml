@@ -11,6 +11,9 @@
     <color name="black_1100">#FF191919</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#FFF15642</color>
+    <color name="gray_font">#7A7A7A</color>
+    <color name="gray_100">#F8F8FA</color>
+    <color name="gray_200">#EDEDED</color>
     <color name="gray_300">#FFD9D9D9</color>
     <color name="gray_500">#FF7A7A7A</color>
     <color name="gray_700">#FF697C7A</color>
