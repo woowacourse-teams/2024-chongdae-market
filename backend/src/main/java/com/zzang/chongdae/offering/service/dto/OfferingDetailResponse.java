@@ -20,7 +20,7 @@ public record OfferingDetailResponse(Long id,
                                      String thumbnailUrl,
                                      Integer dividedPrice,
                                      Integer totalPrice,
-                                     OfferingCondition status) {
+                                     OfferingCondition condition) {
 
     public OfferingDetailResponse(OfferingEntity offering, OfferingPrice offeringPrice, OfferingStatus offeringStatus) {
         this(offering.getId(),
