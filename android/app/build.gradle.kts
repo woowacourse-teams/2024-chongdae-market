@@ -36,12 +36,9 @@ android {
         
         val baseUrl = properties.getProperty("base_url")
         val token = properties.getProperty("token")
-        if (baseUrl != null && token != null) {
-            buildConfigField("String", "BASE_URL", baseUrl)
-            buildConfigField("String", "TOKEN", token)
-        } else {
-            throw IllegalStateException("base_url or token is missing in local.properties")
-        }
+        
+        buildConfigField("String", "BASE_URL", baseUrl ?: "")
+        buildConfigField("String", "TOKEN", token ?: "")
     }
     
     buildTypes {
