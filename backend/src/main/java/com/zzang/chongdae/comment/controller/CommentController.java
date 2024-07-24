@@ -2,6 +2,7 @@ package com.zzang.chongdae.comment.controller;
 
 import com.zzang.chongdae.comment.service.CommentService;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +35,13 @@ public class CommentController {
             @PathVariable(value = "offering-id") Long offeringId,
             @RequestParam(value = "member-id") Long memberId) {
         CommentAllResponse response = commentService.getAllComment(offeringId, memberId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "댓글방 목록 조회", description = "댓글방 목록을 조회합니다.")
+    @GetMapping("/comments")
+    public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(@RequestParam(value = "member-id") Long memberId) {
+        CommentRoomAllResponse response = commentService.getAllCommentRoom(memberId);
         return ResponseEntity.ok(response);
     }
 }
