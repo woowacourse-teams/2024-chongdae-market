@@ -19,6 +19,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/suit_medium"
             android:hint="@string/main_search_hint_text"
             android:inputType="text"
             android:paddingStart="15dp"
