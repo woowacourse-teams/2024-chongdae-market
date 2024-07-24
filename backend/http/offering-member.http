@@ -4,5 +4,5 @@ Content-Type: application/json
 
 {
   "memberId": 2,
-  "offeringId": 1
+  "offeringId": 2
 }
