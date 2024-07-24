@@ -12,7 +12,7 @@ VALUES (false, 5, 10000, '2024-07-15 00:00:00', '2024-07-15 00:00:00',
         'https://file.notion.so/f/f/a98aa686-1767-4142-a9a2-f7303fcfa347/650b4cc1-0d39-4cac-9b2a-4db2782e73ec/Untitled.png?id=d002f22a-15bf-486c-b267-1ddc5f6ee3b3&table=block&spaceId=a98aa686-1767-4142-a9a2-f7303fcfa347&expirationTimestamp=1721174400000&signature=gdrQVGGE6z67DvZqeg93wnTB3_Kk3mK8ZxME5jqnWNk&downloadName=Untitled.png',
         '공동구매해요'),
        (false, 5, 50000, '2024-07-15 00:00:00', '2024-07-15 00:00:00',
-        1, '2024-07-21 00:00:00', '뉴진스 굿즈 공동구매 하실 분 참여 부탁', '서울시 영등포구 국제금융로 39', '102동 2802호', 'www.google.com',
+        1, '2024-08-02 00:00:00', '뉴진스 굿즈 공동구매 하실 분 참여 부탁', '서울시 영등포구 국제금융로 39', '102동 2802호', 'www.google.com',
         'https://file.notion.so/f/f/a98aa686-1767-4142-a9a2-f7303fcfa347/650b4cc1-0d39-4cac-9b2a-4db2782e73ec/Untitled.png?id=d002f22a-15bf-486c-b267-1ddc5f6ee3b3&table=block&spaceId=a98aa686-1767-4142-a9a2-f7303fcfa347&expirationTimestamp=1721174400000&signature=gdrQVGGE6z67DvZqeg93wnTB3_Kk3mK8ZxME5jqnWNk&downloadName=Untitled.png',
         '뉴진스 굿즈'),
        (false, 4, 1000000, '2024-07-01 00:00:00', '2024-07-01 00:00:00',
@@ -50,4 +50,5 @@ VALUES (false, 5, 10000, '2024-07-15 00:00:00', '2024-07-15 00:00:00',
 
 INSERT INTO OFFERING_MEMBER (OFFERING_ID, MEMBER_ID, ROLE, CREATED_AT, UPDATED_AT)
 VALUES (1, 1, 'PROPOSER', '2024-07-15 00:00:00', '2024-07-15 00:00:00'),
-       (1, 2, 'PARTICIPANT', '2024-07-15 00:00:00', '2024-07-15 00:00:00');
+       (1, 2, 'PARTICIPANT', '2024-07-15 00:00:00', '2024-07-15 00:00:00'),
+       (2, 1, 'PROPOSER', '2024-07-15 00:00:00', '2024-07-15 00:00:00');
