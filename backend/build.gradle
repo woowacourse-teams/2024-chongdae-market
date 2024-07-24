@@ -38,14 +38,29 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+// test -> openapi3 -> copyOasToSwagger -> bootJar
+
+test {
     useJUnitPlatform()
 }
 
 openapi3 {
-    server 'https://localhost:8080'
+    server 'http://localhost:8080'
     title '총대마켓 API 명세서'
     description '총대마켓 백엔드 API 명세서'
     version '0.1.0'
     format 'yaml'
+}
+
+tasks.register('copyOasToSwagger', Copy) {
+    dependsOn('openapi3')
+    doFirst {
+        delete file('src/main/resources/static/swagger-ui/openapi3.yaml')
+    }
+    from file("build/api-spec/openapi3.yaml")
+    into file("src/main/resources/static/swagger-ui/.")
+}
+
+bootJar {
+    dependsOn copyOasToSwagger
 }
