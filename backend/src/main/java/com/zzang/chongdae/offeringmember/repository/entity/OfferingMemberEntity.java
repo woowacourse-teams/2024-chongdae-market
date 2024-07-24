@@ -1,6 +1,6 @@
 package com.zzang.chongdae.offeringmember.repository.entity;
 
-import com.zzang.chongdae.common.repository.entity.BaseTimeEntity;
+import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;

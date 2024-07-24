@@ -1,6 +1,6 @@
 package com.zzang.chongdae.member.repository.entity;
 
-import com.zzang.chongdae.common.repository.entity.BaseTimeEntity;
+import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
