@@ -19,4 +19,4 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
-    path: swagger-ui.html
+    path: swagger-ui22.html # TODO: 지우거나 돌리기
