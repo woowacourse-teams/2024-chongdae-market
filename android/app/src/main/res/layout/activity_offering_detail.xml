@@ -3,10 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.detail.OfferingDetailViewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.view.detail.ArticleDetailActivity">
+        android:background="@color/white"
+        tools:context=".presentation.view.detail.OfferingDetailActivity">
 
         <ScrollView
             android:id="@+id/sv_layout"
@@ -28,20 +37,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
+                    app:detailProductImageUrl="@{vm.offeringDetail.thumbnailUrl}"
                     app:layout_constraintDimensionRatio="360:260"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/img_detail_product_default"/>
+                    tools:src="@drawable/img_detail_product_default" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
                     android:layout_marginEnd="25dp"
+                    android:fontFamily="@font/suit_medium"
                     android:text="@string/detail_report_text"
                     android:textColor="@color/black_900"
                     android:textSize="15sp"
+                    app:isVisible="@{!vm.isRepresentative()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,11 +75,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="23dp"
                         android:layout_marginTop="44dp"
+                        android:fontFamily="@font/suit_bold"
                         android:paddingEnd="23dp"
                         android:paddingBottom="12dp"
+                        android:text="@{vm.offeringDetail.title}"
                         android:textColor="@color/black"
                         android:textSize="24sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toTopOf="@id/iv_user_emoticon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -86,6 +99,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:fontFamily="@font/suit_medium"
+                        android:text="@{vm.offeringDetail.nickname}"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintStart_toEndOf="@id/iv_user_emoticon"
@@ -99,6 +114,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="60dp"
                         android:src="@drawable/ic_detail_modify"
+                        app:isVisible="@{vm.isRepresentative()}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,14 +124,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/ic_detail_divide_line"
+                        app:isVisible="@{vm.isRepresentative()}"
                         app:layout_constraintStart_toEndOf="@id/iv_modify"
                         app:layout_constraintTop_toTopOf="@id/iv_modify" />
 
                     <ImageView
+                        android:id="@+id/iv_remove"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/ic_detail_remove"
+                        app:isVisible="@{vm.isRepresentative()}"
                         app:layout_constraintStart_toEndOf="@id/iv_divide_line"
                         app:layout_constraintTop_toTopOf="@id/iv_divide_line" />
 
@@ -131,13 +150,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+                        android:fontFamily="@font/suit_bold"
                         android:text="@string/detail_product_url_text"
                         android:textColor="@color/main_color"
                         android:textSize="16sp"
-                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_product_link_comment"
                         app:layout_constraintStart_toEndOf="@id/tv_product_link_comment"
-                        app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+                        app:layout_constraintTop_toTopOf="@id/tv_product_link_comment" />
 
                     <View
                         android:id="@+id/horizon_line"
@@ -174,9 +193,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="@{@string/all_money_amount_text(vm.offeringDetail.dividedPrice)}"
                         android:textColor="@color/main_color"
                         android:textSize="18sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
                         app:layout_constraintTop_toBottomOf="@id/iv_money"
                         tools:text="10,000원" />
@@ -187,6 +207,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/suit_medium"
+                        android:text="@{@string/total_price(vm.offeringDetail.totalPrice)}"
                         android:textColor="@color/gray_500"
                         android:textSize="11sp"
                         app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
@@ -204,19 +226,20 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
-                        android:id="@+id/tv_due_datetime_comment"
+                        android:id="@+id/tv_deadline_comment"
                         style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="23dp"
-                        android:text="마감 시간"
+                        android:text="@string/detail_deadline_comment_text"
                         app:layout_constraintBottom_toBottomOf="@id/iv_time"
                         app:layout_constraintStart_toEndOf="@id/iv_time"
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
-                        android:id="@+id/tv_due_datetime"
+                        android:id="@+id/tv_deadline"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
                         android:layout_marginTop="8dp"
+                        app:formattedDate="@{vm.offeringDetail.deadline}"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
                         app:layout_constraintTop_toBottomOf="@id/iv_time"
                         tools:text="12월 11일 18시" />
@@ -228,7 +251,7 @@
                         android:layout_marginStart="60dp"
                         android:layout_marginTop="23dp"
                         android:src="@drawable/ic_detail_location"
-                        app:layout_constraintStart_toEndOf="@id/tv_due_datetime_comment"
+                        app:layout_constraintStart_toEndOf="@id/tv_deadline_comment"
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
@@ -244,6 +267,7 @@
                         android:id="@+id/tv_meeting_address"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
                         android:layout_marginTop="8dp"
+                        android:text="@{vm.offeringDetail.meetingAddress}"
                         app:layout_constraintStart_toStartOf="@id/iv_location"
                         app:layout_constraintTop_toBottomOf="@id/iv_location"
                         tools:text="서울시 동작구 보라매로 70" />
@@ -251,6 +275,7 @@
                     <TextView
                         android:id="@+id/tv_meeting_address_detail"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:text="@{vm.offeringDetail.meetingAddressDetail}"
                         app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
                         app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
                         tools:text="102동 106호" />
@@ -279,6 +304,7 @@
                         android:layout_width="0dp"
                         android:layout_marginTop="18dp"
                         android:layout_marginEnd="18dp"
+                        android:text="@{vm.offeringDetail.description}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_content_comment"
@@ -300,11 +326,19 @@
             android:layout_marginHorizontal="19dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/btn_participation_enabled"
+            android:enabled="@{vm.isAvailable}"
+            android:fontFamily="@font/suit_medium"
+            android:onClick="@{() -> vm.onClickParticipation()}"
             android:textColor="@color/white"
+            app:condition="@{vm.offeringCondition}"
+            app:currentCount="@{vm.currentCount}"
+            app:isParticipated="@{vm.isParticipated}"
+            app:isVisible="@{!vm.isRepresentative}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_layout"
+            app:totalCount="@{vm.offeringDetail.totalCount}"
             tools:enabled="true"
             tools:text="참여하기(1/4)" />
 
