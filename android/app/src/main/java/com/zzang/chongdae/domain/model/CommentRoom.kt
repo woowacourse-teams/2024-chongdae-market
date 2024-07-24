@@ -1,10 +1,11 @@
 package com.zzang.chongdae.domain.model
 
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 data class CommentRoom(
     val id: Long,
     val title: String,
-    val description: String,
-    val lastCommentTime: LocalTime,
+    val latestComment: String,
+    val latestCommentTime: LocalDateTime,
+    val isProposer: Boolean,
 )
