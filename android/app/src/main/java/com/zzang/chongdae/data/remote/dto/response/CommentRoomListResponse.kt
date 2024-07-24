@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CommentRoomListResponse(
-    @SerialName("offerings") val commentRoom: List<CommentRoomResponse>
+    @SerialName("offerings") val commentRoom: List<CommentRoomResponse>,
 )
