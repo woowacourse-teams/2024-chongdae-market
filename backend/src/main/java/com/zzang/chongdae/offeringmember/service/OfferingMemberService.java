@@ -10,7 +10,6 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,7 @@ public class OfferingMemberService {
     private final OfferingRepository offeringRepository;
 
     @Transactional
-    public ParticipationResponse participate(ParticipationRequest request) {
+    public Long participate(ParticipationRequest request) {
         MemberEntity member = memberRepository.findById(request.memberId())
                 .orElseThrow(); // TODO: 예외처리 하기
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
@@ -39,14 +38,13 @@ public class OfferingMemberService {
                 member, offering, OfferingMemberRole.PARTICIPANT);
         offeringMemberRepository.save(offeringMember);
 
-        OfferingStatus afterOffsetStatus = offeringStatus.addParticipantCount();
-        return new ParticipationResponse(afterOffsetStatus);
+        return offeringMember.getId();
     }
 
     private void validateParticipate(
             OfferingStatus offeringStatus, OfferingProposer offeringProposer, MemberEntity member) {
         validateClosed(offeringStatus);
-        validateProposer(offeringProposer, member);
+        validateProposer(offeringProposer, member); // TODO: 이미 참여한 공모에 참여 못하게 추가로 막아야 함
     }
 
     private void validateClosed(OfferingStatus offeringStatus) {

@@ -2,9 +2,9 @@ package com.zzang.chongdae.offeringmember.controller;
 
 import com.zzang.chongdae.offeringmember.service.OfferingMemberService;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,8 +20,8 @@ public class OfferingMemberController {
 
     @Operation(summary = "공모 참여", description = "게시된 공모에 참여합니다.")
     @PostMapping("/participations")
-    ResponseEntity<ParticipationResponse> participate(@RequestBody ParticipationRequest participationRequest) {
-        ParticipationResponse response = offeringMemberService.participate(participationRequest);
-        return ResponseEntity.ok(response);
+    ResponseEntity<Void> participate(@RequestBody ParticipationRequest participationRequest) {
+        Long id = offeringMemberService.participate(participationRequest);
+        return ResponseEntity.created(URI.create("participations/" + id)).build();
     }
 }
