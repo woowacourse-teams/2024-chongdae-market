@@ -97,7 +97,10 @@ private fun Int.toPx(context: Context): Int {
 }
 
 @BindingAdapter("formattedDeadline")
-fun setFormattedDeadline(textView: TextView, deadline: LocalDateTime?) {
+fun setFormattedDeadline(
+    textView: TextView,
+    deadline: LocalDateTime?,
+) {
     deadline?.let {
         val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 EEEE a h시 m분", Locale.KOREAN)
         textView.text = it.format(formatter)

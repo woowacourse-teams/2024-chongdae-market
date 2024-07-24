@@ -18,23 +18,23 @@ class CommentDetailViewModel(
 ) : ViewModel() {
     private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
-    
+
     private val _deadlineText = MutableLiveData<LocalDateTime>()
     val deadlineText: LiveData<LocalDateTime> get() = _deadlineText
-    
+
     private val _locationText = MutableLiveData<String>()
     val locationText: LiveData<String> get() = _locationText
-    
+
     private val _locationDetailText = MutableLiveData<String>()
     val locationDetailText: LiveData<String> get() = _locationDetailText
-    
+
     fun toggleCollapsibleView() {
         _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
-        if(_isCollapsibleViewVisible.value == true) {
+        if (_isCollapsibleViewVisible.value == true) {
             loadMeetings()
         }
     }
-    
+
     private fun loadMeetings() {
         viewModelScope.launch {
             commentDetailRepository.getMeetings(
@@ -48,7 +48,7 @@ class CommentDetailViewModel(
             }
         }
     }
-    
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
