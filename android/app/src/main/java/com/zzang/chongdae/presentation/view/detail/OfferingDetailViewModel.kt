@@ -25,6 +25,9 @@ class OfferingDetailViewModel(
     private val _offeringCondition: MutableLiveData<OfferingCondition> = MutableLiveData()
     val offeringCondition: LiveData<OfferingCondition> get() = _offeringCondition
 
+    private val _isParticipated: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isParticipated: LiveData<Boolean> get() = _isParticipated
+
     private val _isAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
     val isAvailable: LiveData<Boolean> get() = _isAvailable
 
@@ -46,6 +49,7 @@ class OfferingDetailViewModel(
                     _offeringDetail.value = it
                     _currentCount.value = it.currentCount.value
                     _offeringCondition.value = it.condition
+                    _isParticipated.value = it.isParticipated
                     _isAvailable.value = isParticipationEnabled(it.condition, it.isParticipated)
                     _isRepresentative.value = isRepresentative(it)
                 }.onFailure {
@@ -60,6 +64,7 @@ class OfferingDetailViewModel(
                 memberId = BuildConfig.TOKEN.toLong(),
                 offeringId = offeringId,
             ).onSuccess {
+                _isParticipated.value = true
                 _isAvailable.value = false
             }.onFailure {
                 Log.e("Error", it.message.toString())

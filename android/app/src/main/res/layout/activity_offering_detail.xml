@@ -332,7 +332,7 @@
             android:textColor="@color/white"
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"
-            app:isParticipated="@{vm.offeringDetail.isParticipated}"
+            app:isParticipated="@{vm.isParticipated}"
             app:isVisible="@{!vm.isRepresentative}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
