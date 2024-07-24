@@ -16,7 +16,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class CommentRoomFragmentTest {
     private lateinit var scenario: FragmentScenario<CommentRoomFragment>
 
     @Before
