@@ -35,8 +35,20 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+
+        initBinding(inflater, container)
+        initAdapter()
+        setUpOfferingsObserve()
+
+        return binding.root
+    }
+
+    private fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
         binding.rvOfferings.adapter = offeringAdapter
         binding.rvOfferings.addItemDecoration(
@@ -45,10 +57,12 @@ class HomeFragment : Fragment(), OnArticleClickListener {
                 LinearLayoutManager.VERTICAL,
             ),
         )
+    }
+
+    private fun setUpOfferingsObserve() {
         viewModel.offerings.observe(viewLifecycleOwner) {
             offeringAdapter.submitList(it)
         }
-        return binding.root
     }
 
     override fun onStart() {

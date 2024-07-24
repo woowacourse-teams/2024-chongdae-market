@@ -14,6 +14,7 @@ class OfferingViewModel(
     private val _offerings: MutableLiveData<List<Offering>> = MutableLiveData()
     val offerings: LiveData<List<Offering>> get() = _offerings
 
+    // 무한 스크롤 적용 시 수정 예정
     fun updateArticles() {
         viewModelScope.launch {
             offeringsRepository.fetchOfferings(0L, 10).onSuccess {
