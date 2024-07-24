@@ -1,4 +1,4 @@
-package com.zzang.chongdae.common.config;
+package com.zzang.chongdae.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
