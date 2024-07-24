@@ -24,10 +24,8 @@ class OfferingDetailRepositoryImpl(
     override suspend fun saveParticipation(
         memberId: Long,
         offeringId: Long,
-    ): Result<Participation> =
+    ): Result<Unit> =
         offeringDetailDataSource.saveParticipation(
             participationRequest = ParticipationRequest(memberId, offeringId),
-        ).mapCatching {
-            it.toDomain()
-        }
+        )
 }

@@ -10,5 +10,5 @@ interface OfferingDetailDataSource {
         memberId: Long,
     ): Result<OfferingDetailResponse>
 
-    suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<ParticipationResponse>
+    suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Unit>
 }

@@ -18,7 +18,7 @@ class OfferingDetailDataSourceImpl(
                 ?: throw IllegalStateException()
         }
 
-    override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<ParticipationResponse> =
+    override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Unit> =
         runCatching {
             service.postParticipations(participationRequest = participationRequest)
                 .body() ?: throw IllegalStateException()

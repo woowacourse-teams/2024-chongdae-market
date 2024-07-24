@@ -12,5 +12,5 @@ interface OfferingDetailRepository {
     suspend fun saveParticipation(
         memberId: Long,
         offeringId: Long,
-    ): Result<Participation>
+    ): Result<Unit>
 }

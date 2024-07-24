@@ -20,5 +20,5 @@ interface OfferingDetailApiService {
     @POST("/participations")
     suspend fun postParticipations(
         @Body participationRequest: ParticipationRequest,
-    ): Response<ParticipationResponse>
+    ): Response<Unit>
 }
