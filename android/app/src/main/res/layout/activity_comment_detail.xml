@@ -8,8 +8,6 @@
         <variable
             name="vm"
             type="com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel" />
-
-        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -141,7 +139,7 @@
                 android:layout_marginTop="@dimen/size_10"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/btn_under_vector"
-                android:visibility="@{vm.isCollapsibleViewVisible ? View.GONE : View.VISIBLE}"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -152,7 +150,7 @@
                 android:layout_marginTop="@dimen/size_10"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/btn_up_vector"
-                android:visibility="@{vm.isCollapsibleViewVisible ? View.VISIBLE : View.GONE}"
+                app:isVisible="@{!vm.isCollapsibleViewVisible}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -189,7 +187,7 @@
                 android:layout_marginTop="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
                 android:src="@drawable/ic_comment_detail_calendar"
-                android:visibility="@{vm.isCollapsibleViewVisible ? View.VISIBLE : View.GONE}"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_location" />
 
@@ -202,7 +200,7 @@
                 android:maxLines="1"
                 android:textColor="@color/gray_font"
                 android:textSize="@dimen/size_11"
-                android:visibility="@{vm.isCollapsibleViewVisible ? View.VISIBLE : View.GONE}"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintBottom_toBottomOf="@id/iv_calendar"
                 app:layout_constraintStart_toEndOf="@id/iv_calendar"
                 app:layout_constraintTop_toTopOf="@id/iv_calendar"
