@@ -6,13 +6,19 @@ import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentCreatedAtResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
+import com.zzang.chongdae.comment.service.dto.LatestCommentResponse;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,5 +59,26 @@ public class CommentService {
                 .toList();
 
         return new CommentAllResponse(responseItems);
+    }
+
+    public CommentRoomAllResponse getAllCommentRoom(Long memberId) {
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(); // TODO: 예외처리 하기
+
+        List<OfferingWithRole> offerings = offeringRepository.findAllByMember(member);
+        List<CommentRoomAllResponseItem> responseItems = offerings.stream()
+                .map(offering -> commentRepository.findTopByOffering(offering.getOffering())
+                        .map(comment -> new CommentRoomAllResponseItem(
+                                offering.getOffering().getId(),
+                                offering.getOffering().getTitle(),
+                                new LatestCommentResponse(comment),
+                                offering.getRole().isProposer()
+                        ))
+                        .orElse(null)
+                )
+                .filter(Objects::nonNull)
+                .toList();
+
+        return new CommentRoomAllResponse(responseItems);
     }
 }
