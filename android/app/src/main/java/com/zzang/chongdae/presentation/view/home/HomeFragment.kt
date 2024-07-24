@@ -2,7 +2,6 @@ package com.zzang.chongdae.presentation.view.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.zzang.chongdae.R
 import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.OfferingsDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
@@ -26,7 +24,7 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         OfferingViewModeFactory(
             OfferingsRepositoryImpl(
                 OfferingsDataSourceImpl(NetworkManager.offeringsService()),
-            )
+            ),
         )
     }
 
@@ -35,7 +33,6 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         initBinding(inflater, container)
         initAdapter()
         setUpOfferingsObserve()
@@ -43,7 +40,10 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         return binding.root
     }
 
-    private fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
+    private fun initBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
     }

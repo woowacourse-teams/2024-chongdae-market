@@ -37,9 +37,7 @@ fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
 }
 
 @BindingAdapter("offeringCondition")
-fun TextView.bindConditionText(
-    offeringCondition: OfferingCondition?,
-) {
+fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
     offeringCondition?.toStyle()?.let {
         this.setTextAppearance(it)
     }
@@ -50,19 +48,21 @@ fun TextView.bindConditionText(
     }
 }
 
-private fun OfferingCondition.toComment(context: Context) = when (this) {
-    OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
-    OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_closed) // 공구마감
-    OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_closed) // 공구마감
-    OfferingCondition.AVAILABLE -> context.getString(R.string.main_offering_continue) //모집중
-}
+private fun OfferingCondition.toComment(context: Context) =
+    when (this) {
+        OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
+        OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_closed) // 공구마감
+        OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_closed) // 공구마감
+        OfferingCondition.AVAILABLE -> context.getString(R.string.main_offering_continue) // 모집중
+    }
 
-private fun OfferingCondition.toStyle() = when (this) {
-    OfferingCondition.FULL -> R.style.Theme_AppCompat_TextView_Offering_Full // 인원 만석
-    OfferingCondition.TIME_OUT -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
-    OfferingCondition.CONFIRMED -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
-    OfferingCondition.AVAILABLE -> R.style.Theme_AppCompat_TextView_Offering_Continue //모집중
-}
+private fun OfferingCondition.toStyle() =
+    when (this) {
+        OfferingCondition.FULL -> R.style.Theme_AppCompat_TextView_Offering_Full // 인원 만석
+        OfferingCondition.TIME_OUT -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
+        OfferingCondition.CONFIRMED -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
+        OfferingCondition.AVAILABLE -> R.style.Theme_AppCompat_TextView_Offering_Continue // 모집중
+    }
 
 @BindingAdapter("isVisible")
 fun View.setIsVisible(isVisible: Boolean) {

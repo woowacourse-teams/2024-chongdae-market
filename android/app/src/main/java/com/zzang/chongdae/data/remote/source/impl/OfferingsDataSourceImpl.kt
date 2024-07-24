@@ -9,7 +9,7 @@ class OfferingsDataSourceImpl(
 ) : OfferingsDataSource {
     override suspend fun fetchOfferings(
         lastOfferingId: Long,
-        pageSize: Int
+        pageSize: Int,
     ): Result<OfferingsResponse> =
         runCatching {
             service.getArticles(lastOfferingId, pageSize).body() ?: throw IllegalStateException()

@@ -11,7 +11,6 @@ import com.zzang.chongdae.presentation.view.home.OnArticleClickListener
 class OfferingAdapter(
     private val onArticleClickListener: OnArticleClickListener,
 ) : ListAdapter<Offering, OfferingViewHolder>(productComparator) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,

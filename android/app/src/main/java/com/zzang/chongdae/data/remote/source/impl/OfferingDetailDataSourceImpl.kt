@@ -3,7 +3,6 @@ package com.zzang.chongdae.data.remote.source.impl
 import com.zzang.chongdae.data.remote.api.OfferingDetailApiService
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
-import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSource
 
 class OfferingDetailDataSourceImpl(

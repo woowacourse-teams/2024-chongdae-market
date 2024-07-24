@@ -10,7 +10,7 @@ class OfferingsRepositoryImpl(
 ) : OfferingsRepository {
     override suspend fun fetchOfferings(
         lastOfferingId: Long,
-        pageSize: Int
+        pageSize: Int,
     ): Result<List<Offering>> {
         return offeringsDataSource.fetchOfferings(lastOfferingId, pageSize).mapCatching {
             it.offerings.map { it.toDomain() }

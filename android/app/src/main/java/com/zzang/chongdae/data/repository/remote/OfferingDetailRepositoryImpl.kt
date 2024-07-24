@@ -4,7 +4,6 @@ import com.zzang.chongdae.data.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSource
 import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.model.Participation
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 
 class OfferingDetailRepositoryImpl(
