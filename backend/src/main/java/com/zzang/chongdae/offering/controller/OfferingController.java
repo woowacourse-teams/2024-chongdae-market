@@ -1,9 +1,9 @@
 package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.offering.service.OfferingService;
-import com.zzang.chongdae.offering.service.dto.MeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +38,10 @@ public class OfferingController {
     }
 
     @Operation(summary = "공모 일정 조회", description = "공모 id를 통해 공모의 일정 정보를 조회합니다.")
-    @GetMapping("/meetings")
-    public ResponseEntity<MeetingResponse> getMeeting(@RequestParam(value = "offering-id") Long offeringId) {
-        MeetingResponse response = offeringService.getMeeting(offeringId);
+    @GetMapping("/offerings/{offering-id}/meetings")
+    public ResponseEntity<OfferingMeetingResponse> getOfferingMeeting(
+            @PathVariable(value = "offering-id") Long offeringId) {
+        OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId);
         return ResponseEntity.ok(response);
     }
 }
