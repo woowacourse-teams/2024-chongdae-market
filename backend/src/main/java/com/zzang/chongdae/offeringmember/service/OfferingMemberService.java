@@ -32,6 +32,7 @@ public class OfferingMemberService {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
         offeringMemberRepository.save(offeringMember);
+        offering.updateCurrentCount();
         return offeringMember.getId();
     }
 
@@ -41,8 +42,7 @@ public class OfferingMemberService {
     }
 
     private void validateClosed(OfferingEntity offering) {
-        int currentCount = offeringMemberRepository.countByOffering(offering);
-        OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
+        OfferingStatus offeringStatus = offering.toOfferingStatus();
         if (offeringStatus.isClosed()) {
             throw new IllegalArgumentException("아이고 못들어가요 ㅜㅜ"); // TODO: 예외처리 하기
         }
