@@ -33,10 +33,6 @@ public class OfferingStatus {
         return isManualConfirmed;
     }
 
-    public OfferingStatus addParticipantCount() {
-        return new OfferingStatus(deadline, totalCount, isManualConfirmed, currentCount + 1);
-    }
-
     public boolean isOpen() {
         OfferingCondition offeringCondition = decideOfferingCondition();
         return offeringCondition.isOpen();
