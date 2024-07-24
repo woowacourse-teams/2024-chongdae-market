@@ -52,7 +52,10 @@ fun TextView.bindStatusComment(
 }
 
 @BindingAdapter("app:showEmptyState")
-fun showEmptyState(view: View, data: List<CommentRoom>?) {
+fun showEmptyState(
+    view: View,
+    data: List<CommentRoom>?,
+) {
     view.visibility = if (data?.isEmpty() == true) View.VISIBLE else View.GONE
 }
 
