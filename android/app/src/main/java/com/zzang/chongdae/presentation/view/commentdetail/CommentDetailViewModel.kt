@@ -13,21 +13,22 @@ class CommentDetailViewModel(
 ) : ViewModel() {
     private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
-    
+
     fun toggleCollapsibleView() {
         _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
         Log.d("CommentDetailViewModel", "toggleCollapsibleView: ${_isCollapsibleViewVisible.value}")
     }
-    
+
     companion object {
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringId: Long, offeringTitle: String) =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T =
-                    CommentDetailViewModel(offeringId, offeringTitle) as T
-            }
+        fun getFactory(
+            offeringId: Long,
+            offeringTitle: String,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T = CommentDetailViewModel(offeringId, offeringTitle) as T
+        }
     }
 }

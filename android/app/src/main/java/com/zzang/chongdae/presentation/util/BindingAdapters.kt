@@ -67,24 +67,30 @@ private fun OfferingCondition.toComment(
 }
 
 @BindingAdapter("layout_heightWithAnimation")
-fun setLayoutHeightWithAnimation(view: View, heightDp: Int) {
+fun setLayoutHeightWithAnimation(
+    view: View,
+    heightDp: Int,
+) {
     val params: ViewGroup.LayoutParams = view.layoutParams
     val startHeight = params.height
-    
+
     val heightPx = heightDp.toPx(view.context)
-    
-    val animator = ValueAnimator.ofInt(startHeight, heightPx).apply {
-        duration = 300
-        addUpdateListener { animation ->
-            params.height = animation.animatedValue as Int
-            view.layoutParams = params
+
+    val animator =
+        ValueAnimator.ofInt(startHeight, heightPx).apply {
+            duration = 300
+            addUpdateListener { animation ->
+                params.height = animation.animatedValue as Int
+                view.layoutParams = params
+            }
         }
-    }
     animator.start()
 }
 
 private fun Int.toPx(context: Context): Int {
     return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), context.resources.displayMetrics
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        context.resources.displayMetrics,
     ).toInt()
 }
