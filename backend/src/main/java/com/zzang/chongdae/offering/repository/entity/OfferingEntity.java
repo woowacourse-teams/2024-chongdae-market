@@ -60,16 +60,23 @@ public class OfferingEntity extends BaseTimeEntity {
     private Integer totalCount;
 
     @NotNull
+    private Integer currentCount = 1;
+
+    @NotNull
     private Boolean isManualConfirmed;
 
     @NotNull
     private BigDecimal totalPrice;
 
+    public void updateCurrentCount() {
+        currentCount++;
+    }
+
     public OfferingPrice toOfferingPrice() {
         return new OfferingPrice(totalCount, totalPrice);
     }
 
-    public OfferingStatus toOfferingStatus(int currentCount) {
+    public OfferingStatus toOfferingStatus() {
         return new OfferingStatus(deadline, totalCount, isManualConfirmed, currentCount);
     }
 }
