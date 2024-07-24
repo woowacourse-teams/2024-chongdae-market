@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,15 +18,16 @@
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_150"
+            android:layout_height="@dimen/size_120"
             android:background="@color/main_color"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="@dimen/icon_size_24"
-            android:layout_height="@dimen/icon_size_24"
+            android:layout_width="@dimen/icon_size_20"
+            android:layout_height="@dimen/icon_size_20"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginTop="@dimen/margin_30"
             android:contentDescription="@string/comment_detail"
@@ -41,10 +45,10 @@
             android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="@dimen/size_20"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            app:layout_constraintBottom_toBottomOf="@id/iv_back"
             app:layout_constraintEnd_toStartOf="@id/iv_more"
-            app:layout_constraintStart_toEndOf="@+id/iv_back"
-            app:layout_constraintTop_toTopOf="@+id/iv_back"
+            app:layout_constraintStart_toEndOf="@id/iv_back"
+            app:layout_constraintTop_toTopOf="@id/iv_back"
             tools:text="엄청나게 긴 제목이 들어가는 것을 표현하는 중 입니다" />
 
         <ImageView
@@ -54,39 +58,51 @@
             android:layout_marginEnd="@dimen/margin_20"
             android:contentDescription="@string/comment_detail"
             android:src="@drawable/btn_more"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_title_text"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_title_text" />
+            app:layout_constraintTop_toTopOf="@id/tv_title_text" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_offering_condition"
+        <View
+            android:id="@+id/white_round_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/size_120"
+            android:layout_marginTop="@dimen/margin_30"
+            android:background="@drawable/bg_white_radius_16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_text" />
+
+        <ImageView
+            android:id="@+id/iv_offering_status"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
             android:layout_marginTop="@dimen/margin_20"
             android:background="@drawable/bg_white_radius_16dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title_text">
+            android:contentDescription="@string/comment_detail"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_recruiting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/white_round_view" />
 
-            <ImageView
-                android:id="@+id/ic_offering_status"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/margin_20"
-                android:contentDescription="@string/comment_detail"
-                android:src="@drawable/ic_recruiting"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_offering_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_radius_16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/white_round_view">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_20"
                 android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_confirm"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ic_offering_status"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.5"
                 tools:text="수정" />
 
@@ -94,33 +110,47 @@
                 android:id="@+id/btn_confirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_20"
                 android:background="@color/main_color"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_edit"
-                app:layout_constraintTop_toBottomOf="@id/ic_offering_status"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.5"
                 tools:text="인원확정" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/foldable_view"
+            android:id="@+id/cl_foldable_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_36"
             android:background="@color/gray_100"
+            android:onClick="@{() -> vm.toggleCollapsibleView()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_offering_condition">
+            app:layout_constraintTop_toBottomOf="@id/cl_offering_button"
+            app:layout_heightWithAnimation="@{vm.isCollapsibleViewVisible ? 80 : 36}">
 
             <ImageView
+                android:id="@+id/iv_foldable_open"
                 android:layout_width="@dimen/icon_size_15"
                 android:layout_height="@dimen/icon_size_15"
+                android:layout_marginTop="@dimen/size_10"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/btn_under_vector"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_foldable_close"
+                android:layout_width="@dimen/icon_size_15"
+                android:layout_height="@dimen/icon_size_15"
+                android:layout_marginTop="@dimen/size_10"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:src="@drawable/btn_up_vector"
+                app:isVisible="@{!vm.isCollapsibleViewVisible}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -154,10 +184,10 @@
                 android:layout_width="@dimen/icon_size_15"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
                 android:src="@drawable/ic_comment_detail_calendar"
-                android:visibility="gone"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_location" />
 
@@ -168,13 +198,13 @@
                 android:layout_marginStart="@dimen/margin_10"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@string/comment_detail_place_time_title"
                 android:textColor="@color/gray_font"
                 android:textSize="@dimen/size_11"
-                android:visibility="gone"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintBottom_toBottomOf="@id/iv_calendar"
                 app:layout_constraintStart_toEndOf="@id/iv_calendar"
-                app:layout_constraintTop_toTopOf="@id/iv_calendar" />
+                app:layout_constraintTop_toTopOf="@id/iv_calendar"
+                tools:text="@string/comment_detail_place_time_title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

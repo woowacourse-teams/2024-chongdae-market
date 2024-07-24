@@ -1,7 +1,10 @@
 package com.zzang.chongdae.presentation.util
 
+import android.animation.ValueAnimator
 import android.content.Context
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -100,4 +103,33 @@ private fun OfferingCondition.toComment(
             currentCount,
             totalCount,
         )
+}
+
+@BindingAdapter("layout_heightWithAnimation")
+fun setLayoutHeightWithAnimation(
+    view: View,
+    heightDp: Int,
+) {
+    val params: ViewGroup.LayoutParams = view.layoutParams
+    val startHeight = params.height
+
+    val heightPx = heightDp.toPx(view.context)
+
+    val animator =
+        ValueAnimator.ofInt(startHeight, heightPx).apply {
+            duration = 300
+            addUpdateListener { animation ->
+                params.height = animation.animatedValue as Int
+                view.layoutParams = params
+            }
+        }
+    animator.start()
+}
+
+private fun Int.toPx(context: Context): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        context.resources.displayMetrics,
+    ).toInt()
 }

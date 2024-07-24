@@ -18,18 +18,27 @@
         android:theme="@style/Theme.Chongdae"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".presentation.view.detail.OfferingDetailActivity"
-            android:exported="false" />
+
         <activity
             android:name=".presentation.view.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name=".presentation.view.detail.OfferingDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.view.commentdetail.CommentDetailActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
