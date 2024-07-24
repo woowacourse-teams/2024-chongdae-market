@@ -4,6 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GroupPurchasesResponse(
-    @SerialName("responses") val responses: List<GroupPurchase>,
+data class OfferingsResponse(
+    @SerialName("offerings") val offerings: List<RemoteOffering>,
 )
