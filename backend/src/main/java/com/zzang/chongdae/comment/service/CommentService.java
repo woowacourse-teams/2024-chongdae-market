@@ -16,9 +16,7 @@ import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,19 +44,21 @@ public class CommentService {
 
         List<CommentWithRole> comments = commentRepository.findAllWithRoleByOffering(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
-                .map(commentWithRole -> {
-                    CommentEntity comment = commentWithRole.getComment();
-                    OfferingMemberRole role = commentWithRole.getRole();
-                    return new CommentAllResponseItem(
-                            new CommentCreatedAtResponse(comment.getCreatedAt()),
-                            comment.getContent(),
-                            comment.getMember().getNickname(),
-                            role.isProposer(),
-                            comment.getMember().isSameMember(memberId));
-                })
+                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, memberId))
                 .toList();
-
         return new CommentAllResponse(responseItems);
+    }
+
+    private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long memberId) {
+        CommentEntity comment = commentWithRole.getComment();
+        OfferingMemberRole role = commentWithRole.getRole();
+        MemberEntity member = comment.getMember();
+        return new CommentAllResponseItem(
+                new CommentCreatedAtResponse(comment.getCreatedAt()),
+                comment.getContent(),
+                member.getNickname(),
+                role.isProposer(),
+                member.isSameMember(memberId));
     }
 
     public CommentRoomAllResponse getAllCommentRoom(Long memberId) {
@@ -67,18 +67,26 @@ public class CommentService {
 
         List<OfferingWithRole> offerings = offeringRepository.findAllByMember(member);
         List<CommentRoomAllResponseItem> responseItems = offerings.stream()
-                .map(offering -> commentRepository.findTopByOffering(offering.getOffering())
-                        .map(comment -> new CommentRoomAllResponseItem(
-                                offering.getOffering().getId(),
-                                offering.getOffering().getTitle(),
-                                new LatestCommentResponse(comment),
-                                offering.getRole().isProposer()
-                        ))
-                        .orElse(null)
-                )
-                .filter(Objects::nonNull)
+                .filter(this::hasComments)
+                .map(this::toCommentRoomAllResponseItem)
                 .toList();
-
         return new CommentRoomAllResponse(responseItems);
+    }
+
+    private boolean hasComments(OfferingWithRole offeringWithRole) {
+        OfferingEntity offering = offeringWithRole.getOffering();
+        return commentRepository.existsByOffering(offering);
+    }
+
+    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingWithRole offeringWithRole) {
+        OfferingEntity offering = offeringWithRole.getOffering();
+        OfferingMemberRole role = offeringWithRole.getRole();
+        CommentEntity comment = commentRepository.findTopByOffering(offering)
+                .orElseThrow(); // TODO: 예외처리 하기
+        return new CommentRoomAllResponseItem(
+                offering.getId(),
+                offering.getTitle(),
+                new LatestCommentResponse(comment),
+                role.isProposer());
     }
 }
