@@ -8,12 +8,14 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.presentation.view.comment.CommentRoomFragment
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomViewHolder
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
+import java.time.LocalDateTime
 
 @RunWith(AndroidJUnit4::class)
 class CommentRoomFragmentTest {
@@ -36,7 +38,9 @@ class CommentRoomFragmentTest {
     fun `댓글방이_있으면_댓글방의_뷰가_보여야_한다`() {
         // given
         scenario.onFragment {
-            it.viewModel.initCommentRooms()
+            it.viewModel.putCommentRooms(
+                listOf(CommentRoom(1, "알송", "알송이에용", LocalDateTime.now(), true)),
+            )
         }
         // when
         onView(withId(R.id.rv_comment_room)).perform(

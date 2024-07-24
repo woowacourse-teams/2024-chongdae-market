@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.zzang.chongdae.data.remote.api.NetworkManager
+import com.zzang.chongdae.data.remote.source.impl.CommentRoomDataSourceImpl
+import com.zzang.chongdae.data.repository.remote.CommentRoomRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentCommentRoomBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomAdapter
 
@@ -17,7 +20,11 @@ class CommentRoomFragment : Fragment() {
     val commentRoomAdapter get() = _commentRoomAdapter
 
     val viewModel by viewModels<CommentRoomViewModel> {
-        CommentRoomViewModel.factory()
+        CommentRoomViewModel.factory(
+            CommentRoomRepositoryImpl(
+                CommentRoomDataSourceImpl(NetworkManager.commentRoomService()),
+            ),
+        )
     }
 
     override fun onCreateView(
@@ -33,6 +40,8 @@ class CommentRoomFragment : Fragment() {
             commentRoomAdapter.submitList(it)
         }
         commentRoomAdapter.submitList(viewModel.commentRooms.value)
+        // 테스트를 위해 주석처리함!
+//        viewModel.updateCommentRooms()
 
         return binding.root
     }
