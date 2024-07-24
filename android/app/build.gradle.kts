@@ -37,9 +37,9 @@ android {
 
         val baseUrl = properties.getProperty("base_url")
         val token = properties.getProperty("token")
-
-        buildConfigField("String", "BASE_URL", baseUrl ?: "")
-        buildConfigField("String", "TOKEN", token ?: "")
+        
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+        buildConfigField("String", "TOKEN", "\"$token\"")
     }
 
     buildTypes {
