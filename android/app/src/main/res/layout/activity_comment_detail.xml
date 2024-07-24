@@ -166,30 +166,59 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tv_default_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/comment_detail_place_time_title"
+                android:textColor="@color/gray_font"
+                android:textSize="@dimen/size_11"
+                app:isVisible="@{!vm.isCollapsibleViewVisible}"
+                app:layout_constraintTop_toTopOf="@id/iv_location"
+                app:layout_constraintStart_toEndOf="@id/iv_location"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_10"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@string/comment_detail_place_time_title"
+                android:text="@{vm.locationText}"
                 android:textColor="@color/gray_font"
                 android:textSize="@dimen/size_11"
-                app:layout_constraintBottom_toBottomOf="@id/iv_location"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintStart_toEndOf="@id/iv_location"
-                app:layout_constraintTop_toTopOf="@id/iv_location" />
+                app:layout_constraintTop_toTopOf="@id/iv_location"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/tv_location_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{vm.locationDetailText}"
+                android:textColor="@color/gray_font"
+                android:textSize="@dimen/size_11"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
+                app:layout_constraintStart_toStartOf="@+id/tv_location"
+                app:layout_constraintTop_toBottomOf="@id/tv_location" />
 
             <ImageView
                 android:id="@+id/iv_calendar"
                 android:layout_width="@dimen/icon_size_15"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
                 android:contentDescription="@string/comment_detail"
                 android:src="@drawable/ic_comment_detail_calendar"
                 app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_location" />
+                app:layout_constraintTop_toBottomOf="@id/tv_location_detail" />
 
             <TextView
                 android:id="@+id/tv_calendar"
@@ -200,6 +229,7 @@
                 android:maxLines="1"
                 android:textColor="@color/gray_font"
                 android:textSize="@dimen/size_11"
+                app:formattedDeadline="@{vm.deadlineText}"
                 app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintBottom_toBottomOf="@id/iv_calendar"
                 app:layout_constraintStart_toEndOf="@id/iv_calendar"

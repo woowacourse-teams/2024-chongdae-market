@@ -13,6 +13,7 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @BindingAdapter("detailProductImageUrl")
 fun ImageView.setImageResource(imageUrl: String?) {
@@ -93,4 +94,12 @@ private fun Int.toPx(context: Context): Int {
         this.toFloat(),
         context.resources.displayMetrics,
     ).toInt()
+}
+
+@BindingAdapter("formattedDeadline")
+fun setFormattedDeadline(textView: TextView, deadline: LocalDateTime?) {
+    deadline?.let {
+        val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 EEEE a h시 m분", Locale.KOREAN)
+        textView.text = it.format(formatter)
+    }
 }

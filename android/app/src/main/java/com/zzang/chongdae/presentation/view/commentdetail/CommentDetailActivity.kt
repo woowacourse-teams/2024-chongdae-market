@@ -7,6 +7,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.zzang.chongdae.R
+import com.zzang.chongdae.data.remote.api.NetworkManager
+import com.zzang.chongdae.data.remote.source.impl.CommentDetailDataSourceImpl
+import com.zzang.chongdae.data.repository.remote.CommentDetailRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 
 class CommentDetailActivity : AppCompatActivity() {
@@ -24,7 +27,15 @@ class CommentDetailActivity : AppCompatActivity() {
         intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: ""
     }
 
-    private val viewModel: CommentDetailViewModel by viewModels { CommentDetailViewModel.getFactory(offeringId, offeringTitle) }
+    private val viewModel: CommentDetailViewModel by viewModels {
+        CommentDetailViewModel.getFactory(
+            offeringId,
+            offeringTitle,
+            CommentDetailRepositoryImpl(
+                CommentDetailDataSourceImpl(NetworkManager.commentDetailService()),
+            ),
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +55,7 @@ class CommentDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_DEFAULT_VALUE = -1L
+        private const val EXTRA_DEFAULT_VALUE = 1L
         private const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
         private const val EXTRA_OFFERING_TITLE_KEY = "offering_title_key"
 
