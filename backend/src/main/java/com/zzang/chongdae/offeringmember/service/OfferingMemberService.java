@@ -2,7 +2,6 @@ package com.zzang.chongdae.offeringmember.service;
 
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingProposer;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -28,34 +27,30 @@ public class OfferingMemberService {
                 .orElseThrow(); // TODO: 예외처리 하기
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow();// TODO: 예외처리 하기
-
-        int currentCount = offeringMemberRepository.countByOffering(offering);
-        OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
-        OfferingProposer offeringProposer = offering.toOfferingProposer();
-        validateParticipate(offeringStatus, offeringProposer, member);
+        validateParticipate(offering, member);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
         offeringMemberRepository.save(offeringMember);
-
         return offeringMember.getId();
     }
 
-    private void validateParticipate(
-            OfferingStatus offeringStatus, OfferingProposer offeringProposer, MemberEntity member) {
-        validateClosed(offeringStatus);
-        validateProposer(offeringProposer, member); // TODO: 이미 참여한 공모에 참여 못하게 추가로 막아야 함
+    private void validateParticipate(OfferingEntity offering, MemberEntity member) {
+        validateClosed(offering);
+        validateDuplicate(offering, member);
     }
 
-    private void validateClosed(OfferingStatus offeringStatus) {
+    private void validateClosed(OfferingEntity offering) {
+        int currentCount = offeringMemberRepository.countByOffering(offering);
+        OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
         if (offeringStatus.isClosed()) {
             throw new IllegalArgumentException("아이고 못들어가요 ㅜㅜ"); // TODO: 예외처리 하기
         }
     }
 
-    private void validateProposer(OfferingProposer offeringProposer, MemberEntity member) {
-        if (offeringProposer.isProposer(member)) {
-            throw new IllegalArgumentException("공모자는 참여할 수 없어요 ㅜㅜ"); // TODO: 예외처리 하기
+    private void validateDuplicate(OfferingEntity offering, MemberEntity member) {
+        if (offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
+            throw new IllegalArgumentException("이미 참여한 공모엔 참여할 수 없습니다."); // TODO: 예외처리 하기
         }
     }
 }
