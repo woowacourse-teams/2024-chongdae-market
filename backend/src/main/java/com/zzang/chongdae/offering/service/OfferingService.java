@@ -29,8 +29,7 @@ public class OfferingService {
                 .orElseThrow(); // TODO: 예외 처리하기
 
         OfferingPrice offeringPrice = offering.toOfferingPrice();
-        int currentCount = offeringMemberRepository.countByOffering(offering);
-        OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
+        OfferingStatus offeringStatus = offering.toOfferingStatus();
 
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(); // TODO: 로그인 추가하면 교체 필요
@@ -45,8 +44,7 @@ public class OfferingService {
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
-                    int currentCount = offeringMemberRepository.countByOffering(offering);
-                    OfferingStatus offeringStatus = offering.toOfferingStatus(currentCount);
+                    OfferingStatus offeringStatus = offering.toOfferingStatus();
                     return new OfferingAllResponseItem(offering, offeringPrice, offeringStatus);
                 })
                 .toList()
