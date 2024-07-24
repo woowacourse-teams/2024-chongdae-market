@@ -36,4 +36,8 @@ public class CommentEntity extends BaseTimeEntity {
 
     @Column(length = 80)
     private String content;
+
+    public CommentEntity(MemberEntity member, OfferingEntity offering, String content) {
+        this(null, member, offering, content);
+    }
 }
