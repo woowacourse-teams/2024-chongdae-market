@@ -6,6 +6,7 @@ import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offering.service.dto.MeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -49,5 +50,11 @@ public class OfferingService {
                 })
                 .toList()
         );
+    }
+
+    public MeetingResponse getMeeting(Long offeringId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(); // TODO: 예외 처리하기
+        return new MeetingResponse(offering);
     }
 }

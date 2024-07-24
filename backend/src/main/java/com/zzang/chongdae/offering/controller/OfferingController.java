@@ -1,6 +1,7 @@
 package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.offering.service.OfferingService;
+import com.zzang.chongdae.offering.service.dto.MeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,13 @@ public class OfferingController {
             @RequestParam(value = "last-id", defaultValue = "0") Long lastId,
             @RequestParam(value = "page-size", defaultValue = "10") Integer pageSize) {
         OfferingAllResponse response = offeringService.getAllOffering(lastId, pageSize);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "공모 일정 조회", description = "공모 id를 통해 공모의 일정 정보를 조회합니다.")
+    @GetMapping("/meetings")
+    public ResponseEntity<MeetingResponse> getMeeting(@RequestParam(value = "offering-id") Long offeringId) {
+        MeetingResponse response = offeringService.getMeeting(offeringId);
         return ResponseEntity.ok(response);
     }
 }
