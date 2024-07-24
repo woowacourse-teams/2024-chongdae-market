@@ -35,4 +35,6 @@ object NetworkManager {
     fun service(): GroupPurchaseApiService = getRetrofit().create(GroupPurchaseApiService::class.java)
 
     fun offeringDetailService(): OfferingDetailApiService = getRetrofit().create(OfferingDetailApiService::class.java)
+
+    fun commentDetailService(): CommentDetailApiService = getRetrofit().create(CommentDetailApiService::class.java)
 }
