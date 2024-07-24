@@ -17,19 +17,19 @@ class OfferingDetailViewModel(
     private val offeringDetailRepository: OfferingDetailRepository,
 ) : ViewModel(), ParticipationClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
-    val offeringDetail: LiveData<OfferingDetail> = _offeringDetail
+    val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
     private val _currentCount: MutableLiveData<Int> = MutableLiveData()
-    val currentCount: LiveData<Int> = _currentCount
+    val currentCount: LiveData<Int> get() = _currentCount
 
     private val _offeringCondition: MutableLiveData<OfferingCondition> = MutableLiveData()
-    val offeringCondition: LiveData<OfferingCondition> = _offeringCondition
+    val offeringCondition: LiveData<OfferingCondition> get() = _offeringCondition
 
     private val _isAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isAvailable: LiveData<Boolean> = _isAvailable
+    val isAvailable: LiveData<Boolean> get() = _isAvailable
 
     private val _isRepresentative: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isRepresentative: LiveData<Boolean> = _isRepresentative
+    val isRepresentative: LiveData<Boolean> get() = _isRepresentative
 
     init {
         loadArticle()
