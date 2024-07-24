@@ -81,7 +81,7 @@ public class CommentService {
     private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingWithRole offeringWithRole) {
         OfferingEntity offering = offeringWithRole.getOffering();
         OfferingMemberRole role = offeringWithRole.getRole();
-        CommentEntity comment = commentRepository.findTopByOffering(offering)
+        CommentEntity comment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering)
                 .orElseThrow(); // TODO: 예외처리 하기
         return new CommentRoomAllResponseItem(
                 offering.getId(),

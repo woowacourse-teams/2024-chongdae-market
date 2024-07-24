@@ -20,7 +20,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
         """)
     List<CommentWithRole> findAllWithRoleByOffering(OfferingEntity offering);
 
-    Optional<CommentEntity> findTopByOffering(OfferingEntity offering);
+    Optional<CommentEntity> findTopByOfferingOrderByCreatedAtDesc(OfferingEntity offering);
 
     Boolean existsByOffering(OfferingEntity offering);
 }
