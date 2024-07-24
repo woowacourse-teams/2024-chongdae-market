@@ -16,7 +16,8 @@ fun ImageView.setImageResource(imageUrl: String?) {
     imageUrl.let {
         Glide.with(context)
             .load(it)
-            .placeholder(R.drawable.img_detail_product_default)
+            .error(R.drawable.img_detail_product_default)
+            .fallback(R.drawable.img_detail_product_default)
             .into(this)
     }
 }
