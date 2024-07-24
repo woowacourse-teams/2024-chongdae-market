@@ -14,7 +14,7 @@ data class OfferingDetailResponse(
     @SerialName("deadline") val deadline: String,
     @SerialName("currentCount") val currentCount: Int,
     @SerialName("totalCount") val totalCount: Int,
-    @SerialName("thumbnailUrl") val thumbnailUrl: String,
+    @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
     @SerialName("condition") val condition: RemoteOfferingCondition,

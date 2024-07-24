@@ -1,15 +1,13 @@
 package com.zzang.chongdae.domain.model
 
-import java.time.LocalDateTime
-
-data class Article(
+data class Offering(
     val id: Long,
-    val thumbnailUrl: String,
-    val deadline: LocalDateTime,
     val title: String,
     val meetingAddress: String,
-    val splitPrice: Int,
+    val thumbnailUrl: String?,
     val totalCount: Int,
     val currentCount: Int,
-    val isClosed: Boolean,
+    val dividedPrice: Int,
+    val condition: OfferingCondition,
+    val isOpen: Boolean,
 )
