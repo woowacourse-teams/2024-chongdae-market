@@ -17,6 +17,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
             FROM CommentEntity as c JOIN OfferingMemberEntity as om
                 ON c.offering = om.offering AND c.member = om.member
             WHERE om.offering = :offering
+            ORDER BY c.createdAt
         """)
     List<CommentWithRole> findAllWithRoleByOffering(OfferingEntity offering);
 
