@@ -17,4 +17,4 @@ spring:
 springdoc:
   swagger-ui:
     path: swagger-ui.html
-    url: /static/openapi3.yaml
+    url: /static/swagger-ui/openapi3.yaml
