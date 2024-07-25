@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.repository.CommentRoomRepository
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class CommentRoomViewModel(
 
     fun updateCommentRooms() {
         viewModelScope.launch {
-            commentRoomRepository.fetchCommentRoom(1).onSuccess {
+            commentRoomRepository.fetchCommentRoom(BuildConfig.TOKEN.toLong()).onSuccess {
                 _commentRooms.value = it
             }.onFailure {
                 Log.e("error", it.message.toString())
