@@ -6,5 +6,5 @@ interface OfferingsRepository {
     suspend fun fetchOfferings(
         lastOfferingId: Long,
         pageSize: Int,
-    ): Result<List<Offering>>
+    ): List<Offering>
 }
