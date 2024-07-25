@@ -10,6 +10,8 @@ import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import com.zzang.chongdae.presentation.util.MutableSingleLiveData
+import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
 class OfferingDetailViewModel(
@@ -33,6 +35,9 @@ class OfferingDetailViewModel(
 
     private val _isRepresentative: MutableLiveData<Boolean> = MutableLiveData(true)
     val isRepresentative: LiveData<Boolean> get() = _isRepresentative
+
+    private val _commentDetailEvent: MutableSingleLiveData<String> = MutableSingleLiveData()
+    val commentDetailEvent: SingleLiveData<String> get() = _commentDetailEvent
 
     init {
         loadArticle()
@@ -66,6 +71,7 @@ class OfferingDetailViewModel(
             ).onSuccess {
                 _isParticipated.value = true
                 _isAvailable.value = false
+                _commentDetailEvent.setValue(offeringDetail.value?.title ?: "")
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }
@@ -79,4 +85,8 @@ class OfferingDetailViewModel(
 
     // 총대여부를 확인하는 메서드(로그인 기능 구현 시 수정 예정)
     private fun isRepresentative(it: OfferingDetail) = it.memberId == BuildConfig.TOKEN
+
+    companion object {
+        private const val DEFAULT_TITLE = ""
+    }
 }
