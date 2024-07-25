@@ -8,10 +8,8 @@ import com.zzang.chongdae.databinding.ItemCommentRoomBinding
 import com.zzang.chongdae.databinding.ItemCommentRoomProposerBinding
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.CommentRoomType
-import com.zzang.chongdae.presentation.view.comment.CommentRoomViewModel
 
 class CommentRoomAdapter(
-    private val commentRoomViewModel: CommentRoomViewModel,
     private val onClickListener: OnCommentRoomClickListener,
 ) : ListAdapter<CommentRoom, CommentRoomViewHolder>(productComparator) {
     override fun getItemViewType(position: Int): Int {
