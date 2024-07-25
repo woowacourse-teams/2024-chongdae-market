@@ -9,7 +9,7 @@ import com.zzang.chongdae.comment.service.dto.CommentCreatedAtResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
-import com.zzang.chongdae.comment.service.dto.LatestCommentResponse;
+import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
@@ -81,12 +81,12 @@ public class CommentService {
     private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingWithRole offeringWithRole) {
         OfferingEntity offering = offeringWithRole.getOffering();
         OfferingMemberRole role = offeringWithRole.getRole();
-        CommentEntity comment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering)
+        CommentEntity latestComment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering)
                 .orElseThrow(); // TODO: 예외처리 하기
         return new CommentRoomAllResponseItem(
                 offering.getId(),
                 offering.getTitle(),
-                new LatestCommentResponse(comment),
+                new CommentLatestResponse(latestComment),
                 role.isProposer());
     }
 }
