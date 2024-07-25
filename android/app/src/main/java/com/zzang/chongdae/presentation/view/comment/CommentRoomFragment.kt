@@ -16,7 +16,7 @@ class CommentRoomFragment : Fragment() {
     private var _binding: FragmentCommentRoomBinding? = null
     private val binding get() = _binding!!
 
-    private val commentRoomAdapter: CommentRoomAdapter by lazy{
+    private val commentRoomAdapter: CommentRoomAdapter by lazy {
         CommentRoomAdapter(viewModel)
     }
 
@@ -40,7 +40,10 @@ class CommentRoomFragment : Fragment() {
         return binding.root
     }
 
-    private fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
+    private fun initBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ) {
         _binding = FragmentCommentRoomBinding.inflate(inflater, container, false)
         binding.fragmentCommentRoom = this
         binding.vm = viewModel

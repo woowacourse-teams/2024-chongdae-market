@@ -17,9 +17,10 @@ class CommentRoomViewModel(
     private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
     val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms
 
-    val isCommentRoomsEmpty: LiveData<Boolean> get() = commentRooms.map {
-        it.isEmpty()
-    }
+    val isCommentRoomsEmpty: LiveData<Boolean> get() =
+        commentRooms.map {
+            it.isEmpty()
+        }
 
     fun updateCommentRooms() {
         viewModelScope.launch {

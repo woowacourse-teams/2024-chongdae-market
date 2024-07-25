@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
-import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.OfferingCondition
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
