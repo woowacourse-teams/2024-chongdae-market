@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:showEmptyState="@{vm.commentRooms}" />
+            app:isVisible="@{vm.isCommentRoomsEmpty}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comment_room"

@@ -90,14 +90,6 @@ fun TextView.bindStatusComment(
     this.text = condition?.toComment(this.context, currentCount, totalCount)
 }
 
-@BindingAdapter("app:showEmptyState")
-fun showEmptyState(
-    view: View,
-    data: List<CommentRoom>?,
-) {
-    view.visibility = if (data?.isEmpty() == true) View.VISIBLE else View.GONE
-}
-
 private fun OfferingCondition.toComment(
     context: Context,
     currentCount: Int,
