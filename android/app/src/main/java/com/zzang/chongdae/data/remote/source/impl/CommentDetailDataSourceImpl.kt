@@ -1,6 +1,7 @@
 package com.zzang.chongdae.data.remote.source.impl
 
 import com.zzang.chongdae.data.remote.api.CommentDetailApiService
+import com.zzang.chongdae.data.remote.dto.request.CommentRequest
 import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
 import com.zzang.chongdae.data.remote.source.CommentDetailDataSource
 import retrofit2.Response
@@ -18,4 +19,10 @@ class CommentDetailDataSourceImpl(
             }
         }
     }
+
+    override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit> =
+        runCatching {
+            service.postComment(commentRequest = commentRequest)
+                .body() ?: throw IllegalStateException()
+        }
 }
