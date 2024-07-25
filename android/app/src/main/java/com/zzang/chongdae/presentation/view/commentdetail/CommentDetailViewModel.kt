@@ -40,14 +40,14 @@ class CommentDetailViewModel(
 
     private var cachedComments: List<Comment> = emptyList()
     private var pollJob: Job? = null
-    
+
     private val _offeringStatus = MutableLiveData(OfferingStatus.Recruiting)
     val offeringStatus: LiveData<OfferingStatus> get() = _offeringStatus
 
     init {
         startPolling()
     }
-    
+
     fun updateStatus() {
         _offeringStatus.value = _offeringStatus.value?.let { OfferingStatus.nextStatus(it) }
     }

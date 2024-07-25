@@ -51,7 +51,10 @@ fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
 }
 
 @BindingAdapter("imageResource")
-fun setImageResource(imageView: ImageView, @DrawableRes resource: Int) {
+fun setImageResource(
+    imageView: ImageView,
+    @DrawableRes resource: Int,
+) {
     imageView.setImageResource(resource)
 }
 
