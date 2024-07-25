@@ -20,10 +20,10 @@ class CommentRoomFragment : Fragment(), OnCommentRoomClickListener {
     private val binding get() = _binding!!
 
     private val commentRoomAdapter: CommentRoomAdapter by lazy {
-        CommentRoomAdapter(viewModel, this)
+        CommentRoomAdapter(this)
     }
 
-    val viewModel by viewModels<CommentRoomViewModel> {
+    private val viewModel by viewModels<CommentRoomViewModel> {
         CommentRoomViewModel.factory(
             CommentRoomRepositoryImpl(
                 CommentRoomDataSourceImpl(NetworkManager.commentRoomService()),
