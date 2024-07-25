@@ -6,6 +6,6 @@ data class CommentRoom(
     val id: Long,
     val title: String,
     val latestComment: String,
-    val latestCommentTime: LocalDateTime,
+    val latestCommentTime: LocalDateTime?,
     val isProposer: Boolean,
 )
