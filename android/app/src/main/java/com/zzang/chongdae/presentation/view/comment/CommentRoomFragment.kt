@@ -16,8 +16,9 @@ class CommentRoomFragment : Fragment() {
     private var _binding: FragmentCommentRoomBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var _commentRoomAdapter: CommentRoomAdapter
-    val commentRoomAdapter get() = _commentRoomAdapter
+    private val commentRoomAdapter: CommentRoomAdapter by lazy{
+        CommentRoomAdapter(viewModel)
+    }
 
     val viewModel by viewModels<CommentRoomViewModel> {
         CommentRoomViewModel.factory(
@@ -34,14 +35,13 @@ class CommentRoomFragment : Fragment() {
     ): View {
         _binding = FragmentCommentRoomBinding.inflate(inflater, container, false)
         binding.fragmentCommentRoom = this
-        _commentRoomAdapter = CommentRoomAdapter(viewModel)
-        binding.rvCommentRoom.adapter = _commentRoomAdapter
+        binding.vm = viewModel
+        binding.rvCommentRoom.adapter = commentRoomAdapter
         viewModel.commentRooms.observe(viewLifecycleOwner) {
             commentRoomAdapter.submitList(it)
         }
         commentRoomAdapter.submitList(viewModel.commentRooms.value)
-        // 테스트를 위해 주석처리함!
-//        viewModel.updateCommentRooms()
+        viewModel.updateCommentRooms()
 
         return binding.root
     }

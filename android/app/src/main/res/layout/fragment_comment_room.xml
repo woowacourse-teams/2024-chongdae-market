@@ -8,6 +8,10 @@
         <variable
             name="fragmentCommentRoom"
             type="com.zzang.chongdae.presentation.view.comment.CommentRoomFragment" />
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.comment.CommentRoomViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:showEmptyState="@{fragmentCommentRoom.commentRoomAdapter.currentList}" />
+            app:showEmptyState="@{vm.commentRooms}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comment_room"
