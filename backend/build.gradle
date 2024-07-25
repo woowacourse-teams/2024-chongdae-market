@@ -65,6 +65,6 @@ tasks.register('copyOasToSwagger', Copy) {
     into file("src/main/resources/static/.")
 }
 
-jar {
-    dependsOn copyOasToSwagger
-}
+//bootJar {
+//    dependsOn copyOasToSwagger
+//}
