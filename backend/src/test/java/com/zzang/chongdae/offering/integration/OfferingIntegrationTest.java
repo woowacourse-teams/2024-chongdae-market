@@ -21,7 +21,7 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 
 public class OfferingIntegrationTest extends IntegrationTest {
 
-    @DisplayName("공모 상세 조회")
+    @DisplayName("공모 상세 조회 ")
     @Nested
     class GetOfferingDetail {
 
