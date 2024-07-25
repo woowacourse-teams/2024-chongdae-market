@@ -3,7 +3,6 @@ package com.zzang.chongdae.data.remote.source.impl
 import com.zzang.chongdae.data.remote.api.OfferingDetailApiService
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
-import com.zzang.chongdae.data.remote.dto.response.ParticipationResponse
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSource
 
 class OfferingDetailDataSourceImpl(
@@ -18,7 +17,7 @@ class OfferingDetailDataSourceImpl(
                 ?: throw IllegalStateException()
         }
 
-    override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<ParticipationResponse> =
+    override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Unit> =
         runCatching {
             service.postParticipations(participationRequest = participationRequest)
                 .body() ?: throw IllegalStateException()

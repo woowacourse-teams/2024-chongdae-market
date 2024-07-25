@@ -5,11 +5,22 @@
 
     <data>
 
+        <variable
+            name="offering"
+            type="com.zzang.chongdae.domain.model.Offering" />
+
+        <variable
+            name="onArticleClickListener"
+            type="com.zzang.chongdae.presentation.view.home.OnArticleClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onArticleClickListener.onClick(offering.id)}"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/iv_product"
@@ -23,6 +34,7 @@
             app:layout_constraintDimensionRatio="120:110"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:offeringsProductImageUrl="@{offering.thumbnailUrl}"
             tools:src="@drawable/img_main_product_default" />
 
         <TextView
@@ -31,19 +43,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginTop="7dp"
+            android:fontFamily="@font/suit_bold"
             android:textSize="@dimen/font_size_12"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
+            app:offeringCondition="@{offering.condition}"
             tools:text="@string/main_offering_closed" />
 
         <TextView
             android:id="@+id/tv_offering_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_bold"
+            android:text="@{offering.title}"
             android:textColor="@color/black_900"
             android:textSize="@dimen/font_size_16"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tv_offering_status"
             app:layout_constraintTop_toBottomOf="@id/tv_offering_status"
             tools:text="제목" />
@@ -53,6 +67,7 @@
             style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{offering.meetingAddress}"
             app:layout_constraintStart_toStartOf="@id/tv_offering_status"
             app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
             tools:text="내발산동" />
@@ -71,6 +86,7 @@
             style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{@string/all_money_amount_text(offering.dividedPrice)}"
             app:layout_constraintStart_toEndOf="@id/tv_divided_price_title"
             app:layout_constraintTop_toTopOf="@id/tv_divided_price_title"
             tools:text="4,000원" />
@@ -89,6 +105,7 @@
             style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{@string/main_participant_count(offering.currentCount, offering.totalCount)}"
             app:layout_constraintStart_toEndOf="@id/tv_participant_count_title"
             app:layout_constraintTop_toBottomOf="@id/tv_divided_price"
             tools:text="5명/5명" />
