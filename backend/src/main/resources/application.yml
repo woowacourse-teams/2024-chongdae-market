@@ -15,9 +15,6 @@ spring:
       hibernate:
         format_sql: true
 springdoc:
-  packages-to-scan: com.zzang.chongdae
-  default-consumes-media-type: application/json;charset=UTF-8
-  default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
     path: swagger-ui.html
     url: /static/swagger-ui/openapi3.yaml
