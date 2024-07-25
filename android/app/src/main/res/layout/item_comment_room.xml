@@ -65,7 +65,8 @@
             android:textColor="@color/gray_900"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="오전 10:33" />
+            tools:text="오전 10:33"
+            app:formattedTime="@{commentRoom.latestCommentTime}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

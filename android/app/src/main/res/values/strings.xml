@@ -43,6 +43,9 @@
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
+    <string name="am">오전</string>
+    <string name="pm">오후</string>
+    <string name="time">"mm"</string>
 
     <!--    offering_status-->
     <string name="comment_detail">comment_detail</string>
