@@ -4,7 +4,6 @@
 
     <!--    all-->
     <string name="all_money_amount_text">%,d원</string>
-    <string name="black"> </string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>

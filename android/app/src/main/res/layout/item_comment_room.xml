@@ -68,7 +68,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginEnd="4dp"
             android:textColor="@color/gray_900"
-            app:formattedTime="@{commentRoom.latestCommentTime}"
+            app:formattedAmPmTime="@{commentRoom.latestCommentTime}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="오전 10:33" />

@@ -71,7 +71,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="오전 10:33"
-            app:formattedTime="@{commentRoom.latestCommentTime}"/>
+            app:formattedAmPmTime="@{commentRoom.latestCommentTime}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
