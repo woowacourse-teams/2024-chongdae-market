@@ -2,6 +2,8 @@ package com.zzang.chongdae.presentation.util
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.text.util.Linkify
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,16 @@ import com.zzang.chongdae.domain.model.OfferingCondition
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.util.regex.Pattern
+
+@BindingAdapter("url")
+fun TextView.setHyperlink(url: String?) {
+    url?.let {
+        val mTransform = Linkify.TransformFilter { _, _ -> "" }
+        val pattern = Pattern.compile(this.text.toString())
+        Linkify.addLinks(this, pattern, it, null, mTransform)
+    }
+}
 
 @BindingAdapter("detailProductImageUrl")
 fun ImageView.setImageResource(imageUrl: String?) {
