@@ -65,7 +65,7 @@ public class CommentService {
         MemberEntity loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(); // TODO: 예외처리 하기
 
-        List<OfferingWithRole> offerings = offeringRepository.findAllByMember(loginMember);
+        List<OfferingWithRole> offerings = offeringRepository.findAllWithRoleByMember(loginMember);
         List<CommentRoomAllResponseItem> responseItems = offerings.stream()
                 .filter(this::hasComments)
                 .map(this::toCommentRoomAllResponseItem)
