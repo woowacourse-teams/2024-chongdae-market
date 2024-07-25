@@ -1,9 +1,12 @@
 package com.zzang.chongdae.offering.service;
 
+import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
@@ -27,13 +30,13 @@ public class OfferingService {
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(); // TODO: 예외 처리하기
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         OfferingStatus offeringStatus = offering.toOfferingStatus();
 
         MemberEntity member = memberRepository.findById(memberId)
-                .orElseThrow(); // TODO: 로그인 추가하면 교체 필요
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
 
         return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
@@ -54,7 +57,7 @@ public class OfferingService {
 
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(); // TODO: 예외 처리하기
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 }
