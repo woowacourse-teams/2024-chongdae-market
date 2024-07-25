@@ -2,6 +2,7 @@ package com.zzang.chongdae.offeringmember.integration;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.Schema.schema;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
@@ -32,6 +33,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                 .summary("공모 참여")
                 .description("게시된 공모에 참여합니다.")
                 .requestFields(participationRequestDescriptors)
+                .requestSchema(schema("ParticipationRequest"))
                 .build();
         MemberEntity proposer;
         MemberEntity participant;
