@@ -69,12 +69,10 @@ class CommentRoomFragment : Fragment(), OnCommentRoomClickListener {
         _binding = null
     }
 
-    override fun onClick(id: Long) {
-        CommentDetailActivity.startActivity(
-            activity as Context,
-            id,
-            viewModel.commentRooms.value?.first { it.id == id }?.title
-                ?: throw IllegalArgumentException(),
-        )
+    override fun onClick(
+        id: Long,
+        title: String,
+    ) {
+        CommentDetailActivity.startActivity(activity as Context, id, title)
     }
 }
