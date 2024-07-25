@@ -1,7 +1,6 @@
 package com.zzang.chongdae.comment.service;
 
 import com.zzang.chongdae.comment.domain.CommentWithRole;
-import com.zzang.chongdae.comment.exception.CommentErrorCode;
 import com.zzang.chongdae.comment.repository.CommentRepository;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
@@ -21,6 +20,7 @@ import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,27 +48,27 @@ public class CommentService {
 
         List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(loginMember);
         List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
-                .filter(this::hasComments)
+                .filter(offeringWithRole -> offeringWithRole.getOffering().hasParticipant())
                 .map(this::toCommentRoomAllResponseItem)
                 .toList();
         return new CommentRoomAllResponse(responseItems);
     }
 
-    private boolean hasComments(OfferingWithRole offeringWithRole) {
-        OfferingEntity offering = offeringWithRole.getOffering();
-        return commentRepository.existsByOffering(offering);
-    }
-
     private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingWithRole offeringWithRole) {
         OfferingEntity offering = offeringWithRole.getOffering();
         OfferingMemberRole role = offeringWithRole.getRole();
-        CommentEntity latestComment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering)
-                .orElseThrow(() -> new MarketException(CommentErrorCode.NOT_FOUND));
         return new CommentRoomAllResponseItem(
                 offering.getId(),
                 offering.getTitle(),
-                new CommentLatestResponse(latestComment),
+                toCommentLatestResponse(offering),
                 role.isProposer());
+    }
+
+    private CommentLatestResponse toCommentLatestResponse(OfferingEntity offering) {
+        Optional<CommentEntity> rawComment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
+        return rawComment
+                .map(CommentLatestResponse::new)
+                .orElseGet(() -> new CommentLatestResponse(null, null));
     }
 
     public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
