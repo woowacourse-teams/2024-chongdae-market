@@ -16,18 +16,17 @@ class CommentDetailViewModel(
     val offeringTitle: String,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
-    
     private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
-    private val _deadlineText = MutableLiveData<LocalDateTime>()
-    val deadlineText: LiveData<LocalDateTime> get() = _deadlineText
+    private val _deadline = MutableLiveData<LocalDateTime>()
+    val deadline: LiveData<LocalDateTime> get() = _deadline
 
-    private val _locationText = MutableLiveData<String>()
-    val locationText: LiveData<String> get() = _locationText
+    private val _location = MutableLiveData<String>()
+    val location: LiveData<String> get() = _location
 
-    private val _locationDetailText = MutableLiveData<String>()
-    val locationDetailText: LiveData<String> get() = _locationDetailText
+    private val _locationDetail = MutableLiveData<String>()
+    val locationDetail: LiveData<String> get() = _locationDetail
 
     fun toggleCollapsibleView() {
         _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
@@ -41,9 +40,9 @@ class CommentDetailViewModel(
             commentDetailRepository.getMeetings(
                 offeringId = offeringId,
             ).onSuccess {
-                _deadlineText.value = it.deadline
-                _locationText.value = it.meetingAddress
-                _locationDetailText.value = it.meetingAddressDetail
+                _deadline.value = it.deadline
+                _location.value = it.meetingAddress
+                _locationDetail.value = it.meetingAddressDetail
             }.onFailure {
                 Log.e("error", it.message.toString())
             }
