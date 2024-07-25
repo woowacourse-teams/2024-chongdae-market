@@ -8,7 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -31,22 +34,51 @@ class CommentDetailViewModel(
     private val _locationDetail = MutableLiveData<String>()
     val locationDetail: LiveData<String> get() = _locationDetail
 
+    private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
+    val comments: LiveData<List<Comment>> get() = _comments
+
+    private var cachedComments: List<Comment> = emptyList()
+    private var pollJob: Job? = null
+
+    init {
+        startPolling()
+    }
+
+    private fun loadComments() {
+        viewModelScope.launch {
+            commentDetailRepository.fetchComments(
+                offeringId = offeringId,
+                memberId = BuildConfig.TOKEN.toLong(),
+            ).onSuccess { newComments ->
+                if (newComments != cachedComments) {
+                    cachedComments = newComments
+                    _comments.value = newComments
+                }
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+
+    private fun startPolling() {
+        pollJob?.cancel()
+        pollJob =
+            viewModelScope.launch {
+                while (true) {
+                    loadComments()
+                    delay(1000)
+                }
+            }
+    }
+
+    private fun stopPolling() {
+        pollJob?.cancel()
+    }
+
     fun toggleCollapsibleView() {
         _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
         if (_isCollapsibleViewVisible.value == true) {
             loadMeetings()
-        }
-    }
-
-    private fun loadMeetings() {
-        viewModelScope.launch {
-            commentDetailRepository.getMeetings(offeringId).onSuccess {
-                _deadline.value = it.deadline
-                _location.value = it.meetingAddress
-                _locationDetail.value = it.meetingAddressDetail
-            }.onFailure {
-                Log.e("error", it.message.toString())
-            }
         }
     }
 
@@ -70,6 +102,23 @@ class CommentDetailViewModel(
         }
     }
 
+    private fun loadMeetings() {
+        viewModelScope.launch {
+            commentDetailRepository.getMeetings(offeringId).onSuccess {
+                _deadline.value = it.deadline
+                _location.value = it.meetingAddress
+                _locationDetail.value = it.meetingAddressDetail
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopPolling()
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
@@ -81,7 +130,11 @@ class CommentDetailViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return CommentDetailViewModel(offeringId, offeringTitle, commentDetailRepository) as T
+                return CommentDetailViewModel(
+                    offeringId,
+                    offeringTitle,
+                    commentDetailRepository,
+                ) as T
             }
         }
     }
