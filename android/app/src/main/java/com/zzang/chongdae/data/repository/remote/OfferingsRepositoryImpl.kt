@@ -11,9 +11,9 @@ class OfferingsRepositoryImpl(
     override suspend fun fetchOfferings(
         lastOfferingId: Long,
         pageSize: Int,
-    ): Result<List<Offering>> {
+    ): List<Offering> {
         return offeringsDataSource.fetchOfferings(lastOfferingId, pageSize).mapCatching {
             it.offerings.map { it.toDomain() }
-        }
+        }.getOrThrow()
     }
 }
