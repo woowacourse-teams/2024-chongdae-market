@@ -59,25 +59,12 @@ openapi3 {
 tasks.register('copyOasToSwagger', Copy) {
     dependsOn('openapi3')
     doFirst {
-        delete file('src/main/resources/static/swagger-ui/openapi3.yaml')
+        delete file('src/main/resources/static/openapi3.yaml')
     }
     from file("build/api-spec/openapi3.yaml")
-    into file("src/main/resources/static/swagger-ui/.")
+    into file("src/main/resources/static/.")
 }
 
 bootJar {
     dependsOn copyOasToSwagger
-}
-
-tasks.named('processResources') {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir 'src/main/resources'
-            include '**/*'
-        }
-    }
 }
