@@ -96,6 +96,8 @@ public class CommentIntegrationTest extends IntegrationTest {
             member = memberFixture.createMember();
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
+            MemberEntity participant = memberFixture.createMember("참여자");
+            offeringMemberFixture.createParticipant(participant, offering);
             commentFixture.createComment(member, offering);
         }
 
