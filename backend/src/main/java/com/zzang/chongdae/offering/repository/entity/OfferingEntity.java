@@ -30,6 +30,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class OfferingEntity extends BaseTimeEntity {
 
+    private static final int INITIAL_COUNT = 1;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -65,7 +67,7 @@ public class OfferingEntity extends BaseTimeEntity {
 
     @NotNull
     @Positive
-    private Integer currentCount = 1;
+    private Integer currentCount = INITIAL_COUNT;
 
     @NotNull
     private Boolean isManualConfirmed;
@@ -95,5 +97,9 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public OfferingMeeting toOfferingMeeting() {
         return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail);
+    }
+
+    public boolean hasParticipant() {
+        return currentCount > INITIAL_COUNT;
     }
 }
