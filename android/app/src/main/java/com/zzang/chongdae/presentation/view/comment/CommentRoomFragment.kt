@@ -33,17 +33,29 @@ class CommentRoomFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        initBinding(inflater, container)
+        linkAdapter()
+        updateCommentRooms()
+
+        return binding.root
+    }
+
+    private fun initBinding(inflater: LayoutInflater, container: ViewGroup?) {
         _binding = FragmentCommentRoomBinding.inflate(inflater, container, false)
         binding.fragmentCommentRoom = this
         binding.vm = viewModel
+    }
+
+    private fun linkAdapter() {
         binding.rvCommentRoom.adapter = commentRoomAdapter
         viewModel.commentRooms.observe(viewLifecycleOwner) {
             commentRoomAdapter.submitList(it)
         }
         commentRoomAdapter.submitList(viewModel.commentRooms.value)
-        viewModel.updateCommentRooms()
+    }
 
-        return binding.root
+    private fun updateCommentRooms() {
+        viewModel.updateCommentRooms()
     }
 
     override fun onDestroyView() {
