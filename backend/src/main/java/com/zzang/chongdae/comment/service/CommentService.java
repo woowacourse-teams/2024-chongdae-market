@@ -1,6 +1,7 @@
 package com.zzang.chongdae.comment.service;
 
 import com.zzang.chongdae.comment.domain.CommentWithRole;
+import com.zzang.chongdae.comment.exception.CommentErrorCode;
 import com.zzang.chongdae.comment.repository.CommentRepository;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
@@ -10,9 +11,12 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
+import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
+import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
@@ -30,9 +34,9 @@ public class CommentService {
 
     public void saveComment(CommentSaveRequest request) {
         MemberEntity loginMember = memberRepository.findById(request.memberId())
-                .orElseThrow(); // TODO: 예외처리 하기
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
-                .orElseThrow();// TODO: 예외처리 하기
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         CommentEntity comment = new CommentEntity(loginMember, offering, request.content());
         commentRepository.save(comment);
@@ -40,7 +44,7 @@ public class CommentService {
 
     public CommentRoomAllResponse getAllCommentRoom(Long loginMemberId) {
         MemberEntity loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(); // TODO: 예외처리 하기
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
 
         List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(loginMember);
         List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
@@ -59,7 +63,7 @@ public class CommentService {
         OfferingEntity offering = offeringWithRole.getOffering();
         OfferingMemberRole role = offeringWithRole.getRole();
         CommentEntity latestComment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering)
-                .orElseThrow(); // TODO: 예외처리 하기
+                .orElseThrow(() -> new MarketException(CommentErrorCode.NOT_FOUND));
         return new CommentRoomAllResponseItem(
                 offering.getId(),
                 offering.getTitle(),
@@ -70,7 +74,7 @@ public class CommentService {
     public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
         validateMemberExistence(loginMemberId);
         OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(); // TODO: 예외 처리하기
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         List<CommentWithRole> commentsWithRole = commentRepository.findAllWithRoleByOffering(offering);
         List<CommentAllResponseItem> responseItems = commentsWithRole.stream()
@@ -81,7 +85,7 @@ public class CommentService {
 
     private void validateMemberExistence(Long memberId) {
         if (!memberRepository.existsById(memberId)) {
-            throw new IllegalArgumentException("존재하지 않는 사용자가 로그인을 했네요"); // TODO: 예외 처리하기
+            throw new MarketException(MemberErrorCode.NOT_FOUND);
         }
     }
 
