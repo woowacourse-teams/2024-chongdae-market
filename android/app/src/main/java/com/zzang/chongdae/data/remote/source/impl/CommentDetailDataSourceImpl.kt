@@ -2,6 +2,7 @@ package com.zzang.chongdae.data.remote.source.impl
 
 import com.zzang.chongdae.data.remote.api.CommentDetailApiService
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
+import com.zzang.chongdae.data.remote.dto.response.CommentsResponse
 import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
 import com.zzang.chongdae.data.remote.source.CommentDetailDataSource
 import retrofit2.Response
@@ -24,5 +25,18 @@ class CommentDetailDataSourceImpl(
         runCatching {
             service.postComment(commentRequest = commentRequest)
                 .body() ?: throw IllegalStateException()
+        }
+
+    override suspend fun fetchComments(
+        offeringId: Long,
+        memberId: Long,
+    ): Result<CommentsResponse> =
+        runCatching {
+            val response: Response<CommentsResponse> = service.getComments(offeringId, memberId)
+            if (response.isSuccessful) {
+                response.body() ?: error("에러 발생: null")
+            } else {
+                error("에러 발생: ${response.code()}")
+            }
         }
 }

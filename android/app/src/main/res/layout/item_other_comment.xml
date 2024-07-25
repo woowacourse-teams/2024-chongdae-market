@@ -5,12 +5,15 @@
 
     <data>
 
+        <variable
+            name="comment"
+            type="com.zzang.chongdae.domain.model.Comment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/size_6">
+        android:padding="@dimen/size_4">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -24,9 +27,9 @@
             android:layout_width="@dimen/size_30"
             android:layout_height="@dimen/size_30"
             android:layout_marginStart="@dimen/margin_20"
-            android:src="@drawable/ic_person"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImageProposer="@{comment.isProposer}" />
 
         <TextView
             android:id="@+id/tv_nickname"
@@ -34,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_10"
             android:fontFamily="@font/suit_medium"
+            android:text="@{comment.nickname}"
             android:textColor="@color/black"
             android:textSize="@dimen/size_10"
             app:layout_constraintStart_toEndOf="@id/iv_profile"
@@ -56,6 +60,7 @@
             android:paddingTop="@dimen/size_7"
             android:paddingEnd="@dimen/size_10"
             android:paddingBottom="@dimen/size_7"
+            android:text="@{comment.content}"
             android:textColor="@color/gray_font"
             android:textSize="@dimen/size_14"
             app:layout_constrainedWidth="true"
@@ -70,6 +75,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_10"
+            android:fontFamily="@font/suit_medium"
+            android:textSize="@dimen/size_10"
+            app:formattedCommentTime="@{comment.commentCreatedAt.time}"
             app:layout_constraintBottom_toBottomOf="@id/tv_comment"
             app:layout_constraintStart_toEndOf="@id/tv_comment"
             tools:text="오전 10:30" />
