@@ -15,4 +15,9 @@ public class MemberFixture {
         MemberEntity member = new MemberEntity("dora");
         return memberRepository.save(member);
     }
+
+    public MemberEntity createMember(String nickname) {
+        MemberEntity member = new MemberEntity(nickname);
+        return memberRepository.save(member);
+    }
 }

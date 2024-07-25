@@ -124,4 +124,42 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(200);
         }
     }
+
+    @DisplayName("공모 일정 조회")
+    @Nested
+    class GetOfferingMeeting {
+
+        List<ParameterDescriptorWithType> offeringMeetingPathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id")
+        );
+        List<FieldDescriptor> offeringMeetingResponseDescriptors = List.of(
+                fieldWithPath("deadline").description("마감시간"),
+                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소")
+        );
+        ResourceSnippetParameters snippets = builder()
+                .summary("공모 일정 조회")
+                .description("공모 id를 통해 공모의 일정 정보를 조회합니다.")
+                .pathParameters(offeringMeetingPathParameterDescriptors)
+                .responseFields(offeringMeetingResponseDescriptors)
+                .responseSchema(schema("OfferingMeetingResponse"))
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            MemberEntity member = memberFixture.createMember();
+            offeringFixture.createOffering(member);
+        }
+
+        @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
+        @Test
+        void should_responseOfferingMeeting_when_givenOfferingId() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-offering-meeting-success", resource(snippets)))
+                    .pathParam("offering-id", 1)
+                    .when().get("/offerings/{offering-id}/meetings")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+    }
 }

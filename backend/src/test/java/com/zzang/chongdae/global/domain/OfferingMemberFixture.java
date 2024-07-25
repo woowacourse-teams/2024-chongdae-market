@@ -14,6 +14,15 @@ public class OfferingMemberFixture {
     @Autowired
     private OfferingMemberRepository offeringMemberRepository;
 
+    public OfferingMemberEntity createProposer(MemberEntity member, OfferingEntity offering) {
+        OfferingMemberEntity offeringMember = new OfferingMemberEntity(
+                member,
+                offering,
+                OfferingMemberRole.PROPOSER
+        );
+        return offeringMemberRepository.save(offeringMember);
+    }
+
     public OfferingMemberEntity createParticipant(MemberEntity member, OfferingEntity offering) {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member,

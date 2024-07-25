@@ -21,7 +21,7 @@ public class OfferingFixture {
                 "description",
                 "thumbnailUrl",
                 "productUrl",
-                LocalDateTime.of(2000, 4, 7, 0, 0, 0),
+                LocalDateTime.of(3000, 1, 1, 0, 0, 0),
                 "meetingAddress",
                 "meetingAddressDetail",
                 5,
