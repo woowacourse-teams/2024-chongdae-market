@@ -140,7 +140,7 @@
                 android:layout_marginTop="@dimen/size_10"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/btn_under_vector"
-                app:isVisible="@{vm.isCollapsibleViewVisible}"
+                app:isVisible="@{!vm.isCollapsibleViewVisible}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -151,7 +151,7 @@
                 android:layout_marginTop="@dimen/size_10"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/btn_up_vector"
-                app:isVisible="@{!vm.isCollapsibleViewVisible}"
+                app:isVisible="@{vm.isCollapsibleViewVisible}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
