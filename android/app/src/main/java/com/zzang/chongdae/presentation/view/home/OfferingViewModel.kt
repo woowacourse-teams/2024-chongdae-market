@@ -17,7 +17,7 @@ class OfferingViewModel(
     // 무한 스크롤 적용 시 수정 예정
     fun updateArticles() {
         viewModelScope.launch {
-            offeringsRepository.fetchOfferings(0L, 10).onSuccess {
+            offeringsRepository.fetchOfferings(0L, 100).onSuccess {
                 _offerings.value = it
             }.onFailure {
             }

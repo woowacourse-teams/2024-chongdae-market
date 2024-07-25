@@ -11,6 +11,7 @@ import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.OfferingDetailDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.OfferingDetailRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityOfferingDetailBinding
+import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 
 class OfferingDetailActivity : AppCompatActivity() {
     private var _binding: ActivityOfferingDetailBinding? = null
@@ -31,6 +32,7 @@ class OfferingDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         initBinding()
+        setUpMoveCommentDetailEventObserve()
     }
 
     override fun onDestroy() {
@@ -49,6 +51,12 @@ class OfferingDetailActivity : AppCompatActivity() {
             EXTRA_OFFERING_ID_KEY,
             EXTRA_DEFAULT_VALUE,
         )
+
+    private fun setUpMoveCommentDetailEventObserve() {
+        viewModel.commentDetailEvent.observe(this) { offeringTitle ->
+            CommentDetailActivity.startActivity(this, offeringId, offeringTitle)
+        }
+    }
 
     companion object {
         private const val EXTRA_DEFAULT_VALUE = -1L
