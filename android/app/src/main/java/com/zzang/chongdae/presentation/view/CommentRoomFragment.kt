@@ -10,7 +10,7 @@ import com.zzang.chongdae.R
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class HomeFragment : Fragment() {
+class CommentRoomFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_comment_room, container, false)
     }
 
     companion object {
@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
         fun newInstance(
             param1: String,
             param2: String,
-        ) = HomeFragment().apply {
+        ) = CommentRoomFragment().apply {
             arguments =
                 Bundle().apply {
                     putString(ARG_PARAM1, param1)
