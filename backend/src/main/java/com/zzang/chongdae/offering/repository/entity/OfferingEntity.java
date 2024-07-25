@@ -69,6 +69,13 @@ public class OfferingEntity extends BaseTimeEntity {
     @NotNull
     private BigDecimal totalPrice;
 
+    public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
+                          LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
+                          Integer totalCount, Integer currentCount, Boolean isManualConfirmed, BigDecimal totalPrice) {
+        this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
+                meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice);
+    }
+
     public void updateCurrentCount() {
         currentCount++;
     }

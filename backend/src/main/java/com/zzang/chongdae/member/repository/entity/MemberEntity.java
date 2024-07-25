@@ -29,4 +29,8 @@ public class MemberEntity extends BaseTimeEntity {
     @NotNull
     @Column(unique = true)
     private String nickname;
+
+    public MemberEntity(String nickname) {
+        this(null, nickname);
+    }
 }
