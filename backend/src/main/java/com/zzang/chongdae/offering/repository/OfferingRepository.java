@@ -13,12 +13,10 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     List<OfferingEntity> findByIdGreaterThan(Long lastId, Pageable pageable);
 
     @Query("""
-            SELECT new com.zzang.chongdae.offering.domain.OfferingWithRole(
-                o, om.role
-            )
-            FROM OfferingEntity as o JOIN OfferingMemberEntity as om
-                ON o.id = om.offering.id
-            WHERE om.member = :member
-        """)
-    List<OfferingWithRole> findAllByMember(MemberEntity member);
+                SELECT new com.zzang.chongdae.offering.domain.OfferingWithRole(o, om.role)
+                FROM OfferingEntity as o JOIN OfferingMemberEntity as om
+                    ON o.id = om.offering.id
+                WHERE om.member = :member
+            """)
+    List<OfferingWithRole> findAllWithRoleByMember(MemberEntity member);
 }
