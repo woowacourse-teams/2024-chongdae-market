@@ -11,22 +11,12 @@ import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.CommentDetailDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.CommentDetailRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
+import com.zzang.chongdae.presentation.view.commentdetail.adapter.CommentAdapter
 
 class CommentDetailActivity : AppCompatActivity() {
     private var _binding: ActivityCommentDetailBinding? = null
     private val binding get() = _binding!!
-
-    private val offeringId by lazy {
-        intent.getLongExtra(
-            EXTRA_OFFERING_ID_KEY,
-            EXTRA_DEFAULT_VALUE,
-        )
-    }
-
-    private val offeringTitle by lazy {
-        intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
-    }
-
+    private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
             offeringId,
@@ -37,10 +27,21 @@ class CommentDetailActivity : AppCompatActivity() {
         )
     }
 
+    private val offeringId by lazy {
+        intent.getLongExtra(
+            EXTRA_OFFERING_ID_KEY,
+            EXTRA_DEFAULT_VALUE,
+        )
+    }
+    private val offeringTitle by lazy {
+        intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initBinding()
+        initAdapter()
+        setUpCommentsObserve()
     }
 
     override fun onDestroy() {
@@ -52,6 +53,16 @@ class CommentDetailActivity : AppCompatActivity() {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_comment_detail)
         binding.vm = viewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun initAdapter() {
+        binding.rvComments.adapter = commentAdapter
+    }
+
+    private fun setUpCommentsObserve() {
+        viewModel.comments.observe(this) {
+            commentAdapter.submitList(it)
+        }
     }
 
     companion object {

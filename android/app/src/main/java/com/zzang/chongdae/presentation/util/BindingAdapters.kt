@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.regex.Pattern
@@ -160,4 +161,15 @@ fun setFormattedDeadline(
         val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 EEEE a h시 m분", Locale.KOREAN)
         textView.text = it.format(formatter)
     }
+}
+
+@BindingAdapter("formattedCommentTime")
+fun TextView.setTime(localTime: LocalTime) {
+    this.text = localTime.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN))
+}
+
+@BindingAdapter("setImageProposer")
+fun ImageView.setImageProposer(proposer: Boolean) {
+    val imageRes = if (proposer) R.drawable.ic_proposer else R.drawable.ic_not_proposer
+    setImageResource(imageRes)
 }

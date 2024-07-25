@@ -239,6 +239,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comments"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/size_36"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/et_comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_offering_button"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_other_comment" />
+
         <EditText
             android:id="@+id/et_comment"
             android:layout_width="match_parent"
@@ -261,9 +274,9 @@
             android:id="@+id/iv_send_comment"
             android:layout_width="@dimen/size_44"
             android:layout_height="@dimen/size_44"
+            android:onClick="@{() -> vm.postComment()}"
             android:padding="@dimen/margin_10"
             android:src="@drawable/btn_comment_detail_send"
-            android:onClick="@{() -> vm.postComment()}"
             app:layout_constraintBottom_toBottomOf="@id/et_comment"
             app:layout_constraintEnd_toEndOf="@id/et_comment"
             app:layout_constraintTop_toTopOf="@id/et_comment" />
