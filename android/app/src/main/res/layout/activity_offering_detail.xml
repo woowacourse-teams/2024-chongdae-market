@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
                     android:fontFamily="@font/suit_medium"
-                    android:text="@string/detail_report_text"
+                    android:text="@string/all_report_text"
                     android:textColor="@color/gray_font"
                     android:textSize="15sp"
                     app:isVisible="@{!vm.isRepresentative()}"
