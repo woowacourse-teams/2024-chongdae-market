@@ -30,6 +30,10 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(unique = true, length = 10)
     private String nickname;
 
+    public MemberEntity(String nickname) {
+        this(null, nickname);
+    }
+
     public boolean isSameMember(Long memberId) {
         return this.id.equals(memberId);
     }
