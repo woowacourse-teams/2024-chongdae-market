@@ -10,6 +10,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -35,11 +37,13 @@ class CommentDetailViewModel(
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
 
+    private var pollJob: Job? = null
+
     init {
-        loadComments()
+        startPolling()
     }
 
-    fun loadComments() {
+    private fun loadComments() {
         viewModelScope.launch {
             commentDetailRepository.fetchComments(
                 offeringId = offeringId,
@@ -50,6 +54,21 @@ class CommentDetailViewModel(
                 Log.e("error", it.message.toString())
             }
         }
+    }
+
+    private fun startPolling() {
+        pollJob?.cancel()
+        pollJob =
+            viewModelScope.launch {
+                while (true) {
+                    loadComments()
+                    delay(1000)
+                }
+            }
+    }
+
+    private fun stopPolling() {
+        pollJob?.cancel()
     }
 
     fun toggleCollapsibleView() {
@@ -89,6 +108,11 @@ class CommentDetailViewModel(
                 Log.e("error", it.message.toString())
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopPolling()
     }
 
     companion object {
