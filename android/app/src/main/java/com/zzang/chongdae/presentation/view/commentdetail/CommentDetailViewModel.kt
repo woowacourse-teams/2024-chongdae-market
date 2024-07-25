@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -16,6 +17,8 @@ class CommentDetailViewModel(
     val offeringTitle: String,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
+    val commentContent = MutableLiveData<String>("")
+
     private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
@@ -37,12 +40,30 @@ class CommentDetailViewModel(
 
     private fun loadMeetings() {
         viewModelScope.launch {
-            commentDetailRepository.getMeetings(
-                offeringId = offeringId,
-            ).onSuccess {
+            commentDetailRepository.getMeetings(offeringId).onSuccess {
                 _deadline.value = it.deadline
                 _location.value = it.meetingAddress
                 _locationDetail.value = it.meetingAddressDetail
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+
+    fun postComment() {
+        val content = commentContent.value?.trim()
+        if (content.isNullOrEmpty()) {
+            return
+        }
+
+        // memberId를 가져오는 로직 수정 예정(로그인 기능 구현 이후)
+        viewModelScope.launch {
+            commentDetailRepository.saveParticipation(
+                memberId = BuildConfig.TOKEN.toLong(),
+                offeringId = offeringId,
+                comment = content,
+            ).onSuccess {
+                commentContent.value = ""
             }.onFailure {
                 Log.e("error", it.message.toString())
             }
@@ -59,7 +80,9 @@ class CommentDetailViewModel(
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
                 extras: CreationExtras,
-            ): T = CommentDetailViewModel(offeringId, offeringTitle, commentDetailRepository) as T
+            ): T {
+                return CommentDetailViewModel(offeringId, offeringTitle, commentDetailRepository) as T
+            }
         }
     }
 }
