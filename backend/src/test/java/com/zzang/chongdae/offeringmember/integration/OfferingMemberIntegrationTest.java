@@ -78,7 +78,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .body(request)
                     .when().post("/participations")
                     .then().log().all()
-                    .statusCode(500);
+                    .statusCode(400);
         }
     }
 }
