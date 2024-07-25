@@ -32,10 +32,6 @@ class CommentRoomViewModel(
         }
     }
 
-    fun putCommentRooms(commentRooms: List<CommentRoom>) {
-        _commentRooms.value = commentRooms
-    }
-
     companion object {
         fun factory(commentRoomRepositoryImpl: CommentRoomRepository): ViewModelProvider.Factory {
             return CommentRoomViewModelFactory(commentRoomRepositoryImpl)
