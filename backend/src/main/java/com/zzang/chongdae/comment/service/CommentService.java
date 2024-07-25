@@ -38,29 +38,6 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(); // TODO: 예외 처리하기
-
-        List<CommentWithRole> comments = commentRepository.findAllWithRoleByOffering(offering);
-        List<CommentAllResponseItem> responseItems = comments.stream()
-                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, loginMemberId))
-                .toList();
-        return new CommentAllResponse(responseItems);
-    }
-
-    private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long loginMemberId) {
-        CommentEntity comment = commentWithRole.getComment();
-        OfferingMemberRole role = commentWithRole.getRole();
-        MemberEntity member = comment.getMember();
-        return new CommentAllResponseItem(
-                new CommentCreatedAtResponse(comment.getCreatedAt()),
-                comment.getContent(),
-                member.getNickname(),
-                role.isProposer(),
-                member.isSameMember(loginMemberId));
-    }
-
     public CommentRoomAllResponse getAllCommentRoom(Long loginMemberId) {
         MemberEntity loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(); // TODO: 예외처리 하기
@@ -88,5 +65,28 @@ public class CommentService {
                 offering.getTitle(),
                 new CommentLatestResponse(latestComment),
                 role.isProposer());
+    }
+
+    public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(); // TODO: 예외 처리하기
+
+        List<CommentWithRole> comments = commentRepository.findAllWithRoleByOffering(offering);
+        List<CommentAllResponseItem> responseItems = comments.stream()
+                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, loginMemberId))
+                .toList();
+        return new CommentAllResponse(responseItems);
+    }
+
+    private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long loginMemberId) {
+        CommentEntity comment = commentWithRole.getComment();
+        OfferingMemberRole role = commentWithRole.getRole();
+        MemberEntity member = comment.getMember();
+        return new CommentAllResponseItem(
+                new CommentCreatedAtResponse(comment.getCreatedAt()),
+                comment.getContent(),
+                member.getNickname(),
+                role.isProposer(),
+                member.isSameMember(loginMemberId));
     }
 }

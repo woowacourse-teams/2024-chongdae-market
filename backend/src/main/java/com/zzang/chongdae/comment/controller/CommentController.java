@@ -30,20 +30,20 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "댓글방 목록 조회", description = "댓글방 목록을 조회합니다.")
+    @GetMapping("/comments")
+    public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
+            @RequestParam(value = "member-id") Long loginMemberId) {
+        CommentRoomAllResponse response = commentService.getAllCommentRoom(loginMemberId);
+        return ResponseEntity.ok(response);
+    }
+
     @Operation(summary = "댓글 목록 조회", description = "댓글 목록을 조회합니다.")
     @GetMapping("/comments/{offering-id}")
     public ResponseEntity<CommentAllResponse> getAllComment(
             @PathVariable(value = "offering-id") Long offeringId,
             @RequestParam(value = "member-id") Long loginMemberId) {
         CommentAllResponse response = commentService.getAllComment(offeringId, loginMemberId);
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(summary = "댓글방 목록 조회", description = "댓글방 목록을 조회합니다.")
-    @GetMapping("/comments")
-    public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
-            @RequestParam(value = "member-id") Long loginMemberId) {
-        CommentRoomAllResponse response = commentService.getAllCommentRoom(loginMemberId);
         return ResponseEntity.ok(response);
     }
 }
