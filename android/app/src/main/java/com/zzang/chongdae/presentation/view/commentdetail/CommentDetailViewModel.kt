@@ -37,6 +37,7 @@ class CommentDetailViewModel(
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
 
+    private var cachedComments: List<Comment> = emptyList()
     private var pollJob: Job? = null
 
     init {
@@ -48,8 +49,11 @@ class CommentDetailViewModel(
             commentDetailRepository.fetchComments(
                 offeringId = offeringId,
                 memberId = BuildConfig.TOKEN.toLong(),
-            ).onSuccess {
-                _comments.value = it
+            ).onSuccess { newComments ->
+                if (newComments != cachedComments) {
+                    cachedComments = newComments
+                    _comments.value = newComments
+                }
             }.onFailure {
                 Log.e("error", it.message.toString())
             }

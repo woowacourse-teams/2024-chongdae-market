@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.zzang.chongdae.R
 import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.CommentDetailDataSourceImpl
@@ -56,12 +58,22 @@ class CommentDetailActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        binding.rvComments.adapter = commentAdapter
+        binding.rvComments.apply {
+            adapter = commentAdapter
+            layoutManager =
+                LinearLayoutManager(this@CommentDetailActivity).apply {
+                    stackFromEnd = true
+                }
+        }
     }
 
     private fun setUpCommentsObserve() {
-        viewModel.comments.observe(this) {
-            commentAdapter.submitList(it)
+        viewModel.comments.observe(this) { comments ->
+            commentAdapter.submitList(comments) {
+                binding.rvComments.doOnPreDraw {
+                    binding.rvComments.scrollToPosition(comments.size - 1)
+                }
+            }
         }
     }
 
