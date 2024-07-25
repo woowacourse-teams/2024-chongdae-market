@@ -4,6 +4,7 @@
 
     <!--    all-->
     <string name="all_money_amount_text">%,d원</string>
+    <string name="black"> </string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>
@@ -43,9 +44,7 @@
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
-    <string name="am">오전</string>
-    <string name="pm">오후</string>
-    <string name="time">"mm"</string>
+    <string name="amPmTime">"a hh:mm"</string>
 
     <!--    offering_status-->
     <string name="comment_detail">comment_detail</string>

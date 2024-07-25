@@ -140,10 +140,7 @@ fun setLayoutHeightWithAnimation(
 
 @BindingAdapter("formattedTime")
 fun TextView.setTime(localDateTime: LocalDateTime) {
-    val aMOrPm = if (localDateTime.hour < 12) context.getString(R.string.am) else context.getString(R.string.pm)
-    val hour = if (aMOrPm == context.getString(R.string.am)) localDateTime.hour else localDateTime.hour - 12
-    val minute = localDateTime.format(DateTimeFormatter.ofPattern(context.getString(R.string.time)))
-    this.text = "$aMOrPm $hour:$minute"
+    this.text = localDateTime.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN))
 }
 
 private fun Int.toPx(context: Context): Int {
