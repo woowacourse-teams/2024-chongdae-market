@@ -42,8 +42,8 @@ public class CommentService {
         MemberEntity loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(); // TODO: 예외처리 하기
 
-        List<OfferingWithRole> offerings = offeringRepository.findAllWithRoleByMember(loginMember);
-        List<CommentRoomAllResponseItem> responseItems = offerings.stream()
+        List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(loginMember);
+        List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
                 .filter(this::hasComments)
                 .map(this::toCommentRoomAllResponseItem)
                 .toList();
@@ -68,14 +68,21 @@ public class CommentService {
     }
 
     public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
+        validateMemberExistence(loginMemberId);
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(); // TODO: 예외 처리하기
 
-        List<CommentWithRole> comments = commentRepository.findAllWithRoleByOffering(offering);
-        List<CommentAllResponseItem> responseItems = comments.stream()
+        List<CommentWithRole> commentsWithRole = commentRepository.findAllWithRoleByOffering(offering);
+        List<CommentAllResponseItem> responseItems = commentsWithRole.stream()
                 .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, loginMemberId))
                 .toList();
         return new CommentAllResponse(responseItems);
+    }
+
+    private void validateMemberExistence(Long memberId) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new IllegalArgumentException("존재하지 않는 사용자가 로그인을 했네요"); // TODO: 예외 처리하기
+        }
     }
 
     private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long loginMemberId) {
