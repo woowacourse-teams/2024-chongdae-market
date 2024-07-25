@@ -40,7 +40,7 @@ jobs:
       - name: Build with Gradle Wrapper
         run: |
           ./gradlew clean
-          ./gradlew openapi3
+          ./gradlew copyOasToSwagger
           ./gradlew build
         working-directory: ./backend
 
