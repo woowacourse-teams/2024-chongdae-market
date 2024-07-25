@@ -4,8 +4,9 @@ on:
   push:
     branches: [ "develop-BE" ]
     paths: [ "backend/**" ]
-#  pull_request:
-#     branches: [ "develop-BE" ]
+  pull_request:
+     branches: [ "develop-BE" ]
+     paths: [ "backend/**" ]
 
 jobs:
 
@@ -61,3 +62,6 @@ jobs:
           docker image prune -a -f
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
           docker run --name ${{ secrets.DOCKERHUB_CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${GITHUB_SHA::7}
+          echo "Current User: $(whoami)"
+          echo "Current User ID: $(id -u)"
+          echo "Current User Group: $(id -gn)"
