@@ -1,11 +1,15 @@
 package com.zzang.chongdae.offeringmember.service;
 
+import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
+import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
@@ -24,9 +28,9 @@ public class OfferingMemberService {
     @Transactional
     public Long participate(ParticipationRequest request) {
         MemberEntity member = memberRepository.findById(request.memberId())
-                .orElseThrow(); // TODO: 예외처리 하기
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
-                .orElseThrow();// TODO: 예외처리 하기
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipate(offering, member);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
@@ -44,13 +48,13 @@ public class OfferingMemberService {
     private void validateClosed(OfferingEntity offering) {
         OfferingStatus offeringStatus = offering.toOfferingStatus();
         if (offeringStatus.isClosed()) {
-            throw new IllegalArgumentException("아이고 못들어가요 ㅜㅜ"); // TODO: 예외처리 하기
+            throw new MarketException(OfferingErrorCode.CANNOT_PARTICIPATE);
         }
     }
 
     private void validateDuplicate(OfferingEntity offering, MemberEntity member) {
         if (offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
-            throw new IllegalArgumentException("이미 참여한 공모엔 참여할 수 없습니다."); // TODO: 예외처리 하기
+            throw new MarketException(OfferingMemberErrorCode.DUPLICATED);
         }
     }
 }

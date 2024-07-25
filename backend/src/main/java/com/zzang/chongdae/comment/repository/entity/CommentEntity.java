@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,7 @@ public class CommentEntity extends BaseTimeEntity {
     @ManyToOne
     private OfferingEntity offering;
 
+    @NotNull
     @Column(length = 80)
     private String content;
 

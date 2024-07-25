@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -37,6 +38,7 @@ public class OfferingEntity extends BaseTimeEntity {
     private MemberEntity member;
 
     @NotNull
+    @Column(length = 30)
     private String title;
 
     @NotNull
@@ -58,15 +60,18 @@ public class OfferingEntity extends BaseTimeEntity {
     private String meetingAddressDetail;
 
     @NotNull
+    @Positive
     private Integer totalCount;
 
     @NotNull
+    @Positive
     private Integer currentCount = 1;
 
     @NotNull
     private Boolean isManualConfirmed;
 
     @NotNull
+    @Positive
     private BigDecimal totalPrice;
 
     public void updateCurrentCount() {
