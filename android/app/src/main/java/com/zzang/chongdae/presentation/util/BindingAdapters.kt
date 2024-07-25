@@ -139,8 +139,8 @@ fun setLayoutHeightWithAnimation(
 }
 
 @BindingAdapter("formattedAmPmTime")
-fun TextView.setTime(localDateTime: LocalDateTime) {
-    this.text = localDateTime.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN))
+fun TextView.setTime(localDateTime: LocalDateTime?) {
+    this.text = localDateTime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN)) ?: ""
 }
 
 private fun Int.toPx(context: Context): Int {
