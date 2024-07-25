@@ -43,6 +43,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/suit_medium"
             android:maxLines="1"
+            android:text="@{vm.offeringTitle}"
             android:textColor="@color/white"
             android:textSize="@dimen/size_20"
             app:layout_constraintBottom_toBottomOf="@id/iv_back"
@@ -176,8 +177,8 @@
                 android:textColor="@color/gray_font"
                 android:textSize="@dimen/size_11"
                 app:isVisible="@{!vm.isCollapsibleViewVisible}"
-                app:layout_constraintTop_toTopOf="@id/iv_location"
                 app:layout_constraintStart_toEndOf="@id/iv_location"
+                app:layout_constraintTop_toTopOf="@id/iv_location"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView

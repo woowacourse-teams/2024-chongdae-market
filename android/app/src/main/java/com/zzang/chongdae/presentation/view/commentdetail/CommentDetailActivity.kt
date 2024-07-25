@@ -24,7 +24,7 @@ class CommentDetailActivity : AppCompatActivity() {
     }
 
     private val offeringTitle by lazy {
-        intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: ""
+        intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
     }
 
     private val viewModel: CommentDetailViewModel by viewModels {
@@ -58,6 +58,7 @@ class CommentDetailActivity : AppCompatActivity() {
         private const val EXTRA_DEFAULT_VALUE = 1L
         private const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
         private const val EXTRA_OFFERING_TITLE_KEY = "offering_title_key"
+        private const val DEFAULT_OFFERING_TITLE = "공구 제목을 불러오지 못했어요."
 
         fun startActivity(
             context: Context,

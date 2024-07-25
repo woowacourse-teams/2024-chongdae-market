@@ -13,9 +13,10 @@ import java.time.LocalDateTime
 
 class CommentDetailViewModel(
     private val offeringId: Long,
-    private val offeringTitle: String,
+    val offeringTitle: String,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
+    
     private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
