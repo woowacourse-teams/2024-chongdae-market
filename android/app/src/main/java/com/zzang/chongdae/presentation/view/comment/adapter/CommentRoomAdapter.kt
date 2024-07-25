@@ -5,30 +5,59 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.zzang.chongdae.databinding.ItemCommentRoomBinding
+import com.zzang.chongdae.databinding.ItemCommentRoomProposerBinding
 import com.zzang.chongdae.domain.model.CommentRoom
+import com.zzang.chongdae.domain.model.CommentRoomType
 import com.zzang.chongdae.presentation.view.comment.CommentRoomViewModel
 
 class CommentRoomAdapter(
     private val commentRoomViewModel: CommentRoomViewModel,
-) : ListAdapter<CommentRoom, CommentRoomViewHolder.Representative>(productComparator) {
+) : ListAdapter<CommentRoom, CommentRoomViewHolder>(productComparator) {
+    override fun getItemViewType(position: Int): Int {
+        return if (currentList[position].isProposer == true) {
+            CommentRoomType.PROPOSER.separator
+        } else {
+            CommentRoomType.NOT_PROPOSER.separator
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): CommentRoomViewHolder.Representative {
-        val binding =
-            ItemCommentRoomBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            )
-        return CommentRoomViewHolder.Representative(binding)
+    ): CommentRoomViewHolder {
+        when (viewType) {
+            CommentRoomType.PROPOSER.separator -> {
+                val binding =
+                    ItemCommentRoomProposerBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    )
+                return CommentRoomViewHolder.Proposer(binding)
+            }
+
+            CommentRoomType.NOT_PROPOSER.separator -> {
+                val binding =
+                    ItemCommentRoomBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    )
+                return CommentRoomViewHolder.NotProposer(binding)
+            }
+
+            else -> error("Invalid view type")
+        }
     }
 
     override fun onBindViewHolder(
-        holder: CommentRoomViewHolder.Representative,
+        holder: CommentRoomViewHolder,
         position: Int,
     ) {
-        holder.bind(currentList[position], commentRoomViewModel)
+        when (holder) {
+            is CommentRoomViewHolder.Proposer -> holder.bind(currentList[position])
+            is CommentRoomViewHolder.NotProposer -> holder.bind(currentList[position])
+        }
     }
 
     companion object {
