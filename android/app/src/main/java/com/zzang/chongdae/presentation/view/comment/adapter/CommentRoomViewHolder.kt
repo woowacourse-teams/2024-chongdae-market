@@ -12,16 +12,24 @@ sealed class CommentRoomViewHolder(
     class Proposer(
         private val binding: ItemCommentRoomProposerBinding,
     ) : CommentRoomViewHolder(binding.root) {
-        fun bind(commentRoom: CommentRoom) {
+        fun bind(
+            commentRoom: CommentRoom,
+            onClickListener: OnCommentRoomClickListener,
+        ) {
             binding.commentRoom = commentRoom
+            binding.clickListener = onClickListener
         }
     }
 
     class NotProposer(
         private val binding: ItemCommentRoomBinding,
     ) : CommentRoomViewHolder(binding.root) {
-        fun bind(commentRoom: CommentRoom) {
+        fun bind(
+            commentRoom: CommentRoom,
+            onClickListener: OnCommentRoomClickListener,
+        ) {
             binding.commentRoom = commentRoom
+            binding.clickListener = onClickListener
         }
     }
 }

@@ -12,6 +12,7 @@ import com.zzang.chongdae.presentation.view.comment.CommentRoomViewModel
 
 class CommentRoomAdapter(
     private val commentRoomViewModel: CommentRoomViewModel,
+    private val onClickListener: OnCommentRoomClickListener,
 ) : ListAdapter<CommentRoom, CommentRoomViewHolder>(productComparator) {
     override fun getItemViewType(position: Int): Int {
         return if (currentList[position].isProposer == true) {
@@ -55,8 +56,17 @@ class CommentRoomAdapter(
         position: Int,
     ) {
         when (holder) {
-            is CommentRoomViewHolder.Proposer -> holder.bind(currentList[position])
-            is CommentRoomViewHolder.NotProposer -> holder.bind(currentList[position])
+            is CommentRoomViewHolder.Proposer ->
+                holder.bind(
+                    currentList[position],
+                    onClickListener,
+                )
+
+            is CommentRoomViewHolder.NotProposer ->
+                holder.bind(
+                    currentList[position],
+                    onClickListener,
+                )
         }
     }
 

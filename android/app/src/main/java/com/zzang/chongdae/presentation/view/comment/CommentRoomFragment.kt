@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.comment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,15 @@ import com.zzang.chongdae.data.remote.source.impl.CommentRoomDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.CommentRoomRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentCommentRoomBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomAdapter
+import com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener
+import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 
-class CommentRoomFragment : Fragment() {
+class CommentRoomFragment : Fragment(), OnCommentRoomClickListener {
     private var _binding: FragmentCommentRoomBinding? = null
     private val binding get() = _binding!!
 
     private val commentRoomAdapter: CommentRoomAdapter by lazy {
-        CommentRoomAdapter(viewModel)
+        CommentRoomAdapter(viewModel, this)
     }
 
     val viewModel by viewModels<CommentRoomViewModel> {
@@ -64,5 +67,14 @@ class CommentRoomFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(id: Long) {
+        CommentDetailActivity.startActivity(
+            activity as Context,
+            id,
+            viewModel.commentRooms.value?.first { it.id == id }?.title
+                ?: throw IllegalArgumentException(),
+        )
     }
 }
