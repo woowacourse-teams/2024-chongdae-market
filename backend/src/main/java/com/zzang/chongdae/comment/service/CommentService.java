@@ -29,27 +29,27 @@ public class CommentService {
     private final OfferingRepository offeringRepository;
 
     public void saveComment(CommentSaveRequest request) {
-        MemberEntity member = memberRepository.findById(request.memberId())
+        MemberEntity loginMember = memberRepository.findById(request.memberId())
                 .orElseThrow(); // TODO: 예외처리 하기
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow();// TODO: 예외처리 하기
 
-        CommentEntity comment = new CommentEntity(member, offering, request.content());
+        CommentEntity comment = new CommentEntity(loginMember, offering, request.content());
         commentRepository.save(comment);
     }
 
-    public CommentAllResponse getAllComment(Long offeringId, Long memberId) {
+    public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(); // TODO: 예외 처리하기
 
         List<CommentWithRole> comments = commentRepository.findAllWithRoleByOffering(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
-                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, memberId))
+                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, loginMemberId))
                 .toList();
         return new CommentAllResponse(responseItems);
     }
 
-    private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long memberId) {
+    private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long loginMemberId) {
         CommentEntity comment = commentWithRole.getComment();
         OfferingMemberRole role = commentWithRole.getRole();
         MemberEntity member = comment.getMember();
@@ -58,14 +58,14 @@ public class CommentService {
                 comment.getContent(),
                 member.getNickname(),
                 role.isProposer(),
-                member.isSameMember(memberId));
+                member.isSameMember(loginMemberId));
     }
 
-    public CommentRoomAllResponse getAllCommentRoom(Long memberId) {
-        MemberEntity member = memberRepository.findById(memberId)
+    public CommentRoomAllResponse getAllCommentRoom(Long loginMemberId) {
+        MemberEntity loginMember = memberRepository.findById(loginMemberId)
                 .orElseThrow(); // TODO: 예외처리 하기
 
-        List<OfferingWithRole> offerings = offeringRepository.findAllByMember(member);
+        List<OfferingWithRole> offerings = offeringRepository.findAllByMember(loginMember);
         List<CommentRoomAllResponseItem> responseItems = offerings.stream()
                 .filter(this::hasComments)
                 .map(this::toCommentRoomAllResponseItem)

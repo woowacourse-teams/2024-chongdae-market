@@ -24,7 +24,8 @@ public class CommentController {
 
     @Operation(summary = "댓글 작성", description = "댓글을 작성합니다.")
     @PostMapping("/comments")
-    public ResponseEntity<Void> saveComment(@RequestBody CommentSaveRequest commentSaveRequest) {
+    public ResponseEntity<Void> saveComment(
+            @RequestBody CommentSaveRequest commentSaveRequest) {
         commentService.saveComment(commentSaveRequest);
         return ResponseEntity.ok().build();
     }
@@ -33,15 +34,16 @@ public class CommentController {
     @GetMapping("/comments/{offering-id}")
     public ResponseEntity<CommentAllResponse> getAllComment(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestParam(value = "member-id") Long memberId) {
-        CommentAllResponse response = commentService.getAllComment(offeringId, memberId);
+            @RequestParam(value = "member-id") Long loginMemberId) {
+        CommentAllResponse response = commentService.getAllComment(offeringId, loginMemberId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "댓글방 목록 조회", description = "댓글방 목록을 조회합니다.")
     @GetMapping("/comments")
-    public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(@RequestParam(value = "member-id") Long memberId) {
-        CommentRoomAllResponse response = commentService.getAllCommentRoom(memberId);
+    public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
+            @RequestParam(value = "member-id") Long loginMemberId) {
+        CommentRoomAllResponse response = commentService.getAllCommentRoom(loginMemberId);
         return ResponseEntity.ok(response);
     }
 }
