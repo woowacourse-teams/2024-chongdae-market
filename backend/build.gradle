@@ -48,7 +48,8 @@ test {
 }
 
 openapi3 {
-    server 'http://localhost:8080'
+    servers = [{ url = 'http://13.124.137.6' },
+               { url = 'http://localhost:8080' }]
     title '총대마켓 API 명세서'
     description '총대마켓 백엔드 API 명세서'
     version '0.1.0'
