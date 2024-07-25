@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.25dp"
-            android:text="@{commentRoom.description}"
+            android:text="@{commentRoom.latestComment}"
             android:textColor="@color/gray_500"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
             app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
