@@ -7,7 +7,7 @@
             type="com.zzang.chongdae.domain.model.CommentRoom" />
 
         <variable
-            name="clickListener"
+            name="onCommentRoomClickListener"
             type="com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener" />
     </data>
 
@@ -17,7 +17,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:onClick="@{() -> clickListener.onClick(commentRoom.id, commentRoom.title)}">
+        android:onClick="@{() -> onCommentRoomClickListener.onClick(commentRoom.id, commentRoom.title)}">
 
         <View
             android:layout_width="match_parent"

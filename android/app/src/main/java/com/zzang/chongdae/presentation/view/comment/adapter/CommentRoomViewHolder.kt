@@ -17,7 +17,7 @@ sealed class CommentRoomViewHolder(
             onClickListener: OnCommentRoomClickListener,
         ) {
             binding.commentRoom = commentRoom
-            binding.clickListener = onClickListener
+            binding.onCommentRoomClickListener = onClickListener
         }
     }
 
@@ -29,7 +29,7 @@ sealed class CommentRoomViewHolder(
             onClickListener: OnCommentRoomClickListener,
         ) {
             binding.commentRoom = commentRoom
-            binding.clickListener = onClickListener
+            binding.onCommentRoomClickListener = onClickListener
         }
     }
 }
