@@ -27,7 +27,7 @@ public class MemberEntity extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @Column(unique = true)
+    @Column(unique = true, length = 10)
     private String nickname;
 
     public boolean isSameMember(Long memberId) {

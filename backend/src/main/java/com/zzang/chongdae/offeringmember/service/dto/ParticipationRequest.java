@@ -1,4 +1,10 @@
 package com.zzang.chongdae.offeringmember.service.dto;
 
-public record ParticipationRequest(Long memberId, Long offeringId) {
+import jakarta.validation.constraints.NotNull;
+
+public record ParticipationRequest(@NotNull
+                                   Long memberId,
+
+                                   @NotNull
+                                   Long offeringId) {
 }
