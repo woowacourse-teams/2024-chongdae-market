@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="comment"
+            type="com.zzang.chongdae.domain.model.Comment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,6 +36,7 @@
             android:paddingTop="@dimen/size_7"
             android:paddingEnd="@dimen/size_10"
             android:paddingBottom="@dimen/size_7"
+            android:text="@{comment.content}"
             android:textColor="@color/white"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,8 +51,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_10"
+            android:fontFamily="@font/suit_medium"
+            android:textSize="@dimen/size_10"
+            app:formattedCommentTime="@{comment.commentCreatedAt.time}"
             app:layout_constraintBottom_toBottomOf="@id/tv_comment"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toStartOf="@id/tv_comment"
             tools:text="오전 10:30" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
