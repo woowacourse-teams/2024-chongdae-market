@@ -57,10 +57,11 @@
         android:layout_height="wrap_content"
         android:textColor="@color/main_color"
         android:textSize="@dimen/font_size_20"
+        android:text="총알0328"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/tv_welcome_text"
         app:layout_constraintTop_toBottomOf="@id/tv_welcome_text"
-        tools:text="쿠쿠콧구멍" />
+        tools:text="총알133" />
 
     <TextView
         android:id="@+id/tv_nickname_title"

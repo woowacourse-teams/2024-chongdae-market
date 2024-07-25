@@ -45,17 +45,26 @@
                     tools:src="@drawable/img_detail_product_default" />
 
                 <TextView
+                    android:id="@+id/tv_report_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
-                    android:layout_marginEnd="25dp"
                     android:fontFamily="@font/suit_medium"
                     android:text="@string/detail_report_text"
-                    android:textColor="@color/black_900"
+                    android:textColor="@color/gray_font"
                     android:textSize="15sp"
                     app:isVisible="@{!vm.isRepresentative()}"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_report"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_10"
+                    android:src="@drawable/ic_detail_report"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_report_comment"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -156,7 +165,8 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@id/tv_product_link_comment"
                         app:layout_constraintStart_toEndOf="@id/tv_product_link_comment"
-                        app:layout_constraintTop_toTopOf="@id/tv_product_link_comment" />
+                        app:layout_constraintTop_toTopOf="@id/tv_product_link_comment"
+                        app:url="@{vm.offeringDetail.productUrl}" />
 
                     <View
                         android:id="@+id/horizon_line"
