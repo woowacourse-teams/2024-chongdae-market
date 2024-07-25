@@ -76,4 +76,52 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(200);
         }
     }
+
+    @DisplayName("공모 목록 조회")
+    @Nested
+    class GetAllOffering {
+
+        List<ParameterDescriptorWithType> offeringAllQueryParameterDescriptors = List.of(
+                parameterWithName("last-id").description("마지막 공모 id"),
+                parameterWithName("page-size").description("페이지 크기")
+        );
+        List<FieldDescriptor> offeringAllResponseDescriptors = List.of(
+                fieldWithPath("offerings[].id").description("공모 id"),
+                fieldWithPath("offerings[].title").description("제목"),
+                fieldWithPath("offerings[].meetingAddress").description("모집 주소"),
+                fieldWithPath("offerings[].currentCount").description("현재원"),
+                fieldWithPath("offerings[].totalCount").description("총원"),
+                fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
+                fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
+                fieldWithPath("offerings[].condition").description("공모 상태"),
+                fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
+        );
+        ResourceSnippetParameters snippets = builder()
+                .summary("공모 목록 조회")
+                .description("공모 목록을 조회합니다.")
+                .queryParameters(offeringAllQueryParameterDescriptors)
+                .responseFields(offeringAllResponseDescriptors)
+                .responseSchema(schema("OfferingAllResponse"))
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            MemberEntity member = memberFixture.createMember();
+            for (int i = 0; i < 11; i++) {
+                offeringFixture.createOffering(member);
+            }
+        }
+
+        @DisplayName("공모 목록을 조회할 수 있다")
+        @Test
+        void should_responseAllOffering_when_givenPageInfo() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-all-offering-success", resource(snippets)))
+                    .queryParam("last-id", 1)
+                    .queryParam("page-size", 10)
+                    .when().get("/offerings")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+    }
 }

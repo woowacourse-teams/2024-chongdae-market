@@ -11,4 +11,10 @@ public abstract class DomainSupplier {
 
     @Autowired
     protected OfferingFixture offeringFixture;
+
+    @Autowired
+    protected OfferingMemberFixture offeringMemberFixture;
+
+    @Autowired
+    protected CommentFixture commentFixture;
 }
