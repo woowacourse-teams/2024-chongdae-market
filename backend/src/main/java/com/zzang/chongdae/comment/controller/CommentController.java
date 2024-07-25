@@ -35,7 +35,7 @@ public class CommentController {
     public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
             @RequestParam(value = "member-id") Long loginMemberId) {
         CommentRoomAllResponse response = commentService.getAllCommentRoom(loginMemberId);
-        return ResponseEntity.ok(response); // TODO: 총대 한명만 존재하는 댓글방도 댓글방 목록 조회 시 띄울 것인지
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "댓글 목록 조회", description = "댓글 목록을 조회합니다.")
