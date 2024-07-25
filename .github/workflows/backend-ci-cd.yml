@@ -40,7 +40,7 @@ jobs:
       - name: Build with Gradle Wrapper
         run: |
           ./gradlew clean
-          ./gradlew test
+          ./gradlew openapi3
           ./gradlew build
         working-directory: ./backend
 
