@@ -4,6 +4,8 @@
 
     <!--    all-->
     <string name="all_money_amount_text">%,d원</string>
+    <string name="all_report_text">신고하기</string>
+    <string name="all_edit_text">수정</string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>
@@ -22,12 +24,11 @@
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>
     <string name="my_page_nickname_title">&#160;님</string>
-
     <!--    offering_detail-->
     <string name="detail_product_url_title">물품 링크:&#160;</string>
     <string name="detail_product_url_text">바로가기</string>
     <string name="detail_divided_money_title">엔빵 가격</string>
-    <string name="detail_report_text">신고하기</string>
+
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
     <string name="total_price">(총 가격 %,d원)</string>
@@ -50,5 +51,16 @@
     <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
     <string name="comment_detail_message_hint">메시지를 입력하세요.</string>
     <string name="detail_deadline_comment_text">마감 시간</string>
+
+    <!--    comment_detail-->
+    <string name="recruiting">모집중</string>
+    <string name="scheduling">일정조정중</string>
+    <string name="purchasing">구매중</string>
+    <string name="dealing">거래중</string>
+    <string name="completed">거래완료</string>
+    <string name="participant_confirm">인원확정</string>
+    <string name="schedule_confirm">일정확정</string>
+    <string name="purchase_confirm">구매확정</string>
+    <string name="deal_confirm">거래확정</string>
 
 </resources>
