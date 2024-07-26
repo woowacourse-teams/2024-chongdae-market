@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
@@ -47,6 +48,14 @@ fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
             .fallback(R.drawable.img_main_product_default)
             .into(this)
     }
+}
+
+@BindingAdapter("imageResource")
+fun setImageResource(
+    imageView: ImageView,
+    @DrawableRes resource: Int,
+) {
+    imageView.setImageResource(resource)
 }
 
 @BindingAdapter("offeringCondition")

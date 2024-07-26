@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.Comment
+import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -40,8 +41,15 @@ class CommentDetailViewModel(
     private var cachedComments: List<Comment> = emptyList()
     private var pollJob: Job? = null
 
+    private val _offeringStatus = MutableLiveData(OfferingStatus.Recruiting)
+    val offeringStatus: LiveData<OfferingStatus> get() = _offeringStatus
+
     init {
         startPolling()
+    }
+
+    fun updateStatus() {
+        _offeringStatus.value = _offeringStatus.value?.let { OfferingStatus.nextStatus(it) }
     }
 
     private fun loadComments() {
