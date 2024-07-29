@@ -6,18 +6,18 @@
     <data>
 
         <variable
-            name="fragmentCommentRoom"
-            type="com.zzang.chongdae.presentation.view.comment.CommentRoomFragment" />
+            name="fragmentCommentRooms"
+            type="com.zzang.chongdae.presentation.view.comment.CommentRoomsFragment" />
 
         <variable
             name="vm"
-            type="com.zzang.chongdae.presentation.view.comment.CommentRoomViewModel" />
+            type="com.zzang.chongdae.presentation.view.comment.CommentRoomsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.view.comment.CommentRoomFragment">
+        tools:context=".presentation.view.comment.CommentRoomsFragment">
 
         <TextView
             android:id="@+id/tv_comment_text"

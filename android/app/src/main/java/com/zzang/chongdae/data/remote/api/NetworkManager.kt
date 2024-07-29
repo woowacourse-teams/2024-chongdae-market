@@ -38,5 +38,5 @@ object NetworkManager {
 
     fun commentDetailService(): CommentDetailApiService = getRetrofit().create(CommentDetailApiService::class.java)
 
-    fun commentRoomService(): CommentRoomApiService = getRetrofit().create(CommentRoomApiService::class.java)
+    fun commentRoomService(): CommentRoomsApiService = getRetrofit().create(CommentRoomsApiService::class.java)
 }

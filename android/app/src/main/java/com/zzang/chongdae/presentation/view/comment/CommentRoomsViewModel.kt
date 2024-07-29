@@ -9,11 +9,11 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.CommentRoom
-import com.zzang.chongdae.domain.repository.CommentRoomRepository
+import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import kotlinx.coroutines.launch
 
-class CommentRoomViewModel(
-    private val commentRoomRepository: CommentRoomRepository,
+class CommentRoomsViewModel(
+    private val commentRoomsRepository: CommentRoomsRepository,
 ) : ViewModel() {
     private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
     val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms
@@ -25,7 +25,7 @@ class CommentRoomViewModel(
 
     fun updateCommentRooms() {
         viewModelScope.launch {
-            commentRoomRepository.fetchCommentRoom(BuildConfig.TOKEN.toLong()).onSuccess {
+            commentRoomsRepository.fetchCommentRooms(BuildConfig.TOKEN.toLong()).onSuccess {
                 _commentRooms.value = it
             }.onFailure {
                 Log.e("error", it.message.toString())
@@ -34,8 +34,8 @@ class CommentRoomViewModel(
     }
 
     companion object {
-        fun factory(commentRoomRepositoryImpl: CommentRoomRepository): ViewModelProvider.Factory {
-            return CommentRoomViewModelFactory(commentRoomRepositoryImpl)
+        fun factory(commentRoomsRepositoryImpl: CommentRoomsRepository): ViewModelProvider.Factory {
+            return CommentRoomsViewModelFactory(commentRoomsRepositoryImpl)
         }
     }
 }
