@@ -47,6 +47,12 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// editorconfigCheck -> check
+
+check {
+    dependsOn editorconfigCheck
+}
+
 // test -> openapi3 -> copyOasToSwagger -> bootJar
 
 test {
