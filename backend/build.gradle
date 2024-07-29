@@ -35,10 +35,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
     testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
@@ -60,8 +63,10 @@ test {
 }
 
 openapi3 {
-    servers = [{ url = 'http://13.124.137.6' },
-               { url = 'http://localhost:8080' }]
+    servers = [
+            { url = 'http://13.124.137.6' },
+            { url = 'http://localhost:8080' }
+    ]
     title '총대마켓 API 명세서'
     description '총대마켓 백엔드 API 명세서'
     version '0.1.0'
