@@ -68,3 +68,7 @@ tasks.register('copyOasToSwagger', Copy) {
 bootJar {
     dependsOn copyOasToSwagger
 }
+
+jar {
+    enabled = false
+}
