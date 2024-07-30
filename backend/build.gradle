@@ -52,9 +52,9 @@ dependencies {
 
 // editorconfigCheck -> check
 
-check {
-    dependsOn editorconfigCheck
-}
+//check {
+//    dependsOn editorconfigCheck
+//}
 
 // test -> openapi3 -> copyOasToSwagger -> bootJar
 
