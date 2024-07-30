@@ -61,9 +61,9 @@ class CommentDetailActivity : AppCompatActivity() {
         binding.ivMore.setOnClickListener {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
-            } else {
-                binding.drawerLayout.openDrawer(GravityCompat.END)
+                return@setOnClickListener
             }
+            binding.drawerLayout.openDrawer(GravityCompat.END)
         }
     }
 
