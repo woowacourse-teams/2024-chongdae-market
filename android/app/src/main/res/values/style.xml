@@ -64,17 +64,41 @@
     <style name="Theme.AppCompat.TextView.Write.Subject" parent="@style/Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/size_16</item>
+        <item name="android:textSize">@dimen/size_20</item>
         <item name="android:textColor">@color/black_700</item>
-        <item name="android:layout_marginTop">@dimen/size_21</item>
+        <item name="android:layout_marginTop">@dimen/size_24</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Write.Description" parent="@style/Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/size_11</item>
+        <item name="android:textSize">@dimen/size_13</item>
         <item name="android:textColor">@color/gray_500</item>
         <item name="android:layout_marginTop">@dimen/size_8</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.Asterisk" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_14</item>
+        <item name="android:textColor">@color/main_color</item>
+        <item name="android:layout_marginStart">@dimen/size_4</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+        <item name="android:text">@string/all_asterisk</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.EditText" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/size_44</item>
+        <item name="android:textSize">@dimen/size_15</item>
+        <item name="android:textColor">@color/gray_700</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="android:background">@drawable/et_border_gray</item>
+        <item name="android:layout_marginTop">@dimen/size_16</item>
+        <item name="android:paddingHorizontal">@dimen/size_8</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
 </resources>
