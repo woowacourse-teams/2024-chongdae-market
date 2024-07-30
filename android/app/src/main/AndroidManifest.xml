@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".ChongdaeApp"
@@ -32,13 +32,19 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.detail.OfferingDetailActivity"
+            android:name=".presentation.view.offeringdetail.OfferingDetailActivity"
             android:exported="false" />
 
         <activity
             android:name=".presentation.view.commentdetail.CommentDetailActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".presentation.view.write.OfferingWriteActivity"
+            android:exported="false">
+        </activity>
+
     </application>
 
 </manifest>
