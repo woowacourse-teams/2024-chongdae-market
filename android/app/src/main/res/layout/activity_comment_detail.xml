@@ -56,13 +56,13 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_20"
                 app:layout_constraintBottom_toBottomOf="@id/iv_back"
-                app:layout_constraintEnd_toStartOf="@id/iv_more"
+                app:layout_constraintEnd_toStartOf="@id/iv_more_options"
                 app:layout_constraintStart_toEndOf="@id/iv_back"
                 app:layout_constraintTop_toTopOf="@id/iv_back"
                 tools:text="엄청나게 긴 제목이 들어가는 것을 표현하는 중 입니다" />
 
             <ImageView
-                android:id="@+id/iv_more"
+                android:id="@+id/iv_more_options"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/icon_size_24"
                 android:paddingStart="@dimen/size_5"

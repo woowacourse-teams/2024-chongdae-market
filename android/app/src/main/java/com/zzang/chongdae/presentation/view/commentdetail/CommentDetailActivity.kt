@@ -58,7 +58,7 @@ class CommentDetailActivity : AppCompatActivity() {
     }
 
     private fun setupDrawerToggle() {
-        binding.ivMore.setOnClickListener {
+        binding.ivMoreOptions.setOnClickListener {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
                 return@setOnClickListener
