@@ -101,4 +101,12 @@
         <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Normal.Gray900.Size17" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_17</item>
+        <item name="fontFamily">@font/suit_medium</item>
+        <item name="android:textColor">@color/gray_900</item>
+    </style>
+
 </resources>
