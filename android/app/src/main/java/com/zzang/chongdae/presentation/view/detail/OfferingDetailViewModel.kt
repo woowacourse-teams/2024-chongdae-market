@@ -102,10 +102,9 @@ class OfferingDetailViewModel(
             ): T {
                 return OfferingDetailViewModel(
                     articleId,
-                    offeringDetailRepository
+                    offeringDetailRepository,
                 ) as T
             }
         }
     }
 }
-
