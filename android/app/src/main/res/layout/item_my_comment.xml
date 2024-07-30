@@ -30,7 +30,7 @@
             android:background="@drawable/bg_comment_main_color"
             android:ellipsize="end"
             android:fontFamily="@font/suit_medium"
-            android:gravity="right"
+            android:gravity="left"
             android:maxLines="10"
             android:paddingStart="@dimen/size_10"
             android:paddingTop="@dimen/size_7"

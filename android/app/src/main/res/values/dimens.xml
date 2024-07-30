@@ -84,6 +84,9 @@
     <dimen name="size_100">100dp</dimen>
     <dimen name="size_120">120dp</dimen>
     <dimen name="size_150">150dp</dimen>
+    <dimen name="size_200">200dp</dimen>
+    <dimen name="size_250">250dp</dimen>
+    <dimen name="size_300">300dp</dimen>
 
     <!-- font size -->
     <dimen name="font_size_72">72sp</dimen>
