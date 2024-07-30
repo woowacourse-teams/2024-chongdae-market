@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,35 +42,40 @@ class CommentDetailActivity : AppCompatActivity() {
     private val offeringTitle by lazy {
         intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
     }
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
+        setupDrawerToggle()
         initAdapter()
         setUpCommentsObserve()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
+    
     private fun initBinding() {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_comment_detail)
         binding.vm = viewModel
         binding.lifecycleOwner = this
     }
-
+    
+    private fun setupDrawerToggle() {
+        binding.ivMore.setOnClickListener {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.END)
+            } else {
+                binding.drawerLayout.openDrawer(GravityCompat.END)
+            }
+        }
+    }
+    
     private fun initAdapter() {
         binding.rvComments.apply {
             adapter = commentAdapter
-            layoutManager =
-                LinearLayoutManager(this@CommentDetailActivity).apply {
-                    stackFromEnd = true
-                }
+            layoutManager = LinearLayoutManager(this@CommentDetailActivity).apply {
+                stackFromEnd = true
+            }
         }
     }
-
+    
     private fun setUpCommentsObserve() {
         viewModel.comments.observe(this) { comments ->
             commentAdapter.submitList(comments) {
@@ -79,7 +85,12 @@ class CommentDetailActivity : AppCompatActivity() {
             }
         }
     }
-
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+    
     companion object {
         private const val EXTRA_DEFAULT_VALUE = 1L
         private const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
