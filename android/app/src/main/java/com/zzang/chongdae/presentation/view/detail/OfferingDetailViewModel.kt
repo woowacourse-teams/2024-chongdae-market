@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
@@ -71,7 +73,7 @@ class OfferingDetailViewModel(
             ).onSuccess {
                 _isParticipated.value = true
                 _isAvailable.value = false
-                _commentDetailEvent.setValue(offeringDetail.value?.title ?: "")
+                _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }
@@ -88,5 +90,21 @@ class OfferingDetailViewModel(
 
     companion object {
         private const val DEFAULT_TITLE = ""
+
+        @Suppress("UNCHECKED_CAST")
+        fun getFactory(
+            articleId: Long,
+            offeringDetailRepository: OfferingDetailRepository,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return OfferingDetailViewModel(
+                    articleId,
+                    offeringDetailRepository,
+                ) as T
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ class HomeFragment : Fragment(), OnArticleClickListener {
     private val binding get() = _binding!!
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
-        OfferingViewModeFactory(
+        OfferingViewModel.getFactory(
             OfferingsRepositoryImpl(
                 OfferingsDataSourceImpl(NetworkManager.offeringsService()),
             ),
