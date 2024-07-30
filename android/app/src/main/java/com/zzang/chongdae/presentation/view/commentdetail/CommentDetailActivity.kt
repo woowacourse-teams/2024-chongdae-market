@@ -24,7 +24,10 @@ class CommentDetailActivity : AppCompatActivity() {
             offeringId,
             offeringTitle,
             CommentDetailRepositoryImpl(
-                CommentDetailDataSourceImpl(NetworkManager.commentDetailService()),
+                CommentDetailDataSourceImpl(
+                    NetworkManager.offeringsService(),
+                    NetworkManager.commentsService(),
+                ),
             ),
         )
     }
