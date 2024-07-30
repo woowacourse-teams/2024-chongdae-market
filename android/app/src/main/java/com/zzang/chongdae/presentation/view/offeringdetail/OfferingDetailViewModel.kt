@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.detail
+package com.zzang.chongdae.presentation.view.offeringdetail
 
 import android.util.Log
 import androidx.lifecycle.LiveData
