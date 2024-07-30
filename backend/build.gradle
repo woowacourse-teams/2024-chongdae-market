@@ -16,7 +16,7 @@ java {
 }
 
 editorconfig {
-    includes = ['src/**/*.java', 'build.gradle']
+    includes = ['src/**', 'build.gradle']
     excludes = ['build/**', 'out/**']
 }
 
