@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,19 +46,25 @@ class CommentDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
+        setupDrawerToggle()
         initAdapter()
         setUpCommentsObserve()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     private fun initBinding() {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_comment_detail)
         binding.vm = viewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupDrawerToggle() {
+        binding.ivMoreOptions.setOnClickListener {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.END)
+                return@setOnClickListener
+            }
+            binding.drawerLayout.openDrawer(GravityCompat.END)
+        }
     }
 
     private fun initAdapter() {
@@ -78,6 +85,11 @@ class CommentDetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     companion object {
