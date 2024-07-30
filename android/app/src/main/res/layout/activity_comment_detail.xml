@@ -10,7 +10,6 @@
             type="com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel" />
     </data>
 
-
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -65,9 +64,9 @@
                 android:id="@+id/iv_more_options"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/icon_size_24"
-                android:paddingStart="@dimen/size_5"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
+                android:paddingStart="@dimen/size_5"
                 android:src="@drawable/btn_more"
                 app:layout_constraintBottom_toBottomOf="@id/tv_title_text"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -310,10 +309,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@color/white"
             android:layout_width="@dimen/size_300"
             android:layout_height="match_parent"
-            android:layout_gravity="end">
+            android:layout_gravity="end"
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/tv_offering_members"
@@ -334,19 +333,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_offering_members" />
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/rv_offering_members"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_marginTop="@dimen/margin_10"-->
-<!--                android:paddingBottom="@dimen/size_50"-->
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/horizon_line"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/tv_offering_members"-->
-<!--                tools:itemCount="5"-->
-<!--                tools:listitem="@layout/item_offering_member" />-->
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/rv_offering_members"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:layout_marginTop="@dimen/margin_10"-->
+            <!--                android:paddingBottom="@dimen/size_50"-->
+            <!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            <!--                app:layout_constraintBottom_toTopOf="@+id/horizon_line"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/tv_offering_members"-->
+            <!--                tools:itemCount="5"-->
+            <!--                tools:listitem="@layout/item_offering_member" />-->
 
             <View
                 android:id="@+id/horizon_line"
