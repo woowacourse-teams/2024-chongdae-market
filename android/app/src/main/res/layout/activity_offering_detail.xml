@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.zzang.chongdae.presentation.view.detail.OfferingDetailViewModel" />
+            type="com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailViewModel" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.view.detail.OfferingDetailActivity">
+        tools:context=".presentation.view.offeringdetail.OfferingDetailActivity">
 
         <ScrollView
             android:id="@+id/sv_layout"
