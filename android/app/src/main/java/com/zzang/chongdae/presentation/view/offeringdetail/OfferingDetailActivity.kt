@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.detail
+package com.zzang.chongdae.presentation.view.offeringdetail
 
 import android.content.Context
 import android.content.Intent
@@ -20,10 +20,13 @@ class OfferingDetailActivity : AppCompatActivity() {
         obtainOfferingId()
     }
     private val viewModel: OfferingDetailViewModel by viewModels {
-        OfferingDetailViewModelFactory(
+        OfferingDetailViewModel.getFactory(
             offeringId,
             OfferingDetailRepositoryImpl(
-                OfferingDetailDataSourceImpl(NetworkManager.offeringDetailService()),
+                OfferingDetailDataSourceImpl(
+                    NetworkManager.offeringsService(),
+                    NetworkManager.participatoinsService(),
+                ),
             ),
         )
     }

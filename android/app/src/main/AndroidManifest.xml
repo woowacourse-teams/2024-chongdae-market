@@ -32,7 +32,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.detail.OfferingDetailActivity"
+            android:name=".presentation.view.offeringdetail.OfferingDetailActivity"
             android:exported="false" />
 
         <activity

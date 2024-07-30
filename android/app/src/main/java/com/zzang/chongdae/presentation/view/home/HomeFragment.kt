@@ -13,15 +13,15 @@ import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.OfferingsDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentHomeBinding
-import com.zzang.chongdae.presentation.view.detail.OfferingDetailActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
+import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
 
 class HomeFragment : Fragment(), OnArticleClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
-        OfferingViewModeFactory(
+        OfferingViewModel.getFactory(
             OfferingsRepositoryImpl(
                 OfferingsDataSourceImpl(NetworkManager.offeringsService()),
             ),
