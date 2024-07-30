@@ -61,4 +61,20 @@
         <item name="android:textColor">@color/black_1000</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Write.Subject" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_16</item>
+        <item name="android:textColor">@color/black_700</item>
+        <item name="android:layout_marginTop">@dimen/size_21</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.Description" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_11</item>
+        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:layout_marginTop">@dimen/size_8</item>
+    </style>
+
 </resources>
