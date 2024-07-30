@@ -24,7 +24,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
     }
 
     private val viewModel by viewModels<CommentRoomsViewModel> {
-        CommentRoomsViewModel.factory(
+        CommentRoomsViewModel.getFactory(
             CommentRoomsRepositoryImpl(
                 CommentRoomsDataSourceImpl(NetworkManager.commentRoomService()),
             ),
