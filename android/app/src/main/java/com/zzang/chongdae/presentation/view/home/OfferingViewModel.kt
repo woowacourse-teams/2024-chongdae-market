@@ -2,7 +2,9 @@ package com.zzang.chongdae.presentation.view.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -24,5 +26,19 @@ class OfferingViewModel(
 
     companion object {
         private const val PAGE_SIZE = 10
+
+        @Suppress("UNCHECKED_CAST")
+        fun getFactory(
+            offeringsRepository: OfferingsRepository,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return OfferingViewModel(
+                    offeringsRepository
+                ) as T
+            }
+        }
     }
 }

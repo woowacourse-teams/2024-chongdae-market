@@ -20,7 +20,7 @@ class OfferingDetailActivity : AppCompatActivity() {
         obtainOfferingId()
     }
     private val viewModel: OfferingDetailViewModel by viewModels {
-        OfferingDetailViewModelFactory(
+        OfferingDetailViewModel.getFactory(
             offeringId,
             OfferingDetailRepositoryImpl(
                 OfferingDetailDataSourceImpl(NetworkManager.offeringDetailService()),
