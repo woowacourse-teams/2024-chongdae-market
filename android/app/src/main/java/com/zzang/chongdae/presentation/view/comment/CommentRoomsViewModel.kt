@@ -34,8 +34,12 @@ class CommentRoomsViewModel(
     }
 
     companion object {
-        fun factory(commentRoomsRepositoryImpl: CommentRoomsRepository): ViewModelProvider.Factory {
-            return CommentRoomsViewModelFactory(commentRoomsRepositoryImpl)
-        }
+        @Suppress("UNCHECKED_CAST")
+        fun getFactory(commentRoomsRepository: CommentRoomsRepository) =
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return CommentRoomsViewModel(commentRoomsRepository) as T
+                }
+            }
     }
 }
