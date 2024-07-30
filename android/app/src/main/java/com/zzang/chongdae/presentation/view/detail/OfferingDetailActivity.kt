@@ -23,7 +23,10 @@ class OfferingDetailActivity : AppCompatActivity() {
         OfferingDetailViewModel.getFactory(
             offeringId,
             OfferingDetailRepositoryImpl(
-                OfferingDetailDataSourceImpl(NetworkManager.offeringDetailService()),
+                OfferingDetailDataSourceImpl(
+                    NetworkManager.offeringsService(),
+                    NetworkManager.participatoinsService(),
+                ),
             ),
         )
     }
