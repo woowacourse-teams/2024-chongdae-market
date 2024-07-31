@@ -21,8 +21,8 @@ public class CommentController {
 
     @PostMapping("/comments")
     public ResponseEntity<Void> saveComment(
-            @RequestBody CommentSaveRequest commentSaveRequest) {
-        commentService.saveComment(commentSaveRequest);
+            @RequestBody CommentSaveRequest request) {
+        commentService.saveComment(request);
         return ResponseEntity.ok().build();
     }
 

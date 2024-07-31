@@ -16,8 +16,9 @@ public class OfferingMemberController {
     private final OfferingMemberService offeringMemberService;
 
     @PostMapping("/participations")
-    ResponseEntity<Void> participate(@RequestBody ParticipationRequest participationRequest) {
-        Long id = offeringMemberService.participate(participationRequest);
-        return ResponseEntity.created(URI.create("participations/" + id)).build();
+    ResponseEntity<Void> participate(
+            @RequestBody ParticipationRequest request) {
+        Long id = offeringMemberService.participate(request);
+        return ResponseEntity.created(URI.create("/participations/" + id)).build();
     }
 }

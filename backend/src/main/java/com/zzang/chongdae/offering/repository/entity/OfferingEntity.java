@@ -14,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -74,13 +73,17 @@ public class OfferingEntity extends BaseTimeEntity {
 
     @NotNull
     @Positive
-    private BigDecimal totalPrice;
+    private Integer totalPrice;
+
+    @Positive
+    private Integer eachPrice;
 
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
-                          Integer totalCount, Integer currentCount, Boolean isManualConfirmed, BigDecimal totalPrice) {
+                          Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
+                          Integer eachPrice) {
         this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
-                meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice);
+                meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice, eachPrice);
     }
 
     public void updateCurrentCount() {
