@@ -31,6 +31,8 @@
     <string name="main_offering_condition_continue_comment">마감까지 &lt;font color="#FF0000">%d명 &lt;/font> 남았어요</string>
     <string name="main_discount_rate_text">33%↓</string>
     <string name="strike_money_amount_text"><strike>%,d원</strike></string>
+    <string name="main_filter_participation">참여 가능만</string>
+    <string name="main_filter_discount_rate">높은 할인율 순</string>
 
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>
@@ -100,5 +102,6 @@
     <string name="write_deadline_contents_description">공동 구매에 대한 자세한 내용을 입력해주세요</string>
     <string name="write_under_1000">1000자 이하</string>
     <string name="write_start_offering">공동구매 시작하기!</string>
+    <string name="main_filter_product_price">낮은 가격 순</string>
 
 </resources>

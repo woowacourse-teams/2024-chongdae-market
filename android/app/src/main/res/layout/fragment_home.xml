@@ -39,6 +39,30 @@
             app:layout_constraintEnd_toEndOf="@id/et_search"
             app:layout_constraintTop_toTopOf="@id/et_search" />
 
+        <CheckBox
+            android:id="@+id/cb_participation"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
+            android:layout_marginStart="25dp"
+            android:text="@string/main_filter_participation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_search" />
+
+        <CheckBox
+            android:id="@+id/cb_discount_rate"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
+            android:layout_marginStart="4dp"
+            android:text="@string/main_filter_discount_rate"
+            app:layout_constraintStart_toEndOf="@id/cb_participation"
+            app:layout_constraintTop_toTopOf="@id/cb_participation" />
+
+        <CheckBox
+            android:id="@+id/cb_product_price"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
+            android:layout_marginStart="4dp"
+            android:text="@string/main_filter_product_price"
+            app:layout_constraintStart_toEndOf="@id/cb_discount_rate"
+            app:layout_constraintTop_toTopOf="@id/cb_participation" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_offerings"
             android:layout_width="0dp"
@@ -49,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_search"
+            app:layout_constraintTop_toBottomOf="@id/cb_participation"
             tools:listitem="@layout/item_offering" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
