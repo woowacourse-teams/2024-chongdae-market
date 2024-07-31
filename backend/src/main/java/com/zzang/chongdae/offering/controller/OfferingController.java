@@ -44,8 +44,9 @@ public class OfferingController {
     }
 
     @PostMapping("/offerings")
-    public ResponseEntity<Void> saveOffering(@RequestBody OfferingSaveRequest offeringCreateRequest) {
-        Long offeringId = offeringService.saveOffering(offeringCreateRequest);
+    public ResponseEntity<Void> saveOffering(
+            @RequestBody OfferingSaveRequest request) {
+        Long offeringId = offeringService.saveOffering(request);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 }
