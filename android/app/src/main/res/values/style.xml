@@ -21,9 +21,17 @@
     <style name="Theme.AppCompat.TextView.Normal.Gray700.Size12" parent="@style/Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="fontFamily">@font/suit_medium</item>
         <item name="android:textColor">@color/gray_500</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Bold.MainColor.Size23" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">23sp</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/main_color</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Offering.Continue" parent="@style/Widget.AppCompat.TextView">
@@ -32,7 +40,7 @@
         <item name="android:textSize">@dimen/font_size_12</item>
         <item name="android:text">@string/main_offering_continue</item>
         <item name="fontFamily">@font/suit_bold</item>
-        <item name="android:textColor">@color/offering_continue</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Offering.Closed" parent="@style/Widget.AppCompat.TextView">
@@ -41,7 +49,7 @@
         <item name="android:text">@string/main_offering_closed</item>
         <item name="android:textSize">@dimen/font_size_12</item>
         <item name="fontFamily">@font/suit_bold</item>
-        <item name="android:textColor">@color/offering_closed</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Offering.Full" parent="@style/Widget.AppCompat.TextView">
@@ -50,7 +58,7 @@
         <item name="android:textSize">@dimen/font_size_12</item>
         <item name="android:text">@string/main_offering_full</item>
         <item name="fontFamily">@font/suit_bold</item>
-        <item name="android:textColor">@color/offering_full</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Bold.Black1000.Size14" parent="@style/Widget.AppCompat.TextView">

@@ -2,6 +2,8 @@ package com.zzang.chongdae.presentation.util
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.text.Html
+import android.text.Spannable
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -53,24 +55,58 @@ fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
 @BindingAdapter("imageResource")
 fun setImageResource(
     imageView: ImageView,
-    @DrawableRes resource: Int,
+    @DrawableRes resource: Int?,
 ) {
-    imageView.setImageResource(resource)
+    resource?.let { imageView.setImageResource(it) }
 }
 
-@BindingAdapter("offeringCondition")
+@BindingAdapter("offeringConditionForComment", "remaining")
+fun TextView.bindConditionComment(offeringCondition: OfferingCondition?, remaining: Int) {
+    offeringCondition?.let {
+        this.text = it.toOfferingComment(context, remaining)
+    }
+}
+
+private fun OfferingCondition.toOfferingComment(context: Context, remaining: Int) =
+    when (this) {
+        OfferingCondition.FULL -> context.getString(R.string.main_offering_condition_full_comment)
+        OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_condition_closed_comment)
+        OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_condition_closed_comment)
+        OfferingCondition.AVAILABLE -> Html.fromHtml(
+            context.getString(R.string.main_offering_condition_continue_comment)
+                .format((remaining)),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+    }
+
+@BindingAdapter("conditionText:offeringCondition") // 추후 condition추가(마감임박)에 따른 API변경있으면 수정 예정
 fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
     offeringCondition?.toStyle()?.let {
         this.setTextAppearance(it)
     }
 
     offeringCondition?.let {
-        this.text = it.toComment(context)
+        this.text = it.toOfferingConditionText(context)
         this.setTextAppearance(it.toStyle())
+        setBackGroundTintByCondition(it)
     }
 }
 
-private fun OfferingCondition.toComment(context: Context) =
+private fun TextView.setBackGroundTintByCondition(offeringCondition: OfferingCondition) {
+    when (offeringCondition) {
+        OfferingCondition.FULL -> this.setColor(R.color.offering_full)
+        OfferingCondition.TIME_OUT -> this.setColor(R.color.offering_closed)
+        OfferingCondition.CONFIRMED -> this.setColor(R.color.offering_closed)
+        OfferingCondition.AVAILABLE -> this.setColor(R.color.offering_continue)
+    }
+}
+
+private fun TextView.setColor(colorId: Int) {
+    this.background.setTint(this.context.resources.getColor(colorId, null))
+}
+
+private fun OfferingCondition.toOfferingConditionText(context: Context) =
     when (this) {
         OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
         OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_closed) // 공구마감
@@ -108,10 +144,10 @@ fun TextView.bindStatusComment(
         this.text = context.getString(R.string.participant_already)
         return
     }
-    this.text = condition?.toComment(this.context, currentCount, totalCount)
+    this.text = condition?.toOfferingConditionText(this.context, currentCount, totalCount)
 }
 
-private fun OfferingCondition.toComment(
+private fun OfferingCondition.toOfferingConditionText(
     context: Context,
     currentCount: Int,
     totalCount: Int,
@@ -150,7 +186,12 @@ fun setLayoutHeightWithAnimation(
 
 @BindingAdapter("formattedAmPmTime")
 fun TextView.setTime(localDateTime: LocalDateTime?) {
-    this.text = localDateTime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN)) ?: ""
+    this.text = localDateTime?.format(
+        DateTimeFormatter.ofPattern(
+            context.getString(R.string.amPmTime),
+            Locale.KOREAN
+        )
+    ) ?: ""
 }
 
 private fun Int.toPx(context: Context): Int {
@@ -174,7 +215,12 @@ fun setFormattedDeadline(
 
 @BindingAdapter("formattedCommentTime")
 fun TextView.setTime(localTime: LocalTime) {
-    this.text = localTime.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN))
+    this.text = localTime.format(
+        DateTimeFormatter.ofPattern(
+            context.getString(R.string.amPmTime),
+            Locale.KOREAN
+        )
+    )
 }
 
 @BindingAdapter("setImageProposer")
