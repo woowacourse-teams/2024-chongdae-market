@@ -12,7 +12,10 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -160,6 +163,62 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
                     .statusCode(200);
+        }
+    }
+
+    @DisplayName("공모 작성")
+    @Nested
+    class CreateOffering {
+
+        List<FieldDescriptor> offeringCreateRequestDescriptors = List.of(
+                fieldWithPath("memberId").description("회원 id"),
+                fieldWithPath("title").description("제목"),
+                fieldWithPath("productUrl").description("물품 구매 링크"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("totalCount").description("총원"),
+                fieldWithPath("totalPrice").description("총가격"),
+                fieldWithPath("eachPrice").description("낱개 가격"),
+                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("deadline").description("모집 종료 시간"),
+                fieldWithPath("description").description("내용")
+        );
+        ResourceSnippetParameters snippets = builder()
+                .summary("공모 작성")
+                .description("공모 정보를 받아 공모를 작성합니다.")
+                .requestFields(offeringCreateRequestDescriptors)
+                .responseSchema(schema("OfferingCreateResponse"))
+                .build();
+        MemberEntity member;
+
+        @BeforeEach
+        void setUp() {
+            member = memberFixture.createMember();
+        }
+
+        @DisplayName("공모 정보를 받아 공모를 작성합니다")
+        @Test
+        void should_createOffering_when_givenOfferingCreateRequest() {
+            Map<String, String> request = new HashMap<>(Map.of(
+                    "memberId", member.getId().toString(),
+                    "title", "공모 제목",
+                    "productUrl", "www.naver.com",
+                    "thumbnailUrl", "www.naver.com/favicon.ico",
+                    "totalCount", "5",
+                    "totalPrice", "10000",
+                    "eachPrice", "2000",
+                    "meetingAddress", "서울시 관악구 봉천동",
+                    "meetingAddressDetail", "상세주소아파트",
+                    "deadline", "2024-10-11T10:00:00"));
+            request.put("description", "내용입니다.");
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("create-offering-success", resource(snippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(201);
         }
     }
 }

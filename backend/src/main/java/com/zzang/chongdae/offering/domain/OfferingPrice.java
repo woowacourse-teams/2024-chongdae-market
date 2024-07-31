@@ -8,9 +8,11 @@ import lombok.AllArgsConstructor;
 public class OfferingPrice {
 
     private final Integer totalCount;
-    private final BigDecimal totalPrice;
+    private final Integer totalPrice;
 
-    public BigDecimal calculateDividedPrice() {
-        return totalPrice.divide(BigDecimal.valueOf(totalCount), RoundingMode.HALF_UP);
+    public Integer calculateDividedPrice() {
+        return BigDecimal.valueOf(totalPrice)
+                .divide(BigDecimal.valueOf(totalCount), RoundingMode.HALF_UP)
+                .intValue();
     }
 }
