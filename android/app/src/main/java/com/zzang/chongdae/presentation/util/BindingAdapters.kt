@@ -61,24 +61,29 @@ fun setImageResource(
 }
 
 @BindingAdapter("offeringConditionForComment", "remaining")
-fun TextView.bindConditionComment(offeringCondition: OfferingCondition?, remaining: Int) {
+fun TextView.bindConditionComment(
+    offeringCondition: OfferingCondition?,
+    remaining: Int,
+) {
     offeringCondition?.let {
         this.text = it.toOfferingComment(context, remaining)
     }
 }
 
-private fun OfferingCondition.toOfferingComment(context: Context, remaining: Int) =
-    when (this) {
-        OfferingCondition.FULL -> context.getString(R.string.main_offering_condition_full_comment)
-        OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_condition_closed_comment)
-        OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_condition_closed_comment)
-        OfferingCondition.AVAILABLE -> Html.fromHtml(
+private fun OfferingCondition.toOfferingComment(
+    context: Context,
+    remaining: Int,
+) = when (this) {
+    OfferingCondition.FULL -> context.getString(R.string.main_offering_condition_full_comment)
+    OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_condition_closed_comment)
+    OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_condition_closed_comment)
+    OfferingCondition.AVAILABLE ->
+        Html.fromHtml(
             context.getString(R.string.main_offering_condition_continue_comment)
                 .format((remaining)),
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
-
-    }
+}
 
 @BindingAdapter("conditionText:offeringCondition") // 추후 condition추가(마감임박)에 따른 API변경있으면 수정 예정
 fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
@@ -189,8 +194,8 @@ fun TextView.setTime(localDateTime: LocalDateTime?) {
     this.text = localDateTime?.format(
         DateTimeFormatter.ofPattern(
             context.getString(R.string.amPmTime),
-            Locale.KOREAN
-        )
+            Locale.KOREAN,
+        ),
     ) ?: ""
 }
 
@@ -215,12 +220,13 @@ fun setFormattedDeadline(
 
 @BindingAdapter("formattedCommentTime")
 fun TextView.setTime(localTime: LocalTime) {
-    this.text = localTime.format(
-        DateTimeFormatter.ofPattern(
-            context.getString(R.string.amPmTime),
-            Locale.KOREAN
+    this.text =
+        localTime.format(
+            DateTimeFormatter.ofPattern(
+                context.getString(R.string.amPmTime),
+                Locale.KOREAN,
+            ),
         )
-    )
 }
 
 @BindingAdapter("setImageProposer")

@@ -1,7 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -26,10 +25,11 @@ class OfferingViewModel(
     }
 
     private fun getOfferings() {
-        offerings = Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringsRepository::fetchOfferings) },
-        ).liveData.cachedIn(viewModelScope)
+        offerings =
+            Pager(
+                config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
+                pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringsRepository::fetchOfferings) },
+            ).liveData.cachedIn(viewModelScope)
     }
 
     companion object {
