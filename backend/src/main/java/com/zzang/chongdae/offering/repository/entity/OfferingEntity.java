@@ -5,7 +5,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
-import com.zzang.chongdae.offering.service.dto.OfferingCreateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -87,7 +87,7 @@ public class OfferingEntity extends BaseTimeEntity {
                 meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice, eachPrice);
     }
 
-    public OfferingEntity(MemberEntity member, OfferingCreateRequest request) {
+    public OfferingEntity(MemberEntity member, OfferingSaveRequest request) {
         this(null, member, request.title(), request.description(), request.thumbnailUrl(), request.productUrl(),
                 request.deadline(), request.meetingAddress(), request.meetingAddressDetail(), request.totalCount(), 1,
                 false, request.totalPrice(), request.eachPrice());

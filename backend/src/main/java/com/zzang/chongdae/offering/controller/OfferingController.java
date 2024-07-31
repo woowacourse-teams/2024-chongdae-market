@@ -2,9 +2,9 @@ package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
-import com.zzang.chongdae.offering.service.dto.OfferingCreateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +44,8 @@ public class OfferingController {
     }
 
     @PostMapping("/offerings")
-    public ResponseEntity<Void> createOffering(@RequestBody OfferingCreateRequest offeringCreateRequest) {
-        Long offeringId = offeringService.createOffering(offeringCreateRequest);
+    public ResponseEntity<Void> saveOffering(@RequestBody OfferingSaveRequest offeringCreateRequest) {
+        Long offeringId = offeringService.saveOffering(offeringCreateRequest);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 }
