@@ -23,6 +23,7 @@ public class OfferingFixture {
                 LocalDateTime.of(3000, 1, 1, 0, 0, 0),
                 "meetingAddress",
                 "meetingAddressDetail",
+                "meetingAddressDong",
                 5,
                 1,
                 false,
