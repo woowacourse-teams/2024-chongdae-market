@@ -91,7 +91,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> offeringAllResponseDescriptors = List.of(
                 fieldWithPath("offerings[].id").description("공모 id"),
                 fieldWithPath("offerings[].title").description("제목"),
-                fieldWithPath("offerings[].meetingAddress").description("모집 주소"),
+                fieldWithPath("offerings[].meetingAddressDong").description("모집 동 주소"),
                 fieldWithPath("offerings[].currentCount").description("현재원"),
                 fieldWithPath("offerings[].totalCount").description("총원"),
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
@@ -180,6 +180,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("eachPrice").description("낱개 가격"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소"),
                 fieldWithPath("deadline").description("모집 종료 시간"),
                 fieldWithPath("description").description("내용")
         );
@@ -207,9 +208,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "totalCount", "5",
                     "totalPrice", "10000",
                     "eachPrice", "2000",
-                    "meetingAddress", "서울시 관악구 봉천동",
+                    "meetingAddress", "서울특별시 광진구 구의강변로 3길 11",
                     "meetingAddressDetail", "상세주소아파트",
-                    "deadline", "2024-10-11T10:00:00"));
+                    "meetingAddressDong", "구의동"));
+            request.put("deadline", "2024-10-11T10:00:00");
             request.put("description", "내용입니다.");
 
             RestAssured.given(spec).log().all()

@@ -60,6 +60,8 @@ public class OfferingEntity extends BaseTimeEntity {
 
     private String meetingAddressDetail;
 
+    private String meetingAddressDong; // TODO: nullable?
+
     @NotNull
     @Positive
     private Integer totalCount;
@@ -80,10 +82,12 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
+                          String meetingAddressDong,
                           Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
                           Integer eachPrice) {
         this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
-                meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice, eachPrice);
+                meetingAddressDetail, meetingAddressDong, totalCount, currentCount, isManualConfirmed, totalPrice,
+                eachPrice);
     }
 
     public void updateCurrentCount() {
