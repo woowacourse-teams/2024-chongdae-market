@@ -2,12 +2,16 @@ package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingCreateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,5 +41,11 @@ public class OfferingController {
             @PathVariable(value = "offering-id") Long offeringId) {
         OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/offerings")
+    public ResponseEntity<Void> createOffering(@RequestBody OfferingCreateRequest offeringCreateRequest) {
+        Long offeringId = offeringService.createOffering(offeringCreateRequest);
+        return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 }

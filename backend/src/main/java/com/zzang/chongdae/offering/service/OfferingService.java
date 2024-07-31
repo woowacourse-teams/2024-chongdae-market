@@ -11,6 +11,7 @@ import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
+import com.zzang.chongdae.offering.service.dto.OfferingCreateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
@@ -59,5 +60,13 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
+    }
+
+    public Long createOffering(OfferingCreateRequest request) {
+        MemberEntity member = memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+        OfferingEntity offering = new OfferingEntity(member, request);
+        OfferingEntity savedOffering = offeringRepository.save(offering);
+        return savedOffering.getId();
     }
 }

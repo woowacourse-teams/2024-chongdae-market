@@ -5,6 +5,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.service.dto.OfferingCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -74,13 +74,23 @@ public class OfferingEntity extends BaseTimeEntity {
 
     @NotNull
     @Positive
-    private BigDecimal totalPrice;
+    private Integer totalPrice;
+
+    @Positive
+    private Integer eachPrice;
 
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
-                          Integer totalCount, Integer currentCount, Boolean isManualConfirmed, BigDecimal totalPrice) {
+                          Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
+                          Integer eachPrice) {
         this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
-                meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice);
+                meetingAddressDetail, totalCount, currentCount, isManualConfirmed, totalPrice, eachPrice);
+    }
+
+    public OfferingEntity(MemberEntity member, OfferingCreateRequest request) {
+        this(null, member, request.title(), request.description(), request.thumbnailUrl(), request.productUrl(),
+                request.deadline(), request.meetingAddress(), request.meetingAddressDetail(), request.totalCount(), 1,
+                false, request.totalPrice(), request.eachPrice());
     }
 
     public void updateCurrentCount() {
