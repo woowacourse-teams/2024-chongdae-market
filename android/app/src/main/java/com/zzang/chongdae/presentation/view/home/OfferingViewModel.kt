@@ -1,6 +1,7 @@
 package com.zzang.chongdae.presentation.view.home
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -17,12 +18,19 @@ import com.zzang.chongdae.domain.repository.OfferingsRepository
 class OfferingViewModel(
     private val offeringsRepository: OfferingsRepository,
 ) : ViewModel() {
-    val offerings: LiveData<PagingData<Offering>> =
-        Pager(
+    lateinit var offerings: LiveData<PagingData<Offering>>
+        private set
+
+    init {
+        getOfferings()
+    }
+
+    private fun getOfferings() {
+        offerings = Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringsRepository::fetchOfferings) },
-        ).liveData
-            .cachedIn(viewModelScope)
+        ).liveData.cachedIn(viewModelScope)
+    }
 
     companion object {
         private const val PAGE_SIZE = 10
