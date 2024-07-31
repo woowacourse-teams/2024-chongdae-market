@@ -65,7 +65,7 @@ public class OfferingService {
     public Long saveOffering(OfferingSaveRequest request) {
         MemberEntity member = memberRepository.findById(request.memberId())
                 .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
-        OfferingEntity offering = new OfferingEntity(member, request);
+        OfferingEntity offering = request.toEntity(member);
         OfferingEntity savedOffering = offeringRepository.save(offering);
         return savedOffering.getId();
     }
