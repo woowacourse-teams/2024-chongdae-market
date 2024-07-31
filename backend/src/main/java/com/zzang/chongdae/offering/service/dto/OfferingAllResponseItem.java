@@ -7,7 +7,7 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 
 public record OfferingAllResponseItem(Long id,
                                       String title,
-                                      String meetingAddress,
+                                      String meetingAddressDong,
                                       Integer currentCount,
                                       Integer totalCount,
                                       String thumbnailUrl,
@@ -19,7 +19,7 @@ public record OfferingAllResponseItem(Long id,
             OfferingEntity offering, OfferingPrice offeringPrice, OfferingStatus offeringStatus) {
         this(offering.getId(),
                 offering.getTitle(),
-                offering.getMeetingAddress(),
+                offering.getMeetingAddressDong(),
                 offeringStatus.getCurrentCount(),
                 offering.getTotalCount(),
                 offering.getThumbnailUrl(),

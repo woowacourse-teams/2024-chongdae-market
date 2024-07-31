@@ -13,11 +13,12 @@ public record OfferingSaveRequest(Long memberId,
                                   Integer eachPrice,
                                   String meetingAddress,
                                   String meetingAddressDetail,
+                                  String meetingAddressDong,
                                   LocalDateTime deadline,
                                   String description) {
 
     public OfferingEntity toEntity(MemberEntity member) {
         return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
-                meetingAddressDetail, totalCount, 1, false, totalPrice, eachPrice);
+                meetingAddressDetail, meetingAddressDong, totalCount, 1, false, totalPrice, eachPrice);
     }
 }
