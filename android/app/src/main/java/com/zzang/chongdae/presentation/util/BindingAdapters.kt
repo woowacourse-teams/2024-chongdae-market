@@ -80,7 +80,7 @@ private fun OfferingCondition.toOfferingComment(
     OfferingCondition.AVAILABLE ->
         Html.fromHtml(
             context.getString(R.string.main_offering_condition_continue_comment)
-                .format((remaining)),
+                .format(remaining),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
 }
