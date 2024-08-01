@@ -4,6 +4,8 @@ import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +50,12 @@ public class OfferingController {
             @RequestBody OfferingSaveRequest request) {
         Long offeringId = offeringService.saveOffering(request);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
+    }
+
+    @PostMapping("/offerings/product-images")
+    public ResponseEntity<OfferingProductImageResponse> extractProductImage(
+            @RequestBody OfferingProductImageRequest request) {
+        OfferingProductImageResponse response = offeringService.extractProductImage(request);
+        return ResponseEntity.ok(response);
     }
 }
