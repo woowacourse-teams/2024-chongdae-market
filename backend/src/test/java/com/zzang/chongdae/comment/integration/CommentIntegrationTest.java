@@ -28,16 +28,24 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class SaveComment {
 
-        List<FieldDescriptor> saveCommentRequestDescriptors = List.of(
+        List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("memberId").description("회원 id"),
                 fieldWithPath("offeringId").description("공모 id"),
                 fieldWithPath("content").description("내용")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글 작성")
                 .description("댓글을 작성합니다.")
-                .requestFields(saveCommentRequestDescriptors)
+                .requestFields(requestDescriptors)
                 .requestSchema(schema("CommentSaveRequest"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("댓글 작성")
+                .description("댓글을 작성합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("CommentSaveRequest"))
+                .responseSchema(schema("CommentSaveFailResponse"))
                 .build();
 
         MemberEntity member;
@@ -59,7 +67,7 @@ public class CommentIntegrationTest extends IntegrationTest {
             );
 
             RestAssured.given(spec).log().all()
-                    .filter(document("save-comment-success", resource(snippets)))
+                    .filter(document("save-comment-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -77,7 +85,7 @@ public class CommentIntegrationTest extends IntegrationTest {
             );
 
             RestAssured.given(spec).log().all()
-                    .filter(document("save-comment-fail-request-with-null", resource(snippets)))
+                    .filter(document("save-comment-fail-request-with-null", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -95,7 +103,7 @@ public class CommentIntegrationTest extends IntegrationTest {
             );
 
             RestAssured.given(spec).log().all()
-                    .filter(document("save-comment-fail-request-with-long-content", resource(snippets)))
+                    .filter(document("save-comment-fail-request-with-long-content", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -113,7 +121,7 @@ public class CommentIntegrationTest extends IntegrationTest {
             );
 
             RestAssured.given(spec).log().all()
-                    .filter(document("save-comment-fail-invalid_member", resource(snippets)))
+                    .filter(document("save-comment-fail-invalid_member", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -131,7 +139,7 @@ public class CommentIntegrationTest extends IntegrationTest {
             );
 
             RestAssured.given(spec).log().all()
-                    .filter(document("save-comment-fail-invalid-offering", resource(snippets)))
+                    .filter(document("save-comment-fail-invalid-offering", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -144,10 +152,10 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class GetAllCommentRoom {
 
-        List<ParameterDescriptorWithType> getAllCommentRoomQueryParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("member-id").description("회원 id")
         );
-        List<FieldDescriptor> getAllCommentRoomSuccessResponseDescriptors = List.of(
+        List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].offeringId").description("공모 id"),
                 fieldWithPath("offerings[].offeringTitle").description("공모 제목"),
                 fieldWithPath("offerings[].latestComment.content").description("최신 댓글 내용"),
@@ -157,16 +165,16 @@ public class CommentIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 목록 조회")
                 .description("댓글방 목록을 조회합니다.")
-                .queryParameters(getAllCommentRoomQueryParameterDescriptors)
-                .responseFields(getAllCommentRoomSuccessResponseDescriptors)
-                .responseSchema(schema("CommentRoomAllResponse"))
+                .queryParameters(queryParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("CommentRoomAllSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
-                .queryParameters(getAllCommentRoomQueryParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("CommentAllResponse"))
+                .responseSchema(schema("CommentRoomAllFailResponse"))
                 .build();
 
         MemberEntity member;
@@ -209,13 +217,13 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class GetAllComment {
 
-        List<ParameterDescriptorWithType> getAllCommentPathParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id")
         );
-        List<ParameterDescriptorWithType> getAllCommentQueryParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("member-id").description("회원 id")
         );
-        List<FieldDescriptor> getAllCommentSuccessResponseDescriptors = List.of(
+        List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("comments[].commentId").description("댓글 id"),
                 fieldWithPath("comments[].createdAt.date").description("작성 날짜"),
                 fieldWithPath("comments[].createdAt.time").description("작성 시간"),
@@ -227,18 +235,18 @@ public class CommentIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
-                .pathParameters(getAllCommentPathParameterDescriptors)
-                .queryParameters(getAllCommentQueryParameterDescriptors)
-                .responseFields(getAllCommentSuccessResponseDescriptors)
-                .responseSchema(schema("CommentAllResponse"))
+                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("CommentAllSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
-                .pathParameters(getAllCommentPathParameterDescriptors)
-                .queryParameters(getAllCommentQueryParameterDescriptors)
+                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("CommentAllResponse"))
+                .responseSchema(schema("CommentAllFailResponse"))
                 .build();
         MemberEntity member;
         OfferingEntity offering;

@@ -29,13 +29,13 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class GetOfferingDetail {
 
-        List<ParameterDescriptorWithType> offeringDetailPathParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id")
         );
-        List<ParameterDescriptorWithType> offeringDetailQueryParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("member-id").description("회원 id")
         );
-        List<FieldDescriptor> offeringDetailSuccessResponseDescriptors = List.of(
+        List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("id").description("공모 id"),
                 fieldWithPath("title").description("제목"),
                 fieldWithPath("productUrl").description("물품 링크"),
@@ -56,18 +56,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 상세 조회")
                 .description("공모 id를 통해 공모의 상세 정보를 조회합니다.")
-                .pathParameters(offeringDetailPathParameterDescriptors)
-                .queryParameters(offeringDetailQueryParameterDescriptors)
-                .responseFields(offeringDetailSuccessResponseDescriptors)
-                .responseSchema(schema("OfferingDetailResponse")) // TODO: change?
+                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingDetailSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("공모 상세 조회")
                 .description("공모 id를 통해 공모의 상세 정보를 조회합니다.")
-                .pathParameters(offeringDetailPathParameterDescriptors)
-                .queryParameters(offeringDetailQueryParameterDescriptors)
+                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("OfferingDetailResponse"))
+                .responseSchema(schema("OfferingDetailFailResponse"))
                 .build();
 
         @BeforeEach
@@ -117,11 +117,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class GetAllOffering {
 
-        List<ParameterDescriptorWithType> offeringAllQueryParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("last-id").description("마지막 공모 id"),
                 parameterWithName("page-size").description("페이지 크기")
         );
-        List<FieldDescriptor> offeringAllResponseDescriptors = List.of(
+        List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].id").description("공모 id"),
                 fieldWithPath("offerings[].title").description("제목"),
                 fieldWithPath("offerings[].meetingAddressDong").description("모집 동 주소"),
@@ -132,12 +132,12 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].condition").description("공모 상태"),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 목록 조회")
                 .description("공모 목록을 조회합니다.")
-                .queryParameters(offeringAllQueryParameterDescriptors)
-                .responseFields(offeringAllResponseDescriptors)
-                .responseSchema(schema("OfferingAllResponse"))
+                .queryParameters(queryParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingAllSuccessResponse"))
                 .build();
 
         @BeforeEach
@@ -152,7 +152,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_responseAllOffering_when_givenPageInfo() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-all-offering-success", resource(snippets)))
+                    .filter(document("get-all-offering-success", resource(successSnippets)))
                     .queryParam("last-id", 1)
                     .queryParam("page-size", 10)
                     .when().get("/offerings")
@@ -165,10 +165,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class GetOfferingMeeting {
 
-        List<ParameterDescriptorWithType> offeringMeetingPathParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id")
         );
-        List<FieldDescriptor> offeringMeetingSuccessResponseDescriptors = List.of(
+        List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("deadline").description("마감시간"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소")
@@ -176,16 +176,16 @@ public class OfferingIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 일정 조회")
                 .description("공모 id를 통해 공모의 일정 정보를 조회합니다.")
-                .pathParameters(offeringMeetingPathParameterDescriptors)
-                .responseFields(offeringMeetingSuccessResponseDescriptors)
-                .responseSchema(schema("OfferingMeetingResponse"))
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingMeetingSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("공모 일정 조회")
                 .description("공모 id를 통해 공모의 일정 정보를 조회합니다.")
-                .pathParameters(offeringMeetingPathParameterDescriptors)
+                .pathParameters(pathParameterDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("OfferingMeetingResponse"))
+                .responseSchema(schema("OfferingMeetingFailResponse"))
                 .build();
 
         @BeforeEach
@@ -221,7 +221,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class CreateOffering {
 
-        List<FieldDescriptor> offeringCreateRequestDescriptors = List.of(
+        List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("memberId").description("회원 id"),
                 fieldWithPath("title").description("제목"),
                 fieldWithPath("productUrl").description("물품 구매 링크"),
@@ -238,15 +238,16 @@ public class OfferingIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 작성")
                 .description("공모 정보를 받아 공모를 작성합니다.")
-                .requestFields(offeringCreateRequestDescriptors)
-                .responseSchema(schema("OfferingCreateResponse"))
+                .requestFields(requestDescriptors)
+                .requestSchema(schema("OfferingCreateRequest"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("공모 작성")
                 .description("공모 정보를 받아 공모를 작성합니다.")
-                .requestFields(offeringCreateRequestDescriptors)
+                .requestFields(requestDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("OfferingCreateResponse"))
+                .requestSchema(schema("OfferingCreateRequest"))
+                .responseSchema(schema("OfferingCreateFailResponse"))
                 .build();
 
         MemberEntity member;
@@ -315,13 +316,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class ExtractProductImage {
 
-        List<FieldDescriptor> offeringProductImageSuccessRequestDescriptors = List.of(
+        List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("productUrl").description("상품 url")
         );
-        ResourceSnippetParameters successSnippets = builder()
+        List<FieldDescriptor> responseDescriptors = List.of(
+                fieldWithPath("imageUrl").description("이미지 url")
+        );
+        ResourceSnippetParameters snippets = builder()
                 .summary("상품 이미지 추출")
                 .description("상품 링크를 받아 이미지를 추출합니다.")
-                .requestFields(offeringProductImageSuccessRequestDescriptors)
+                .requestFields(requestDescriptors)
+                .responseFields(responseDescriptors)
+                .requestSchema(schema("OfferingProductImageRequest"))
                 .responseSchema(schema("OfferingProductImageResponse"))
                 .build();
 
@@ -331,7 +337,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             OfferingProductImageRequest request = new OfferingProductImageRequest("http://product-url.com");
 
             RestAssured.given(spec).log().all()
-                    .filter(document("extract-product-image-success", resource(successSnippets)))
+                    .filter(document("extract-product-image-success", resource(snippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -345,7 +351,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             OfferingProductImageRequest request = new OfferingProductImageRequest("http://fail-product-url.com");
 
             RestAssured.given(spec).log().all()
-                    .filter(document("extract-product-image-fail", resource(successSnippets)))
+                    .filter(document("extract-product-image-fail", resource(snippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
