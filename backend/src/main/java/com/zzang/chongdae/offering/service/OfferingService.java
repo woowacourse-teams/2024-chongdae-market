@@ -14,12 +14,15 @@ import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
+import com.zzang.chongdae.storage.service.StorageService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +31,7 @@ public class OfferingService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final MemberRepository memberRepository;
+    private final StorageService storageService;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -68,5 +72,10 @@ public class OfferingService {
         OfferingEntity offering = request.toEntity(member);
         OfferingEntity savedOffering = offeringRepository.save(offering);
         return savedOffering.getId();
+    }
+
+    public OfferingUploadedImageResponse uploadOfferingThumbnail(MultipartFile image) {
+        String url = storageService.uploadFile(image, "/images/offerings/product/");
+        return new OfferingUploadedImageResponse(url);
     }
 }

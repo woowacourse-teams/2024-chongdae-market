@@ -5,6 +5,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,9 +46,14 @@ public class OfferingController {
     }
 
     @PostMapping("/offerings")
-    public ResponseEntity<Void> saveOffering(
-            @RequestBody OfferingSaveRequest request) {
+    public ResponseEntity<Void> saveOffering(@RequestBody OfferingSaveRequest request) {
         Long offeringId = offeringService.saveOffering(request);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
+    }
+
+    @PostMapping("/offerings/thumbnail")
+    public ResponseEntity<OfferingUploadedImageResponse> uploadOfferingThumbnail(@RequestParam MultipartFile image) {
+        OfferingUploadedImageResponse response = offeringService.uploadOfferingThumbnail(image);
+        return ResponseEntity.ok(response);
     }
 }

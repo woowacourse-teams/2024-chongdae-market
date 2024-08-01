@@ -18,3 +18,7 @@ springdoc:
   swagger-ui:
     path: swagger-ui.html
     url: /static/swagger-ui/openapi3.yaml
+
+amazon:
+  s3:
+    bucket: techcourse-project-2024
