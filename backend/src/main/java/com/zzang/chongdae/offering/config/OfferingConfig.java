@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OfferingConfig {
 
-    private static final int CRAWLER_READ_TIMEOUT = 1000;
+    private static final int CRAWLER_TIMEOUT_MILLISECONDS = 1000;
 
     @Bean
     public HtmlCrawler htmlCrawler() {
-        return new JsoupHtmlCrawler(CRAWLER_READ_TIMEOUT);
+        return new JsoupHtmlCrawler(CRAWLER_TIMEOUT_MILLISECONDS);
     }
 
     @Bean
