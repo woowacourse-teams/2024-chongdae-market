@@ -310,6 +310,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_emptyValue() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("create-offering-fail-request-with-null", resource(failSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 
     @DisplayName("상품 이미지 추출")
@@ -322,11 +349,19 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> responseDescriptors = List.of(
                 fieldWithPath("imageUrl").description("이미지 url")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("상품 이미지 추출")
                 .description("상품 링크를 받아 이미지를 추출합니다.")
                 .requestFields(requestDescriptors)
                 .responseFields(responseDescriptors)
+                .requestSchema(schema("OfferingProductImageSuccessRequest"))
+                .responseSchema(schema("OfferingProductImageSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("상품 이미지 추출")
+                .description("상품 링크를 받아 이미지를 추출합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
                 .requestSchema(schema("OfferingProductImageRequest"))
                 .responseSchema(schema("OfferingProductImageResponse"))
                 .build();
@@ -337,7 +372,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             OfferingProductImageRequest request = new OfferingProductImageRequest("http://product-url.com");
 
             RestAssured.given(spec).log().all()
-                    .filter(document("extract-product-image-success", resource(snippets)))
+                    .filter(document("extract-product-image-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -351,12 +386,26 @@ public class OfferingIntegrationTest extends IntegrationTest {
             OfferingProductImageRequest request = new OfferingProductImageRequest("http://fail-product-url.com");
 
             RestAssured.given(spec).log().all()
-                    .filter(document("extract-product-image-fail", resource(snippets)))
+                    .filter(document("extract-product-image-fail", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
                     .then().log().all()
                     .statusCode(200);
+        }
+
+        @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_emptyValue() {
+            OfferingProductImageRequest request = new OfferingProductImageRequest(null);
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("extract-product-image-fail-request-with-null", resource(failSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings/product-images/og")
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 }

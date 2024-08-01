@@ -118,5 +118,21 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_emptyValue() {
+            ParticipationRequest request = new ParticipationRequest(
+                    null,
+                    null
+            );
+            RestAssured.given(spec).log().all()
+                    .filter(document("participate-fail-request-with-null", resource(failSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 }

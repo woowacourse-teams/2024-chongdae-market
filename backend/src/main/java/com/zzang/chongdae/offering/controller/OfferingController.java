@@ -56,7 +56,7 @@ public class OfferingController {
 
     @PostMapping("/offerings/product-images/og")
     public ResponseEntity<OfferingProductImageResponse> extractProductImage(
-            @RequestBody OfferingProductImageRequest request) {
+            @RequestBody @Valid OfferingProductImageRequest request) {
         OfferingProductImageResponse response = offeringService.extractProductImage(request);
         return ResponseEntity.ok(response);
     }

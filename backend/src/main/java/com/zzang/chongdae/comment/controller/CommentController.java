@@ -29,7 +29,7 @@ public class CommentController {
 
     @GetMapping("/comments")
     public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
-            @RequestParam(value = "member-id") @Valid Long loginMemberId) {
+            @RequestParam(value = "member-id") Long loginMemberId) {
         CommentRoomAllResponse response = commentService.getAllCommentRoom(loginMemberId);
         return ResponseEntity.ok(response);
     }
