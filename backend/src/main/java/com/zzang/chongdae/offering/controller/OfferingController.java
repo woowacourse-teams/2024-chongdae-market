@@ -51,7 +51,7 @@ public class OfferingController {
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 
-    @PostMapping("/offerings/thumbnail")
+    @PostMapping("/offerings/product-images/s3")
     public ResponseEntity<OfferingUploadedImageResponse> uploadOfferingThumbnail(@RequestParam MultipartFile image) {
         OfferingUploadedImageResponse response = offeringService.uploadOfferingThumbnail(image);
         return ResponseEntity.ok(response);
