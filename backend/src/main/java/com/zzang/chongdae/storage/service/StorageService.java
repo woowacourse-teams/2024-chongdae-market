@@ -4,6 +4,7 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.storage.exception.StorageErrorCode;
 import java.io.IOException;
@@ -30,7 +31,8 @@ public class StorageService {
             ObjectMetadata metadata = createMetadata(file);
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectKey, inputStream, metadata);
 
-            s3Client.putObject(putObjectRequest);
+            PutObjectResult result = s3Client.putObject(putObjectRequest);
+            System.out.println(result.getMetadata().toString());
             return s3Client.getUrl(bucketName, objectKey).toString();
         } catch (IOException e) {
             throw new MarketException(StorageErrorCode.INVALID_FILE);
