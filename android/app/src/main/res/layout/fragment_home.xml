@@ -48,19 +48,19 @@
             app:layout_constraintTop_toBottomOf="@id/et_search" />
 
         <CheckBox
-            android:id="@+id/cb_discount_rate"
+            android:id="@+id/cb_product_price"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
-            android:layout_marginStart="4dp"
-            android:text="@string/main_filter_discount_rate"
+            android:layout_marginStart="10dp"
+            android:text="@string/main_filter_product_closed"
             app:layout_constraintStart_toEndOf="@id/cb_participation"
             app:layout_constraintTop_toTopOf="@id/cb_participation" />
 
         <CheckBox
-            android:id="@+id/cb_product_price"
+            android:id="@+id/cb_discount_rate"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
-            android:layout_marginStart="4dp"
-            android:text="@string/main_filter_product_price"
-            app:layout_constraintStart_toEndOf="@id/cb_discount_rate"
+            android:layout_marginStart="10dp"
+            android:text="@string/main_filter_discount_rate"
+            app:layout_constraintStart_toEndOf="@id/cb_product_price"
             app:layout_constraintTop_toTopOf="@id/cb_participation" />
 
         <androidx.recyclerview.widget.RecyclerView

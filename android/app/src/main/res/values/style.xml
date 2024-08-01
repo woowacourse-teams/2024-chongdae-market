@@ -26,10 +26,10 @@
         <item name="android:textColor">@color/gray_500</item>
     </style>
 
-    <style name="Theme.AppCompat.TextView.Bold.MainColor.Size23" parent="@style/Widget.AppCompat.TextView">
+    <style name="Theme.AppCompat.TextView.Bold.MainColor.Size25" parent="@style/Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">25sp</item>
         <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/main_color</item>
     </style>
@@ -120,7 +120,7 @@
     <style name="Widget.AppCompat.CompoundButton.CheckBox.Filter" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/suit_regular</item>
         <item name="android:textColor">@color/gray_900</item>
         <item name="android:background">@drawable/bg_main_filter</item>
@@ -128,7 +128,7 @@
         <item name="android:drawableStart">@drawable/btn_main_filter</item>
         <item name="android:drawablePadding">3dp</item>
         <item name="android:paddingVertical">6dp</item>
-        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">16dp</item>
     </style>
 

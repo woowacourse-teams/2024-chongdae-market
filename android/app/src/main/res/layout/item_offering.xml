@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:comment="http://schemas.android.com/apk/res-auto"
     xmlns:conditionText="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -22,20 +21,22 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> onArticleClickListener.onClick(offering.id)}"
         android:paddingTop="15dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="15dp">
 
         <ImageView
             android:id="@+id/iv_product"
             android:layout_width="120dp"
             android:layout_height="0dp"
+            android:layout_marginStart="4dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg_radius_10dp"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="120:110"
+            app:layout_constraintDimensionRatio="120:120"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
             app:offeringsProductImageUrl="@{offering.thumbnailUrl}"
             tools:src="@drawable/img_main_product_default" />
 
@@ -49,6 +50,7 @@
             android:background="@drawable/bg_main_discount_rate"
             android:fontFamily="@font/suit_bold"
             android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
             app:layout_constraintStart_toStartOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
             conditionText:offeringCondition="@{offering.condition}"
@@ -74,10 +76,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@{offering.meetingAddress}"
+            android:text="내발산동"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
-            tools:text="내발산동" />
+            app:layout_constraintTop_toBottomOf="@id/tv_offering_title" />
+
+        <TextView
+            android:id="@+id/tv_offering_condition_comment"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
+            app:offeringConditionForComment="@{offering.condition}"
+            app:remaining="@{offering.totalCount - offering.currentCount}"
+            tools:text="공구가 마감되었어요." />
 
         <TextView
             android:id="@+id/tv_origin_price"
@@ -85,43 +96,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="17dp"
+            android:text="2,000원"
+            app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
             app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
-            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address" />
+            app:layout_constraintTop_toTopOf="@id/tv_divided_price" />
 
         <TextView
             android:id="@+id/tv_discount_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/main_discount_rate_text"
             android:textColor="@color/main_color"
             android:textSize="@dimen/font_size_13"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_divided_price"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
-            tools:text="@string/main_discount_rate_text" />
+            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address" />
 
 
         <TextView
             android:id="@+id/tv_divided_price"
-            style="@style/Theme.AppCompat.TextView.Bold.MainColor.Size23"
+            style="@style/Theme.AppCompat.TextView.Bold.MainColor.Size25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="50dp"
             android:layout_marginBottom="@dimen/size_40"
             android:text="@{@string/all_money_amount_text(offering.dividedPrice)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_meeting_address"
-            tools:text="4,000원" />
-
-        <TextView
-            android:id="@+id/tv_offering_condition_comment"
-            style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
-            android:layout_marginBottom="3dp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_product"
-            app:layout_constraintStart_toStartOf="@id/tv_offering_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_divided_price"
-            app:offeringConditionForComment="@{offering.condition}"
-            app:remaining="@{offering.totalCount - offering.currentCount}"
-            tools:text="공구가 마감되었어요." />
+            tools:text="100,000원" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
