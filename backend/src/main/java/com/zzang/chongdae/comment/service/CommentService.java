@@ -94,6 +94,7 @@ public class CommentService {
         OfferingMemberRole role = commentWithRole.getRole();
         MemberEntity member = comment.getMember();
         return new CommentAllResponseItem(
+                comment.getId(),
                 new CommentCreatedAtResponse(comment.getCreatedAt()),
                 comment.getContent(),
                 member.getNickname(),
