@@ -2,6 +2,7 @@ package com.zzang.chongdae.offeringmember.controller;
 
 import com.zzang.chongdae.offeringmember.service.OfferingMemberService;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
+import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class OfferingMemberController {
 
     @PostMapping("/participations")
     ResponseEntity<Void> participate(
-            @RequestBody ParticipationRequest request) {
+            @RequestBody @Valid ParticipationRequest request) {
         Long id = offeringMemberService.participate(request);
         return ResponseEntity.created(URI.create("/participations/" + id)).build();
     }
