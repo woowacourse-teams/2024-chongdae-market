@@ -7,6 +7,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,14 +49,14 @@ public class OfferingController {
 
     @PostMapping("/offerings")
     public ResponseEntity<Void> saveOffering(
-            @RequestBody OfferingSaveRequest request) {
+            @RequestBody @Valid OfferingSaveRequest request) {
         Long offeringId = offeringService.saveOffering(request);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 
     @PostMapping("/offerings/product-images/og")
     public ResponseEntity<OfferingProductImageResponse> extractProductImage(
-            @RequestBody OfferingProductImageRequest request) {
+            @RequestBody @Valid OfferingProductImageRequest request) {
         OfferingProductImageResponse response = offeringService.extractProductImage(request);
         return ResponseEntity.ok(response);
     }

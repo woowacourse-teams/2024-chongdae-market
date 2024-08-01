@@ -10,13 +10,13 @@ import org.jsoup.select.Elements;
 @RequiredArgsConstructor
 public class JsoupHtmlCrawler implements HtmlCrawler {
 
-    private final int readTimeout;
+    private final int timeoutMilliseconds;
 
     @Override
     public String scrap(String productUrl) {
         try {
             return Jsoup.connect(productUrl)
-                    .timeout(readTimeout)
+                    .timeout(timeoutMilliseconds)
                     .header("Accept-Language", "en-US,en;q=0.9,ko;q=0.8")
                     .get()
                     .html();
