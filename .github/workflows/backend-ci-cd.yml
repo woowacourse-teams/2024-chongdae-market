@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "develop-BE" ]
     paths: [ "backend/**" ]
-  # pull_request:
-  #  branches: [ "develop-BE" ]
+  pull_request:
+   branches: [ "develop-BE" ]
 
 jobs:
 
