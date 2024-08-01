@@ -6,6 +6,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 
 import com.zzang.chongdae.global.domain.DomainSupplier;
 import com.zzang.chongdae.global.helper.DatabaseCleaner;
+import com.zzang.chongdae.offering.config.TestCrawlerConfig;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -19,18 +20,16 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = {TestCrawlerConfig.class})
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class IntegrationTest extends DomainSupplier {
 
-    @LocalServerPort
-    private int port;
-
     protected RequestSpecification spec;
-
     @Autowired
     protected DatabaseCleaner databaseCleaner;
+    @LocalServerPort
+    private int port;
 
     @BeforeEach
     protected void setUp(RestDocumentationContextProvider restDocumentation) {

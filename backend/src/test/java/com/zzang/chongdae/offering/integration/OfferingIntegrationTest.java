@@ -170,7 +170,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class CreateOffering {
 
-        List<FieldDescriptor> offeringCreateRequestDescriptors = List.of(
+        List<FieldDescriptor> offeringCreateRequestDescriptors = List.of( // TODO: optional
                 fieldWithPath("memberId").description("회원 id"),
                 fieldWithPath("title").description("제목"),
                 fieldWithPath("productUrl").description("물품 구매 링크"),
@@ -221,6 +221,51 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().post("/offerings")
                     .then().log().all()
                     .statusCode(201);
+        }
+    }
+
+    @DisplayName("상품 이미지 추출")
+    @Nested
+    class ExtractProductImage {
+
+        List<FieldDescriptor> offeringProductImageRequest = List.of(
+                fieldWithPath("productUrl").description("상품 url")
+        );
+        ResourceSnippetParameters snippets = builder()
+                .summary("상품 이미지 추출")
+                .description("상품 링크를 받아 이미지를 추출합니다.")
+                .requestFields(offeringProductImageRequest)
+                .responseSchema(schema("OfferingProductImageResponse"))
+                .build();
+
+        @DisplayName("상품 링크를 받아 이미지를 추출합니다.")
+        @Test
+        void should_extract_imageUrl_when_given_productUrl() {
+            Map<String, String> request = Map.of(
+                    "productUrl", "http://product-url.com");
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("extract-product-image-success", resource(snippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings/product-images")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("상품 링크가 올바르지 않거나 이미지가 존재하지 않을 경우 빈 값을 반환합니다.")
+        @Test
+        void should_return_emptyString_when_fail() {
+            Map<String, String> request = Map.of(
+                    "productUrl", "http://fail-product-url.com");
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("extract-product-image-fail", resource(snippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings/product-images")
+                    .then().log().all()
+                    .statusCode(200);
         }
     }
 }
