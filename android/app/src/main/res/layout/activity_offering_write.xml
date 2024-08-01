@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -47,6 +54,7 @@
             <EditText
                 android:id="@+id/et_title"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:text="@={vm.title}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_enter_title"
                 tools:text="adffa" />
@@ -68,20 +76,21 @@
             <EditText
                 android:id="@+id/et_purchase_link"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintEnd_toStartOf="@id/btn_extract_image"
                 android:layout_marginEnd="10dp"
+                android:text="@={vm.productUrl}"
+                app:layout_constraintEnd_toStartOf="@id/btn_extract_image"
+                app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_enter_purchase_link" />
 
             <Button
                 android:id="@+id/btn_extract_image"
                 android:layout_width="79dp"
                 android:layout_height="@dimen/size_44"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_purchase_link"
                 android:background="@drawable/btn_rounded"
                 android:text="사진 추출"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/et_purchase_link" />
 
             <TextView
                 android:id="@+id/tv_photo"
@@ -181,6 +190,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
 
             <EditText
+                android:text="@={vm.totalPrice}"
                 android:id="@+id/et_total_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -258,6 +268,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description" />
 
             <EditText
+                android:text="@={vm.eachPrice}"
                 android:id="@+id/et_individual_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -324,6 +335,7 @@
                 android:id="@+id/et_place"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:hint="@string/write_search_place"
+                android:text="@={vm.meetingAddress}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_place" />
 
@@ -332,6 +344,7 @@
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:layout_marginTop="8dp"
                 android:hint="@string/write_enter_place_detail"
+                android:text="@={vm.meetingAddressDetail}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/et_place" />
 
@@ -357,6 +370,7 @@
             <EditText
                 android:id="@+id/et_deadline"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:text="@={vm.deadline}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_deadline_description" />
 
@@ -396,6 +410,7 @@
                 android:background="@drawable/et_border_gray"
                 android:gravity="top"
                 android:padding="12dp"
+                android:text="@={vm.description}"
                 android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -419,6 +434,7 @@
                 android:layout_marginTop="@dimen/size_36"
                 android:layout_marginBottom="@dimen/size_34"
                 android:background="@drawable/btn_rounded"
+                android:onClick="@{() -> vm.postOffering()}"
                 android:text="@string/write_start_offering"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"

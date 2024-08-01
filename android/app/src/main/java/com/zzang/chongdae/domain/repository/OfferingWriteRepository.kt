@@ -8,7 +8,7 @@ interface OfferingWriteRepository {
         thumbnailUrl: String?,
         totalCount: Int,
         totalPrice: Int,
-        eachPrice: Int,
+        eachPrice: Int?,
         meetingAddress: String,
         meetingAddressDong: String?,
         meetingAddressDetail: String,

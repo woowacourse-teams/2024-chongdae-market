@@ -11,7 +11,7 @@ data class OfferingWriteRequest(
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("totalCount") val totalCount: Int,
     @SerialName("totalPrice") val totalPrice: Int,
-    @SerialName("eachPrice") val eachPrice: Int,
+    @SerialName("eachPrice") val eachPrice: Int?,
     @SerialName("meetingAddress") val meetingAddress: String,
     @SerialName("meetingAddressDong") val meetingAddressDong: String?,
     @SerialName("meetingAddressDetail") val meetingAddressDetail: String,

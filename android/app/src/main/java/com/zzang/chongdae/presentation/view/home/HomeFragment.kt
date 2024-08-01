@@ -15,6 +15,7 @@ import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
+import com.zzang.chongdae.presentation.view.write.OfferingWriteActivity
 
 class HomeFragment : Fragment(), OnArticleClickListener {
     private var _binding: FragmentHomeBinding? = null
@@ -36,7 +37,7 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         initBinding(inflater, container)
         initAdapter()
         setUpOfferingsObserve()
-
+        navigateToOfferingWriteActivity()
         return binding.root
     }
 
@@ -78,5 +79,11 @@ class HomeFragment : Fragment(), OnArticleClickListener {
 
     override fun onClick(offeringId: Long) {
         OfferingDetailActivity.startActivity(activity as Context, offeringId)
+    }
+
+    private fun navigateToOfferingWriteActivity() {
+        binding.fabCreateOffering.setOnClickListener {
+            OfferingWriteActivity.startActivity(activity as Context)
+        }
     }
 }

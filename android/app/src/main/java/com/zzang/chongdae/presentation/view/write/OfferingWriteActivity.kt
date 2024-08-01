@@ -32,6 +32,7 @@ class OfferingWriteActivity : AppCompatActivity() {
     private fun initBinding() {
         _binding = ActivityOfferingWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.vm = viewModel
     }
 
     override fun onDestroy() {
