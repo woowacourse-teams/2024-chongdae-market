@@ -40,6 +40,17 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        offeringAdapter.refresh()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
