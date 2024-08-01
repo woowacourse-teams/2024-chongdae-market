@@ -13,6 +13,8 @@ import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import java.util.List;
@@ -28,6 +30,7 @@ public class OfferingService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final MemberRepository memberRepository;
+    private final ProductImageExtractor extractor;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -68,5 +71,10 @@ public class OfferingService {
         OfferingEntity offering = request.toEntity(member);
         OfferingEntity savedOffering = offeringRepository.save(offering);
         return savedOffering.getId();
+    }
+
+    public OfferingProductImageResponse extractProductImage(OfferingProductImageRequest request) {
+        String imageUrl = extractor.extract(request.productUrl());
+        return new OfferingProductImageResponse(imageUrl);
     }
 }
