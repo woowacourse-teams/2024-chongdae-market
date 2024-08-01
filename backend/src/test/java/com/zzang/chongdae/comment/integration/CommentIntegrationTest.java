@@ -124,6 +124,7 @@ public class CommentIntegrationTest extends IntegrationTest {
                 parameterWithName("member-id").description("회원 id")
         );
         List<FieldDescriptor> getAllCommentResponseDescriptors = List.of(
+                fieldWithPath("comments[].commentId").description("댓글 id"),
                 fieldWithPath("comments[].createdAt.date").description("작성 날짜"),
                 fieldWithPath("comments[].createdAt.time").description("작성 시간"),
                 fieldWithPath("comments[].content").description("내용"),
