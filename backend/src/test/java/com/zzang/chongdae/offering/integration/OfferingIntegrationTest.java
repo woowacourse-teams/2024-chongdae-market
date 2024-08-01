@@ -11,11 +11,12 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,7 +35,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<ParameterDescriptorWithType> offeringDetailQueryParameterDescriptors = List.of(
                 parameterWithName("member-id").description("회원 id")
         );
-        List<FieldDescriptor> offeringDetailResponseDescriptors = List.of(
+        List<FieldDescriptor> offeringDetailSuccessResponseDescriptors = List.of(
                 fieldWithPath("id").description("공모 id"),
                 fieldWithPath("title").description("제목"),
                 fieldWithPath("productUrl").description("물품 링크"),
@@ -52,12 +53,20 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("nickname").description("공모자 회원 닉네임"),
                 fieldWithPath("isParticipated").description("공모 참여 여부")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 상세 조회")
                 .description("공모 id를 통해 공모의 상세 정보를 조회합니다.")
                 .pathParameters(offeringDetailPathParameterDescriptors)
                 .queryParameters(offeringDetailQueryParameterDescriptors)
-                .responseFields(offeringDetailResponseDescriptors)
+                .responseFields(offeringDetailSuccessResponseDescriptors)
+                .responseSchema(schema("OfferingDetailResponse")) // TODO: change?
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 상세 조회")
+                .description("공모 id를 통해 공모의 상세 정보를 조회합니다.")
+                .pathParameters(offeringDetailPathParameterDescriptors)
+                .queryParameters(offeringDetailQueryParameterDescriptors)
+                .responseFields(failResponseDescriptors)
                 .responseSchema(schema("OfferingDetailResponse"))
                 .build();
 
@@ -71,12 +80,36 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_responseOfferingDetail_when_givenOfferingId() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-offering-detail-success", resource(snippets)))
+                    .filter(document("get-offering-detail-success", resource(successSnippets)))
                     .pathParam("offering-id", 1)
                     .queryParam("member-id", 1)
                     .when().get("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모를 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
+                    .pathParam("offering-id", 100)
+                    .queryParam("member-id", 1)
+                    .when().get("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("유효하지 않은 사용자가 공모를 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidMember() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-offering-detail-fail-invalid-member", resource(failSnippets)))
+                    .pathParam("offering-id", 1)
+                    .queryParam("member-id", 100)
+                    .when().get("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 
@@ -135,16 +168,23 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<ParameterDescriptorWithType> offeringMeetingPathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id")
         );
-        List<FieldDescriptor> offeringMeetingResponseDescriptors = List.of(
+        List<FieldDescriptor> offeringMeetingSuccessResponseDescriptors = List.of(
                 fieldWithPath("deadline").description("마감시간"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 일정 조회")
                 .description("공모 id를 통해 공모의 일정 정보를 조회합니다.")
                 .pathParameters(offeringMeetingPathParameterDescriptors)
-                .responseFields(offeringMeetingResponseDescriptors)
+                .responseFields(offeringMeetingSuccessResponseDescriptors)
+                .responseSchema(schema("OfferingMeetingResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 일정 조회")
+                .description("공모 id를 통해 공모의 일정 정보를 조회합니다.")
+                .pathParameters(offeringMeetingPathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
                 .responseSchema(schema("OfferingMeetingResponse"))
                 .build();
 
@@ -158,11 +198,22 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_responseOfferingMeeting_when_givenOfferingId() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-offering-meeting-success", resource(snippets)))
+                    .filter(document("get-offering-meeting-success", resource(successSnippets)))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
                     .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모의 일정 정보를 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-offering-meeting-fail-invalid-offering", resource(failSnippets)))
+                    .pathParam("offering-id", 100)
+                    .when().get("/offerings/{offering-id}/meetings")
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 
@@ -170,7 +221,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class CreateOffering {
 
-        List<FieldDescriptor> offeringCreateRequestDescriptors = List.of( // TODO: optional
+        List<FieldDescriptor> offeringCreateRequestDescriptors = List.of(
                 fieldWithPath("memberId").description("회원 id"),
                 fieldWithPath("title").description("제목"),
                 fieldWithPath("productUrl").description("물품 구매 링크"),
@@ -184,12 +235,20 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("deadline").description("모집 종료 시간"),
                 fieldWithPath("description").description("내용")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 작성")
                 .description("공모 정보를 받아 공모를 작성합니다.")
                 .requestFields(offeringCreateRequestDescriptors)
                 .responseSchema(schema("OfferingCreateResponse"))
                 .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 작성")
+                .description("공모 정보를 받아 공모를 작성합니다.")
+                .requestFields(offeringCreateRequestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("OfferingCreateResponse"))
+                .build();
+
         MemberEntity member;
 
         @BeforeEach
@@ -200,27 +259,55 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("공모 정보를 받아 공모를 작성합니다")
         @Test
         void should_createOffering_when_givenOfferingCreateRequest() {
-            Map<String, String> request = new HashMap<>(Map.of(
-                    "memberId", member.getId().toString(),
-                    "title", "공모 제목",
-                    "productUrl", "www.naver.com",
-                    "thumbnailUrl", "www.naver.com/favicon.ico",
-                    "totalCount", "5",
-                    "totalPrice", "10000",
-                    "eachPrice", "2000",
-                    "meetingAddress", "서울특별시 광진구 구의강변로 3길 11",
-                    "meetingAddressDetail", "상세주소아파트",
-                    "meetingAddressDong", "구의동"));
-            request.put("deadline", "2024-10-11T10:00:00");
-            request.put("description", "내용입니다.");
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    member.getId(),
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    5,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    "내용입니다."
+            );
 
             RestAssured.given(spec).log().all()
-                    .filter(document("create-offering-success", resource(snippets)))
+                    .filter(document("create-offering-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
                     .then().log().all()
                     .statusCode(201);
+        }
+
+        @DisplayName("유효하지 않은 사용자가 공모를 작성할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidMember() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    member.getId() + 100,
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    5,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    "내용입니다."
+            );
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("create-offering-fail-invalid-member", resource(failSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 
@@ -228,27 +315,26 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class ExtractProductImage {
 
-        List<FieldDescriptor> offeringProductImageRequest = List.of(
+        List<FieldDescriptor> offeringProductImageSuccessRequestDescriptors = List.of(
                 fieldWithPath("productUrl").description("상품 url")
         );
-        ResourceSnippetParameters snippets = builder()
+        ResourceSnippetParameters successSnippets = builder()
                 .summary("상품 이미지 추출")
                 .description("상품 링크를 받아 이미지를 추출합니다.")
-                .requestFields(offeringProductImageRequest)
+                .requestFields(offeringProductImageSuccessRequestDescriptors)
                 .responseSchema(schema("OfferingProductImageResponse"))
                 .build();
 
         @DisplayName("상품 링크를 받아 이미지를 추출합니다.")
         @Test
         void should_extract_imageUrl_when_given_productUrl() {
-            Map<String, String> request = Map.of(
-                    "productUrl", "http://product-url.com");
+            OfferingProductImageRequest request = new OfferingProductImageRequest("http://product-url.com");
 
             RestAssured.given(spec).log().all()
-                    .filter(document("extract-product-image-success", resource(snippets)))
+                    .filter(document("extract-product-image-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
-                    .when().post("/offerings/product-images")
+                    .when().post("/offerings/product-images/og")
                     .then().log().all()
                     .statusCode(200);
         }
@@ -256,14 +342,13 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("상품 링크가 올바르지 않거나 이미지가 존재하지 않을 경우 빈 값을 반환합니다.")
         @Test
         void should_return_emptyString_when_fail() {
-            Map<String, String> request = Map.of(
-                    "productUrl", "http://fail-product-url.com");
+            OfferingProductImageRequest request = new OfferingProductImageRequest("http://fail-product-url.com");
 
             RestAssured.given(spec).log().all()
-                    .filter(document("extract-product-image-fail", resource(snippets)))
+                    .filter(document("extract-product-image-fail", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
-                    .when().post("/offerings/product-images")
+                    .when().post("/offerings/product-images/og")
                     .then().log().all()
                     .statusCode(200);
         }

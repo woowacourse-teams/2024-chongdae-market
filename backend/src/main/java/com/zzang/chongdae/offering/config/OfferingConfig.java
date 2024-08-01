@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OfferingConfig {
 
+    // TODO: 시간 단위 의미 넣기
     private static final int CRAWLER_READ_TIMEOUT = 1000;
 
     @Bean
