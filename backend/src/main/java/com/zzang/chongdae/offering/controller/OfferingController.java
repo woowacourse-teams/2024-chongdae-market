@@ -25,7 +25,8 @@ public class OfferingController {
 
     @GetMapping("/offerings/{offering-id}")
     public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
-            @PathVariable(value = "offering-id") Long offeringId, @RequestParam(value = "member-id") Long memberId) {
+            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestParam(value = "member-id") Long memberId) {
         OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, memberId);
         return ResponseEntity.ok(response);
     }
@@ -52,7 +53,7 @@ public class OfferingController {
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 
-    @PostMapping("/offerings/product-images")
+    @PostMapping("/offerings/product-images/og")
     public ResponseEntity<OfferingProductImageResponse> extractProductImage(
             @RequestBody OfferingProductImageRequest request) {
         OfferingProductImageResponse response = offeringService.extractProductImage(request);
