@@ -27,12 +27,11 @@ public class StorageService {
     public String uploadFile(MultipartFile file, String path) {
         try {
             String objectKey = path + UUID.randomUUID();
-            InputStream inputStream = file.getInputStream();
             ObjectMetadata metadata = createMetadata(file);
+            InputStream inputStream = file.getInputStream();
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectKey, inputStream, metadata);
 
-            PutObjectResult result = s3Client.putObject(putObjectRequest);
-            System.out.println(result.getMetadata().toString());
+            s3Client.putObject(putObjectRequest);
             return s3Client.getUrl(bucketName, objectKey).toString();
         } catch (IOException e) {
             throw new MarketException(StorageErrorCode.INVALID_FILE);
