@@ -75,7 +75,7 @@ public class OfferingService {
     }
 
     public OfferingUploadedImageResponse uploadOfferingThumbnail(MultipartFile image) {
-        String url = storageService.uploadFile(image, "images/offerings/product/");
+        String url = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
         return new OfferingUploadedImageResponse(url);
     }
 }
