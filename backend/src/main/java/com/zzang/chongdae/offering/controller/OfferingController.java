@@ -4,6 +4,8 @@ import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import java.net.URI;
@@ -25,7 +27,8 @@ public class OfferingController {
 
     @GetMapping("/offerings/{offering-id}")
     public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
-            @PathVariable(value = "offering-id") Long offeringId, @RequestParam(value = "member-id") Long memberId) {
+            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestParam(value = "member-id") Long memberId) {
         OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, memberId);
         return ResponseEntity.ok(response);
     }
@@ -54,6 +57,13 @@ public class OfferingController {
     @PostMapping("/offerings/product-images/s3")
     public ResponseEntity<OfferingUploadedImageResponse> uploadOfferingThumbnail(@RequestParam MultipartFile image) {
         OfferingUploadedImageResponse response = offeringService.uploadOfferingThumbnail(image);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/offerings/product-images/og")
+    public ResponseEntity<OfferingProductImageResponse> extractProductImage(
+            @RequestBody OfferingProductImageRequest request) {
+        OfferingProductImageResponse response = offeringService.extractProductImage(request);
         return ResponseEntity.ok(response);
     }
 }

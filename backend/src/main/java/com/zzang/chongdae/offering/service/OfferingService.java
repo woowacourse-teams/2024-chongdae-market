@@ -13,6 +13,8 @@ import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
@@ -32,6 +34,7 @@ public class OfferingService {
     private final OfferingMemberRepository offeringMemberRepository;
     private final MemberRepository memberRepository;
     private final StorageService storageService;
+    private final ProductImageExtractor extractor;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -77,5 +80,10 @@ public class OfferingService {
     public OfferingUploadedImageResponse uploadOfferingThumbnail(MultipartFile image) {
         String url = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
         return new OfferingUploadedImageResponse(url);
+    }
+
+    public OfferingProductImageResponse extractProductImage(OfferingProductImageRequest request) {
+        String imageUrl = extractor.extract(request.productUrl());
+        return new OfferingProductImageResponse(imageUrl);
     }
 }
