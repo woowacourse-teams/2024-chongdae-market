@@ -6,10 +6,10 @@ import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentCreatedAtResponse;
+import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
-import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
@@ -94,6 +94,7 @@ public class CommentService {
         OfferingMemberRole role = commentWithRole.getRole();
         MemberEntity member = comment.getMember();
         return new CommentAllResponseItem(
+                comment.getId(),
                 new CommentCreatedAtResponse(comment.getCreatedAt()),
                 comment.getContent(),
                 member.getNickname(),
