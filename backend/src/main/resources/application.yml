@@ -18,8 +18,8 @@ spring:
     multipart:
       enabled: true
       file-size-threshold: 0B
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 springdoc:
   swagger-ui:
