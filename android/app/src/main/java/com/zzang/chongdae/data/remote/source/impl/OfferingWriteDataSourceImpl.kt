@@ -11,9 +11,10 @@ class OfferingWriteDataSourceImpl(
         return runCatching {
             val response = offeringsApiService.postOfferingWrite(offeringWriteRequest)
             if (response.isSuccessful) {
-                response.body() ?: error("")
+                response.body() ?: error("에러 발생: null")
             } else {
-                error("")
+                error("에러 발생: ${response.code()}")
+//                throw IllegalStateException()
             }
         }
     }

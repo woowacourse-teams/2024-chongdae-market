@@ -152,6 +152,7 @@
                 android:layout_marginTop="@dimen/size_18"
                 android:background="@drawable/et_border_main_color"
                 android:gravity="center"
+                android:text="@={vm.totalCount}"
                 android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@id/img_minus_total_personnel"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
@@ -190,9 +191,9 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
 
             <EditText
-                android:text="@={vm.totalPrice}"
                 android:id="@+id/et_total_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:text="@={vm.totalPrice}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_price" />
 
@@ -268,9 +269,9 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description" />
 
             <EditText
-                android:text="@={vm.eachPrice}"
                 android:id="@+id/et_individual_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:text="@={vm.eachPrice}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description2" />
 
