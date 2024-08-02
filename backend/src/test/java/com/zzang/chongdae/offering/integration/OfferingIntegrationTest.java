@@ -13,6 +13,7 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.storage.service.StorageService;
@@ -58,7 +59,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
                 fieldWithPath("dividedPrice").description("n빵 가격"),
                 fieldWithPath("totalPrice").description("총가격"),
-                fieldWithPath("condition").description("공모 상태"),
+                fieldWithPath("condition").description("공모 상태"
+                        + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("memberId").description("공모자 회원 id"),
                 fieldWithPath("nickname").description("공모자 회원 닉네임"),
                 fieldWithPath("isParticipated").description("공모 참여 여부")
@@ -139,7 +141,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].totalCount").description("총원"),
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
                 fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
-                fieldWithPath("offerings[].condition").description("공모 상태"),
+                fieldWithPath("offerings[].condition").description("공모 상태"
+                        + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
