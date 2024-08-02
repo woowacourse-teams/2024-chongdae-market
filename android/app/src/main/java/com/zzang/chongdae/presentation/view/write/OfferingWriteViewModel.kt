@@ -14,28 +14,28 @@ import kotlinx.coroutines.launch
 class OfferingWriteViewModel(
     private val offeringWriteRepository: OfferingWriteRepository,
 ) : ViewModel() {
-    val title: MutableLiveData<String> = MutableLiveData()
+    val title: MutableLiveData<String> = MutableLiveData("a")
 
-    val productUrl: MutableLiveData<String?> = MutableLiveData()
+    val productUrl: MutableLiveData<String?> = MutableLiveData("a")
 
-    val thumbnailUrl: MutableLiveData<String?> = MutableLiveData()
+    val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("a")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData()
+    val totalCount: MutableLiveData<String> = MutableLiveData("2")
 
-    val totalPrice: MutableLiveData<String> = MutableLiveData()
+    val totalPrice: MutableLiveData<String> = MutableLiveData("2")
 
-    val eachPrice: MutableLiveData<String?> = MutableLiveData()
+    val eachPrice: MutableLiveData<String?> = MutableLiveData("2")
 
-    val meetingAddress: MutableLiveData<String> = MutableLiveData()
+    val meetingAddress: MutableLiveData<String> = MutableLiveData("a")
 
-    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
+    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData("a")
     val meetingAddressDong: LiveData<String?> get() = _meetingAddressDong
 
-    val meetingAddressDetail: MutableLiveData<String> = MutableLiveData()
+    val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("a")
 
-    val deadline: MutableLiveData<String> = MutableLiveData()
+    val deadline: MutableLiveData<String> = MutableLiveData("a")
 
-    val description: MutableLiveData<String> = MutableLiveData()
+    val description: MutableLiveData<String> = MutableLiveData("a")
 
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
@@ -77,7 +77,7 @@ class OfferingWriteViewModel(
             ).onSuccess {
                 Log.d("alsong", "postOffering: 잘보내짐")
             }.onFailure {
-                Log.d("error", it.message.toString())
+                Log.e("alsong", it.message.toString())
             }
         }
     }
