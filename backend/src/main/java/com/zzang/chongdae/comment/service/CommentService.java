@@ -32,14 +32,15 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
 
-    public void saveComment(CommentSaveRequest request) {
+    public Long saveComment(CommentSaveRequest request) {
         MemberEntity loginMember = memberRepository.findById(request.memberId())
                 .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         CommentEntity comment = new CommentEntity(loginMember, offering, request.content());
-        commentRepository.save(comment);
+        CommentEntity savedComment = commentRepository.save(comment);
+        return savedComment.getId();
     }
 
     public CommentRoomAllResponse getAllCommentRoom(Long loginMemberId) {
