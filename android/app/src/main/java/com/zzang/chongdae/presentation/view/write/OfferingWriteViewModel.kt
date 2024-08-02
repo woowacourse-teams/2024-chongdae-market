@@ -28,18 +28,19 @@ class OfferingWriteViewModel(
 
     val meetingAddress: MutableLiveData<String> = MutableLiveData("a")
 
-    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData("a")
+    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData("구의")
     val meetingAddressDong: LiveData<String?> get() = _meetingAddressDong
 
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("a")
 
-    val deadline: MutableLiveData<String> = MutableLiveData("a")
+    val deadline: MutableLiveData<String> = MutableLiveData("2024-10-11T10:00:00")
 
     val description: MutableLiveData<String> = MutableLiveData("a")
 
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
         Log.d("alsong", "======================================")
+        Log.d("alsong", "memberId: ${BuildConfig.TOKEN.toLong()}")
         Log.d("alsong", "title: ${title.value}")
         Log.d("alsong", "productUrl: ${productUrl.value}")
         Log.d("alsong", "thumbnailUrl: ${thumbnailUrl.value}")
@@ -48,6 +49,7 @@ class OfferingWriteViewModel(
         Log.d("alsong", "eachPrice: ${eachPrice.value}")
         Log.d("alsong", "meetingAddress: ${meetingAddress.value}")
         Log.d("alsong", "meetingAddressDetail: ${meetingAddressDetail.value}")
+        Log.d("alsong", "meetingAddressDong: ${meetingAddressDong.value}")
         Log.d("alsong", "deadline: ${deadline.value}")
         Log.d("alsong", "description: ${description.value}")
 
