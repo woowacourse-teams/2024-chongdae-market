@@ -1,13 +1,12 @@
 package com.zzang.chongdae.offering.exception;
 
-import org.springframework.http.HttpStatus;
-
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.zzang.chongdae.global.exception.ErrorMessage;
 import com.zzang.chongdae.global.exception.ErrorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor

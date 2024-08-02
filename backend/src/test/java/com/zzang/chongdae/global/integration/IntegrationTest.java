@@ -11,7 +11,9 @@ import com.zzang.chongdae.offering.config.TestCrawlerConfig;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,13 @@ public abstract class IntegrationTest extends DomainSupplier {
     protected DatabaseCleaner databaseCleaner;
     @LocalServerPort
     private int port;
+
+    protected <E extends Enum<E>> String getEnumValuesAsString(Class<E> enumClass) {
+        String enumValues = Arrays.stream(enumClass.getEnumConstants())
+                .map(Enum::name)
+                .collect(Collectors.joining(", "));
+        return " (종류: " + enumValues + ")";
+    }
 
     @BeforeEach
     protected void setUp(RestDocumentationContextProvider restDocumentation) {
