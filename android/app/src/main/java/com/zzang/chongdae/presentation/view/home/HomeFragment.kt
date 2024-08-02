@@ -7,15 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.zzang.chongdae.R
 import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.OfferingsDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentHomeBinding
+import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
-import com.zzang.chongdae.presentation.view.write.OfferingWriteActivity
 
 class HomeFragment : Fragment(), OnArticleClickListener {
     private var _binding: FragmentHomeBinding? = null
@@ -35,16 +37,27 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         savedInstanceState: Bundle?,
     ): View {
         initBinding(inflater, container)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
         initAdapter()
         setUpOfferingsObserve()
-        navigateToOfferingWriteActivity()
-        return binding.root
+        navigateToOfferingWriteFragment()
     }
 
     override fun onStart() {
         super.onStart()
-
         offeringAdapter.refresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).alsong2()
     }
 
     override fun onDestroyView() {
@@ -81,9 +94,10 @@ class HomeFragment : Fragment(), OnArticleClickListener {
         OfferingDetailActivity.startActivity(activity as Context, offeringId)
     }
 
-    private fun navigateToOfferingWriteActivity() {
+    private fun navigateToOfferingWriteFragment() {
         binding.fabCreateOffering.setOnClickListener {
-            OfferingWriteActivity.startActivity(activity as Context)
+            findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
+            (activity as MainActivity).alsong()
         }
     }
 }
