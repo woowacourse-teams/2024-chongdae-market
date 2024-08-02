@@ -14,45 +14,31 @@ import kotlinx.coroutines.launch
 class OfferingWriteViewModel(
     private val offeringWriteRepository: OfferingWriteRepository,
 ) : ViewModel() {
-    val title: MutableLiveData<String> = MutableLiveData("a")
+    val title: MutableLiveData<String> = MutableLiveData()
 
-    val productUrl: MutableLiveData<String?> = MutableLiveData("a")
+    val productUrl: MutableLiveData<String?> = MutableLiveData()
 
-    val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("a")
+    val thumbnailUrl: MutableLiveData<String?> = MutableLiveData()
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("2")
+    val totalCount: MutableLiveData<String> = MutableLiveData()
 
-    val totalPrice: MutableLiveData<String> = MutableLiveData("2")
+    val totalPrice: MutableLiveData<String> = MutableLiveData()
 
-    val eachPrice: MutableLiveData<String?> = MutableLiveData("2")
+    val eachPrice: MutableLiveData<String?> = MutableLiveData()
 
-    val meetingAddress: MutableLiveData<String> = MutableLiveData("a")
+    val meetingAddress: MutableLiveData<String> = MutableLiveData()
 
-    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData("구의")
+    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
     val meetingAddressDong: LiveData<String?> get() = _meetingAddressDong
 
-    val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("a")
+    val meetingAddressDetail: MutableLiveData<String> = MutableLiveData()
 
-    val deadline: MutableLiveData<String> = MutableLiveData("2024-10-11T10:00:00")
+    val deadline: MutableLiveData<String> = MutableLiveData()
 
-    val description: MutableLiveData<String> = MutableLiveData("a")
+    val description: MutableLiveData<String> = MutableLiveData()
 
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
-        Log.d("alsong", "======================================")
-        Log.d("alsong", "memberId: ${BuildConfig.TOKEN.toLong()}")
-        Log.d("alsong", "title: ${title.value}")
-        Log.d("alsong", "productUrl: ${productUrl.value}")
-        Log.d("alsong", "thumbnailUrl: ${thumbnailUrl.value}")
-        Log.d("alsong", "totalCount: ${totalCount.value}")
-        Log.d("alsong", "totalPrice: ${totalPrice.value}")
-        Log.d("alsong", "eachPrice: ${eachPrice.value}")
-        Log.d("alsong", "meetingAddress: ${meetingAddress.value}")
-        Log.d("alsong", "meetingAddressDetail: ${meetingAddressDetail.value}")
-        Log.d("alsong", "meetingAddressDong: ${meetingAddressDong.value}")
-        Log.d("alsong", "deadline: ${deadline.value}")
-        Log.d("alsong", "description: ${description.value}")
-
         val memberId = BuildConfig.TOKEN.toLong()
         val title = title.value ?: return
         val totalCount = totalCount.value ?: return
@@ -77,7 +63,7 @@ class OfferingWriteViewModel(
                 deadline = deadline,
                 description = description,
             ).onSuccess {
-                Log.d("alsong", "postOffering: 잘보내짐")
+                Log.d("alsong", "success")
             }.onFailure {
                 Log.e("alsong", it.message.toString())
             }
