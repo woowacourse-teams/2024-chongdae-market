@@ -5,25 +5,36 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
+import static io.restassured.RestAssured.given;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import io.restassured.RestAssured;
+import com.zzang.chongdae.storage.service.StorageService;
 import io.restassured.http.ContentType;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.web.multipart.MultipartFile;
 
 public class OfferingIntegrationTest extends IntegrationTest {
+
+    @MockBean
+    private StorageService storageService;
 
     @DisplayName("공모 상세 조회")
     @Nested
@@ -48,7 +59,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
                 fieldWithPath("dividedPrice").description("n빵 가격"),
                 fieldWithPath("totalPrice").description("총가격"),
-                fieldWithPath("condition").description("공모 상태"),
+                fieldWithPath("condition").description("공모 상태"
+                        + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("memberId").description("공모자 회원 id"),
                 fieldWithPath("nickname").description("공모자 회원 닉네임"),
                 fieldWithPath("isParticipated").description("공모 참여 여부")
@@ -79,7 +91,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("공모 id로 공모 상세 정보를 조회할 수 있다")
         @Test
         void should_responseOfferingDetail_when_givenOfferingId() {
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("get-offering-detail-success", resource(successSnippets)))
                     .pathParam("offering-id", 1)
                     .queryParam("member-id", 1)
@@ -91,7 +103,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("유효하지 않은 공모를 조회할 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_invalidOffering() {
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
                     .pathParam("offering-id", 100)
                     .queryParam("member-id", 1)
@@ -103,7 +115,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("유효하지 않은 사용자가 공모를 조회할 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_invalidMember() {
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("get-offering-detail-fail-invalid-member", resource(failSnippets)))
                     .pathParam("offering-id", 1)
                     .queryParam("member-id", 100)
@@ -129,7 +141,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].totalCount").description("총원"),
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
                 fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
-                fieldWithPath("offerings[].condition").description("공모 상태"),
+                fieldWithPath("offerings[].condition").description("공모 상태"
+                        + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
@@ -151,7 +164,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("공모 목록을 조회할 수 있다")
         @Test
         void should_responseAllOffering_when_givenPageInfo() {
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("get-all-offering-success", resource(successSnippets)))
                     .queryParam("last-id", 1)
                     .queryParam("page-size", 10)
@@ -197,7 +210,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
         @Test
         void should_responseOfferingMeeting_when_givenOfferingId() {
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("get-offering-meeting-success", resource(successSnippets)))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/meetings")
@@ -208,7 +221,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("유효하지 않은 공모의 일정 정보를 조회할 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_invalidOffering() {
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("get-offering-meeting-fail-invalid-offering", resource(failSnippets)))
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/meetings")
@@ -275,7 +288,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "내용입니다."
             );
 
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("create-offering-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -302,7 +315,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "내용입니다."
             );
 
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("create-offering-fail-invalid-member", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -329,7 +342,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     null
             );
 
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("create-offering-fail-request-with-null", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -368,10 +381,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @DisplayName("상품 링크를 받아 이미지를 추출합니다.")
         @Test
-        void should_extract_imageUrl_when_given_productUrl() {
+        void should_extractImageUrl_when_givenProductUrl() {
             OfferingProductImageRequest request = new OfferingProductImageRequest("http://product-url.com");
 
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("extract-product-image-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -382,10 +395,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @DisplayName("상품 링크가 올바르지 않거나 이미지가 존재하지 않을 경우 빈 값을 반환합니다.")
         @Test
-        void should_return_emptyString_when_fail() {
+        void should_returnEmptyString_when_fail() {
             OfferingProductImageRequest request = new OfferingProductImageRequest("http://fail-product-url.com");
 
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("extract-product-image-fail", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -399,13 +412,54 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_emptyValue() {
             OfferingProductImageRequest request = new OfferingProductImageRequest(null);
 
-            RestAssured.given(spec).log().all()
+            given(spec).log().all()
                     .filter(document("extract-product-image-fail-request-with-null", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @DisplayName("S3에 이미지 업로드")
+    @Nested
+    class UploadProductImage {
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("상품 이미지 업로드")
+                .description("""
+                        상품 이미지를 받아 이미지를 S3에 업로드한다.
+                                               
+                        현재 사용 플러그인이 multipart/form-data의 파라미터에 대한 문서화를 지원하지 않습니다.
+                        ### Parameters
+                        | Part         | Type   | Description            |
+                        |--------------|--------|------------------------|
+                        | image        | binary | 상품 이미지               |
+                        """)
+                .responseSchema(schema("OfferingProductImageSuccessResponse"))
+                .build();
+
+        private File image;
+
+        @BeforeEach
+        void setUp() {
+            image = new File("src/test/resources/test-image.png");
+            MultipartFile mockImage = new MockMultipartFile("emptyImageFile", new byte[0]);
+            given(storageService.uploadFile(mockImage, "path"))
+                    .willReturn("https://uploaded-image-url.com");
+        }
+
+        @DisplayName("상품 이미지를 받아 이미지를 S3에 업로드한다.")
+        @Test
+        void should_uploadImageUrl_when_givenImageFile() {
+            given(spec).log().all()
+                    .filter(document("upload-product-image-success", resource(successSnippets)))
+                    .multiPart("image", image)
+                    .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                    .when().post("/offerings/product-images/s3")
+                    .then().log().all()
+                    .statusCode(200);
         }
     }
 }
