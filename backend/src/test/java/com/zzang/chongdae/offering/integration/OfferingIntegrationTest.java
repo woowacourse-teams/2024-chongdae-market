@@ -30,10 +30,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetOfferingDetail {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
-                parameterWithName("offering-id").description("공모 id")
+                parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id")
+                parameterWithName("member-id").description("회원 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("id").description("공모 id"),
@@ -118,8 +118,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetAllOffering {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("last-id").description("마지막 공모 id"),
-                parameterWithName("page-size").description("페이지 크기")
+                parameterWithName("last-id").description("마지막 공모 id (필수)"),
+                parameterWithName("page-size").description("페이지 크기 (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].id").description("공모 id"),
@@ -166,7 +166,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetOfferingMeeting {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
-                parameterWithName("offering-id").description("공모 id")
+                parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("deadline").description("마감시간"),
@@ -222,18 +222,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class CreateOffering {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("memberId").description("회원 id"),
-                fieldWithPath("title").description("제목"),
+                fieldWithPath("memberId").description("회원 id (필수)"),
+                fieldWithPath("title").description("제목 (필수)"),
                 fieldWithPath("productUrl").description("물품 구매 링크"),
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
-                fieldWithPath("totalCount").description("총원"),
-                fieldWithPath("totalPrice").description("총가격"),
+                fieldWithPath("totalCount").description("총원 (필수)"),
+                fieldWithPath("totalPrice").description("총가격 (필수)"),
                 fieldWithPath("eachPrice").description("낱개 가격"),
-                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소"),
-                fieldWithPath("deadline").description("모집 종료 시간"),
-                fieldWithPath("description").description("내용")
+                fieldWithPath("deadline").description("모집 종료 시간 (필수)"),
+                fieldWithPath("description").description("내용 (필수)")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 작성")
@@ -344,7 +344,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class ExtractProductImage {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("productUrl").description("상품 url")
+                fieldWithPath("productUrl").description("상품 url (필수)")
         );
         List<FieldDescriptor> responseDescriptors = List.of(
                 fieldWithPath("imageUrl").description("이미지 url")
