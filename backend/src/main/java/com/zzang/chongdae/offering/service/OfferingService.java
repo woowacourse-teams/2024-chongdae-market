@@ -77,9 +77,9 @@ public class OfferingService {
         return savedOffering.getId();
     }
 
-    public OfferingUploadedImageResponse uploadOfferingThumbnail(MultipartFile image) {
-        String url = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
-        return new OfferingUploadedImageResponse(url);
+    public OfferingProductImageResponse uploadProductImage(MultipartFile image) {
+        String imageUrl = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
+        return new OfferingProductImageResponse(imageUrl);
     }
 
     public OfferingProductImageResponse extractProductImage(OfferingProductImageRequest request) {
