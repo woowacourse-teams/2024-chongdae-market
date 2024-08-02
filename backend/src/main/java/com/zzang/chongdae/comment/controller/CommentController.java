@@ -5,6 +5,7 @@ import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import jakarta.validation.Valid;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,8 @@ public class CommentController {
     @PostMapping("/comments")
     public ResponseEntity<Void> saveComment(
             @RequestBody @Valid CommentSaveRequest request) {
-        commentService.saveComment(request);
-        return ResponseEntity.ok().build();
+        Long commentId = commentService.saveComment(request);
+        return ResponseEntity.created(URI.create("/comments/" + commentId)).build();
     }
 
     @GetMapping("/comments")

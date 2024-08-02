@@ -26,8 +26,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
     class Participate {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("memberId").description("회원 id"),
-                fieldWithPath("offeringId").description("공모 id")
+                fieldWithPath("memberId").description("회원 id (필수)"),
+                fieldWithPath("offeringId").description("공모 id (필수)")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여")

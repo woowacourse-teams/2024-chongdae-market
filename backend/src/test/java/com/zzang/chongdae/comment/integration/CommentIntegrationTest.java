@@ -29,9 +29,9 @@ public class CommentIntegrationTest extends IntegrationTest {
     class SaveComment {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("memberId").description("회원 id"),
-                fieldWithPath("offeringId").description("공모 id"),
-                fieldWithPath("content").description("내용")
+                fieldWithPath("memberId").description("회원 id (필수)"),
+                fieldWithPath("offeringId").description("공모 id (필수)"),
+                fieldWithPath("content").description("내용 (필수)")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글 작성")
@@ -72,7 +72,7 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .body(request)
                     .when().post("/comments")
                     .then().log().all()
-                    .statusCode(200);
+                    .statusCode(201);
         }
 
         @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
@@ -153,7 +153,7 @@ public class CommentIntegrationTest extends IntegrationTest {
     class GetAllCommentRoom {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id")
+                parameterWithName("member-id").description("회원 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].offeringId").description("공모 id"),
@@ -218,10 +218,10 @@ public class CommentIntegrationTest extends IntegrationTest {
     class GetAllComment {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
-                parameterWithName("offering-id").description("공모 id")
+                parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id")
+                parameterWithName("member-id").description("회원 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("comments[].commentId").description("댓글 id"),
