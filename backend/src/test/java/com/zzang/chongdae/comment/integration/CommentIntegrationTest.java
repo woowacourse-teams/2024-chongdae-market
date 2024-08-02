@@ -72,7 +72,7 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .body(request)
                     .when().post("/comments")
                     .then().log().all()
-                    .statusCode(200);
+                    .statusCode(201);
         }
 
         @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
