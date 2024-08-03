@@ -97,7 +97,6 @@ class HomeFragment : Fragment(), OnArticleClickListener {
     private fun navigateToOfferingWriteFragment() {
         binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
-            (activity as MainActivity).hideBottomNavigation()
         }
     }
 }

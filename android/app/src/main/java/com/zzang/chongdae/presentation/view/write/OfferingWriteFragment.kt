@@ -10,6 +10,7 @@ import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.OfferingWriteDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.OfferingWriteRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
+import com.zzang.chongdae.presentation.view.MainActivity
 
 class OfferingWriteFragment : Fragment() {
     private var _binding: FragmentOfferingWriteBinding? = null
@@ -32,6 +33,11 @@ class OfferingWriteFragment : Fragment() {
     ): View {
         initBinding(inflater, container)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).hideBottomNavigation()
     }
 
     private fun initBinding(
