@@ -435,6 +435,7 @@
                 android:layout_marginTop="@dimen/size_36"
                 android:layout_marginBottom="@dimen/size_34"
                 android:background="@drawable/btn_rounded"
+                android:clickable="@{vm.submitButtonEnabled}"
                 android:onClick="@{() -> vm.postOffering()}"
                 android:text="@string/write_start_offering"
                 android:textColor="@color/white"
@@ -442,7 +443,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_contents" />
+                app:layout_constraintTop_toBottomOf="@id/et_contents"
+                app:setSubmitButtonEnabled="@{vm.submitButtonEnabled}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

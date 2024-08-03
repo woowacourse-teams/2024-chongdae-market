@@ -8,6 +8,7 @@ import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -233,4 +234,10 @@ fun TextView.setTime(localTime: LocalTime) {
 fun ImageView.setImageProposer(proposer: Boolean) {
     val imageRes = if (proposer) R.drawable.ic_proposer else R.drawable.ic_not_proposer
     setImageResource(imageRes)
+}
+
+@BindingAdapter("setSubmitButtonEnabled")
+fun Button.setSubmitButtonEnabled(buttonEnabled: Boolean) {
+    val imageRes = if (buttonEnabled) R.drawable.btn_rounded else R.drawable.btn_rounded_enabeld
+    background = context.getDrawable(imageRes)
 }

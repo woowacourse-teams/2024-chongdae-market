@@ -35,7 +35,10 @@ class OfferingWriteFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
     }
@@ -46,6 +49,7 @@ class OfferingWriteFragment : Fragment() {
     ) {
         _binding = FragmentOfferingWriteBinding.inflate(inflater, container, false)
         binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     override fun onDestroy() {

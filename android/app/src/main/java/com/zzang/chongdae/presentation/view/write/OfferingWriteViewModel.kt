@@ -2,6 +2,7 @@ package com.zzang.chongdae.presentation.view.write
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -36,6 +37,31 @@ class OfferingWriteViewModel(
     val deadline: MutableLiveData<String> = MutableLiveData()
 
     val description: MutableLiveData<String> = MutableLiveData()
+
+    private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
+
+    init {
+        _submitButtonEnabled.apply {
+            addSource(title) { updateSubmitButtonEnabled() }
+            addSource(totalCount) { updateSubmitButtonEnabled() }
+            addSource(totalPrice) { updateSubmitButtonEnabled() }
+            addSource(meetingAddress) { updateSubmitButtonEnabled() }
+            addSource(meetingAddressDetail) { updateSubmitButtonEnabled() }
+            addSource(deadline) { updateSubmitButtonEnabled() }
+            addSource(description) { updateSubmitButtonEnabled() }
+        }
+    }
+
+    private fun updateSubmitButtonEnabled() {
+        _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
+            !totalCount.value.isNullOrBlank() &&
+            !totalPrice.value.isNullOrBlank() &&
+            !meetingAddress.value.isNullOrBlank() &&
+            !meetingAddressDetail.value.isNullOrBlank() &&
+            !deadline.value.isNullOrBlank() &&
+            !description.value.isNullOrBlank()
+    }
 
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
