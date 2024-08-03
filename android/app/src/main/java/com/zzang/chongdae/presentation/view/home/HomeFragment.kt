@@ -57,7 +57,7 @@ class HomeFragment : Fragment(), OnArticleClickListener {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).alsong2()
+        (activity as MainActivity).showBottomNavigation()
     }
 
     override fun onDestroyView() {
@@ -97,7 +97,7 @@ class HomeFragment : Fragment(), OnArticleClickListener {
     private fun navigateToOfferingWriteFragment() {
         binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
-            (activity as MainActivity).alsong()
+            (activity as MainActivity).hideBottomNavigation()
         }
     }
 }

@@ -38,11 +38,11 @@ class MainActivity : AppCompatActivity() {
         binding.mainBottomNavigation.setupWithNavController(navController)
     }
 
-    fun alsong() {
+    fun hideBottomNavigation() {
         binding.mainBottomNavigation.visibility = View.GONE
     }
 
-    fun alsong2() {
+    fun showBottomNavigation() {
         binding.mainBottomNavigation.visibility = View.VISIBLE
     }
 
