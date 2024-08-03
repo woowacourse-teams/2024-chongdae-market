@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.zzang.chongdae.R
 import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.impl.OfferingWriteDataSourceImpl
 import com.zzang.chongdae.data.repository.remote.OfferingWriteRepositoryImpl
@@ -15,6 +17,7 @@ import com.zzang.chongdae.presentation.view.MainActivity
 class OfferingWriteFragment : Fragment() {
     private var _binding: FragmentOfferingWriteBinding? = null
     private val binding get() = _binding!!
+    private var toast: Toast? = null
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
@@ -41,6 +44,7 @@ class OfferingWriteFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
+        observeInvalidInputEvent()
     }
 
     private fun initBinding(
@@ -50,6 +54,24 @@ class OfferingWriteFragment : Fragment() {
         _binding = FragmentOfferingWriteBinding.inflate(inflater, container, false)
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun observeInvalidInputEvent() {
+        viewModel.invalidTotalCountEvent.observe(this) {
+            toast?.cancel()
+            toast = Toast.makeText(requireActivity(), R.string.write_invalid_total_count, Toast.LENGTH_SHORT)
+            toast?.show()
+        }
+        viewModel.invalidTotalPriceEvent.observe(this) {
+            toast?.cancel()
+            toast = Toast.makeText(requireActivity(), R.string.write_invalid_total_price, Toast.LENGTH_SHORT)
+            toast?.show()
+        }
+        viewModel.invalidEachPriceEvent.observe(this) {
+            toast?.cancel()
+            toast = Toast.makeText(requireActivity(), R.string.write_invalid_each_price, Toast.LENGTH_SHORT)
+            toast?.show()
+        }
     }
 
     override fun onDestroy() {
