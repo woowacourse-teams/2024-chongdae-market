@@ -10,7 +10,7 @@ class AddressWebViewClient(private val assetLoader: WebViewAssetLoader) :
     WebViewClientCompat() {
     override fun shouldInterceptRequest(
         view: WebView?,
-        request: WebResourceRequest?
+        request: WebResourceRequest?,
     ): WebResourceResponse? {
         return assetLoader.shouldInterceptRequest(request!!.url)
     }

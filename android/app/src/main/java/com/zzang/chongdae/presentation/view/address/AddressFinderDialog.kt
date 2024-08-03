@@ -16,15 +16,19 @@ class AddressFinderDialog : DialogFragment(), OnAddressClickListener {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = DialogAddressFinderBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         initDialog()
@@ -54,20 +58,21 @@ class AddressFinderDialog : DialogFragment(), OnAddressClickListener {
             }
             addJavascriptInterface(
                 JavascriptInterface(this@AddressFinderDialog),
-                JS_BRIDGE
+                JS_BRIDGE,
             )
             webViewClient = AddressWebViewClient(assetLoader)
-            loadUrl("https://${DOMAIN}/${PATH}/html/address.html")
+            loadUrl("https://$DOMAIN/$PATH/html/address.html")
         }
     }
 
-    private fun webViewAssetLoader() = WebViewAssetLoader.Builder()
-        .addPathHandler(
-            "/${PATH}/",
-            WebViewAssetLoader.AssetsPathHandler(requireContext())
-        )
-        .setDomain(DOMAIN)
-        .build()
+    private fun webViewAssetLoader() =
+        WebViewAssetLoader.Builder()
+            .addPathHandler(
+                "/$PATH/",
+                WebViewAssetLoader.AssetsPathHandler(requireContext()),
+            )
+            .setDomain(DOMAIN)
+            .build()
 
     override fun onClickAddress(address: String) {
         setFragmentResult(ADDRESS_KEY, bundleOf(BUNDLE_ADDRESS_KEY to address))
