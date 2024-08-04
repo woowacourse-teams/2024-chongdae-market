@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">chongdae</string>
+    <string name="app_name">총대마켓</string>
 
     <!--    all-->
     <string name="all_money_amount_text">%,d원</string>
