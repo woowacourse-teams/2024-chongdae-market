@@ -23,7 +23,7 @@ class OfferingWriteViewModel(
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("0")
+    val totalCount: MutableLiveData<String> = MutableLiveData("2")
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
@@ -97,7 +97,7 @@ class OfferingWriteViewModel(
             return
         }
         val totalCountInt = totalCount.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalCountInt < 0) {
+        if (totalCountInt <= 0) {
             _splitPrice.value = ERROR_INTEGER_FORMAT
             return
         }
@@ -106,12 +106,12 @@ class OfferingWriteViewModel(
 
     private fun updateDiscountRate() {
         val eachPriceInt = eachPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (eachPriceInt < 0) {
+        if (eachPriceInt <= 0) {
             _discountRate.value = ERROR_FLOAT_FORMAT
             return
         }
         val splitPriceInt = _splitPrice.value ?: ERROR_INTEGER_FORMAT
-        if (splitPriceInt < 0) {
+        if (splitPriceInt <= 0) {
             _discountRate.value = ERROR_FLOAT_FORMAT
             return
         }

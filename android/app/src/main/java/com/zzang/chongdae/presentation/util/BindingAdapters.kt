@@ -251,7 +251,7 @@ fun Button.setSubmitButtonText(buttonEnabled: Boolean) {
 
 @BindingAdapter("setSplitPriceVisibility")
 fun TextView.setSplitPriceVisibility(splitPrice: Int) {
-    val textVisibility = if (splitPrice > 0) View.VISIBLE else View.INVISIBLE
+    val textVisibility = if (splitPrice >= 0) View.VISIBLE else View.INVISIBLE
     visibility = textVisibility
 }
 
