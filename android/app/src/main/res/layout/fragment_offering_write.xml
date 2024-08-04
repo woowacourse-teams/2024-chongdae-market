@@ -205,7 +205,8 @@
                 android:textColor="@color/gray_500"
                 android:textSize="@dimen/size_10"
                 app:layout_constraintStart_toStartOf="@id/et_total_price"
-                app:layout_constraintTop_toBottomOf="@id/et_total_price" />
+                app:layout_constraintTop_toBottomOf="@id/et_total_price"
+                app:setSplitPriceVisibility="@{vm.splitPrice}" />
 
             <TextView
                 android:id="@+id/tv_per_n_price"
@@ -218,7 +219,8 @@
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/et_total_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description" />
+                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
+                app:setSplitPriceVisibility="@{vm.splitPrice}" />
 
             <TextView
                 android:id="@+id/tv_per_n_price_value"
@@ -226,11 +228,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_4"
                 android:fontFamily="@font/suit_bold"
+                android:text="@{vm.splitPrice.toString()}"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
                 app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
+                app:setSplitPriceVisibility="@{vm.splitPrice}"
                 tools:text="10,000" />
 
             <TextView
@@ -244,7 +248,8 @@
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_per_n_price_value"
-                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description" />
+                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
+                app:setSplitPriceVisibility="@{vm.splitPrice}" />
 
             <TextView
                 android:id="@+id/tv_individual_price"
@@ -437,14 +442,14 @@
                 android:background="@drawable/btn_rounded_disabled"
                 android:clickable="@{vm.submitButtonEnabled}"
                 android:onClick="@{() -> vm.postOffering()}"
-                app:setSubmitButtonText="@{vm.submitButtonEnabled}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_contents"
-                app:setSubmitButtonEnabled="@{vm.submitButtonEnabled}" />
+                app:setSubmitButtonEnabled="@{vm.submitButtonEnabled}"
+                app:setSubmitButtonText="@{vm.submitButtonEnabled}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

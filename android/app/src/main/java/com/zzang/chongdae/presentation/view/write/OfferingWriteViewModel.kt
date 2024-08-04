@@ -52,6 +52,9 @@ class OfferingWriteViewModel(
     private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
 
+    private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData()
+    val splitPrice: LiveData<Int> get() = _splitPrice
+
     init {
         _submitButtonEnabled.apply {
             addSource(title) { updateSubmitButtonEnabled() }
@@ -61,6 +64,11 @@ class OfferingWriteViewModel(
             addSource(meetingAddressDetail) { updateSubmitButtonEnabled() }
             addSource(deadline) { updateSubmitButtonEnabled() }
             addSource(description) { updateSubmitButtonEnabled() }
+        }
+
+        _splitPrice.apply {
+            addSource(totalCount) { updateSplitPrice() }
+            addSource(totalPrice) { updateSplitPrice() }
         }
     }
 
@@ -72,6 +80,20 @@ class OfferingWriteViewModel(
             !meetingAddressDetail.value.isNullOrBlank() &&
             !deadline.value.isNullOrBlank() &&
             !description.value.isNullOrBlank()
+    }
+
+    private fun updateSplitPrice() {
+        val totalPriceInt = totalPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (totalPriceInt < 0) {
+            _splitPrice.value = ERROR_INTEGER_FORMAT
+            return
+        }
+        val totalCountInt = totalCount.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (totalCountInt < 0) {
+            _splitPrice.value = ERROR_INTEGER_FORMAT
+            return
+        }
+        _splitPrice.value = totalPriceInt / totalCountInt
     }
 
     // memberId는 임시값을 보내고 있음!
@@ -133,7 +155,7 @@ class OfferingWriteViewModel(
     }
 
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
-        val totalCountConverted = totalCount.trim().toIntOrNull() ?: -1
+        val totalCountConverted = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalCountConverted < 2 || totalCountConverted > 10000) {
             _invalidTotalCountEvent.setValue(true)
             return null
@@ -142,7 +164,7 @@ class OfferingWriteViewModel(
     }
 
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
-        val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: -1
+        val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalPriceConverted < 0) {
             _invalidTotalPriceEvent.setValue(true)
             return null
@@ -155,6 +177,8 @@ class OfferingWriteViewModel(
     }
 
     companion object {
+        private const val ERROR_INTEGER_FORMAT = -1
+
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringWriteRepository: OfferingWriteRepository) =
             object : ViewModelProvider.Factory {
