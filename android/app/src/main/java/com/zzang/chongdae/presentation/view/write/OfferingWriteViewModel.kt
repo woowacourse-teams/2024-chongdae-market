@@ -23,7 +23,7 @@ class OfferingWriteViewModel(
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("")
+    val totalCount: MutableLiveData<String> = MutableLiveData("0")
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
@@ -118,6 +118,18 @@ class OfferingWriteViewModel(
         val discountPrice = (eachPriceInt - splitPriceInt).toFloat()
         _discountRate.value = (discountPrice / eachPriceInt) * 100
         if (discountPrice < 0) _discountRate.value = 0f
+    }
+
+    fun increaseTotalCount() {
+        var totalCountInt = totalCount.value?.toIntOrNull() ?: return
+        totalCountInt++
+        totalCount.value = totalCountInt.toString()
+    }
+
+    fun decreaseTotalCount() {
+        var totalCountInt = totalCount.value?.toIntOrNull() ?: return
+        totalCountInt--
+        totalCount.value = totalCountInt.toString()
     }
 
     // memberId는 임시값을 보내고 있음!
