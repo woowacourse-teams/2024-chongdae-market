@@ -52,8 +52,11 @@ class OfferingWriteViewModel(
     private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
 
-    private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData()
+    private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
+
+    private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
+    val discountRate: LiveData<Float> get() = _discountRate
 
     init {
         _submitButtonEnabled.apply {
@@ -69,6 +72,11 @@ class OfferingWriteViewModel(
         _splitPrice.apply {
             addSource(totalCount) { updateSplitPrice() }
             addSource(totalPrice) { updateSplitPrice() }
+        }
+
+        _discountRate.apply {
+            addSource(_splitPrice) { updateDiscountRate() }
+            addSource(eachPrice) { updateDiscountRate() }
         }
     }
 
@@ -94,6 +102,22 @@ class OfferingWriteViewModel(
             return
         }
         _splitPrice.value = totalPriceInt / totalCountInt
+    }
+
+    private fun updateDiscountRate() {
+        val eachPriceInt = eachPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (eachPriceInt < 0) {
+            _discountRate.value = ERROR_FLOAT_FORMAT
+            return
+        }
+        val splitPriceInt = _splitPrice.value ?: ERROR_INTEGER_FORMAT
+        if (splitPriceInt < 0) {
+            _discountRate.value = ERROR_FLOAT_FORMAT
+            return
+        }
+        val discountPrice = (eachPriceInt - splitPriceInt).toFloat()
+        _discountRate.value = (discountPrice / eachPriceInt) * 100
+        if (discountPrice < 0) _discountRate.value = 0f
     }
 
     // memberId는 임시값을 보내고 있음!
@@ -178,6 +202,7 @@ class OfferingWriteViewModel(
 
     companion object {
         private const val ERROR_INTEGER_FORMAT = -1
+        private const val ERROR_FLOAT_FORMAT = -1f
         private const val MINIMUM_TOTAL_COUNT = 2
         private const val MAXIMUM_TOTAL_COUNT = 10_000
 

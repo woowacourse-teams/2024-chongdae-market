@@ -229,28 +229,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_4"
                 android:fontFamily="@font/suit_bold"
-                app:setFormattedNumber="@{vm.splitPrice}"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
                 app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
+                app:setFormattedNumber="@{vm.splitPrice}"
                 app:setSplitPriceVisibility="@{vm.splitPrice}"
                 tools:text="10,000" />
-
-            <TextView
-                android:id="@+id/tv_per_n_price_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_4"
-                android:fontFamily="@font/suit_bold"
-                android:text="@string/all_won"
-                android:textColor="@color/main_color"
-                android:textSize="@dimen/size_15"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/tv_per_n_price_value"
-                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
-                app:setSplitPriceVisibility="@{vm.splitPrice}" />
 
             <TextView
                 android:id="@+id/tv_individual_price"
@@ -292,7 +278,8 @@
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/et_total_price"
-                app:layout_constraintTop_toBottomOf="@id/et_individual_price" />
+                app:layout_constraintTop_toBottomOf="@id/et_individual_price"
+                app:setDiscountRateVisibility="@{vm.discountRate}" />
 
             <TextView
                 android:id="@+id/tv_discount_rate_value"
@@ -304,6 +291,8 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_discount_rate"
                 app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
+                app:setDiscountRateVisibility="@{vm.discountRate}"
+                app:setDiscountRate="@{vm.discountRate}"
                 tools:text="10" />
 
             <TextView
@@ -316,7 +305,8 @@
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_discount_rate_value"
-                app:layout_constraintTop_toTopOf="@id/tv_discount_rate" />
+                app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
+                app:setDiscountRateVisibility="@{vm.discountRate}" />
 
             <TextView
                 android:id="@+id/tv_place"

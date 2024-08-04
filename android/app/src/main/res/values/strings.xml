@@ -107,5 +107,6 @@
     <string name="write_invalid_total_count">총원은 2이상 10,000이하의 정수를 입력해 주세요.</string>
     <string name="write_invalid_total_price">총 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_invalid_each_price">낱개 가격은 0이상의 정수를 입력해 주세요.</string>
+    <string name="write_discount_rate_value">%.1f</string>
 
 </resources>

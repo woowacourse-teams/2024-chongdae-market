@@ -16,7 +16,6 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
-import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -245,7 +244,8 @@ fun Button.setSubmitButtonEnabled(buttonEnabled: Boolean) {
 
 @BindingAdapter("setSubmitButtonText")
 fun Button.setSubmitButtonText(buttonEnabled: Boolean) {
-    val buttonText = if (buttonEnabled) R.string.write_start_offering else R.string.write_start_offering_button_disabled
+    val buttonText =
+        if (buttonEnabled) R.string.write_start_offering else R.string.write_start_offering_button_disabled
     text = context.getText(buttonText)
 }
 
@@ -255,8 +255,20 @@ fun TextView.setSplitPriceVisibility(splitPrice: Int) {
     visibility = textVisibility
 }
 
+@BindingAdapter("setDiscountRateVisibility")
+fun TextView.setDiscountRateVisibility(discountRate: Float) {
+    val textVisibility = if (discountRate >= 0) View.VISIBLE else View.INVISIBLE
+    visibility = textVisibility
+}
+
 @BindingAdapter("setFormattedNumber")
 fun TextView.setFormattedNumber(number: Int) {
-    val formattedNumber = NumberFormat.getNumberInstance(Locale.US).format(number)
+    val formattedNumber = context.getString(R.string.all_money_amount_text).format(number)
     text = formattedNumber
+}
+
+@BindingAdapter("setDiscountRate")
+fun TextView.setDiscountRate(number: Float) {
+    val formattedRate = context.getString(R.string.write_discount_rate_value).format(number)
+    text = formattedRate
 }
