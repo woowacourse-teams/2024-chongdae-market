@@ -132,15 +132,15 @@
 
             <TextView
                 android:id="@+id/img_minus_total_personnel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_marginTop="@dimen/size_19"
                 android:background="@drawable/btn_offering_write_minus_total_personnel"
                 android:gravity="center"
                 android:onClick="@{() -> vm.decreaseTotalCount()}"
                 android:text="@string/all_minus"
                 android:textColor="@color/white"
-                android:textSize="@dimen/size_16"
+                android:textSize="@dimen/size_20"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
@@ -148,21 +148,22 @@
 
             <EditText
                 android:id="@+id/et_total_personnel"
-                android:layout_width="@dimen/size_64"
-                android:layout_height="@dimen/size_27"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/size_40"
                 android:layout_marginStart="@dimen/size_7"
                 android:layout_marginTop="@dimen/size_18"
                 android:background="@drawable/et_border_main_color"
                 android:gravity="center"
                 android:text="@={vm.totalCount}"
-                android:textSize="12dp"
+                android:textSize="20dp"
                 app:layout_constraintStart_toEndOf="@id/img_minus_total_personnel"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
+                app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel"
+                tools:text="2" />
 
             <TextView
                 android:id="@+id/img_plus_total_personnel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_marginStart="@dimen/size_7"
                 android:layout_marginTop="@dimen/size_19"
                 android:background="@drawable/btn_offering_write_minus_total_personnel"
@@ -170,7 +171,7 @@
                 android:onClick="@{() -> vm.increaseTotalCount()}"
                 android:text="@string/all_plus"
                 android:textColor="@color/white"
-                android:textSize="@dimen/size_16"
+                android:textSize="@dimen/size_20"
                 app:layout_constraintStart_toEndOf="@id/et_total_personnel"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
 
