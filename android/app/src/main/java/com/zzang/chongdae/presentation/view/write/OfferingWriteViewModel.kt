@@ -156,7 +156,7 @@ class OfferingWriteViewModel(
 
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
         val totalCountConverted = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalCountConverted < 2 || totalCountConverted > 10000) {
+        if (totalCountConverted < MINIMUM_TOTAL_COUNT || totalCountConverted > MAXIMUM_TOTAL_COUNT) {
             _invalidTotalCountEvent.setValue(true)
             return null
         }
@@ -178,6 +178,8 @@ class OfferingWriteViewModel(
 
     companion object {
         private const val ERROR_INTEGER_FORMAT = -1
+        private const val MINIMUM_TOTAL_COUNT = 2
+        private const val MAXIMUM_TOTAL_COUNT = 10_000
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringWriteRepository: OfferingWriteRepository) =
