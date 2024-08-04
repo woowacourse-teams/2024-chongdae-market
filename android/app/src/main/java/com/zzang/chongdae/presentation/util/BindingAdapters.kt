@@ -16,6 +16,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
+import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -252,4 +253,10 @@ fun Button.setSubmitButtonText(buttonEnabled: Boolean) {
 fun TextView.setSplitPriceVisibility(splitPrice: Int) {
     val textVisibility = if (splitPrice > 0) View.VISIBLE else View.INVISIBLE
     visibility = textVisibility
+}
+
+@BindingAdapter("setFormattedNumber")
+fun TextView.setFormattedNumber(number: Int) {
+    val formattedNumber = NumberFormat.getNumberInstance(Locale.US).format(number)
+    text = formattedNumber
 }

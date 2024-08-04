@@ -89,11 +89,11 @@
     <string name="write_total_price">총 가격</string>
     <string name="write_information_total_price">너무 고가의 물품은 주의가 필요해요!</string>
     <string name="write_rounds_description">1원 단위까지 반올림</string>
-    <string name="write_per_n_price">예상 엔빵 가격 : </string>
+    <string name="write_per_n_price">예상 엔빵 가격 :\u00A0</string>
     <string name="write_individual_price">낱개 가격</string>
     <string name="write_information_individual_price_description">1개만 구입할 때의 가격을 입력해 주세요.</string>
     <string name="write_information_individual_price_description2">입력 시 공구 성공률이 높아져요!</string>
-    <string name="write_discount_rate">공구 할인률 : </string>
+    <string name="write_discount_rate">공구 할인률 :\u00A0</string>
     <string name="write_information_place">거래 희망 장소를 검색해 주세요.</string>
     <string name="write_search_place"> 주소 검색</string>
     <string name="write_enter_place_detail"> 상세 주소를 입력해 주세요</string>

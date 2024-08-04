@@ -8,6 +8,7 @@
         <variable
             name="vm"
             type="com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel" />
+
     </data>
 
     <ScrollView
@@ -228,7 +229,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_4"
                 android:fontFamily="@font/suit_bold"
-                android:text="@{vm.splitPrice.toString()}"
+                app:setFormattedNumber="@{vm.splitPrice}"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
                 android:textStyle="bold"
