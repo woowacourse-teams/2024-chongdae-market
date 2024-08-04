@@ -12,7 +12,7 @@
 
         <variable
             name="onArticleClickListener"
-            type="com.zzang.chongdae.presentation.view.home.OnArticleClickListener" />
+            type="com.zzang.chongdae.presentation.view.home.OnOfferingClickListener" />
 
     </data>
 

@@ -19,7 +19,7 @@ import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
 
-class HomeFragment : Fragment(), OnArticleClickListener {
+class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var offeringAdapter: OfferingAdapter
