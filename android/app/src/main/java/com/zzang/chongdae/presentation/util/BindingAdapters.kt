@@ -238,6 +238,12 @@ fun ImageView.setImageProposer(proposer: Boolean) {
 
 @BindingAdapter("setSubmitButtonEnabled")
 fun Button.setSubmitButtonEnabled(buttonEnabled: Boolean) {
-    val imageRes = if (buttonEnabled) R.drawable.btn_rounded else R.drawable.btn_rounded_enabeld
+    val imageRes = if (buttonEnabled) R.drawable.btn_rounded else R.drawable.btn_rounded_disabled
     background = context.getDrawable(imageRes)
+}
+
+@BindingAdapter("setSubmitButtonText")
+fun Button.setSubmitButtonText(buttonEnabled: Boolean) {
+    val buttonText = if (buttonEnabled) R.string.write_start_offering_enabled else R.string.write_start_offering_button_disabled
+    text = context.getText(buttonText)
 }
