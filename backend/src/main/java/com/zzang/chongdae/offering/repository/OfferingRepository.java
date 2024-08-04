@@ -28,16 +28,12 @@ public interface OfferingRepository
         static Specification<OfferingEntity> hasSearchKeyword(String keyword) {
             return (root, query, builder) -> {
                 if (keyword == null) {
-                    System.out.println("this is null space");
                     return builder.conjunction();
                 }
                 String parsedKeyword = "%" + keyword + "%";
-
-                Predicate titlePredicate = builder.like(root.get("title"), keyword);
-                Predicate addressPredicate = builder.like(root.get("meetingAddress"), keyword);
+                Predicate titlePredicate = builder.like(root.get("title"), parsedKeyword);
+                Predicate addressPredicate = builder.like(root.get("meetingAddress"), parsedKeyword);
                 return builder.or(titlePredicate, addressPredicate);
-//                System.out.println(keyword);
-//                return builder.equal(root.get("title"), keyword);
             };
         }
     }

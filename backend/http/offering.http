@@ -2,7 +2,7 @@
 GET {{base-url}}/offerings/1?member-id=1
 
 ### 공모 목록 조회 API
-GET {{base-url}}/offerings?filter=""&search="간식 같이 사요"&last-id=0&page-size=10
+GET {{base-url}}/offerings?filter=""&search=같이&last-id=0&page-size=10
 
 ### 공모 필터 목록 조회 API
 GET {{base-url}}/offerings/filters
