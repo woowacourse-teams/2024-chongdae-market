@@ -1,5 +1,5 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
-interface ParticipationClickListener {
+interface OnParticipationClickListener {
     fun onClickParticipation()
 }

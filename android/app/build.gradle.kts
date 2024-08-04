@@ -141,4 +141,7 @@ dependencies {
 
     // Pagination
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+
+    // WebView
+    implementation("androidx.webkit:webkit:1.9.0")
 }

@@ -1,5 +1,5 @@
 package com.zzang.chongdae.presentation.view.home
 
-interface OnArticleClickListener {
+interface OnOfferingClickListener {
     fun onClick(offeringId: Long)
 }
