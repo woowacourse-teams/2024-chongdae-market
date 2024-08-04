@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offering.service;
 
+import static com.zzang.chongdae.offering.repository.OfferingRepository.Specs.greaterThan;
 import static com.zzang.chongdae.offering.repository.OfferingRepository.Specs.hasSearchKeyword;
 import static org.springframework.data.jpa.domain.Specification.where;
 
@@ -27,6 +28,7 @@ import com.zzang.chongdae.storage.service.StorageService;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -58,10 +60,11 @@ public class OfferingService {
 
     public OfferingAllResponse getAllOffering(String filter, String keyword, Long lastId, Integer pageSize) {
         Pageable pageable = PageRequest.ofSize(pageSize);
-        List<OfferingEntity> offerings = offeringRepository.findAll(
-                where(
-                        hasSearchKeyword(keyword)
-                )
+        Page<OfferingEntity> offerings = offeringRepository.findAll(
+                where(hasSearchKeyword(keyword)
+                        .and(greaterThan(lastId))
+                ),
+                pageable
         );
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {

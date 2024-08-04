@@ -36,5 +36,11 @@ public interface OfferingRepository
                 return builder.or(titlePredicate, addressPredicate);
             };
         }
+
+        static Specification<OfferingEntity> greaterThan(Long lastId) {
+            return (root, query, builder) -> {
+                return builder.greaterThan(root.get("id"), lastId);
+            };
+        }
     }
 }
