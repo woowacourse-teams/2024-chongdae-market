@@ -14,6 +14,8 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingFilter;
+import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.storage.service.StorageService;
@@ -227,6 +229,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 필터 목록 조회")
+    @Nested
+    class GetAllOfferingFilter {
+
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("filters[].keyword").description("키워드" + getEnumValuesAsString(OfferingFilter.class)),
+                fieldWithPath("filters[]name").description("이름"),
+                fieldWithPath("filters[]type").description("타입" + getEnumValuesAsString(OfferingFilterType.class))
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 필터 목록 조회")
+                .description("공모 목록 조회 시 필터링할 수 있는 키워드 목록을 조회합니다.")
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingFilterSuccessResponse"))
+                .build();
+
+        @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
+        @Test
+        void should_responseOfferingFilter_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("get-all-offering-filter-success", resource(successSnippets)))
+                    .when().get("/offerings/filters")
+                    .then().log().all()
+                    .statusCode(200);
         }
     }
 

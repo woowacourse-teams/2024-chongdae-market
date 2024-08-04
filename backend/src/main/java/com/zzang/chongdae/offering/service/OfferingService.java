@@ -13,8 +13,8 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
-import com.zzang.chongdae.offering.service.dto.OfferingFilterResponse;
-import com.zzang.chongdae.offering.service.dto.OfferingFilterResponseItem;
+import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
@@ -72,11 +72,11 @@ public class OfferingService {
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 
-    public OfferingFilterResponse getOfferingFilter() {
-        List<OfferingFilterResponseItem> filters = Arrays.stream(OfferingFilter.values())
-                .map(OfferingFilterResponseItem::new)
+    public OfferingFilterAllResponse getOfferingFilter() {
+        List<OfferingFilterAllResponseItem> filters = Arrays.stream(OfferingFilter.values())
+                .map(OfferingFilterAllResponseItem::new)
                 .toList();
-        return new OfferingFilterResponse(filters);
+        return new OfferingFilterAllResponse(filters);
     }
 
     public Long saveOffering(OfferingSaveRequest request) {

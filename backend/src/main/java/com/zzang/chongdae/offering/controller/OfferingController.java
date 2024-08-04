@@ -3,7 +3,7 @@ package com.zzang.chongdae.offering.controller;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
-import com.zzang.chongdae.offering.service.dto.OfferingFilterResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
@@ -50,8 +50,8 @@ public class OfferingController {
     }
 
     @GetMapping("offerings/filters")
-    public ResponseEntity<OfferingFilterResponse> getOfferingFilter() {
-        OfferingFilterResponse response = offeringService.getOfferingFilter();
+    public ResponseEntity<OfferingFilterAllResponse> getOfferingFilter() { // TODO: getAllOfferingFilter로 바꾸기
+        OfferingFilterAllResponse response = offeringService.getOfferingFilter();
         return ResponseEntity.ok(response);
     }
 
