@@ -74,7 +74,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/size_20</item>
         <item name="android:textColor">@color/black_700</item>
-        <item name="android:layout_marginTop">@dimen/size_24</item>
+        <item name="android:layout_marginTop">@dimen/size_40</item>
         <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
