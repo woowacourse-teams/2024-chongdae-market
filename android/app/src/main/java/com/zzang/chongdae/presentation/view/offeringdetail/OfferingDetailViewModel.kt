@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-) : ViewModel(), ParticipationClickListener {
+) : ViewModel(), OnParticipationClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
