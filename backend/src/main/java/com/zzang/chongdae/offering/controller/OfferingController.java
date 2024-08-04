@@ -3,11 +3,11 @@ package com.zzang.chongdae.offering.controller;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingFilterResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +46,12 @@ public class OfferingController {
     public ResponseEntity<OfferingMeetingResponse> getOfferingMeeting(
             @PathVariable(value = "offering-id") Long offeringId) {
         OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("offerings/filters")
+    public ResponseEntity<OfferingFilterResponse> getOfferingFilter() {
+        OfferingFilterResponse response = offeringService.getOfferingFilter();
         return ResponseEntity.ok(response);
     }
 
