@@ -237,9 +237,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetAllOfferingFilter {
 
         List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("filters[].keyword").description("키워드" + getEnumValuesAsString(OfferingFilter.class)),
+                fieldWithPath("filters[].keyword").description("키워드"
+                        + getEnumValuesAsString(OfferingFilter.class)),
                 fieldWithPath("filters[]name").description("이름"),
-                fieldWithPath("filters[]type").description("타입" + getEnumValuesAsString(OfferingFilterType.class))
+                fieldWithPath("filters[]type").description("타입"
+                        + getEnumValuesAsString(OfferingFilterType.class))
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 필터 목록 조회")
