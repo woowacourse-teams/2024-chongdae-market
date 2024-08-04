@@ -244,6 +244,6 @@ fun Button.setSubmitButtonEnabled(buttonEnabled: Boolean) {
 
 @BindingAdapter("setSubmitButtonText")
 fun Button.setSubmitButtonText(buttonEnabled: Boolean) {
-    val buttonText = if (buttonEnabled) R.string.write_start_offering_enabled else R.string.write_start_offering_button_disabled
+    val buttonText = if (buttonEnabled) R.string.write_start_offering else R.string.write_start_offering_button_disabled
     text = context.getText(buttonText)
 }
