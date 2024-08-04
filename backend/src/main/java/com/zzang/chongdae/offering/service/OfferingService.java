@@ -1,5 +1,8 @@
 package com.zzang.chongdae.offering.service;
 
+import static com.zzang.chongdae.offering.repository.OfferingRepository.Specs.hasSearchKeyword;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
@@ -53,9 +56,13 @@ public class OfferingService {
         return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
     }
 
-    public OfferingAllResponse getAllOffering(Long lastId, Integer pageSize) {
+    public OfferingAllResponse getAllOffering(String filter, String keyword, Long lastId, Integer pageSize) {
         Pageable pageable = PageRequest.ofSize(pageSize);
-        List<OfferingEntity> offerings = offeringRepository.findByIdGreaterThan(lastId, pageable);
+        List<OfferingEntity> offerings = offeringRepository.findAll(
+                where(
+                        hasSearchKeyword(keyword)
+                )
+        );
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
