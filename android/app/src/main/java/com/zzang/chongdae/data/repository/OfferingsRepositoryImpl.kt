@@ -1,26 +1,28 @@
-package com.zzang.chongdae.data.repository.remote
+package com.zzang.chongdae.data.repository
 
 import com.zzang.chongdae.data.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
-import com.zzang.chongdae.data.remote.source.OfferingsDataSource
+import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
+import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.repository.OfferingsRepository
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 
 class OfferingsRepositoryImpl(
-    private val offeringsDataSource: OfferingsDataSource,
+    private val offeringLocalDataSource: OfferingLocalDataSource,
+    private val offeringRemoteDataSource: OfferingRemoteDataSource,
 ) : OfferingsRepository {
     override suspend fun fetchOfferings(
         lastOfferingId: Long,
         pageSize: Int,
     ): List<Offering> {
-        return offeringsDataSource.fetchOfferings(lastOfferingId, pageSize).mapCatching {
+        return offeringRemoteDataSource.fetchOfferings(lastOfferingId, pageSize).mapCatching {
             it.offerings.map { it.toDomain() }
         }.getOrThrow()
     }
 
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
-        return offeringsDataSource.saveOffering(
+        return offeringRemoteDataSource.saveOffering(
             offeringWriteRequest =
                 OfferingWriteRequest(
                     memberId = uiModel.memberId,

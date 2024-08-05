@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface ParticipationsApiService {
+interface ParticipationApiService {
     @POST("/participations")
     suspend fun postParticipations(
         @Body participationRequest: ParticipationRequest,

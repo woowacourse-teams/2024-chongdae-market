@@ -8,10 +8,8 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.impl.OfferingsDataSourceImpl
-import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 
@@ -22,11 +20,7 @@ class OfferingWriteFragment : Fragment() {
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
-            OfferingsRepositoryImpl(
-                OfferingsDataSourceImpl(
-                    NetworkManager.offeringsService(),
-                ),
-            ),
+            offeringsRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
     }
 

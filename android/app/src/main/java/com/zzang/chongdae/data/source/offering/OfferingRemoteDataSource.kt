@@ -1,9 +1,9 @@
-package com.zzang.chongdae.data.remote.source
+package com.zzang.chongdae.data.source.offering
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 
-interface OfferingsDataSource {
+interface OfferingRemoteDataSource {
     suspend fun fetchOfferings(
         lastOfferingId: Long,
         pageSize: Int,

@@ -10,10 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.impl.OfferingsDataSourceImpl
-import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
@@ -25,9 +23,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
-            OfferingsRepositoryImpl(
-                OfferingsDataSourceImpl(NetworkManager.offeringsService()),
-            ),
+            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
     }
 
@@ -52,6 +48,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     override fun onStart() {
         super.onStart()
+
         offeringAdapter.refresh()
     }
 

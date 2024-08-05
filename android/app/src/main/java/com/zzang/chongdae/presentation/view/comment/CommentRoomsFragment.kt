@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.impl.CommentRoomsDataSourceImpl
-import com.zzang.chongdae.data.repository.remote.CommentRoomsRepositoryImpl
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.FragmentCommentRoomsBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomsAdapter
 import com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener
@@ -25,9 +23,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
 
     private val viewModel by viewModels<CommentRoomsViewModel> {
         CommentRoomsViewModel.getFactory(
-            CommentRoomsRepositoryImpl(
-                CommentRoomsDataSourceImpl(NetworkManager.commentsService()),
-            ),
+            commentRoomsRepository = (requireActivity().application as ChongdaeApp).commentRoomsRepository,
         )
     }
 
