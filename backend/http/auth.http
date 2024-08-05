@@ -11,6 +11,6 @@ POST {{base-url}}/auth/signup
 Content-Type: application/json
 
 {
-  "ci": "poke123456"
+  "ci": "poke12345678"
 }
 

@@ -8,6 +8,7 @@ import com.zzang.chongdae.auth.service.dto.TokenDto;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.member.service.NickNameGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final NickNameGenerator nickNameGenerator;
 
     public TokenDto login(LoginRequest request) {
         String password = passwordEncoder.encode(request.ci());
@@ -33,7 +35,7 @@ public class AuthService {
         if (memberRepository.existsByPassword(password)) {
             throw new MarketException(AuthErrorCode.DUPLICATED_MEMBER);
         }
-        MemberEntity member = new MemberEntity("dora2", password);
+        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), password);
         MemberEntity savedMember = memberRepository.save(member);
         return new SignupResponse(savedMember);
     }
