@@ -132,4 +132,12 @@
         <item name="android:paddingEnd">16dp</item>
     </style>
 
+    <!--    DateTimePicker Custom   -->
+    <style name="DefaultNumberPickerTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#00000000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_medium</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
 </resources>

@@ -60,13 +60,16 @@ class OfferingWriteViewModel(
     val splitPrice: LiveData<Int> get() = _splitPrice
 
     private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
+    val discountRate: LiveData<Float> get() = _discountRate
+
+    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
+
     val splitPriceVisibility: LiveData<Boolean>
         get() = _splitPrice.map { it >= 0 }
 
     val discountRateVisibility: LiveData<Boolean>
         get() = _discountRate.map { it >= 0 }
-
-    val discountRate: LiveData<Float> get() = _discountRate
 
     init {
         _submitButtonEnabled.apply {
@@ -138,6 +141,10 @@ class OfferingWriteViewModel(
     fun decreaseTotalCount() {
         val totalCount = Count.fromString(totalCount.value).decrease()
         this.totalCount.value = totalCount.number.toString()
+    }
+
+    fun makeDeadlineChoiceEvent() {
+        _deadlineChoiceEvent.setValue(true)
     }
 
     // memberId는 임시값을 보내고 있음!

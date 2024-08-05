@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.write
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +41,15 @@ class OfferingWriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
         observeInvalidInputEvent()
+        showDateTimePickerDialog()
+    }
+
+    private fun showDateTimePickerDialog() {
+        viewModel.deadlineChoiceEvent.observe(viewLifecycleOwner) {
+            val dialog = Dialog(requireActivity())
+            dialog.setContentView(R.layout.dialog_date_time_picker)
+            dialog.show()
+        }
     }
 
     private fun initBinding(
