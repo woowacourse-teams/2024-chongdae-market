@@ -23,7 +23,6 @@ class OfferingsDataSourceImpl(
                 response.body() ?: error("에러 발생: null")
             } else {
                 error("에러 발생: ${response.code()}")
-//                throw IllegalStateException()
             }
         }
     }
