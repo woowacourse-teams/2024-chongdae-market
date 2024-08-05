@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.domain.repository.OfferingWriteRepository
+import com.zzang.chongdae.domain.repository.OfferingsRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
 class OfferingWriteViewModel(
-    private val offeringWriteRepository: OfferingWriteRepository,
+    private val offeringsRepository: OfferingsRepository,
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 
@@ -155,7 +155,7 @@ class OfferingWriteViewModel(
                 return@launch
             }
 
-            offeringWriteRepository.saveOffering(
+            offeringsRepository.saveOffering(
                 memberId = memberId,
                 title = title,
                 productUrl = productUrl.value,
@@ -219,14 +219,14 @@ class OfferingWriteViewModel(
         private const val MAXIMUM_TOTAL_COUNT = 10_000
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringWriteRepository: OfferingWriteRepository) =
+        fun getFactory(offeringsRepository: OfferingsRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
                     return OfferingWriteViewModel(
-                        offeringWriteRepository,
+                        offeringsRepository,
                     ) as T
                 }
             }
