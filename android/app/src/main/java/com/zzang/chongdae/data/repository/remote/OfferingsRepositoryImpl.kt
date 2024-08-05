@@ -34,20 +34,20 @@ class OfferingsRepositoryImpl(
     ): Result<Unit> {
         return offeringsDataSource.saveOffering(
             offeringWriteRequest =
-            OfferingWriteRequest(
-                memberId = memberId,
-                title = title,
-                productUrl = productUrl,
-                thumbnailUrl = thumbnailUrl,
-                totalCount = totalCount,
-                totalPrice = totalPrice,
-                eachPrice = eachPrice,
-                meetingAddress = meetingAddress,
-                meetingAddressDong = meetingAddressDong,
-                meetingAddressDetail = meetingAddressDetail,
-                deadline = deadline,
-                description = description,
-            ),
+                OfferingWriteRequest(
+                    memberId = memberId,
+                    title = title,
+                    productUrl = productUrl,
+                    thumbnailUrl = thumbnailUrl,
+                    totalCount = totalCount,
+                    totalPrice = totalPrice,
+                    eachPrice = eachPrice,
+                    meetingAddress = meetingAddress,
+                    meetingAddressDong = meetingAddressDong,
+                    meetingAddressDetail = meetingAddressDetail,
+                    deadline = deadline,
+                    description = description,
+                ),
         )
     }
 }

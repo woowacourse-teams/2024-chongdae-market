@@ -63,7 +63,6 @@ class OfferingWriteViewModel(
     val discountRateVisibility: LiveData<Boolean>
         get() = _discountRate.map { it >= 0 }
 
-
     val discountRate: LiveData<Float> get() = _discountRate
 
     init {
@@ -90,12 +89,12 @@ class OfferingWriteViewModel(
 
     private fun updateSubmitButtonEnabled() {
         _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
-                !totalCount.value.isNullOrBlank() &&
-                !totalPrice.value.isNullOrBlank() &&
-                !meetingAddress.value.isNullOrBlank() &&
-                !meetingAddressDetail.value.isNullOrBlank() &&
-                !deadline.value.isNullOrBlank() &&
-                !description.value.isNullOrBlank()
+            !totalCount.value.isNullOrBlank() &&
+            !totalPrice.value.isNullOrBlank() &&
+            !meetingAddress.value.isNullOrBlank() &&
+            !meetingAddressDetail.value.isNullOrBlank() &&
+            !deadline.value.isNullOrBlank() &&
+            !description.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
