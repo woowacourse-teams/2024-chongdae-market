@@ -11,13 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class CookieConsumer {
 
+    private static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
+    private static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+
     public void addCookies(HttpServletResponse servletResponse, List<Cookie> cookies) {
         for (Cookie cookie : cookies) {
             servletResponse.addCookie(cookie);
         }
     }
 
-    public String getTokenByCookieName(String cookieName, Cookie[] cookies) {
+    public String getAccessToken(Cookie[] cookies) {
+        return getTokenByCookieName(ACCESS_TOKEN_COOKIE_NAME, cookies);
+    }
+
+    private String getTokenByCookieName(String cookieName, Cookie[] cookies) {
         if (cookies == null) {
             throw new MarketException(AuthErrorCode.INVALID_TOKEN);
         }

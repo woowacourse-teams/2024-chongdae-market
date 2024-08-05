@@ -6,6 +6,7 @@ import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
 import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NickNameGenerator;
@@ -38,5 +39,11 @@ public class AuthService {
         MemberEntity member = new MemberEntity(nickNameGenerator.generate(), password);
         MemberEntity savedMember = memberRepository.save(member);
         return new SignupResponse(savedMember);
+    }
+
+    public MemberEntity findMemberByToken(String token) {
+        Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
     }
 }
