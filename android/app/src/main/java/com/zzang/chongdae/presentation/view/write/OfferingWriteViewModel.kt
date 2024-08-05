@@ -99,45 +99,45 @@ class OfferingWriteViewModel(
     }
 
     private fun updateSplitPrice() {
-        val totalPriceInt = totalPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalPriceInt < 0) {
+        val totalPriceValue = totalPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (totalPriceValue < 0) {
             _splitPrice.value = ERROR_INTEGER_FORMAT
             return
         }
-        val totalCountInt = totalCount.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalCountInt <= 0) {
+        val totalCountValue = totalCount.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (totalCountValue <= 0) {
             _splitPrice.value = ERROR_INTEGER_FORMAT
             return
         }
-        _splitPrice.value = totalPriceInt / totalCountInt
+        _splitPrice.value = totalPriceValue / totalCountValue
     }
 
     private fun updateDiscountRate() {
-        val eachPriceInt = eachPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (eachPriceInt <= 0) {
+        val eachPriceValue = eachPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (eachPriceValue <= 0) {
             _discountRate.value = ERROR_FLOAT_FORMAT
             return
         }
-        val splitPriceInt = _splitPrice.value ?: ERROR_INTEGER_FORMAT
-        if (splitPriceInt <= 0) {
+        val splitPriceValue = _splitPrice.value ?: ERROR_INTEGER_FORMAT
+        if (splitPriceValue <= 0) {
             _discountRate.value = ERROR_FLOAT_FORMAT
             return
         }
-        val discountPrice = (eachPriceInt - splitPriceInt).toFloat()
-        _discountRate.value = (discountPrice / eachPriceInt) * 100
+        val discountPrice = (eachPriceValue - splitPriceValue).toFloat()
+        _discountRate.value = (discountPrice / eachPriceValue) * 100
         if (discountPrice < 0) _discountRate.value = 0f
     }
 
     fun increaseTotalCount() {
-        var totalCountInt = totalCount.value?.toIntOrNull() ?: return
-        totalCountInt++
-        totalCount.value = totalCountInt.toString()
+        var totalCountValue = totalCount.value?.toIntOrNull() ?: return
+        totalCountValue++
+        this.totalCount.value = totalCountValue.toString()
     }
 
     fun decreaseTotalCount() {
-        var totalCountInt = totalCount.value?.toIntOrNull() ?: return
-        totalCountInt--
-        totalCount.value = totalCountInt.toString()
+        var totalCountValue = totalCount.value?.toIntOrNull() ?: return
+        totalCountValue--
+        this.totalCount.value = totalCountValue.toString()
     }
 
     // memberId는 임시값을 보내고 있음!
