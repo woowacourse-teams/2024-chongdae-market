@@ -141,7 +141,7 @@
                 android:text="@string/all_minus"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_20"
-                android:textStyle="bold"
+                android:fontFamily="@font/suit_bold"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
 
@@ -172,6 +172,7 @@
                 android:text="@string/all_plus"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_20"
+                android:fontFamily="@font/suit_bold"
                 app:layout_constraintStart_toEndOf="@id/et_total_personnel"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
 
@@ -221,7 +222,6 @@
                 android:text="@string/write_per_n_price"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/et_total_price"
                 app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
                 app:isVisible="@{vm.splitPriceVisibility}" />
@@ -234,7 +234,6 @@
                 android:fontFamily="@font/suit_bold"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
-                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
                 app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
                 android:text="@{@string/all_money_amount_text(vm.splitPrice)}"
@@ -279,7 +278,6 @@
                 android:text="@string/write_discount_rate"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/et_total_price"
                 app:layout_constraintTop_toBottomOf="@id/et_individual_price"
                 app:isVisible="@{vm.discountRateVisibility}" />
@@ -291,7 +289,6 @@
                 android:fontFamily="@font/suit_bold"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
-                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_discount_rate"
                 app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
                 android:text="@{@string/write_discount_rate_value(vm.discountRate)}"
@@ -306,7 +303,6 @@
                 android:text="@string/all_percentage"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
-                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_discount_rate_value"
                 app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
                 app:isVisible="@{vm.discountRateVisibility}" />
