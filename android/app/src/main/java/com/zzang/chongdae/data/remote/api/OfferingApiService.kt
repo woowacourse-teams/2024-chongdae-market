@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface OfferingsApiService {
+interface OfferingApiService {
     @GET("/offerings")
     suspend fun getOfferings(
         @Query("last-id") lastOfferingId: Long,

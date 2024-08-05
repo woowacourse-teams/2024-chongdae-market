@@ -28,7 +28,7 @@ class ChongdaeApp : Application() {
     val offeringRepository: OfferingsRepository by lazy {
         OfferingsRepositoryImpl(
             offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
-            offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringsService()),
+            offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringService()),
         )
     }
 
@@ -38,15 +38,15 @@ class ChongdaeApp : Application() {
             commentLocalDataSource = CommentLocalDataSourceImpl(commentDao),
             commentRemoteDataSource =
                 CommentRemoteDataSourceImpl(
-                    networkManager.offeringsService(),
-                    networkManager.commentsService(),
+                    networkManager.offeringService(),
+                    networkManager.commentService(),
                 ),
         )
     }
 
     val commentRoomsRepository: CommentRoomsRepository by lazy {
         CommentRoomsRepositoryImpl(
-            commentRoomsDataSource = CommentRoomsDataSourceImpl(networkManager.commentsService()),
+            commentRoomsDataSource = CommentRoomsDataSourceImpl(networkManager.commentService()),
         )
     }
 
@@ -54,8 +54,8 @@ class ChongdaeApp : Application() {
         OfferingDetailRepositoryImpl(
             offeringDetailDataSource =
                 OfferingDetailDataSourceImpl(
-                    networkManager.offeringsService(),
-                    networkManager.participatoinsService(),
+                    networkManager.offeringService(),
+                    networkManager.participationService(),
                 ),
         )
     }
