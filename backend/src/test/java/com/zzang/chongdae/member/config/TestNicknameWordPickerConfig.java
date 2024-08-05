@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-public class NicknameWordPickerConfiguration {
+public class TestNicknameWordPickerConfig {
 
     @Bean
     @Primary

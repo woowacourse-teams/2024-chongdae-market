@@ -7,8 +7,10 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
+import com.zzang.chongdae.global.config.TestConfig;
 import com.zzang.chongdae.global.domain.DomainSupplier;
 import com.zzang.chongdae.global.helper.DatabaseCleaner;
+import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
 import com.zzang.chongdae.offering.config.TestCrawlerConfig;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -28,7 +30,7 @@ import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = {TestCrawlerConfig.class})
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = {TestConfig.class})
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class IntegrationTest extends DomainSupplier {
@@ -42,8 +44,10 @@ public abstract class IntegrationTest extends DomainSupplier {
     );
 
     protected RequestSpecification spec;
+
     @Autowired
     protected DatabaseCleaner databaseCleaner;
+
     @LocalServerPort
     private int port;
 
