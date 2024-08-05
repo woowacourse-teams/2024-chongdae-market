@@ -16,7 +16,6 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.storage.service.StorageService;
 import java.util.List;
@@ -69,9 +68,7 @@ public class OfferingService {
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 
-    public Long saveOffering(OfferingSaveRequest request) {
-        MemberEntity member = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+    public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
         OfferingEntity savedOffering = offeringRepository.save(offering);
         return savedOffering.getId();

@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offering.controller;
 
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -7,7 +8,6 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +51,9 @@ public class OfferingController {
 
     @PostMapping("/offerings")
     public ResponseEntity<Void> saveOffering(
-            @RequestBody @Valid OfferingSaveRequest request) {
-        Long offeringId = offeringService.saveOffering(request);
+            @RequestBody @Valid OfferingSaveRequest request,
+            MemberEntity member) {
+        Long offeringId = offeringService.saveOffering(request, member);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 

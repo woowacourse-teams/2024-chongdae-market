@@ -7,10 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public record OfferingSaveRequest(@NotNull
-                                  Long memberId,
-
-                                  @NotBlank
+public record OfferingSaveRequest(@NotBlank
                                   String title,
 
                                   String productUrl,
