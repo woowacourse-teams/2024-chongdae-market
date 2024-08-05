@@ -36,14 +36,14 @@ class OfferingViewModel(
         private const val PAGE_SIZE = 10
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringsRepository: OfferingsRepository) =
+        fun getFactory(offeringRepository: OfferingsRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
                     return OfferingViewModel(
-                        offeringsRepository,
+                        offeringRepository,
                     ) as T
                 }
             }

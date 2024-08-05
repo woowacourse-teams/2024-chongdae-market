@@ -6,10 +6,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.impl.OfferingDetailDataSourceImpl
-import com.zzang.chongdae.data.repository.remote.OfferingDetailRepositoryImpl
+import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
+import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 
@@ -21,13 +22,8 @@ class OfferingDetailActivity : AppCompatActivity() {
     }
     private val viewModel: OfferingDetailViewModel by viewModels {
         OfferingDetailViewModel.getFactory(
-            offeringId,
-            OfferingDetailRepositoryImpl(
-                OfferingDetailDataSourceImpl(
-                    NetworkManager.offeringsService(),
-                    NetworkManager.participatoinsService(),
-                ),
-            ),
+            offeringId = offeringId,
+            offeringDetailRepository = (application as ChongdaeApp).offeringDetailRepository,
         )
     }
 

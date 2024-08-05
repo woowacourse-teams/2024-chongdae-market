@@ -9,10 +9,8 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.impl.CommentDetailDataSourceImpl
-import com.zzang.chongdae.data.repository.remote.CommentDetailRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.CommentAdapter
 
@@ -22,14 +20,9 @@ class CommentDetailActivity : AppCompatActivity() {
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
-            offeringId,
-            offeringTitle,
-            CommentDetailRepositoryImpl(
-                CommentDetailDataSourceImpl(
-                    NetworkManager.offeringsService(),
-                    NetworkManager.commentsService(),
-                ),
-            ),
+            offeringId = offeringId,
+            offeringTitle = offeringTitle,
+            commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,
         )
     }
 
@@ -66,7 +59,7 @@ class CommentDetailActivity : AppCompatActivity() {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
     }
-
+    
     private fun initAdapter() {
         binding.rvComments.apply {
             adapter = commentAdapter
