@@ -69,13 +69,16 @@ class OfferingWriteFragment : Fragment() {
         }
     }
 
-    private fun showToast(@StringRes message: Int) {
+    private fun showToast(
+        @StringRes message: Int,
+    ) {
         toast?.cancel()
-        toast = Toast.makeText(
-            requireActivity(),
-            message,
-            Toast.LENGTH_SHORT,
-        )
+        toast =
+            Toast.makeText(
+                requireActivity(),
+                message,
+                Toast.LENGTH_SHORT,
+            )
         toast?.show()
     }
 

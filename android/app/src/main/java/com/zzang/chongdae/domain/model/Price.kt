@@ -1,6 +1,6 @@
 package com.zzang.chongdae.domain.model
 
-data class Price (val amount: Int) {
+data class Price(val amount: Int) {
     init {
         require(amount >= 0) { "[ERROR] 가격은 0 이상의 정수이어야 한다." }
     }

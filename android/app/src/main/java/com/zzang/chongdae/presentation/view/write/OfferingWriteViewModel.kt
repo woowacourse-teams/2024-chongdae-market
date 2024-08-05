@@ -108,12 +108,12 @@ class OfferingWriteViewModel(
 
     private fun updateSubmitButtonEnabled() {
         _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
-                !totalCount.value.isNullOrBlank() &&
-                !totalPrice.value.isNullOrBlank() &&
-                !meetingAddress.value.isNullOrBlank() &&
-                !meetingAddressDetail.value.isNullOrBlank() &&
-                !deadline.value.isNullOrBlank() &&
-                !description.value.isNullOrBlank()
+            !totalCount.value.isNullOrBlank() &&
+            !totalPrice.value.isNullOrBlank() &&
+            !meetingAddress.value.isNullOrBlank() &&
+            !meetingAddressDetail.value.isNullOrBlank() &&
+            !deadline.value.isNullOrBlank() &&
+            !description.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
@@ -164,20 +164,21 @@ class OfferingWriteViewModel(
             }
 
             offeringsRepository.saveOffering(
-                uiModel = OfferingWriteUiModel(
-                    memberId = memberId,
-                    title = title,
-                    productUrl = productUrl.value,
-                    thumbnailUrl = thumbnailUrl.value,
-                    totalCount = totalCountConverted,
-                    totalPrice = totalPriceConverted,
-                    eachPrice = eachPriceNotBlank,
-                    meetingAddress = meetingAddress,
-                    meetingAddressDong = meetingAddressDong.value,
-                    meetingAddressDetail = meetingAddressDetail,
-                    deadline = deadline,
-                    description = description,
-                )
+                uiModel =
+                    OfferingWriteUiModel(
+                        memberId = memberId,
+                        title = title,
+                        productUrl = productUrl.value,
+                        thumbnailUrl = thumbnailUrl.value,
+                        totalCount = totalCountConverted,
+                        totalPrice = totalPriceConverted,
+                        eachPrice = eachPriceNotBlank,
+                        meetingAddress = meetingAddress,
+                        meetingAddressDong = meetingAddressDong.value,
+                        meetingAddressDetail = meetingAddressDetail,
+                        deadline = deadline,
+                        description = description,
+                    ),
             ).onSuccess {
                 Log.d("alsong", "success")
             }.onFailure {
