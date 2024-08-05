@@ -1,9 +1,5 @@
 package com.zzang.chongdae.offering.service;
 
-import static com.zzang.chongdae.offering.repository.OfferingRepository.Specs.greaterThan;
-import static com.zzang.chongdae.offering.repository.OfferingRepository.Specs.hasSearchKeyword;
-import static org.springframework.data.jpa.domain.Specification.where;
-
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
@@ -25,12 +21,13 @@ import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,14 +55,20 @@ public class OfferingService {
         return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
     }
 
-    public OfferingAllResponse getAllOffering(String filter, String keyword, Long lastId, Integer pageSize) {
-        Pageable pageable = PageRequest.ofSize(pageSize);
-        Page<OfferingEntity> offerings = offeringRepository.findAll(
-                where(hasSearchKeyword(keyword)
-                        .and(greaterThan(lastId))
-                ),
-                pageable
-        );
+    public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(0, pageSize, sort);
+        OfferingFilter filter = OfferingFilter.findByName(filterName);
+        List<OfferingEntity> offerings = new ArrayList<>();
+        if (filter == OfferingFilter.RECENT) {
+            offerings = offeringRepository.findByIdGreaterThanWithKeyword(lastId, searchKeyword, pageable);
+        }
+//        Page<OfferingEntity> offerings = offeringRepository.findAll(
+//                where(hasSearchKeyword(searchKeyword)
+//                        .and(greaterThan(lastId))
+//                ),
+//                pageable
+//        );
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();

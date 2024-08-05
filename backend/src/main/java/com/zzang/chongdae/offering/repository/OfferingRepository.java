@@ -14,7 +14,16 @@ import org.springframework.data.jpa.repository.Query;
 public interface OfferingRepository
         extends JpaRepository<OfferingEntity, Long>, JpaSpecificationExecutor<OfferingEntity> {
 
-    List<OfferingEntity> findByIdGreaterThan(Specification<OfferingEntity> spec, Long lastId, Pageable pageable);
+//    List<OfferingEntity> findByIdGreaterThanAndTitleContainingOrMeetingAddressContaining(Long lastId,
+//                                                                                         Pageable pageable);
+
+    @Query("""
+
+            SELECT o
+            FROM OfferingEntity o
+            WHERE o.id > :lastId AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            """)
+    List<OfferingEntity> findByIdGreaterThanWithKeyword(Long lastId, String keyword, Pageable pageable);
 
     @Query("""
                 SELECT new com.zzang.chongdae.offering.domain.OfferingWithRole(o, om.role)
