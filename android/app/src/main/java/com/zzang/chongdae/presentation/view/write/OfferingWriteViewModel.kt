@@ -24,7 +24,7 @@ class OfferingWriteViewModel(
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("2")
+    val totalCount: MutableLiveData<String> = MutableLiveData("${MINIMUM_TOTAL_COUNT}")
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
