@@ -9,12 +9,14 @@ import com.zzang.chongdae.comment.service.dto.CommentCreatedAtResponse;
 import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
+import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
+import com.zzang.chongdae.offering.domain.status.CommentRoomStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -101,5 +104,14 @@ public class CommentService {
                 member.getNickname(),
                 role.isProposer(),
                 member.isSameMember(loginMemberId));
+    }
+
+    @Transactional
+    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, Long loginMemberId) {
+        // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        CommentRoomStatus updatedStatus = offering.updateStatus();
+        return new CommentRoomStatusResponse(updatedStatus);
     }
 }

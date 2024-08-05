@@ -14,7 +14,8 @@ public enum OfferingErrorCode implements ErrorResponse {
 
     NOT_FOUND(BAD_REQUEST, "해당 공모가 존재하지 않습니다."),
     PARTICIPANT_FULL(BAD_REQUEST, "해당 공모에 참여 가능한 인원수를 초과하였습니다."),
-    CANNOT_PARTICIPATE(BAD_REQUEST, "참여할 수 없는 공모입니다.");
+    CANNOT_PARTICIPATE(BAD_REQUEST, "참여할 수 없는 공모입니다."),
+    INVALID_CONDITION(BAD_REQUEST, "유효하지 않은 공모 상태입니다");
 
     private final HttpStatus status;
     private final String message;

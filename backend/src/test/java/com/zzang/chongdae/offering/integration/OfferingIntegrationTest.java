@@ -230,6 +230,61 @@ public class OfferingIntegrationTest extends IntegrationTest {
         }
     }
 
+    @DisplayName("공모 상태 조회")
+    @Nested
+    class GetOfferingStatus {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("status").description("상태"),
+                fieldWithPath("steps[]").description("단계")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 상태 조회")
+                .description("공모 id를 통해 공모의 상태 정보를 조회합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingStatusSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 상태 조회")
+                .description("공모 id를 통해 공모의 상태 정보를 조회합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("OfferingStatusFailResponse"))
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            MemberEntity member = memberFixture.createMember();
+            offeringFixture.createOffering(member);
+        }
+
+        @DisplayName("공모 id로 공모 상태 정보를 조회할 수 있다")
+        @Test
+        void should_responseOfferingStatus_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("get-offering-status-success", resource(successSnippets)))
+                    .pathParam("offering-id", 1)
+                    .when().get("/offerings/{offering-id}/status")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모의 상태 정보를 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            given(spec).log().all()
+                    .filter(document("get-offering-status-fail-invalid-offering", resource(failSnippets)))
+                    .pathParam("offering-id", 100)
+                    .when().get("/offerings/{offering-id}/status")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
     @DisplayName("공모 작성")
     @Nested
     class CreateOffering {

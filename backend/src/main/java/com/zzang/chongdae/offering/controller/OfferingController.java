@@ -7,7 +7,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +39,13 @@ public class OfferingController {
             @RequestParam(value = "last-id", defaultValue = "0") Long lastId,
             @RequestParam(value = "page-size", defaultValue = "10") Integer pageSize) {
         OfferingAllResponse response = offeringService.getAllOffering(lastId, pageSize);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/offerings/{offering-id}/status")
+    public ResponseEntity<OfferingStatusResponse> getOfferingStatus(
+            @PathVariable(value = "offering-id") Long offeringId) { // TODO : 로그인 사용자가 참여자인지 확인
+        OfferingStatusResponse response = offeringService.getOfferingStatus(offeringId);
         return ResponseEntity.ok(response);
     }
 

@@ -16,7 +16,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.storage.service.StorageService;
 import java.util.List;
@@ -61,6 +61,12 @@ public class OfferingService {
                 })
                 .toList()
         );
+    }
+
+    public OfferingStatusResponse getOfferingStatus(Long offeringId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return new OfferingStatusResponse(offering.getRoomStatus());
     }
 
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
