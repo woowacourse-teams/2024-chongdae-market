@@ -11,6 +11,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import com.epages.restdocs.apispec.HeaderDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import io.restassured.http.ContentType;
@@ -38,7 +39,7 @@ class AuthIntegrationTest extends IntegrationTest {
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("회원 로그인")
-                .description("회원 식별자 인증 정보로 로그인합니다.")
+                .description("회원 식별자 인증 정보로 로그인 합니다.")
                 .requestFields(requestDescriptors)
                 .requestSchema(schema("LonginRequest"))
                 .responseHeaders(responseHeaderDescriptors)
@@ -51,7 +52,7 @@ class AuthIntegrationTest extends IntegrationTest {
             member = memberFixture.createMember();
         }
 
-        @DisplayName("회원 식별자 인증 정보로 로그인합니다.")
+        @DisplayName("회원 식별자 인증 정보로 로그인한다.")
         @Test
         void should_loginSuccess_when_givenMemberCI() {
             LoginRequest request = new LoginRequest(
@@ -65,6 +66,69 @@ class AuthIntegrationTest extends IntegrationTest {
                     .when().post("/auth/login")
                     .then().log().all()
                     .statusCode(200);
+        }
+    }
+
+    @DisplayName("회원가입")
+    @Nested
+    class Signup {
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("ci").description("회원 식별자 인증 정보")
+        );
+        List<FieldDescriptor> responseDescriptors = List.of(
+                fieldWithPath("memberId").description("회원 id")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("회원 가입")
+                .description("회원 식별자 인증 정보로 가입합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(responseDescriptors)
+                .requestSchema(schema("SignupRequest"))
+                .responseSchema(schema("SignupResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("SignupFailRequest"))
+                .responseSchema(schema("SignupFailResponse"))
+                .build();
+
+        MemberEntity member;
+
+        @BeforeEach
+        void setUp() {
+            member = memberFixture.createMember();
+        }
+
+        @DisplayName("회원 식별자 인증 정보로 회원가입 한다.")
+        @Test
+        void should_signupSuccess_when_givenMemberCI() {
+            SignupRequest request = new SignupRequest(
+                    "poke1234"
+            );
+
+            given(spec).log().all()
+                    .filter(document("signup-success", resource(successSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/auth/signup")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("이미 가입된 회원이 있으면 예외가 발생한다.")
+        @Test
+        void should_throwException_when_givenAlreadyExistMember() {
+            SignupRequest request = new SignupRequest(
+                    "dora1234"
+            );
+
+            given(spec).log().all()
+                    .filter(document("signup-fail-duplicated-member", resource(failSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/auth/signup")
+                    .then().log().all()
+                    .statusCode(409);
         }
     }
 }
