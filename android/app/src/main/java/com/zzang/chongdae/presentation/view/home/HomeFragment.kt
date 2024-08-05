@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.zzang.chongdae.ChongdaeApp
+import com.zzang.chongdae.data.remote.api.NetworkManager
+import com.zzang.chongdae.data.remote.source.impl.OfferingsDataSourceImpl
+import com.zzang.chongdae.data.repository.remote.OfferingsRepositoryImpl
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
@@ -23,23 +25,35 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
     }
-
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         initBinding(inflater, container)
+        return binding.root
+    }
+    
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
         initAdapter()
         setUpOfferingsObserve()
-
-        return binding.root
+        navigateToOfferingWriteFragment()
     }
 
     override fun onStart() {
         super.onStart()
 
         offeringAdapter.refresh()
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).showBottomNavigation()
     }
 
     override fun onDestroyView() {
@@ -74,5 +88,11 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     override fun onClick(offeringId: Long) {
         OfferingDetailActivity.startActivity(activity as Context, offeringId)
+    }
+    
+    private fun navigateToOfferingWriteFragment() {
+        binding.fabCreateOffering.setOnClickListener {
+            findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
+        }
     }
 }

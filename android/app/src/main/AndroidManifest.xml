@@ -40,11 +40,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity
-            android:name=".presentation.view.write.OfferingWriteActivity"
-            android:exported="false">
-        </activity>
-
     </application>
 
 </manifest>
