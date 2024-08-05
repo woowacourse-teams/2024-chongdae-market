@@ -82,7 +82,7 @@ public class OfferingService {
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 
-    public OfferingFilterAllResponse getOfferingFilter() {
+    public OfferingFilterAllResponse getAllOfferingFilter() {
         List<OfferingFilterAllResponseItem> filters = Arrays.stream(OfferingFilter.values())
                 .map(OfferingFilterAllResponseItem::new)
                 .toList();

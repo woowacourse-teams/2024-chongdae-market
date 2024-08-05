@@ -52,8 +52,8 @@ public class OfferingController {
     }
 
     @GetMapping("offerings/filters")
-    public ResponseEntity<OfferingFilterAllResponse> getOfferingFilter() { // TODO: getAllOfferingFilter로 바꾸기
-        OfferingFilterAllResponse response = offeringService.getOfferingFilter();
+    public ResponseEntity<OfferingFilterAllResponse> getAllOfferingFilter() {
+        OfferingFilterAllResponse response = offeringService.getAllOfferingFilter();
         return ResponseEntity.ok(response);
     }
 
