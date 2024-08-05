@@ -2,6 +2,8 @@ package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.SignupRequest;
+import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,5 +30,11 @@ public class AuthController {
         List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
         cookieConsumer.addCookies(servletResponse, cookies);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/auth/signup")
+    ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+        SignupResponse response = authService.signup(request);
+        return ResponseEntity.ok(response);
     }
 }

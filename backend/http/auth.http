@@ -5,3 +5,12 @@ Content-Type: application/json
 {
   "ci": "dora1234"
 }
+
+### 회원가입 API
+POST {{base-url}}/auth/signup
+Content-Type: application/json
+
+{
+  "ci": "poke123456"
+}
+
