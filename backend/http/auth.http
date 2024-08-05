@@ -1,0 +1,7 @@
+### 로그인 API
+POST {{base-url}}/auth/login
+Content-Type: application/json
+
+{
+  "ci": "dora1234"
+}
