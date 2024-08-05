@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> {
 
@@ -36,7 +35,19 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                 AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.deadline ASC, o.id DESC
             """)
-    List<OfferingEntity> findImminentOfferingsWithKeyword(LocalDateTime lastDeadline, Long lastId, String keyword, Pageable pageable);
+    List<OfferingEntity> findImminentOfferingsWithKeyword(
+            LocalDateTime lastDeadline, Long lastId, String keyword, Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE ((o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice < :discountRate
+                    OR ((o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice = :discountRate AND o.id < :lastId))
+                AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            ORDER BY (o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice DESC, o.id DESC
+            """)
+    List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
+            double discountRate, Long lastId, String keyword, Pageable pageable);
 
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();

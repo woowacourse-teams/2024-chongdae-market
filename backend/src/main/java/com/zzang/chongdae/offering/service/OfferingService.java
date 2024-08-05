@@ -78,6 +78,9 @@ public class OfferingService {
         if (filter == OfferingFilter.IMMINENT) {
             return fetchImminentOfferings(searchKeyword, lastId, pageable);
         }
+        if (filter == OfferingFilter.HIGH_DISCOUNT) {
+            return fetchHighDiscountOfferings(searchKeyword, lastId, pageable);
+        }
         throw new MarketException(OfferingErrorCode.NOT_SUPPORTED_FILTER);
     }
 
@@ -102,6 +105,22 @@ public class OfferingService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         return offeringRepository.findImminentOfferingsWithKeyword(
                 lastOffering.getDeadline(), lastOffering.getId(), searchKeyword, pageable);
+    }
+
+    private List<OfferingEntity> fetchHighDiscountOfferings(String searchKeyword, Long lastId, Pageable pageable) {
+        if (lastId == null) {
+            double outOfRangeDiscountRate = 1;
+            Long outOfRangeId = findOutOfRangeId();
+            return offeringRepository.findHighDiscountOfferingsWithKeyword(
+                    outOfRangeDiscountRate, outOfRangeId, searchKeyword, pageable);
+        }
+        OfferingEntity lastOffering = offeringRepository.findById(lastId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        double discountRate = (double) (lastOffering.getEachPrice()
+                - lastOffering.getTotalPrice() / lastOffering.getTotalCount())
+                / lastOffering.getEachPrice(); // TODO: 도메인으로 분리
+        return offeringRepository.findHighDiscountOfferingsWithKeyword(discountRate, lastOffering.getId(),
+                searchKeyword, pageable);
     }
 
     private Long findOutOfRangeId() {
