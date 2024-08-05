@@ -274,7 +274,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_createOffering_when_givenOfferingCreateRequest() {
             OfferingSaveRequest request = new OfferingSaveRequest(
-                    member.getId(),
                     "공모 제목",
                     "www.naver.com",
                     "www.naver.com/favicon.ico",
@@ -297,38 +296,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(201);
         }
 
-        @DisplayName("유효하지 않은 사용자가 공모를 작성할 경우 예외가 발생한다.")
-        @Test
-        void should_throwException_when_invalidMember() {
-            OfferingSaveRequest request = new OfferingSaveRequest(
-                    member.getId() + 100,
-                    "공모 제목",
-                    "www.naver.com",
-                    "www.naver.com/favicon.ico",
-                    5,
-                    10000,
-                    2000,
-                    "서울특별시 광진구 구의강변로 3길 11",
-                    "상세주소아파트",
-                    "구의동",
-                    LocalDateTime.parse("2024-10-11T10:00:00"),
-                    "내용입니다."
-            );
-
-            given(spec).log().all()
-                    .filter(document("create-offering-fail-invalid-member", resource(failSnippets)))
-                    .contentType(ContentType.JSON)
-                    .body(request)
-                    .when().post("/offerings")
-                    .then().log().all()
-                    .statusCode(400);
-        }
-
         @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_emptyValue() {
             OfferingSaveRequest request = new OfferingSaveRequest(
-                    null,
                     null,
                     null,
                     null,
