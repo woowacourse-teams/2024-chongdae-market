@@ -1,6 +1,5 @@
 package com.zzang.chongdae.offering.controller;
 
-import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -37,11 +36,11 @@ public class OfferingController {
 
     @GetMapping("/offerings")
     public ResponseEntity<OfferingAllResponse> getAllOffering(
-            @RequestParam(value = "filter", required = false) String filter,
-            @RequestParam(value = "search", required = false) String keyword,
-            @RequestParam(value = "last-id", defaultValue = "0") Long lastId,
+            @RequestParam(value = "filter", defaultValue = "RECENT") String filterName,
+            @RequestParam(value = "search", required = false) String searchKeyword,
+            @RequestParam(value = "last-id", required = false) Long lastId,
             @RequestParam(value = "page-size", defaultValue = "10") Integer pageSize) {
-        OfferingAllResponse response = offeringService.getAllOffering(filter, keyword, lastId, pageSize);
+        OfferingAllResponse response = offeringService.getAllOffering(filterName, searchKeyword, lastId, pageSize);
         return ResponseEntity.ok(response);
     }
 
