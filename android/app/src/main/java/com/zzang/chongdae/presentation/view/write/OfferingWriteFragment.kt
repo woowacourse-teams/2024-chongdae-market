@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.zzang.chongdae.R
@@ -58,20 +60,24 @@ class OfferingWriteFragment : Fragment() {
 
     private fun observeInvalidInputEvent() {
         viewModel.invalidTotalCountEvent.observe(this) {
-            toast?.cancel()
-            toast = Toast.makeText(requireActivity(), R.string.write_invalid_total_count, Toast.LENGTH_SHORT)
-            toast?.show()
+            showToast(R.string.write_invalid_total_count)
         }
         viewModel.invalidTotalPriceEvent.observe(this) {
-            toast?.cancel()
-            toast = Toast.makeText(requireActivity(), R.string.write_invalid_total_price, Toast.LENGTH_SHORT)
-            toast?.show()
+            showToast(R.string.write_invalid_total_price)
         }
         viewModel.invalidEachPriceEvent.observe(this) {
-            toast?.cancel()
-            toast = Toast.makeText(requireActivity(), R.string.write_invalid_each_price, Toast.LENGTH_SHORT)
-            toast?.show()
+            showToast(R.string.write_invalid_each_price)
         }
+    }
+
+    private fun showToast(@StringRes message: Int) {
+        toast?.cancel()
+        toast = Toast.makeText(
+            requireActivity(),
+            message,
+            Toast.LENGTH_SHORT,
+        )
+        toast?.show()
     }
 
     override fun onDestroy() {
