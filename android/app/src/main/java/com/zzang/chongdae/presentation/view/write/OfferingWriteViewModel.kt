@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
@@ -56,6 +57,13 @@ class OfferingWriteViewModel(
     val splitPrice: LiveData<Int> get() = _splitPrice
 
     private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
+    val splitPriceVisibility: LiveData<Boolean>
+        get() = _splitPrice.map { it >= 0 }
+
+    val discountRateVisibility: LiveData<Boolean>
+        get() = _discountRate.map { it >= 0 }
+
+
     val discountRate: LiveData<Float> get() = _discountRate
 
     init {
@@ -82,12 +90,12 @@ class OfferingWriteViewModel(
 
     private fun updateSubmitButtonEnabled() {
         _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
-            !totalCount.value.isNullOrBlank() &&
-            !totalPrice.value.isNullOrBlank() &&
-            !meetingAddress.value.isNullOrBlank() &&
-            !meetingAddressDetail.value.isNullOrBlank() &&
-            !deadline.value.isNullOrBlank() &&
-            !description.value.isNullOrBlank()
+                !totalCount.value.isNullOrBlank() &&
+                !totalPrice.value.isNullOrBlank() &&
+                !meetingAddress.value.isNullOrBlank() &&
+                !meetingAddressDetail.value.isNullOrBlank() &&
+                !deadline.value.isNullOrBlank() &&
+                !description.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {

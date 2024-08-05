@@ -236,18 +236,6 @@ fun ImageView.setImageProposer(proposer: Boolean) {
     setImageResource(imageRes)
 }
 
-@BindingAdapter("setSplitPriceVisibility")
-fun TextView.setSplitPriceVisibility(splitPrice: Int) {
-    val textVisibility = if (splitPrice >= 0) View.VISIBLE else View.INVISIBLE
-    visibility = textVisibility
-}
-
-@BindingAdapter("setDiscountRateVisibility")
-fun TextView.setDiscountRateVisibility(discountRate: Float) {
-    val textVisibility = if (discountRate >= 0) View.VISIBLE else View.INVISIBLE
-    visibility = textVisibility
-}
-
 @BindingAdapter("setFormattedNumber")
 fun TextView.setFormattedNumber(number: Int) {
     val formattedNumber = context.getString(R.string.all_money_amount_text).format(number)
