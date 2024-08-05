@@ -237,7 +237,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
                 app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
-                app:setFormattedNumber="@{vm.splitPrice}"
+                android:text="@{@string/all_money_amount_text(vm.splitPrice)}"
                 app:isVisible="@{vm.splitPriceVisibility}"
                 tools:text="10,000원" />
 
@@ -294,7 +294,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/tv_discount_rate"
                 app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
-                app:setDiscountRate="@{vm.discountRate}"
+                android:text="@{@string/write_discount_rate_value(vm.discountRate)}"
                 app:isVisible="@{vm.discountRateVisibility}"
                 tools:text="10" />
 

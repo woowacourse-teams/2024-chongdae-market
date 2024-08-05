@@ -235,15 +235,3 @@ fun ImageView.setImageProposer(proposer: Boolean) {
     val imageRes = if (proposer) R.drawable.ic_proposer else R.drawable.ic_not_proposer
     setImageResource(imageRes)
 }
-
-@BindingAdapter("setFormattedNumber")
-fun TextView.setFormattedNumber(number: Int) {
-    val formattedNumber = context.getString(R.string.all_money_amount_text).format(number)
-    text = formattedNumber
-}
-
-@BindingAdapter("setDiscountRate")
-fun TextView.setDiscountRate(number: Float) {
-    val formattedRate = context.getString(R.string.write_discount_rate_value).format(number)
-    text = formattedRate
-}
