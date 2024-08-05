@@ -16,7 +16,7 @@ class CommentDetailRepositoryImpl(
     private val commentLocalDataSource: CommentLocalDataSource,
     private val commentRemoteDataSource: CommentRemoteDataSource,
 ) : CommentDetailRepository {
-    override suspend fun getMeetings(offeringId: Long): Result<Meetings> {
+    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
         return commentRemoteDataSource.getMeetings(offeringId).mapCatching {
             it.toDomain()
         }

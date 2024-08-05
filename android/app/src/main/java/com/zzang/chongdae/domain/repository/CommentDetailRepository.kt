@@ -4,7 +4,7 @@ import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.Meetings
 
 interface CommentDetailRepository {
-    suspend fun getMeetings(offeringId: Long): Result<Meetings>
+    suspend fun fetchMeetings(offeringId: Long): Result<Meetings>
 
     suspend fun saveParticipation(
         memberId: Long,
