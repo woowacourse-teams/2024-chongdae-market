@@ -130,8 +130,8 @@
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_total_personnel" />
 
-            <TextView
-                android:id="@+id/img_minus_total_personnel"
+            <Button
+                android:id="@+id/btn_minus_total_personnel"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:layout_marginTop="@dimen/size_19"
@@ -156,12 +156,12 @@
                 android:gravity="center"
                 android:text="@={vm.totalCount}"
                 android:textSize="20dp"
-                app:layout_constraintStart_toEndOf="@id/img_minus_total_personnel"
+                app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel"
                 tools:text="2" />
 
-            <TextView
-                android:id="@+id/img_plus_total_personnel"
+            <Button
+                android:id="@+id/btn_plus_total_personnel"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="@dimen/size_7"
@@ -180,7 +180,7 @@
                 style="@style/Theme.AppCompat.TextView.Write.Subject"
                 android:text="@string/write_total_price"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/img_minus_total_personnel" />
+                app:layout_constraintTop_toBottomOf="@id/btn_minus_total_personnel" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.Write.Asterisk"
