@@ -13,8 +13,7 @@ public class NickNameGenerator {
     private static final int MAX_TRY_COUNT = 3;
 
     private final MemberRepository memberRepository;
-    private final Nouns nouns;
-    private final Adjectives adjectives;
+    private final NicknameWordInitializer nicknameWordInitializer;
 
     public String generate() {
         int tryCount = 0;
@@ -29,8 +28,8 @@ public class NickNameGenerator {
         if (tryCount == MAX_TRY_COUNT) {
             throw new MarketException(MemberErrorCode.MAX_TRY_EXCEED);
         }
-        String noun = nouns.pick();
-        String adjective = adjectives.pick();
-        return noun + adjective;
+        String adjective = nicknameWordInitializer.pickAdjective();
+        String noun = nicknameWordInitializer.pickNoun();
+        return adjective + noun;
     }
 }
