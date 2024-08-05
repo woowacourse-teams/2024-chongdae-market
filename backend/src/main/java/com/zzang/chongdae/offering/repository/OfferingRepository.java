@@ -3,27 +3,14 @@ package com.zzang.chongdae.offering.repository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
-import jakarta.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface OfferingRepository
-        extends JpaRepository<OfferingEntity, Long>, JpaSpecificationExecutor<OfferingEntity> {
-
-//    List<OfferingEntity> findByIdGreaterThanAndTitleContainingOrMeetingAddressContaining(Long lastId,
-//                                                                                         Pageable pageable);
-
-    @Query("""
-
-            SELECT o
-            FROM OfferingEntity o
-            WHERE o.id > :lastId AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
-            """)
-    List<OfferingEntity> findByIdGreaterThanWithKeyword(Long lastId, String keyword, Pageable pageable);
+public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> {
 
     @Query("""
                 SELECT new com.zzang.chongdae.offering.domain.OfferingWithRole(o, om.role)
@@ -33,23 +20,24 @@ public interface OfferingRepository
             """)
     List<OfferingWithRole> findAllWithRoleByMember(MemberEntity member);
 
-    interface Specs {
-        static Specification<OfferingEntity> hasSearchKeyword(String keyword) {
-            return (root, query, builder) -> {
-                if (keyword == null) {
-                    return builder.conjunction();
-                }
-                String parsedKeyword = "%" + keyword + "%";
-                Predicate titlePredicate = builder.like(root.get("title"), parsedKeyword);
-                Predicate addressPredicate = builder.like(root.get("meetingAddress"), parsedKeyword);
-                return builder.or(titlePredicate, addressPredicate);
-            };
-        }
+    @Query("""
 
-        static Specification<OfferingEntity> greaterThan(Long lastId) {
-            return (root, query, builder) -> {
-                return builder.greaterThan(root.get("id"), lastId);
-            };
-        }
-    }
+            SELECT o
+            FROM OfferingEntity o
+            WHERE o.id < :lastId AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            ORDER BY o.id DESC
+            """)
+    List<OfferingEntity> findRecentOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.deadline > :lastDeadline OR (o.deadline = :lastDeadline AND o.id < :lastId))
+                AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            ORDER BY o.deadline ASC, o.id DESC
+            """)
+    List<OfferingEntity> findImminentOfferingsWithKeyword(LocalDateTime lastDeadline, Long lastId, String keyword, Pageable pageable);
+
+    @Query("SELECT MAX(o.id) FROM OfferingEntity o")
+    Long findMaxId();
 }

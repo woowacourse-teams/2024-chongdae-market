@@ -21,19 +21,20 @@ import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.storage.service.StorageService;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class OfferingService {
+
+    private static final Long OUT_OF_RANGE_ID_OFFSET = 1L;
 
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
@@ -56,19 +57,9 @@ public class OfferingService {
     }
 
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(0, pageSize, sort);
+        Pageable pageable = PageRequest.ofSize(pageSize);
         OfferingFilter filter = OfferingFilter.findByName(filterName);
-        List<OfferingEntity> offerings = new ArrayList<>();
-        if (filter == OfferingFilter.RECENT) {
-            offerings = offeringRepository.findByIdGreaterThanWithKeyword(lastId, searchKeyword, pageable);
-        }
-//        Page<OfferingEntity> offerings = offeringRepository.findAll(
-//                where(hasSearchKeyword(searchKeyword)
-//                        .and(greaterThan(lastId))
-//                ),
-//                pageable
-//        );
+        List<OfferingEntity> offerings = fetchOfferings(filter, searchKeyword, lastId, pageable);
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
@@ -77,6 +68,44 @@ public class OfferingService {
                 })
                 .toList()
         );
+    }
+
+    private List<OfferingEntity> fetchOfferings(
+            OfferingFilter filter, String searchKeyword, Long lastId, Pageable pageable) {
+        if (filter == OfferingFilter.RECENT) {
+            return fetchRecentOfferings(searchKeyword, lastId, pageable);
+        }
+        if (filter == OfferingFilter.IMMINENT) {
+            return fetchImminentOfferings(searchKeyword, lastId, pageable);
+        }
+        throw new MarketException(OfferingErrorCode.NOT_SUPPORTED_FILTER);
+    }
+
+    private List<OfferingEntity> fetchRecentOfferings(String searchKeyword, Long lastId, Pageable pageable) {
+        if (lastId == null) {
+            Long outOfRangeId = findOutOfRangeId();
+            return offeringRepository.findRecentOfferingsWithKeyword(outOfRangeId, searchKeyword, pageable);
+        }
+        OfferingEntity lastOffering = offeringRepository.findById(lastId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return offeringRepository.findRecentOfferingsWithKeyword(lastOffering.getId(), searchKeyword, pageable);
+    }
+
+    private List<OfferingEntity> fetchImminentOfferings(String searchKeyword, Long lastId, Pageable pageable) {
+        if (lastId == null) {
+            LocalDateTime outOfRangeDeadline = LocalDateTime.now();
+            Long outOfRangeId = findOutOfRangeId();
+            return offeringRepository.findImminentOfferingsWithKeyword(
+                    outOfRangeDeadline, outOfRangeId, searchKeyword, pageable);
+        }
+        OfferingEntity lastOffering = offeringRepository.findById(lastId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return offeringRepository.findImminentOfferingsWithKeyword(
+                lastOffering.getDeadline(), lastOffering.getId(), searchKeyword, pageable);
+    }
+
+    private Long findOutOfRangeId() {
+        return offeringRepository.findMaxId() + OUT_OF_RANGE_ID_OFFSET;
     }
 
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
