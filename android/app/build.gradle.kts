@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("de.mannodermaus.android-junit5") version "1.10.0.0"
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "2.0.0"
 }
 
@@ -141,4 +142,11 @@ dependencies {
 
     // Pagination
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+
+    // WebView
+    implementation("androidx.webkit:webkit:1.9.0")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
 }

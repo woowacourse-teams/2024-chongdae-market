@@ -1,6 +1,7 @@
 package com.zzang.chongdae.presentation.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -28,12 +29,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavController() {
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         navController = navHostFragment.findNavController()
     }
 
     private fun setupBottomNavigation() {
         binding.mainBottomNavigation.setupWithNavController(navController)
+    }
+
+    fun hideBottomNavigation() {
+        binding.mainBottomNavigation.visibility = View.GONE
+    }
+
+    fun showBottomNavigation() {
+        binding.mainBottomNavigation.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

@@ -112,7 +112,7 @@ class CommentDetailViewModel(
 
     private fun loadMeetings() {
         viewModelScope.launch {
-            commentDetailRepository.getMeetings(offeringId).onSuccess {
+            commentDetailRepository.fetchMeetings(offeringId).onSuccess {
                 _deadline.value = it.deadline
                 _location.value = it.meetingAddress
                 _locationDetail.value = it.meetingAddressDetail

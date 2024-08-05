@@ -17,25 +17,33 @@ import com.zzang.chongdae.domain.repository.OfferingsRepository
 class OfferingViewModel(
     private val offeringsRepository: OfferingsRepository,
 ) : ViewModel() {
-    val offerings: LiveData<PagingData<Offering>> =
-        Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringsRepository::fetchOfferings) },
-        ).liveData
-            .cachedIn(viewModelScope)
+    lateinit var offerings: LiveData<PagingData<Offering>>
+        private set
+
+    init {
+        getOfferings()
+    }
+
+    private fun getOfferings() {
+        offerings =
+            Pager(
+                config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
+                pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringsRepository::fetchOfferings) },
+            ).liveData.cachedIn(viewModelScope)
+    }
 
     companion object {
         private const val PAGE_SIZE = 10
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringsRepository: OfferingsRepository) =
+        fun getFactory(offeringRepository: OfferingsRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
                     return OfferingViewModel(
-                        offeringsRepository,
+                        offeringRepository,
                     ) as T
                 }
             }

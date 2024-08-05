@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-) : ViewModel(), ParticipationClickListener {
+) : ViewModel(), OnParticipationClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
@@ -42,10 +42,10 @@ class OfferingDetailViewModel(
     val commentDetailEvent: SingleLiveData<String> get() = _commentDetailEvent
 
     init {
-        loadArticle()
+        loadOffering()
     }
 
-    private fun loadArticle() {
+    private fun loadOffering() {
         viewModelScope.launch {
             // memberId를 가져 오는 로직 수정 예정(로그인 기능 구현 시)
             offeringDetailRepository.fetchOfferingDetail(
@@ -93,7 +93,7 @@ class OfferingDetailViewModel(
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
-            articleId: Long,
+            offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
@@ -101,7 +101,7 @@ class OfferingDetailViewModel(
                 extras: CreationExtras,
             ): T {
                 return OfferingDetailViewModel(
-                    articleId,
+                    offeringId,
                     offeringDetailRepository,
                 ) as T
             }
