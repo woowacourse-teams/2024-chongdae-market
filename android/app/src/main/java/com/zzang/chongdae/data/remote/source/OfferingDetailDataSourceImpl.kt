@@ -1,10 +1,10 @@
-package com.zzang.chongdae.data.remote.source.impl
+package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.api.OfferingsApiService
 import com.zzang.chongdae.data.remote.api.ParticipationsApiService
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
-import com.zzang.chongdae.data.remote.source.OfferingDetailDataSource
+import com.zzang.chongdae.data.source.OfferingDetailDataSource
 
 class OfferingDetailDataSourceImpl(
     private val offeringsApiService: OfferingsApiService,

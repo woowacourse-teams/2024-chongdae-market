@@ -1,17 +1,17 @@
-package com.zzang.chongdae.data.remote.source.impl
+package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.api.CommentsApiService
 import com.zzang.chongdae.data.remote.api.OfferingsApiService
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
 import com.zzang.chongdae.data.remote.dto.response.CommentsResponse
 import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
-import com.zzang.chongdae.data.remote.source.CommentDetailDataSource
+import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import retrofit2.Response
 
-class CommentDetailDataSourceImpl(
+class CommentRemoteDataSourceImpl(
     private val offeringsApiService: OfferingsApiService,
     private val commentsApiService: CommentsApiService,
-) : CommentDetailDataSource {
+) : CommentRemoteDataSource {
     override suspend fun getMeetings(offeringId: Long): Result<MeetingsResponse> {
         return runCatching {
             val response: Response<MeetingsResponse> = offeringsApiService.getMeetings(offeringId)

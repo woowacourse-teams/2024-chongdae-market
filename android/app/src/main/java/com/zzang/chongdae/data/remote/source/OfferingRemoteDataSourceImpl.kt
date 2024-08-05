@@ -1,17 +1,17 @@
-package com.zzang.chongdae.data.remote.source.impl
+package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.api.OfferingsApiService
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
-import com.zzang.chongdae.data.remote.source.OfferingsDataSource
+import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 
-class OfferingsDataSourceImpl(
+class OfferingRemoteDataSourceImpl(
     private val service: OfferingsApiService,
-) : OfferingsDataSource {
+) : OfferingRemoteDataSource {
     override suspend fun fetchOfferings(
         lastOfferingId: Long,
         pageSize: Int,
     ): Result<OfferingsResponse> =
         runCatching {
-            service.getArticles(lastOfferingId, pageSize).body() ?: throw IllegalStateException()
+            service.getOfferings(lastOfferingId, pageSize).body() ?: throw IllegalStateException()
         }
 }
