@@ -8,9 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
-import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 

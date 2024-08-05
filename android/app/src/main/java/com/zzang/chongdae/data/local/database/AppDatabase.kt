@@ -18,12 +18,13 @@ import com.zzang.chongdae.data.local.model.OfferingEntity
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun commentDao(): CommentDao
+
     abstract fun offeringDao(): OfferingDao
-    
+
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
-        
+
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
                 Room.databaseBuilder(

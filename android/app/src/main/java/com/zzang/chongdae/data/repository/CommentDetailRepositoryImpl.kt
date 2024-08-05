@@ -4,8 +4,8 @@ import com.zzang.chongdae.data.local.model.OfferingEntity
 import com.zzang.chongdae.data.mapper.mapToCommentEntity
 import com.zzang.chongdae.data.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
-import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import com.zzang.chongdae.data.source.comment.CommentLocalDataSource
+import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.Meetings
@@ -21,7 +21,7 @@ class CommentDetailRepositoryImpl(
             it.toDomain()
         }
     }
-    
+
     override suspend fun saveParticipation(
         memberId: Long,
         offeringId: Long,
@@ -30,7 +30,7 @@ class CommentDetailRepositoryImpl(
         commentRemoteDataSource.saveComment(
             commentRequest = CommentRequest(memberId, offeringId, comment),
         )
-    
+
     override suspend fun fetchComments(
         offeringId: Long,
         memberId: Long,
@@ -42,7 +42,7 @@ class CommentDetailRepositoryImpl(
             response.commentsResponse.map { it.toDomain() }
         }
     }
-    
+
     override suspend fun fetchCommentsWithRoom(
         offeringId: Long,
         memberId: Long,
@@ -53,14 +53,15 @@ class CommentDetailRepositoryImpl(
             return if (response.isSuccess) {
                 val commentsResponse = response.getOrNull()
                 if (commentsResponse != null) {
-                    val newComments = commentsResponse.commentsResponse.map {
-                        mapToCommentEntity(
-                            offeringId = offeringId,
-                            commentResponse = it
-                        )
-                    }
+                    val newComments =
+                        commentsResponse.commentsResponse.map {
+                            mapToCommentEntity(
+                                offeringId = offeringId,
+                                commentResponse = it,
+                            )
+                        }
                     commentLocalDataSource.insertComments(newComments)
-                    
+
                     Result.success(commentsResponse.commentsResponse.map { it.toDomain() })
                 } else {
                     Result.failure(Throwable("댓글 데이터가 없습니다."))

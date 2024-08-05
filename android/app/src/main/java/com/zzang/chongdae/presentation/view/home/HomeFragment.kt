@@ -20,7 +20,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
-            offeringRepository =  (requireActivity().application as ChongdaeApp).offeringRepository,
+            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
     }
 

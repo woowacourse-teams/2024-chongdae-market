@@ -1,7 +1,6 @@
 package com.zzang.chongdae.data.mapper
 
 import com.zzang.chongdae.data.local.model.CommentEntity
-import com.zzang.chongdae.data.local.model.OfferingEntity
 import com.zzang.chongdae.data.remote.dto.response.CommentResponse
 import com.zzang.chongdae.domain.model.Comment
 
@@ -15,7 +14,10 @@ fun CommentResponse.toDomain(): Comment {
     )
 }
 
-fun mapToCommentEntity(offeringId: Long, commentResponse: CommentResponse): CommentEntity {
+fun mapToCommentEntity(
+    offeringId: Long,
+    commentResponse: CommentResponse,
+): CommentEntity {
     return CommentEntity(
         offeringId = offeringId,
         commentId = commentResponse.commentId,

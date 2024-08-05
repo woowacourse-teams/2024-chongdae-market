@@ -5,8 +5,8 @@ import com.zzang.chongdae.data.local.database.AppDatabase
 import com.zzang.chongdae.data.local.source.CommentLocalDataSourceImpl
 import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
 import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
 import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
+import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
 import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
@@ -21,43 +21,45 @@ import com.zzang.chongdae.domain.repository.OfferingsRepository
 class ChongdaeApp : Application() {
     private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(this) }
     private val networkManager: NetworkManager by lazy { NetworkManager }
-    
+
     private val offeringDao by lazy { appDatabase.offeringDao() }
     private val commentDao by lazy { appDatabase.commentDao() }
-    
+
     val offeringRepository: OfferingsRepository by lazy {
         OfferingsRepositoryImpl(
             offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
-            offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringsService())
+            offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringsService()),
         )
     }
-    
+
     val commentDetailRepository: CommentDetailRepository by lazy {
         CommentDetailRepositoryImpl(
             offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
             commentLocalDataSource = CommentLocalDataSourceImpl(commentDao),
-            commentRemoteDataSource = CommentRemoteDataSourceImpl(
-                networkManager.offeringsService(),
-                networkManager.commentsService()
-            )
+            commentRemoteDataSource =
+                CommentRemoteDataSourceImpl(
+                    networkManager.offeringsService(),
+                    networkManager.commentsService(),
+                ),
         )
     }
-    
+
     val commentRoomsRepository: CommentRoomsRepository by lazy {
         CommentRoomsRepositoryImpl(
-            commentRoomsDataSource = CommentRoomsDataSourceImpl(networkManager.commentsService())
+            commentRoomsDataSource = CommentRoomsDataSourceImpl(networkManager.commentsService()),
         )
     }
-    
+
     val offeringDetailRepository: OfferingDetailRepository by lazy {
         OfferingDetailRepositoryImpl(
-            offeringDetailDataSource = OfferingDetailDataSourceImpl(
-                networkManager.offeringsService(),
-                networkManager.participatoinsService(),
-            ),
+            offeringDetailDataSource =
+                OfferingDetailDataSourceImpl(
+                    networkManager.offeringsService(),
+                    networkManager.participatoinsService(),
+                ),
         )
     }
-    
+
     override fun onCreate() {
         super.onCreate()
     }

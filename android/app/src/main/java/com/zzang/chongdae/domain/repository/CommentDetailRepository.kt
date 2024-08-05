@@ -16,7 +16,7 @@ interface CommentDetailRepository {
         offeringId: Long,
         memberId: Long,
     ): Result<List<Comment>>
-    
+
     suspend fun fetchCommentsWithRoom(
         offeringId: Long,
         memberId: Long,

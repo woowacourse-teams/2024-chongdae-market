@@ -59,7 +59,7 @@ class CommentDetailActivity : AppCompatActivity() {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
     }
-    
+
     private fun initAdapter() {
         binding.rvComments.apply {
             adapter = commentAdapter
