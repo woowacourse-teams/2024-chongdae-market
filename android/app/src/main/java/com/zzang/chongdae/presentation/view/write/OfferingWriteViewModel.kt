@@ -164,18 +164,20 @@ class OfferingWriteViewModel(
             }
 
             offeringsRepository.saveOffering(
-                memberId = memberId,
-                title = title,
-                productUrl = productUrl.value,
-                thumbnailUrl = thumbnailUrl.value,
-                totalCount = totalCountConverted,
-                totalPrice = totalPriceConverted,
-                eachPrice = eachPriceNotBlank,
-                meetingAddress = meetingAddress,
-                meetingAddressDong = meetingAddressDong.value,
-                meetingAddressDetail = meetingAddressDetail,
-                deadline = deadline,
-                description = description,
+                uiModel = OfferingWriteUiModel(
+                    memberId = memberId,
+                    title = title,
+                    productUrl = productUrl.value,
+                    thumbnailUrl = thumbnailUrl.value,
+                    totalCount = totalCountConverted,
+                    totalPrice = totalPriceConverted,
+                    eachPrice = eachPriceNotBlank,
+                    meetingAddress = meetingAddress,
+                    meetingAddressDong = meetingAddressDong.value,
+                    meetingAddressDetail = meetingAddressDetail,
+                    deadline = deadline,
+                    description = description,
+                )
             ).onSuccess {
                 Log.d("alsong", "success")
             }.onFailure {
