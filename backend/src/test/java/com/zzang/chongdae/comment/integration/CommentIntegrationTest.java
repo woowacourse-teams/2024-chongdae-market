@@ -40,12 +40,8 @@ public class CommentIntegrationTest extends IntegrationTest {
                 .requestSchema(schema("CommentSaveRequest"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
-                .summary("댓글 작성")
-                .description("댓글을 작성합니다.")
-                .requestFields(requestDescriptors)
                 .responseFields(failResponseDescriptors)
-                .requestSchema(schema("CommentSaveRequest"))
-                .responseSchema(schema("CommentSaveFailResponse"))
+                .responseSchema(schema("CommentSaveFailResponse")) // TODO: 중복되는 값 제거
                 .build();
 
         MemberEntity member;

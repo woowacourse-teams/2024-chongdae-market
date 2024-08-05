@@ -1,5 +1,7 @@
 package com.zzang.chongdae.global.integration;
 
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -33,6 +36,11 @@ public abstract class IntegrationTest extends DomainSupplier {
     protected final List<FieldDescriptor> failResponseDescriptors = List.of(
             fieldWithPath("message").description("오류 내용")
     );
+
+    protected final RequestCookiesSnippet requestCookiesSnippet = requestCookies(
+            cookieWithName("access_token").description("인증 토큰")
+    );
+
     protected RequestSpecification spec;
     @Autowired
     protected DatabaseCleaner databaseCleaner;
