@@ -432,17 +432,16 @@
                 android:layout_height="45dp"
                 android:layout_marginTop="@dimen/size_36"
                 android:layout_marginBottom="@dimen/size_34"
-                android:background="@drawable/btn_rounded_disabled"
-                android:clickable="@{vm.submitButtonEnabled}"
+                android:background="@drawable/btn_background_selector"
+                android:enabled="@{vm.submitButtonEnabled}"
                 android:onClick="@{() -> vm.postOffering()}"
+                android:text="@{vm.submitButtonEnabled ? @string/write_start_offering : @string/write_start_offering_button_disabled}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_contents"
-                app:setSubmitButtonEnabled="@{vm.submitButtonEnabled}"
-                app:setSubmitButtonText="@{vm.submitButtonEnabled}" />
+                app:layout_constraintTop_toBottomOf="@id/et_contents" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

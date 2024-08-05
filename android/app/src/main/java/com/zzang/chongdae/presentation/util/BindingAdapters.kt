@@ -236,19 +236,6 @@ fun ImageView.setImageProposer(proposer: Boolean) {
     setImageResource(imageRes)
 }
 
-@BindingAdapter("setSubmitButtonEnabled")
-fun Button.setSubmitButtonEnabled(buttonEnabled: Boolean) {
-    val imageRes = if (buttonEnabled) R.drawable.btn_rounded else R.drawable.btn_rounded_disabled
-    background = context.getDrawable(imageRes)
-}
-
-@BindingAdapter("setSubmitButtonText")
-fun Button.setSubmitButtonText(buttonEnabled: Boolean) {
-    val buttonText =
-        if (buttonEnabled) R.string.write_start_offering else R.string.write_start_offering_button_disabled
-    text = context.getText(buttonText)
-}
-
 @BindingAdapter("setSplitPriceVisibility")
 fun TextView.setSplitPriceVisibility(splitPrice: Int) {
     val textVisibility = if (splitPrice >= 0) View.VISIBLE else View.INVISIBLE
