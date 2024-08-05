@@ -424,6 +424,7 @@
                 app:layout_constraintEnd_toEndOf="@id/et_contents" />
 
             <Button
+                android:id="@+id/btn_submit_offering_write"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="@dimen/size_36"
