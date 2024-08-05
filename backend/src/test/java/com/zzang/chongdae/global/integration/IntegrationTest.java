@@ -9,6 +9,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 
 import com.zzang.chongdae.global.config.TestConfig;
 import com.zzang.chongdae.global.domain.DomainSupplier;
+import com.zzang.chongdae.global.helper.CookieProvider;
 import com.zzang.chongdae.global.helper.DatabaseCleaner;
 import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
 import com.zzang.chongdae.offering.config.TestCrawlerConfig;
@@ -47,6 +48,9 @@ public abstract class IntegrationTest extends DomainSupplier {
 
     @Autowired
     protected DatabaseCleaner databaseCleaner;
+
+    @Autowired
+    protected CookieProvider cookieProvider;
 
     @LocalServerPort
     private int port;

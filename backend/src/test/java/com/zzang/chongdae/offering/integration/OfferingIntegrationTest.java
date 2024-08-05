@@ -235,7 +235,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class CreateOffering {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("memberId").description("회원 id (필수)"),
                 fieldWithPath("title").description("제목 (필수)"),
                 fieldWithPath("productUrl").description("물품 구매 링크"),
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
@@ -289,6 +288,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
@@ -315,6 +315,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-fail-request-with-null", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
