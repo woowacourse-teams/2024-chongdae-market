@@ -13,6 +13,6 @@ class OfferingViewHolder(
         onOfferingClickListener: OnOfferingClickListener,
     ) {
         binding.offering = offering
-        binding.onArticleClickListener = onOfferingClickListener
+        binding.onOfferingClickListener = onOfferingClickListener
     }
 }

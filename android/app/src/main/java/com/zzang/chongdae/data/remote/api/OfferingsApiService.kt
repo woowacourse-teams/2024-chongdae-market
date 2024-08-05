@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface OfferingsApiService {
     @GET("/offerings")
-    suspend fun getArticles(
+    suspend fun getOfferings(
         @Query("last-id") lastOfferingId: Long,
         @Query("page-size") pageSize: Int,
     ): Response<OfferingsResponse>
