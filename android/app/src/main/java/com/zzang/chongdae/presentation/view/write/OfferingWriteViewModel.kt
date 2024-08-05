@@ -10,6 +10,9 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.domain.model.Count
+import com.zzang.chongdae.domain.model.DiscountPrice
+import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingsRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -77,66 +80,64 @@ class OfferingWriteViewModel(
         }
 
         _splitPrice.apply {
-            addSource(totalCount) { updateSplitPrice() }
-            addSource(totalPrice) { updateSplitPrice() }
+            addSource(totalCount) { safeUpdateSplitPrice() }
+            addSource(totalPrice) { safeUpdateSplitPrice() }
         }
 
         _discountRate.apply {
-            addSource(_splitPrice) { updateDiscountRate() }
-            addSource(eachPrice) { updateDiscountRate() }
+            addSource(_splitPrice) { safeUpdateDiscountRate() }
+            addSource(eachPrice) { safeUpdateDiscountRate() }
+        }
+    }
+
+    private fun safeUpdateSplitPrice() {
+        runCatching {
+            updateSplitPrice()
+        }.onFailure {
+            _splitPrice.value = ERROR_INTEGER_FORMAT
+        }
+    }
+
+    private fun safeUpdateDiscountRate() {
+        runCatching {
+            updateDiscountRate()
+        }.onFailure {
+            _discountRate.value = ERROR_FLOAT_FORMAT
         }
     }
 
     private fun updateSubmitButtonEnabled() {
         _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
-            !totalCount.value.isNullOrBlank() &&
-            !totalPrice.value.isNullOrBlank() &&
-            !meetingAddress.value.isNullOrBlank() &&
-            !meetingAddressDetail.value.isNullOrBlank() &&
-            !deadline.value.isNullOrBlank() &&
-            !description.value.isNullOrBlank()
+                !totalCount.value.isNullOrBlank() &&
+                !totalPrice.value.isNullOrBlank() &&
+                !meetingAddress.value.isNullOrBlank() &&
+                !meetingAddressDetail.value.isNullOrBlank() &&
+                !deadline.value.isNullOrBlank() &&
+                !description.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
-        val totalPriceValue = totalPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalPriceValue < 0) {
-            _splitPrice.value = ERROR_INTEGER_FORMAT
-            return
-        }
-        val totalCountValue = totalCount.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalCountValue <= 0) {
-            _splitPrice.value = ERROR_INTEGER_FORMAT
-            return
-        }
-        _splitPrice.value = totalPriceValue / totalCountValue
+        val totalPrice = Price.fromString(totalPrice.value)
+        val totalCount = Count.fromString(totalCount.value)
+        _splitPrice.value = totalPrice.amount / totalCount.number
     }
 
     private fun updateDiscountRate() {
-        val eachPriceValue = eachPrice.value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (eachPriceValue <= 0) {
-            _discountRate.value = ERROR_FLOAT_FORMAT
-            return
-        }
-        val splitPriceValue = _splitPrice.value ?: ERROR_INTEGER_FORMAT
-        if (splitPriceValue <= 0) {
-            _discountRate.value = ERROR_FLOAT_FORMAT
-            return
-        }
-        val discountPrice = (eachPriceValue - splitPriceValue).toFloat()
-        _discountRate.value = (discountPrice / eachPriceValue) * 100
-        if (discountPrice < 0) _discountRate.value = 0f
+        val eachPrice = Price.fromString(eachPrice.value)
+        val splitPrice = Price.fromInteger(_splitPrice.value)
+        val discountPriceValue = eachPrice.amount - splitPrice.amount
+        val discountPrice = DiscountPrice.fromFloat(discountPriceValue.toFloat())
+        _discountRate.value = (discountPrice.amount / eachPrice.amount) * 100
     }
 
     fun increaseTotalCount() {
-        var totalCountValue = totalCount.value?.toIntOrNull() ?: return
-        totalCountValue++
-        this.totalCount.value = totalCountValue.toString()
+        val totalCount = Count.fromString(totalCount.value).increase()
+        this.totalCount.value = totalCount.number.toString()
     }
 
     fun decreaseTotalCount() {
-        var totalCountValue = totalCount.value?.toIntOrNull() ?: return
-        totalCountValue--
-        this.totalCount.value = totalCountValue.toString()
+        val totalCount = Count.fromString(totalCount.value).decrease()
+        this.totalCount.value = totalCount.number.toString()
     }
 
     // memberId는 임시값을 보내고 있음!
@@ -156,7 +157,7 @@ class OfferingWriteViewModel(
 
             var eachPriceNotBlank: Int? = 0
             runCatching {
-                eachPriceNotBlank = returnNullIfBlank(eachPrice.value)
+                eachPriceNotBlank = eachPriceToPositiveIntOrNull(eachPrice.value)
             }.onFailure {
                 makeEachPriceInvalidEvent()
                 return@launch
@@ -183,18 +184,15 @@ class OfferingWriteViewModel(
         }
     }
 
-    private fun returnNullIfBlank(input: String?): Int? {
-        val inputTrim = input?.trim()
-        // 낱개 가격이 빈 문자열이면
-        if (inputTrim.isNullOrBlank()) {
+    private fun eachPriceToPositiveIntOrNull(input: String?): Int? {
+        val eachPriceInputTrim = input?.trim()
+        if (eachPriceInputTrim.isNullOrBlank()) {
             return null
         }
-        // 낱개 가격이 음수이거나 정수가 아니거나 수가 아니면
-        if (inputTrim.toInt() < 0) {
+        if (eachPriceInputTrim.toInt() < 0) {
             throw NumberFormatException()
         }
-        // 낱개 가격이 양수이면
-        return inputTrim.toInt()
+        return eachPriceInputTrim.toInt()
     }
 
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {

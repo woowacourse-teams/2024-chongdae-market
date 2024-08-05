@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -59,13 +58,13 @@ class OfferingWriteFragment : Fragment() {
     }
 
     private fun observeInvalidInputEvent() {
-        viewModel.invalidTotalCountEvent.observe(this) {
+        viewModel.invalidTotalCountEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_total_count)
         }
-        viewModel.invalidTotalPriceEvent.observe(this) {
+        viewModel.invalidTotalPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_total_price)
         }
-        viewModel.invalidEachPriceEvent.observe(this) {
+        viewModel.invalidEachPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_each_price)
         }
     }
