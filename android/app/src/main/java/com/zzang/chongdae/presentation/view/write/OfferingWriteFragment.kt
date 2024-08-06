@@ -20,9 +20,13 @@ import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
 class OfferingWriteFragment : Fragment() {
-    private var _binding: FragmentOfferingWriteBinding? = null
-    private val binding get() = _binding!!
+    private var _fragmentBinding: FragmentOfferingWriteBinding? = null
+    private val fragmentBinding get() = _fragmentBinding!!
+
+    private var _dateTimePickerBinding: DialogDateTimePickerBinding? = null
+    private val dateTimePickerBinding get() = _dateTimePickerBinding!!
     private var toast: Toast? = null
+    private val dialog: Dialog by lazy { Dialog(requireActivity()) }
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
@@ -36,7 +40,7 @@ class OfferingWriteFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         initBinding(inflater, container)
-        return binding.root
+        return fragmentBinding.root
     }
 
     override fun onViewCreated(
@@ -52,44 +56,35 @@ class OfferingWriteFragment : Fragment() {
     }
 
     private fun searchPlace() {
-        binding.tvPlaceValue.setOnClickListener {
+        fragmentBinding.tvPlaceValue.setOnClickListener {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
         setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
-            binding.tvPlaceValue.text = bundle.getString(AddressFinderDialog.BUNDLE_ADDRESS_KEY)
+            fragmentBinding.tvPlaceValue.text = bundle.getString(AddressFinderDialog.BUNDLE_ADDRESS_KEY)
         }
     }
 
     private fun selectDeadline() {
         viewModel.deadlineChoiceEvent.observe(viewLifecycleOwner) {
-            val dialog = Dialog(requireActivity())
-            val dateTimeBinding = DialogDateTimePickerBinding.inflate(layoutInflater)
-            dateTimeBinding.vm = viewModel
-            dialog.setContentView(dateTimeBinding.root)
+            dialog.setContentView(dateTimePickerBinding.root)
             dialog.show()
-            setDateTimeText(dateTimeBinding)
-            setOnDateTimePickerSubmitButtonClickListener(dateTimeBinding, dialog)
-            setOnDateTimePickerCancelButtonClickListener(dateTimeBinding, dialog)
+            setDateTimeText(dateTimePickerBinding)
+            setOnDateTimePickerSubmitButtonClickListener()
+            setOnDateTimePickerCancelButtonClickListener()
         }
     }
 
-    private fun setOnDateTimePickerCancelButtonClickListener(
-        dateTimeBinding: DialogDateTimePickerBinding,
-        dialog: Dialog,
-    ) {
-        dateTimeBinding.btnCancel.setOnClickListener {
+    private fun setOnDateTimePickerCancelButtonClickListener() {
+        dateTimePickerBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
     }
 
-    private fun setOnDateTimePickerSubmitButtonClickListener(
-        dateTimeBinding: DialogDateTimePickerBinding,
-        dialog: Dialog,
-    ) {
-        dateTimeBinding.btnSubmit.setOnClickListener {
+    private fun setOnDateTimePickerSubmitButtonClickListener() {
+        dateTimePickerBinding.btnSubmit.setOnClickListener {
             viewModel.updateDeadline(
-                dateTimeBinding.tvDate.text.toString(),
-                dateTimeBinding.tvTime.text.toString(),
+                dateTimePickerBinding.tvDate.text.toString(),
+                dateTimePickerBinding.tvTime.text.toString(),
             )
             dialog.dismiss()
         }
@@ -154,9 +149,12 @@ class OfferingWriteFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
     ) {
-        _binding = FragmentOfferingWriteBinding.inflate(inflater, container, false)
-        binding.vm = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        _fragmentBinding = FragmentOfferingWriteBinding.inflate(inflater, container, false)
+        fragmentBinding.vm = viewModel
+        fragmentBinding.lifecycleOwner = viewLifecycleOwner
+
+        _dateTimePickerBinding = DialogDateTimePickerBinding.inflate(inflater, container, false)
+        dateTimePickerBinding.vm = viewModel
     }
 
     private fun observeInvalidInputEvent() {
@@ -193,6 +191,6 @@ class OfferingWriteFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        _fragmentBinding = null
     }
 }
