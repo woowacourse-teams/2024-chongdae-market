@@ -2,23 +2,42 @@ package com.zzang.chongdae.presentation.view
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.ActivityLoginBinding
+import com.zzang.chongdae.presentation.LoginViewModel
+import com.zzang.chongdae.presentation.OnAuthClickListener
 
-class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
+class LoginActivity : AppCompatActivity(), OnAuthClickListener {
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: LoginViewModel by viewModels {
+        LoginViewModel.getFactory(
+            authRepository = (application as ChongdaeApp).authRepository,
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        initBinding()
+    }
 
-        binding.btnLogin.setOnClickListener {
-            loginWithKakao()
-        }
+    override fun onLoginClick() {
+        loginWithKakao()
+    }
+
+    private fun initBinding() {
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.vm = viewModel
+        binding.onAuthClickListener = this
+        binding.lifecycleOwner = this
     }
 
     private fun loginWithKakao() {
@@ -35,7 +54,8 @@ class LoginActivity : AppCompatActivity() {
                 Log.d(TAG, "사용자 정보 요청 실패 $error")
             } else if (user != null) {
                 Log.d(TAG, "사용자 정보 요청 성공 : $user")
-                // 이부분에서 닉네임을 받아온다
+                viewModel.loadCi(user.kakaoAccount?.profile?.nickname ?: return@me)
+                viewModel.postSignup()
             }
         }
 
@@ -52,7 +72,6 @@ class LoginActivity : AppCompatActivity() {
             Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
         }
     }
-
 
     fun login() {
         // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
@@ -77,8 +96,6 @@ class LoginActivity : AppCompatActivity() {
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
     }
-
-
 
     companion object {
         const val TAG = "alsong"

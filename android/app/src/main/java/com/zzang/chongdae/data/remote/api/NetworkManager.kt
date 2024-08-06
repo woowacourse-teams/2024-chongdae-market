@@ -37,4 +37,6 @@ object NetworkManager {
     fun participationService(): ParticipationApiService = getRetrofit().create(ParticipationApiService::class.java)
 
     fun commentService(): CommentApiService = getRetrofit().create(CommentApiService::class.java)
+
+    fun authService(): AuthApiService = getRetrofit().create(AuthApiService::class.java)
 }

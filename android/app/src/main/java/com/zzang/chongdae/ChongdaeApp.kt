@@ -6,14 +6,17 @@ import com.zzang.chongdae.data.local.database.AppDatabase
 import com.zzang.chongdae.data.local.source.CommentLocalDataSourceImpl
 import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
 import com.zzang.chongdae.data.remote.api.NetworkManager
+import com.zzang.chongdae.data.remote.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
 import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
 import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
+import com.zzang.chongdae.data.repository.AuthRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
@@ -57,6 +60,15 @@ class ChongdaeApp : Application() {
                 OfferingDetailDataSourceImpl(
                     networkManager.offeringService(),
                     networkManager.participationService(),
+                ),
+        )
+    }
+
+    val authRepository: AuthRepository by lazy {
+        AuthRepositoryImpl(
+            authRemoteDataSource =
+                AuthRemoteDataSourceImpl(
+                    networkManager.authService(),
                 ),
         )
     }

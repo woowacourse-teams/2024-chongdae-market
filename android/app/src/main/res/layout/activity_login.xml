@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.LoginViewModel" />
+
+        <variable
+            name="onAuthClickListener"
+            type="com.zzang.chongdae.presentation.OnAuthClickListener"/>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -66,6 +76,7 @@
 
         <Button
             android:id="@+id/btn_login"
+            android:onClick="@{() -> onAuthClickListener.onLoginClick()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="152dp"
