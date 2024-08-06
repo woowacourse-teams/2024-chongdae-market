@@ -1,18 +1,15 @@
 package com.zzang.chongdae.presentation.view.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -23,17 +20,20 @@ class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
 ) : ViewModel() {
     private val _offerings = MutableLiveData<PagingData<Offering>>()
-    val offerings: LiveData<PagingData<Offering>> = _offerings
+    val offerings: LiveData<PagingData<Offering>> get() = _offerings
+
+    val search: MutableLiveData<String?> = MutableLiveData(null)
+
     init {
-        getOfferings()
+        fetchOfferings()
     }
 
-    private fun getOfferings() {
+    fun fetchOfferings() {
         viewModelScope.launch {
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
-                    OfferingPagingSource(offeringRepository)
+                    OfferingPagingSource(offeringRepository, search.value)
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
                 _offerings.value = pagingData

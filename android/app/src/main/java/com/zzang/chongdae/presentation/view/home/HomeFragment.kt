@@ -68,6 +68,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     ) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = viewModel
     }
 
     private fun initAdapter() {

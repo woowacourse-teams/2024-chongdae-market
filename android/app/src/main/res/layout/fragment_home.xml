@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.home.OfferingViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +25,7 @@
             android:backgroundTint="@color/main_color"
             android:fontFamily="@font/suit_medium"
             android:hint="@string/main_search_hint_text"
+            android:text="@={vm.search}"
             android:inputType="text"
             android:paddingStart="15dp"
             android:paddingBottom="20dp"
@@ -35,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
+            android:onClick="@{() -> vm.fetchOfferings()}"
             android:src="@drawable/ic_main_search"
             app:layout_constraintEnd_toEndOf="@id/et_search"
             app:layout_constraintTop_toTopOf="@id/et_search" />
