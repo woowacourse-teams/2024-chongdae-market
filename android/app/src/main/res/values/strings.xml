@@ -35,7 +35,7 @@
     <string name="strike_money_amount_text"><strike>%,d원</strike></string>
     <string name="main_filter_participation">참여가능만</string>
     <string name="main_filter_product_closed">마감임박순</string>
-    <string name="main_filter_discount_rate">할인율순</string>
+    <string name="main_filter_discount_rate">높은할인율순</string>
 
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>

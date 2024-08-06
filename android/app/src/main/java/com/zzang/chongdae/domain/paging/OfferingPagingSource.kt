@@ -8,11 +8,13 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 class OfferingPagingSource(
     private val offeringsRepository: OfferingRepository,
     private val search: String?,
+    private val filter: String?,
 ) : PagingSource<Long, Offering>() {
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Offering> {
         val lastOfferingId = params.key
         return runCatching {
             val offerings = offeringsRepository.fetchOfferings(
+                filter = filter,
                 search = search,
                 lastOfferingId = lastOfferingId,
                 pageSize = params.loadSize

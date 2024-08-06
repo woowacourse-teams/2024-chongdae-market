@@ -25,10 +25,10 @@
             android:backgroundTint="@color/main_color"
             android:fontFamily="@font/suit_medium"
             android:hint="@string/main_search_hint_text"
-            android:text="@={vm.search}"
             android:inputType="text"
             android:paddingStart="15dp"
             android:paddingBottom="20dp"
+            android:text="@={vm.search}"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +50,7 @@
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
             android:layout_marginStart="25dp"
             android:text="@string/main_filter_participation"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(@string/main_filter_participation, isChecked)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_search" />
 
@@ -58,6 +59,7 @@
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
             android:layout_marginStart="10dp"
             android:text="@string/main_filter_product_closed"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(@string/main_filter_product_closed, isChecked)}"
             app:layout_constraintStart_toEndOf="@id/cb_participation"
             app:layout_constraintTop_toTopOf="@id/cb_participation" />
 
@@ -65,6 +67,7 @@
             android:id="@+id/cb_discount_rate"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
             android:layout_marginStart="10dp"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(@string/main_filter_discount_rate, isChecked)}"
             android:text="@string/main_filter_discount_rate"
             app:layout_constraintStart_toEndOf="@id/cb_product_price"
             app:layout_constraintTop_toTopOf="@id/cb_participation" />
