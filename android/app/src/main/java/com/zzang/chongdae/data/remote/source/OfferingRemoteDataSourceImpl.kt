@@ -12,11 +12,14 @@ class OfferingRemoteDataSourceImpl(
     private val service: OfferingApiService,
 ) : OfferingRemoteDataSource {
     override suspend fun fetchOfferings(
-        lastOfferingId: Long,
-        pageSize: Int,
+        filter: String?,
+        search: String?,
+        lastOfferingId: Long?,
+        pageSize: Int?
     ): Result<OfferingsResponse> =
         runCatching {
-            service.getOfferings(lastOfferingId, pageSize).body() ?: throw IllegalStateException()
+            service.getOfferings(filter, search, lastOfferingId, pageSize).body()
+                ?: throw IllegalStateException()
         }
 
     override suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit> {
@@ -32,7 +35,8 @@ class OfferingRemoteDataSourceImpl(
 
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrlResponse> {
         return runCatching {
-            val response: Response<ProductUrlResponse> = service.postProductImageOg(productUrl.toProductUrlRequest())
+            val response: Response<ProductUrlResponse> =
+                service.postProductImageOg(productUrl.toProductUrlRequest())
             if (response.isSuccessful) {
                 response.body() ?: error("에러 발생: null")
             } else {

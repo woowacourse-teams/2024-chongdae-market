@@ -3,11 +3,14 @@ package com.zzang.chongdae.domain.repository
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
+import retrofit2.http.Query
 
 interface OfferingRepository {
     suspend fun fetchOfferings(
-        lastOfferingId: Long,
-        pageSize: Int,
+        filter: String? = null,
+        search: String? = null,
+        lastOfferingId: Long? = null,
+        pageSize: Int? = null,
     ): List<Offering>
 
     suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit>
