@@ -5,6 +5,7 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 
@@ -39,5 +40,11 @@ class OfferingRepositoryImpl(
                     description = uiModel.description,
                 ),
         )
+    }
+    
+    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
+        return offeringRemoteDataSource.saveProductImageOg(productUrl).mapCatching {
+            it.toDomain()
+        }
     }
 }
