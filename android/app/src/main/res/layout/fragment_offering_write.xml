@@ -326,10 +326,10 @@
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_place" />
 
-
-            <EditText
-                android:id="@+id/et_place"
+            <TextView
+                android:id="@+id/tv_place_value"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:gravity="center_vertical"
                 android:hint="@string/write_search_place"
                 android:text="@={vm.meetingAddress}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -342,7 +342,7 @@
                 android:hint="@string/write_enter_place_detail"
                 android:text="@={vm.meetingAddressDetail}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/et_place" />
+                app:layout_constraintTop_toBottomOf="@id/tv_place_value" />
 
             <TextView
                 android:id="@+id/tv_deadline"
@@ -363,9 +363,11 @@
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_deadline" />
 
-            <EditText
-                android:id="@+id/et_deadline"
+            <TextView
+                android:id="@+id/tv_deadline_value"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> vm.makeDeadlineChoiceEvent()}"
                 android:text="@={vm.deadline}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_deadline_description" />
@@ -375,16 +377,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/size_8"
                 android:src="@drawable/ic_calendar2"
-                app:layout_constraintBottom_toBottomOf="@id/et_deadline"
-                app:layout_constraintEnd_toEndOf="@id/et_deadline"
-                app:layout_constraintTop_toTopOf="@id/et_deadline" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_deadline_value"
+                app:layout_constraintEnd_toEndOf="@id/tv_deadline_value"
+                app:layout_constraintTop_toTopOf="@id/tv_deadline_value" />
 
             <TextView
                 android:id="@+id/tv_contents"
                 style="@style/Theme.AppCompat.TextView.Write.Subject"
                 android:text="@string/write_contents"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/et_deadline" />
+                app:layout_constraintTop_toBottomOf="@id/tv_deadline_value" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.Write.Asterisk"
