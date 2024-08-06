@@ -1,6 +1,8 @@
 package com.zzang.chongdae.offering.util.httpclient;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,6 +19,7 @@ public class JsoupHtmlCrawler implements HtmlCrawler {
         try {
             return Jsoup.connect(productUrl)
                     .timeout(timeoutMilliseconds)
+                    .header("Host", parseHostFromProductUrl(productUrl))
                     .header("User-Agent",
                             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0")
                     .header("Accept-Language", "en-US,en;q=0.9,ko;q=0.8")
@@ -25,6 +28,11 @@ public class JsoupHtmlCrawler implements HtmlCrawler {
         } catch (IOException | RuntimeException e) {
             return "";
         }
+    }
+
+    private String parseHostFromProductUrl(String productUrl) throws MalformedURLException {
+        URL parsedUrl = new URL(productUrl);
+        return parsedUrl.getHost();
     }
 
     @Override
