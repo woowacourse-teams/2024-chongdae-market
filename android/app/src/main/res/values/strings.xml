@@ -14,6 +14,8 @@
     <string name="all_won">원</string>
     <string name="all_percentage">%</string>
     <string name="all_place">장소</string>
+    <string name="all_am">오전</string>
+    <string name="all_pm">오후</string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>
@@ -108,5 +110,8 @@
     <string name="write_invalid_total_price">총 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_invalid_each_price">낱개 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_discount_rate_value">%.1f</string>
+    <string name="write_selected_date">%d년 %d월 %d일</string>
+    <string name="write_selected_time">%s %d시 %d분</string>
+    <string name="write_success_writing">공모가 게시되었어요!</string>
 
 </resources>

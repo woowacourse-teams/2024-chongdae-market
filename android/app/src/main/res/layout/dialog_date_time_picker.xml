@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel" />
+
+        <variable
+            name="onClickListener"
+            type="com.zzang.chongdae.presentation.view.write.OnOfferingWriteClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_date_time_picker"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:theme="@style/DefaultNumberPickerTheme">
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/size_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2024년 8월 6일" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/size_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
+            tools:text="오후 10시 28분" />
+
+        <View
+            android:id="@+id/view_divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/gray_300"
+            app:layout_constraintTop_toBottomOf="@id/tv_time" />
+
+
+        <DatePicker
+            android:id="@+id/picker_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_divide_line" />
+
+        <View
+            android:id="@+id/view_shading_selected_date"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_date_time_picker_selected"
+            app:layout_constraintBottom_toBottomOf="@id/picker_date"
+            app:layout_constraintTop_toTopOf="@id/picker_date"
+            tools:layout_editor_absoluteX="10dp" />
+
+        <TimePicker
+            android:id="@+id/picker_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:timePickerMode="spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/picker_date" />
+
+        <View
+            android:id="@+id/view_shading_selected_time"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_date_time_picker_selected"
+            app:layout_constraintBottom_toBottomOf="@id/picker_time"
+            app:layout_constraintTop_toTopOf="@id/picker_time"
+            tools:layout_editor_absoluteX="10dp" />
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="164dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btn_rounded"
+            android:onClick="@{() -> onClickListener.onDateTimeSubmitButtonClick()}"
+            android:text="확인"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/picker_time" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="164dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_rounded_gray"
+            android:onClick="@{() -> onClickListener.onDateTimeCancelButtonClick()}"
+            android:text="취소"
+            android:textColor="@color/black_700"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_submit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

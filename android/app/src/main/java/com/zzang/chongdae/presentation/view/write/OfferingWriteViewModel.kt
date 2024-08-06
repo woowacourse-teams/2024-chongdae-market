@@ -17,6 +17,8 @@ import com.zzang.chongdae.domain.repository.OfferingsRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class OfferingWriteViewModel(
     private val offeringsRepository: OfferingsRepository,
@@ -42,6 +44,8 @@ class OfferingWriteViewModel(
 
     val deadline: MutableLiveData<String> = MutableLiveData("")
 
+    private val deadlineValue: MutableLiveData<String> = MutableLiveData("")
+
     val description: MutableLiveData<String> = MutableLiveData("")
 
     private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
@@ -56,17 +60,23 @@ class OfferingWriteViewModel(
     private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
 
+    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
+
     private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
 
     private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
+    val discountRate: LiveData<Float> get() = _discountRate
+
+    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
+
     val splitPriceVisibility: LiveData<Boolean>
         get() = _splitPrice.map { it >= 0 }
 
     val discountRateVisibility: LiveData<Boolean>
         get() = _discountRate.map { it >= 0 }
-
-    val discountRate: LiveData<Float> get() = _discountRate
 
     init {
         _submitButtonEnabled.apply {
@@ -140,6 +150,23 @@ class OfferingWriteViewModel(
         this.totalCount.value = totalCount.number.toString()
     }
 
+    fun makeDeadlineChoiceEvent() {
+        _deadlineChoiceEvent.setValue(true)
+    }
+
+    fun updateDeadline(
+        date: String,
+        time: String,
+    ) {
+        val dateTime = "$date $time"
+        val inputFormat = SimpleDateFormat(INPUT_DATE_TIME_FORMAT, Locale.KOREAN)
+        val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
+
+        val parsedDateTime = inputFormat.parse(dateTime)
+        deadlineValue.value = parsedDateTime?.let { outputFormat.format(it) }
+        deadline.value = dateTime
+    }
+
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
         val memberId = BuildConfig.TOKEN.toLong()
@@ -148,7 +175,7 @@ class OfferingWriteViewModel(
         val totalPrice = totalPrice.value ?: return
         val meetingAddress = meetingAddress.value ?: return
         val meetingAddressDetail = meetingAddressDetail.value ?: return
-        val deadline = deadline.value ?: return
+        val deadline = deadlineValue.value ?: return
         val description = description.value ?: return
 
         viewModelScope.launch {
@@ -180,6 +207,7 @@ class OfferingWriteViewModel(
                         description = description,
                     ),
             ).onSuccess {
+                makeFinishEvent()
                 Log.d("alsong", "success")
             }.onFailure {
                 Log.e("alsong", it.message.toString())
@@ -220,11 +248,17 @@ class OfferingWriteViewModel(
         _invalidEachPriceEvent.setValue(true)
     }
 
+    private fun makeFinishEvent() {
+        _finishEvent.setValue(true)
+    }
+
     companion object {
         private const val ERROR_INTEGER_FORMAT = -1
         private const val ERROR_FLOAT_FORMAT = -1f
         private const val MINIMUM_TOTAL_COUNT = 2
         private const val MAXIMUM_TOTAL_COUNT = 10_000
+        private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
+        private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringsRepository: OfferingsRepository) =
