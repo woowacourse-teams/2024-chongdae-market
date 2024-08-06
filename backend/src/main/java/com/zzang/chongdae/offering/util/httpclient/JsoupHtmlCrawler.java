@@ -17,6 +17,8 @@ public class JsoupHtmlCrawler implements HtmlCrawler {
         try {
             return Jsoup.connect(productUrl)
                     .timeout(timeoutMilliseconds)
+                    .header("User-Agent",
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:128.0) Gecko/20100101 Firefox/128.0")
                     .header("Accept-Language", "en-US,en;q=0.9,ko;q=0.8")
                     .get()
                     .html();
