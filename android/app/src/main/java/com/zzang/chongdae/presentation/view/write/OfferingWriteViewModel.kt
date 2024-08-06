@@ -27,7 +27,7 @@ class OfferingWriteViewModel(
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("${MINIMUM_TOTAL_COUNT}")
+    val totalCount: MutableLiveData<String> = MutableLiveData("$MINIMUM_TOTAL_COUNT")
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
@@ -35,8 +35,7 @@ class OfferingWriteViewModel(
 
     val meetingAddress: MutableLiveData<String> = MutableLiveData("")
 
-    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
-    val meetingAddressDong: LiveData<String?> get() = _meetingAddressDong
+    private val meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
 
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
