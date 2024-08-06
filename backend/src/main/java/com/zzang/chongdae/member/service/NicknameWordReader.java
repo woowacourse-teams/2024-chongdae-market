@@ -1,5 +1,7 @@
 package com.zzang.chongdae.member.service;
 
+import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +20,7 @@ public class NicknameWordReader {
             String[] line = br.readLine().split(",");
             return Arrays.asList(line);
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new MarketException(MemberErrorCode.NICK_NAME_READ_FAIL);
         }
     }
 }
