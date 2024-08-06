@@ -44,16 +44,16 @@ public class OfferingController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/offerings/filters")
+    public ResponseEntity<OfferingFilterAllResponse> getAllOfferingFilter() {
+        OfferingFilterAllResponse response = offeringService.getAllOfferingFilter();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/offerings/{offering-id}/meetings")
     public ResponseEntity<OfferingMeetingResponse> getOfferingMeeting(
             @PathVariable(value = "offering-id") Long offeringId) {
         OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/offerings/filters")
-    public ResponseEntity<OfferingFilterAllResponse> getAllOfferingFilter() {
-        OfferingFilterAllResponse response = offeringService.getAllOfferingFilter();
         return ResponseEntity.ok(response);
     }
 

@@ -68,17 +68,17 @@ public class OfferingService {
         );
     }
 
-    public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        return new OfferingMeetingResponse(offering.toOfferingMeeting());
-    }
-
     public OfferingFilterAllResponse getAllOfferingFilter() {
         List<OfferingFilterAllResponseItem> filters = Arrays.stream(OfferingFilter.values())
                 .map(OfferingFilterAllResponseItem::new)
                 .toList();
         return new OfferingFilterAllResponse(filters);
+    }
+
+    public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 
     public Long saveOffering(OfferingSaveRequest request) {
