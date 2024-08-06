@@ -106,7 +106,7 @@ public class OfferingEntity extends BaseTimeEntity {
         return this.roomStatus;
     }
 
-    public void confirm() {
+    public void manuallyConfirm() {
         this.isManualConfirmed = true;
     }
 
@@ -124,5 +124,9 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public boolean hasParticipant() {
         return currentCount > INITIAL_COUNT;
+    }
+
+    public boolean isStatusGrouping() {
+        return this.roomStatus.isGrouping();
     }
 }

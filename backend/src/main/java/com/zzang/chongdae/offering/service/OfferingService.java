@@ -83,6 +83,9 @@ public class OfferingService {
     public OfferingStatusResponse getOfferingStatus(Long offeringId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        if (offering.isStatusGrouping() && offering.toOfferingStatus().isAutoConfirmed()) {
+            offering.moveStatus();
+        }
         return new OfferingStatusResponse(offering.getRoomStatus());
     }
 
@@ -93,7 +96,7 @@ public class OfferingService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         CommentRoomStatus updatedStatus = offering.moveStatus();
         if (updatedStatus.equals(CommentRoomStatus.BUYING)) {
-            offering.confirm();
+            offering.manuallyConfirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
     }

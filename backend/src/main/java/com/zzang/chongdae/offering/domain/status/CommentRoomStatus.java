@@ -29,4 +29,8 @@ public enum CommentRoomStatus {
     public CommentRoomStatus nextStatus() {
         return toStatus(condition.nextCondition());
     }
+
+    public boolean isGrouping() {
+        return this == GROUPING;
+    }
 }
