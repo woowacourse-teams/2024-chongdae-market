@@ -1,5 +1,7 @@
 package com.zzang.chongdae.presentation.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityMainBinding
+import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -49,5 +52,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        fun startActivity(context: Context) =
+            Intent(context, OfferingDetailActivity::class.java).run {
+                context.startActivity(this)
+            }
     }
 }

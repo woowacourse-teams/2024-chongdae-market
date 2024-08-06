@@ -1,6 +1,7 @@
 package com.zzang.chongdae
 
 import android.app.Application
+import com.kakao.sdk.common.KakaoSdk
 import com.zzang.chongdae.data.local.database.AppDatabase
 import com.zzang.chongdae.data.local.source.CommentLocalDataSourceImpl
 import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
@@ -62,5 +63,6 @@ class ChongdaeApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        KakaoSdk.init(this, "d5416bb3715a6b7e5a767d849661b6f5")
     }
 }
