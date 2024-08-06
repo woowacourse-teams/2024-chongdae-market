@@ -27,7 +27,7 @@
                 android:layout_marginTop="@dimen/size_44"
                 android:text="@string/write_information_message"
                 android:textColor="@color/black_700"
-                android:textSize="@dimen/size_20"
+                android:textSize="@dimen/size_24"
                 android:fontFamily="@font/suit_bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -57,8 +57,7 @@
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:text="@={vm.title}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_enter_title"
-                tools:text="adffa" />
+                app:layout_constraintTop_toBottomOf="@id/tv_enter_title"/>
 
             <TextView
                 android:id="@+id/tv_purchase_link"
@@ -102,7 +101,6 @@
                 android:enabled="@{vm.extractButtonEnabled}"
                 android:onClick="@{() -> vm.postProductImageOg()}"
                 android:text="@string/write_extract_image"
-                android:fontFamily="@font/suit_medium"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/et_purchase_link" />
@@ -185,7 +183,6 @@
                 android:gravity="center"
                 android:text="@={vm.totalCount}"
                 android:textSize="20dp"
-                android:fontFamily="@font/suit_medium"
                 app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel"
                 tools:text="2" />
@@ -467,7 +464,6 @@
                 android:text="@{vm.submitButtonEnabled ? @string/write_start_offering : @string/write_start_offering_button_disabled}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
-                android:fontFamily="@font/suit_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -45,7 +45,7 @@ class OfferingWriteViewModel(
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
     val deadline: MutableLiveData<String> = MutableLiveData("")
-    
+
     private val deadlineValue: MutableLiveData<String> = MutableLiveData("")
 
     val description: MutableLiveData<String> = MutableLiveData("")
@@ -79,14 +79,13 @@ class OfferingWriteViewModel(
         get() = _discountRate.map { it >= 0 }
 
     val discountRate: LiveData<Float> get() = _discountRate
-    
+
     private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
-    
+
     private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
-    
-    
+
     init {
         _submitButtonEnabled.apply {
             addSource(title) { updateSubmitButtonEnabled() }
@@ -97,22 +96,22 @@ class OfferingWriteViewModel(
             addSource(deadline) { updateSubmitButtonEnabled() }
             addSource(description) { updateSubmitButtonEnabled() }
         }
-        
+
         _splitPrice.apply {
             addSource(totalCount) { safeUpdateSplitPrice() }
             addSource(totalPrice) { safeUpdateSplitPrice() }
         }
-        
+
         _discountRate.apply {
             addSource(_splitPrice) { safeUpdateDiscountRate() }
             addSource(eachPrice) { safeUpdateDiscountRate() }
         }
-        
+
         _extractButtonEnabled.apply {
             addSource(productUrl) { value = !productUrl.value.isNullOrBlank() }
         }
     }
-    
+
     private fun safeUpdateSplitPrice() {
         runCatching {
             updateSplitPrice()
@@ -120,12 +119,11 @@ class OfferingWriteViewModel(
             _splitPrice.value = ERROR_INTEGER_FORMAT
         }
     }
-    
+
     fun clearProductUrl() {
         productUrl.value = null
     }
-    
-    
+
     fun postProductImageOg() {
         viewModelScope.launch {
             offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
@@ -140,12 +138,11 @@ class OfferingWriteViewModel(
             }
         }
     }
-    
+
     fun clearProductImage() {
         thumbnailUrl.value = null
     }
-    
-    
+
     private fun safeUpdateDiscountRate() {
         runCatching {
             updateDiscountRate()
@@ -153,23 +150,23 @@ class OfferingWriteViewModel(
             _discountRate.value = ERROR_FLOAT_FORMAT
         }
     }
-    
+
     private fun updateSubmitButtonEnabled() {
         _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
-                !totalCount.value.isNullOrBlank() &&
-                !totalPrice.value.isNullOrBlank() &&
-                !meetingAddress.value.isNullOrBlank() &&
-                !meetingAddressDetail.value.isNullOrBlank() &&
-                !deadline.value.isNullOrBlank() &&
-                !description.value.isNullOrBlank()
+            !totalCount.value.isNullOrBlank() &&
+            !totalPrice.value.isNullOrBlank() &&
+            !meetingAddress.value.isNullOrBlank() &&
+            !meetingAddressDetail.value.isNullOrBlank() &&
+            !deadline.value.isNullOrBlank() &&
+            !description.value.isNullOrBlank()
     }
-    
+
     private fun updateSplitPrice() {
         val totalPrice = Price.fromString(totalPrice.value)
         val totalCount = Count.fromString(totalCount.value)
         _splitPrice.value = totalPrice.amount / totalCount.number
     }
-    
+
     private fun updateDiscountRate() {
         val eachPrice = Price.fromString(eachPrice.value)
         val splitPrice = Price.fromInteger(_splitPrice.value)
@@ -177,21 +174,21 @@ class OfferingWriteViewModel(
         val discountPrice = DiscountPrice.fromFloat(discountPriceValue.toFloat())
         _discountRate.value = (discountPrice.amount / eachPrice.amount) * 100
     }
-    
+
     fun increaseTotalCount() {
         val totalCount = Count.fromString(totalCount.value).increase()
         this.totalCount.value = totalCount.number.toString()
     }
-    
+
     fun decreaseTotalCount() {
         val totalCount = Count.fromString(totalCount.value).decrease()
         this.totalCount.value = totalCount.number.toString()
     }
-    
+
     fun makeDeadlineChoiceEvent() {
         _deadlineChoiceEvent.setValue(true)
     }
-    
+
     fun updateDeadline(
         date: String,
         time: String,
@@ -199,12 +196,12 @@ class OfferingWriteViewModel(
         val dateTime = "$date $time"
         val inputFormat = SimpleDateFormat(INPUT_DATE_TIME_FORMAT, Locale.KOREAN)
         val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
-        
+
         val parsedDateTime = inputFormat.parse(dateTime)
         deadlineValue.value = parsedDateTime?.let { outputFormat.format(it) }
         deadline.value = dateTime
     }
-    
+
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
         val memberId = BuildConfig.TOKEN.toLong()
@@ -215,11 +212,11 @@ class OfferingWriteViewModel(
         val meetingAddressDetail = meetingAddressDetail.value ?: return
         val deadline = deadlineValue.value ?: return
         val description = description.value ?: return
-        
+
         viewModelScope.launch {
             val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return@launch
             val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return@launch
-            
+
             var eachPriceNotBlank: Int? = 0
             runCatching {
                 eachPriceNotBlank = eachPriceToPositiveIntOrNull(eachPrice.value)
@@ -227,23 +224,23 @@ class OfferingWriteViewModel(
                 makeEachPriceInvalidEvent()
                 return@launch
             }
-            
+
             offeringRepository.saveOffering(
                 uiModel =
-                OfferingWriteUiModel(
-                    memberId = memberId,
-                    title = title,
-                    productUrl = productUrl.value,
-                    thumbnailUrl = thumbnailUrl.value,
-                    totalCount = totalCountConverted,
-                    totalPrice = totalPriceConverted,
-                    eachPrice = eachPriceNotBlank,
-                    meetingAddress = meetingAddress,
-                    meetingAddressDong = meetingAddressDong.value,
-                    meetingAddressDetail = meetingAddressDetail,
-                    deadline = deadline,
-                    description = description,
-                ),
+                    OfferingWriteUiModel(
+                        memberId = memberId,
+                        title = title,
+                        productUrl = productUrl.value,
+                        thumbnailUrl = thumbnailUrl.value,
+                        totalCount = totalCountConverted,
+                        totalPrice = totalPriceConverted,
+                        eachPrice = eachPriceNotBlank,
+                        meetingAddress = meetingAddress,
+                        meetingAddressDong = meetingAddressDong.value,
+                        meetingAddressDetail = meetingAddressDetail,
+                        deadline = deadline,
+                        description = description,
+                    ),
             ).onSuccess {
                 makeFinishEvent()
                 Log.d("alsong", "success")
@@ -252,7 +249,7 @@ class OfferingWriteViewModel(
             }
         }
     }
-    
+
     private fun eachPriceToPositiveIntOrNull(input: String?): Int? {
         val eachPriceInputTrim = input?.trim()
         if (eachPriceInputTrim.isNullOrBlank()) {
@@ -263,7 +260,7 @@ class OfferingWriteViewModel(
         }
         return eachPriceInputTrim.toInt()
     }
-    
+
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
         val totalCountConverted = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalCountConverted < MINIMUM_TOTAL_COUNT || totalCountConverted > MAXIMUM_TOTAL_COUNT) {
@@ -272,7 +269,7 @@ class OfferingWriteViewModel(
         }
         return totalCountConverted
     }
-    
+
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
         val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalPriceConverted < 0) {
@@ -281,15 +278,15 @@ class OfferingWriteViewModel(
         }
         return totalPriceConverted
     }
-    
+
     private fun makeEachPriceInvalidEvent() {
         _invalidEachPriceEvent.setValue(true)
     }
-    
+
     private fun makeFinishEvent() {
         _finishEvent.setValue(true)
     }
-    
+
     companion object {
         private const val ERROR_INTEGER_FORMAT = -1
         private const val ERROR_FLOAT_FORMAT = -1f
@@ -298,7 +295,7 @@ class OfferingWriteViewModel(
         private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
         private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
         private const val HTTPS = "https:"
-        
+
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringRepository: OfferingRepository) =
             object : ViewModelProvider.Factory {
