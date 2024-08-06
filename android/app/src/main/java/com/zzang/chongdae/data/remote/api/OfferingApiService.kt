@@ -35,7 +35,7 @@ interface OfferingApiService {
     suspend fun postOfferingWrite(
         @Body offeringWriteRequest: OfferingWriteRequest,
     ): Response<Unit>
-    
+
     @POST("/offerings/product-images/og")
     suspend fun postProductImageOg(
         @Body productUrl: ProductUrlRequest,

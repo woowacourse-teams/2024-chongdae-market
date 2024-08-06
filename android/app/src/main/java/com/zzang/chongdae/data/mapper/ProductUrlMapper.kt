@@ -15,4 +15,3 @@ fun String.toProductUrlRequest(): ProductUrlRequest {
         productUrl = this,
     )
 }
-

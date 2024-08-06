@@ -4,8 +4,6 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.text.Html
 import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -13,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
@@ -102,7 +99,7 @@ fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
     offeringCondition?.toStyle()?.let {
         this.setTextAppearance(it)
     }
-    
+
     offeringCondition?.let {
         this.text = it.toOfferingConditionText(context)
         this.setTextAppearance(it.toStyle())
@@ -187,9 +184,9 @@ fun setLayoutHeightWithAnimation(
 ) {
     val params: ViewGroup.LayoutParams = view.layoutParams
     val startHeight = params.height
-    
+
     val heightPx = heightDp.toPx(view.context)
-    
+
     val animator =
         ValueAnimator.ofInt(startHeight, heightPx).apply {
             duration = 300

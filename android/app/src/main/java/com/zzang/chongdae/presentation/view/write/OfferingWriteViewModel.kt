@@ -45,13 +45,13 @@ class OfferingWriteViewModel(
     val deadline: MutableLiveData<String> = MutableLiveData("")
 
     val description: MutableLiveData<String> = MutableLiveData("")
-    
+
     private val _errorEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
     val errorEvent: SingleLiveData<Int> get() = _errorEvent
 
     private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
-    
+
     private val _extractButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val extractButtonEnabled: LiveData<Boolean> get() = _extractButtonEnabled
 
@@ -96,20 +96,20 @@ class OfferingWriteViewModel(
             addSource(_splitPrice) { safeUpdateDiscountRate() }
             addSource(eachPrice) { safeUpdateDiscountRate() }
         }
-        
+
         _extractButtonEnabled.apply {
             addSource(productUrl) { value = !productUrl.value.isNullOrBlank() }
         }
     }
-    
+
     fun clearProductUrl() {
         productUrl.value = null
     }
-    
+
     fun postProductImageOg() {
         viewModelScope.launch {
-            offeringRepository.saveProductImageOg(productUrl.value?:"").onSuccess {
-                if(it.imageUrl.isNullOrBlank()) {
+            offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
+                if (it.imageUrl.isNullOrBlank()) {
                     _errorEvent.setValue(R.string.error_empty_product_url)
                     return@launch
                 }

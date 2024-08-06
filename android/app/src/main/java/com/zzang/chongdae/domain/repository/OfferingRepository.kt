@@ -11,6 +11,6 @@ interface OfferingRepository {
     ): List<Offering>
 
     suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit>
-    
+
     suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl>
 }

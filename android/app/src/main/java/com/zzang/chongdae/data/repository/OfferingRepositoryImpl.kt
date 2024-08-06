@@ -41,7 +41,7 @@ class OfferingRepositoryImpl(
                 ),
         )
     }
-    
+
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
         return offeringRemoteDataSource.saveProductImageOg(productUrl).mapCatching {
             it.toDomain()

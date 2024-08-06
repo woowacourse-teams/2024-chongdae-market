@@ -18,7 +18,7 @@ class OfferingRemoteDataSourceImpl(
         runCatching {
             service.getOfferings(lastOfferingId, pageSize).body() ?: throw IllegalStateException()
         }
-    
+
     override suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit> {
         return runCatching {
             val response = service.postOfferingWrite(offeringWriteRequest)
@@ -29,10 +29,8 @@ class OfferingRemoteDataSourceImpl(
             }
         }
     }
-    
-    override suspend fun saveProductImageOg(
-        productUrl: String,
-    ): Result<ProductUrlResponse> {
+
+    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrlResponse> {
         return runCatching {
             val response: Response<ProductUrlResponse> = service.postProductImageOg(productUrl.toProductUrlRequest())
             if (response.isSuccessful) {
