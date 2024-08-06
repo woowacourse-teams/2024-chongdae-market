@@ -17,6 +17,8 @@ import com.zzang.chongdae.domain.repository.OfferingsRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class OfferingWriteViewModel(
     private val offeringsRepository: OfferingsRepository,
@@ -41,6 +43,8 @@ class OfferingWriteViewModel(
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
     val deadline: MutableLiveData<String> = MutableLiveData("")
+
+    private val deadlineValue: MutableLiveData<String> = MutableLiveData("")
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
@@ -147,6 +151,19 @@ class OfferingWriteViewModel(
         _deadlineChoiceEvent.setValue(true)
     }
 
+    fun updateDeadline(
+        date: String,
+        time: String,
+    ) {
+        val dateTime = "$date $time"
+        val inputFormat = SimpleDateFormat("yyyy년 M월 d일 a h시 m분", Locale.KOREAN)
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+
+        val parsedDateTime = inputFormat.parse(dateTime)
+        deadlineValue.value = parsedDateTime?.let { outputFormat.format(it) }
+        deadline.value = dateTime
+    }
+
     // memberId는 임시값을 보내고 있음!
     fun postOffering() {
         val memberId = BuildConfig.TOKEN.toLong()
@@ -155,7 +172,7 @@ class OfferingWriteViewModel(
         val totalPrice = totalPrice.value ?: return
         val meetingAddress = meetingAddress.value ?: return
         val meetingAddressDetail = meetingAddressDetail.value ?: return
-        val deadline = deadline.value ?: return
+        val deadline = deadlineValue.value ?: return
         val description = description.value ?: return
 
         viewModelScope.launch {

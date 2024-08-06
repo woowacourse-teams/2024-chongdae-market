@@ -366,6 +366,7 @@
             <TextView
                 android:id="@+id/tv_deadline_value"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:gravity="center_vertical"
                 android:onClick="@{() -> vm.makeDeadlineChoiceEvent()}"
                 android:text="@={vm.deadline}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"

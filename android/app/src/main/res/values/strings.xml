@@ -108,5 +108,7 @@
     <string name="write_invalid_total_price">총 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_invalid_each_price">낱개 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_discount_rate_value">%.1f</string>
+    <string name="write_selected_date">%d년 %d월 %d일</string>
+    <string name="write_selected_time">%s %d시 %d분</string>
 
 </resources>
