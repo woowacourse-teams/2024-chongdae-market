@@ -13,13 +13,13 @@ import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.repository.OfferingsRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
 class OfferingWriteViewModel(
-    private val offeringsRepository: OfferingsRepository,
+    private val offeringRepository: OfferingRepository,
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 
@@ -162,7 +162,7 @@ class OfferingWriteViewModel(
                 return@launch
             }
 
-            offeringsRepository.saveOffering(
+            offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
                         memberId = memberId,
@@ -226,14 +226,14 @@ class OfferingWriteViewModel(
         private const val MAXIMUM_TOTAL_COUNT = 10_000
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringsRepository: OfferingsRepository) =
+        fun getFactory(offeringRepository: OfferingRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
                     return OfferingWriteViewModel(
-                        offeringsRepository,
+                        offeringRepository,
                     ) as T
                 }
             }

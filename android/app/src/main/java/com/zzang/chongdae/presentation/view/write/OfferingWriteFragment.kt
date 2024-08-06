@@ -20,7 +20,7 @@ class OfferingWriteFragment : Fragment() {
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
-            offeringsRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
     }
 

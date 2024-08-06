@@ -3,7 +3,7 @@ package com.zzang.chongdae.domain.repository
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 
-interface OfferingsRepository {
+interface OfferingRepository {
     suspend fun fetchOfferings(
         lastOfferingId: Long,
         pageSize: Int,
