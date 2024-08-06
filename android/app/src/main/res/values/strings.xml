@@ -112,5 +112,6 @@
     <string name="write_discount_rate_value">%.1f</string>
     <string name="write_selected_date">%d년 %d월 %d일</string>
     <string name="write_selected_time">%s %d시 %d분</string>
+    <string name="write_success_writing">공모가 게시되었어요!</string>
 
 </resources>

@@ -60,6 +60,9 @@ class OfferingWriteViewModel(
     private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
 
+    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
+
     private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
 
@@ -204,6 +207,7 @@ class OfferingWriteViewModel(
                         description = description,
                     ),
             ).onSuccess {
+                makeFinishEvent()
                 Log.d("alsong", "success")
             }.onFailure {
                 Log.e("alsong", it.message.toString())
@@ -242,6 +246,10 @@ class OfferingWriteViewModel(
 
     private fun makeEachPriceInvalidEvent() {
         _invalidEachPriceEvent.setValue(true)
+    }
+
+    private fun makeFinishEvent() {
+        _finishEvent.setValue(true)
     }
 
     companion object {

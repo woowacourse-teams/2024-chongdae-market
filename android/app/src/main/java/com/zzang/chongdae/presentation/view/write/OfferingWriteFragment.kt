@@ -46,6 +46,7 @@ class OfferingWriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
         observeInvalidInputEvent()
+        observeFinishEvent()
         selectDeadline()
         searchPlace()
     }
@@ -170,6 +171,13 @@ class OfferingWriteFragment : Fragment() {
         }
         viewModel.invalidEachPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_each_price)
+        }
+    }
+
+    private fun observeFinishEvent() {
+        viewModel.finishEvent.observe(viewLifecycleOwner) {
+            parentFragmentManager.popBackStack()
+            showToast(R.string.write_success_writing)
         }
     }
 
