@@ -457,7 +457,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .filter(document("update-comment-room-status-success", resource(successSnippets)))
                     .pathParam("offering-id", offering.getId())
                     .queryParam("member-id", member.getId())
-                    .when().put("/offerings/{offering-id}/status")
+                    .when().patch("/offerings/{offering-id}/status")
                     .then().log().all()
                     .statusCode(200);
 
@@ -476,7 +476,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
                     .pathParam("offering-id", offering.getId() + 100)
                     .queryParam("member-id", member.getId())
-                    .when().put("/offerings/{offering-id}/status")
+                    .when().patch("/offerings/{offering-id}/status")
                     .then().log().all()
                     .statusCode(400);
         }
