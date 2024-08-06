@@ -101,12 +101,12 @@ public class OfferingEntity extends BaseTimeEntity {
         currentCount++;
     }
 
-    public CommentRoomStatus updateStatus() { // TODO: Rename to moveStatus?
+    public CommentRoomStatus moveStatus() {
         this.roomStatus = roomStatus.nextStatus();
         return this.roomStatus;
     }
 
-    public void updateConditionConfirmed() {
+    public void confirm() {
         this.isManualConfirmed = true;
     }
 

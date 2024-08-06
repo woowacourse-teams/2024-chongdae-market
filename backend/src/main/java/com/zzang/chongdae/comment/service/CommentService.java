@@ -111,9 +111,9 @@ public class CommentService {
         // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        CommentRoomStatus updatedStatus = offering.updateStatus();
+        CommentRoomStatus updatedStatus = offering.moveStatus();
         if (updatedStatus.equals(CommentRoomStatus.BUYING)) {
-            offering.updateConditionConfirmed();
+            offering.confirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
     }
