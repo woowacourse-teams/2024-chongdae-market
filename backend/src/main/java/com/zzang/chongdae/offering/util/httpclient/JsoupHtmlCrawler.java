@@ -26,6 +26,7 @@ public class JsoupHtmlCrawler implements HtmlCrawler {
                     .get()
                     .html();
         } catch (IOException | RuntimeException e) {
+            e.printStackTrace();
             return "";
         }
     }
