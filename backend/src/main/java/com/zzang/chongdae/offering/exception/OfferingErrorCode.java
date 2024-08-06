@@ -18,7 +18,6 @@ public enum OfferingErrorCode implements ErrorResponse {
     PARTICIPANT_FULL(BAD_REQUEST, "해당 공모에 참여 가능한 인원수를 초과하였습니다."),
     CANNOT_PARTICIPATE(BAD_REQUEST, "참여할 수 없는 공모입니다."),
     INVALID_CONDITION(BAD_REQUEST, "유효하지 않은 공모 상태입니다"),
-    CANNOT_PARTICIPATE(BAD_REQUEST, "참여할 수 없는 공모입니다."),
     NOT_PARTICIPATE_MEMBER(BAD_REQUEST, "해당 공모의 참여자가 아닙니다.");
 
     private final HttpStatus status;
