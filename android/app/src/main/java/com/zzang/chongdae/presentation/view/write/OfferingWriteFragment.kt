@@ -19,7 +19,7 @@ import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
-class OfferingWriteFragment : Fragment() {
+class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     private var _fragmentBinding: FragmentOfferingWriteBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
@@ -69,25 +69,19 @@ class OfferingWriteFragment : Fragment() {
             dialog.setContentView(dateTimePickerBinding.root)
             dialog.show()
             setDateTimeText(dateTimePickerBinding)
-            setOnDateTimePickerSubmitButtonClickListener()
-            setOnDateTimePickerCancelButtonClickListener()
         }
     }
 
-    private fun setOnDateTimePickerCancelButtonClickListener() {
-        dateTimePickerBinding.btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
+    override fun onDateTimeSubmitButtonClick() {
+        viewModel.updateDeadline(
+            dateTimePickerBinding.tvDate.text.toString(),
+            dateTimePickerBinding.tvTime.text.toString(),
+        )
+        dialog.dismiss()
     }
 
-    private fun setOnDateTimePickerSubmitButtonClickListener() {
-        dateTimePickerBinding.btnSubmit.setOnClickListener {
-            viewModel.updateDeadline(
-                dateTimePickerBinding.tvDate.text.toString(),
-                dateTimePickerBinding.tvTime.text.toString(),
-            )
-            dialog.dismiss()
-        }
+    override fun onDateTimeCancelButtonClick() {
+        dialog.dismiss()
     }
 
     private fun setDateTimeText(dateTimeBinding: DialogDateTimePickerBinding) {
@@ -155,6 +149,7 @@ class OfferingWriteFragment : Fragment() {
 
         _dateTimePickerBinding = DialogDateTimePickerBinding.inflate(inflater, container, false)
         dateTimePickerBinding.vm = viewModel
+        dateTimePickerBinding.onClickListener = this
     }
 
     private fun observeInvalidInputEvent() {

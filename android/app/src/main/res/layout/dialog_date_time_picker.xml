@@ -7,6 +7,9 @@
             name="vm"
             type="com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel" />
 
+        <variable
+            name="onClickListener"
+            type="com.zzang.chongdae.presentation.view.write.OnOfferingWriteClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -98,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/btn_rounded"
+            android:onClick="@{() -> onClickListener.onDateTimeSubmitButtonClick()}"
             android:text="확인"
             android:textColor="@color/white"
             android:textSize="16dp"
@@ -112,6 +116,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/btn_rounded_gray"
+            android:onClick="@{() -> onClickListener.onDateTimeCancelButtonClick()}"
             android:text="취소"
             android:textColor="@color/black_700"
             android:textSize="16dp"
