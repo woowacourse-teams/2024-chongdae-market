@@ -28,7 +28,7 @@
                 android:text="@string/write_information_message"
                 android:textColor="@color/black_700"
                 android:textSize="@dimen/size_24"
-                android:textStyle="bold"
+                android:fontFamily="@font/suit_bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,8 +57,7 @@
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:text="@={vm.title}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_enter_title"
-                tools:text="adffa" />
+                app:layout_constraintTop_toBottomOf="@id/tv_enter_title"/>
 
             <TextView
                 android:id="@+id/tv_purchase_link"
@@ -83,12 +82,25 @@
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_enter_purchase_link" />
 
+            <ImageView
+                android:id="@+id/iv_clear_url"
+                android:layout_width="@dimen/icon_size_20"
+                android:layout_height="@dimen/icon_size_20"
+                android:layout_marginEnd="@dimen/size_5"
+                android:onClick="@{() -> vm.clearProductUrl()}"
+                android:src="@drawable/btn_offering_write_clear"
+                app:layout_constraintBottom_toBottomOf="@+id/et_purchase_link"
+                app:layout_constraintEnd_toEndOf="@+id/et_purchase_link"
+                app:layout_constraintTop_toTopOf="@+id/et_purchase_link" />
+
             <Button
                 android:id="@+id/btn_extract_image"
                 android:layout_width="79dp"
                 android:layout_height="@dimen/size_44"
-                android:background="@drawable/btn_rounded"
-                android:text="사진 추출"
+                android:background="@drawable/btn_background_selector"
+                android:enabled="@{vm.extractButtonEnabled}"
+                android:onClick="@{() -> vm.postProductImageOg()}"
+                android:text="@string/write_extract_image"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/et_purchase_link" />
@@ -100,22 +112,37 @@
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/et_purchase_link" />
 
-
             <ImageView
-                android:id="@+id/img_upload_photo"
+                android:id="@+id/iv_upload_photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="@dimen/size_9"
+                android:background="@drawable/bg_radius_10dp"
+                android:clipToOutline="true"
+                android:scaleType="fitXY"
                 android:src="@drawable/btn_upload_photo"
+                app:importProductImageUrl="@{vm.thumbnailUrl}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_photo" />
+
+            <ImageView
+                android:id="@+id/iv_delete_image"
+                android:layout_width="@dimen/icon_size_24"
+                android:layout_height="@dimen/icon_size_24"
+                android:onClick="@{() -> vm.clearProductImage()}"
+                android:src="@drawable/btn_offering_write_delete_image"
+                app:isVisible="@{vm.deleteImageVisible}"
+                app:layout_constraintBottom_toTopOf="@+id/iv_upload_photo"
+                app:layout_constraintEnd_toEndOf="@+id/iv_upload_photo"
+                app:layout_constraintStart_toEndOf="@+id/iv_upload_photo"
+                app:layout_constraintTop_toTopOf="@+id/iv_upload_photo" />
 
             <TextView
                 android:id="@+id/tv_total_personnel"
                 style="@style/Theme.AppCompat.TextView.Write.Subject"
                 android:text="@string/write_total_personnel"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/img_upload_photo" />
+                app:layout_constraintTop_toBottomOf="@id/iv_upload_photo" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.Write.Asterisk"
