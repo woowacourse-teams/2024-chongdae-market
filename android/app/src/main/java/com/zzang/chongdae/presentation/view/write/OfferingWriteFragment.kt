@@ -75,13 +75,19 @@ class OfferingWriteFragment : Fragment() {
         }
     }
 
-    private fun setCancelButtonClickListener(dateTimeBinding: DialogDateTimePickerBinding, dialog: Dialog) {
+    private fun setCancelButtonClickListener(
+        dateTimeBinding: DialogDateTimePickerBinding,
+        dialog: Dialog,
+    ) {
         dateTimeBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
     }
 
-    private fun setSubmitButtonClickListener(dateTimeBinding: DialogDateTimePickerBinding, dialog: Dialog) {
+    private fun setSubmitButtonClickListener(
+        dateTimeBinding: DialogDateTimePickerBinding,
+        dialog: Dialog,
+    ) {
         dateTimeBinding.btnSubmit.setOnClickListener {
             viewModel.updateDeadline(
                 dateTimeBinding.tvDate.text.toString(),
