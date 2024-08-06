@@ -8,15 +8,15 @@ public enum OfferingCondition {
     AVAILABLE;
 
     public static OfferingCondition decideBy(OfferingStatus offeringStatus) {
+        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()
+                || (offeringStatus.isDeadlineOver() && offeringStatus.isCountNotFull())) {
+            return CONFIRMED;
+        }
         if (offeringStatus.isCountFull() && offeringStatus.isDeadlineNotOver()) {
             return FULL;
         }
         if (offeringStatus.isCountAlmostFull() || offeringStatus.isDeadlineAlmostOver()) {
             return IMMINENT;
-        }
-        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()
-                || (offeringStatus.isDeadlineOver() && offeringStatus.isCountNotFull())) {
-            return CONFIRMED;
         }
         return AVAILABLE;
     }
