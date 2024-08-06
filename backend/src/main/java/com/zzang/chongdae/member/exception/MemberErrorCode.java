@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 public enum MemberErrorCode implements ErrorResponse {
 
     NOT_FOUND(BAD_REQUEST, "해당 사용자가 존재하지 않습니다."),
-    MAX_TRY_EXCEED(INTERNAL_SERVER_ERROR, "닉네임 생성에 실패했습니다.");
+    MAX_TRY_EXCEEDED(INTERNAL_SERVER_ERROR, "닉네임 생성에 실패했습니다.");
 
     private final HttpStatus status;
     private final String message;

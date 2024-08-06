@@ -26,7 +26,7 @@ public class NicknameGenerator {
 
     private String tryGenerate(int tryCount) {
         if (tryCount == MAX_TRY_COUNT) {
-            throw new MarketException(MemberErrorCode.MAX_TRY_EXCEED);
+            throw new MarketException(MemberErrorCode.MAX_TRY_EXCEEDED);
         }
         String adjective = nicknameWordInitializer.pickAdjective();
         String noun = nicknameWordInitializer.pickNoun();
