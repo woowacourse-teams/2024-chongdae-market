@@ -1,6 +1,7 @@
 package com.zzang.chongdae.global.domain;
 
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.status.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
@@ -28,7 +29,8 @@ public class OfferingFixture {
                 1,
                 false,
                 5000,
-                1000
+                1000,
+                CommentRoomStatus.GROUPING
         );
         return offeringRepository.save(offering);
     }

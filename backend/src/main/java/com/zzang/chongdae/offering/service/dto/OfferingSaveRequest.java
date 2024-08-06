@@ -1,5 +1,7 @@
 package com.zzang.chongdae.offering.service.dto;
 
+import static com.zzang.chongdae.offering.domain.status.CommentRoomStatus.GROUPING;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -41,6 +43,7 @@ public record OfferingSaveRequest(@NotNull
 
     public OfferingEntity toEntity(MemberEntity member) {
         return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
-                meetingAddressDetail, meetingAddressDong, totalCount, 1, false, totalPrice, eachPrice);
+                meetingAddressDetail, meetingAddressDong, totalCount, 1, false,
+                totalPrice, eachPrice, GROUPING);
     }
 }

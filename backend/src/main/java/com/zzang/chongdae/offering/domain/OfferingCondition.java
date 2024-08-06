@@ -3,24 +3,25 @@ package com.zzang.chongdae.offering.domain;
 public enum OfferingCondition {
 
     FULL,
-    TIME_OUT,
+    IMMINENT,
     CONFIRMED,
     AVAILABLE;
 
     public static OfferingCondition decideBy(OfferingStatus offeringStatus) {
-        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()) {
+        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()
+                || (offeringStatus.isDeadlineOver() && offeringStatus.isCountNotFull())) {
             return CONFIRMED;
         }
-        if (offeringStatus.isCountFull()) {
+        if (offeringStatus.isCountFull() && offeringStatus.isDeadlineNotOver()) {
             return FULL;
         }
-        if (offeringStatus.isDeadlineOver()) {
-            return TIME_OUT;
+        if (offeringStatus.isCountAlmostFull() || offeringStatus.isDeadlineAlmostOver()) {
+            return IMMINENT;
         }
         return AVAILABLE;
     }
 
     public boolean isOpen() {
-        return this == AVAILABLE;
+        return this == AVAILABLE || this == IMMINENT;
     }
 }
