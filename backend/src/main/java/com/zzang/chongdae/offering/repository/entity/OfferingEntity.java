@@ -5,8 +5,11 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.status.CommentRoomStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -80,18 +83,31 @@ public class OfferingEntity extends BaseTimeEntity {
     @Positive
     private Integer eachPrice;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private CommentRoomStatus roomStatus;
+
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
                           Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
-                          Integer eachPrice) {
+                          Integer eachPrice, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, isManualConfirmed, totalPrice,
-                eachPrice);
+                eachPrice, roomStatus);
     }
 
     public void updateCurrentCount() {
         currentCount++;
+    }
+
+    public CommentRoomStatus moveStatus() {
+        this.roomStatus = roomStatus.nextStatus();
+        return this.roomStatus;
+    }
+
+    public void manuallyConfirm() {
+        this.isManualConfirmed = true;
     }
 
     public OfferingPrice toOfferingPrice() {
@@ -108,5 +124,9 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public boolean hasParticipant() {
         return currentCount > INITIAL_COUNT;
+    }
+
+    public boolean isStatusGrouping() {
+        return this.roomStatus.isGrouping();
     }
 }
