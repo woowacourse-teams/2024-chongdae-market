@@ -4,10 +4,10 @@ import static com.zzang.chongdae.offering.domain.status.CommentRoomStatus.BUYING
 import static com.zzang.chongdae.offering.domain.status.CommentRoomStatus.DONE;
 import static com.zzang.chongdae.offering.domain.status.CommentRoomStatus.GROUPING;
 import static com.zzang.chongdae.offering.domain.status.CommentRoomStatus.TRADING;
-import static com.zzang.chongdae.offering.exception.OfferingErrorCode.INVALID_CONDITION;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.offering.domain.status.CommentRoomStatus;
+import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public record OfferingStatusResponse(String status,
             return Arrays.stream(values())
                     .filter((value) -> value.roomStatus.equals(roomStatus))
                     .findFirst()
-                    .orElseThrow(() -> new MarketException(INVALID_CONDITION))
+                    .orElseThrow(() -> new MarketException(OfferingErrorCode.INVALID_CONDITION))
                     .view;
         }
     }

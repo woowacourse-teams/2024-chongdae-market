@@ -1,8 +1,7 @@
 package com.zzang.chongdae.offering.domain.status;
 
-import static com.zzang.chongdae.offering.exception.OfferingErrorCode.INVALID_CONDITION;
-
 import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import java.util.Arrays;
 import lombok.Getter;
 
@@ -24,7 +23,7 @@ public enum CommentRoomStatus {
         return Arrays.stream(values())
                 .filter(status -> status == condition.status())
                 .findFirst()
-                .orElseThrow(() -> new MarketException(INVALID_CONDITION));
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.INVALID_CONDITION));
     }
 
     public CommentRoomStatus nextStatus() {
