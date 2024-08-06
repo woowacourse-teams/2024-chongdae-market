@@ -94,7 +94,7 @@ private fun OfferingCondition.toOfferingComment(
         )
 }
 
-@BindingAdapter("conditionText:offeringCondition") // 추후 condition추가(마감임박)에 따른 API변경있으면 수정 예정
+@BindingAdapter("offeringCondition") // 추후 condition추가(마감임박)에 따른 API변경있으면 수정 예정
 fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
     offeringCondition?.toStyle()?.let {
         this.setTextAppearance(it)
