@@ -1,8 +1,6 @@
 package com.zzang.chongdae.offering.service;
 
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
@@ -31,19 +29,16 @@ public class OfferingService {
 
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
-    private final MemberRepository memberRepository;
     private final StorageService storageService;
     private final ProductImageExtractor extractor;
 
-    public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
+    public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         OfferingStatus offeringStatus = offering.toOfferingStatus();
 
-        MemberEntity member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
 
         return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
@@ -62,9 +57,12 @@ public class OfferingService {
         );
     }
 
-    public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
+    public OfferingMeetingResponse getOfferingMeeting(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
+            throw new MarketException(OfferingErrorCode.NOT_PARTICIPATE_MEMBER);
+        }
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 

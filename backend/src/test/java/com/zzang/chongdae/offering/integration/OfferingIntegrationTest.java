@@ -14,6 +14,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.storage.service.StorageService;
@@ -43,9 +44,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
-        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id (필수)")
-        );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("id").description("공모 id"),
                 fieldWithPath("title").description("제목"),
@@ -69,7 +67,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("공모 상세 조회")
                 .description("공모 id를 통해 공모의 상세 정보를 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("OfferingDetailSuccessResponse"))
                 .build();
@@ -77,7 +74,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("공모 상세 조회")
                 .description("공모 id를 통해 공모의 상세 정보를 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("OfferingDetailFailResponse"))
                 .build();
@@ -93,8 +89,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOfferingDetail_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-offering-detail-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 1)
-                    .queryParam("member-id", 1)
                     .when().get("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(200);
@@ -105,20 +101,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 100)
-                    .queryParam("member-id", 1)
-                    .when().get("/offerings/{offering-id}")
-                    .then().log().all()
-                    .statusCode(400);
-        }
-
-        @DisplayName("유효하지 않은 사용자가 공모를 조회할 경우 예외가 발생한다.")
-        @Test
-        void should_throwException_when_invalidMember() {
-            given(spec).log().all()
-                    .filter(document("get-offering-detail-fail-invalid-member", resource(failSnippets)))
-                    .pathParam("offering-id", 1)
-                    .queryParam("member-id", 100)
                     .when().get("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(400);
@@ -204,7 +188,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @BeforeEach
         void setUp() {
             MemberEntity member = memberFixture.createMember();
-            offeringFixture.createOffering(member);
+            OfferingEntity offering = offeringFixture.createOffering(member);
+            offeringMemberFixture.createProposer(member, offering);
         }
 
         @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
@@ -212,6 +197,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOfferingMeeting_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-offering-meeting-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
@@ -223,6 +209,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-offering-meeting-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()

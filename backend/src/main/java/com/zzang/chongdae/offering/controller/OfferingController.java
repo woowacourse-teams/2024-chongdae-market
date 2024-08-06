@@ -29,8 +29,8 @@ public class OfferingController {
     @GetMapping("/offerings/{offering-id}")
     public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestParam(value = "member-id") Long memberId) {
-        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, memberId);
+            MemberEntity member) {
+        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
@@ -44,8 +44,9 @@ public class OfferingController {
 
     @GetMapping("/offerings/{offering-id}/meetings")
     public ResponseEntity<OfferingMeetingResponse> getOfferingMeeting(
-            @PathVariable(value = "offering-id") Long offeringId) {
-        OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId);
+            @PathVariable(value = "offering-id") Long offeringId,
+            MemberEntity member) {
+        OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
