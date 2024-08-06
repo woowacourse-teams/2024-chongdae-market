@@ -176,8 +176,8 @@ class OfferingWriteFragment : Fragment() {
 
     private fun observeFinishEvent() {
         viewModel.finishEvent.observe(viewLifecycleOwner) {
-            parentFragmentManager.popBackStack()
             showToast(R.string.write_success_writing)
+            parentFragmentManager.popBackStack()
         }
     }
 
