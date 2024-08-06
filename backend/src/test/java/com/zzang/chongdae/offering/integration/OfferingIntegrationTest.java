@@ -15,7 +15,6 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingCondition;
-import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -412,9 +411,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
-        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id (필수)")
-        );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("updatedStatus").description("변경된 상태")
         );
@@ -422,7 +418,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("댓글방 상태 변경")
                 .description("댓글방의 상태를 변경합니다.")
                 .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("CommentRoomStatusUpdateSuccessResponse"))
                 .build();
@@ -430,7 +425,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("댓글방 상태 변경")
                 .description("댓글방의 상태를 변경합니다.")
                 .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("CommentRoomStatusUpdateFailResponse"))
                 .build();
@@ -450,8 +444,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_updateStatus_when_givenOfferingIdAndMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", offering.getId())
-                    .queryParam("member-id", member.getId())
                     .when().patch("/offerings/{offering-id}/status")
                     .then().log().all()
                     .statusCode(200);
@@ -469,8 +463,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", offering.getId() + 100)
-                    .queryParam("member-id", member.getId())
                     .when().patch("/offerings/{offering-id}/status")
                     .then().log().all()
                     .statusCode(400);

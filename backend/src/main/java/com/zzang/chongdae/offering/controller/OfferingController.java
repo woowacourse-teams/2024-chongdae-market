@@ -1,7 +1,7 @@
 package com.zzang.chongdae.offering.controller;
 
-import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -70,7 +70,7 @@ public class OfferingController {
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 
-    @GetMapping("/offerings/{offering-id}/status") // TODO: 인증 필터 적용
+    @GetMapping("/offerings/{offering-id}/status")
     public ResponseEntity<OfferingStatusResponse> getOfferingStatus(
             @PathVariable(value = "offering-id") Long offeringId) { // TODO : 로그인 사용자가 참여자인지 확인
         OfferingStatusResponse response = offeringService.getOfferingStatus(offeringId);
@@ -80,8 +80,8 @@ public class OfferingController {
     @PatchMapping("/offerings/{offering-id}/status")
     public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestParam(value = "member-id") Long loginMemberId) {
-        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, loginMemberId);
+            MemberEntity member) {
+        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, member);
         return ResponseEntity.ok(response);
     }
 

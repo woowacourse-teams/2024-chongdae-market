@@ -99,7 +99,7 @@ public class OfferingService {
     }
 
     @Transactional
-    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, Long loginMemberId) { // TODO: 인증 필터 적용
+    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
         // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
