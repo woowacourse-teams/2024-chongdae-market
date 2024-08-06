@@ -10,6 +10,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.Price
@@ -23,9 +24,11 @@ class OfferingWriteViewModel(
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 
-    val productUrl: MutableLiveData<String?> = MutableLiveData("")
+    val productUrl: MutableLiveData<String?> = MutableLiveData(null)
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
+
+    val deleteImageVisible: LiveData<Boolean> = thumbnailUrl.map { !it.isNullOrBlank() }
 
     val totalCount: MutableLiveData<String> = MutableLiveData("$MINIMUM_TOTAL_COUNT")
 
@@ -42,9 +45,15 @@ class OfferingWriteViewModel(
     val deadline: MutableLiveData<String> = MutableLiveData("")
 
     val description: MutableLiveData<String> = MutableLiveData("")
+    
+    private val _errorEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val errorEvent: SingleLiveData<Int> get() = _errorEvent
 
     private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
+    
+    private val _extractButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val extractButtonEnabled: LiveData<Boolean> get() = _extractButtonEnabled
 
     private val _invalidTotalCountEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidTotalCountEvent: SingleLiveData<Boolean> get() = _invalidTotalCountEvent
@@ -87,6 +96,33 @@ class OfferingWriteViewModel(
             addSource(_splitPrice) { safeUpdateDiscountRate() }
             addSource(eachPrice) { safeUpdateDiscountRate() }
         }
+        
+        _extractButtonEnabled.apply {
+            addSource(productUrl) { value = !productUrl.value.isNullOrBlank() }
+        }
+    }
+    
+    fun clearProductUrl() {
+        productUrl.value = null
+    }
+    
+    fun postProductImageOg() {
+        viewModelScope.launch {
+            offeringRepository.saveProductImageOg(productUrl.value?:"").onSuccess {
+                if(it.imageUrl.isNullOrBlank()) {
+                    _errorEvent.setValue(R.string.error_empty_product_url)
+                    return@launch
+                }
+                thumbnailUrl.value = it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+                _errorEvent.setValue(R.string.error_invalid_product_url)
+            }
+        }
+    }
+
+    fun clearProductImage() {
+        thumbnailUrl.value = null
     }
 
     private fun safeUpdateSplitPrice() {
@@ -178,10 +214,8 @@ class OfferingWriteViewModel(
                         deadline = deadline,
                         description = description,
                     ),
-            ).onSuccess {
-                Log.d("alsong", "success")
-            }.onFailure {
-                Log.e("alsong", it.message.toString())
+            ).onFailure {
+                Log.e("error", it.message.toString())
             }
         }
     }
