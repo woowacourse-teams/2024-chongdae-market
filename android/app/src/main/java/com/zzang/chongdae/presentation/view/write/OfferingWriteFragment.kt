@@ -68,12 +68,12 @@ class OfferingWriteFragment : Fragment() {
             dialog.setContentView(dateTimeBinding.root)
             dialog.show()
             setDateTimeText(dateTimeBinding)
-            setSubmitButtonClickListener(dateTimeBinding, dialog)
-            setCancelButtonClickListener(dateTimeBinding, dialog)
+            setOnDateTimePickerSubmitButtonClickListener(dateTimeBinding, dialog)
+            setOnDateTimePickerCancelButtonClickListener(dateTimeBinding, dialog)
         }
     }
 
-    private fun setCancelButtonClickListener(
+    private fun setOnDateTimePickerCancelButtonClickListener(
         dateTimeBinding: DialogDateTimePickerBinding,
         dialog: Dialog,
     ) {
@@ -82,7 +82,7 @@ class OfferingWriteFragment : Fragment() {
         }
     }
 
-    private fun setSubmitButtonClickListener(
+    private fun setOnDateTimePickerSubmitButtonClickListener(
         dateTimeBinding: DialogDateTimePickerBinding,
         dialog: Dialog,
     ) {
@@ -97,11 +97,11 @@ class OfferingWriteFragment : Fragment() {
 
     private fun setDateTimeText(dateTimeBinding: DialogDateTimePickerBinding) {
         val calendar = Calendar.getInstance()
-        setDate(calendar, dateTimeBinding)
-        setTime(calendar, dateTimeBinding)
+        updateDate(calendar, dateTimeBinding)
+        updateTime(calendar, dateTimeBinding)
     }
 
-    private fun setTime(
+    private fun updateTime(
         calendar: Calendar,
         dateTimeBinding: DialogDateTimePickerBinding,
     ) {
@@ -113,7 +113,7 @@ class OfferingWriteFragment : Fragment() {
         }
     }
 
-    private fun setDate(
+    private fun updateDate(
         calendar: Calendar,
         dateTimeBinding: DialogDateTimePickerBinding,
     ) {
