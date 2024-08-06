@@ -2,6 +2,7 @@ package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
@@ -41,7 +42,12 @@ public class AuthService {
         return new SignupResponse(savedMember);
     }
 
-    public MemberEntity findMemberByToken(String token) {
+    public TokenDto refresh(RefreshRequest request) {
+        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(request.refreshToken());
+        return jwtTokenProvider.createAuthToken(memberId.toString());
+    }
+
+    public MemberEntity findMemberByAccessToken(String token) {
         Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));

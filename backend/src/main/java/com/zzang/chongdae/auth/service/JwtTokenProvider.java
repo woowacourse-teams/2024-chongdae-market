@@ -59,6 +59,11 @@ public class JwtTokenProvider {
         return Long.valueOf(memberId);
     }
 
+    public Long getMemberIdByRefreshToken(String token) {
+        String memberId = getClaims(token, refreshSecretKey).getSubject();
+        return Long.valueOf(memberId);
+    }
+
     private Claims getClaims(String token, String key) {
         try {
             return Jwts.parser()

@@ -29,6 +29,6 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
                                         WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String token = cookieConsumer.getAccessToken(request.getCookies());
-        return authService.findMemberByToken(token);
+        return authService.findMemberByAccessToken(token);
     }
 }

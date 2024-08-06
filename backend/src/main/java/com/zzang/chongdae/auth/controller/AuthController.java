@@ -2,6 +2,7 @@ package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
@@ -33,8 +34,18 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+    ResponseEntity<SignupResponse> signup(
+            @RequestBody SignupRequest request) {
         SignupResponse response = authService.signup(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/auth/refresh")
+    ResponseEntity<Void> refresh(
+            @RequestBody RefreshRequest request, HttpServletResponse servletResponse) {
+        TokenDto tokenDto = authService.refresh(request);
+        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
+        cookieConsumer.addCookies(servletResponse, cookies);
+        return ResponseEntity.ok().build();
     }
 }

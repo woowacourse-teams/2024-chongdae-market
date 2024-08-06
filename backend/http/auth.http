@@ -14,3 +14,10 @@ Content-Type: application/json
   "ci": "poke12345678"
 }
 
+### 토큰 재발급 API
+POST {{base-url}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzI0MTMwODY0fQ.BoN2p--HbWn1zbed2NSZtZm4RumWtVm338sAtxXwEC8"
+}
