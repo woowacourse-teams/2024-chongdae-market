@@ -31,3 +31,18 @@ amazon:
     bucket: techcourse-project-2024
   cloudfront:
     redirectUrl: d3a5rfnjdz82qu.cloudfront.net
+
+security:
+  jwt:
+    token:
+      access-secret-key: testAccessSecretKeytestAccessSecretKeytestAccessSecretKeytestAccessSecretKeytest
+      refresh-secret-key: testRefreshSecretKeytestRefreshSecretKeytestRefreshSecretKeytestRefreshSecretKeytest
+      access-token-expired: 30m
+      refresh-token-expired: 14d
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID

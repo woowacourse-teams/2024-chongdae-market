@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offeringmember.controller;
 
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offeringmember.service.OfferingMemberService;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import jakarta.validation.Valid;
@@ -18,8 +19,9 @@ public class OfferingMemberController {
 
     @PostMapping("/participations")
     ResponseEntity<Void> participate(
-            @RequestBody @Valid ParticipationRequest request) {
-        Long id = offeringMemberService.participate(request);
+            @RequestBody @Valid ParticipationRequest request,
+            MemberEntity member) {
+        Long id = offeringMemberService.participate(request, member);
         return ResponseEntity.created(URI.create("/participations/" + id)).build();
     }
 }

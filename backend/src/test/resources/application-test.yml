@@ -11,3 +11,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+security:
+  jwt:
+    token:
+      access-secret-key: accessSecretKey
+      refresh-secret-key: refreshSecretKey
+      access-token-expired: 30m
+      refresh-token-expired: 14d

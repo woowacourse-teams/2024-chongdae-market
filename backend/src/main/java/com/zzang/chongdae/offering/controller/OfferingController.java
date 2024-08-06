@@ -1,6 +1,7 @@
 package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -32,8 +33,8 @@ public class OfferingController {
     @GetMapping("/offerings/{offering-id}")
     public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestParam(value = "member-id") Long memberId) {
-        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, memberId);
+            MemberEntity member) {
+        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
@@ -55,15 +56,17 @@ public class OfferingController {
 
     @GetMapping("/offerings/{offering-id}/meetings")
     public ResponseEntity<OfferingMeetingResponse> getOfferingMeeting(
-            @PathVariable(value = "offering-id") Long offeringId) {
-        OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId);
+            @PathVariable(value = "offering-id") Long offeringId,
+            MemberEntity member) {
+        OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/offerings")
     public ResponseEntity<Void> saveOffering(
-            @RequestBody @Valid OfferingSaveRequest request) {
-        Long offeringId = offeringService.saveOffering(request);
+            @RequestBody @Valid OfferingSaveRequest request,
+            MemberEntity member) {
+        Long offeringId = offeringService.saveOffering(request, member);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 
@@ -77,8 +80,8 @@ public class OfferingController {
     @PatchMapping("/offerings/{offering-id}/status")
     public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestParam(value = "member-id") Long loginMemberId) {
-        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, loginMemberId);
+            MemberEntity member) {
+        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
