@@ -26,7 +26,6 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
     class Participate {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("memberId").description("회원 id (필수)"),
                 fieldWithPath("offeringId").description("공모 id (필수)")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
@@ -49,7 +48,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            proposer = memberFixture.createMember("dora");
+            proposer = memberFixture.createMember();
             participant = memberFixture.createMember("poke");
             offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
@@ -59,11 +58,11 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_participateSuccess() {
             ParticipationRequest request = new ParticipationRequest(
-                    participant.getId(),
                     offering.getId()
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -75,27 +74,11 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_givenProposerParticipate() {
             ParticipationRequest request = new ParticipationRequest(
-                    proposer.getId(),
                     offering.getId()
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-my-offering", resource(failSnippets)))
-                    .contentType(ContentType.JSON)
-                    .body(request)
-                    .when().post("/participations")
-                    .then().log().all()
-                    .statusCode(400);
-        }
-
-        @DisplayName("유효하지 않은 사용자가 공모에 참여할 경우 예외가 발생한다.")
-        @Test
-        void should_throwException_when_invalidMember() {
-            ParticipationRequest request = new ParticipationRequest(
-                    participant.getId() + 100,
-                    offering.getId()
-            );
-            RestAssured.given(spec).log().all()
-                    .filter(document("participate-fail-invalid-member", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -107,11 +90,11 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_invalidOffering() {
             ParticipationRequest request = new ParticipationRequest(
-                    participant.getId(),
                     offering.getId() + 100
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -123,11 +106,11 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_emptyValue() {
             ParticipationRequest request = new ParticipationRequest(
-                    null,
                     null
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-request-with-null", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")

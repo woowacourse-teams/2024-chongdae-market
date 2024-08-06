@@ -21,7 +21,7 @@ public class MemberFixture {
     }
 
     public MemberEntity createMember(String nickname) {
-        MemberEntity member = new MemberEntity(nickname, passwordEncoder.encode("5678" + nickname));
+        MemberEntity member = new MemberEntity(nickname, passwordEncoder.encode(nickname + "5678"));
         return memberRepository.save(member);
     }
 }

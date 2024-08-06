@@ -1,8 +1,6 @@
 package com.zzang.chongdae.offeringmember.service;
 
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -22,13 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class OfferingMemberService {
 
     private final OfferingMemberRepository offeringMemberRepository;
-    private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
 
     @Transactional
-    public Long participate(ParticipationRequest request) {
-        MemberEntity member = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+    public Long participate(ParticipationRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipate(offering, member);

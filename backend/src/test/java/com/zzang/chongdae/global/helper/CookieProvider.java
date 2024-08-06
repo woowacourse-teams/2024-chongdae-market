@@ -17,4 +17,13 @@ public class CookieProvider {
                 .then().log().all()
                 .extract().detailedCookies();
     }
+
+    public Cookies createCookiesWithCi(String ci) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new LoginRequest(ci))
+                .when().post("/auth/login")
+                .then().log().all()
+                .extract().detailedCookies();
+    }
 }
