@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -25,7 +24,6 @@ class OfferingAdapter(
         holder: OfferingViewHolder,
         position: Int,
     ) {
-        Log.e("seogi", "${getItem(position)?.id}")
         getItem(position)?.let { holder.bind(it, onOfferingClickListener) }
     }
 
