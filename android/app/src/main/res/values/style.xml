@@ -101,7 +101,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/size_44</item>
         <item name="android:textSize">@dimen/size_15</item>
-        <item name="android:textColor">@color/gray_700</item>
+        <item name="android:textColor">@color/gray_900</item>
         <item name="layout_constraintEnd_toEndOf">parent</item>
         <item name="android:background">@drawable/et_border_gray</item>
         <item name="android:layout_marginTop">@dimen/size_16</item>

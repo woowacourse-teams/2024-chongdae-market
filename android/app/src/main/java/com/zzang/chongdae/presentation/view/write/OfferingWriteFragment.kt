@@ -9,12 +9,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
 import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
 class OfferingWriteFragment : Fragment() {
@@ -45,6 +47,12 @@ class OfferingWriteFragment : Fragment() {
         (activity as MainActivity).hideBottomNavigation()
         observeInvalidInputEvent()
         showDateTimePickerDialog()
+        binding.tvPlaceValue.setOnClickListener {
+            AddressFinderDialog().show(parentFragmentManager, this.tag)
+        }
+        setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
+            binding.tvPlaceValue.text = bundle.getString(AddressFinderDialog.BUNDLE_ADDRESS_KEY)
+        }
     }
 
     private fun showDateTimePickerDialog() {
