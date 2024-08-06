@@ -4,6 +4,7 @@ import com.zzang.chongdae.comment.service.CommentService;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -23,23 +23,24 @@ public class CommentController {
 
     @PostMapping("/comments")
     public ResponseEntity<Void> saveComment(
-            @RequestBody @Valid CommentSaveRequest request) {
-        Long commentId = commentService.saveComment(request);
+            @RequestBody @Valid CommentSaveRequest request,
+            MemberEntity member) {
+        Long commentId = commentService.saveComment(request, member);
         return ResponseEntity.created(URI.create("/comments/" + commentId)).build();
     }
 
     @GetMapping("/comments")
     public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
-            @RequestParam(value = "member-id") Long loginMemberId) {
-        CommentRoomAllResponse response = commentService.getAllCommentRoom(loginMemberId);
+            MemberEntity member) {
+        CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/comments/{offering-id}")
     public ResponseEntity<CommentAllResponse> getAllComment(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestParam(value = "member-id") Long loginMemberId) {
-        CommentAllResponse response = commentService.getAllComment(offeringId, loginMemberId);
+            MemberEntity member) {
+        CommentAllResponse response = commentService.getAllComment(offeringId, member);
         return ResponseEntity.ok(response);
     }
 }
