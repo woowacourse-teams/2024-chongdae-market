@@ -2,7 +2,7 @@ package com.zzang.chongdae.offering.domain.status;
 
 public abstract class CommentRoomCondition {
 
-    abstract public CommentRoomCondition nextCondition();
+    public abstract CommentRoomCondition nextCondition();
 
-    abstract public CommentRoomStatus status();
+    public abstract CommentRoomStatus status();
 }
