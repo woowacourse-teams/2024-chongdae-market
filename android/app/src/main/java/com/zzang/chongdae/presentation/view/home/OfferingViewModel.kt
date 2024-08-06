@@ -12,10 +12,10 @@ import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
-import com.zzang.chongdae.domain.repository.OfferingsRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 
 class OfferingViewModel(
-    private val offeringsRepository: OfferingsRepository,
+    private val offeringRepository: OfferingRepository,
 ) : ViewModel() {
     lateinit var offerings: LiveData<PagingData<Offering>>
         private set
@@ -28,7 +28,7 @@ class OfferingViewModel(
         offerings =
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-                pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringsRepository::fetchOfferings) },
+                pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringRepository::fetchOfferings) },
             ).liveData.cachedIn(viewModelScope)
     }
 
@@ -36,7 +36,7 @@ class OfferingViewModel(
         private const val PAGE_SIZE = 10
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringRepository: OfferingsRepository) =
+        fun getFactory(offeringRepository: OfferingRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,

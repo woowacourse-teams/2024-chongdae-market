@@ -12,11 +12,11 @@ import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
-import com.zzang.chongdae.data.repository.OfferingsRepositoryImpl
+import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
-import com.zzang.chongdae.domain.repository.OfferingsRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 
 class ChongdaeApp : Application() {
     private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(this) }
@@ -25,8 +25,8 @@ class ChongdaeApp : Application() {
     private val offeringDao by lazy { appDatabase.offeringDao() }
     private val commentDao by lazy { appDatabase.commentDao() }
 
-    val offeringRepository: OfferingsRepository by lazy {
-        OfferingsRepositoryImpl(
+    val offeringRepository: OfferingRepository by lazy {
+        OfferingRepositoryImpl(
             offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
             offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringService()),
         )
