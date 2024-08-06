@@ -30,7 +30,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
-            offeringsRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
     }
 
@@ -161,6 +161,9 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         }
         viewModel.invalidEachPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_each_price)
+        }
+        viewModel.errorEvent.observe(viewLifecycleOwner) {
+            showToast(it)
         }
     }
 

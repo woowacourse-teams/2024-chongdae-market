@@ -10,10 +10,11 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.repository.OfferingsRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
@@ -21,15 +22,17 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class OfferingWriteViewModel(
-    private val offeringsRepository: OfferingsRepository,
+    private val offeringRepository: OfferingRepository,
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 
-    val productUrl: MutableLiveData<String?> = MutableLiveData("")
+    val productUrl: MutableLiveData<String?> = MutableLiveData(null)
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("${MINIMUM_TOTAL_COUNT}")
+    val deleteImageVisible: LiveData<Boolean> = thumbnailUrl.map { !it.isNullOrBlank() }
+
+    val totalCount: MutableLiveData<String> = MutableLiveData("$MINIMUM_TOTAL_COUNT")
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
@@ -37,8 +40,7 @@ class OfferingWriteViewModel(
 
     val meetingAddress: MutableLiveData<String> = MutableLiveData("")
 
-    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
-    val meetingAddressDong: LiveData<String?> get() = _meetingAddressDong
+    private val meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
 
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
@@ -48,8 +50,14 @@ class OfferingWriteViewModel(
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
+    private val _errorEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val errorEvent: SingleLiveData<Int> get() = _errorEvent
+
     private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
+
+    private val _extractButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val extractButtonEnabled: LiveData<Boolean> get() = _extractButtonEnabled
 
     private val _invalidTotalCountEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidTotalCountEvent: SingleLiveData<Boolean> get() = _invalidTotalCountEvent
@@ -60,23 +68,23 @@ class OfferingWriteViewModel(
     private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
 
-    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
-
     private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
 
     private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
-    val discountRate: LiveData<Float> get() = _discountRate
-
-    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
-
     val splitPriceVisibility: LiveData<Boolean>
         get() = _splitPrice.map { it >= 0 }
 
     val discountRateVisibility: LiveData<Boolean>
         get() = _discountRate.map { it >= 0 }
+
+    val discountRate: LiveData<Float> get() = _discountRate
+
+    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
+
+    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
 
     init {
         _submitButtonEnabled.apply {
@@ -98,6 +106,10 @@ class OfferingWriteViewModel(
             addSource(_splitPrice) { safeUpdateDiscountRate() }
             addSource(eachPrice) { safeUpdateDiscountRate() }
         }
+
+        _extractButtonEnabled.apply {
+            addSource(productUrl) { value = !productUrl.value.isNullOrBlank() }
+        }
     }
 
     private fun safeUpdateSplitPrice() {
@@ -106,6 +118,29 @@ class OfferingWriteViewModel(
         }.onFailure {
             _splitPrice.value = ERROR_INTEGER_FORMAT
         }
+    }
+
+    fun clearProductUrl() {
+        productUrl.value = null
+    }
+
+    fun postProductImageOg() {
+        viewModelScope.launch {
+            offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
+                if (it.imageUrl.isNullOrBlank()) {
+                    _errorEvent.setValue(R.string.error_empty_product_url)
+                    return@launch
+                }
+                thumbnailUrl.value = HTTPS + it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+                _errorEvent.setValue(R.string.error_invalid_product_url)
+            }
+        }
+    }
+
+    fun clearProductImage() {
+        thumbnailUrl.value = null
     }
 
     private fun safeUpdateDiscountRate() {
@@ -190,7 +225,7 @@ class OfferingWriteViewModel(
                 return@launch
             }
 
-            offeringsRepository.saveOffering(
+            offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
                         memberId = memberId,
@@ -259,16 +294,17 @@ class OfferingWriteViewModel(
         private const val MAXIMUM_TOTAL_COUNT = 10_000
         private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
         private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
+        private const val HTTPS = "https:"
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringsRepository: OfferingsRepository) =
+        fun getFactory(offeringRepository: OfferingRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
                     return OfferingWriteViewModel(
-                        offeringsRepository,
+                        offeringRepository,
                     ) as T
                 }
             }
