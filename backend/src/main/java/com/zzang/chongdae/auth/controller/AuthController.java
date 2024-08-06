@@ -25,7 +25,7 @@ public class AuthController {
     private final CookieConsumer cookieConsumer;
 
     @PostMapping("/auth/login")
-    ResponseEntity<Void> login(
+    public ResponseEntity<Void> login(
             @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
         TokenDto tokenDto = authService.login(request);
         List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
@@ -34,14 +34,14 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    ResponseEntity<SignupResponse> signup(
+    public ResponseEntity<SignupResponse> signup(
             @RequestBody SignupRequest request) {
         SignupResponse response = authService.signup(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/auth/refresh")
-    ResponseEntity<Void> refresh(
+    public ResponseEntity<Void> refresh(
             @RequestBody RefreshRequest request, HttpServletResponse servletResponse) {
         TokenDto tokenDto = authService.refresh(request);
         List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
