@@ -22,7 +22,8 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE o.id < :lastId AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            WHERE o.id < :lastId
+                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.id DESC
             """)
     List<OfferingEntity> findRecentOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
@@ -31,7 +32,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             SELECT o
             FROM OfferingEntity o
             WHERE (o.deadline > :lastDeadline OR (o.deadline = :lastDeadline AND o.id < :lastId))
-                AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.deadline ASC, o.id DESC
             """)
     List<OfferingEntity> findImminentOfferingsWithKeyword(
@@ -42,7 +43,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             FROM OfferingEntity o
             WHERE ((o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice < :discountRate
                     OR ((o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice = :discountRate AND o.id < :lastId))
-                AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+               AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY (o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
