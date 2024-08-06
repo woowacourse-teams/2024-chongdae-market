@@ -21,13 +21,13 @@
 
         <activity
             android:name=".presentation.view.MainActivity"
-            android:exported="true">
+            android:exported="false">
 
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
 
         </activity>
 
@@ -39,6 +39,20 @@
             android:name=".presentation.view.commentdetail.CommentDetailActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakaod5416bb3715a6b7e5a767d849661b6f5" />
+            </intent-filter>
+        </activity>
 
     </application>
 
