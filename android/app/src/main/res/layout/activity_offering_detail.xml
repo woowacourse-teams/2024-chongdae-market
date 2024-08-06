@@ -128,7 +128,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/iv_divide_line"
+                        android:id="@+id/view_divide_line"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -144,8 +144,8 @@
                         android:layout_marginStart="10dp"
                         android:src="@drawable/ic_detail_remove"
                         app:isVisible="@{vm.isRepresentative()}"
-                        app:layout_constraintStart_toEndOf="@id/iv_divide_line"
-                        app:layout_constraintTop_toTopOf="@id/iv_divide_line" />
+                        app:layout_constraintStart_toEndOf="@id/view_divide_line"
+                        app:layout_constraintTop_toTopOf="@id/view_divide_line" />
 
                     <TextView
                         android:id="@+id/tv_product_link_comment"
