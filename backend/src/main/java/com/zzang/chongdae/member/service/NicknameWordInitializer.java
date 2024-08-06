@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class NicknameWordInitializer {
 
-    private static final String ADJECTIVE_FILE_PATH = "src/test/resources/static/nickname/adjectives.txt";
-    private static final String NOUNS_FILE_PATH = "src/test/resources/static/nickname/nouns.txt";
+    private static final String ADJECTIVE_FILE_PATH = "static/nickname/adjectives.txt";
+    private static final String NOUNS_FILE_PATH = "static/nickname/nouns.txt";
 
     private final NicknameWordPicker nicknameWordPicker;
     private final NicknameWordReader nickNameWordReader;
