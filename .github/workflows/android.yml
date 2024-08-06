@@ -41,7 +41,6 @@ jobs:
 
       - name: Create google-services
         run: |
-          mkdir ./app
           echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
       - name: Set up JDK 17
