@@ -46,7 +46,11 @@ class OfferingWriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
         observeInvalidInputEvent()
-        showDateTimePickerDialog()
+        selectDeadline()
+        searchPlace()
+    }
+
+    private fun searchPlace() {
         binding.tvPlaceValue.setOnClickListener {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
@@ -55,7 +59,7 @@ class OfferingWriteFragment : Fragment() {
         }
     }
 
-    private fun showDateTimePickerDialog() {
+    private fun selectDeadline() {
         viewModel.deadlineChoiceEvent.observe(viewLifecycleOwner) {
             val dialog = Dialog(requireActivity())
             val dateTimeBinding = DialogDateTimePickerBinding.inflate(layoutInflater)
@@ -67,11 +71,11 @@ class OfferingWriteFragment : Fragment() {
             dialog.show()
             setDateTimeText(dateTimeBinding)
             setSubmitButtonClickListener(dateTimeBinding, dialog)
-            setCancleButtonClickListener(dateTimeBinding, dialog)
+            setCancelButtonClickListener(dateTimeBinding, dialog)
         }
     }
 
-    private fun setCancleButtonClickListener(dateTimeBinding: DialogDateTimePickerBinding, dialog: Dialog) {
+    private fun setCancelButtonClickListener(dateTimeBinding: DialogDateTimePickerBinding, dialog: Dialog) {
         dateTimeBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
