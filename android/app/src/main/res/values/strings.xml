@@ -14,6 +14,8 @@
     <string name="all_won">원</string>
     <string name="all_percentage">%</string>
     <string name="all_place">장소</string>
+    <string name="all_am">오전</string>
+    <string name="all_pm">오후</string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>
@@ -110,4 +112,10 @@
     <string name="write_discount_rate_value">%.1f</string>
     <string name="error_invalid_product_url">대표 이미지가 유효하지 않습니다.</string>
     <string name="error_empty_product_url">대표 이미지가 존재하지 않습니다.</string>
+    <string name="write_extract_image">사진 추출</string>
+
+    <!--    offering_write-->
+    <string name="write_selected_date">%d년 %d월 %d일</string>
+    <string name="write_selected_time">%s %d시 %d분</string>
+    <string name="write_success_writing">공모가 게시되었어요!</string>
 </resources>
