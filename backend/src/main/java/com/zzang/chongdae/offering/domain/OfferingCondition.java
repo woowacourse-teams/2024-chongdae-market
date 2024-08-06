@@ -8,14 +8,14 @@ public enum OfferingCondition {
     AVAILABLE;
 
     public static OfferingCondition decideBy(OfferingStatus offeringStatus) {
+        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()) {
+            return CONFIRMED;
+        }
         if (offeringStatus.isCountFull()) {
             return FULL;
         }
         if (offeringStatus.isDeadlineOver()) {
             return TIME_OUT;
-        }
-        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()) {
-            return CONFIRMED;
         }
         return AVAILABLE;
     }
