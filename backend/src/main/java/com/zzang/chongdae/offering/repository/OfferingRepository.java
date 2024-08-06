@@ -20,7 +20,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     List<OfferingWithRole> findAllWithRoleByMember(MemberEntity member);
 
     @Query("""
-
             SELECT o
             FROM OfferingEntity o
             WHERE o.id < :lastId AND (o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
