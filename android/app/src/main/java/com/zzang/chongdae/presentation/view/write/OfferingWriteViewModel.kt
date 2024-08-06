@@ -156,8 +156,8 @@ class OfferingWriteViewModel(
         time: String,
     ) {
         val dateTime = "$date $time"
-        val inputFormat = SimpleDateFormat("yyyy년 M월 d일 a h시 m분", Locale.KOREAN)
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val inputFormat = SimpleDateFormat(INPUT_DATE_TIME_FORMAT, Locale.KOREAN)
+        val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
 
         val parsedDateTime = inputFormat.parse(dateTime)
         deadlineValue.value = parsedDateTime?.let { outputFormat.format(it) }
@@ -249,6 +249,8 @@ class OfferingWriteViewModel(
         private const val ERROR_FLOAT_FORMAT = -1f
         private const val MINIMUM_TOTAL_COUNT = 2
         private const val MAXIMUM_TOTAL_COUNT = 10_000
+        private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
+        private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringsRepository: OfferingsRepository) =

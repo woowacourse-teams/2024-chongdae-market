@@ -147,7 +147,7 @@ class OfferingWriteFragment : Fragment() {
         hourOfDay: Int,
         minute: Int,
     ) {
-        val amPm = if (hourOfDay < 12) "오전" else "오후"
+        val amPm = if (hourOfDay < 12) getString(R.string.all_am) else getString(R.string.all_pm)
         val hour = if (hourOfDay % 12 == 0) 12 else hourOfDay % 12
         textView.text = getString(R.string.write_selected_time, amPm, hour, minute)
     }
