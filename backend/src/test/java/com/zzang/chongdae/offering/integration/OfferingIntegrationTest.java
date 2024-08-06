@@ -132,8 +132,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetAllOffering {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("last-id").description("마지막 공모 id (필수)"),
-                parameterWithName("page-size").description("페이지 크기 (필수)")
+                parameterWithName("filter").description("필터 이름 (기본값: RECENT)"
+                        + getEnumValuesAsString(OfferingFilter.class)),
+                parameterWithName("search").description("검색어"),
+                parameterWithName("last-id").description("마지막 공모 id"),
+                parameterWithName("page-size").description("페이지 크기 (기본값: 10)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].id").description("공모 id"),
@@ -168,7 +171,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseAllOffering_when_givenPageInfo() {
             given(spec).log().all()
                     .filter(document("get-all-offering-success", resource(successSnippets)))
-                    .queryParam("last-id", 1)
+                    .queryParam("filter", "RECENT")
+                    .queryParam("search", "title")
+                    .queryParam("last-id", 10)
                     .queryParam("page-size", 10)
                     .when().get("/offerings")
                     .then().log().all()
@@ -237,10 +242,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetAllOfferingFilter {
 
         List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("filters[].keyword").description("키워드"
+                fieldWithPath("filters[].name").description("필터 이름"
                         + getEnumValuesAsString(OfferingFilter.class)),
-                fieldWithPath("filters[]name").description("이름"),
-                fieldWithPath("filters[]type").description("타입"
+                fieldWithPath("filters[].value").description("필터 디스플레이 이름"),
+                fieldWithPath("filters[].type").description("필터 디스플레이 여부"
                         + getEnumValuesAsString(OfferingFilterType.class))
         );
         ResourceSnippetParameters successSnippets = builder()
