@@ -7,9 +7,6 @@
             name="vm"
             type="com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel" />
 
-        <variable
-            name="offeringWriteFragment"
-            type="com.zzang.chongdae.presentation.view.write.OfferingWriteFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

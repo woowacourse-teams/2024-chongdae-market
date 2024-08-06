@@ -64,10 +64,7 @@ class OfferingWriteFragment : Fragment() {
         viewModel.deadlineChoiceEvent.observe(viewLifecycleOwner) {
             val dialog = Dialog(requireActivity())
             val dateTimeBinding = DialogDateTimePickerBinding.inflate(layoutInflater)
-            dateTimeBinding.apply {
-                vm = viewModel
-                offeringWriteFragment = this@OfferingWriteFragment
-            }
+            dateTimeBinding.vm = viewModel
             dialog.setContentView(dateTimeBinding.root)
             dialog.show()
             setDateTimeText(dateTimeBinding)
