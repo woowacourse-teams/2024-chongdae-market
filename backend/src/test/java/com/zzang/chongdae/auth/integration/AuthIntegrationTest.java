@@ -11,6 +11,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import com.epages.restdocs.apispec.HeaderDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -130,6 +131,51 @@ class AuthIntegrationTest extends IntegrationTest {
                     .when().post("/auth/signup")
                     .then().log().all()
                     .statusCode(409);
+        }
+    }
+
+    @DisplayName("토큰 재발급")
+    @Nested
+    class Refresh {
+
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("refreshToken").description("재발급에 필요한 토큰")
+        );
+        List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
+                headerWithName("Set-Cookie").description("""
+                        access_token=a.b.c; Path=/; HttpOnly \n
+                        refresh_token=a.b.c; Path=/; HttpOnly
+                        """)
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("토큰 재발급")
+                .description("토큰을 재발급합니다.")
+                .requestFields(requestDescriptors)
+                .requestSchema(schema("RefreshRequest"))
+                .responseHeaders(responseHeaderDescriptors)
+                .build();
+
+        MemberEntity member;
+
+        @BeforeEach
+        void setUp() {
+            member = memberFixture.createMember();
+        }
+
+        @DisplayName("토큰을 재발급 한다.")
+        @Test
+        void should_refreshSuccess_when_givenRefreshToken() {
+            RefreshRequest request = new RefreshRequest(
+                    cookieProvider.createCookies().getValue("refresh_token")
+            );
+
+            given(spec).log().all()
+                    .filter(document("refresh-success", resource(successSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/auth/refresh")
+                    .then().log().all()
+                    .statusCode(200);
         }
     }
 }
