@@ -11,7 +11,6 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
@@ -32,22 +31,17 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
 
-    public Long saveComment(CommentSaveRequest request) {
-        MemberEntity loginMember = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+    public Long saveComment(CommentSaveRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
-        CommentEntity comment = new CommentEntity(loginMember, offering, request.content());
+        CommentEntity comment = new CommentEntity(member, offering, request.content());
         CommentEntity savedComment = commentRepository.save(comment);
         return savedComment.getId();
     }
 
-    public CommentRoomAllResponse getAllCommentRoom(Long loginMemberId) {
-        MemberEntity loginMember = memberRepository.findById(loginMemberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
-
-        List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(loginMember);
+    public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
+        List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(member);
         List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
                 .filter(offeringWithRole -> offeringWithRole.getOffering().hasParticipant())
                 .map(this::toCommentRoomAllResponseItem)
@@ -72,22 +66,15 @@ public class CommentService {
                 .orElseGet(() -> new CommentLatestResponse(null, null));
     }
 
-    public CommentAllResponse getAllComment(Long offeringId, Long loginMemberId) {
-        validateMemberExistence(loginMemberId);
+    public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         List<CommentWithRole> commentsWithRole = commentRepository.findAllWithRoleByOffering(offering);
         List<CommentAllResponseItem> responseItems = commentsWithRole.stream()
-                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, loginMemberId))
+                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, member.getId()))
                 .toList();
         return new CommentAllResponse(responseItems);
-    }
-
-    private void validateMemberExistence(Long memberId) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new MarketException(MemberErrorCode.NOT_FOUND);
-        }
     }
 
     private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long loginMemberId) {

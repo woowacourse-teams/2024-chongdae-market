@@ -30,8 +30,11 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(unique = true, length = 10)
     private String nickname;
 
-    public MemberEntity(String nickname) {
-        this(null, nickname);
+    @NotNull
+    private String password;
+
+    public MemberEntity(String nickname, String password) {
+        this(null, nickname, password);
     }
 
     public boolean isSameMember(Long memberId) {
