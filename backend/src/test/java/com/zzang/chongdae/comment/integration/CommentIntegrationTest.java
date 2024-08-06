@@ -5,7 +5,6 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
-import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
@@ -280,78 +279,6 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .pathParam("offering-id", offering.getId() + 100)
                     .queryParam("member-id", member.getId())
                     .when().get("/comments/{offering-id}")
-                    .then().log().all()
-                    .statusCode(400);
-        }
-    }
-
-    @DisplayName("댓글방 상태 변경")
-    @Nested
-    class UpdateCommentRoomStatus {
-
-        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
-                parameterWithName("offering-id").description("공모 id (필수)")
-        );
-        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id (필수)")
-        );
-        List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("updatedStatus").description("변경된 상태")
-        );
-        ResourceSnippetParameters successSnippets = builder()
-                .summary("댓글방 상태 변경")
-                .description("댓글방의 상태를 변경합니다.")
-                .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
-                .responseFields(successResponseDescriptors)
-                .responseSchema(schema("CommentRoomStatusUpdateSuccessResponse"))
-                .build();
-        ResourceSnippetParameters failSnippets = builder()
-                .summary("댓글방 상태 변경")
-                .description("댓글방의 상태를 변경합니다.")
-                .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
-                .responseFields(failResponseDescriptors)
-                .responseSchema(schema("CommentRoomStatusUpdateFailResponse"))
-                .build();
-        MemberEntity member;
-        OfferingEntity offering;
-
-        @BeforeEach
-        void setUp() {
-            member = memberFixture.createMember();
-            offering = offeringFixture.createOffering(member);
-            offeringMemberFixture.createProposer(member, offering);
-            commentFixture.createComment(member, offering);
-        }
-
-        @DisplayName("댓글방 상태를 다음 상태로 변경할 수 있다")
-        @Test
-        void should_updateStatus_when_givenOfferingIdAndMemberId() {
-            RestAssured.given(spec).log().all()
-                    .filter(document("update-comment-room-status-success", resource(successSnippets)))
-                    .pathParam("offering-id", offering.getId())
-                    .queryParam("member-id", member.getId())
-                    .when().put("/comments/{offering-id}/status")
-                    .then().log().all()
-                    .statusCode(200);
-
-            RestAssured.given().log().all()
-                    .pathParam("offering-id", offering.getId())
-                    .when().get("/offerings/{offering-id}/status")
-                    .then().log().all()
-                    .statusCode(200)
-                    .body("status", is("BUYING"));
-        }
-
-        @DisplayName("유효하지 않은 공모에 대해 댓글방 상태를 변경할 경우 예외가 발생한다.")
-        @Test
-        void should_throwException_when_invalidOffering() {
-            RestAssured.given(spec).log().all()
-                    .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
-                    .pathParam("offering-id", offering.getId() + 100)
-                    .queryParam("member-id", member.getId())
-                    .when().put("/comments/{offering-id}/status")
                     .then().log().all()
                     .statusCode(400);
         }

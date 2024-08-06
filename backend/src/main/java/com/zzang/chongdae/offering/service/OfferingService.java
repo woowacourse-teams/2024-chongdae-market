@@ -1,11 +1,13 @@
 package com.zzang.chongdae.offering.service;
 
+import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.status.CommentRoomStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -63,12 +66,6 @@ public class OfferingService {
         );
     }
 
-    public OfferingStatusResponse getOfferingStatus(Long offeringId) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        return new OfferingStatusResponse(offering.getRoomStatus());
-    }
-
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
@@ -81,6 +78,24 @@ public class OfferingService {
         OfferingEntity offering = request.toEntity(member);
         OfferingEntity savedOffering = offeringRepository.save(offering);
         return savedOffering.getId();
+    }
+
+    public OfferingStatusResponse getOfferingStatus(Long offeringId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return new OfferingStatusResponse(offering.getRoomStatus());
+    }
+
+    @Transactional
+    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, Long loginMemberId) {
+        // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        CommentRoomStatus updatedStatus = offering.moveStatus();
+        if (updatedStatus.equals(CommentRoomStatus.BUYING)) {
+            offering.confirm();
+        }
+        return new CommentRoomStatusResponse(updatedStatus);
     }
 
     public OfferingProductImageResponse uploadProductImage(MultipartFile image) {

@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offering.controller;
 
+import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,13 +44,6 @@ public class OfferingController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/offerings/{offering-id}/status")
-    public ResponseEntity<OfferingStatusResponse> getOfferingStatus(
-            @PathVariable(value = "offering-id") Long offeringId) { // TODO : 로그인 사용자가 참여자인지 확인
-        OfferingStatusResponse response = offeringService.getOfferingStatus(offeringId);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/offerings/{offering-id}/meetings")
     public ResponseEntity<OfferingMeetingResponse> getOfferingMeeting(
             @PathVariable(value = "offering-id") Long offeringId) {
@@ -61,6 +56,21 @@ public class OfferingController {
             @RequestBody @Valid OfferingSaveRequest request) {
         Long offeringId = offeringService.saveOffering(request);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
+    }
+
+    @GetMapping("/offerings/{offering-id}/status")
+    public ResponseEntity<OfferingStatusResponse> getOfferingStatus(
+            @PathVariable(value = "offering-id") Long offeringId) { // TODO : 로그인 사용자가 참여자인지 확인
+        OfferingStatusResponse response = offeringService.getOfferingStatus(offeringId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/offerings/{offering-id}/status")
+    public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
+            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestParam(value = "member-id") Long loginMemberId) {
+        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, loginMemberId);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/offerings/product-images/s3")
