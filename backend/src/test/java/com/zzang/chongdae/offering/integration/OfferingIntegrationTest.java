@@ -119,10 +119,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("filter").description("필터 이름 (기본값: RECENT)"
-                        + getEnumValuesAsString(OfferingFilter.class)),
-                parameterWithName("search").description("검색어"),
-                parameterWithName("last-id").description("마지막 공모 id"),
-                parameterWithName("page-size").description("페이지 크기 (기본값: 10)")
+                        + getEnumValuesAsString(OfferingFilter.class)).optional(),
+                parameterWithName("search").description("검색어").optional(),
+                parameterWithName("last-id").description("마지막 공모 id").optional(),
+                parameterWithName("page-size").description("페이지 크기 (기본값: 10)").optional()
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].id").description("공모 id"),
