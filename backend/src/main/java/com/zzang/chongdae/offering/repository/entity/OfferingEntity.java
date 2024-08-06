@@ -106,6 +106,10 @@ public class OfferingEntity extends BaseTimeEntity {
         return this.roomStatus;
     }
 
+    public void updateConditionConfirmed() {
+        this.isManualConfirmed = true;
+    }
+
     public OfferingPrice toOfferingPrice() {
         return new OfferingPrice(totalCount, totalPrice);
     }

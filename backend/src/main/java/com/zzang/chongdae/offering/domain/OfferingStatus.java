@@ -48,12 +48,6 @@ public class OfferingStatus {
     }
 
     public boolean isAutoConfirmed() {
-        // 마감시간이 지나고, 인원까지 꽉 찬 경우?
-        // 마감시간이 지나지 않고, 인원이 꽉 찬 경우 -> FULL
-        // 마감시간이 지나지 않거나, 인원이 거의 찬 경우 -> IMMINENT
-        // 마감시간이 지나지 않고, 인원이 꽉 차지 않은 경우 -> AVAILABLE
-        // 마감시간이 지나고, 인원이 꽉 차지 않은 경우 -> confirmed
-        //
         return isCountFull() && isDeadlineOver();
     }
 
