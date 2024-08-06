@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NickNameWordReader {
+public class NicknameWordReader {
 
     public List<String> read(String path) {
         try (FileInputStream fileInputStream = new FileInputStream(path);

@@ -15,7 +15,7 @@ public class NicknameWordInitializer {
     private static final String NOUNS_FILE_PATH = "src/test/resources/static/nickname/nouns.txt";
 
     private final NicknameWordPicker nicknameWordPicker;
-    private final NickNameWordReader nickNameWordReader;
+    private final NicknameWordReader nickNameWordReader;
     private List<String> adjectives;
     private List<String> nouns;
 

@@ -10,7 +10,7 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.member.service.NickNameGenerator;
+import com.zzang.chongdae.member.service.NicknameGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final NickNameGenerator nickNameGenerator;
+    private final NicknameGenerator nickNameGenerator;
 
     public TokenDto login(LoginRequest request) {
         String password = passwordEncoder.encode(request.ci());

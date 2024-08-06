@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 public class NicknameGeneratorTest {
 
     @Autowired
-    NickNameGenerator nickNameGenerator;
+    NicknameGenerator nickNameGenerator;
 
     @DisplayName("닉네임 생성에 성공한다.")
     @Test

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class NickNameGenerator {
+public class NicknameGenerator {
 
     private static final int MAX_TRY_COUNT = 3;
 
