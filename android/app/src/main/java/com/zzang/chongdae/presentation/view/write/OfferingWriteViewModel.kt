@@ -113,7 +113,7 @@ class OfferingWriteViewModel(
                     _errorEvent.setValue(R.string.error_empty_product_url)
                     return@launch
                 }
-                thumbnailUrl.value = it.imageUrl
+                thumbnailUrl.value = HTTPS + it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
                 _errorEvent.setValue(R.string.error_invalid_product_url)
@@ -258,6 +258,7 @@ class OfferingWriteViewModel(
         private const val ERROR_FLOAT_FORMAT = -1f
         private const val MINIMUM_TOTAL_COUNT = 2
         private const val MAXIMUM_TOTAL_COUNT = 10_000
+        private const val HTTPS = "https:"
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringRepository: OfferingRepository) =
