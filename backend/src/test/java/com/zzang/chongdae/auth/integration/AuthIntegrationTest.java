@@ -15,12 +15,17 @@ import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.http.ContentType;
+import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 class AuthIntegrationTest extends IntegrationTest {
@@ -151,18 +156,30 @@ class AuthIntegrationTest extends IntegrationTest {
                 .summary("토큰 재발급")
                 .description("토큰을 재발급합니다.")
                 .requestFields(requestDescriptors)
-                .requestSchema(schema("RefreshRequest"))
                 .responseHeaders(responseHeaderDescriptors)
+                .requestSchema(schema("RefreshRequest"))
+                .build();
+        ResourceSnippetParameters failedSnippets = builder()
+                .requestFields(requestDescriptors)
+                .requestSchema(schema("RefreshFailRequest"))
                 .build();
 
+        @Value("${security.jwt.token.refresh-secret-key}")
+        String refreshSecretKey;
+
+        @Value("${security.jwt.token.refresh-token-expired}")
+        Duration refreshTokenExpired;
+
         MemberEntity member;
+        Date now;
 
         @BeforeEach
         void setUp() {
             member = memberFixture.createMember();
+            now = Date.from(clock.instant());
         }
 
-        @DisplayName("토큰을 재발급 한다.")
+        @DisplayName("refreshToken으로 accessToken과 refreshToken을 재발급 한다.")
         @Test
         void should_refreshSuccess_when_givenRefreshToken() {
             RefreshRequest request = new RefreshRequest(
@@ -176,6 +193,47 @@ class AuthIntegrationTest extends IntegrationTest {
                     .when().post("/auth/refresh")
                     .then().log().all()
                     .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 refeshToken인 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_givenInvalidRefreshToken() {
+
+            RefreshRequest request = new RefreshRequest(
+                    "invalidRefreshToken"
+            );
+
+            given(spec).log().all()
+                    .filter(document("refresh-fail-invalid-token", resource(failedSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/auth/refresh")
+                    .then().log().all()
+                    .statusCode(401);
+        }
+
+        @DisplayName("만료된 refeshToken인 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_givenExpiredRefreshToken() {
+            Date alreadyExpiredAt = new Date(now.getTime() - refreshTokenExpired.toMillis());
+
+            String expiredToken = Jwts.builder()
+                    .setSubject(member.getId().toString())
+                    .setExpiration(alreadyExpiredAt)
+                    .signWith(SignatureAlgorithm.HS256, refreshSecretKey)
+                    .compact();
+
+            RefreshRequest request = new RefreshRequest(
+                    expiredToken
+            );
+
+            given(spec).log().all()
+                    .filter(document("refresh-fail-expired-token", resource(failedSnippets)))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/auth/refresh")
+                    .then().log().all()
+                    .statusCode(401);
         }
     }
 }

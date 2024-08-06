@@ -11,11 +11,10 @@ import com.zzang.chongdae.global.config.TestConfig;
 import com.zzang.chongdae.global.domain.DomainSupplier;
 import com.zzang.chongdae.global.helper.CookieProvider;
 import com.zzang.chongdae.global.helper.DatabaseCleaner;
-import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
-import com.zzang.chongdae.offering.config.TestCrawlerConfig;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import java.time.Clock;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +50,9 @@ public abstract class IntegrationTest extends DomainSupplier {
 
     @Autowired
     protected CookieProvider cookieProvider;
+
+    @Autowired
+    protected Clock clock;
 
     @LocalServerPort
     private int port;
