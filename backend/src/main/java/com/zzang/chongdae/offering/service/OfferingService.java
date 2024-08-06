@@ -4,6 +4,7 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -12,13 +13,15 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUploadedImageResponse;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +38,7 @@ public class OfferingService {
     private final MemberRepository memberRepository;
     private final StorageService storageService;
     private final ProductImageExtractor extractor;
+    private final OfferingFetcher offeringFetcher;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -50,9 +54,10 @@ public class OfferingService {
         return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
     }
 
-    public OfferingAllResponse getAllOffering(Long lastId, Integer pageSize) {
+    public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
         Pageable pageable = PageRequest.ofSize(pageSize);
-        List<OfferingEntity> offerings = offeringRepository.findByIdGreaterThan(lastId, pageable);
+        OfferingFilter filter = OfferingFilter.findByName(filterName);
+        List<OfferingEntity> offerings = offeringFetcher.fetchOfferings(filter, searchKeyword, lastId, pageable);
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
@@ -61,6 +66,13 @@ public class OfferingService {
                 })
                 .toList()
         );
+    }
+
+    public OfferingFilterAllResponse getAllOfferingFilter() {
+        List<OfferingFilterAllResponseItem> filters = Arrays.stream(OfferingFilter.values())
+                .map(OfferingFilterAllResponseItem::new)
+                .toList();
+        return new OfferingFilterAllResponse(filters);
     }
 
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {

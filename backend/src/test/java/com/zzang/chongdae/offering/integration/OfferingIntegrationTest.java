@@ -14,6 +14,8 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingFilter;
+import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.storage.service.StorageService;
@@ -130,8 +132,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
     class GetAllOffering {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("last-id").description("마지막 공모 id (필수)"),
-                parameterWithName("page-size").description("페이지 크기 (필수)")
+                parameterWithName("filter").description("필터 이름 (기본값: RECENT)"
+                        + getEnumValuesAsString(OfferingFilter.class)),
+                parameterWithName("search").description("검색어"),
+                parameterWithName("last-id").description("마지막 공모 id"),
+                parameterWithName("page-size").description("페이지 크기 (기본값: 10)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].id").description("공모 id"),
@@ -166,7 +171,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseAllOffering_when_givenPageInfo() {
             given(spec).log().all()
                     .filter(document("get-all-offering-success", resource(successSnippets)))
-                    .queryParam("last-id", 1)
+                    .queryParam("filter", "RECENT")
+                    .queryParam("search", "title")
+                    .queryParam("last-id", 10)
                     .queryParam("page-size", 10)
                     .when().get("/offerings")
                     .then().log().all()
@@ -227,6 +234,35 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 필터 목록 조회")
+    @Nested
+    class GetAllOfferingFilter {
+
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("filters[].name").description("필터 이름"
+                        + getEnumValuesAsString(OfferingFilter.class)),
+                fieldWithPath("filters[].value").description("필터 디스플레이 이름"),
+                fieldWithPath("filters[].type").description("필터 디스플레이 여부"
+                        + getEnumValuesAsString(OfferingFilterType.class))
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 필터 목록 조회")
+                .description("공모 목록 조회 시 필터링할 수 있는 키워드 목록을 조회합니다.")
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingFilterSuccessResponse"))
+                .build();
+
+        @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
+        @Test
+        void should_responseOfferingFilter_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("get-all-offering-filter-success", resource(successSnippets)))
+                    .when().get("/offerings/filters")
+                    .then().log().all()
+                    .statusCode(200);
         }
     }
 
