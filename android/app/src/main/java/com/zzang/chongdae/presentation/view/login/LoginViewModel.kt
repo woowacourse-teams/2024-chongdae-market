@@ -25,14 +25,14 @@ class LoginViewModel(
     fun postLogin(ci: String) {
         viewModelScope.launch {
             authRepository.saveLogin(
-                ci = "gadfa",
+                ci = "mmnbb",
             ).onSuccess {
                 Log.d("alsong", "login success")
                 _navigateEvent.setValue(true)
             }.onFailure {
                 Log.e("alsong", "postLogin ${it.message}")
                 when (it.message) {
-                    "404" -> postSignup("gadfa")
+                    "404" -> postSignup("mmnbb")
 //                    "401" ->
                 }
             }

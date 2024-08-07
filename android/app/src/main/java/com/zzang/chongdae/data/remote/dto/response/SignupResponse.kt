@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignupResponse(
-    @SerialName("memberResponse") val memberResponse: MemberResponse,
-    @SerialName("tokenResponse") val tokenResponse: TokenResponse,
+    @SerialName("member") val memberResponse: MemberResponse,
+    @SerialName("token") val tokenResponse: TokenResponse,
 )
