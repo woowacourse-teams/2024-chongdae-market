@@ -266,7 +266,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
                 fieldWithPath("totalCount").description("총원 (필수)"),
                 fieldWithPath("totalPrice").description("총가격 (필수)"),
-                fieldWithPath("eachPrice").description("낱개 가격"),
+                fieldWithPath("originPrice").description("원 가격"),
                 fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소"),
@@ -349,7 +349,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(400);
         }
 
-        @DisplayName("전체 가격을 총 인원으로 나눈 가격이 낱개 가격보다 클 경우 예외가 발생한다.")
+        @DisplayName("원가가 n빵 가격보다 작을 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_dividedPrice() {
             OfferingSaveRequest request = new OfferingSaveRequest(
