@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="23dp"
             android:layout_marginTop="21dp"
+            android:fontFamily="@font/suit_medium"
             android:text="@string/comment_text"
             android:textColor="@color/black_1100"
             android:textSize="@dimen/font_size_18"
