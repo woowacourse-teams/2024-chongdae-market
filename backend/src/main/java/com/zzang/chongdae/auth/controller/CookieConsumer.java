@@ -24,6 +24,10 @@ public class CookieConsumer {
         return getTokenByCookieName(ACCESS_TOKEN_COOKIE_NAME, cookies);
     }
 
+    public String getRefreshToken(Cookie[] cookies) {
+        return getTokenByCookieName(REFRESH_TOKEN_COOKIE_NAME, cookies);
+    }
+
     private String getTokenByCookieName(String cookieName, Cookie[] cookies) {
         if (cookies == null) {
             throw new MarketException(AuthErrorCode.INVALID_TOKEN);

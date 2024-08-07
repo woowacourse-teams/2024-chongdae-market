@@ -11,7 +11,6 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import com.epages.restdocs.apispec.HeaderDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
-import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -82,16 +81,21 @@ class AuthIntegrationTest extends IntegrationTest {
                 fieldWithPath("ci").description("회원 식별자 인증 정보")
         );
         List<FieldDescriptor> responseDescriptors = List.of(
-                fieldWithPath("member.id").description("회원 id"),
-                fieldWithPath("member.nickname").description("닉네임"),
-                fieldWithPath("token.accessToken").description("accessToken"),
-                fieldWithPath("token.refreshToken").description("refreshToken")
+                fieldWithPath("memberId").description("회원 id"),
+                fieldWithPath("nickname").description("닉네임")
+        );
+        List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
+                headerWithName("Set-Cookie").description("""
+                        access_token=a.b.c; Path=/; HttpOnly \n
+                        refresh_token=a.b.c; Path=/; HttpOnly
+                        """)
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("회원 가입")
                 .description("회원 식별자 인증 정보로 가입합니다.")
                 .requestFields(requestDescriptors)
                 .responseFields(responseDescriptors)
+                .responseHeaders(responseHeaderDescriptors)
                 .requestSchema(schema("SignupRequest"))
                 .responseSchema(schema("SignupResponse"))
                 .build();
@@ -145,9 +149,6 @@ class AuthIntegrationTest extends IntegrationTest {
     @Nested
     class Refresh {
 
-        List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("refreshToken").description("재발급에 필요한 refreshToken")
-        );
         List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
                 headerWithName("Set-Cookie").description("""
                         access_token=a.b.c; Path=/; HttpOnly \n
@@ -157,13 +158,11 @@ class AuthIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("토큰 재발급")
                 .description("토큰을 재발급합니다.")
-                .requestFields(requestDescriptors)
                 .responseHeaders(responseHeaderDescriptors)
-                .requestSchema(schema("RefreshRequest"))
                 .build();
         ResourceSnippetParameters failedSnippets = builder()
-                .requestFields(requestDescriptors)
-                .requestSchema(schema("RefreshFailRequest"))
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("RefreshFailResponse"))
                 .build();
 
         @Value("${security.jwt.token.refresh-secret-key}")
@@ -184,14 +183,10 @@ class AuthIntegrationTest extends IntegrationTest {
         @DisplayName("refreshToken으로 accessToken과 refreshToken을 재발급 한다.")
         @Test
         void should_refreshSuccess_when_givenRefreshToken() {
-            RefreshRequest request = new RefreshRequest(
-                    cookieProvider.createCookies().getValue("refresh_token")
-            );
 
             given(spec).log().all()
                     .filter(document("refresh-success", resource(successSnippets)))
-                    .contentType(ContentType.JSON)
-                    .body(request)
+                    .cookies(cookieProvider.createCookies())
                     .when().post("/auth/refresh")
                     .then().log().all()
                     .statusCode(200);
@@ -201,14 +196,9 @@ class AuthIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_givenInvalidRefreshToken() {
 
-            RefreshRequest request = new RefreshRequest(
-                    "invalidRefreshToken"
-            );
-
             given(spec).log().all()
                     .filter(document("refresh-fail-invalid-token", resource(failedSnippets)))
-                    .contentType(ContentType.JSON)
-                    .body(request)
+                    .cookie("refresh_token", "invalidRefreshToken")
                     .when().post("/auth/refresh")
                     .then().log().all()
                     .statusCode(401);
@@ -218,21 +208,15 @@ class AuthIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_givenExpiredRefreshToken() {
             Date alreadyExpiredAt = new Date(now.getTime() - refreshTokenExpired.toMillis());
-
             String expiredToken = Jwts.builder()
                     .setSubject(member.getId().toString())
                     .setExpiration(alreadyExpiredAt)
                     .signWith(SignatureAlgorithm.HS256, refreshSecretKey)
                     .compact();
 
-            RefreshRequest request = new RefreshRequest(
-                    expiredToken
-            );
-
             given(spec).log().all()
                     .filter(document("refresh-fail-expired-token", resource(failedSnippets)))
-                    .contentType(ContentType.JSON)
-                    .body(request)
+                    .cookie("refresh_token", expiredToken)
                     .when().post("/auth/refresh")
                     .then().log().all()
                     .statusCode(401);
