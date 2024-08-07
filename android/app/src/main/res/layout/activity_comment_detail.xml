@@ -112,7 +112,7 @@
                 android:elevation="5dp"
                 android:fontFamily="@font/suit_semibold"
                 android:gravity="center"
-                android:onClick="@{() -> vm.updateStatus()}"
+                android:onClick="@{() -> vm.updateOfferingStatus()}"
                 android:text="@{vm.offeringStatusButtonText}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_15"
