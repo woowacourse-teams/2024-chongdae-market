@@ -4,6 +4,7 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
+import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import okhttp3.MultipartBody
 
 interface OfferingRemoteDataSource {
@@ -21,4 +22,6 @@ interface OfferingRemoteDataSource {
     suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse>
 
     suspend fun fetchFilters(): Result<FiltersResponse>
+
+    suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatusResponse>
 }

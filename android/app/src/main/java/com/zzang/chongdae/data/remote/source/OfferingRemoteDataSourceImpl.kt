@@ -6,6 +6,7 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
+import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -28,9 +29,9 @@ class OfferingRemoteDataSourceImpl(
         return runCatching {
             val response = service.postOfferingWrite(offeringWriteRequest)
             if (response.isSuccessful) {
-                response.body() ?: error("에러 발생: null")
+                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("에러 발생: ${response.code()}")
+                error("$ERROR_PREFIX${response.code()}")
             }
         }
     }
@@ -40,9 +41,9 @@ class OfferingRemoteDataSourceImpl(
             val response: Response<ProductUrlResponse> =
                 service.postProductImageOg(productUrl.toProductUrlRequest())
             if (response.isSuccessful) {
-                response.body() ?: error("에러 발생: null")
+                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("에러 발생: ${response.code()}")
+                error("$ERROR_PREFIX${response.code()}")
             }
         }
     }
@@ -51,9 +52,9 @@ class OfferingRemoteDataSourceImpl(
         return runCatching {
             val response: Response<ProductUrlResponse> = service.postProductImageS3(image)
             if (response.isSuccessful) {
-                response.body() ?: error("에러 발생: null")
+                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("에러 발생: ${response.code()}")
+                error("$ERROR_PREFIX${response.code()}")
             }
         }
     }
@@ -62,4 +63,20 @@ class OfferingRemoteDataSourceImpl(
         runCatching {
             service.getFilters().body() ?: throw IllegalStateException()
         }
+
+    override suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatusResponse> {
+        return runCatching {
+            val response: Response<OfferingStatusResponse> = service.getOfferingStatus(offeringId)
+            if (response.isSuccessful) {
+                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
+            } else {
+                error("$ERROR_PREFIX${response.code()}")
+            }
+        }
+    }
+
+    companion object {
+        private const val ERROR_PREFIX = "에러 발생: "
+        private const val ERROR_NULL_MESSAGE = "null"
+    }
 }
