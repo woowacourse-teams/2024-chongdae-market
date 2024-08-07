@@ -7,6 +7,7 @@ import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
+import com.zzang.chongdae.data.remote.dto.response.StatusResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -55,4 +56,9 @@ interface OfferingApiService {
     suspend fun postProductImageS3(
         @Part image: MultipartBody.Part,
     ): Response<ProductUrlResponse>
+
+    @GET("/offerings/{offering-id}/status")
+    suspend fun getOfferingStatus(
+        @Path("offering-id") offeringId: Long,
+    ): Response<StatusResponse>
 }
