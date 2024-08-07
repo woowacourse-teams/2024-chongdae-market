@@ -56,6 +56,8 @@ class OfferingRepositoryImpl(
     override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
         return offeringRemoteDataSource.saveProductImageS3(image).mapCatching {
             it.toDomain()
+        }
+    }
 
     override suspend fun fetchFilters(): Result<List<Filter>> {
         return offeringRemoteDataSource.fetchFilters().mapCatching {
