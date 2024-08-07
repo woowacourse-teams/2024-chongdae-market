@@ -13,7 +13,7 @@ public class OfferingPrice {
 
     private final int totalCount;
     private final int totalPrice;
-    private final Integer eachPrice;
+    private final Integer originPrice;
 
     public int calculateDividedPrice() {
         return BigDecimal.valueOf(totalPrice)
@@ -22,13 +22,13 @@ public class OfferingPrice {
     }
 
     public double calculateDiscountRate() {
-        return (double) (eachPrice - totalPrice / totalCount) / eachPrice;
+        return (double) (originPrice - totalPrice / totalCount) / originPrice;
     }
 
-    public void validateEachPrice() {
+    public void validateOriginPrice() {
         int dividedPrice = totalPrice / totalCount;
-        if (dividedPrice > eachPrice) {
-            throw new MarketException(OfferingErrorCode.CANNOT_DIVIDED_PRICE_GREATER_THEN_EACH_PRICE);
+        if (originPrice < dividedPrice) {
+            throw new MarketException(OfferingErrorCode.CANNOT_ORIGIN_PRICE_LESS_THEN_DIVIDED_PRICE);
         }
     }
 }

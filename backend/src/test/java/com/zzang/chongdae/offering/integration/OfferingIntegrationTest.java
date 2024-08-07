@@ -132,7 +132,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].totalCount").description("총원"),
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
                 fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
-                fieldWithPath("offerings[].eachPrice").description("낱개 가격"),
+                fieldWithPath("offerings[].originPrice").description("원 가격"),
                 fieldWithPath("offerings[].condition").description("공모 상태"
                         + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
@@ -386,7 +386,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("status").description("상태"),
-                fieldWithPath("steps[]").description("단계")
+                fieldWithPath("imageUrl").description("이미지 url")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 상태 조회")

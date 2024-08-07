@@ -88,7 +88,7 @@ public class OfferingService {
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
         OfferingPrice offeringPrice = offering.toOfferingPrice();
-        offeringPrice.validateEachPrice();
+        offeringPrice.validateOriginPrice();
         OfferingEntity savedOffering = offeringRepository.save(offering);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);

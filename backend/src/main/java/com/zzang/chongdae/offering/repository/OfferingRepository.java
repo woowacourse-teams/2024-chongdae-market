@@ -41,10 +41,10 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE ((o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice < :discountRate
-                    OR ((o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice = :discountRate AND o.id < :lastId))
+            WHERE ((o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice < :discountRate
+                    OR ((o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice = :discountRate AND o.id < :lastId))
                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
-            ORDER BY (o.eachPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.eachPrice DESC, o.id DESC
+            ORDER BY (o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
             double discountRate, Long lastId, String keyword, Pageable pageable);

@@ -19,7 +19,7 @@ public enum OfferingErrorCode implements ErrorResponse {
     CANNOT_PARTICIPATE(BAD_REQUEST, "참여할 수 없는 공모입니다."),
     INVALID_CONDITION(BAD_REQUEST, "유효하지 않은 공모 상태입니다"),
     NOT_PARTICIPATE_MEMBER(BAD_REQUEST, "해당 공모의 참여자가 아닙니다."),
-    CANNOT_DIVIDED_PRICE_GREATER_THEN_EACH_PRICE(BAD_REQUEST, "전체 가격을 총 인원으로 나눈 가격은 낱개 가격보다 높게 설정할 수 없습니다.");
+    CANNOT_ORIGIN_PRICE_LESS_THEN_DIVIDED_PRICE(BAD_REQUEST, "원가 가격이 n빵 가격보다 작을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
