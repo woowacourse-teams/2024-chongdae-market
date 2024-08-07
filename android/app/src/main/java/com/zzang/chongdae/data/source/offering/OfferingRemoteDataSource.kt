@@ -2,7 +2,6 @@ package com.zzang.chongdae.data.source.offering
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
@@ -25,6 +24,4 @@ interface OfferingRemoteDataSource {
     suspend fun fetchFilters(): Result<FiltersResponse>
 
     suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatusResponse>
-
-    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
 }
