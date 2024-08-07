@@ -2,6 +2,7 @@ package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.SignupOutput;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
@@ -28,16 +29,16 @@ public class AuthController {
     public ResponseEntity<Void> login(
             @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
         TokenDto tokenDto = authService.login(request);
-        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
-        cookieConsumer.addCookies(servletResponse, cookies);
+        addTokenToHttpServletResponse(tokenDto, servletResponse);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/auth/signup")
     public ResponseEntity<SignupResponse> signup(
             @RequestBody SignupRequest request, HttpServletResponse servletResponse) {
-        SignupResponse response = authService.signup(request); // TODO: serviceDTO로 사용하고, 별도의 controllerDTO 만들기
-        addTokenToHttpServletResponse(response.token(), servletResponse);
+        SignupOutput output = authService.signup(request);
+        SignupResponse response = new SignupResponse(output);
+        addTokenToHttpServletResponse(output.token(), servletResponse);
         return ResponseEntity.ok(response);
     }
 

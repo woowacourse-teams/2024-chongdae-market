@@ -81,10 +81,8 @@ class AuthIntegrationTest extends IntegrationTest {
                 fieldWithPath("ci").description("회원 식별자 인증 정보")
         );
         List<FieldDescriptor> responseDescriptors = List.of(
-                fieldWithPath("member.id").description("회원 id"),
-                fieldWithPath("member.nickname").description("닉네임"),
-                fieldWithPath("token.accessToken").description("accessToken"),
-                fieldWithPath("token.refreshToken").description("refreshToken")
+                fieldWithPath("memberId").description("회원 id"),
+                fieldWithPath("nickname").description("닉네임")
         );
         List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
                 headerWithName("Set-Cookie").description("""
