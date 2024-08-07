@@ -13,6 +13,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -61,4 +62,9 @@ interface OfferingApiService {
     suspend fun getOfferingStatus(
         @Path("offering-id") offeringId: Long,
     ): Response<OfferingStatusResponse>
+    
+    @PATCH("/offerings/{offering-id}/status")
+    suspend fun patchOfferingStatus(
+        @Path("offering-id") offeringId: Long,
+    ): Response<Unit>
 }
