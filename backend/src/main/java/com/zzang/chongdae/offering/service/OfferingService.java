@@ -20,7 +20,9 @@ import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
+import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
 import java.util.Arrays;
 import java.util.List;
@@ -88,6 +90,10 @@ public class OfferingService {
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         offeringPrice.validateEachPrice();
         OfferingEntity savedOffering = offeringRepository.save(offering);
+
+        OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
+        offeringMemberRepository.save(offeringMember);
+
         return savedOffering.getId();
     }
 
