@@ -7,7 +7,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.util.Linkify
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -24,17 +23,21 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.regex.Pattern
 
-@BindingAdapter("changedText", "colorId")
+@BindingAdapter("title", "colorId")
 fun TextView.changeSpecificTextColor(
-    changedText: String?,
+    title: String?,
     colorId: Int,
 ) {
-    Log.e("seogi", "$changedText, $colorId")
-    changedText?.let {
-        if (changedText !in this.text) return
-        val spannableString = SpannableString(this.text)
-        val startIndex = this.text.indexOf(it)
-        val endIndex = startIndex + it.length
+    title?.let {
+        if (!it.contains("*")) return
+        val originTitle = removeAsterisks(this.text.toString())
+        val changedTitleText = extractKeywordBetweenAsterisks(it) ?: return
+
+        val spannableString = SpannableString(originTitle)
+
+        val startIndex = originTitle.indexOf(changedTitleText)
+        val endIndex = startIndex + changedTitleText.length
+
         spannableString.setSpan(
             ForegroundColorSpan(colorId),
             startIndex,
@@ -44,6 +47,15 @@ fun TextView.changeSpecificTextColor(
 
         this.text = spannableString
     }
+}
+
+private fun removeAsterisks(title: String): String {
+    return title.replace("*", "")
+}
+
+private fun extractKeywordBetweenAsterisks(text: String): String? {
+    val regex = "\\*(.*?)\\*".toRegex()
+    return regex.find(text)?.groupValues?.get(1)
 }
 
 @BindingAdapter("url")

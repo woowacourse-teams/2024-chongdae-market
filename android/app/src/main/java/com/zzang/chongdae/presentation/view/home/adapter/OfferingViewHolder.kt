@@ -3,18 +3,18 @@ package com.zzang.chongdae.presentation.view.home.adapter
 import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 import com.zzang.chongdae.databinding.ItemOfferingBinding
-import com.zzang.chongdae.presentation.view.home.OfferingUiModel
+import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
 
 class OfferingViewHolder(
     private val binding: ItemOfferingBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
-        offeringUiModel: OfferingUiModel,
+        offering: Offering,
         onOfferingClickListener: OnOfferingClickListener,
         searchKeyword: String?,
     ) {
-        binding.offering = offeringUiModel.offering
+        binding.offering = offering
         binding.onOfferingClickListener = onOfferingClickListener
         binding.searchKeyword = searchKeyword
         setCancellationLineToEachPrice()

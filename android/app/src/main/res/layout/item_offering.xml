@@ -70,7 +70,7 @@
             android:text="@{offering.title}"
             android:textColor="@color/black_900"
             android:textSize="@dimen/font_size_16"
-            app:changedText="@{searchKeyword}"
+            app:title="@{offering.title}"
             app:colorId="@{@color/search_keyword}"
             app:layout_constraintStart_toEndOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"

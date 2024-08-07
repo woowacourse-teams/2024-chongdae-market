@@ -15,6 +15,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
+import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
@@ -25,8 +26,8 @@ import kotlinx.coroutines.launch
 class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
 ) : ViewModel(), OnFilterClickListener {
-    private val _offerings = MutableLiveData<PagingData<OfferingUiModel>>()
-    val offerings: LiveData<PagingData<OfferingUiModel>> get() = _offerings
+    private val _offerings = MutableLiveData<PagingData<Offering>>()
+    val offerings: LiveData<PagingData<Offering>> get() = _offerings
 
     val search: MutableLiveData<String?> = MutableLiveData(null)
 
@@ -65,11 +66,28 @@ class OfferingViewModel(
                     OfferingPagingSource(offeringRepository, search.value, selectedFilter.value)
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
-                _offerings.value = pagingData.map { it.toUiModel() }
+                _offerings.value = pagingData.map {
+                    if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
+                        return@map it.copy(title = highlightSearchKeyword(it.title, search.value!!))
+                    }
+                    it.copy(title = removeAsterisks(it.title))
+                }
             }
         }
         _searchEvent.setValue(search.value)
     }
+
+    private fun removeAsterisks(title: String): String {
+        return title.replace("*", "")
+    }
+
+    private fun highlightSearchKeyword(title: String, keyword: String): String {
+        return title.replace(keyword, "*$keyword*")
+    }
+
+    private fun isTitleContainSearchKeyword(it: Offering) = (search.value as String) in it.title
+
+    private fun isSearchKeywordExist() = (search.value != null) && (search.value != "")
 
     private fun fetchFilters() {
         viewModelScope.launch {
