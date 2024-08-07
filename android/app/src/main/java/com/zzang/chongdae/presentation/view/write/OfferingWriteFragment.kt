@@ -87,7 +87,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
             if (multipartBodyPart != null) {
                 viewModel.uploadImageFile(multipartBodyPart)
             } else {
-                showToast(R.string.error_file_conversion)
+                showToast(R.string.all_error_file_conversion)
             }
         }
     }
@@ -112,12 +112,12 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     }
 
     private fun onPermissionsGranted() {
-        showToast(R.string.permission_granted)
+        showToast(R.string.all_permission_granted)
         launchPhotoPicker()
     }
 
     private fun onPermissionsDenied() {
-        showToast(R.string.permission_denied)
+        showToast(R.string.all_permission_denied)
     }
 
     private fun searchPlace() {

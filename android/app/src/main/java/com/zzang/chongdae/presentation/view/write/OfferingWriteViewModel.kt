@@ -138,7 +138,7 @@ class OfferingWriteViewModel(
                 thumbnailUrl.value = it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _errorEvent.setValue(R.string.error_image_upload)
+                _errorEvent.setValue(R.string.all_error_image_upload)
             }
         }
     }
