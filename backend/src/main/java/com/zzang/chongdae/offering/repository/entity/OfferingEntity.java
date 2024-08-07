@@ -119,7 +119,7 @@ public class OfferingEntity extends BaseTimeEntity {
     }
 
     public OfferingMeeting toOfferingMeeting() {
-        return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail);
+        return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail, meetingAddressDong);
     }
 
     public boolean hasParticipant() {
@@ -128,5 +128,16 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public boolean isStatusGrouping() {
         return this.roomStatus.isGrouping();
+    }
+
+    public boolean isNotProposedBy(MemberEntity other) {
+        return !this.member.equals(other);
+    }
+
+    public void updateMeeting(OfferingMeeting offeringMeeting) {
+        this.deadline = offeringMeeting.getDeadline();
+        this.meetingAddress = offeringMeeting.getMeetingAddress();
+        this.meetingAddressDetail = offeringMeeting.getMeetingAddressDetail();
+        this.meetingAddressDong = offeringMeeting.getMeetingAddressDong();
     }
 }

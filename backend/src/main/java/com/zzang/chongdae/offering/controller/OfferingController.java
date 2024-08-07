@@ -7,6 +7,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
@@ -59,6 +60,15 @@ public class OfferingController {
             @PathVariable(value = "offering-id") Long offeringId,
             MemberEntity member) {
         OfferingMeetingResponse response = offeringService.getOfferingMeeting(offeringId, member);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/offerings/{offering-id}/meetings")
+    public ResponseEntity<OfferingMeetingResponse> updateOfferingMeeting(
+            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestBody @Valid OfferingMeetingUpdateRequest request,
+            MemberEntity member) {
+        OfferingMeetingResponse response = offeringService.updateOfferingMeeting(offeringId, request, member);
         return ResponseEntity.ok(response);
     }
 
