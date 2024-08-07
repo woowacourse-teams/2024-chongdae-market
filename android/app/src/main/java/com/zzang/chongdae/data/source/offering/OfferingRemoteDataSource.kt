@@ -24,4 +24,6 @@ interface OfferingRemoteDataSource {
     suspend fun fetchFilters(): Result<FiltersResponse>
 
     suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatusResponse>
+
+    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
 }
