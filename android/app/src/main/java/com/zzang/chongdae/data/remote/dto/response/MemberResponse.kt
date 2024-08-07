@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MemberResponse(
-    @SerialName("id") val memberId: Long,
+    @SerialName("memberId") val memberId: Long,
     @SerialName("nickname") val nickname: String,
 )

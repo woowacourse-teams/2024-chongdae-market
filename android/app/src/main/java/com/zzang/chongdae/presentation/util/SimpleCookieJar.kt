@@ -6,6 +6,7 @@ import okhttp3.HttpUrl
 
 class SimpleCookieJar : CookieJar {
     private val cookieStore: MutableMap<String, List<Cookie>> = mutableMapOf()
+
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
         return cookieStore[url.host] ?: emptyList()
     }

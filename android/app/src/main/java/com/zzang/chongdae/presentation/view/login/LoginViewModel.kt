@@ -33,7 +33,7 @@ class LoginViewModel(
                 Log.e("alsong", "postLogin ${it.message}")
                 when (it.message) {
                     "404" -> postSignup(ci)
-//                    "401" ->
+                    "401" -> postRefreshToken()
                 }
             }
         }
@@ -45,14 +45,23 @@ class LoginViewModel(
                 ci = ci,
             ).onSuccess {
                 Log.d("alsong", "signup success")
-                Log.d("alsong", "id: ${it.member.memberId}")
-                Log.d("alsong", "nickName: ${it.member.nickName}")
+                Log.d("alsong", "id: ${it.memberId}")
+                Log.d("alsong", "nickName: ${it.nickName}")
                 context.dataStore.edit { preferences ->
-                    preferences[MEMBER_ID_KEY] = it.member.memberId
-                    preferences[NICKNAME_KEY] = it.member.nickName
+                    preferences[MEMBER_ID_KEY] = it.memberId
+                    preferences[NICKNAME_KEY] = it.nickName
                 }
+                postSignup(ci)
             }.onFailure {
                 Log.e("alsong", it.message.toString())
+            }
+        }
+    }
+
+    private fun postRefreshToken() {
+        viewModelScope.launch {
+            authRepository.saveRefresh().onSuccess {
+            }.onFailure {
             }
         }
     }

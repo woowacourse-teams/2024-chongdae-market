@@ -101,7 +101,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 application.dataStore.data.collect {
                     Log.d(TAG, "observeNavigateEvent: ${it[LoginViewModel.MEMBER_ID_KEY]}")
-                    Log.d(TAG, "observeNavigateEvent: ${it.get(LoginViewModel.NICKNAME_KEY)}")
+                    Log.d(TAG, "observeNavigateEvent: ${it[LoginViewModel.NICKNAME_KEY]}")
                 }
             }
         }
