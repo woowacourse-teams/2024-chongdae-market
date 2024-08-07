@@ -22,38 +22,40 @@ class LoginViewModel(
     private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
 
-    private val _signupEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val signupEvent: SingleLiveData<Boolean> get() = _signupEvent
-
     fun postLogin(ci: String) {
         viewModelScope.launch {
             authRepository.saveLogin(
-                ci = "ㄻㅇㄹㄴㅁㄹ",
+                ci = "gadfa",
             ).onSuccess {
                 Log.d("alsong", "login success")
                 _navigateEvent.setValue(true)
             }.onFailure {
                 Log.e("alsong", "postLogin ${it.message}")
                 when (it.message) {
-                    "404" -> postSignup(ci)
-                    "401" -> _navigateEvent.setValue(true)
+                    "404" -> postSignup("gadfa")
+//                    "401" ->
                 }
             }
         }
     }
 
-    fun postSignup(ci: String) {
+    private fun postSignup(ci: String) {
+        Log.d("alsong", "사인업 들어옴")
         viewModelScope.launch {
+            Log.d("alsong", "사인업 들어옴2")
             authRepository.saveSignup(
                 ci = ci,
             ).onSuccess {
+                Log.d("alsong", "사인업 들어옴3")
                 Log.d("alsong", "signup success")
-                context.dataStore.edit { preferences ->
-                    preferences[MEMBER_ID_KEY] = it.memberId
-                    preferences[NICKNAME_KEY] = it.nickName
-                }
+                Log.d("alsong", "signup success ${it.member.nickName}")
+                Log.d("alsong", "signup success ${it.member.nickName}")
+//                context.dataStore.edit { preferences ->
+//                    preferences[MEMBER_ID_KEY] = it.memberId
+//                    preferences[NICKNAME_KEY] = it.nickName
+//                }
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("alsong", it.message.toString())
             }
         }
     }

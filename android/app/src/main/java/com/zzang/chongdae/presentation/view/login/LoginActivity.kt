@@ -11,6 +11,10 @@ import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.ActivityLoginBinding
 import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.login.LoginViewModel.Companion.dataStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private var _binding: ActivityLoginBinding? = null
@@ -93,6 +97,12 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private fun observeNavigateEvent() {
         viewModel.navigateEvent.observe(this) {
             MainActivity.startActivity(this)
+            CoroutineScope(Dispatchers.Main).launch {
+                application.dataStore.data.collect {
+                    Log.d(TAG, "observeNavigateEvent: ${it[LoginViewModel.MEMBER_ID_KEY]}")
+                    Log.d(TAG, "observeNavigateEvent: ${it.get(LoginViewModel.NICKNAME_KEY)}")
+                }
+            }
         }
     }
 
