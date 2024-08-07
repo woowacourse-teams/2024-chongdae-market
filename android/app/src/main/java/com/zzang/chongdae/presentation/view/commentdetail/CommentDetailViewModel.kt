@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,11 +19,12 @@ import java.time.LocalDateTime
 class CommentDetailViewModel(
     private val offeringId: Long,
     val offeringTitle: String,
+    private val offeringRepository: OfferingRepository,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
-    val commentContent = MutableLiveData<String>("")
+    val commentContent = MutableLiveData("")
 
-    private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
+    private val _isCollapsibleViewVisible = MutableLiveData(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
     private val _deadline = MutableLiveData<LocalDateTime>()
@@ -41,15 +42,26 @@ class CommentDetailViewModel(
     private var cachedComments: List<Comment> = emptyList()
     private var pollJob: Job? = null
 
-    private val _offeringStatus = MutableLiveData(OfferingStatus.Recruiting)
-    val offeringStatus: LiveData<OfferingStatus> get() = _offeringStatus
+    private val _offeringStatusButtonText = MutableLiveData<String>()
+    val offeringStatusButtonText: LiveData<String> get() = _offeringStatusButtonText
+
+    private val _offeringStatusImageUrl = MutableLiveData<String>()
+    val offeringStatusImageUrl: LiveData<String> get() = _offeringStatusImageUrl
 
     init {
         startPolling()
+        updateStatus()
     }
 
     fun updateStatus() {
-        _offeringStatus.value = _offeringStatus.value?.let { OfferingStatus.nextStatus(it) }
+        viewModelScope.launch {
+            offeringRepository.fetchOfferingStatus(offeringId).onSuccess {
+                _offeringStatusButtonText.value = it.buttonText
+                _offeringStatusImageUrl.value = it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
     }
 
     private fun loadComments() {
@@ -132,6 +144,7 @@ class CommentDetailViewModel(
         fun getFactory(
             offeringId: Long,
             offeringTitle: String,
+            offeringRepository: OfferingRepository,
             commentDetailRepository: CommentDetailRepository,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
@@ -141,6 +154,7 @@ class CommentDetailViewModel(
                 return CommentDetailViewModel(
                     offeringId,
                     offeringTitle,
+                    offeringRepository,
                     commentDetailRepository,
                 ) as T
             }
