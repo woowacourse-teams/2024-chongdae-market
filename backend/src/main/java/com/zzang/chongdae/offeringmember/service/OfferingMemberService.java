@@ -7,10 +7,15 @@ import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
+import com.zzang.chongdae.offeringmember.domain.OfferingMembers;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
+import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
+import com.zzang.chongdae.offeringmember.service.dto.ProposerResponseItem;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +56,18 @@ public class OfferingMemberService {
         if (offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
             throw new MarketException(OfferingMemberErrorCode.DUPLICATED);
         }
+    }
+
+    public ParticipantResponse getAllParticipant(Long offeringId, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+        OfferingMembers members = new OfferingMembers(offeringMembers);
+        members.validateParticipants(member);
+        OfferingMemberEntity proposer = members.getProposer();
+        List<ParticipantResponseItem> participants = members.getParticipants().stream()
+                .map(ParticipantResponseItem::new)
+                .toList();
+        return new ParticipantResponse(new ProposerResponseItem(proposer), participants);
     }
 }

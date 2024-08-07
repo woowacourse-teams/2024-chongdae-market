@@ -42,4 +42,12 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     public OfferingMemberEntity(MemberEntity member, OfferingEntity offering, OfferingMemberRole role) {
         this(null, member, offering, role);
     }
+
+    public boolean isSameMember(MemberEntity member) {
+        return this.member.getId().equals(member.getId());
+    }
+
+    public boolean isProposer() {
+        return this.role.isProposer();
+    }
 }
