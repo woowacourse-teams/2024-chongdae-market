@@ -48,7 +48,7 @@ class OfferingRepositoryImpl(
             it.toDomain()
         }
     }
-    
+
     override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
         return offeringRemoteDataSource.saveProductImageS3(image).mapCatching {
             it.toDomain()

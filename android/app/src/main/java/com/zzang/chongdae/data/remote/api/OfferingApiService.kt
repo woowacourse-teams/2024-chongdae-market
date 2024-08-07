@@ -43,7 +43,7 @@ interface OfferingApiService {
     suspend fun postProductImageOg(
         @Body productUrl: ProductUrlRequest,
     ): Response<ProductUrlResponse>
-    
+
     @Multipart
     @POST("/offerings/product-images/s3")
     suspend fun postProductImageS3(

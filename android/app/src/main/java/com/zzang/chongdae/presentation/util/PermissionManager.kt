@@ -13,20 +13,22 @@ class PermissionManager(
     private val onPermissionGranted: () -> Unit,
     private val onPermissionDenied: () -> Unit,
 ) {
-    private val storagePermissions = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
+    private val storagePermissions =
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        )
 
-    private val requestPermissionLauncher = fragment.registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        if (permissions.values.all { it }) {
-            onPermissionGranted()
-        } else {
-            onPermissionDenied()
+    private val requestPermissionLauncher =
+        fragment.registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions(),
+        ) { permissions ->
+            if (permissions.values.all { it }) {
+                onPermissionGranted()
+            } else {
+                onPermissionDenied()
+            }
         }
-    }
 
     fun requestPermissions() {
         if (isAndroid13OrAbove() || hasPermissions(fragment.requireContext(), storagePermissions)) {
@@ -36,10 +38,12 @@ class PermissionManager(
         }
     }
 
-    fun isAndroid13OrAbove(): Boolean =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    fun isAndroid13OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
-    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean {
+    private fun hasPermissions(
+        context: Context,
+        permissions: Array<String>,
+    ): Boolean {
         return permissions.all {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }

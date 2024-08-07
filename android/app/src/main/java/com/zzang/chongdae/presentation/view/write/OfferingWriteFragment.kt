@@ -69,17 +69,18 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         selectDeadline()
         searchPlace()
     }
-    
+
     private fun initializePhotoPicker() {
-        pickMediaLauncher = registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
-            handleMediaResult(uri)
-        }
+        pickMediaLauncher =
+            registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
+                handleMediaResult(uri)
+            }
     }
-    
+
     private fun launchPhotoPicker() {
         pickMediaLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
     }
-    
+
     private fun handleMediaResult(uri: Uri?) {
         if (uri != null) {
             val multipartBodyPart = FileUtils.getMultipartBodyPart(requireContext(), uri, "image")
@@ -90,7 +91,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
             }
         }
     }
-    
+
     private fun setUpPermissionManager() {
         permissionManager =
             PermissionManager(

@@ -131,16 +131,16 @@ class OfferingWriteViewModel(
     fun onUploadPhotoClick() {
         _imageUploadEvent.value = Unit
     }
-    
+
     fun uploadImageFile(multipartBody: MultipartBody.Part) {
-       viewModelScope.launch {
-              offeringRepository.saveProductImageS3(multipartBody).onSuccess {
+        viewModelScope.launch {
+            offeringRepository.saveProductImageS3(multipartBody).onSuccess {
                 thumbnailUrl.value = it.imageUrl
-              }.onFailure {
-                 Log.e("error", it.message.toString())
+            }.onFailure {
+                Log.e("error", it.message.toString())
                 _errorEvent.setValue(R.string.error_image_upload)
-              }
-       }
+            }
+        }
     }
 
     fun postProductImageOg() {

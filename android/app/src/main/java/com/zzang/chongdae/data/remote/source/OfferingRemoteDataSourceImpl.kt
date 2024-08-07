@@ -41,8 +41,8 @@ class OfferingRemoteDataSourceImpl(
             }
         }
     }
-    
-    override suspend fun saveProductImageS3(image: MultipartBody.Part) : Result<ProductUrlResponse> {
+
+    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse> {
         return runCatching {
             val response: Response<ProductUrlResponse> = service.postProductImageS3(image)
             if (response.isSuccessful) {

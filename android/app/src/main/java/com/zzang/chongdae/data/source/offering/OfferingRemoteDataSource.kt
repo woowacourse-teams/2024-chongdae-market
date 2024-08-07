@@ -14,6 +14,6 @@ interface OfferingRemoteDataSource {
     suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit>
 
     suspend fun saveProductImageOg(productUrl: String): Result<ProductUrlResponse>
-    
-    suspend fun saveProductImageS3(image:MultipartBody.Part): Result<ProductUrlResponse>
+
+    suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse>
 }
