@@ -1,5 +1,7 @@
 package com.zzang.chongdae.offering.domain;
 
+import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.AllArgsConstructor;
@@ -21,5 +23,12 @@ public class OfferingPrice {
 
     public double calculateDiscountRate() {
         return (double) (eachPrice - totalPrice / totalCount) / eachPrice;
+    }
+
+    public void validateEachPrice() {
+        int dividedPrice = totalPrice / totalCount;
+        if (dividedPrice > eachPrice) {
+            throw new MarketException(OfferingErrorCode.CANNOT_DIVIDED_PRICE_GREATER_THEN_EACH_PRICE);
+        }
     }
 }

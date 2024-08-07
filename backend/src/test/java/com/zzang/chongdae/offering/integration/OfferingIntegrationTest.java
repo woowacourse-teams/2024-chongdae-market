@@ -348,6 +348,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("전체 가격을 총 인원으로 나눈 가격이 낱개 가격보다 클 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_dividedPrice() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    3,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-success", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 
     @DisplayName("공모 상태 조회")
