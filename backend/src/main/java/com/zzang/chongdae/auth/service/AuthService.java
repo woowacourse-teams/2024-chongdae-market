@@ -2,7 +2,9 @@ package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.LoginResponse;
 import com.zzang.chongdae.auth.service.dto.RefreshRequest;
+import com.zzang.chongdae.auth.service.dto.RefreshResponse;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
@@ -24,11 +26,12 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
 
-    public TokenDto login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         String password = passwordEncoder.encode(request.ci());
         MemberEntity member = memberRepository.findByPassword(password)
                 .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_PASSWORD));
-        return jwtTokenProvider.createAuthToken(member.getId().toString());
+        TokenDto tokenDto = jwtTokenProvider.createAuthToken(member.getId().toString());
+        return new LoginResponse(tokenDto);
     }
 
     @Transactional
@@ -39,12 +42,14 @@ public class AuthService {
         }
         MemberEntity member = new MemberEntity(nickNameGenerator.generate(), password);
         MemberEntity savedMember = memberRepository.save(member);
-        return new SignupResponse(savedMember);
+        TokenDto tokenDto = jwtTokenProvider.createAuthToken(savedMember.getId().toString());
+        return new SignupResponse(savedMember, tokenDto);
     }
 
-    public TokenDto refresh(RefreshRequest request) {
+    public RefreshResponse refresh(RefreshRequest request) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(request.refreshToken());
-        return jwtTokenProvider.createAuthToken(memberId.toString());
+        TokenDto tokenDto = jwtTokenProvider.createAuthToken(memberId.toString());
+        return new RefreshResponse(tokenDto);
     }
 
     public MemberEntity findMemberByAccessToken(String token) {
