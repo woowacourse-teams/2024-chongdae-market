@@ -132,6 +132,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].totalCount").description("총원"),
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
                 fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
+                fieldWithPath("offerings[].eachPrice").description("낱개 가격"),
                 fieldWithPath("offerings[].condition").description("공모 상태"
                         + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
