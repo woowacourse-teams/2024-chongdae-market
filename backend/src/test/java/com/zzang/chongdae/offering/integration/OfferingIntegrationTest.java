@@ -267,14 +267,16 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingMeetingUpdateFailResponse"))
                 .build();
 
-        MemberEntity member;
+        MemberEntity proposer;
+        MemberEntity participant;
         OfferingEntity offering;
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember("ever");
-            offering = offeringFixture.createOffering(member);
-            offeringMemberFixture.createProposer(member, offering);
+            proposer = memberFixture.createMember("ever");
+            participant = memberFixture.createMember("eber");
+            offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
         }
 
         @DisplayName("총대는 공모 id로 공모 일정 정보를 수정할 수 있다")
@@ -289,13 +291,34 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("update-offering-meeting-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithCi(proposer.getNickname() + "5678"))
                     .pathParam("offering-id", offering.getId())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().patch("/offerings/{offering-id}/meetings")
                     .then().log().all()
                     .statusCode(200);
+        }
+
+        @DisplayName("총대가 아닌 참여자가 공모의 일정 정보를 수정할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_notProposer() {
+            OfferingMeetingUpdateRequest request = new OfferingMeetingUpdateRequest(
+                    LocalDateTime.of(3000, 1, 1, 0, 0, 0),
+                    "서울시 관악구 장군봉길1로",
+                    "123동 123호",
+                    "봉천동"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-meeting-fail-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi(participant.getNickname() + "5678"))
+                    .pathParam("offering-id", offering.getId())
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}/meetings")
+                    .then().log().all()
+                    .statusCode(400);
         }
 
         @DisplayName("유효하지 않은 공모의 일정 정보를 수정할 경우 예외가 발생한다.")
@@ -310,7 +333,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("update-offering-meeting-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithCi(proposer.getNickname() + "5678"))
                     .pathParam("offering-id", offering.getId() + 10000)
                     .contentType(ContentType.JSON)
                     .body(request)
