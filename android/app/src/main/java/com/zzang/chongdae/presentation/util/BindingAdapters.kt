@@ -94,7 +94,7 @@ private fun OfferingCondition.toOfferingComment(
         )
 }
 
-@BindingAdapter("offeringCondition") // 추후 condition추가(마감임박)에 따른 API변경있으면 수정 예정
+@BindingAdapter("offeringCondition")
 fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
     offeringCondition?.toStyle()?.let {
         this.setTextAppearance(it)
@@ -110,7 +110,7 @@ fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
 private fun TextView.setBackGroundTintByCondition(offeringCondition: OfferingCondition) {
     when (offeringCondition) {
         OfferingCondition.FULL -> this.setColor(R.color.offering_full)
-        OfferingCondition.IMMINENT -> this.setColor(R.color.offering_closed)
+        OfferingCondition.IMMINENT -> this.setColor(R.color.offering_imminent)
         OfferingCondition.CONFIRMED -> this.setColor(R.color.offering_closed)
         OfferingCondition.AVAILABLE -> this.setColor(R.color.offering_continue)
     }
@@ -123,7 +123,7 @@ private fun TextView.setColor(colorId: Int) {
 private fun OfferingCondition.toOfferingConditionText(context: Context) =
     when (this) {
         OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
-        OfferingCondition.IMMINENT -> context.getString(R.string.main_offering_closed) // 공구마감
+        OfferingCondition.IMMINENT -> context.getString(R.string.main_offering_imminent) // 마감임박
         OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_closed) // 공구마감
         OfferingCondition.AVAILABLE -> context.getString(R.string.main_offering_continue) // 모집중
     }
