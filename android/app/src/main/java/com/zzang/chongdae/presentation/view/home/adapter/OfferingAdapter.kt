@@ -11,6 +11,8 @@ import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
 class OfferingAdapter(
     private val onOfferingClickListener: OnOfferingClickListener,
 ) : PagingDataAdapter<Offering, OfferingViewHolder>(productComparator) {
+    private var searchKeyword: String? = null
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -24,7 +26,11 @@ class OfferingAdapter(
         holder: OfferingViewHolder,
         position: Int,
     ) {
-        getItem(position)?.let { holder.bind(it, onOfferingClickListener) }
+        getItem(position)?.let { holder.bind(it, onOfferingClickListener, searchKeyword) }
+    }
+
+    fun setSearchKeyword(keyword: String?) {
+        searchKeyword = keyword
     }
 
     companion object {
@@ -41,7 +47,7 @@ class OfferingAdapter(
                     oldItem: Offering,
                     newItem: Offering,
                 ): Boolean {
-                    return oldItem == newItem
+                    return oldItem.title == newItem.title
                 }
             }
     }

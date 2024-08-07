@@ -4,6 +4,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.text.Html
 import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -20,6 +22,41 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.regex.Pattern
+
+@BindingAdapter("title", "colorId")
+fun TextView.changeSpecificTextColor(
+    title: String?,
+    colorId: Int,
+) {
+    title?.let {
+        if (!it.contains("*")) return
+        val originTitle = removeAsterisks(this.text.toString())
+        val changedTitleText = extractKeywordBetweenAsterisks(it) ?: return
+
+        val spannableString = SpannableString(originTitle)
+
+        val startIndex = originTitle.indexOf(changedTitleText)
+        val endIndex = startIndex + changedTitleText.length
+
+        spannableString.setSpan(
+            ForegroundColorSpan(colorId),
+            startIndex,
+            endIndex,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+
+        this.text = spannableString
+    }
+}
+
+private fun removeAsterisks(title: String): String {
+    return title.replace("*", "")
+}
+
+private fun extractKeywordBetweenAsterisks(text: String): String? {
+    val regex = "\\*(.*?)\\*".toRegex()
+    return regex.find(text)?.groupValues?.get(1)
+}
 
 @BindingAdapter("url")
 fun TextView.setHyperlink(url: String?) {
