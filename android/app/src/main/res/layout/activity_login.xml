@@ -4,11 +4,11 @@
     <data>
         <variable
             name="vm"
-            type="com.zzang.chongdae.presentation.LoginViewModel" />
+            type="com.zzang.chongdae.presentation.view.login.LoginViewModel" />
 
         <variable
             name="onAuthClickListener"
-            type="com.zzang.chongdae.presentation.OnAuthClickListener"/>
+            type="com.zzang.chongdae.presentation.view.login.OnAuthClickListener"/>
 
     </data>
 

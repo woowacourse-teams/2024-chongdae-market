@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation
+package com.zzang.chongdae.presentation.view.login
 
 interface OnAuthClickListener {
     fun onLoginClick()

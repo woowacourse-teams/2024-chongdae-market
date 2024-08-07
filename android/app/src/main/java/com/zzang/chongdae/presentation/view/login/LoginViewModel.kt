@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation
+package com.zzang.chongdae.presentation.view.login
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.domain.repository.AuthRepository
 import kotlinx.coroutines.launch
-import org.apache.commons.lang3.mutable.Mutable
 
 class LoginViewModel(
     private val authRepository: AuthRepository,

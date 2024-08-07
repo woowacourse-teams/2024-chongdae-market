@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view
+package com.zzang.chongdae.presentation.view.login
 
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +10,6 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.ActivityLoginBinding
-import com.zzang.chongdae.presentation.LoginViewModel
-import com.zzang.chongdae.presentation.OnAuthClickListener
 
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private var _binding: ActivityLoginBinding? = null
