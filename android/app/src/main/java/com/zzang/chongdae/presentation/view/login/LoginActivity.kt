@@ -97,7 +97,8 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private fun observeNavigateEvent() {
         viewModel.navigateEvent.observe(this) {
             MainActivity.startActivity(this)
-            CoroutineScope(Dispatchers.Main).launch {
+            // data store의 데이터를 꺼내는 부분
+            CoroutineScope(Dispatchers.IO).launch {
                 application.dataStore.data.collect {
                     Log.d(TAG, "observeNavigateEvent: ${it[LoginViewModel.MEMBER_ID_KEY]}")
                     Log.d(TAG, "observeNavigateEvent: ${it.get(LoginViewModel.NICKNAME_KEY)}")
