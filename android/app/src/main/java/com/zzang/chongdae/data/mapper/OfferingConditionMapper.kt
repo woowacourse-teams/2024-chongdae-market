@@ -6,7 +6,7 @@ import com.zzang.chongdae.domain.model.OfferingCondition
 fun RemoteOfferingCondition.toDomain(): OfferingCondition {
     return when (this) {
         RemoteOfferingCondition.FULL -> OfferingCondition.FULL
-        RemoteOfferingCondition.TIME_OUT -> OfferingCondition.TIME_OUT
+        RemoteOfferingCondition.IMMINENT -> OfferingCondition.IMMINENT
         RemoteOfferingCondition.CONFIRMED -> OfferingCondition.CONFIRMED
         RemoteOfferingCondition.AVAILABLE -> OfferingCondition.AVAILABLE
     }

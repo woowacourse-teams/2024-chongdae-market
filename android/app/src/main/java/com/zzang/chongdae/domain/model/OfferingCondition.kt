@@ -2,7 +2,7 @@ package com.zzang.chongdae.domain.model
 
 enum class OfferingCondition {
     FULL,
-    TIME_OUT,
+    IMMINENT,
     CONFIRMED,
     AVAILABLE, ;
 

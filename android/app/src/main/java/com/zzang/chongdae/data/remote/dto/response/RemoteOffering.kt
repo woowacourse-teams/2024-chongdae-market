@@ -12,6 +12,7 @@ data class RemoteOffering(
     @SerialName("totalCount") val totalCount: Int,
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("dividedPrice") val dividedPrice: Int,
+    @SerialName("eachPrice") val eachPrice: Int?,
     @SerialName("condition") val condition: RemoteOfferingCondition,
     @SerialName("isOpen") val isOpen: Boolean,
 )

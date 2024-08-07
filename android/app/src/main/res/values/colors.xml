@@ -25,5 +25,6 @@
     <color name="offering_closed">#FF7B7B7B</color>
     <color name="offering_continue">#FF2EBC93</color>
     <color name="offering_full">#FF49619D</color>
+    <color name="offering_imminent">#FFF15642</color>
     <color name="my_page_title">#FF606060</color>
 </resources>
