@@ -7,7 +7,8 @@ VALUES ('dora', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'PtgtJCnn307FyCBvR
        ('seogi', '2024-07-15 00:00:00', '2024-07-15 00:00:00', '0CWUdyVQ1TP+GGlI9W2d5Gao/5HgT0MSeIwald0Qcsw='),
        ('chaechae', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WCkwnMjy/yW6odwkADguEIcHjFVELq+JLy+WeojvJ88=');
 
-INSERT INTO OFFERING (IS_MANUAL_CONFIRMED, TOTAL_COUNT, TOTAL_PRICE, EACH_PRICE, CURRENT_COUNT, CREATED_AT, UPDATED_AT,
+INSERT INTO OFFERING (IS_MANUAL_CONFIRMED, TOTAL_COUNT, TOTAL_PRICE, ORIGIN_PRICE, CURRENT_COUNT, CREATED_AT,
+                      UPDATED_AT,
                       MEMBER_ID, DEADLINE, DESCRIPTION, MEETING_ADDRESS, MEETING_ADDRESS_DETAIL, PRODUCT_URL,
                       THUMBNAIL_URL, TITLE, ROOM_STATUS)
 VALUES (FALSE, 3, 10000, 5000, 2, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 1, '2024-09-01 00:00:00', '공동구매해요',
@@ -37,7 +38,8 @@ VALUES (FALSE, 3, 10000, 5000, 2, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 
         'https://github.com/user-attachments/assets/87de86ac-b07e-4297-ac29-425b635fbae3',
         '젤리 같이 구매해요', 'GROUPING'),
        (FALSE, 8, 25000, 5000, 1, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 1, '2024-08-05 00:00:00', '공동구매해요',
-        '서울특별시 동대문구 왕산로 128', '', 'https://www.naver.com', 'https://github.com/user-attachments/assets/897ef4cf-006e-4d88-9e91-d15bf37e9063', '선풍기 공구 참가', 'GROUPING'),
+        '서울특별시 동대문구 왕산로 128', '', 'https://www.naver.com',
+        'https://github.com/user-attachments/assets/897ef4cf-006e-4d88-9e91-d15bf37e9063', '선풍기 공구 참가', 'GROUPING'),
        (FALSE, 8, 45000, 7000, 1, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 1, '2024-08-23 00:00:00', '공동구매해요',
         '서울특별시 중랑구 봉화산로 224', '', 'https://www.naver.com',
         'https://github.com/user-attachments/assets/f280868d-bbab-424e-8d2d-aa0f8ad5029a',
@@ -163,7 +165,7 @@ VALUES (FALSE, 3, 10000, 5000, 2, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 
        (FALSE, 10, 20000, 5000, 1, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 1, '2024-07-26 00:00:00', '공동구매해요',
         '서울특별시 양천구 목동서로 225', '', 'https://www.naver.com',
         'https://github.com/user-attachments/assets/2d7e125a-3254-43f6-99b4-c323f318c58a'
-        , '에스파 굿즈 구입 모집', 'GROUPING'),
+           , '에스파 굿즈 구입 모집', 'GROUPING'),
        (FALSE, 6, 35000, 5900, 1, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 2, '2024-08-04 00:00:00', '공동구매해요',
         '서울특별시 관악구 관악로 92', '', 'https://www.naver.com',
         'https://github.com/user-attachments/assets/c6b07e2f-3c7a-44f9-8d3c-a3431866d8f3',

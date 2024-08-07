@@ -22,7 +22,7 @@ public record OfferingSaveRequest(@NotBlank
                                   @NotNull
                                   Integer totalPrice,
 
-                                  Integer eachPrice,
+                                  Integer originPrice,
 
                                   @NotBlank
                                   String meetingAddress,
@@ -41,6 +41,6 @@ public record OfferingSaveRequest(@NotBlank
     public OfferingEntity toEntity(MemberEntity member) {
         return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, 1, false,
-                totalPrice, eachPrice, GROUPING);
+                totalPrice, originPrice, GROUPING);
     }
 }
