@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModel.getFactory(
             authRepository = (application as ChongdaeApp).authRepository,
+            context = applicationContext,
         )
     }
 
