@@ -157,6 +157,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             participant = memberFixture.createMember("poke");
             offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
+            offeringMemberFixture.createParticipant(participant, offering);
         }
 
         @DisplayName("게시된 공모의 참여자 목록을 확인할 수 있다")
@@ -189,7 +190,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("participants-fail-request-with-null", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithCi("dora5678"))
-                    .when().get("/participants")
+                    .when().get("/participants?offering-id=")
                     .then().log().all()
                     .statusCode(400);
         }
