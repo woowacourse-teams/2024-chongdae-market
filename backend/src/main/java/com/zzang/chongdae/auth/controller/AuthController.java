@@ -2,11 +2,11 @@ package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
-import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -35,17 +35,23 @@ public class AuthController {
 
     @PostMapping("/auth/signup")
     public ResponseEntity<SignupResponse> signup(
-            @RequestBody SignupRequest request) {
-        SignupResponse response = authService.signup(request);
+            @RequestBody SignupRequest request, HttpServletResponse servletResponse) {
+        SignupResponse response = authService.signup(request); // TODO: serviceDTO로 사용하고, 별도의 controllerDTO 만들기
+        addTokenToHttpServletResponse(response.token(), servletResponse);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/auth/refresh")
     public ResponseEntity<Void> refresh(
-            @RequestBody RefreshRequest request, HttpServletResponse servletResponse) {
-        TokenDto tokenDto = authService.refresh(request);
+            HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+        String refreshToken = cookieConsumer.getRefreshToken(servletRequest.getCookies());
+        TokenDto tokenDto = authService.refresh(refreshToken);
+        addTokenToHttpServletResponse(tokenDto, servletResponse);
+        return ResponseEntity.ok().build();
+    }
+
+    private void addTokenToHttpServletResponse(TokenDto tokenDto, HttpServletResponse servletResponse) {
         List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
         cookieConsumer.addCookies(servletResponse, cookies);
-        return ResponseEntity.ok().build();
     }
 }
