@@ -11,7 +11,7 @@ POST {{base-url}}/auth/signup
 Content-Type: application/json
 
 {
-  "ci": "poke12345678"
+  "ci": "poke123456783"
 }
 
 ### 토큰 재발급 API
