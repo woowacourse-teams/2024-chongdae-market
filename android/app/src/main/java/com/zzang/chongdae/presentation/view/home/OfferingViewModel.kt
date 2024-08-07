@@ -66,12 +66,13 @@ class OfferingViewModel(
                     OfferingPagingSource(offeringRepository, search.value, selectedFilter.value)
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
-                _offerings.value = pagingData.map {
-                    if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
-                        return@map it.copy(title = highlightSearchKeyword(it.title, search.value!!))
+                _offerings.value =
+                    pagingData.map {
+                        if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
+                            return@map it.copy(title = highlightSearchKeyword(it.title, search.value!!))
+                        }
+                        it.copy(title = removeAsterisks(it.title))
                     }
-                    it.copy(title = removeAsterisks(it.title))
-                }
             }
         }
         _searchEvent.setValue(search.value)
@@ -81,7 +82,10 @@ class OfferingViewModel(
         return title.replace("*", "")
     }
 
-    private fun highlightSearchKeyword(title: String, keyword: String): String {
+    private fun highlightSearchKeyword(
+        title: String,
+        keyword: String,
+    ): String {
         return title.replace(keyword, "*$keyword*")
     }
 
