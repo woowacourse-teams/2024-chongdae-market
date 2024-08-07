@@ -55,19 +55,19 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 Log.d(TAG, "토큰 정보 보기 실패")
+                loginWithKakao()
             } else if (tokenInfo != null) {
                 Log.d(TAG, "토큰 정보 보기 성공")
+                loadUserInformation()
             }
         }
-        loginWithKakao()
     }
 
-    private fun requestAuth() {
+    private fun loadUserInformation() {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Log.d(TAG, "사용자 정보 요청 실패 $error")
             } else if (user != null) {
-
                 Log.d(TAG, "사용자 정보 요청 성공 : $user")
                 val email = user.kakaoAccount?.email ?: return@me
                 viewModel.postSignup(email)
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         }
     }
 
-    fun loginWithKakao() {
+    private fun loginWithKakao() {
         // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
             UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                     UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                 } else if (token != null) {
                     Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                    requestAuth()
+                    loadUserInformation()
                 }
             }
         } else {
