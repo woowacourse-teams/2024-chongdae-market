@@ -11,33 +11,44 @@ import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import java.util.Arrays;
 
 public record OfferingStatusResponse(CommentRoomStatus status,
-                                     String imageUrl) {
+                                     String imageUrl,
+                                     String buttonText) {
 
-    public OfferingStatusResponse(CommentRoomStatus commentRoomStatus) {
-        this(commentRoomStatus, ImageMapper.toImage(commentRoomStatus));
+    public OfferingStatusResponse(CommentRoomStatus status) {
+        this(status, ViewMapper.toImage(status), ViewMapper.toButton(status));
     }
 
-    private enum ImageMapper {
+    private enum ViewMapper {
 
-        GROUPING_IMAGE(GROUPING, imageUrl("GROUPING")),
-        BUYING_IMAGE(BUYING, imageUrl("BUYING")),
-        TRADING_IMAGE(TRADING, imageUrl("TRADING")),
-        DONE_IMAGE(DONE, imageUrl("DONE"));
+        GROUPING_VIEW(GROUPING, imageUrl("GROUPING"), "인원확정"),
+        BUYING_VIEW(BUYING, imageUrl("BUYING"), "구매확정"),
+        TRADING_VIEW(TRADING, imageUrl("TRADING"), "거래확정"),
+        DONE_VIEW(DONE, imageUrl("DONE"), "거래완료");
 
         private final CommentRoomStatus roomStatus;
         private final String image;
+        private final String button;
 
-        ImageMapper(CommentRoomStatus roomStatus, String image) {
+        ViewMapper(CommentRoomStatus roomStatus, String image, String button) {
             this.roomStatus = roomStatus;
             this.image = image;
+            this.button = button;
         }
 
-        private static String toImage(CommentRoomStatus roomStatus) {
+        private static String toImage(CommentRoomStatus status) {
             return Arrays.stream(values())
-                    .filter(mapper -> mapper.roomStatus.equals(roomStatus))
+                    .filter(mapper -> mapper.roomStatus.equals(status))
                     .findFirst()
                     .orElseThrow(() -> new MarketException(OfferingErrorCode.INVALID_CONDITION))
                     .image;
+        }
+
+        private static String toButton(CommentRoomStatus status) {
+            return Arrays.stream(values())
+                    .filter(mapper -> mapper.roomStatus.equals(status))
+                    .findFirst()
+                    .orElseThrow(() -> new MarketException(OfferingErrorCode.INVALID_CONDITION))
+                    .button;
         }
 
         private static String imageUrl(String status) {
