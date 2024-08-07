@@ -4,6 +4,7 @@ import com.zzang.chongdae.data.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
+import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -14,12 +15,15 @@ class OfferingRepositoryImpl(
     private val offeringRemoteDataSource: OfferingRemoteDataSource,
 ) : OfferingRepository {
     override suspend fun fetchOfferings(
-        lastOfferingId: Long,
-        pageSize: Int,
+        filter: String?,
+        search: String?,
+        lastOfferingId: Long?,
+        pageSize: Int?,
     ): List<Offering> {
-        return offeringRemoteDataSource.fetchOfferings(lastOfferingId, pageSize).mapCatching {
-            it.offerings.map { it.toDomain() }
-        }.getOrThrow()
+        return offeringRemoteDataSource.fetchOfferings(filter, search, lastOfferingId, pageSize)
+            .mapCatching {
+                it.offerings.map { it.toDomain() }
+            }.getOrThrow()
     }
 
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
@@ -45,6 +49,12 @@ class OfferingRepositoryImpl(
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
         return offeringRemoteDataSource.saveProductImageOg(productUrl).mapCatching {
             it.toDomain()
+        }
+    }
+
+    override suspend fun fetchFilters(): Result<List<Filter>> {
+        return offeringRemoteDataSource.fetchFilters().mapCatching {
+            it.filters.map { it.toDomain() }
         }
     }
 }
