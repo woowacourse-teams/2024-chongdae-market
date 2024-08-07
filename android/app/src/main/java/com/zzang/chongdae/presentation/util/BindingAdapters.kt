@@ -4,7 +4,10 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.text.Html
 import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.text.util.Linkify
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +23,28 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.regex.Pattern
+
+@BindingAdapter("changedText", "colorId")
+fun TextView.changeSpecificTextColor(
+    changedText: String?,
+    colorId: Int,
+) {
+    Log.e("seogi", "$changedText, $colorId")
+    changedText?.let {
+        if (changedText !in this.text) return
+        val spannableString = SpannableString(this.text)
+        val startIndex = this.text.indexOf(it)
+        val endIndex = startIndex + it.length
+        spannableString.setSpan(
+            ForegroundColorSpan(colorId),
+            startIndex,
+            endIndex,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+
+        this.text = spannableString
+    }
+}
 
 @BindingAdapter("url")
 fun TextView.setHyperlink(url: String?) {

@@ -5,12 +5,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.zzang.chongdae.databinding.ItemOfferingBinding
-import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.presentation.view.home.OfferingUiModel
 import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
 
 class OfferingAdapter(
     private val onOfferingClickListener: OnOfferingClickListener,
-) : PagingDataAdapter<Offering, OfferingViewHolder>(productComparator) {
+) : PagingDataAdapter<OfferingUiModel, OfferingViewHolder>(productComparator) {
+    private var searchKeyword: String? = null
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -24,24 +26,34 @@ class OfferingAdapter(
         holder: OfferingViewHolder,
         position: Int,
     ) {
-        getItem(position)?.let { holder.bind(it, onOfferingClickListener) }
+        if (searchKeyword != null) {
+            getItem(position)?.let {
+                val isSearchedItem = (searchKeyword as String) in it.offering.title
+                holder.bind(it.copy(isSearched = isSearchedItem), onOfferingClickListener, searchKeyword)
+            }
+        }
+        getItem(position)?.let { holder.bind(it, onOfferingClickListener, searchKeyword) }
+    }
+
+    fun setSearchKeyword(keyword: String?) {
+        searchKeyword = keyword
     }
 
     companion object {
         private val productComparator =
-            object : DiffUtil.ItemCallback<Offering>() {
+            object : DiffUtil.ItemCallback<OfferingUiModel>() {
                 override fun areItemsTheSame(
-                    oldItem: Offering,
-                    newItem: Offering,
+                    oldItem: OfferingUiModel,
+                    newItem: OfferingUiModel,
                 ): Boolean {
-                    return oldItem.id == newItem.id
+                    return oldItem.isSearched == newItem.isSearched
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: Offering,
-                    newItem: Offering,
+                    oldItem: OfferingUiModel,
+                    newItem: OfferingUiModel,
                 ): Boolean {
-                    return oldItem == newItem
+                    return oldItem.offering == newItem.offering
                 }
             }
     }

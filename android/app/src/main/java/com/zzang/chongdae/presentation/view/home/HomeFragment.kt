@@ -100,6 +100,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         viewModel.offerings.observe(viewLifecycleOwner) {
             offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
+
+        viewModel.searchEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.setSearchKeyword(it)
+        }
     }
 
     override fun onClick(offeringId: Long) {

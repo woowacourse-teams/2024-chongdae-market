@@ -13,6 +13,10 @@
             name="onOfferingClickListener"
             type="com.zzang.chongdae.presentation.view.home.OnOfferingClickListener" />
 
+        <variable
+            name="searchKeyword"
+            type="String" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,6 +70,8 @@
             android:text="@{offering.title}"
             android:textColor="@color/black_900"
             android:textSize="@dimen/font_size_16"
+            app:changedText="@{searchKeyword}"
+            app:colorId="@{@color/search_keyword}"
             app:layout_constraintStart_toEndOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
             tools:text="제목" />
@@ -84,6 +90,7 @@
             android:id="@+id/tv_offering_condition_comment"
             style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
             android:layout_marginTop="2dp"
+            android:textColor="@color/gray_300"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
             app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
             app:offeringConditionForComment="@{offering.condition}"
