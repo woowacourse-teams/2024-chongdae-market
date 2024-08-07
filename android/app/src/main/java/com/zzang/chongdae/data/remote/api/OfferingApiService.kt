@@ -17,10 +17,10 @@ import retrofit2.http.Query
 interface OfferingApiService {
     @GET("/offerings")
     suspend fun getOfferings(
-        @Query("filter") filter: String? = null,
-        @Query("search") search: String? = null,
-        @Query("last-id") lastOfferingId: Long? = null,
-        @Query("page-size") pageSize: Int? = null,
+        @Query("filter") filter: String?,
+        @Query("search") search: String?,
+        @Query("last-id") lastOfferingId: Long?,
+        @Query("page-size") pageSize: Int?,
     ): Response<OfferingsResponse>
 
     @GET("/offerings/{offering-id}")

@@ -8,10 +8,10 @@ import retrofit2.http.Query
 
 interface OfferingRepository {
     suspend fun fetchOfferings(
-        filter: String? = null,
-        search: String? = null,
-        lastOfferingId: Long? = null,
-        pageSize: Int? = null,
+        filter: String?,
+        search: String?,
+        lastOfferingId: Long?,
+        pageSize: Int?,
     ): List<Offering>
 
     suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit>
