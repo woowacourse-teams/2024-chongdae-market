@@ -111,7 +111,7 @@ public class OfferingEntity extends BaseTimeEntity {
     }
 
     public OfferingPrice toOfferingPrice() {
-        return new OfferingPrice(totalCount, totalPrice);
+        return new OfferingPrice(totalCount, totalPrice, eachPrice);
     }
 
     public OfferingStatus toOfferingStatus() {
