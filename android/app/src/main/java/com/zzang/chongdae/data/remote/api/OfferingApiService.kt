@@ -5,9 +5,9 @@ import com.zzang.chongdae.data.remote.dto.request.ProductUrlRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body

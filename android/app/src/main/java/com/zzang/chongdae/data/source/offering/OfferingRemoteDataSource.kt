@@ -2,9 +2,9 @@ package com.zzang.chongdae.data.source.offering
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
+import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
 import okhttp3.MultipartBody
 
 interface OfferingRemoteDataSource {
