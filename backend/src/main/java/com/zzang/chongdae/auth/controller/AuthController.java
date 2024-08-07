@@ -2,12 +2,14 @@ package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
-import com.zzang.chongdae.auth.service.dto.LoginResponse;
 import com.zzang.chongdae.auth.service.dto.RefreshRequest;
-import com.zzang.chongdae.auth.service.dto.RefreshResponse;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
+import com.zzang.chongdae.auth.service.dto.TokenDto;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final CookieProducer cookieExtractor;
+    private final CookieConsumer cookieConsumer;
 
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> login(
-            @RequestBody @Valid LoginRequest request) {
-        LoginResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> login(
+            @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
+        TokenDto tokenDto = authService.login(request);
+        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
+        cookieConsumer.addCookies(servletResponse, cookies);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/auth/signup")
@@ -35,9 +41,11 @@ public class AuthController {
     }
 
     @PostMapping("/auth/refresh")
-    public ResponseEntity<RefreshResponse> refresh(
-            @RequestBody RefreshRequest request) {
-        RefreshResponse response = authService.refresh(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> refresh(
+            @RequestBody RefreshRequest request, HttpServletResponse servletResponse) {
+        TokenDto tokenDto = authService.refresh(request);
+        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
+        cookieConsumer.addCookies(servletResponse, cookies);
+        return ResponseEntity.ok().build();
     }
 }
