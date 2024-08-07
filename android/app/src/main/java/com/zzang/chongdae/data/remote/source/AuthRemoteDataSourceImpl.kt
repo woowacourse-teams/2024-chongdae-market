@@ -8,9 +8,9 @@ import com.zzang.chongdae.data.source.AuthRemoteDataSource
 class AuthRemoteDataSourceImpl(
     private val service: AuthApiService,
 ) : AuthRemoteDataSource {
-    override suspend fun saveLogin(ci: String): Result<Unit> {
+    override suspend fun saveLogin(ciRequest: CiRequest): Result<Unit> {
         return runCatching {
-            service.postLogin(ci).body() ?: throw IllegalStateException()
+            service.postLogin(ciRequest).body() ?: throw IllegalStateException()
         }
     }
 

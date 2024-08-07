@@ -10,7 +10,9 @@ class AuthRepositoryImpl(
     private val authRemoteDataSource: AuthRemoteDataSource,
 ) : AuthRepository {
     override suspend fun saveLogin(ci: String): Result<Unit> {
-        return authRemoteDataSource.saveLogin(ci)
+        return authRemoteDataSource.saveLogin(
+            ciRequest = CiRequest(ci),
+        )
     }
 
     override suspend fun saveSignup(ci: String): Result<Member> {

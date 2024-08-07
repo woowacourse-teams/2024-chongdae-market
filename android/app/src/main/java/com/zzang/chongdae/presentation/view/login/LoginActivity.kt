@@ -69,7 +69,8 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             } else if (user != null) {
                 Log.d(TAG, "사용자 정보 요청 성공 : $user")
                 val email = user.kakaoAccount?.email ?: return@me
-                viewModel.postSignup(email)
+                viewModel.postLogin(email)
+//                viewModel.postSignup(email)
             }
         }
     }

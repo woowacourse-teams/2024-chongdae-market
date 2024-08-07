@@ -13,13 +13,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.domain.repository.AuthRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val context: Context
 ) : ViewModel() {
+    fun postLogin(ci: String) {
+        viewModelScope.launch {
+            authRepository.saveLogin(
+                ci = ci,
+            ).onSuccess {
+                Log.d("alsong", "login success")
+            }.onFailure {
+                Log.e("alsong", "postLogin ${it.message.toString()}")
+            }
+        }
+    }
     fun postSignup(ci: String) {
         viewModelScope.launch {
             authRepository.saveSignup(

@@ -9,7 +9,7 @@ import retrofit2.http.POST
 interface AuthApiService {
     @POST("/auth/login")
     suspend fun postLogin(
-        @Body ci: String,
+        @Body ci: CiRequest,
     ): Response<Unit>
 
     @POST("/auth/refresh")
