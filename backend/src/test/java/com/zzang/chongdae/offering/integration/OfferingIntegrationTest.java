@@ -358,7 +358,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("status").description("상태"),
-                fieldWithPath("steps[]").description("단계")
+                fieldWithPath("imageUrl").description("이미지 url")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 상태 조회")
