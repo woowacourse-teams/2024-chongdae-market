@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityMainBinding
-import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null

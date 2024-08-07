@@ -1,6 +1,5 @@
 package com.zzang.chongdae.domain.repository
 
-import com.zzang.chongdae.domain.mo.Member
 import com.zzang.chongdae.domain.model.Signup
 import com.zzang.chongdae.domain.model.Token
 

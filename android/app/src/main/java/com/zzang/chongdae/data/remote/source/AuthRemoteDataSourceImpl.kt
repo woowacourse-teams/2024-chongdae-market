@@ -2,7 +2,6 @@ package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.api.AuthApiService
 import com.zzang.chongdae.data.remote.dto.request.CiRequest
-import com.zzang.chongdae.data.remote.dto.response.MemberResponse
 import com.zzang.chongdae.data.remote.dto.response.SignupResponse
 import com.zzang.chongdae.data.remote.dto.response.TokenResponse
 import com.zzang.chongdae.data.source.AuthRemoteDataSource

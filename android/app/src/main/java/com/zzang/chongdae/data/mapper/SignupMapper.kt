@@ -8,6 +8,6 @@ import com.zzang.chongdae.domain.model.Token
 fun SignupResponse.toDomain(): Signup {
     return Signup(
         member = Member(this.memberResponse.memberId, this.memberResponse.nickname),
-        token = Token(this.tokenResponse.accessToken, this.tokenResponse.refreshToken)
+        token = Token(this.tokenResponse.accessToken, this.tokenResponse.refreshToken),
     )
 }

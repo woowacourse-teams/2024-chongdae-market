@@ -13,7 +13,7 @@ class AuthRepositoryImpl(
     override suspend fun saveLogin(ci: String): Result<Token> {
         return authRemoteDataSource.saveLogin(
             ciRequest = CiRequest(ci),
-        ).mapCatching { it.toDomain()}
+        ).mapCatching { it.toDomain() }
     }
 
     override suspend fun saveSignup(ci: String): Result<Signup> {

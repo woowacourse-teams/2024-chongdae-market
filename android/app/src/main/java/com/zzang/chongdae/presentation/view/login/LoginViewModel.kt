@@ -2,7 +2,6 @@ package com.zzang.chongdae.presentation.view.login
 
 import android.content.Context
 import android.util.Log
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -17,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val context: Context
+    private val context: Context,
 ) : ViewModel() {
     private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
@@ -66,14 +65,16 @@ class LoginViewModel(
         val NICKNAME_KEY = stringPreferencesKey("nickname_key")
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(authRepository: AuthRepository, context: Context) =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return LoginViewModel(authRepository, context) as T
-                }
+        fun getFactory(
+            authRepository: AuthRepository,
+            context: Context,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return LoginViewModel(authRepository, context) as T
             }
+        }
     }
 }
