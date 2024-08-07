@@ -1,35 +1,30 @@
 package com.zzang.chongdae.global.helper;
 
-import com.zzang.chongdae.auth.service.dto.TokenDto;
-import io.restassured.http.Cookie;
+import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import io.restassured.RestAssured;
 import io.restassured.http.Cookies;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class CookieProvider {
 
-    private final TestTokenProvider tokenProvider;
-
-    @Autowired
-    public CookieProvider(TestTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
-
     public Cookies createCookies() {
-        TokenDto tokenDto = tokenProvider.createTokens();
-        return createCookiesFromTokenDto(tokenDto);
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new LoginRequest("dora1234"))
+                .when().post("/auth/login")
+                .then().log().all()
+                .extract().detailedCookies();
     }
 
     public Cookies createCookiesWithCi(String ci) {
-        TokenDto tokenDto = tokenProvider.createTokensWithCi(ci);
-        return createCookiesFromTokenDto(tokenDto);
-    }
-
-    private Cookies createCookiesFromTokenDto(TokenDto tokenDto) {
-        Cookie accessToken = new Cookie.Builder("access_token", tokenDto.accessToken()).build();
-        Cookie refreshToken = new Cookie.Builder("refresh_token", tokenDto.refreshToken()).build();
-        return new Cookies(accessToken, refreshToken);
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new LoginRequest(ci))
+                .when().post("/auth/login")
+                .then().log().all()
+                .extract().detailedCookies();
     }
 }
