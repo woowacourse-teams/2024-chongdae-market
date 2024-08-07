@@ -1,35 +1,93 @@
 package com.zzang.chongdae.presentation.view.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.liveData
+import com.zzang.chongdae.domain.model.Filter
+import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
-) : ViewModel() {
-    lateinit var offerings: LiveData<PagingData<Offering>>
-        private set
+) : ViewModel(), OnFilterClickListener {
+    private val _offerings = MutableLiveData<PagingData<Offering>>()
+    val offerings: LiveData<PagingData<Offering>> get() = _offerings
+
+    val search: MutableLiveData<String?> = MutableLiveData(null)
+
+    private val filters: MutableLiveData<List<Filter>> = MutableLiveData()
+
+    val joinableFilter: LiveData<Filter> =
+        filters.map {
+            it.first { it.name == FilterName.JOINABLE }
+        }
+
+    val imminentFilter: LiveData<Filter> =
+        filters.map {
+            it.first { it.name == FilterName.IMMINENT }
+        }
+
+    val highDiscountFilter: LiveData<Filter> =
+        filters.map {
+            it.first { it.name == FilterName.HIGH_DISCOUNT }
+        }
+
+    private val selectedFilter = MutableLiveData<String?>()
 
     init {
-        getOfferings()
+        fetchOfferings()
+        fetchFilters()
     }
 
-    private fun getOfferings() {
-        offerings =
+    fun fetchOfferings() {
+        viewModelScope.launch {
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-                pagingSourceFactory = { OfferingPagingSource(fetchOfferings = offeringRepository::fetchOfferings) },
-            ).liveData.cachedIn(viewModelScope)
+                pagingSourceFactory = {
+                    OfferingPagingSource(offeringRepository, search.value, selectedFilter.value)
+                },
+            ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
+                _offerings.value = pagingData
+            }
+        }
+    }
+
+    private fun fetchFilters() {
+        viewModelScope.launch {
+            offeringRepository.fetchFilters().onSuccess {
+                filters.value = it
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+
+    override fun onClickFilter(
+        filterName: FilterName,
+        isChecked: Boolean,
+    ) {
+        // 현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
+        if (filterName == FilterName.JOINABLE) return
+
+        if (isChecked) {
+            selectedFilter.value = filterName.toString()
+        } else {
+            selectedFilter.value = null
+        }
+        fetchOfferings()
     }
 
     companion object {
