@@ -83,7 +83,7 @@
     <string name="offering_members">참여자 목록</string>
 
     <!--    offering_write-->
-    <string name="write_information_message">공동 구매할 물품의 정보를\n입력해 주세요.</string>
+    <string name="write_information_message"><font color="#F15642">공동 구매</font>할 물품의 정보를\n입력해 주세요.</string>
     <string name="write_enter_offering_title">게시글의 제목을 입력해 주세요.</string>
     <string name="write_upload_photo">최대 50MB까지 업로드 가능합니다.</string>
     <string name="write_purchase_link">물품 구매 링크</string>
@@ -118,4 +118,6 @@
     <string name="write_selected_date">%d년 %d월 %d일</string>
     <string name="write_selected_time">%s %d시 %d분</string>
     <string name="write_success_writing">공모가 게시되었어요!</string>
+    <string name="error_file_conversion">파일을 찾을 수 없습니다.</string>
+    <string name="error_image_upload">이미지 업로드에 실패했습니다.</string>
 </resources>
