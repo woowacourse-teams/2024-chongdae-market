@@ -6,30 +6,42 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.presentation.util.MutableSingleLiveData
+import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val context: Context
 ) : ViewModel() {
+    private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
+
+    private val _signupEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val signupEvent: SingleLiveData<Boolean> get() = _signupEvent
+
     fun postLogin(ci: String) {
         viewModelScope.launch {
             authRepository.saveLogin(
-                ci = ci,
+                ci = "ㄻㅇㄹㄴㅁㄹ",
             ).onSuccess {
                 Log.d("alsong", "login success")
+                _navigateEvent.setValue(true)
             }.onFailure {
-                Log.e("alsong", "postLogin ${it.message.toString()}")
+                Log.e("alsong", "postLogin ${it.message}")
+                when (it.message) {
+                    "404" -> postSignup(ci)
+                    "401" -> _navigateEvent.setValue(true)
+                }
             }
         }
     }
+
     fun postSignup(ci: String) {
         viewModelScope.launch {
             authRepository.saveSignup(

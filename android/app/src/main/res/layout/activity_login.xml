@@ -76,7 +76,7 @@
 
         <Button
             android:id="@+id/btn_login"
-            android:onClick="@{() -> onAuthClickListener.onLoginClick()}"
+            android:onClick="@{() -> onAuthClickListener.onLoginButtonClick()}"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:layout_marginBottom="152dp"

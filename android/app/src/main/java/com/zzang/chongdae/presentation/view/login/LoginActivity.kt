@@ -10,6 +10,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.ActivityLoginBinding
+import com.zzang.chongdae.presentation.view.MainActivity
 
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private var _binding: ActivityLoginBinding? = null
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
+        observeNavigateEvent()
     }
 
     private fun initBinding() {
@@ -46,33 +48,8 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         binding.lifecycleOwner = this
     }
 
-    override fun onLoginClick() {
-        authenticateWithKakao()
-    }
-
-    private fun authenticateWithKakao() {
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Log.d(TAG, "토큰 정보 보기 실패")
-                loginWithKakao()
-            } else if (tokenInfo != null) {
-                Log.d(TAG, "토큰 정보 보기 성공")
-                loadUserInformation()
-            }
-        }
-    }
-
-    private fun loadUserInformation() {
-        UserApiClient.instance.me { user, error ->
-            if (error != null) {
-                Log.d(TAG, "사용자 정보 요청 실패 $error")
-            } else if (user != null) {
-                Log.d(TAG, "사용자 정보 요청 성공 : $user")
-                val email = user.kakaoAccount?.email ?: return@me
-                viewModel.postLogin(email)
-//                viewModel.postSignup(email)
-            }
-        }
+    override fun onLoginButtonClick() {
+        loginWithKakao()
     }
 
     private fun loginWithKakao() {
@@ -98,6 +75,24 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         } else {
             Log.d(TAG, "카톡 설치 안되어있음. 계정으로 로그인 시도")
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+        }
+    }
+
+    private fun loadUserInformation() {
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                Log.d(TAG, "사용자 정보 요청 실패 $error")
+            } else if (user != null) {
+                Log.d(TAG, "사용자 정보 요청 성공 : $user")
+                val email = user.kakaoAccount?.email ?: return@me
+                viewModel.postLogin(email)
+            }
+        }
+    }
+
+    private fun observeNavigateEvent() {
+        viewModel.navigateEvent.observe(this) {
+            MainActivity.startActivity(this)
         }
     }
 

@@ -1,5 +1,5 @@
 package com.zzang.chongdae.presentation.view.login
 
 interface OnAuthClickListener {
-    fun onLoginClick()
+    fun onLoginButtonClick()
 }

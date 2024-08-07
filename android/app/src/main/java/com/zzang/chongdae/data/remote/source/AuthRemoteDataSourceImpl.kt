@@ -10,7 +10,12 @@ class AuthRemoteDataSourceImpl(
 ) : AuthRemoteDataSource {
     override suspend fun saveLogin(ciRequest: CiRequest): Result<Unit> {
         return runCatching {
-            service.postLogin(ciRequest).body() ?: throw IllegalStateException()
+            val response = service.postLogin(ciRequest)
+            if (response.isSuccessful) {
+                response.body() ?: error("에러 발생: null")
+            } else {
+                error("${response.code()}")
+            }
         }
     }
 
