@@ -1,6 +1,6 @@
 package com.zzang.chongdae.offering.service.dto;
 
-import static com.zzang.chongdae.offering.domain.status.CommentRoomStatus.GROUPING;
+import static com.zzang.chongdae.offering.domain.CommentRoomStatus.GROUPING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
