@@ -377,9 +377,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
         }
     }
 
-    @DisplayName("공모 상태 조회")
+    @DisplayName("댓글방 상태 조회")
     @Nested
-    class GetOfferingStatus {
+    class GetCommentRoomStatus {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
@@ -389,18 +389,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("imageUrl").description("이미지 url")
         );
         ResourceSnippetParameters successSnippets = builder()
-                .summary("공모 상태 조회")
-                .description("공모 id를 통해 공모의 상태 정보를 조회합니다.")
+                .summary("댓글방 상태 조회")
+                .description("공모 id를 통해 댓글방의 상태 정보를 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
                 .responseFields(successResponseDescriptors)
-                .responseSchema(schema("OfferingStatusSuccessResponse"))
+                .responseSchema(schema("CommentRoomStatusSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
-                .summary("공모 상태 조회")
-                .description("공모 id를 통해 공모의 상태 정보를 조회합니다.")
+                .summary("댓글방 상태 조회")
+                .description("공모 id를 통해 댓글방의 상태 정보를 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("OfferingStatusFailResponse"))
+                .responseSchema(schema("CommentRoomStatusFailResponse"))
                 .build();
 
         @BeforeEach
@@ -409,11 +409,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
             offeringFixture.createOffering(member);
         }
 
-        @DisplayName("공모 id로 공모 상태 정보를 조회할 수 있다")
+        @DisplayName("공모 id로 댓글방 상태 정보를 조회할 수 있다")
         @Test
         void should_responseOfferingStatus_when_givenOfferingId() {
             given(spec).log().all()
-                    .filter(document("get-offering-status-success", resource(successSnippets)))
+                    .filter(document("get-comment-room-status-success", resource(successSnippets)))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()
@@ -424,7 +424,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
-                    .filter(document("get-offering-status-fail-invalid-offering", resource(failSnippets)))
+                    .filter(document("get-comment-room-status-fail-invalid-offering", resource(failSnippets)))
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()
