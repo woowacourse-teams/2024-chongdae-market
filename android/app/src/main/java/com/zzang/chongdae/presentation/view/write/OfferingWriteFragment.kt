@@ -1,12 +1,16 @@
 package com.zzang.chongdae.presentation.view.write
 
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -15,6 +19,8 @@ import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
+import com.zzang.chongdae.presentation.util.FileUtils
+import com.zzang.chongdae.presentation.util.PermissionManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
@@ -27,11 +33,19 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     private val dateTimePickerBinding get() = _dateTimePickerBinding!!
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
+    private lateinit var permissionManager: PermissionManager
+    private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setUpPermissionManager()
+        initializePhotoPicker()
     }
 
     override fun onCreateView(
@@ -51,8 +65,59 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         (activity as MainActivity).hideBottomNavigation()
         observeInvalidInputEvent()
         observeFinishEvent()
+        observeImageUploadEvent()
         selectDeadline()
         searchPlace()
+    }
+
+    private fun initializePhotoPicker() {
+        pickMediaLauncher =
+            registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
+                handleMediaResult(uri)
+            }
+    }
+
+    private fun launchPhotoPicker() {
+        pickMediaLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+    }
+
+    private fun handleMediaResult(uri: Uri?) {
+        if (uri != null) {
+            val multipartBodyPart = FileUtils.getMultipartBodyPart(requireContext(), uri, "image")
+            if (multipartBodyPart != null) {
+                viewModel.uploadImageFile(multipartBodyPart)
+            } else {
+                showToast(R.string.all_error_file_conversion)
+            }
+        }
+    }
+
+    private fun setUpPermissionManager() {
+        permissionManager =
+            PermissionManager(
+                fragment = this,
+                onPermissionGranted = { onPermissionsGranted() },
+                onPermissionDenied = { onPermissionsDenied() },
+            )
+    }
+
+    private fun observeImageUploadEvent() {
+        viewModel.imageUploadEvent.observe(viewLifecycleOwner) {
+            if (permissionManager.isAndroid13OrAbove()) {
+                launchPhotoPicker()
+            } else {
+                permissionManager.requestPermissions()
+            }
+        }
+    }
+
+    private fun onPermissionsGranted() {
+        showToast(R.string.all_permission_granted)
+        launchPhotoPicker()
+    }
+
+    private fun onPermissionsDenied() {
+        showToast(R.string.all_permission_denied)
     }
 
     private fun searchPlace() {
