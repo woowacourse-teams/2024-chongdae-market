@@ -2,6 +2,7 @@ package com.zzang.chongdae.presentation.view.login
 
 import android.content.Context
 import android.util.Log
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -24,14 +25,14 @@ class LoginViewModel(
     fun postLogin(ci: String) {
         viewModelScope.launch {
             authRepository.saveLogin(
-                ci = "mmnbb",
+                ci = ci,
             ).onSuccess {
                 Log.d("alsong", "login success")
                 _navigateEvent.setValue(true)
             }.onFailure {
                 Log.e("alsong", "postLogin ${it.message}")
                 when (it.message) {
-                    "404" -> postSignup("mmnbb")
+                    "404" -> postSignup(ci)
 //                    "401" ->
                 }
             }
@@ -39,20 +40,17 @@ class LoginViewModel(
     }
 
     private fun postSignup(ci: String) {
-        Log.d("alsong", "사인업 들어옴")
         viewModelScope.launch {
-            Log.d("alsong", "사인업 들어옴2")
             authRepository.saveSignup(
                 ci = ci,
             ).onSuccess {
-                Log.d("alsong", "사인업 들어옴3")
                 Log.d("alsong", "signup success")
-                Log.d("alsong", "signup success ${it.member.nickName}")
-                Log.d("alsong", "signup success ${it.member.nickName}")
-//                context.dataStore.edit { preferences ->
-//                    preferences[MEMBER_ID_KEY] = it.memberId
-//                    preferences[NICKNAME_KEY] = it.nickName
-//                }
+                Log.d("alsong", "id: ${it.member.memberId}")
+                Log.d("alsong", "nickName: ${it.member.nickName}")
+                context.dataStore.edit { preferences ->
+                    preferences[MEMBER_ID_KEY] = it.member.memberId
+                    preferences[NICKNAME_KEY] = it.member.nickName
+                }
             }.onFailure {
                 Log.e("alsong", it.message.toString())
             }
