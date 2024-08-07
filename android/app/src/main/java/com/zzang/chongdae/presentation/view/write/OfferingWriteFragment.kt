@@ -1,12 +1,17 @@
 package com.zzang.chongdae.presentation.view.write
 
 import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -29,6 +34,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
     private lateinit var permissionManager: PermissionManager
+    private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
     private val viewModel: OfferingWriteViewModel by viewModels {
         OfferingWriteViewModel.getFactory(
@@ -39,6 +45,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpPermissionManager()
+        initializePhotoPicker()
     }
 
     override fun onCreateView(
@@ -62,7 +69,25 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         selectDeadline()
         searchPlace()
     }
-
+    
+    private fun initializePhotoPicker() {
+        pickMediaLauncher = registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
+            handleMediaResult(uri)
+        }
+    }
+    
+    private fun launchPhotoPicker() {
+        pickMediaLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+    }
+    
+    private fun handleMediaResult(uri: Uri?) {
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+    
     private fun setUpPermissionManager() {
         permissionManager =
             PermissionManager(
@@ -74,19 +99,17 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
 
     private fun observeImageUploadEvent() {
         viewModel.imageUploadEvent.observe(viewLifecycleOwner) {
-            permissionManager.requestPermissions()
+            if (permissionManager.isAndroid13OrAbove()) {
+                launchPhotoPicker()
+            } else {
+                permissionManager.requestPermissions()
+            }
         }
     }
 
     private fun onPermissionsGranted() {
         showToast(R.string.permission_granted)
-        pickImage()
-    }
-
-    private fun pickImage() {
-        // TODO: 이미지 선택 기능 구현
-        // val intent = Intent(Intent.ACTION_PICK)
-        // intent.type = "image/*"
+        launchPhotoPicker()
     }
 
     private fun onPermissionsDenied() {
