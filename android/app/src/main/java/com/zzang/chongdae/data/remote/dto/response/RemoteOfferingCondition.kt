@@ -6,8 +6,8 @@ enum class RemoteOfferingCondition {
     @SerialName("FULL")
     FULL,
 
-    @SerialName("TIME_OUT")
-    TIME_OUT,
+    @SerialName("IMMINENT")
+    IMMINENT,
 
     @SerialName("CONFIRMED")
     CONFIRMED,

@@ -1,7 +1,9 @@
 package com.zzang.chongdae.presentation.view
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -44,6 +46,13 @@ class MainActivity : AppCompatActivity() {
 
     fun showBottomNavigation() {
         binding.mainBottomNavigation.visibility = View.VISIBLE
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            this.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(motionEvent)
     }
 
     override fun onDestroy() {

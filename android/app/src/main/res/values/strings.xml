@@ -26,18 +26,16 @@
 
     <!--    main-->
     <string name="main_search_hint_text">검색할 내용을 입력해주세요.</string>
-    <string name="main_offering_continue">모집 중</string>
-    <string name="main_offering_closed">공구 마감</string>
-    <string name="main_offering_full">인원 만석</string>
+    <string name="main_offering_continue">모집중</string>
+    <string name="main_offering_closed">모집마감</string>
+    <string name="main_offering_imminent">마감임박</string>
+    <string name="main_offering_full">인원만석</string>
     <string name="main_offering_condition_imminent_comment">마감이 얼마 안남았어요!</string>
     <string name="main_offering_condition_closed_comment">공구가 마감되었어요.</string>
     <string name="main_offering_condition_full_comment">인원이 빠질 수도 있어요</string>
     <string name="main_offering_condition_continue_comment">마감까지 &lt;font color="#F15642">%d명 &lt;/font> 남았어요</string>
-    <string name="main_discount_rate_text">33%↓</string>
-    <string name="strike_money_amount_text"><strike>%,d원</strike></string>
-    <string name="main_filter_participation">참여가능만</string>
-    <string name="main_filter_product_closed">마감임박순</string>
-    <string name="main_filter_discount_rate">할인율순</string>
+    <string name="main_discount_rate_text">%.1f%%↓</string>
+    <string name="strike_money_amount_text">%,d원</string>
 
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>

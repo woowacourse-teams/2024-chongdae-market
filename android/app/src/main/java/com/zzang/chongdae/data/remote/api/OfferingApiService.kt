@@ -2,6 +2,7 @@ package com.zzang.chongdae.data.remote.api
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.request.ProductUrlRequest
+import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
@@ -19,8 +20,10 @@ import retrofit2.http.Query
 interface OfferingApiService {
     @GET("/offerings")
     suspend fun getOfferings(
-        @Query("last-id") lastOfferingId: Long,
-        @Query("page-size") pageSize: Int,
+        @Query("filter") filter: String?,
+        @Query("search") search: String?,
+        @Query("last-id") lastOfferingId: Long?,
+        @Query("page-size") pageSize: Int?,
     ): Response<OfferingsResponse>
 
     @GET("/offerings/{offering-id}")
@@ -33,6 +36,9 @@ interface OfferingApiService {
     suspend fun getMeetings(
         @Path("offering-id") offeringId: Long,
     ): Response<MeetingsResponse>
+
+    @GET("/offerings/filters")
+    suspend fun getFilters(): Response<FiltersResponse>
 
     @POST("/offerings")
     suspend fun postOfferingWrite(
