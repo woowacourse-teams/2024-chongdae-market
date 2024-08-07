@@ -1,5 +1,6 @@
 package com.zzang.chongdae.auth.integration;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.Schema.schema;
@@ -7,6 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
+import com.epages.restdocs.apispec.HeaderDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
 import com.zzang.chongdae.auth.service.dto.RefreshRequest;
@@ -35,17 +37,18 @@ class AuthIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("ci").description("회원 식별자 인증 정보")
         );
-        List<FieldDescriptor> responseDescriptors = List.of(
-                fieldWithPath("accessToken").description("accessToken"),
-                fieldWithPath("refreshToken").description("refreshToken")
+        List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
+                headerWithName("Set-Cookie").description("""
+                        access_token=a.b.c; Path=/; HttpOnly \n
+                        refresh_token=a.b.c; Path=/; HttpOnly
+                        """)
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("회원 로그인")
                 .description("회원 식별자 인증 정보로 로그인 합니다.")
                 .requestFields(requestDescriptors)
-                .responseFields(responseDescriptors)
+                .responseHeaders(responseHeaderDescriptors)
                 .requestSchema(schema("LonginRequest"))
-                .responseSchema(schema("LoginResponse"))
                 .build();
 
         MemberEntity member;
@@ -145,17 +148,18 @@ class AuthIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("refreshToken").description("재발급에 필요한 refreshToken")
         );
-        List<FieldDescriptor> responseDescriptors = List.of(
-                fieldWithPath("accessToken").description("재발급한 accessToken"),
-                fieldWithPath("refreshToken").description("재발급한 refreshToken")
+        List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
+                headerWithName("Set-Cookie").description("""
+                        access_token=a.b.c; Path=/; HttpOnly \n
+                        refresh_token=a.b.c; Path=/; HttpOnly
+                        """)
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("토큰 재발급")
                 .description("토큰을 재발급합니다.")
                 .requestFields(requestDescriptors)
-                .responseFields(responseDescriptors)
+                .responseHeaders(responseHeaderDescriptors)
                 .requestSchema(schema("RefreshRequest"))
-                .requestSchema(schema("RefreshResponse"))
                 .build();
         ResourceSnippetParameters failedSnippets = builder()
                 .requestFields(requestDescriptors)

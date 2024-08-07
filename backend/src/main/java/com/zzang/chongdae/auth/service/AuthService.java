@@ -2,9 +2,7 @@ package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
-import com.zzang.chongdae.auth.service.dto.LoginResponse;
 import com.zzang.chongdae.auth.service.dto.RefreshRequest;
-import com.zzang.chongdae.auth.service.dto.RefreshResponse;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
@@ -26,12 +24,11 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
 
-    public LoginResponse login(LoginRequest request) {
+    public TokenDto login(LoginRequest request) {
         String password = passwordEncoder.encode(request.ci());
         MemberEntity member = memberRepository.findByPassword(password)
                 .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_PASSWORD));
-        TokenDto tokenDto = jwtTokenProvider.createAuthToken(member.getId().toString());
-        return new LoginResponse(tokenDto);
+        return jwtTokenProvider.createAuthToken(member.getId().toString());
     }
 
     @Transactional
@@ -46,10 +43,9 @@ public class AuthService {
         return new SignupResponse(savedMember, tokenDto);
     }
 
-    public RefreshResponse refresh(RefreshRequest request) {
+    public TokenDto refresh(RefreshRequest request) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(request.refreshToken());
-        TokenDto tokenDto = jwtTokenProvider.createAuthToken(memberId.toString());
-        return new RefreshResponse(tokenDto);
+        return jwtTokenProvider.createAuthToken(memberId.toString());
     }
 
     public MemberEntity findMemberByAccessToken(String token) {
