@@ -50,14 +50,24 @@ class CommentDetailViewModel(
 
     init {
         startPolling()
-        updateStatus()
+        updateStatusInfo()
     }
 
-    fun updateStatus() {
+    fun updateStatusInfo() {
         viewModelScope.launch {
             offeringRepository.fetchOfferingStatus(offeringId).onSuccess {
                 _offeringStatusButtonText.value = it.buttonText
                 _offeringStatusImageUrl.value = it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+    
+    fun updateOfferingStatus() {
+        viewModelScope.launch {
+            offeringRepository.updateOfferingStatus(offeringId).onSuccess {
+                updateStatusInfo()
             }.onFailure {
                 Log.e("error", it.message.toString())
             }
