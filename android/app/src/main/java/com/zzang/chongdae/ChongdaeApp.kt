@@ -75,6 +75,6 @@ class ChongdaeApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, "d5416bb3715a6b7e5a767d849661b6f5")
+        KakaoSdk.init(this, "5fe797552740c1f596e551845cf0f4a1")
     }
 }

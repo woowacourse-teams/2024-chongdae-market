@@ -9,23 +9,23 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.domain.repository.AuthRepository
 import kotlinx.coroutines.launch
+import org.apache.commons.lang3.mutable.Mutable
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    private val _ci: MutableLiveData<String> = MutableLiveData()
-    val ci: LiveData<String> get() = _ci
+    private val _nickName: MutableLiveData<String> = MutableLiveData()
+    val nickName: LiveData<String> get() = _nickName
 
-    fun loadCi(input: String) {
-        _ci.value = input
-    }
+    private val _memberId: MutableLiveData<Long> = MutableLiveData()
+    val memberId: LiveData<Long> get() = _memberId
 
-    fun postSignup() {
+    fun postSignup(ci: String) {
         viewModelScope.launch {
             authRepository.saveSignup(
-                ci = "알송의테스트2",
+                ci = ci,
             ).onSuccess {
-                Log.d("alsong", "success signup ")
+                Log.d("alsong", "signup success")
                 Log.d("alsong", "memberId: ${it.memberId}")
                 Log.d("alsong", "nickName: ${it.nickName}")
             }.onFailure {

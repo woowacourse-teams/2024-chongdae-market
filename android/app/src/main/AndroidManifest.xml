@@ -52,13 +52,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="oauth"
-                    android:scheme="kakaod5416bb3715a6b7e5a767d849661b6f5" />
+                    android:scheme="kakao5fe797552740c1f596e551845cf0f4a1" />
             </intent-filter>
         </activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="d5416bb3715a6b7e5a767d849661b6f5" />
+            android:value="5fe797552740c1f596e551845cf0f4a1" />
     </application>
 
 </manifest>

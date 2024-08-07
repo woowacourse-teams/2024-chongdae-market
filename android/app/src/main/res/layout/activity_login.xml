@@ -77,10 +77,10 @@
         <Button
             android:id="@+id/btn_login"
             android:onClick="@{() -> onAuthClickListener.onLoginClick()}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="152dp"
-            android:background="@drawable/kakao_login_medium_wide"
+            android:background="@drawable/kakao_login_large_wide"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
