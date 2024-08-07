@@ -22,6 +22,7 @@ class CommentDetailActivity : AppCompatActivity() {
         CommentDetailViewModel.getFactory(
             offeringId = offeringId,
             offeringTitle = offeringTitle,
+            offeringRepository = (application as ChongdaeApp).offeringRepository,
             commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,
         )
     }

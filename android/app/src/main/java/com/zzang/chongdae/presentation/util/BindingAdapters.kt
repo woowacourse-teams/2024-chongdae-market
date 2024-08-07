@@ -98,6 +98,16 @@ fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
     }
 }
 
+@BindingAdapter("offeringsStatusImageUrl")
+fun ImageView.setOfferingsStatusImageUrl(imageUrl: String?) {
+    imageUrl.let {
+        Glide.with(context)
+            .load(it)
+            .error(R.drawable.ic_comment_detail_recruiting)
+            .into(this)
+    }
+}
+
 @BindingAdapter("imageResource")
 fun setImageResource(
     imageView: ImageView,
