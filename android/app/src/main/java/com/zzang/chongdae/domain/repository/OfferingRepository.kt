@@ -24,4 +24,6 @@ interface OfferingRepository {
     suspend fun fetchFilters(): Result<List<Filter>>
 
     suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatus>
+
+    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
 }
