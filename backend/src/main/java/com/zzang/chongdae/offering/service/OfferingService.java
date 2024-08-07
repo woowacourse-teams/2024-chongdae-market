@@ -4,6 +4,7 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
+import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -16,6 +17,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
@@ -79,10 +81,31 @@ public class OfferingService {
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        validateIsParticipant(member, offering);
+        return new OfferingMeetingResponse(offering.toOfferingMeeting());
+    }
+
+    private void validateIsParticipant(MemberEntity member, OfferingEntity offering) {
         if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
             throw new MarketException(OfferingErrorCode.NOT_PARTICIPATE_MEMBER);
         }
+    }
+
+    @Transactional
+    public OfferingMeetingResponse updateOfferingMeeting(
+            Long offeringId, OfferingMeetingUpdateRequest request, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        validateIsProposer(offering, member);
+        OfferingMeeting offeringMeeting = request.toOfferingMeeting();
+        offering.updateMeeting(offeringMeeting);
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
+    }
+
+    private void validateIsProposer(OfferingEntity offering, MemberEntity member) {
+        if (offering.isNotProposedBy(member)) {
+            throw new MarketException(OfferingErrorCode.NOT_PROPOSE_MEMBER);
+        }
     }
 
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
