@@ -35,7 +35,7 @@ interface OfferingApiService {
     ): Response<MeetingsResponse>
 
     @GET("/offerings/filters")
-    suspend fun getFilters():Response<FiltersResponse>
+    suspend fun getFilters(): Response<FiltersResponse>
 
     @POST("/offerings")
     suspend fun postOfferingWrite(

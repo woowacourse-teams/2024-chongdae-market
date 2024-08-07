@@ -28,19 +28,22 @@ class OfferingViewModel(
 
     val search: MutableLiveData<String?> = MutableLiveData(null)
 
-    private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
+    private val filters: MutableLiveData<List<Filter>> = MutableLiveData()
 
-    val joinableFilter: LiveData<Filter> = _filters.map {
-        it.first { it.name == FilterName.JOINABLE }
-    }
+    val joinableFilter: LiveData<Filter> =
+        filters.map {
+            it.first { it.name == FilterName.JOINABLE }
+        }
 
-    val imminentFilter: LiveData<Filter> = _filters.map {
-        it.first { it.name == FilterName.IMMINENT }
-    }
+    val imminentFilter: LiveData<Filter> =
+        filters.map {
+            it.first { it.name == FilterName.IMMINENT }
+        }
 
-    val highDiscountFilter: LiveData<Filter> = _filters.map {
-        it.first { it.name == FilterName.HIGH_DISCOUNT }
-    }
+    val highDiscountFilter: LiveData<Filter> =
+        filters.map {
+            it.first { it.name == FilterName.HIGH_DISCOUNT }
+        }
 
     private val selectedFilter = MutableLiveData<String?>()
 
@@ -65,16 +68,19 @@ class OfferingViewModel(
     private fun fetchFilters() {
         viewModelScope.launch {
             offeringRepository.fetchFilters().onSuccess {
-                _filters.value = it
+                filters.value = it
             }.onFailure {
                 Log.e("error", it.message.toString())
             }
         }
     }
 
-    override fun onClickFilter(filterName: FilterName, isChecked: Boolean) {
-        //현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
-        if(filterName==FilterName.JOINABLE) return
+    override fun onClickFilter(
+        filterName: FilterName,
+        isChecked: Boolean,
+    ) {
+        // 현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
+        if (filterName == FilterName.JOINABLE) return
 
         if (isChecked) {
             selectedFilter.value = filterName.toString()

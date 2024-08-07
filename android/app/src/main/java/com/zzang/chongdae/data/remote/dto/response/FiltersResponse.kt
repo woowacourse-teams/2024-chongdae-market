@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FiltersResponse(
-    @SerialName("filters") val filters: List<RemoteFilter>
+    @SerialName("filters") val filters: List<RemoteFilter>,
 )

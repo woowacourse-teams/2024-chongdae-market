@@ -13,12 +13,13 @@ class OfferingPagingSource(
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Offering> {
         val lastOfferingId = params.key
         return runCatching {
-            val offerings = offeringsRepository.fetchOfferings(
-                filter = filter,
-                search = search,
-                lastOfferingId = lastOfferingId,
-                pageSize = params.loadSize
-            )
+            val offerings =
+                offeringsRepository.fetchOfferings(
+                    filter = filter,
+                    search = search,
+                    lastOfferingId = lastOfferingId,
+                    pageSize = params.loadSize,
+                )
 
             LoadResult.Page(
                 data = offerings,

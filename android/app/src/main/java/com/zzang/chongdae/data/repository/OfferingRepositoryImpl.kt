@@ -18,7 +18,7 @@ class OfferingRepositoryImpl(
         filter: String?,
         search: String?,
         lastOfferingId: Long?,
-        pageSize: Int?
+        pageSize: Int?,
     ): List<Offering> {
         return offeringRemoteDataSource.fetchOfferings(filter, search, lastOfferingId, pageSize)
             .mapCatching {
@@ -29,20 +29,20 @@ class OfferingRepositoryImpl(
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
         return offeringRemoteDataSource.saveOffering(
             offeringWriteRequest =
-            OfferingWriteRequest(
-                memberId = uiModel.memberId,
-                title = uiModel.title,
-                productUrl = uiModel.productUrl,
-                thumbnailUrl = uiModel.thumbnailUrl,
-                totalCount = uiModel.totalCount,
-                totalPrice = uiModel.totalPrice,
-                eachPrice = uiModel.eachPrice,
-                meetingAddress = uiModel.meetingAddress,
-                meetingAddressDong = uiModel.meetingAddressDong,
-                meetingAddressDetail = uiModel.meetingAddressDetail,
-                deadline = uiModel.deadline,
-                description = uiModel.description,
-            ),
+                OfferingWriteRequest(
+                    memberId = uiModel.memberId,
+                    title = uiModel.title,
+                    productUrl = uiModel.productUrl,
+                    thumbnailUrl = uiModel.thumbnailUrl,
+                    totalCount = uiModel.totalCount,
+                    totalPrice = uiModel.totalPrice,
+                    eachPrice = uiModel.eachPrice,
+                    meetingAddress = uiModel.meetingAddress,
+                    meetingAddressDong = uiModel.meetingAddressDong,
+                    meetingAddressDetail = uiModel.meetingAddressDetail,
+                    deadline = uiModel.deadline,
+                    description = uiModel.description,
+                ),
         )
     }
 

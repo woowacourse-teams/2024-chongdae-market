@@ -16,7 +16,7 @@ class OfferingRemoteDataSourceImpl(
         filter: String?,
         search: String?,
         lastOfferingId: Long?,
-        pageSize: Int?
+        pageSize: Int?,
     ): Result<OfferingsResponse> =
         runCatching {
             service.getOfferings(filter, search, lastOfferingId, pageSize).body()
@@ -46,7 +46,8 @@ class OfferingRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun fetchFilters(): Result<FiltersResponse> = runCatching {
-        service.getFilters().body() ?: throw IllegalStateException()
-    }
+    override suspend fun fetchFilters(): Result<FiltersResponse> =
+        runCatching {
+            service.getFilters().body() ?: throw IllegalStateException()
+        }
 }

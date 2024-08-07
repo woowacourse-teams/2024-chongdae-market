@@ -4,7 +4,6 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
-import retrofit2.http.Query
 
 interface OfferingRemoteDataSource {
     suspend fun fetchOfferings(
