@@ -9,36 +9,40 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import java.util.Arrays;
-import java.util.List;
 
 public record OfferingStatusResponse(CommentRoomStatus status,
-                                     List<String> steps) {
+                                     String imageUrl) {
 
     public OfferingStatusResponse(CommentRoomStatus commentRoomStatus) {
-        this(commentRoomStatus, ViewMapper.toView(commentRoomStatus));
+        this(commentRoomStatus, ImageMapper.toImage(commentRoomStatus));
     }
 
-    private enum ViewMapper {
+    private enum ImageMapper {
 
-        GROUPING_VIEW(GROUPING, List.of("모집중", "인원확정", "구매중", "거래중")),
-        BUYING_VIEW(BUYING, List.of("모집중", "인원확정", "구매중", "거래중")),
-        TRADING_VIEW(TRADING, List.of("모집중", "인원확정", "구매완료", "거래중")),
-        DONE_VIEW(DONE, List.of("모집중", "인원확정", "구매완료", "거래완료"));
+        GROUPING_IMAGE(GROUPING, imageUrl("GROUPING")),
+        BUYING_IMAGE(BUYING, imageUrl("BUYING")),
+        TRADING_IMAGE(TRADING, imageUrl("TRADING")),
+        DONE_IMAGE(DONE, imageUrl("DONE"));
 
         private final CommentRoomStatus roomStatus;
-        private final List<String> view;
+        private final String image;
 
-        ViewMapper(CommentRoomStatus roomStatus, List<String> view) {
+        ImageMapper(CommentRoomStatus roomStatus, String image) {
             this.roomStatus = roomStatus;
-            this.view = view;
+            this.image = image;
         }
 
-        private static List<String> toView(CommentRoomStatus roomStatus) {
+        private static String toImage(CommentRoomStatus roomStatus) {
             return Arrays.stream(values())
                     .filter(mapper -> mapper.roomStatus.equals(roomStatus))
                     .findFirst()
                     .orElseThrow(() -> new MarketException(OfferingErrorCode.INVALID_CONDITION))
-                    .view;
+                    .image;
+        }
+
+        private static String imageUrl(String status) {
+            String imageUrlFormat = "https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/%s.png";
+            return String.format(imageUrlFormat, status);
         }
     }
 }
