@@ -18,20 +18,18 @@
         android:theme="@style/Theme.Chongdae"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
-            android:name=".presentation.view.login.LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Chongdae">
+            android:name=".presentation.view.MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
-        <activity
-            android:name=".presentation.view.MainActivity"
-            android:exported="false">
         </activity>
 
         <activity
@@ -43,18 +41,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity
-            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="oauth"
-                    android:scheme="kakao5fe797552740c1f596e551845cf0f4a1" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
