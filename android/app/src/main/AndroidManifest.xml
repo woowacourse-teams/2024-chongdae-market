@@ -21,7 +21,7 @@
 
         <activity
             android:name=".presentation.view.MainActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:exported="true">
 
             <intent-filter>
