@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -31,8 +32,8 @@ class LoginViewModel(
             }.onFailure {
                 Log.e("alsong", "postLogin ${it.message}")
                 when (it.message) {
-                    "404" -> postSignup(ci)
-                    "401" -> postRefreshToken()
+                    HttpStatusCode.NOT_FOUND_404.code -> postSignup(ci)
+                    HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
                 }
             }
         }
@@ -50,16 +51,23 @@ class LoginViewModel(
                 postSignup(ci)
             }.onFailure {
                 Log.e("alsong", it.message.toString())
+                when (it.message) {
+                    HttpStatusCode.NOT_FOUND_404.code -> postLogin(ci)
+                    HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
+                }
             }
         }
     }
 
-    private fun postRefreshToken() {
+    private fun postRefreshToken(ci: String) {
         viewModelScope.launch {
             authRepository.saveRefresh().onSuccess {
                 Log.d("alsong", "postRefresh: Success")
             }.onFailure {
-                Log.e("alsong", "postRefresh: ${it.message.toString()}")
+                Log.e("alsong", "postRefresh: ${it.message}")
+                when (it.message) {
+                    HttpStatusCode.UNAUTHORIZED_401.code -> postLogin(ci)
+                }
             }
         }
     }
