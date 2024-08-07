@@ -18,6 +18,7 @@ import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.storage.service.StorageService;
@@ -178,7 +179,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("deadline").description("마감시간"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
-                fieldWithPath("meetingAddressDetail").description("모집 상세 주소")
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 일정 조회")
@@ -222,6 +224,97 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/meetings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 일정 수정")
+    @Nested
+    class UpdateOfferingMeeting {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("deadline").description("마감시간 (필수)"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소")
+        );
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("deadline").description("마감시간"),
+                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 일정 수정")
+                .description("공모 id를 통해 공모의 일정 정보를 수정합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .requestFields(requestDescriptors)
+                .responseFields(successResponseDescriptors)
+                .requestSchema(schema("OfferingMeetingUpdateSuccessRequest"))
+                .responseSchema(schema("OfferingMeetingUpdateSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 일정 수정")
+                .description("공모 id를 통해 공모의 일정 정보를 수정합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("OfferingMeetingUpdateFailRequest"))
+                .responseSchema(schema("OfferingMeetingUpdateFailResponse"))
+                .build();
+
+        MemberEntity member;
+        OfferingEntity offering;
+
+        @BeforeEach
+        void setUp() {
+            member = memberFixture.createMember("ever");
+            offering = offeringFixture.createOffering(member);
+            offeringMemberFixture.createProposer(member, offering);
+        }
+
+        @DisplayName("총대는 공모 id로 공모 일정 정보를 수정할 수 있다")
+        @Test
+        void should_updateSuccess_when_givenOfferingIdAndInfo() {
+            OfferingMeetingUpdateRequest request = new OfferingMeetingUpdateRequest(
+                    LocalDateTime.of(3000, 1, 1, 0, 0, 0),
+                    "서울시 관악구 장군봉길1로",
+                    "123동 123호",
+                    "봉천동"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-meeting-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .pathParam("offering-id", offering.getId())
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}/meetings")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모의 일정 정보를 수정할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            OfferingMeetingUpdateRequest request = new OfferingMeetingUpdateRequest(
+                    LocalDateTime.of(3000, 1, 1, 0, 0, 0),
+                    "서울시 관악구 장군봉길1로",
+                    "123동 123호",
+                    "봉천동"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-meeting-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .pathParam("offering-id", offering.getId() + 10000)
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}/meetings")
                     .then().log().all()
                     .statusCode(400);
         }
