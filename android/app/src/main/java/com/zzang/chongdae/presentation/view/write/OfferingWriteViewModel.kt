@@ -18,6 +18,7 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -86,6 +87,9 @@ class OfferingWriteViewModel(
     private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
 
+    private val _imageUploadEvent = MutableLiveData<Unit>()
+    val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
+
     init {
         _submitButtonEnabled.apply {
             addSource(title) { updateSubmitButtonEnabled() }
@@ -122,6 +126,21 @@ class OfferingWriteViewModel(
 
     fun clearProductUrl() {
         productUrl.value = null
+    }
+
+    fun onUploadPhotoClick() {
+        _imageUploadEvent.value = Unit
+    }
+
+    fun uploadImageFile(multipartBody: MultipartBody.Part) {
+        viewModelScope.launch {
+            offeringRepository.saveProductImageS3(multipartBody).onSuccess {
+                thumbnailUrl.value = it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+                _errorEvent.setValue(R.string.all_error_image_upload)
+            }
+        }
     }
 
     fun postProductImageOg() {

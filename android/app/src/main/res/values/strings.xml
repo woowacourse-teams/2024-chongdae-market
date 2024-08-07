@@ -16,6 +16,10 @@
     <string name="all_place">장소</string>
     <string name="all_am">오전</string>
     <string name="all_pm">오후</string>
+    <string name="all_permission_granted">권한이 허용되었습니다.</string>
+    <string name="all_permission_denied">권한이 거부되었습니다.</string>
+    <string name="all_error_file_conversion">파일을 찾을 수 없습니다.</string>
+    <string name="all_error_image_upload">이미지 업로드에 실패했습니다.</string>
 
     <!--    login-->
     <string name="login_with_kakao">카카오톡으로</string>
@@ -85,7 +89,7 @@
     <string name="offering_members">참여자 목록</string>
 
     <!--    offering_write-->
-    <string name="write_information_message">공동 구매할 물품의 정보를\n입력해 주세요.</string>
+    <string name="write_information_message"><font color="#F15642">공동 구매</font>할 물품의 정보를\n입력해 주세요.</string>
     <string name="write_enter_offering_title">게시글의 제목을 입력해 주세요.</string>
     <string name="write_upload_photo">최대 50MB까지 업로드 가능합니다.</string>
     <string name="write_purchase_link">물품 구매 링크</string>

@@ -12,9 +12,11 @@ class OfferingViewHolder(
     fun bind(
         offering: Offering,
         onOfferingClickListener: OnOfferingClickListener,
+        searchKeyword: String?,
     ) {
         binding.offering = offering
         binding.onOfferingClickListener = onOfferingClickListener
+        binding.searchKeyword = searchKeyword
         setCancellationLineToEachPrice()
     }
 
