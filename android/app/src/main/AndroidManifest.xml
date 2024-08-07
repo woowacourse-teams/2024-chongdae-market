@@ -20,16 +20,20 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".presentation.view.MainActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            android:exported="true">
-
+            android:name=".presentation.view.login.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Chongdae">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
 
+        <activity
+            android:name=".presentation.view.MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:exported="false">
         </activity>
 
         <activity
