@@ -9,6 +9,7 @@ import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
+import okhttp3.MultipartBody
 
 class OfferingRepositoryImpl(
     private val offeringLocalDataSource: OfferingLocalDataSource,
@@ -48,6 +49,12 @@ class OfferingRepositoryImpl(
 
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
         return offeringRemoteDataSource.saveProductImageOg(productUrl).mapCatching {
+            it.toDomain()
+        }
+    }
+
+    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
+        return offeringRemoteDataSource.saveProductImageS3(image).mapCatching {
             it.toDomain()
         }
     }

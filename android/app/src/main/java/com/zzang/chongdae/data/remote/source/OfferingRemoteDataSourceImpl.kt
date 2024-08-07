@@ -7,6 +7,7 @@ import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
+import okhttp3.MultipartBody
 import retrofit2.Response
 
 class OfferingRemoteDataSourceImpl(
@@ -38,6 +39,17 @@ class OfferingRemoteDataSourceImpl(
         return runCatching {
             val response: Response<ProductUrlResponse> =
                 service.postProductImageOg(productUrl.toProductUrlRequest())
+            if (response.isSuccessful) {
+                response.body() ?: error("에러 발생: null")
+            } else {
+                error("에러 발생: ${response.code()}")
+            }
+        }
+    }
+
+    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse> {
+        return runCatching {
+            val response: Response<ProductUrlResponse> = service.postProductImageS3(image)
             if (response.isSuccessful) {
                 response.body() ?: error("에러 발생: null")
             } else {
