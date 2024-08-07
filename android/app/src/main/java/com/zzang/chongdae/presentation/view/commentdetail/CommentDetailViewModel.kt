@@ -63,7 +63,7 @@ class CommentDetailViewModel(
             }
         }
     }
-    
+
     fun updateOfferingStatus() {
         viewModelScope.launch {
             offeringRepository.updateOfferingStatus(offeringId).onSuccess {

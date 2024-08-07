@@ -74,7 +74,7 @@ class OfferingRemoteDataSourceImpl(
             }
         }
     }
-    
+
     override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
         return runCatching {
             val response = service.patchOfferingStatus(offeringId)

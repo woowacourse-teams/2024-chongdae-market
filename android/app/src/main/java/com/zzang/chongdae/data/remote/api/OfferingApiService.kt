@@ -62,7 +62,7 @@ interface OfferingApiService {
     suspend fun getOfferingStatus(
         @Path("offering-id") offeringId: Long,
     ): Response<OfferingStatusResponse>
-    
+
     @PATCH("/offerings/{offering-id}/status")
     suspend fun patchOfferingStatus(
         @Path("offering-id") offeringId: Long,
