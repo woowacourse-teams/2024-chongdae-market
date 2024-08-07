@@ -120,6 +120,7 @@
                 android:background="@drawable/bg_radius_10dp"
                 android:clipToOutline="true"
                 android:scaleType="fitXY"
+                android:onClick="@{() -> vm.onUploadPhotoClick()}"
                 android:src="@drawable/btn_upload_photo"
                 app:importProductImageUrl="@{vm.thumbnailUrl}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"

@@ -86,6 +86,9 @@ class OfferingWriteViewModel(
     private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
 
+    private val _imageUploadEvent = MutableLiveData<Unit>()
+    val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
+
     init {
         _submitButtonEnabled.apply {
             addSource(title) { updateSubmitButtonEnabled() }
@@ -122,6 +125,10 @@ class OfferingWriteViewModel(
 
     fun clearProductUrl() {
         productUrl.value = null
+    }
+
+    fun onUploadPhotoClick() {
+        _imageUploadEvent.value = Unit
     }
 
     fun postProductImageOg() {

@@ -16,6 +16,8 @@
     <string name="all_place">장소</string>
     <string name="all_am">오전</string>
     <string name="all_pm">오후</string>
+    <string name="permission_granted">권한이 허용되었습니다.</string>
+    <string name="permission_denied">권한이 거부되었습니다.</string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>
