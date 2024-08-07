@@ -3,6 +3,7 @@ package com.zzang.chongdae.data.remote.source
 import com.zzang.chongdae.data.mapper.toProductUrlRequest
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
+import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
@@ -43,5 +44,9 @@ class OfferingRemoteDataSourceImpl(
                 error("에러 발생: ${response.code()}")
             }
         }
+    }
+
+    override suspend fun fetchFilters(): Result<FiltersResponse> = runCatching {
+        service.getFilters().body() ?: throw IllegalStateException()
     }
 }

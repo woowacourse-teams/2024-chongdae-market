@@ -5,17 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.zzang.chongdae.domain.model.Filter
+import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.repository.OfferingRepository
-import com.zzang.chongdae.presentation.util.MutableSingleLiveData
-import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -27,11 +28,25 @@ class OfferingViewModel(
 
     val search: MutableLiveData<String?> = MutableLiveData(null)
 
-    private val selectedFilter = MutableLiveData<String?>()
+    private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
 
+    val joinableFilter: LiveData<Filter> = _filters.map {
+        it.first { it.name == FilterName.JOINABLE }
+    }
+
+    val imminentFilter: LiveData<Filter> = _filters.map {
+        it.first { it.name == FilterName.IMMINENT }
+    }
+
+    val highDiscountFilter: LiveData<Filter> = _filters.map {
+        it.first { it.name == FilterName.HIGH_DISCOUNT }
+    }
+
+    private val selectedFilter = MutableLiveData<String?>()
 
     init {
         fetchOfferings()
+        fetchFilters()
     }
 
     fun fetchOfferings() {
@@ -47,22 +62,27 @@ class OfferingViewModel(
         }
     }
 
-    override fun onClickFilter(type: String, isChecked: Boolean) {
+    private fun fetchFilters() {
+        viewModelScope.launch {
+            offeringRepository.fetchFilters().onSuccess {
+                _filters.value = it
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+
+    override fun onClickFilter(filterName: FilterName, isChecked: Boolean) {
+        //현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
+        if(filterName==FilterName.JOINABLE) return
+
         if (isChecked) {
-            selectedFilter.value = type.toFilterCondition()
+            selectedFilter.value = filterName.toString()
         } else {
             selectedFilter.value = null
         }
         fetchOfferings()
     }
-
-    private fun String.toFilterCondition() = when (this) {
-        "참여가능만" -> "JOINABLE"
-        "마감임박순" -> "IMMINENT"
-        "높은할인율순" -> "HIGH_DISCOUNT"
-        else -> null
-    }
-
 
     companion object {
         private const val PAGE_SIZE = 10

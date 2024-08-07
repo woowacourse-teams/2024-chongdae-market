@@ -46,31 +46,31 @@
             app:layout_constraintTop_toTopOf="@id/et_search" />
 
         <CheckBox
-            android:id="@+id/cb_participation"
+            android:id="@+id/cb_joinable"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
             android:layout_marginStart="25dp"
-            android:text="@string/main_filter_participation"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(@string/main_filter_participation, isChecked)}"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.joinableFilter.name, isChecked)}"
+            android:text="@{vm.joinableFilter.value}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_search" />
 
         <CheckBox
-            android:id="@+id/cb_product_price"
+            android:id="@+id/cb_imminent"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
             android:layout_marginStart="10dp"
-            android:text="@string/main_filter_product_closed"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(@string/main_filter_product_closed, isChecked)}"
-            app:layout_constraintStart_toEndOf="@id/cb_participation"
-            app:layout_constraintTop_toTopOf="@id/cb_participation" />
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.imminentFilter.name, isChecked)}"
+            android:text="@{vm.imminentFilter.value}"
+            app:layout_constraintStart_toEndOf="@id/cb_joinable"
+            app:layout_constraintTop_toTopOf="@id/cb_joinable" />
 
         <CheckBox
-            android:id="@+id/cb_discount_rate"
+            android:id="@+id/cb_high_discount"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
             android:layout_marginStart="10dp"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(@string/main_filter_discount_rate, isChecked)}"
-            android:text="@string/main_filter_discount_rate"
-            app:layout_constraintStart_toEndOf="@id/cb_product_price"
-            app:layout_constraintTop_toTopOf="@id/cb_participation" />
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.highDiscountFilter.name, isChecked)}"
+            android:text="@{vm.highDiscountFilter.value}"
+            app:layout_constraintStart_toEndOf="@id/cb_imminent"
+            app:layout_constraintTop_toTopOf="@id/cb_joinable" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_offerings"
@@ -82,7 +82,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cb_participation"
+            app:layout_constraintTop_toBottomOf="@id/cb_joinable"
             tools:listitem="@layout/item_offering" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
