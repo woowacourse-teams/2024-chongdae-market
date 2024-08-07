@@ -27,7 +27,6 @@ class LoginViewModel(
             authRepository.saveLogin(
                 ci = ci,
             ).onSuccess {
-                Log.d("alsong", "login success")
                 _navigateEvent.setValue(true)
             }.onFailure {
                 Log.e("alsong", "postLogin ${it.message}")
@@ -44,9 +43,6 @@ class LoginViewModel(
             authRepository.saveSignup(
                 ci = ci,
             ).onSuccess {
-                Log.d("alsong", "signup success")
-                Log.d("alsong", "id: ${it.memberId}")
-                Log.d("alsong", "nickName: ${it.nickName}")
                 context.dataStore.edit { preferences ->
                     preferences[MEMBER_ID_KEY] = it.memberId
                     preferences[NICKNAME_KEY] = it.nickName
@@ -61,7 +57,9 @@ class LoginViewModel(
     private fun postRefreshToken() {
         viewModelScope.launch {
             authRepository.saveRefresh().onSuccess {
+                Log.d("alsong", "postRefresh: Success")
             }.onFailure {
+                Log.e("alsong", "postRefresh: ${it.message.toString()}")
             }
         }
     }
