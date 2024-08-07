@@ -3,7 +3,6 @@ package com.zzang.chongdae.presentation.view.write
 import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
+import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.PermissionManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
@@ -82,9 +82,12 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     
     private fun handleMediaResult(uri: Uri?) {
         if (uri != null) {
-            Log.d("PhotoPicker", "Selected URI: $uri")
-        } else {
-            Log.d("PhotoPicker", "No media selected")
+            val multipartBodyPart = FileUtils.getMultipartBodyPart(requireContext(), uri, "image")
+            if (multipartBodyPart != null) {
+                viewModel.uploadImageFile(multipartBodyPart)
+            } else {
+                showToast(R.string.error_file_conversion)
+            }
         }
     }
     

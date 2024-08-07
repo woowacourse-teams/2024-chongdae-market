@@ -18,6 +18,7 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -129,6 +130,17 @@ class OfferingWriteViewModel(
 
     fun onUploadPhotoClick() {
         _imageUploadEvent.value = Unit
+    }
+    
+    fun uploadImageFile(multipartBody: MultipartBody.Part) {
+       viewModelScope.launch {
+              offeringRepository.saveProductImageS3(multipartBody).onSuccess {
+                thumbnailUrl.value = it.imageUrl
+              }.onFailure {
+                 Log.e("error", it.message.toString())
+                _errorEvent.setValue(R.string.error_image_upload)
+              }
+       }
     }
 
     fun postProductImageOg() {
