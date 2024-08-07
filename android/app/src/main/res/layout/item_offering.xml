@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="17dp"
-            android:text="2,000원"
+            android:text='@{offering.eachPrice != null ? @string/strike_money_amount_text(offering.eachPrice) : ""}'
             app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
             app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
             app:layout_constraintTop_toTopOf="@id/tv_divided_price" />
@@ -106,7 +106,7 @@
             android:id="@+id/tv_discount_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_discount_rate_text"
+            android:text='@{offering.eachPrice != null ? @string/main_discount_rate_text(offering.calculateDiscountRate()) : ""}'
             android:textColor="@color/main_color"
             android:textSize="@dimen/font_size_13"
             android:textStyle="bold"
