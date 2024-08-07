@@ -23,13 +23,24 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         )
     }
 
+    // 카카오 로그인
+    // 카카오계정으로 로그인 공통 callback 구성
+    // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
+    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.e(TAG, "카카오계정으로 로그인 실패", error)
+        } else if (token != null) {
+            Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
     }
 
     override fun onLoginClick() {
-        loginWithKakao()
+        authenticateWithKakao()
     }
 
     private fun initBinding() {
@@ -40,7 +51,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         binding.lifecycleOwner = this
     }
 
-    private fun loginWithKakao() {
+    private fun authenticateWithKakao() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 Log.d(TAG, "토큰 정보 보기 실패")
@@ -58,19 +69,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 viewModel.postSignup()
             }
         }
-
         login()
-    }
-
-    // 카카오 로그인
-    // 카카오계정으로 로그인 공통 callback 구성
-    // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
-    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-        if (error != null) {
-            Log.e(TAG, "카카오계정으로 로그인 실패", error)
-        } else if (token != null) {
-            Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
-        }
     }
 
     fun login() {
@@ -93,6 +92,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 }
             }
         } else {
+            Log.d(TAG, "카톡 설치 안되어있음. 계정으로 로그인 시도")
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
     }
