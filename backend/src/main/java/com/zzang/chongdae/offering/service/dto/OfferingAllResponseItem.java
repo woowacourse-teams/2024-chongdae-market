@@ -12,6 +12,7 @@ public record OfferingAllResponseItem(Long id,
                                       Integer totalCount,
                                       String thumbnailUrl,
                                       Integer dividedPrice,
+                                      Integer eachPrice,
                                       OfferingCondition condition,
                                       Boolean isOpen) {
 
@@ -23,7 +24,8 @@ public record OfferingAllResponseItem(Long id,
                 offeringStatus.getCurrentCount(),
                 offering.getTotalCount(),
                 offering.getThumbnailUrl(),
-                offeringPrice.calculateDividedPrice().intValue(),
+                offeringPrice.calculateDividedPrice(),
+                offeringPrice.getEachPrice(),
                 offeringStatus.decideOfferingCondition(),
                 offeringStatus.isOpen()
         );
