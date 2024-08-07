@@ -132,7 +132,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].totalCount").description("총원"),
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
                 fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
-                fieldWithPath("offerings[].eachPrice").description("낱개 가격"),
+                fieldWithPath("offerings[].originPrice").description("원 가격"),
                 fieldWithPath("offerings[].condition").description("공모 상태"
                         + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
@@ -266,7 +266,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
                 fieldWithPath("totalCount").description("총원 (필수)"),
                 fieldWithPath("totalPrice").description("총가격 (필수)"),
-                fieldWithPath("eachPrice").description("낱개 가격"),
+                fieldWithPath("originPrice").description("원 가격"),
                 fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소"),
@@ -348,11 +348,38 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("원가가 n빵 가격보다 작을 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_dividedPrice() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    3,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-success", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 
-    @DisplayName("공모 상태 조회")
+    @DisplayName("댓글방 상태 조회")
     @Nested
-    class GetOfferingStatus {
+    class GetCommentRoomStatus {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
@@ -362,18 +389,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("imageUrl").description("이미지 url")
         );
         ResourceSnippetParameters successSnippets = builder()
-                .summary("공모 상태 조회")
-                .description("공모 id를 통해 공모의 상태 정보를 조회합니다.")
+                .summary("댓글방 상태 조회")
+                .description("공모 id를 통해 댓글방의 상태 정보를 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
                 .responseFields(successResponseDescriptors)
-                .responseSchema(schema("OfferingStatusSuccessResponse"))
+                .responseSchema(schema("CommentRoomStatusSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
-                .summary("공모 상태 조회")
-                .description("공모 id를 통해 공모의 상태 정보를 조회합니다.")
+                .summary("댓글방 상태 조회")
+                .description("공모 id를 통해 댓글방의 상태 정보를 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
                 .responseFields(failResponseDescriptors)
-                .responseSchema(schema("OfferingStatusFailResponse"))
+                .responseSchema(schema("CommentRoomStatusFailResponse"))
                 .build();
 
         @BeforeEach
@@ -382,11 +409,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
             offeringFixture.createOffering(member);
         }
 
-        @DisplayName("공모 id로 공모 상태 정보를 조회할 수 있다")
+        @DisplayName("공모 id로 댓글방 상태 정보를 조회할 수 있다")
         @Test
         void should_responseOfferingStatus_when_givenOfferingId() {
             given(spec).log().all()
-                    .filter(document("get-offering-status-success", resource(successSnippets)))
+                    .filter(document("get-comment-room-status-success", resource(successSnippets)))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()
@@ -397,7 +424,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
-                    .filter(document("get-offering-status-fail-invalid-offering", resource(failSnippets)))
+                    .filter(document("get-comment-room-status-fail-invalid-offering", resource(failSnippets)))
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()

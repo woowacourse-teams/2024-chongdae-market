@@ -81,7 +81,7 @@ public class OfferingEntity extends BaseTimeEntity {
     private Integer totalPrice;
 
     @Positive
-    private Integer eachPrice;
+    private Integer originPrice;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -91,10 +91,10 @@ public class OfferingEntity extends BaseTimeEntity {
                           LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
                           Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
-                          Integer eachPrice, CommentRoomStatus roomStatus) {
+                          Integer originPrice, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, isManualConfirmed, totalPrice,
-                eachPrice, roomStatus);
+                originPrice, roomStatus);
     }
 
     public void updateCurrentCount() {
@@ -111,7 +111,7 @@ public class OfferingEntity extends BaseTimeEntity {
     }
 
     public OfferingPrice toOfferingPrice() {
-        return new OfferingPrice(totalCount, totalPrice, eachPrice);
+        return new OfferingPrice(totalCount, totalPrice, originPrice);
     }
 
     public OfferingStatus toOfferingStatus() {
