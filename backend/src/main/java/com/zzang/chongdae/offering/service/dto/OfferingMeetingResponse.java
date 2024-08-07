@@ -5,12 +5,14 @@ import java.time.LocalDateTime;
 
 public record OfferingMeetingResponse(LocalDateTime deadline,
                                       String meetingAddress,
-                                      String meetingAddressDetail) {
+                                      String meetingAddressDetail,
+                                      String meetingAddressDong) {
 
     public OfferingMeetingResponse(OfferingMeeting offeringMeeting) {
         this(offeringMeeting.getDeadline(),
                 offeringMeeting.getMeetingAddress(),
-                offeringMeeting.getMeetingAddressDetail()
+                offeringMeeting.getMeetingAddressDetail(),
+                offeringMeeting.getMeetingAddressDong()
         );
     }
 }
