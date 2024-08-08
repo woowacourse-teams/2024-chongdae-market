@@ -411,7 +411,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             member = memberFixture.createMember();
         }
 
-        @DisplayName("공모 정보를 받아 공모를 작성합니다")
+        @DisplayName("공모 정보를 받아 공모를 작성 할 수 있다.")
         @Test
         void should_createOffering_when_givenOfferingCreateRequest() {
             OfferingSaveRequest request = new OfferingSaveRequest(
