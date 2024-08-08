@@ -31,7 +31,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE ((o.deadline > :now AND o.deadline < :threshold) 
+            WHERE ((o.deadline > :now AND o.deadline < :threshold)
                 OR (o.deadline = :now AND o.id < :lastId)
                 OR (o.totalCount <= 3 AND (o.totalCount - o.currentCount) < 2)
                 OR (o.totalCount > 3 AND (o.totalCount - o.currentCount) < 3))
