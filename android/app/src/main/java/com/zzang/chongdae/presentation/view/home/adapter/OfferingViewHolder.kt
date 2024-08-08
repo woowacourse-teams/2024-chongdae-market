@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.home.adapter
 
+import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 import com.zzang.chongdae.databinding.ItemOfferingBinding
 import com.zzang.chongdae.domain.model.Offering
@@ -11,8 +12,17 @@ class OfferingViewHolder(
     fun bind(
         offering: Offering,
         onOfferingClickListener: OnOfferingClickListener,
+        searchKeyword: String?,
     ) {
         binding.offering = offering
         binding.onOfferingClickListener = onOfferingClickListener
+        binding.searchKeyword = searchKeyword
+        setCancellationLineToEachPrice()
+    }
+
+    private fun setCancellationLineToEachPrice() {
+        binding.tvOriginPrice.apply {
+            this.paintFlags = this.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        }
     }
 }

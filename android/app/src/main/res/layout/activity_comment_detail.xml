@@ -85,15 +85,15 @@
             <ImageView
                 android:id="@+id/iv_offering_status"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
+                android:layout_height="@dimen/size_80"
                 android:layout_marginTop="@dimen/margin_20"
                 android:background="@drawable/bg_white_radius_16dp"
                 android:contentDescription="@string/comment_detail"
                 android:scaleType="fitXY"
-                app:imageResource="@{vm.offeringStatus.imageRes}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/white_round_view" />
+                app:layout_constraintTop_toTopOf="@id/white_round_view"
+                app:offeringsStatusImageUrl="@{vm.offeringStatusImageUrl}" />
 
             <View
                 android:id="@+id/view_divider"
@@ -104,49 +104,23 @@
                 app:layout_constraintStart_toStartOf="@+id/white_round_view"
                 app:layout_constraintTop_toBottomOf="@id/white_round_view" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_offering_button"
+            <TextView
+                android:id="@+id/tv_update_status"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_white_radius_16dp"
+                android:layout_height="@dimen/size_50"
+                android:background="@color/main_color"
+                android:elevation="5dp"
+                android:fontFamily="@font/suit_semibold"
+                android:gravity="center"
+                android:onClick="@{() -> vm.updateOffering()}"
+                android:text="@{vm.offeringStatusButtonText}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_divider">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:fontFamily="@font/suit_semibold"
-                    android:text="@{vm.offeringStatus.buttonText}"
-                    android:textColor="@color/gray_font"
-                    android:textSize="@dimen/size_15"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btn_confirm"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.5"
-                    tools:text="수정" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_confirm"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/main_color"
-                    android:fontFamily="@font/suit_semibold"
-                    android:onClick="@{() -> vm.updateStatus()}"
-                    android:text="@{vm.offeringStatus.statusText}"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/size_15"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_edit"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.5"
-                    tools:text="인원확정" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@+id/white_round_view"
+                app:layout_constraintWidth_percent="0.5"
+                tools:text="인원확정" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_foldable_view"
@@ -157,7 +131,7 @@
                 android:translationZ="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_offering_button"
+                app:layout_constraintTop_toBottomOf="@id/tv_update_status"
                 app:layout_heightWithAnimation="@{vm.isCollapsibleViewVisible ? 80 : 36}">
 
                 <ImageView
@@ -271,10 +245,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/size_36"
+                android:layout_marginBottom="@dimen/size_5"
                 app:layout_constraintBottom_toTopOf="@+id/et_comment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_offering_button"
+                app:layout_constraintTop_toBottomOf="@id/tv_update_status"
                 tools:itemCount="5"
                 tools:listitem="@layout/item_other_comment" />
 

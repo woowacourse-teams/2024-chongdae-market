@@ -9,8 +9,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.OfferingStatus
+import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,11 +20,15 @@ import java.time.LocalDateTime
 class CommentDetailViewModel(
     private val offeringId: Long,
     val offeringTitle: String,
+    private val offeringRepository: OfferingRepository,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
-    val commentContent = MutableLiveData<String>("")
+    private var cachedComments: List<Comment> = emptyList()
+    private val cachedMeetings: Meetings? = null
+    private var pollJob: Job? = null
+    val commentContent = MutableLiveData("")
 
-    private val _isCollapsibleViewVisible = MutableLiveData<Boolean>(false)
+    private val _isCollapsibleViewVisible = MutableLiveData(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
     private val _deadline = MutableLiveData<LocalDateTime>()
@@ -38,21 +43,47 @@ class CommentDetailViewModel(
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
 
-    private var cachedComments: List<Comment> = emptyList()
-    private var pollJob: Job? = null
+    private val _offeringStatusButtonText = MutableLiveData<String>()
+    val offeringStatusButtonText: LiveData<String> get() = _offeringStatusButtonText
 
-    private val _offeringStatus = MutableLiveData(OfferingStatus.Recruiting)
-    val offeringStatus: LiveData<OfferingStatus> get() = _offeringStatus
+    private val _offeringStatusImageUrl = MutableLiveData<String>()
+    val offeringStatusImageUrl: LiveData<String> get() = _offeringStatusImageUrl
+
+    private val _showStatusDialogEvent = MutableLiveData<Unit>()
+    val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
 
     init {
         startPolling()
+        updateStatusInfo()
+        loadMeetings()
     }
 
-    fun updateStatus() {
-        _offeringStatus.value = _offeringStatus.value?.let { OfferingStatus.nextStatus(it) }
+    private fun updateStatusInfo() {
+        viewModelScope.launch {
+            offeringRepository.fetchOfferingStatus(offeringId).onSuccess {
+                _offeringStatusButtonText.value = it.buttonText
+                _offeringStatusImageUrl.value = it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
     }
 
-    private fun loadComments() {
+    fun updateOffering() {
+        _showStatusDialogEvent.value = Unit
+    }
+
+    fun updateOfferingStatus() {
+        viewModelScope.launch {
+            offeringRepository.updateOfferingStatus(offeringId).onSuccess {
+                updateStatusInfo()
+            }.onFailure {
+                Log.e("error", it.message.toString())
+            }
+        }
+    }
+
+    fun loadComments() {
         viewModelScope.launch {
             commentDetailRepository.fetchComments(
                 offeringId = offeringId,
@@ -98,7 +129,7 @@ class CommentDetailViewModel(
 
         // memberId를 가져오는 로직 수정 예정(로그인 기능 구현 이후)
         viewModelScope.launch {
-            commentDetailRepository.saveParticipation(
+            commentDetailRepository.saveComment(
                 memberId = BuildConfig.TOKEN.toLong(),
                 offeringId = offeringId,
                 comment = content,
@@ -113,9 +144,11 @@ class CommentDetailViewModel(
     private fun loadMeetings() {
         viewModelScope.launch {
             commentDetailRepository.fetchMeetings(offeringId).onSuccess {
-                _deadline.value = it.deadline
-                _location.value = it.meetingAddress
-                _locationDetail.value = it.meetingAddressDetail
+                if (it != cachedMeetings) {
+                    _deadline.value = it.deadline
+                    _location.value = it.meetingAddress
+                    _locationDetail.value = it.meetingAddressDetail
+                }
             }.onFailure {
                 Log.e("error", it.message.toString())
             }
@@ -132,6 +165,7 @@ class CommentDetailViewModel(
         fun getFactory(
             offeringId: Long,
             offeringTitle: String,
+            offeringRepository: OfferingRepository,
             commentDetailRepository: CommentDetailRepository,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
@@ -141,6 +175,7 @@ class CommentDetailViewModel(
                 return CommentDetailViewModel(
                     offeringId,
                     offeringTitle,
+                    offeringRepository,
                     commentDetailRepository,
                 ) as T
             }

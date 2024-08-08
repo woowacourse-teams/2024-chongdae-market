@@ -4,6 +4,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.text.Html
 import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -21,6 +23,41 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.regex.Pattern
 
+@BindingAdapter("title", "colorId")
+fun TextView.changeSpecificTextColor(
+    title: String?,
+    colorId: Int,
+) {
+    title?.let {
+        if (!it.contains("*")) return
+        val originTitle = removeAsterisks(this.text.toString())
+        val changedTitleText = extractKeywordBetweenAsterisks(it) ?: return
+
+        val spannableString = SpannableString(originTitle)
+
+        val startIndex = originTitle.indexOf(changedTitleText)
+        val endIndex = startIndex + changedTitleText.length
+
+        spannableString.setSpan(
+            ForegroundColorSpan(colorId),
+            startIndex,
+            endIndex,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+
+        this.text = spannableString
+    }
+}
+
+private fun removeAsterisks(title: String): String {
+    return title.replace("*", "")
+}
+
+private fun extractKeywordBetweenAsterisks(text: String): String? {
+    val regex = "\\*(.*?)\\*".toRegex()
+    return regex.find(text)?.groupValues?.get(1)
+}
+
 @BindingAdapter("url")
 fun TextView.setHyperlink(url: String?) {
     url?.let {
@@ -32,13 +69,22 @@ fun TextView.setHyperlink(url: String?) {
 
 @BindingAdapter("detailProductImageUrl")
 fun ImageView.setImageResource(imageUrl: String?) {
-    imageUrl.let {
+    imageUrl?.let {
         Glide.with(context)
             .load(it)
             .error(R.drawable.img_detail_product_default)
             .fallback(R.drawable.img_detail_product_default)
             .into(this)
     }
+}
+
+@BindingAdapter("importProductImageUrl")
+fun ImageView.importProductImageUrl(imageUrl: String?) {
+    Glide.with(context)
+        .load(imageUrl)
+        .placeholder(R.drawable.btn_upload_photo)
+        .error(R.drawable.btn_upload_photo)
+        .into(this)
 }
 
 @BindingAdapter("offeringsProductImageUrl")
@@ -48,6 +94,16 @@ fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
             .load(it)
             .error(R.drawable.img_main_product_default)
             .fallback(R.drawable.img_main_product_default)
+            .into(this)
+    }
+}
+
+@BindingAdapter("offeringsStatusImageUrl")
+fun ImageView.setOfferingsStatusImageUrl(imageUrl: String?) {
+    imageUrl.let {
+        Glide.with(context)
+            .load(it)
+            .error(R.drawable.ic_comment_detail_recruiting)
             .into(this)
     }
 }
@@ -75,7 +131,7 @@ private fun OfferingCondition.toOfferingComment(
     remaining: Int,
 ) = when (this) {
     OfferingCondition.FULL -> context.getString(R.string.main_offering_condition_full_comment)
-    OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_condition_closed_comment)
+    OfferingCondition.IMMINENT -> context.getString(R.string.main_offering_condition_closed_comment)
     OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_condition_closed_comment)
     OfferingCondition.AVAILABLE ->
         Html.fromHtml(
@@ -85,7 +141,7 @@ private fun OfferingCondition.toOfferingComment(
         )
 }
 
-@BindingAdapter("conditionText:offeringCondition") // 추후 condition추가(마감임박)에 따른 API변경있으면 수정 예정
+@BindingAdapter("offeringCondition")
 fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
     offeringCondition?.toStyle()?.let {
         this.setTextAppearance(it)
@@ -101,7 +157,7 @@ fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
 private fun TextView.setBackGroundTintByCondition(offeringCondition: OfferingCondition) {
     when (offeringCondition) {
         OfferingCondition.FULL -> this.setColor(R.color.offering_full)
-        OfferingCondition.TIME_OUT -> this.setColor(R.color.offering_closed)
+        OfferingCondition.IMMINENT -> this.setColor(R.color.offering_imminent)
         OfferingCondition.CONFIRMED -> this.setColor(R.color.offering_closed)
         OfferingCondition.AVAILABLE -> this.setColor(R.color.offering_continue)
     }
@@ -114,7 +170,7 @@ private fun TextView.setColor(colorId: Int) {
 private fun OfferingCondition.toOfferingConditionText(context: Context) =
     when (this) {
         OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
-        OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_closed) // 공구마감
+        OfferingCondition.IMMINENT -> context.getString(R.string.main_offering_imminent) // 마감임박
         OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_closed) // 공구마감
         OfferingCondition.AVAILABLE -> context.getString(R.string.main_offering_continue) // 모집중
     }
@@ -122,7 +178,7 @@ private fun OfferingCondition.toOfferingConditionText(context: Context) =
 private fun OfferingCondition.toStyle() =
     when (this) {
         OfferingCondition.FULL -> R.style.Theme_AppCompat_TextView_Offering_Full // 인원 만석
-        OfferingCondition.TIME_OUT -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
+        OfferingCondition.IMMINENT -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
         OfferingCondition.CONFIRMED -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
         OfferingCondition.AVAILABLE -> R.style.Theme_AppCompat_TextView_Offering_Continue // 모집중
     }
@@ -158,7 +214,7 @@ private fun OfferingCondition.toOfferingConditionText(
     totalCount: Int,
 ) = when (this) {
     OfferingCondition.FULL -> context.getString(R.string.participant_full)
-    OfferingCondition.TIME_OUT -> context.getString(R.string.participant_end)
+    OfferingCondition.IMMINENT -> context.getString(R.string.participant_end)
     OfferingCondition.CONFIRMED -> context.getString(R.string.participant_end)
     OfferingCondition.AVAILABLE ->
         context.getString(

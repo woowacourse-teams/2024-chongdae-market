@@ -10,35 +10,38 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.repository.OfferingsRepository
+import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class OfferingWriteViewModel(
-    private val offeringsRepository: OfferingsRepository,
+    private val offeringRepository: OfferingRepository,
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 
-    val productUrl: MutableLiveData<String?> = MutableLiveData("")
+    val productUrl: MutableLiveData<String?> = MutableLiveData(null)
 
     val thumbnailUrl: MutableLiveData<String?> = MutableLiveData("")
 
-    val totalCount: MutableLiveData<String> = MutableLiveData("${MINIMUM_TOTAL_COUNT}")
+    val deleteImageVisible: LiveData<Boolean> = thumbnailUrl.map { !it.isNullOrBlank() }
+
+    val totalCount: MutableLiveData<String> = MutableLiveData("$MINIMUM_TOTAL_COUNT")
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
-    val eachPrice: MutableLiveData<String?> = MutableLiveData("")
+    val originPrice: MutableLiveData<String?> = MutableLiveData("")
 
     val meetingAddress: MutableLiveData<String> = MutableLiveData("")
 
-    private val _meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
-    val meetingAddressDong: LiveData<String?> get() = _meetingAddressDong
+    private val meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
 
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
@@ -48,8 +51,14 @@ class OfferingWriteViewModel(
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
+    private val _errorEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val errorEvent: SingleLiveData<Int> get() = _errorEvent
+
     private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
+
+    private val _extractButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val extractButtonEnabled: LiveData<Boolean> get() = _extractButtonEnabled
 
     private val _invalidTotalCountEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidTotalCountEvent: SingleLiveData<Boolean> get() = _invalidTotalCountEvent
@@ -57,26 +66,32 @@ class OfferingWriteViewModel(
     private val _invalidTotalPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidTotalPriceEvent: SingleLiveData<Boolean> get() = _invalidTotalPriceEvent
 
-    private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
+    private val _invalidOriginPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val invalidOriginPriceEvent: SingleLiveData<Boolean> get() = _invalidOriginPriceEvent
 
-    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
+    private val _originPriceCheaperThanSplitPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val originPriceCheaperThanSplitPriceEvent: SingleLiveData<Boolean> get() = _originPriceCheaperThanSplitPriceEvent
 
     private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
 
     private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
-    val discountRate: LiveData<Float> get() = _discountRate
-
-    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
-
     val splitPriceVisibility: LiveData<Boolean>
         get() = _splitPrice.map { it >= 0 }
 
     val discountRateVisibility: LiveData<Boolean>
         get() = _discountRate.map { it >= 0 }
+
+    val discountRate: LiveData<Float> get() = _discountRate
+
+    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
+
+    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
+
+    private val _imageUploadEvent = MutableLiveData<Unit>()
+    val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
 
     init {
         _submitButtonEnabled.apply {
@@ -96,7 +111,11 @@ class OfferingWriteViewModel(
 
         _discountRate.apply {
             addSource(_splitPrice) { safeUpdateDiscountRate() }
-            addSource(eachPrice) { safeUpdateDiscountRate() }
+            addSource(originPrice) { safeUpdateDiscountRate() }
+        }
+
+        _extractButtonEnabled.apply {
+            addSource(productUrl) { value = !productUrl.value.isNullOrBlank() }
         }
     }
 
@@ -106,6 +125,44 @@ class OfferingWriteViewModel(
         }.onFailure {
             _splitPrice.value = ERROR_INTEGER_FORMAT
         }
+    }
+
+    fun clearProductUrl() {
+        productUrl.value = null
+    }
+
+    fun onUploadPhotoClick() {
+        _imageUploadEvent.value = Unit
+    }
+
+    fun uploadImageFile(multipartBody: MultipartBody.Part) {
+        viewModelScope.launch {
+            offeringRepository.saveProductImageS3(multipartBody).onSuccess {
+                thumbnailUrl.value = it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+                _errorEvent.setValue(R.string.all_error_image_upload)
+            }
+        }
+    }
+
+    fun postProductImageOg() {
+        viewModelScope.launch {
+            offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
+                if (it.imageUrl.isNullOrBlank()) {
+                    _errorEvent.setValue(R.string.error_empty_product_url)
+                    return@launch
+                }
+                thumbnailUrl.value = HTTPS + it.imageUrl
+            }.onFailure {
+                Log.e("error", it.message.toString())
+                _errorEvent.setValue(R.string.error_invalid_product_url)
+            }
+        }
+    }
+
+    fun clearProductImage() {
+        thumbnailUrl.value = null
     }
 
     private fun safeUpdateDiscountRate() {
@@ -133,11 +190,11 @@ class OfferingWriteViewModel(
     }
 
     private fun updateDiscountRate() {
-        val eachPrice = Price.fromString(eachPrice.value)
+        val originPrice = Price.fromString(originPrice.value)
         val splitPrice = Price.fromInteger(_splitPrice.value)
-        val discountPriceValue = eachPrice.amount - splitPrice.amount
+        val discountPriceValue = originPrice.amount - splitPrice.amount
         val discountPrice = DiscountPrice.fromFloat(discountPriceValue.toFloat())
-        _discountRate.value = (discountPrice.amount / eachPrice.amount) * 100
+        _discountRate.value = (discountPrice.amount / originPrice.amount) * 100
     }
 
     fun increaseTotalCount() {
@@ -178,19 +235,20 @@ class OfferingWriteViewModel(
         val deadline = deadlineValue.value ?: return
         val description = description.value ?: return
 
+        val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
+        val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return
+
+        var originPriceNotBlank: Int? = 0
+        runCatching {
+            originPriceNotBlank = originPriceToPositiveIntOrNull(originPrice.value)
+        }.onFailure {
+            makeOriginPriceInvalidEvent()
+            return
+        }
+        if (isOriginPriceCheaperThanSplitPriceEvent() == true) return
+
         viewModelScope.launch {
-            val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return@launch
-            val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return@launch
-
-            var eachPriceNotBlank: Int? = 0
-            runCatching {
-                eachPriceNotBlank = eachPriceToPositiveIntOrNull(eachPrice.value)
-            }.onFailure {
-                makeEachPriceInvalidEvent()
-                return@launch
-            }
-
-            offeringsRepository.saveOffering(
+            offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
                         memberId = memberId,
@@ -199,7 +257,7 @@ class OfferingWriteViewModel(
                         thumbnailUrl = thumbnailUrl.value,
                         totalCount = totalCountConverted,
                         totalPrice = totalPriceConverted,
-                        eachPrice = eachPriceNotBlank,
+                        originPrice = originPriceNotBlank,
                         meetingAddress = meetingAddress,
                         meetingAddressDong = meetingAddressDong.value,
                         meetingAddressDetail = meetingAddressDetail,
@@ -208,14 +266,13 @@ class OfferingWriteViewModel(
                     ),
             ).onSuccess {
                 makeFinishEvent()
-                Log.d("alsong", "success")
             }.onFailure {
-                Log.e("alsong", it.message.toString())
+                Log.e("error", it.message.toString())
             }
         }
     }
 
-    private fun eachPriceToPositiveIntOrNull(input: String?): Int? {
+    private fun originPriceToPositiveIntOrNull(input: String?): Int? {
         val eachPriceInputTrim = input?.trim()
         if (eachPriceInputTrim.isNullOrBlank()) {
             return null
@@ -244,8 +301,18 @@ class OfferingWriteViewModel(
         return totalPriceConverted
     }
 
-    private fun makeEachPriceInvalidEvent() {
-        _invalidEachPriceEvent.setValue(true)
+    private fun makeOriginPriceInvalidEvent() {
+        _invalidOriginPriceEvent.setValue(true)
+    }
+
+    private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {
+        if (originPrice.value.isNullOrBlank()) return false
+        val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
+        if (discountRateValue <= 0f) {
+            _originPriceCheaperThanSplitPriceEvent.setValue(true)
+            return true
+        }
+        return false
     }
 
     private fun makeFinishEvent() {
@@ -259,16 +326,17 @@ class OfferingWriteViewModel(
         private const val MAXIMUM_TOTAL_COUNT = 10_000
         private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
         private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
+        private const val HTTPS = "https:"
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringsRepository: OfferingsRepository) =
+        fun getFactory(offeringRepository: OfferingRepository) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
                     return OfferingWriteViewModel(
-                        offeringsRepository,
+                        offeringRepository,
                     ) as T
                 }
             }

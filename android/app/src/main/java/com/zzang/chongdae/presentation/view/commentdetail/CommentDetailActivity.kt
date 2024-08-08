@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.commentdetail
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,19 +10,24 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
+import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.CommentAdapter
 
-class CommentDetailActivity : AppCompatActivity() {
+class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private var _binding: ActivityCommentDetailBinding? = null
     private val binding get() = _binding!!
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
+    private val dialog: Dialog by lazy { Dialog(this) }
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
             offeringId = offeringId,
             offeringTitle = offeringTitle,
+            offeringRepository = (application as ChongdaeApp).offeringRepository,
             commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,
         )
     }
@@ -36,12 +42,20 @@ class CommentDetailActivity : AppCompatActivity() {
         intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
     }
 
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(this)
+    }
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
         setupDrawerToggle()
         initAdapter()
-        setUpCommentsObserve()
+        setUpObserve()
+        observeComments()
     }
 
     private fun initBinding() {
@@ -70,7 +84,12 @@ class CommentDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpCommentsObserve() {
+    private fun setUpObserve() {
+        observeComments()
+        observeUpdateOfferingEvent()
+    }
+
+    private fun observeComments() {
         viewModel.comments.observe(this) { comments ->
             commentAdapter.submitList(comments) {
                 binding.rvComments.doOnPreDraw {
@@ -78,6 +97,42 @@ class CommentDetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun observeUpdateOfferingEvent() {
+        viewModel.showStatusDialogEvent.observe(this) {
+            showUpdateStatusDialog()
+        }
+    }
+
+    private fun showUpdateStatusDialog() {
+        val dialogBinding =
+            DataBindingUtil.inflate<DialogUpdateStatusBinding>(
+                layoutInflater,
+                R.layout.dialog_update_status,
+                null,
+                false,
+            )
+
+        dialogBinding.viewModel = viewModel
+        dialogBinding.listener = this
+
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+    }
+
+    override fun onSubmitClick() {
+        viewModel.updateOfferingStatus()
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "update_offering_status_event",
+            name = "update_offering_status_event",
+            contentType = "button",
+        )
+        dialog.dismiss()
+    }
+
+    override fun onCancelClick() {
+        dialog.dismiss()
     }
 
     override fun onDestroy() {

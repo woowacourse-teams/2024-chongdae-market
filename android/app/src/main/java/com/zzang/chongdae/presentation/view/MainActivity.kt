@@ -1,7 +1,11 @@
 package com.zzang.chongdae.presentation.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -46,8 +50,22 @@ class MainActivity : AppCompatActivity() {
         binding.mainBottomNavigation.visibility = View.VISIBLE
     }
 
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            this.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(motionEvent)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        fun startActivity(context: Context) =
+            Intent(context, MainActivity::class.java).run {
+                context.startActivity(this)
+            }
     }
 }

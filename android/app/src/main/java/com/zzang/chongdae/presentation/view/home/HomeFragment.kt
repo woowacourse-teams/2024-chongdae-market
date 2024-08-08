@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.FragmentHomeBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
@@ -25,6 +28,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         OfferingViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
+    }
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(requireContext())
+    }
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
     override fun onCreateView(
@@ -68,10 +78,12 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     ) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = viewModel
     }
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
+        scrollToTopWhenLoadingFinish()
         binding.rvOfferings.adapter = offeringAdapter
         binding.rvOfferings.addItemDecoration(
             DividerItemDecoration(
@@ -81,14 +93,47 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         )
     }
 
+    private fun scrollToTopWhenLoadingFinish() {
+        offeringAdapter.addLoadStateListener { loadState ->
+            if (loadState.refresh is LoadState.NotLoading) {
+                if (isItemExist()) {
+                    scrollToTop()
+                }
+            }
+        }
+    }
+
+    private fun isItemExist() = offeringAdapter.itemCount > 0
+
     private fun setUpOfferingsObserve() {
         viewModel.offerings.observe(viewLifecycleOwner) {
             offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
+
+        viewModel.searchEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.setSearchKeyword(it)
+        }
+
+        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "filter_offerings_event",
+                name = "filter_offerings_event",
+                contentType = "checkbox",
+            )
+        }
     }
 
     override fun onClick(offeringId: Long) {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "Offering_Item_ID: $offeringId",
+            name = "read_offering_detail_event",
+            contentType = "item",
+        )
         OfferingDetailActivity.startActivity(activity as Context, offeringId)
+    }
+
+    private fun scrollToTop() {
+        binding.rvOfferings.smoothScrollToPosition(0)
     }
 
     private fun navigateToOfferingWriteFragment() {
