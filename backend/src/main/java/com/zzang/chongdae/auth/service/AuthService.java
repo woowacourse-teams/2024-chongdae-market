@@ -2,9 +2,8 @@ package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
-import com.zzang.chongdae.auth.service.dto.RefreshRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
-import com.zzang.chongdae.auth.service.dto.SignupResponse;
+import com.zzang.chongdae.auth.service.dto.SignupResponseDto;
 import com.zzang.chongdae.auth.service.dto.TokenDto;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
@@ -32,7 +31,7 @@ public class AuthService {
     }
 
     @Transactional
-    public SignupResponse signup(SignupRequest request) {
+    public SignupResponseDto signup(SignupRequest request) {
         String password = passwordEncoder.encode(request.ci());
         if (memberRepository.existsByPassword(password)) {
             throw new MarketException(AuthErrorCode.DUPLICATED_MEMBER);
@@ -40,11 +39,11 @@ public class AuthService {
         MemberEntity member = new MemberEntity(nickNameGenerator.generate(), password);
         MemberEntity savedMember = memberRepository.save(member);
         TokenDto tokenDto = jwtTokenProvider.createAuthToken(savedMember.getId().toString());
-        return new SignupResponse(savedMember, tokenDto);
+        return new SignupResponseDto(savedMember, tokenDto);
     }
 
-    public TokenDto refresh(RefreshRequest request) {
-        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(request.refreshToken());
+    public TokenDto refresh(String refreshToken) {
+        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
         return jwtTokenProvider.createAuthToken(memberId.toString());
     }
 
