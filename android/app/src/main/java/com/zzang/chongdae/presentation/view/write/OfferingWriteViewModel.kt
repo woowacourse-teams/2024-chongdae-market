@@ -67,7 +67,7 @@ class OfferingWriteViewModel(
     val invalidTotalPriceEvent: SingleLiveData<Boolean> get() = _invalidTotalPriceEvent
 
     private val _invalidOriginPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidOriginPriceEvent
+    val invalidOriginPriceEvent: SingleLiveData<Boolean> get() = _invalidOriginPriceEvent
 
     private val _originPriceCheaperThanSplitPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val originPriceCheaperThanSplitPriceEvent: SingleLiveData<Boolean> get() = _originPriceCheaperThanSplitPriceEvent

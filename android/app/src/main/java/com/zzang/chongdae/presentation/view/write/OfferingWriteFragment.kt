@@ -225,7 +225,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         viewModel.invalidTotalPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_total_price)
         }
-        viewModel.invalidEachPriceEvent.observe(viewLifecycleOwner) {
+        viewModel.invalidOriginPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_each_price)
         }
         viewModel.originPriceCheaperThanSplitPriceEvent.observe(viewLifecycleOwner) {
