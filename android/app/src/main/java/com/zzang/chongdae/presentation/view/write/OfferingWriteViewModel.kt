@@ -37,7 +37,7 @@ class OfferingWriteViewModel(
 
     val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
-    val eachPrice: MutableLiveData<String?> = MutableLiveData("")
+    val originPrice: MutableLiveData<String?> = MutableLiveData("")
 
     val meetingAddress: MutableLiveData<String> = MutableLiveData("")
 
@@ -66,8 +66,11 @@ class OfferingWriteViewModel(
     private val _invalidTotalPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val invalidTotalPriceEvent: SingleLiveData<Boolean> get() = _invalidTotalPriceEvent
 
-    private val _invalidEachPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val invalidEachPriceEvent: SingleLiveData<Boolean> get() = _invalidEachPriceEvent
+    private val _invalidOriginPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val invalidOriginPriceEvent: SingleLiveData<Boolean> get() = _invalidOriginPriceEvent
+
+    private val _originPriceCheaperThanSplitPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val originPriceCheaperThanSplitPriceEvent: SingleLiveData<Boolean> get() = _originPriceCheaperThanSplitPriceEvent
 
     private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
@@ -108,7 +111,7 @@ class OfferingWriteViewModel(
 
         _discountRate.apply {
             addSource(_splitPrice) { safeUpdateDiscountRate() }
-            addSource(eachPrice) { safeUpdateDiscountRate() }
+            addSource(originPrice) { safeUpdateDiscountRate() }
         }
 
         _extractButtonEnabled.apply {
@@ -187,11 +190,11 @@ class OfferingWriteViewModel(
     }
 
     private fun updateDiscountRate() {
-        val eachPrice = Price.fromString(eachPrice.value)
+        val originPrice = Price.fromString(originPrice.value)
         val splitPrice = Price.fromInteger(_splitPrice.value)
-        val discountPriceValue = eachPrice.amount - splitPrice.amount
+        val discountPriceValue = originPrice.amount - splitPrice.amount
         val discountPrice = DiscountPrice.fromFloat(discountPriceValue.toFloat())
-        _discountRate.value = (discountPrice.amount / eachPrice.amount) * 100
+        _discountRate.value = (discountPrice.amount / originPrice.amount) * 100
     }
 
     fun increaseTotalCount() {
@@ -232,18 +235,19 @@ class OfferingWriteViewModel(
         val deadline = deadlineValue.value ?: return
         val description = description.value ?: return
 
+        val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
+        val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return
+
+        var originPriceNotBlank: Int? = 0
+        runCatching {
+            originPriceNotBlank = originPriceToPositiveIntOrNull(originPrice.value)
+        }.onFailure {
+            makeOriginPriceInvalidEvent()
+            return
+        }
+        if (isOriginPriceCheaperThanSplitPriceEvent() == true) return
+
         viewModelScope.launch {
-            val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return@launch
-            val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return@launch
-
-            var eachPriceNotBlank: Int? = 0
-            runCatching {
-                eachPriceNotBlank = eachPriceToPositiveIntOrNull(eachPrice.value)
-            }.onFailure {
-                makeEachPriceInvalidEvent()
-                return@launch
-            }
-
             offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
@@ -253,7 +257,7 @@ class OfferingWriteViewModel(
                         thumbnailUrl = thumbnailUrl.value,
                         totalCount = totalCountConverted,
                         totalPrice = totalPriceConverted,
-                        eachPrice = eachPriceNotBlank,
+                        originPrice = originPriceNotBlank,
                         meetingAddress = meetingAddress,
                         meetingAddressDong = meetingAddressDong.value,
                         meetingAddressDetail = meetingAddressDetail,
@@ -262,14 +266,13 @@ class OfferingWriteViewModel(
                     ),
             ).onSuccess {
                 makeFinishEvent()
-                Log.d("alsong", "success")
             }.onFailure {
-                Log.e("alsong", it.message.toString())
+                Log.e("error", it.message.toString())
             }
         }
     }
 
-    private fun eachPriceToPositiveIntOrNull(input: String?): Int? {
+    private fun originPriceToPositiveIntOrNull(input: String?): Int? {
         val eachPriceInputTrim = input?.trim()
         if (eachPriceInputTrim.isNullOrBlank()) {
             return null
@@ -298,8 +301,18 @@ class OfferingWriteViewModel(
         return totalPriceConverted
     }
 
-    private fun makeEachPriceInvalidEvent() {
-        _invalidEachPriceEvent.setValue(true)
+    private fun makeOriginPriceInvalidEvent() {
+        _invalidOriginPriceEvent.setValue(true)
+    }
+
+    private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {
+        if (originPrice.value.isNullOrBlank()) return false
+        val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
+        if (discountRateValue <= 0f) {
+            _originPriceCheaperThanSplitPriceEvent.setValue(true)
+            return true
+        }
+        return false
     }
 
     private fun makeFinishEvent() {

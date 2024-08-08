@@ -38,7 +38,7 @@ class OfferingRepositoryImpl(
                     thumbnailUrl = uiModel.thumbnailUrl,
                     totalCount = uiModel.totalCount,
                     totalPrice = uiModel.totalPrice,
-                    eachPrice = uiModel.eachPrice,
+                    originPrice = uiModel.originPrice,
                     meetingAddress = uiModel.meetingAddress,
                     meetingAddressDong = uiModel.meetingAddressDong,
                     meetingAddressDetail = uiModel.meetingAddressDetail,

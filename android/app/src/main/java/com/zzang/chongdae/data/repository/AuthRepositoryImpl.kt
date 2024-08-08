@@ -3,7 +3,7 @@ package com.zzang.chongdae.data.repository
 import com.zzang.chongdae.data.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.CiRequest
 import com.zzang.chongdae.data.source.AuthRemoteDataSource
-import com.zzang.chongdae.domain.mo.Member
+import com.zzang.chongdae.domain.model.Member
 import com.zzang.chongdae.domain.repository.AuthRepository
 
 class AuthRepositoryImpl(

@@ -30,7 +30,7 @@ class LoginViewModel(
             ).onSuccess {
                 _navigateEvent.setValue(true)
             }.onFailure {
-                Log.e("alsong", "postLogin ${it.message}")
+                Log.e("error", "postLogin: ${it.message}")
                 when (it.message) {
                     HttpStatusCode.NOT_FOUND_404.code -> postSignup(ci)
                     HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
@@ -50,7 +50,7 @@ class LoginViewModel(
                 }
                 postSignup(ci)
             }.onFailure {
-                Log.e("alsong", it.message.toString())
+                Log.e("error", it.message.toString())
                 when (it.message) {
                     HttpStatusCode.NOT_FOUND_404.code -> postLogin(ci)
                     HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
@@ -62,9 +62,8 @@ class LoginViewModel(
     private fun postRefreshToken(ci: String) {
         viewModelScope.launch {
             authRepository.saveRefresh().onSuccess {
-                Log.d("alsong", "postRefresh: Success")
             }.onFailure {
-                Log.e("alsong", "postRefresh: ${it.message}")
+                Log.e("error", "postRefresh: ${it.message}")
                 when (it.message) {
                     HttpStatusCode.UNAUTHORIZED_401.code -> postLogin(ci)
                 }
