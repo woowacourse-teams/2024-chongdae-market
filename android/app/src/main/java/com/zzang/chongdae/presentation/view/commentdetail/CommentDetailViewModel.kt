@@ -48,12 +48,15 @@ class CommentDetailViewModel(
     private val _offeringStatusImageUrl = MutableLiveData<String>()
     val offeringStatusImageUrl: LiveData<String> get() = _offeringStatusImageUrl
 
+    private val _showStatusDialogEvent = MutableLiveData<Unit>()
+    val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
+
     init {
         startPolling()
         updateStatusInfo()
     }
 
-    fun updateStatusInfo() {
+    private fun updateStatusInfo() {
         viewModelScope.launch {
             offeringRepository.fetchOfferingStatus(offeringId).onSuccess {
                 _offeringStatusButtonText.value = it.buttonText
@@ -62,6 +65,10 @@ class CommentDetailViewModel(
                 Log.e("error", it.message.toString())
             }
         }
+    }
+
+    fun updateOffering() {
+        _showStatusDialogEvent.value = Unit
     }
 
     fun updateOfferingStatus() {
