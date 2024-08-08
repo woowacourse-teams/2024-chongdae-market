@@ -248,7 +248,6 @@ class OfferingWriteViewModel(
         if (isOriginPriceCheaperThanSplitPriceEvent() == true) return
 
         viewModelScope.launch {
-            Log.d("alsong", "originPrice: $originPriceNotBlank")
             offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
