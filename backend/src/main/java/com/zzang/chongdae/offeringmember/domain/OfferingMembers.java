@@ -26,7 +26,7 @@ public class OfferingMembers {
                 .filter(OfferingMemberEntity::isProposer)
                 .findFirst()
                 .map(OfferingMemberEntity::getMember)
-                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PROPOSER_NOT_FOUND));
     }
 
     public List<MemberEntity> getParticipants() {
