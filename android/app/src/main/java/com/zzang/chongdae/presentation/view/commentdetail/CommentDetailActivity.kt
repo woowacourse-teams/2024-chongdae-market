@@ -10,10 +10,12 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.CommentAdapter
 
 class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
@@ -38,6 +40,13 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
     private val offeringTitle by lazy {
         intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
+    }
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(this)
+    }
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +123,11 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
 
     override fun onSubmitClick() {
         viewModel.updateOfferingStatus()
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "update_offering_status_event",
+            name = "update_offering_status_event",
+            contentType = "button",
+        )
         dialog.dismiss()
     }
 
