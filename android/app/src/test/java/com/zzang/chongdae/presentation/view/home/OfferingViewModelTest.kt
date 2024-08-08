@@ -1,13 +1,9 @@
 package com.zzang.chongdae.presentation.view.home
 
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.domain.model.FilterType
-import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
+import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -30,11 +26,11 @@ class OfferingViewModelTest {
 
         coEvery {
             offeringRepository.fetchOfferings(null, null, null, null)
-        } returns OFFERINGS_STUB
+        } returns TestFixture.OFFERINGS_STUB
 
         coEvery {
             offeringRepository.fetchFilters().getOrThrow()
-        } returns FILTERS_STUB
+        } returns TestFixture.FILTERS_STUB
 
         viewModel = OfferingViewModel(offeringRepository)
     }
@@ -44,38 +40,12 @@ class OfferingViewModelTest {
         // given
         coEvery {
             offeringRepository.fetchFilters().getOrThrow()
-        } returns FILTERS_STUB
+        } returns TestFixture.FILTERS_STUB
 
         // when
         val actual = viewModel.filters.getOrAwaitValue()
 
         // then
         assertThat(actual).hasSize(4)
-    }
-
-    companion object {
-        private val OFFERINGS_STUB =
-            (0..20).map {
-                Offering(
-                    id = it.toLong(),
-                    title = "",
-                    meetingAddress = "",
-                    thumbnailUrl = null,
-                    totalCount = 0,
-                    currentCount = 0,
-                    dividedPrice = 0,
-                    eachPrice = null,
-                    condition = OfferingCondition.CONFIRMED,
-                    isOpen = false,
-                )
-            }
-        private val FILTERS_STUB =
-            (0..3).map {
-                Filter(
-                    name = FilterName.HIGH_DISCOUNT,
-                    value = "",
-                    type = FilterType.VISIBLE,
-                )
-            }
     }
 }
