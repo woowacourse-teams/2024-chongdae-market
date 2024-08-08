@@ -1,10 +1,12 @@
 package com.zzang.chongdae.offeringmember.integration;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
+import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -114,6 +116,81 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 참여자 목록 조회")
+    @Nested
+    class OfferingParticipants {
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("proposer.nickname").description("공모 작성자 닉네임"),
+                fieldWithPath("participants[].nickname").description("공모 참여자 닉네임")
+        );
+        ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
+                .summary("공모 참여자 목록 조회")
+                .description("공모 참여자들의 목록을 조회합니다.")
+                .queryParameters(queryParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .requestSchema(schema("OfferingParticipantsSuccessRequest"))
+                .responseSchema(schema("OfferingParticipantsSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = ResourceSnippetParameters.builder()
+                .summary("공모 참여자 목록 조회")
+                .description("공모 참여자들의 목록을 조회합니다.")
+                .queryParameters(queryParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("OfferingParticipantsFailRequest"))
+                .responseSchema(schema("OfferingParticipantsFailResponse"))
+                .build();
+        MemberEntity proposer;
+        MemberEntity participant;
+        OfferingEntity offering;
+
+        @BeforeEach
+        void setUp() {
+            proposer = memberFixture.createMember("dora");
+            participant = memberFixture.createMember("poke");
+            offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+            offeringMemberFixture.createParticipant(participant, offering);
+        }
+
+        @DisplayName("게시된 공모의 참여자 목록을 확인할 수 있다")
+        @Test
+        void should_participantsSuccess() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("participants-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("dora5678"))
+                    .queryParam("offering-id", offering.getId())
+                    .when().get("/participants")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모의 참여자 목록을 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("participants-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("dora5678"))
+                    .queryParam("offering-id", 1000)
+                    .when().get("/participants")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("요청 값에 빈값이 들어오는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_emptyValue() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("participants-fail-request-with-null", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("dora5678"))
+                    .when().get("/participants?offering-id=")
                     .then().log().all()
                     .statusCode(400);
         }
