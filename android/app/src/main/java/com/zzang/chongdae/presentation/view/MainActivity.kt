@@ -1,5 +1,7 @@
 package com.zzang.chongdae.presentation.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -58,5 +60,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        fun startActivity(context: Context) =
+            Intent(context, MainActivity::class.java).run {
+                context.startActivity(this)
+            }
     }
 }
