@@ -18,8 +18,8 @@ public class OfferingMembers {
         return offeringMembers.stream()
                 .filter(OfferingMemberEntity::isProposer)
                 .findFirst()
-                .map(OfferingMemberEntity::getMember)
-                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PROPOSER_NOT_FOUND));
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PROPOSER_NOT_FOUND))
+                .getMember();
     }
 
     public List<MemberEntity> getParticipants() {
