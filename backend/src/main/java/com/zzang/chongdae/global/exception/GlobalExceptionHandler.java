@@ -1,11 +1,21 @@
 package com.zzang.chongdae.global.exception;
 
+import com.zzang.chongdae.logging.config.CachedHttpServletResponseWrapper;
+import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -31,6 +41,37 @@ public class GlobalExceptionHandler {
                 "해당 쿼리 파리미터 값이 존재하지 않습니다 :[%s]".formatted(e.getParameterName()));
         return ResponseEntity
                 .badRequest()
+                .body(errorMessage);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        ErrorMessage errorMessage = new ErrorMessage("서버 관리자에게 문의하세요");
+
+        String identifier = UUID.randomUUID().toString();
+        String httpMethod = request.getMethod();
+        String uri = request.getRequestURI();
+        String requestBody = new String(request.getInputStream().readAllBytes());
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String stackTrace = sw.toString();
+
+        CachedHttpServletResponseWrapper cachedResponse = (CachedHttpServletResponseWrapper) response;
+        String responseBody = new String(cachedResponse.getCachedBody());
+
+        long startTime = Long.parseLong(request.getAttribute("startTime").toString());
+        long endTime = System.currentTimeMillis();
+        String latency = endTime - startTime + "ms";
+
+        LoggingErrorResponse logResponse = new LoggingErrorResponse(identifier, httpMethod, uri, requestBody,
+                "500", responseBody, latency, stackTrace);
+        log.error(logResponse.toString());
+
+        return ResponseEntity
+                .internalServerError()
                 .body(errorMessage);
     }
 }

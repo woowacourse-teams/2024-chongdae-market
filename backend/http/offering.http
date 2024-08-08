@@ -17,7 +17,7 @@ Content-Type: application/json
   "thumbnailUrl": "www.naver.com/favicon.ico",
   "totalCount": 5,
   "totalPrice": 10000,
-  "originPrice": 2000,
+  "originPrice": null,
   "meetingAddress": "서울특별시 광진구 구의강변로 3길 11",
   "meetingAddressDetail": "상세주소아파트",
   "meetingAddressDong": "구의동",
