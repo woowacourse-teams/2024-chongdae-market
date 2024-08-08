@@ -1,6 +1,7 @@
 package com.zzang.chongdae
 
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
 import com.zzang.chongdae.data.local.database.AppDatabase
 import com.zzang.chongdae.data.local.source.CommentLocalDataSourceImpl
@@ -76,5 +77,6 @@ class ChongdaeApp : Application() {
     override fun onCreate() {
         super.onCreate()
         KakaoSdk.init(this, "5fe797552740c1f596e551845cf0f4a1")
+        FirebaseApp.initializeApp(this)
     }
 }
