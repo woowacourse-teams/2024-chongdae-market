@@ -21,14 +21,15 @@ public class OfferingMembers {
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
     }
 
-    public OfferingMemberEntity getProposer() {
+    public MemberEntity getProposer() {
         return offeringMembers.stream()
                 .filter(OfferingMemberEntity::isProposer)
                 .findFirst()
+                .map(OfferingMemberEntity::getMember)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
     }
 
-    public List<OfferingMemberEntity> getParticipants() {
+    public List<MemberEntity> getParticipants() {
         return offeringMembers.stream()
                 .filter(offeringMemberEntity -> !offeringMemberEntity.isProposer())
                 .toList();

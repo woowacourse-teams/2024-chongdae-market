@@ -64,7 +64,7 @@ public class OfferingMemberService {
         List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
         OfferingMembers members = new OfferingMembers(offeringMembers);
         members.validateParticipants(member);
-        OfferingMemberEntity proposer = members.getProposer();
+        MemberEntity proposer = members.getProposer();
         List<ParticipantResponseItem> participants = members.getParticipants().stream()
                 .map(ParticipantResponseItem::new)
                 .toList();

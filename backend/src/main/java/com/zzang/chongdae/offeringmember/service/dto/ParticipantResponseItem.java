@@ -1,10 +1,10 @@
 package com.zzang.chongdae.offeringmember.service.dto;
 
-import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 
 public record ParticipantResponseItem(String nickname) {
 
-    public ParticipantResponseItem(OfferingMemberEntity offeringMember) {
-        this(offeringMember.getMember().getNickname());
+    public ParticipantResponseItem(MemberEntity offeringMember) {
+        this(offeringMember.getNickname());
     }
 }
