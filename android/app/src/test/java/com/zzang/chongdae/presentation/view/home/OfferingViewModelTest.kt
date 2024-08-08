@@ -10,6 +10,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -35,8 +36,9 @@ class OfferingViewModelTest {
         viewModel = OfferingViewModel(offeringRepository)
     }
 
+    @DisplayName("필터 정보를 불러온다")
     @Test
-    fun `필터 정보를 불러온다`() {
+    fun fetchFilters() {
         // given
         coEvery {
             offeringRepository.fetchFilters().getOrThrow()
