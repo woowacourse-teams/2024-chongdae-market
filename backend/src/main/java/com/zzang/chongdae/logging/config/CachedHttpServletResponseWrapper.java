@@ -1,4 +1,4 @@
-package com.zzang.chongdae.global.config.logging;
+package com.zzang.chongdae.logging.config;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.WriteListener;
@@ -8,26 +8,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CachedBodyHttpServletResponse extends HttpServletResponseWrapper {
+public class CachedHttpServletResponseWrapper extends HttpServletResponseWrapper {
 
     private final ByteArrayOutputStream cachedBody;
     private final ServletOutputStream outputStream;
     private final PrintWriter writer;
 
-    public CachedBodyHttpServletResponse(HttpServletResponse response) throws IOException {
+    public CachedHttpServletResponseWrapper(HttpServletResponse response) {
         super(response);
-        cachedBody = new ByteArrayOutputStream();
-        outputStream = new CachedBodyServletOutputStream(cachedBody);
-        writer = new PrintWriter(cachedBody);
+        this.cachedBody = new ByteArrayOutputStream();
+        this.outputStream = new CachedServletOutputStream(cachedBody);
+        this.writer = new PrintWriter(cachedBody);
     }
 
     @Override
-    public ServletOutputStream getOutputStream() throws IOException {
+    public ServletOutputStream getOutputStream() {
         return outputStream;
     }
 
     @Override
-    public PrintWriter getWriter() throws IOException {
+    public PrintWriter getWriter() {
         return writer;
     }
 
@@ -55,12 +55,12 @@ public class CachedBodyHttpServletResponse extends HttpServletResponseWrapper {
         }
     }
 
-    private class CachedBodyServletOutputStream extends ServletOutputStream {
+    private static class CachedServletOutputStream extends ServletOutputStream {
 
-        private final ByteArrayOutputStream cachedBody;
+        private final ByteArrayOutputStream byteArrayOutputStream;
 
-        public CachedBodyServletOutputStream(ByteArrayOutputStream cachedBody) {
-            this.cachedBody = cachedBody;
+        public CachedServletOutputStream(ByteArrayOutputStream byteArrayOutputStream) {
+            this.byteArrayOutputStream = byteArrayOutputStream;
         }
 
         @Override
@@ -70,12 +70,11 @@ public class CachedBodyHttpServletResponse extends HttpServletResponseWrapper {
 
         @Override
         public void setWriteListener(WriteListener listener) {
-            // No implementation needed
         }
 
         @Override
-        public void write(int b) throws IOException {
-            cachedBody.write(b);
+        public void write(int buffer) {
+            byteArrayOutputStream.write(buffer);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.zzang.chongdae.global.config.logging;
+package com.zzang.chongdae.logging.config;
 
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
@@ -9,35 +9,36 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
-    private byte[] cachedBody;
+public class CachedHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-    public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
+    private final byte[] cachedBody;
+
+    public CachedHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
         InputStream requestInputStream = request.getInputStream();
         this.cachedBody = inputStreamToByteArray(requestInputStream);
     }
 
     @Override
-    public ServletInputStream getInputStream() throws IOException {
-        return new CachedBodyServletInputStream(this.cachedBody);
+    public ServletInputStream getInputStream() {
+        return new CachedServletInputStream(this.cachedBody);
     }
 
     private byte[] inputStreamToByteArray(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteArrayOutputStream.write(buffer, 0, len);
+        int read = inputStream.read();
+        while (read != -1) {
+            byteArrayOutputStream.write(read);
+            read = inputStream.read();
         }
         return byteArrayOutputStream.toByteArray();
     }
 
-    private class CachedBodyServletInputStream extends ServletInputStream {
+    private static class CachedServletInputStream extends ServletInputStream {
 
         private final ByteArrayInputStream byteArrayInputStream;
 
-        public CachedBodyServletInputStream(byte[] cachedBody) {
+        public CachedServletInputStream(byte[] cachedBody) {
             this.byteArrayInputStream = new ByteArrayInputStream(cachedBody);
         }
 
@@ -53,11 +54,10 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
         @Override
         public void setReadListener(ReadListener listener) {
-            // No implementation needed
         }
 
         @Override
-        public int read() throws IOException {
+        public int read() {
             return byteArrayInputStream.read();
         }
     }
