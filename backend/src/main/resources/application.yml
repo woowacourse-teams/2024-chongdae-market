@@ -46,3 +46,16 @@ components:
       type: apiKey
       in: cookie
       name: JSESSIONID
+
+logging:
+  level:
+    com.zzang.chongdae: INFO
+  file:
+    name: /logs/backend.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      file-name-pattern: /logs/backend.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 100MB
+      max-history: 14
