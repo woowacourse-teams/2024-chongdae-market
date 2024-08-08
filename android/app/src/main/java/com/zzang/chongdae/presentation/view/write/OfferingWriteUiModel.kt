@@ -7,7 +7,7 @@ data class OfferingWriteUiModel(
     val thumbnailUrl: String?,
     val totalCount: Int,
     val totalPrice: Int,
-    val eachPrice: Int?,
+    val originPrice: Int?,
     val meetingAddress: String,
     val meetingAddressDong: String?,
     val meetingAddressDetail: String,
