@@ -42,7 +42,7 @@ class OfferingDetailViewModelTest {
 
     @DisplayName("공구에 참여한다")
     @Test
-    fun onClickParticipation()  {
+    fun onClickParticipation() {
         // given
 
         // when
