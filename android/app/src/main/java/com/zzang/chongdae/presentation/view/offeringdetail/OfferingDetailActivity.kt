@@ -6,9 +6,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityOfferingDetailBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 
 class OfferingDetailActivity : AppCompatActivity() {
@@ -22,6 +24,13 @@ class OfferingDetailActivity : AppCompatActivity() {
             offeringId = offeringId,
             offeringDetailRepository = (application as ChongdaeApp).offeringDetailRepository,
         )
+    }
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(this)
+    }
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +59,12 @@ class OfferingDetailActivity : AppCompatActivity() {
 
     private fun setUpMoveCommentDetailEventObserve() {
         viewModel.commentDetailEvent.observe(this) { offeringTitle ->
+
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "Offering_Item_ID: $offeringId",
+                name = "participate_offering_event",
+                contentType = "button",
+            )
             CommentDetailActivity.startActivity(this, offeringId, offeringTitle)
         }
     }
