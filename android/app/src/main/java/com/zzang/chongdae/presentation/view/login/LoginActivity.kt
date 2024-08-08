@@ -96,6 +96,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 contentType = "button",
             )
             MainActivity.startActivity(this)
+            finish()
         }
     }
 }
