@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             Log.e(TAG, "카카오계정으로 로그인 실패", error)
         } else if (token != null) {
             Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
+            loadUserInformation()
         }
     }
 
