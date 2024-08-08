@@ -9,6 +9,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("plugin.serialization") version "2.0.0"
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -165,6 +166,8 @@ dependencies {
 
     // data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation("com.google.firebase:firebase-crashlytics")
 
     // mockk
     testImplementation("io.mockk:mockk:1.13.10")

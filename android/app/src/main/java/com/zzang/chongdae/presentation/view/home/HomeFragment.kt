@@ -11,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.FragmentHomeBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
@@ -26,6 +28,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         OfferingViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
+    }
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(requireContext())
+    }
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
     override fun onCreateView(
@@ -104,9 +113,22 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         viewModel.searchEvent.observe(viewLifecycleOwner) {
             offeringAdapter.setSearchKeyword(it)
         }
+
+        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "filter_offerings_event",
+                name = "filter_offerings_event",
+                contentType = "checkbox",
+            )
+        }
     }
 
     override fun onClick(offeringId: Long) {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "Offering_Item_ID: $offeringId",
+            name = "read_offering_detail_event",
+            contentType = "item",
+        )
         OfferingDetailActivity.startActivity(activity as Context, offeringId)
     }
 
