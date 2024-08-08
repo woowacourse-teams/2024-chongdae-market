@@ -37,7 +37,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -115,7 +114,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             offeringAdapter.setSearchKeyword(it)
         }
 
-        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner){
+        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "filter_offerings_event",
                 name = "filter_offerings_event",
@@ -126,7 +125,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     override fun onClick(offeringId: Long) {
         firebaseAnalyticsManager.logSelectContentEvent(
-            id = "Offering_Item_ID: ${offeringId}",
+            id = "Offering_Item_ID: $offeringId",
             name = "read_offering_detail_event",
             contentType = "item",
         )

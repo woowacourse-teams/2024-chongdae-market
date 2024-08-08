@@ -53,7 +53,6 @@ class OfferingViewModel(
     private val _searchEvent: MutableSingleLiveData<String?> = MutableSingleLiveData(null)
     val searchEvent: SingleLiveData<String?> get() = _searchEvent
 
-
     private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
@@ -74,10 +73,11 @@ class OfferingViewModel(
                     pagingData.map {
                         if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
                             return@map it.copy(
-                                title = highlightSearchKeyword(
-                                    it.title,
-                                    search.value!!
-                                )
+                                title =
+                                    highlightSearchKeyword(
+                                        it.title,
+                                        search.value!!,
+                                    ),
                             )
                         }
                         it.copy(title = removeAsterisks(it.title))
@@ -146,4 +146,3 @@ class OfferingViewModel(
             }
     }
 }
-

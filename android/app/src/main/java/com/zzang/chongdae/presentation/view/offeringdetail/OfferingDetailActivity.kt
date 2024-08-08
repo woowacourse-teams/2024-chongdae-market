@@ -33,7 +33,6 @@ class OfferingDetailActivity : AppCompatActivity() {
         FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,7 +61,7 @@ class OfferingDetailActivity : AppCompatActivity() {
         viewModel.commentDetailEvent.observe(this) { offeringTitle ->
 
             firebaseAnalyticsManager.logSelectContentEvent(
-                id = "Offering_Item_ID: ${offeringId}",
+                id = "Offering_Item_ID: $offeringId",
                 name = "participate_offering_event",
                 contentType = "button",
             )
