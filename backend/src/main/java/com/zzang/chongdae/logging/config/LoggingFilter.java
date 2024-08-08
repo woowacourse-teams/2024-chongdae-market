@@ -18,6 +18,7 @@ public class LoggingFilter implements Filter {
             throws IOException, ServletException {
         if (isMultipart(request)) {
             chain.doFilter(request, response);
+            return;
         }
         HttpServletRequest wrappedRequest
                 = new CachedHttpServletRequestWrapper((HttpServletRequest) request);

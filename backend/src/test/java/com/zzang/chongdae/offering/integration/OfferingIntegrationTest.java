@@ -690,6 +690,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @Nested
     class UploadProductImage {
 
+        List<FieldDescriptor> responseDescriptors = List.of(
+                fieldWithPath("imageUrl").description("이미지 url")
+        );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("상품 이미지 업로드")
                 .description("""
@@ -701,6 +704,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                         |--------------|--------|------------------------|
                         | image        | binary | 상품 이미지               |
                         """)
+                .responseFields(responseDescriptors)
                 .responseSchema(schema("OfferingProductImageSuccessResponse"))
                 .build();
 
