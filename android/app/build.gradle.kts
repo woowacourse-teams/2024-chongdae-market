@@ -38,9 +38,11 @@ android {
 
         val baseUrl = properties.getProperty("base_url")
         val token = properties.getProperty("token")
+        val nativeAppKey = properties.getProperty("native_app_key")
 
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         buildConfigField("String", "TOKEN", "\"$token\"")
+        buildConfigField("String", "NATIVE_APP_KEY", nativeAppKey)
     }
 
     buildTypes {
