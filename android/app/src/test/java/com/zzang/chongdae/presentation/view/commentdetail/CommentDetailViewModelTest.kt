@@ -62,7 +62,7 @@ class CommentDetailViewModelTest {
         // when
         // then
         val result = viewModel.comments.getOrAwaitValue()
-        assertThat(result).isEqualTo(TestFixture.comments1)
+        assertThat(result).isEqualTo(TestFixture.comments)
     }
 
     @DisplayName("댓글을 작성하면 댓글 목록에 추가된다")

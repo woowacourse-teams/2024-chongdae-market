@@ -6,7 +6,7 @@ import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.util.TestFixture
 
 class FakeCommentDetailRepository : CommentDetailRepository {
-    private val comments: MutableList<Comment> = TestFixture.comments1
+    private val comments: MutableList<Comment> = TestFixture.comments
 
     override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
         return Result.success(
@@ -19,7 +19,7 @@ class FakeCommentDetailRepository : CommentDetailRepository {
         offeringId: Long,
         comment: String,
     ): Result<Unit> {
-        comments.add(TestFixture.comment1)
+        comments.add(TestFixture.comment)
         return Result.success(Unit)
     }
 

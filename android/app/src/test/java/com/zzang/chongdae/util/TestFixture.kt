@@ -16,7 +16,7 @@ object TestFixture {
             meetingAddressDetail = "addressDetail",
         )
 
-    val comment1: Comment =
+    val comment: Comment =
         Comment(
             content = "content1",
             commentCreatedAt =
@@ -29,27 +29,9 @@ object TestFixture {
             nickname = "nickname",
         )
 
-    val comment2: Comment =
-        Comment(
-            content = "content2",
-            commentCreatedAt =
-                CommentCreatedAt(
-                    "2021-10-10".toLocalDate(),
-                    "10:10:10".toLocalTime(),
-                ),
-            isMine = true,
-            isProposer = true,
-            nickname = "nickname",
-        )
-
-    val comments1: MutableList<Comment> =
+    val comments: MutableList<Comment> =
         mutableListOf(
-            comment1,
-        )
-
-    val comments2: List<Comment> =
-        listOf(
-            comment2,
+            comment,
         )
 
     val offeringStatus: OfferingStatus =
