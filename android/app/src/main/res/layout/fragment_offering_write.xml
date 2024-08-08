@@ -293,7 +293,7 @@
             <EditText
                 android:id="@+id/et_individual_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
-                android:text="@={vm.eachPrice}"
+                android:text="@={vm.originPrice}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description2" />
 
