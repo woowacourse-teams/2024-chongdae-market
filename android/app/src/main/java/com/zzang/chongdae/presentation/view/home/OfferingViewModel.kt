@@ -31,20 +31,21 @@ class OfferingViewModel(
 
     val search: MutableLiveData<String?> = MutableLiveData(null)
 
-    private val filters: MutableLiveData<List<Filter>> = MutableLiveData()
+    private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
+    val filters: MutableLiveData<List<Filter>> get() = _filters
 
     val joinableFilter: LiveData<Filter> =
-        filters.map {
+        _filters.map {
             it.first { it.name == FilterName.JOINABLE }
         }
 
     val imminentFilter: LiveData<Filter> =
-        filters.map {
+        _filters.map {
             it.first { it.name == FilterName.IMMINENT }
         }
 
     val highDiscountFilter: LiveData<Filter> =
-        filters.map {
+        _filters.map {
             it.first { it.name == FilterName.HIGH_DISCOUNT }
         }
 
@@ -96,7 +97,7 @@ class OfferingViewModel(
     private fun fetchFilters() {
         viewModelScope.launch {
             offeringRepository.fetchFilters().onSuccess {
-                filters.value = it
+                _filters.value = it
             }.onFailure {
                 Log.e("error", it.message.toString())
             }
