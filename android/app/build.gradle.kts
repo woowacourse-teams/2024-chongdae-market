@@ -43,7 +43,7 @@ android {
 
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         buildConfigField("String", "TOKEN", "\"$token\"")
-        buildConfigField("String", "NATIVE_APP_KEY", nativeAppKey)
+        buildConfigField("String", "NATIVE_APP_KEY", "\"$nativeAppKey\"")
     }
 
     buildTypes {
