@@ -31,12 +31,15 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.deadline > :lastDeadline OR (o.deadline = :lastDeadline AND o.id < :lastId))
-                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            WHERE ((o.deadline > :now AND o.deadline < :threshold) 
+                OR (o.deadline = :now AND o.id < :lastId)
+                OR (o.totalCount <= 3 AND (o.totalCount - o.currentCount) < 2)
+                OR (o.totalCount > 3 AND (o.totalCount - o.currentCount) < 3))
+            AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.deadline ASC, o.id DESC
             """)
     List<OfferingEntity> findImminentOfferingsWithKeyword(
-            LocalDateTime lastDeadline, Long lastId, String keyword, Pageable pageable);
+            LocalDateTime now, LocalDateTime threshold, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
             SELECT o
