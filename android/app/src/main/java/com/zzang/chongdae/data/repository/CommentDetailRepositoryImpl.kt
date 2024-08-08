@@ -22,7 +22,7 @@ class CommentDetailRepositoryImpl(
         }
     }
 
-    override suspend fun saveParticipation(
+    override suspend fun saveComment(
         memberId: Long,
         offeringId: Long,
         comment: String,
