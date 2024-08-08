@@ -3,7 +3,7 @@ package com.zzang.chongdae.domain.model
 @JvmInline
 value class DiscountPrice private constructor(val amount: Float) {
     init {
-        require(amount >= 0) { "[ERROR] 할인율은 0 이상의 유리수이어야 한다." }
+        require(amount > 0) { "[ERROR] 할인율은 0 초과의 유리수여야 한다." }
     }
 
     companion object {
