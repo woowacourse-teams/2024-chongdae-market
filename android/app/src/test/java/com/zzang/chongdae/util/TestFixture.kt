@@ -15,6 +15,8 @@ import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.model.OfferingStatus
 import java.time.LocalDateTime
+import com.zzang.chongdae.domain.model.ProductUrl
+import okhttp3.MultipartBody
 
 object TestFixture {
     val meetings: Meetings =
@@ -79,6 +81,10 @@ object TestFixture {
                 type = FilterType.VISIBLE,
             )
         }
+
+    val productUrl: ProductUrl = ProductUrl("url")
+
+    val martiPartBody = MultipartBody.Part.createFormData("image", "image")
 
     val OFFERING_DETAIL_STUB = OfferingDetail(
         id = 1,
