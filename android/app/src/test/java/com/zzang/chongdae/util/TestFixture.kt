@@ -5,13 +5,13 @@ import com.zzang.chongdae.data.mapper.toLocalDateTime
 import com.zzang.chongdae.data.mapper.toLocalTime
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentCreatedAt
-import com.zzang.chongdae.domain.model.Meetings
-import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.FilterType
+import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.OfferingStatus
 
 object TestFixture {
     val meetings: Meetings =
