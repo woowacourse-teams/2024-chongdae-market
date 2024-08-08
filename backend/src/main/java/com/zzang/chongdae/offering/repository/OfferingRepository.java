@@ -36,6 +36,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                 OR (o.totalCount <= 3 AND (o.totalCount - o.currentCount) < 2)
                 OR (o.totalCount > 3 AND (o.totalCount - o.currentCount) < 3))
             AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            AND (o.isManualConfirmed IS FALSE)
             ORDER BY o.deadline ASC, o.id DESC
             """)
     List<OfferingEntity> findImminentOfferingsWithKeyword(
