@@ -12,14 +12,14 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class CommentDetailActivityTest{
+class CommentDetailActivityTest {
     private lateinit var scenario: ActivityScenario<CommentDetailActivity>
-    
+
     @Before
     fun setUp() {
         scenario = ActivityScenario.launch(CommentDetailActivity::class.java)
     }
-    
+
     @Test
     @DisplayName("댓글 상세 화면이 보여야 한다")
     fun displayCommentDetailTest() {

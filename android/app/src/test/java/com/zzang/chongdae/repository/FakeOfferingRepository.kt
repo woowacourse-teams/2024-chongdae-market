@@ -11,41 +11,40 @@ import okhttp3.MultipartBody
 
 class FakeOfferingRepository : OfferingRepository {
     private var offeringStatus: OfferingStatus = TestFixture.offeringStatus
-    
+
     override suspend fun fetchOfferings(
         filter: String?,
         search: String?,
         lastOfferingId: Long?,
-        pageSize: Int?
+        pageSize: Int?,
     ): List<Offering> {
         TODO("Not yet implemented")
     }
-    
+
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
         TODO("Not yet implemented")
     }
-    
+
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
         TODO("Not yet implemented")
     }
-    
+
     override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
         TODO("Not yet implemented")
     }
-    
+
     override suspend fun fetchFilters(): Result<List<Filter>> {
         TODO("Not yet implemented")
     }
-    
+
     override suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatus> {
         return Result.success(
-            offeringStatus
+            offeringStatus,
         )
     }
-    
+
     override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
         offeringStatus = TestFixture.offeringStatus2
         return Result.success(Unit)
     }
-    
 }

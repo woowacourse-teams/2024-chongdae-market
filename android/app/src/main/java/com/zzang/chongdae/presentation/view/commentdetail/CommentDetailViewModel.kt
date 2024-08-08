@@ -144,7 +144,7 @@ class CommentDetailViewModel(
     private fun loadMeetings() {
         viewModelScope.launch {
             commentDetailRepository.fetchMeetings(offeringId).onSuccess {
-                if(it != cachedMeetings) {
+                if (it != cachedMeetings) {
                     _deadline.value = it.deadline
                     _location.value = it.meetingAddress
                     _locationDetail.value = it.meetingAddressDetail
