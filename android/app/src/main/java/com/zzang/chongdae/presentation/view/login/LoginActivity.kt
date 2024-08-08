@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.ActivityLoginBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
@@ -21,6 +23,14 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             authRepository = (application as ChongdaeApp).authRepository,
             context = applicationContext,
         )
+    }
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(this)
+    }
+
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
     val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -80,6 +90,11 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
 
     private fun observeNavigateEvent() {
         viewModel.navigateEvent.observe(this) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "login_event",
+                name = "login_event",
+                contentType = "button",
+            )
             MainActivity.startActivity(this)
         }
     }
