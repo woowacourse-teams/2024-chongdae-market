@@ -24,7 +24,7 @@ class OfferingPagingSource(
             LoadResult.Page(
                 data = offerings,
                 prevKey = lastOfferingId,
-                nextKey = if (offerings.isEmpty()) null else offerings.last().id,
+                nextKey = if (offerings.isEmpty() || offerings.size < DEFAULT_PAGE_SIZE) null else offerings.last().id,
             )
         }.onFailure { throwable ->
             LoadResult.Error<Long, Offering>(throwable)
@@ -38,6 +38,6 @@ class OfferingPagingSource(
     }
 
     companion object {
-        private const val DEFAULT_PAGE_SIZE = 0L
+        private const val DEFAULT_PAGE_SIZE = 10
     }
 }
