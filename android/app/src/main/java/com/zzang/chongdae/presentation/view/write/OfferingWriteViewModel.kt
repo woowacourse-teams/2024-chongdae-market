@@ -267,9 +267,8 @@ class OfferingWriteViewModel(
                     ),
             ).onSuccess {
                 makeFinishEvent()
-                Log.d("alsong", "success")
             }.onFailure {
-                Log.e("alsong", it.message.toString())
+                Log.e("error", it.message.toString())
             }
         }
     }
