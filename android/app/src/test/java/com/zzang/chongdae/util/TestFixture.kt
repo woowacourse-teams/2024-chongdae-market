@@ -12,6 +12,8 @@ import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingStatus
+import com.zzang.chongdae.domain.model.ProductUrl
+import okhttp3.MultipartBody
 
 object TestFixture {
     val meetings: Meetings =
@@ -76,4 +78,8 @@ object TestFixture {
                 type = FilterType.VISIBLE,
             )
         }
+
+    val productUrl: ProductUrl = ProductUrl("url")
+
+    val martiPartBody = MultipartBody.Part.createFormData("image", "image")
 }
