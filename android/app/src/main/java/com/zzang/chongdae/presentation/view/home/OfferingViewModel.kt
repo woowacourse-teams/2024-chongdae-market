@@ -53,6 +53,10 @@ class OfferingViewModel(
     private val _searchEvent: MutableSingleLiveData<String?> = MutableSingleLiveData(null)
     val searchEvent: SingleLiveData<String?> get() = _searchEvent
 
+
+    private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
+
     init {
         fetchOfferings()
         fetchFilters()
@@ -69,7 +73,12 @@ class OfferingViewModel(
                 _offerings.value =
                     pagingData.map {
                         if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
-                            return@map it.copy(title = highlightSearchKeyword(it.title, search.value!!))
+                            return@map it.copy(
+                                title = highlightSearchKeyword(
+                                    it.title,
+                                    search.value!!
+                                )
+                            )
                         }
                         it.copy(title = removeAsterisks(it.title))
                     }
@@ -107,6 +116,8 @@ class OfferingViewModel(
         filterName: FilterName,
         isChecked: Boolean,
     ) {
+        _filterOfferingsEvent.setValue(Unit)
+
         // 현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
         if (filterName == FilterName.JOINABLE) return
 
@@ -135,3 +146,4 @@ class OfferingViewModel(
             }
     }
 }
+
