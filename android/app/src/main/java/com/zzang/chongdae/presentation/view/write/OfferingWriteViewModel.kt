@@ -238,16 +238,17 @@ class OfferingWriteViewModel(
         val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
         val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return
 
-        var eachPriceNotBlank: Int? = 0
+        var originPriceNotBlank: Int? = 0
         runCatching {
-            eachPriceNotBlank = eachPriceToPositiveIntOrNull(originPrice.value)
+            originPriceNotBlank = originPriceToPositiveIntOrNull(originPrice.value)
         }.onFailure {
-            makeEachPriceInvalidEvent()
+            makeOriginPriceInvalidEvent()
             return
         }
         if (isOriginPriceCheaperThanSplitPriceEvent() == true) return
 
         viewModelScope.launch {
+            Log.d("alsong", "originPrice: $originPriceNotBlank")
             offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
@@ -257,7 +258,7 @@ class OfferingWriteViewModel(
                         thumbnailUrl = thumbnailUrl.value,
                         totalCount = totalCountConverted,
                         totalPrice = totalPriceConverted,
-                        originPrice = eachPriceNotBlank,
+                        originPrice = originPriceNotBlank,
                         meetingAddress = meetingAddress,
                         meetingAddressDong = meetingAddressDong.value,
                         meetingAddressDetail = meetingAddressDetail,
@@ -273,7 +274,7 @@ class OfferingWriteViewModel(
         }
     }
 
-    private fun eachPriceToPositiveIntOrNull(input: String?): Int? {
+    private fun originPriceToPositiveIntOrNull(input: String?): Int? {
         val eachPriceInputTrim = input?.trim()
         if (eachPriceInputTrim.isNullOrBlank()) {
             return null
@@ -302,11 +303,12 @@ class OfferingWriteViewModel(
         return totalPriceConverted
     }
 
-    private fun makeEachPriceInvalidEvent() {
+    private fun makeOriginPriceInvalidEvent() {
         _invalidOriginPriceEvent.setValue(true)
     }
 
     private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {
+        if (originPrice.value.isNullOrBlank()) return false
         val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
         if (discountRateValue <= 0f) {
             _originPriceCheaperThanSplitPriceEvent.setValue(true)
