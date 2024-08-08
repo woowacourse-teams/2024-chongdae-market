@@ -14,9 +14,9 @@ import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.model.OfferingStatus
-import java.time.LocalDateTime
 import com.zzang.chongdae.domain.model.ProductUrl
 import okhttp3.MultipartBody
+import java.time.LocalDateTime
 
 object TestFixture {
     val meetings: Meetings =
@@ -86,22 +86,23 @@ object TestFixture {
 
     val martiPartBody = MultipartBody.Part.createFormData("image", "image")
 
-    val OFFERING_DETAIL_STUB = OfferingDetail(
-        id = 1,
-        title = "Test",
-        nickname = "Test",
-        memberId = "1L",
-        productUrl = "TEST",
-        thumbnailUrl = null,
-        dividedPrice = 1000,
-        totalPrice = 1000,
-        deadline = LocalDateTime.of(1,1,1,1,1,1,1),
-        currentCount = CurrentCount(value = 1000),
-        totalCount = 1000,
-        meetingAddress = "TEST",
-        meetingAddressDetail = "TEST",
-        description = "TEST",
-        condition = OfferingCondition.CONFIRMED,
-        isParticipated = false
-    )
+    val OFFERING_DETAIL_STUB =
+        OfferingDetail(
+            id = 1,
+            title = "Test",
+            nickname = "Test",
+            memberId = "1L",
+            productUrl = "TEST",
+            thumbnailUrl = null,
+            dividedPrice = 1000,
+            totalPrice = 1000,
+            deadline = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1),
+            currentCount = CurrentCount(value = 1000),
+            totalCount = 1000,
+            meetingAddress = "TEST",
+            meetingAddressDetail = "TEST",
+            description = "TEST",
+            condition = OfferingCondition.CONFIRMED,
+            isParticipated = false,
+        )
 }
