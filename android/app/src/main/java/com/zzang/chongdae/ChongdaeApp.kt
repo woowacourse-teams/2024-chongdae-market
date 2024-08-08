@@ -75,6 +75,6 @@ class ChongdaeApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, "5fe797552740c1f596e551845cf0f4a1")
+        KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
     }
 }

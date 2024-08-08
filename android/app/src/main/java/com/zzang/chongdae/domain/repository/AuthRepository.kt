@@ -1,6 +1,6 @@
 package com.zzang.chongdae.domain.repository
 
-import com.zzang.chongdae.domain.mo.Member
+import com.zzang.chongdae.domain.model.Member
 
 interface AuthRepository {
     suspend fun saveLogin(ci: String): Result<Unit>

@@ -125,7 +125,8 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
         setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
-            fragmentBinding.tvPlaceValue.text = bundle.getString(AddressFinderDialog.BUNDLE_ADDRESS_KEY)
+            fragmentBinding.tvPlaceValue.text =
+                bundle.getString(AddressFinderDialog.BUNDLE_ADDRESS_KEY)
         }
     }
 
@@ -224,8 +225,11 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         viewModel.invalidTotalPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_total_price)
         }
-        viewModel.invalidEachPriceEvent.observe(viewLifecycleOwner) {
+        viewModel.invalidOriginPriceEvent.observe(viewLifecycleOwner) {
             showToast(R.string.write_invalid_each_price)
+        }
+        viewModel.originPriceCheaperThanSplitPriceEvent.observe(viewLifecycleOwner) {
+            showToast(R.string.write_origin_price_cheaper_than_total_price)
         }
         viewModel.errorEvent.observe(viewLifecycleOwner) {
             showToast(it)
