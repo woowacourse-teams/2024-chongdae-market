@@ -28,6 +28,9 @@ public class LoggingInterceptor implements HandlerInterceptor {
                                 HttpServletResponse response,
                                 Object handler,
                                 Exception ex) throws IOException {
+        if (isMultipart(request)) {
+            return;
+        }
 
         long startTime = Long.parseLong(request.getAttribute("startTime").toString());
         long endTime = System.currentTimeMillis();
@@ -58,5 +61,10 @@ public class LoggingInterceptor implements HandlerInterceptor {
                     requestBody, statusCode, responseBody, latency);
             log.warn(logResponse.toString());
         }
+    }
+
+    private boolean isMultipart(HttpServletRequest request) {
+        String contentType = request.getContentType();
+        return contentType != null && contentType.toLowerCase().startsWith("multipart/");
     }
 }
