@@ -117,6 +117,7 @@
     <string name="write_invalid_total_count">총원은 2이상 10,000이하의 정수를 입력해 주세요.</string>
     <string name="write_invalid_total_price">총 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_invalid_each_price">낱개 가격은 0이상의 정수를 입력해 주세요.</string>
+    <string name="write_origin_price_cheaper_than_total_price">낱개 가격은 예상 엔빵 가격보다 높아야 합니다.</string>
     <string name="write_discount_rate_value">%.1f</string>
     <string name="error_invalid_product_url">대표 이미지가 유효하지 않습니다.</string>
     <string name="error_empty_product_url">대표 이미지가 존재하지 않습니다.</string>
