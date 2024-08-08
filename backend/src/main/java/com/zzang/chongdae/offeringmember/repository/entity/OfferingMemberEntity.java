@@ -50,4 +50,8 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     public boolean isProposer() {
         return this.role.isProposer();
     }
+
+    public boolean isParticipant() {
+        return this.role.isParticipant();
+    }
 }

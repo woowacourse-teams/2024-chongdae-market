@@ -31,7 +31,8 @@ public class OfferingMembers {
 
     public List<MemberEntity> getParticipants() {
         return offeringMembers.stream()
-                .filter(offeringMemberEntity -> !offeringMemberEntity.isProposer())
+                .filter(OfferingMemberEntity::isParticipant)
+                .map(OfferingMemberEntity::getMember)
                 .toList();
     }
 }
