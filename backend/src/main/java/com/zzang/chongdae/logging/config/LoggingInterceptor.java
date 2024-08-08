@@ -58,6 +58,5 @@ public class LoggingInterceptor implements HandlerInterceptor {
                     requestBody, statusCode, responseBody, latency);
             log.warn(logResponse.toString());
         }
-
     }
 }

@@ -16,12 +16,20 @@ public class LoggingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        if (isMultipart(request)) {
+            chain.doFilter(request, response);
+        }
         HttpServletRequest wrappedRequest
                 = new CachedHttpServletRequestWrapper((HttpServletRequest) request);
         CachedHttpServletResponseWrapper wrappedResponse
                 = new CachedHttpServletResponseWrapper((HttpServletResponse) response);
         chain.doFilter(wrappedRequest, wrappedResponse);
         wrappedResponse.copyBodyToResponse();
+    }
+
+    private boolean isMultipart(ServletRequest request) {
+        String contentType = request.getContentType();
+        return contentType != null && contentType.toLowerCase().startsWith("multipart/");
     }
 }
 
