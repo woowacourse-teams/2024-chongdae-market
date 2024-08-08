@@ -26,11 +26,11 @@ class FakeOfferingRepository : OfferingRepository {
     }
 
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
-        TODO("Not yet implemented")
+        return Result.success(TestFixture.productUrl)
     }
 
     override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
-        TODO("Not yet implemented")
+        return Result.success(TestFixture.productUrl)
     }
 
     override suspend fun fetchFilters(): Result<List<Filter>> {
