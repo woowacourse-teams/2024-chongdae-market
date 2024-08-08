@@ -8,4 +8,8 @@ public enum OfferingMemberRole {
     public boolean isProposer() {
         return this == PROPOSER;
     }
+
+    public boolean isParticipant() {
+        return this == PARTICIPANT;
+    }
 }
