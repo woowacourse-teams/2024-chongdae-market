@@ -131,11 +131,12 @@ private fun OfferingCondition.toOfferingComment(
     remaining: Int,
 ) = when (this) {
     OfferingCondition.FULL -> context.getString(R.string.main_offering_condition_full_comment)
-    OfferingCondition.IMMINENT -> Html.fromHtml(
-        context.getString(R.string.main_offering_condition_continue_comment)
-            .format(remaining),
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-    )
+    OfferingCondition.IMMINENT ->
+        Html.fromHtml(
+            context.getString(R.string.main_offering_condition_continue_comment)
+                .format(remaining),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
 
     OfferingCondition.CONFIRMED -> ""
     OfferingCondition.AVAILABLE -> ""
