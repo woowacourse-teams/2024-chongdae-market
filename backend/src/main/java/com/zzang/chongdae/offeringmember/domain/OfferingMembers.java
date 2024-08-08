@@ -14,13 +14,6 @@ public class OfferingMembers {
 
     private final List<OfferingMemberEntity> offeringMembers;
 
-    public void validateParticipants(MemberEntity member) {
-        offeringMembers.stream()
-                .filter(offeringMember -> offeringMember.isSameMember(member))
-                .findFirst()
-                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
-    }
-
     public MemberEntity getProposer() {
         return offeringMembers.stream()
                 .filter(OfferingMemberEntity::isProposer)

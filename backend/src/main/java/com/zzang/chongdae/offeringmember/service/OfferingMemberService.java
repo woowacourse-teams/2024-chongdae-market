@@ -63,11 +63,21 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
         OfferingMembers members = new OfferingMembers(offeringMembers);
-        members.validateParticipants(member);
+        validateParticipants(offering, member);
         MemberEntity proposer = members.getProposer();
-        List<ParticipantResponseItem> participants = members.getParticipants().stream()
+        List<MemberEntity> participants = members.getParticipants();
+
+        ProposerResponseItem proposerResponseItem = new ProposerResponseItem(proposer);
+        List<ParticipantResponseItem> participantsResponseItem = participants.stream()
                 .map(ParticipantResponseItem::new)
                 .toList();
-        return new ParticipantResponse(new ProposerResponseItem(proposer), participants);
+
+        return new ParticipantResponse(proposerResponseItem, participantsResponseItem);
+    }
+
+    private void validateParticipants(OfferingEntity offering, MemberEntity member) {
+        if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
+            throw new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND);
+        }
     }
 }
