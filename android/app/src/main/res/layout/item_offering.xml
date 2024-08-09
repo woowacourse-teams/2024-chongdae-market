@@ -70,10 +70,10 @@
             android:text="@{offering.title}"
             android:textColor="@color/black_900"
             android:textSize="@dimen/font_size_16"
-            app:title="@{offering.title}"
             app:colorId="@{@color/search_keyword}"
             app:layout_constraintStart_toEndOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
+            app:title="@{offering.title}"
             tools:text="제목" />
 
         <TextView
@@ -113,13 +113,15 @@
             android:id="@+id/tv_discount_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text='@{offering.eachPrice != null ? @string/main_discount_rate_text(offering.calculateDiscountRate()) : ""}'
             android:textColor="@color/main_color"
             android:textSize="@dimen/font_size_13"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_divided_price"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address" />
+            app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
+            tools:text="53%" />
 
 
         <TextView

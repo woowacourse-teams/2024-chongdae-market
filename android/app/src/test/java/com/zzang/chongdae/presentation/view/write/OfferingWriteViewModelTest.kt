@@ -65,4 +65,67 @@ class OfferingWriteViewModelTest {
         val result = viewModel.thumbnailUrl.getOrAwaitValue()
         assertThat(result).isEqualTo(null)
     }
+
+    @DisplayName("총원과 총 가격을 입력받았을 때 엔빵 가격을 계산할 수 있어야 한다")
+    @Test
+    fun calculateSplitPrice() {
+        // when
+        viewModel.totalCount.value = "3"
+        viewModel.totalPrice.value = "3000"
+
+        // then
+        val result = viewModel.splitPrice.getOrAwaitValue()
+        assertThat(result).isEqualTo(1000)
+    }
+
+    @DisplayName("총원과 총 가격, 낱개 가격을 입력받았을 때 할인율을 계산할 수 있어야 한다")
+    @Test
+    fun calculateDiscountRate() {
+        // when
+        viewModel.totalCount.value = "3"
+        viewModel.totalPrice.value = "3000"
+        viewModel.originPrice.value = "2000"
+
+        // then
+        val result = viewModel.discountRate.getOrAwaitValue()
+        assertThat(result).isEqualTo(50f)
+    }
+
+    @DisplayName("필수 항목이 모두 입력되어야만 제출 버튼이 활성화 되어야 한다")
+    @Test
+    fun enabledSubmitButton() {
+        // when
+        viewModel.apply {
+            title.value = "테스트 제목"
+            totalCount.value = "2"
+            totalPrice.value = "1000"
+            meetingAddress.value = "테스트 장소"
+            meetingAddressDetail.value = "테스트 장소 상세"
+            deadline.value = "테스트 시간"
+            description.value = "테스트 내용"
+        }
+
+        // then
+        val result = viewModel.submitButtonEnabled.getOrAwaitValue()
+        assertThat(result).isTrue()
+    }
+
+    @DisplayName("필수 항목이 모두 입력되지 않으면 제출 버튼이 비활성화 되어야 한다")
+    @Test
+    fun disabledSubmitButton() {
+        // when
+        viewModel.apply {
+            title.value = "테스트 제목"
+            totalCount.value = "\n"
+            totalPrice.value = ""
+            meetingAddress.value = "  "
+            meetingAddressDetail.value = "             "
+            deadline.value = "테스트 시간"
+            description.value = "테스트 내용"
+        }
+
+        // then
+        val result = viewModel.submitButtonEnabled.getOrAwaitValue()
+        assertThat(result).isFalse()
+    }
 }
