@@ -2,7 +2,7 @@
 GET {{base-url}}/offerings/1
 
 ### 공모 목록 조회 API
-GET {{base-url}}/offerings?filter=IMMINENT&page-size=3&last-id=10
+GET {{base-url}}/offerings?last-id=10&page-size=10
 
 ### 공모 필터 목록 조회 API
 GET {{base-url}}/offerings/filters
