@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -20,7 +19,7 @@ import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
 
-class HomeFragment : Fragment(), OnOfferingClickListener {
+class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var offeringAdapter: OfferingAdapter
@@ -79,11 +78,11 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
+        binding.onUpsideClickListener = this
     }
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
-        scrollToTopWhenLoadingFinish()
         binding.rvOfferings.adapter = offeringAdapter
         binding.rvOfferings.addItemDecoration(
             DividerItemDecoration(
@@ -92,18 +91,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             ),
         )
     }
-
-    private fun scrollToTopWhenLoadingFinish() {
-        offeringAdapter.addLoadStateListener { loadState ->
-            if (loadState.refresh is LoadState.NotLoading) {
-                if (isItemExist()) {
-                    scrollToTop()
-                }
-            }
-        }
-    }
-
-    private fun isItemExist() = offeringAdapter.itemCount > 0
 
     private fun setUpOfferingsObserve() {
         viewModel.offerings.observe(viewLifecycleOwner) {
@@ -120,6 +107,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
                 name = "filter_offerings_event",
                 contentType = "checkbox",
             )
+            scrollToTop()
         }
     }
 
@@ -140,5 +128,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
         }
+    }
+
+    override fun onClickUpside() {
+        scrollToTop()
     }
 }

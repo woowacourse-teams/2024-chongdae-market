@@ -129,7 +129,17 @@
         <item name="android:drawablePadding">3dp</item>
         <item name="android:paddingVertical">6dp</item>
         <item name="android:paddingStart">10dp</item>
-        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
+    <style name="Widget.AppCompat.CompoundButton.CheckBox.Upside" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray_900</item>
+        <item name="android:background">@drawable/bg_main_gray_color_10dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingVertical">3dp</item>
+        <item name="android:drawableStart">@drawable/btn_upside</item>
     </style>
 
     <!--    DateTimePicker Custom   -->
