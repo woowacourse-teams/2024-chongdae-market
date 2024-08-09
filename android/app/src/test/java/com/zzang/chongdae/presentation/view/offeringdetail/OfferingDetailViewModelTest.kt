@@ -5,7 +5,6 @@ import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.repository.FakeOfferingDetailRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
-import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.getOrAwaitValue
 import io.mockk.every
 import io.mockk.mockk
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mock
 
 @ExperimentalCoroutinesApi
 @ExtendWith(CoroutinesTestExtension::class)
