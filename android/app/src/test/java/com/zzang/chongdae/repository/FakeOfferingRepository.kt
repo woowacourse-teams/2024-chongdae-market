@@ -22,7 +22,7 @@ class FakeOfferingRepository : OfferingRepository {
     }
 
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
-        TODO("Not yet implemented")
+        return Result.success(Unit)
     }
 
     override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
