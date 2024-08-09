@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class OfferingDetailResponse(
     @SerialName("id") val id: Long,
     @SerialName("title") val title: String,
-    @SerialName("productUrl") val productUrl: String,
+    @SerialName("productUrl") val productUrl: String?,
     @SerialName("meetingAddress") val meetingAddress: String,
     @SerialName("meetingAddressDetail") val meetingAddressDetail: String,
     @SerialName("description") val description: String,
