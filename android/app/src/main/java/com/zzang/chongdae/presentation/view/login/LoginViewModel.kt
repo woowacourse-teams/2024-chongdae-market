@@ -48,7 +48,7 @@ class LoginViewModel(
                     preferences[MEMBER_ID_KEY] = it.memberId
                     preferences[NICKNAME_KEY] = it.nickName
                 }
-                postSignup(ci)
+                postLogin(ci)
             }.onFailure {
                 Log.e("error", it.message.toString())
                 when (it.message) {
