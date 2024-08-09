@@ -13,6 +13,8 @@ import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +46,7 @@ public class OfferingController {
             @RequestParam(value = "filter", defaultValue = "RECENT") String filterName,
             @RequestParam(value = "search", required = false) String searchKeyword,
             @RequestParam(value = "last-id", required = false) Long lastId,
-            @RequestParam(value = "page-size", defaultValue = "10") Integer pageSize) {
+            @RequestParam(value = "page-size", defaultValue = "10") @Min(1) @Max(60) Integer pageSize) {
         OfferingAllResponse response = offeringService.getAllOffering(filterName, searchKeyword, lastId, pageSize);
         return ResponseEntity.ok(response);
     }

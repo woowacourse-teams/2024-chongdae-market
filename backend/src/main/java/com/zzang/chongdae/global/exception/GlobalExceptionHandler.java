@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @Slf4j
 @RestControllerAdvice
@@ -29,7 +30,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> handle(MethodArgumentNotValidException e) {
-        ErrorMessage errorMessage = new ErrorMessage(e.getAllErrors().get(0).getDefaultMessage());
+        ErrorMessage errorMessage = new ErrorMessage(
+                "요청값이 유효하지 않습니다: [%s]".formatted(e.getAllErrors().get(0).getDefaultMessage()));
+        return ResponseEntity
+                .badRequest()
+                .body(errorMessage);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handle(HandlerMethodValidationException e) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                "요청값이 유효하지 않습니다: [%s]".formatted(e.getAllErrors().get(0).getDefaultMessage()));
         return ResponseEntity
                 .badRequest()
                 .body(errorMessage);
@@ -43,6 +54,7 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(errorMessage);
     }
+
 
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response)
