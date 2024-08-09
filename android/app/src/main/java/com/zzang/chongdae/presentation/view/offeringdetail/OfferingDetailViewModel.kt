@@ -3,7 +3,6 @@ package com.zzang.chongdae.presentation.view.offeringdetail
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -93,7 +92,10 @@ class OfferingDetailViewModel(
     ) = offeringCondition.isAvailable() && !isParticipated
 
     // 총대여부를 확인하는 메서드(로그인 기능 구현 시 수정 예정)
-    private fun isRepresentative(it: OfferingDetail, memberId: Long): Boolean {
+    private fun isRepresentative(
+        it: OfferingDetail,
+        memberId: Long,
+    ): Boolean {
         return it.memberId == memberId.toString()
     }
 
@@ -106,7 +108,7 @@ class OfferingDetailViewModel(
         fun getFactory(
             offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
-            context: Context
+            context: Context,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
@@ -115,7 +117,7 @@ class OfferingDetailViewModel(
                 return OfferingDetailViewModel(
                     offeringId,
                     offeringDetailRepository,
-                    context
+                    context,
                 ) as T
             }
         }
