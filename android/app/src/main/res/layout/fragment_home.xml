@@ -9,6 +9,11 @@
             name="vm"
             type="com.zzang.chongdae.presentation.view.home.OfferingViewModel" />
 
+
+        <variable
+            name="onUpsideClickListener"
+            type="com.zzang.chongdae.presentation.view.home.OnUpsideClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +75,16 @@
             android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.highDiscountFilter.name, isChecked)}"
             android:text="@{vm.highDiscountFilter.value}"
             app:layout_constraintStart_toEndOf="@id/cb_imminent"
+            app:layout_constraintTop_toTopOf="@id/cb_joinable" />
+
+        <CheckBox
+            android:id="@+id/cb_upside"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Upside"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:onClick="@{() -> onUpsideClickListener.onClickUpside()}"
+            app:layout_constraintStart_toEndOf="@id/cb_high_discount"
             app:layout_constraintTop_toTopOf="@id/cb_joinable" />
 
         <androidx.recyclerview.widget.RecyclerView
