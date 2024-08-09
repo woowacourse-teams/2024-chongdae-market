@@ -46,6 +46,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
         _binding = FragmentCommentRoomsBinding.inflate(inflater, container, false)
         binding.fragmentCommentRooms = this
         binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun linkAdapter() {
