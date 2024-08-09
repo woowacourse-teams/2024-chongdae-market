@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="com.zzang.chongdae.domain.model.Comment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_6">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/size_150" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:background="@drawable/bg_comment_main_color"
+            android:ellipsize="end"
+            android:fontFamily="@font/suit_medium"
+            android:gravity="left"
+            android:maxLines="10"
+            android:paddingStart="@dimen/size_10"
+            android:paddingTop="@dimen/size_7"
+            android:paddingEnd="@dimen/size_10"
+            android:paddingBottom="@dimen/size_7"
+            android:text="@{comment.content}"
+            android:textColor="@color/white"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="내용\n내용이야 채팅 내용이야 내용이야 채팅 내용이야 내용이야 채팅 내용이" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:fontFamily="@font/suit_medium"
+            android:textSize="@dimen/size_10"
+            app:formattedCommentTime="@{comment.commentCreatedAt.time}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_comment"
+            app:layout_constraintEnd_toStartOf="@id/tv_comment"
+            tools:text="오전 10:30" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

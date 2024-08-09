@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="commentRoom"
+            type="com.zzang.chongdae.domain.model.CommentRoom" />
+
+        <variable
+            name="onCommentRoomClickListener"
+            type="com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="@dimen/size_30"
+            android:layout_height="@dimen/size_30"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/size_10"
+            android:layout_marginBottom="@dimen/size_10"
+            android:src="@drawable/img_profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_offering_title"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray900.Size17"
+            android:layout_marginStart="13dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+            app:layout_constraintStart_toEndOf="@id/iv_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_profile"
+            tools:text="참여자1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

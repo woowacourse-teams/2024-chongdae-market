@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_menu_navigation"
+    app:startDestination="@id/home_fragment">
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.zzang.chongdae.presentation.view.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_fragment_to_offering_write_fragment"
+            app:destination="@id/offering_write_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/comment_room_fragment"
+        android:name="com.zzang.chongdae.presentation.view.comment.CommentRoomsFragment"
+        android:label="fragment_comment_room"
+        tools:layout="@layout/fragment_comment_rooms" />
+    <fragment
+        android:id="@+id/my_page_fragment"
+        android:name="com.zzang.chongdae.presentation.view.MyPageFragment"
+        android:label="fragment_my_page"
+        tools:layout="@layout/fragment_my_page" />
+    <fragment
+        android:id="@+id/offering_write_fragment"
+        android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteFragment"
+        android:label="fragment_write_fragment"
+        tools:layout="@layout/fragment_offering_write" />
+</navigation>
