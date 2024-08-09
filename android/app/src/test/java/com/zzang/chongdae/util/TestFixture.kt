@@ -5,6 +5,7 @@ import com.zzang.chongdae.data.mapper.toLocalDateTime
 import com.zzang.chongdae.data.mapper.toLocalTime
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentCreatedAt
+import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.CurrentCount
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
@@ -81,6 +82,17 @@ object TestFixture {
                 type = FilterType.VISIBLE,
             )
         }
+
+    val COMMENT_ROOMS_STUB =
+        listOf(
+            CommentRoom(
+                id = 1,
+                title = "title",
+                latestComment = "latestComment",
+                latestCommentTime = LocalDateTime.of(1, 1, 1, 0, 0),
+                isProposer = true,
+            ),
+        )
 
     val productUrl: ProductUrl = ProductUrl("url")
 
