@@ -31,6 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class OfferingController {
 
+    private static final int MIN_PAGE_SIZE = 1;
+    private static final int MAX_PAGE_SIZE = 60;
+
     private final OfferingService offeringService;
 
     @GetMapping("/offerings/{offering-id}")
@@ -46,7 +49,8 @@ public class OfferingController {
             @RequestParam(value = "filter", defaultValue = "RECENT") String filterName,
             @RequestParam(value = "search", required = false) String searchKeyword,
             @RequestParam(value = "last-id", required = false) Long lastId,
-            @RequestParam(value = "page-size", defaultValue = "10") @Min(1) @Max(60) Integer pageSize) {
+            @RequestParam(value = "page-size", defaultValue = "10") @Min(MIN_PAGE_SIZE) @Max(MAX_PAGE_SIZE)
+            Integer pageSize) {
         OfferingAllResponse response = offeringService.getAllOffering(filterName, searchKeyword, lastId, pageSize);
         return ResponseEntity.ok(response);
     }
