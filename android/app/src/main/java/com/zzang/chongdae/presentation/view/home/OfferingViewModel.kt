@@ -58,7 +58,6 @@ class OfferingViewModel(
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
     init {
-        fetchOfferings()
         fetchFilters()
     }
 
