@@ -215,7 +215,11 @@ private fun OfferingCondition.toOfferingConditionText(
     totalCount: Int,
 ) = when (this) {
     OfferingCondition.FULL -> context.getString(R.string.participant_full)
-    OfferingCondition.IMMINENT -> context.getString(R.string.participant_end)
+    OfferingCondition.IMMINENT -> context.getString(
+        R.string.participant_count,
+        currentCount,
+        totalCount,
+    )
     OfferingCondition.CONFIRMED -> context.getString(R.string.participant_end)
     OfferingCondition.AVAILABLE ->
         context.getString(
