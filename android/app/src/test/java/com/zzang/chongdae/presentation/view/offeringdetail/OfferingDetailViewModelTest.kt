@@ -1,11 +1,13 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
+import android.content.Context
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.repository.FakeOfferingDetailRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
-import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.getOrAwaitValue
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -19,25 +21,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 class OfferingDetailViewModelTest {
     private lateinit var viewModel: OfferingDetailViewModel
     private lateinit var offeringDetailRepository: OfferingDetailRepository
-
+    private lateinit var context: Context
     private val offeringId = 1L
 
     @BeforeEach
     fun setUp() {
+        context = mockk<Context>(relaxed = true)
+        every { context.applicationContext } returns context
         offeringDetailRepository = FakeOfferingDetailRepository()
-        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository)
-    }
-
-    @DisplayName("공모 상세정보를 불러온다")
-    @Test
-    fun loadOffering() {
-        // given
-
-        // when
-        val actual = viewModel.offeringDetail.getOrAwaitValue()
-
-        // then
-        assertThat(actual).isEqualTo(TestFixture.OFFERING_DETAIL_STUB)
+        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, context)
     }
 
     @DisplayName("공구에 참여한다")

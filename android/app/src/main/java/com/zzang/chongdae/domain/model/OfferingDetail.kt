@@ -7,7 +7,7 @@ data class OfferingDetail(
     val title: String,
     val nickname: String,
     val memberId: String,
-    val productUrl: String,
+    val productUrl: String?,
     val thumbnailUrl: String?,
     val dividedPrice: Int,
     val totalPrice: Int,

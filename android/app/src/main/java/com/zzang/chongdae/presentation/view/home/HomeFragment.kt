@@ -58,6 +58,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
     override fun onStart() {
         super.onStart()
 
+        viewModel.fetchOfferings()
         offeringAdapter.refresh()
     }
 

@@ -8,7 +8,7 @@ enum class OfferingCondition {
 
     companion object {
         fun OfferingCondition.isAvailable(): Boolean {
-            return this == AVAILABLE
+            return this == AVAILABLE || this == IMMINENT
         }
     }
 }
