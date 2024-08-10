@@ -42,7 +42,7 @@ jobs:
           echo "sdk.dir=/Users/chaehyun/Library/Android/sdk" > ./local.properties
           echo "base_url=$BASE_URL" >> ./local.properties
           echo "token=$TOKEN" >> ./local.properties
-          echo "native_app_key=$NATIVE_APP_KEY" >> .local.properties
+          echo "native_app_key=$NATIVE_APP_KEY" >> ./local.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
