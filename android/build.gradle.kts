@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         val navigationVersion = "2.7.7"
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
-        val secretsGradlePlugin = "2.0.0"
+        val secretsGradlePlugin = "2.0.1"
         classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:$secretsGradlePlugin")
     }
 }
