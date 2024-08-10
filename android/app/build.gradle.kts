@@ -42,7 +42,7 @@ android {
         val token = properties.getProperty("token")
         val nativeAppKey = properties.getProperty("native_app_key")
 
-        manifestPlaceholders["native_app_key"] = nativeAppKey
+//        manifestPlaceholders["native_app_key"] = nativeAppKey
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         buildConfigField("String", "TOKEN", "\"$token\"")
         buildConfigField("String", "NATIVE_APP_KEY", "\"$nativeAppKey\"")
