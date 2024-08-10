@@ -7,7 +7,7 @@ plugins {
     id("de.mannodermaus.android-junit5") version "1.10.0.0"
     id("kotlin-kapt")
     id("com.google.gms.google-services")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+//    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("plugin.serialization") version "2.0.0"
     id("com.google.firebase.crashlytics")
 }
@@ -42,7 +42,7 @@ android {
         val token = properties.getProperty("token")
         val nativeAppKey = properties.getProperty("native_app_key")
 
-//        manifestPlaceholders["native_app_key"] = nativeAppKey
+        manifestPlaceholders["native_app_key"] = nativeAppKey
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         buildConfigField("String", "TOKEN", "\"$token\"")
         buildConfigField("String", "NATIVE_APP_KEY", "\"$nativeAppKey\"")
