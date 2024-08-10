@@ -45,7 +45,8 @@ android {
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
         buildConfigField("String", "TOKEN", "\"$token\"")
         buildConfigField("String", "NATIVE_APP_KEY", "\"$nativeAppKey\"")
-//        manifestPlaceholders["native_app_key"] = nativeAppKey
+        manifestPlaceholders["native_app_key"] = nativeAppKey
+        manifestPlaceholders["native_app_key"] = properties["native_app_key"] as String
     }
 
     buildTypes {
