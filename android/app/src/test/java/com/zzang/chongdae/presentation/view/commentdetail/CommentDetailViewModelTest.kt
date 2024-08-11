@@ -1,7 +1,9 @@
 package com.zzang.chongdae.presentation.view.commentdetail
 
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeCommentDetailRepository
 import com.zzang.chongdae.repository.FakeOfferingRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CommentDetailViewModelTest {
     private lateinit var viewModel: CommentDetailViewModel
+    private lateinit var authRepository: AuthRepository
     private lateinit var offeringRepository: OfferingRepository
     private lateinit var commentDetailRepository: CommentDetailRepository
     private val offeringId: Long = 1L
@@ -27,9 +30,10 @@ class CommentDetailViewModelTest {
 
     @BeforeEach
     fun setUp() {
+        authRepository = FakeAuthRepository()
         offeringRepository = FakeOfferingRepository()
         commentDetailRepository = FakeCommentDetailRepository()
-        viewModel = CommentDetailViewModel(offeringId, offeringTitle, offeringRepository, commentDetailRepository)
+        viewModel = CommentDetailViewModel(authRepository, offeringId, offeringTitle, offeringRepository, commentDetailRepository)
     }
 
     @DisplayName("공동구매 상태를 불러온다")
