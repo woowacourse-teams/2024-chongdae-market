@@ -25,7 +25,7 @@ class OfferingDetailActivity : AppCompatActivity() {
         OfferingDetailViewModel.getFactory(
             offeringId = offeringId,
             offeringDetailRepository = (application as ChongdaeApp).offeringDetailRepository,
-            MemberPreferences(applicationContext.dataStore)
+            MemberPreferences(applicationContext.dataStore),
         )
     }
 
