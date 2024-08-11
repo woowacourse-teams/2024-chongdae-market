@@ -63,20 +63,32 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
 
     private fun loginWithKakao() {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-            UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-                if (error != null) {
-                    Log.e("error", "카카오톡으로 로그인 실패", error)
-                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                        return@loginWithKakaoTalk
-                    }
-                    UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-                } else if (token != null) {
-                    loadUserInformation()
-                }
-            }
+            loginWithKakaoTalk()
         } else {
             UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
+    }
+
+    private fun loginWithKakaoTalk() {
+        UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
+            if (error != null) {
+                Log.e("error", "카카오톡으로 로그인 실패", error)
+                loginWithKakaoAcountIfKakaoTalkLoginFailed(error)
+            } else if (token != null) {
+                loadUserInformation()
+            }
+        }
+    }
+
+    private fun loginWithKakaoAcountIfKakaoTalkLoginFailed(error: Throwable?) {
+        if (isKakaoTalkLoginCanceled(error)) {
+            return
+        }
+        UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+    }
+
+    private fun isKakaoTalkLoginCanceled(error: Throwable?): Boolean {
+        return error is ClientError && error.reason == ClientErrorCause.Cancelled
     }
 
     private fun loadUserInformation() {
