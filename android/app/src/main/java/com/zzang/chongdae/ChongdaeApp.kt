@@ -2,6 +2,7 @@ package com.zzang.chongdae
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
@@ -19,6 +20,7 @@ import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
+import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository

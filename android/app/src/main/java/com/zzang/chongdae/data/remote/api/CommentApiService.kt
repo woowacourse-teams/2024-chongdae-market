@@ -17,7 +17,6 @@ interface CommentApiService {
     @GET("/comments/{offering-id}")
     suspend fun getComments(
         @Path("offering-id") offeringId: Long,
-        @Query("member-id") memberId: Long,
     ): Response<CommentsResponse>
 
     @POST("/comments")

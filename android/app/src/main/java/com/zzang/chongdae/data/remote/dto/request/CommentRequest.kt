@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CommentRequest(
-    @SerialName("memberId") val memberId: Long,
     @SerialName("offeringId") val offeringId: Long,
     @SerialName("content") val content: String,
 )

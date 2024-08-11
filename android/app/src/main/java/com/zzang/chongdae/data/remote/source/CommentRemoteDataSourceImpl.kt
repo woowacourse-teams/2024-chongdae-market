@@ -18,28 +18,31 @@ class CommentRemoteDataSourceImpl(
             if (response.isSuccessful) {
                 response.body() ?: error("에러 발생: null")
             } else {
-                error("에러 발생: ${response.code()}")
+                error("${response.code()}")
             }
         }
     }
 
     override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit> =
         runCatching {
-            commentApiService.postComment(commentRequest = commentRequest)
-                .body() ?: throw IllegalStateException()
+            val response = commentApiService.postComment(commentRequest)
+            if (response.isSuccessful) {
+                response.body() ?: error("에러 발생: null")
+            } else{
+                error("${response.code()}")
+            }
         }
 
     override suspend fun fetchComments(
         offeringId: Long,
-        memberId: Long,
     ): Result<CommentsResponse> =
         runCatching {
             val response: Response<CommentsResponse> =
-                commentApiService.getComments(offeringId, memberId)
+                commentApiService.getComments(offeringId)
             if (response.isSuccessful) {
                 response.body() ?: error("에러 발생: null")
             } else {
-                error("에러 발생: ${response.code()}")
+                error("${response.code()}")
             }
         }
 }

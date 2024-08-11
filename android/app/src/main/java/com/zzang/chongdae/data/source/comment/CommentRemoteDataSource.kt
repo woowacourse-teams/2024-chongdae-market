@@ -9,8 +9,5 @@ interface CommentRemoteDataSource {
 
     suspend fun saveComment(commentRequest: CommentRequest): Result<Unit>
 
-    suspend fun fetchComments(
-        offeringId: Long,
-        memberId: Long,
-    ): Result<CommentsResponse>
+    suspend fun fetchComments(offeringId: Long): Result<CommentsResponse>
 }

@@ -23,21 +23,18 @@ class CommentDetailRepositoryImpl(
     }
 
     override suspend fun saveComment(
-        memberId: Long,
         offeringId: Long,
         comment: String,
     ): Result<Unit> =
         commentRemoteDataSource.saveComment(
-            commentRequest = CommentRequest(memberId, offeringId, comment),
+            commentRequest = CommentRequest(offeringId, comment),
         )
 
     override suspend fun fetchComments(
         offeringId: Long,
-        memberId: Long,
     ): Result<List<Comment>> {
         return commentRemoteDataSource.fetchComments(
             offeringId,
-            memberId,
         ).mapCatching { response ->
             response.commentsResponse.map { it.toDomain() }
         }
@@ -45,11 +42,10 @@ class CommentDetailRepositoryImpl(
 
     override suspend fun fetchCommentsWithRoom(
         offeringId: Long,
-        memberId: Long,
     ): Result<List<Comment>> {
         try {
             offeringLocalDataSource.insertOffering(OfferingEntity(offeringId))
-            val response = commentRemoteDataSource.fetchComments(offeringId, memberId)
+            val response = commentRemoteDataSource.fetchComments(offeringId)
             return if (response.isSuccess) {
                 val commentsResponse = response.getOrNull()
                 if (commentsResponse != null) {

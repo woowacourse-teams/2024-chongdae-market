@@ -7,17 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.Meetings
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.presentation.util.handleAccessTokenExpiration
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class CommentDetailViewModel(
+    private val authRepository: AuthRepository,
     private val offeringId: Long,
     val offeringTitle: String,
     private val offeringRepository: OfferingRepository,
@@ -64,7 +67,8 @@ class CommentDetailViewModel(
                 _offeringStatusButtonText.value = it.buttonText
                 _offeringStatusImageUrl.value = it.imageUrl
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("error", "updateStatusInfo: ${it.message}")
+                handleAccessTokenExpiration(authRepository, it) { updateStatusInfo() }
             }
         }
     }
@@ -78,7 +82,8 @@ class CommentDetailViewModel(
             offeringRepository.updateOfferingStatus(offeringId).onSuccess {
                 updateStatusInfo()
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("error", "updateOfferingStatus: ${it.message}")
+                handleAccessTokenExpiration(authRepository, it) { updateOfferingStatus() }
             }
         }
     }
@@ -87,14 +92,14 @@ class CommentDetailViewModel(
         viewModelScope.launch {
             commentDetailRepository.fetchComments(
                 offeringId = offeringId,
-                memberId = BuildConfig.TOKEN.toLong(),
             ).onSuccess { newComments ->
                 if (newComments != cachedComments) {
                     cachedComments = newComments
                     _comments.value = newComments
                 }
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("error", "loadComments: ${it.message}")
+                handleAccessTokenExpiration(authRepository, it) { loadComments() }
             }
         }
     }
@@ -127,16 +132,15 @@ class CommentDetailViewModel(
             return
         }
 
-        // memberId를 가져오는 로직 수정 예정(로그인 기능 구현 이후)
         viewModelScope.launch {
             commentDetailRepository.saveComment(
-                memberId = BuildConfig.TOKEN.toLong(),
                 offeringId = offeringId,
                 comment = content,
             ).onSuccess {
                 commentContent.value = ""
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("error", "postComment: ${it.message}")
+                handleAccessTokenExpiration(authRepository, it) { postComment() }
             }
         }
     }
@@ -150,7 +154,8 @@ class CommentDetailViewModel(
                     _locationDetail.value = it.meetingAddressDetail
                 }
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("error", "loadMeetings: ${it.message}")
+                handleAccessTokenExpiration(authRepository, it) { loadMeetings() }
             }
         }
     }
@@ -163,6 +168,7 @@ class CommentDetailViewModel(
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
+            authRepository: AuthRepository,
             offeringId: Long,
             offeringTitle: String,
             offeringRepository: OfferingRepository,
@@ -173,6 +179,7 @@ class CommentDetailViewModel(
                 extras: CreationExtras,
             ): T {
                 return CommentDetailViewModel(
+                    authRepository,
                     offeringId,
                     offeringTitle,
                     offeringRepository,
