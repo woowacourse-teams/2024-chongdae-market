@@ -1,9 +1,6 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
-import android.content.Context
 import android.util.Log
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
+import com.zzang.chongdae.data.local.source.MemberPreferences
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
@@ -23,7 +21,7 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-    private val context: Context,
+    private val memberPreferences: MemberPreferences,
 ) : ViewModel(), OnParticipationClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
@@ -52,10 +50,9 @@ class OfferingDetailViewModel(
 
     private fun loadOffering() {
         viewModelScope.launch {
-            val pref = context.dataStore.data.first()
-
+            val memberId = memberPreferences.memberIdFlow.first() ?: -1
             offeringDetailRepository.fetchOfferingDetail(
-                memberId = BuildConfig.TOKEN.toLong(),
+                memberId = memberId,
                 offeringId = offeringId,
             )
                 .onSuccess {
@@ -64,7 +61,7 @@ class OfferingDetailViewModel(
                     _offeringCondition.value = it.condition
                     _isParticipated.value = it.isParticipated
                     _isAvailable.value = isParticipationEnabled(it.condition, it.isParticipated)
-                    _isRepresentative.value = isRepresentative(it, pref[MEMBER_ID_KEY] ?: -1L)
+                    _isRepresentative.value = isRepresentative(it, memberId)
                 }.onFailure {
                     Log.e("error", it.message.toString())
                 }
@@ -101,14 +98,12 @@ class OfferingDetailViewModel(
 
     companion object {
         private const val DEFAULT_TITLE = ""
-        val Context.dataStore by preferencesDataStore(name = "settings")
-        val MEMBER_ID_KEY = longPreferencesKey("member_id_key")
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
             offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
-            context: Context,
+            memberPreferences: MemberPreferences,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
@@ -117,7 +112,7 @@ class OfferingDetailViewModel(
                 return OfferingDetailViewModel(
                     offeringId,
                     offeringDetailRepository,
-                    context,
+                    memberPreferences,
                 ) as T
             }
         }

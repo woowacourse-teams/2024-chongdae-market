@@ -10,6 +10,8 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
+import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
+import com.zzang.chongdae.data.local.source.MemberPreferences
 import com.zzang.chongdae.databinding.ActivityLoginBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -21,7 +23,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModel.getFactory(
             authRepository = (application as ChongdaeApp).authRepository,
-            context = applicationContext,
+            memberPreferences = MemberPreferences(applicationContext.dataStore),
         )
     }
 
