@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.repository.AuthRepository

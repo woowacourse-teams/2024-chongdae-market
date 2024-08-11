@@ -30,9 +30,7 @@ class CommentDetailRepositoryImpl(
             commentRequest = CommentRequest(offeringId, comment),
         )
 
-    override suspend fun fetchComments(
-        offeringId: Long,
-    ): Result<List<Comment>> {
+    override suspend fun fetchComments(offeringId: Long): Result<List<Comment>> {
         return commentRemoteDataSource.fetchComments(
             offeringId,
         ).mapCatching { response ->
@@ -40,9 +38,7 @@ class CommentDetailRepositoryImpl(
         }
     }
 
-    override suspend fun fetchCommentsWithRoom(
-        offeringId: Long,
-    ): Result<List<Comment>> {
+    override suspend fun fetchCommentsWithRoom(offeringId: Long): Result<List<Comment>> {
         try {
             offeringLocalDataSource.insertOffering(OfferingEntity(offeringId))
             val response = commentRemoteDataSource.fetchComments(offeringId)

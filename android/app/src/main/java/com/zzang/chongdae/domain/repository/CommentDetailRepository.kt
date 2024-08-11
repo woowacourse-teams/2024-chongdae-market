@@ -11,11 +11,7 @@ interface CommentDetailRepository {
         comment: String,
     ): Result<Unit>
 
-    suspend fun fetchComments(
-        offeringId: Long,
-    ): Result<List<Comment>>
+    suspend fun fetchComments(offeringId: Long): Result<List<Comment>>
 
-    suspend fun fetchCommentsWithRoom(
-        offeringId: Long,
-    ): Result<List<Comment>>
+    suspend fun fetchCommentsWithRoom(offeringId: Long): Result<List<Comment>>
 }

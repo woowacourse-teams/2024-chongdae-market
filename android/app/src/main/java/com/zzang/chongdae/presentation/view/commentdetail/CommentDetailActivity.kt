@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.repository.AuthRepositoryImpl
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager

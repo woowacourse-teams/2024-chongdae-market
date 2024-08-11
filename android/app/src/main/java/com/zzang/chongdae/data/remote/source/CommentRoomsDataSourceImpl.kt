@@ -10,7 +10,7 @@ class CommentRoomsDataSourceImpl(
     override suspend fun fetchCommentRooms(): Result<CommentRoomsResponse> {
         return runCatching {
             val response = commentApiService.getCommentRooms()
-            if(response.isSuccessful){
+            if (response.isSuccessful) {
                 response.body() ?: error("에러 발생: null")
             } else {
                 error("${response.code()}")

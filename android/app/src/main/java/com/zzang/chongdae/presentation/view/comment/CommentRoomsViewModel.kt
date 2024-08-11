@@ -42,11 +42,10 @@ class CommentRoomsViewModel(
         fun getFactory(
             authRepository: AuthRepository,
             commentRoomsRepository: CommentRoomsRepository,
-        ) =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return CommentRoomsViewModel(authRepository, commentRoomsRepository) as T
-                }
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return CommentRoomsViewModel(authRepository, commentRoomsRepository) as T
             }
+        }
     }
 }

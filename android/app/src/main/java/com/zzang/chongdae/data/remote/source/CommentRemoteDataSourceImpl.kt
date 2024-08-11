@@ -28,14 +28,12 @@ class CommentRemoteDataSourceImpl(
             val response = commentApiService.postComment(commentRequest)
             if (response.isSuccessful) {
                 response.body() ?: error("에러 발생: null")
-            } else{
+            } else {
                 error("${response.code()}")
             }
         }
 
-    override suspend fun fetchComments(
-        offeringId: Long,
-    ): Result<CommentsResponse> =
+    override suspend fun fetchComments(offeringId: Long): Result<CommentsResponse> =
         runCatching {
             val response: Response<CommentsResponse> =
                 commentApiService.getComments(offeringId)
