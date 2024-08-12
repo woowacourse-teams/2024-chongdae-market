@@ -79,6 +79,7 @@
                 android:layout_marginEnd="10dp"
                 android:text="@={vm.productUrl}"
                 app:layout_constraintEnd_toStartOf="@id/btn_extract_image"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_enter_purchase_link" />
 
@@ -183,6 +184,7 @@
                 android:background="@drawable/et_border_main_color"
                 android:gravity="center"
                 android:text="@={vm.totalCount}"
+                android:textColor="@color/gray_900"
                 android:textSize="20dp"
                 app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel"
@@ -439,6 +441,7 @@
                 android:gravity="top"
                 android:padding="12dp"
                 android:text="@={vm.description}"
+                android:textColor="@color/gray_font"
                 android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
