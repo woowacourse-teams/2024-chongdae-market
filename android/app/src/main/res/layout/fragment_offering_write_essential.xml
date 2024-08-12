@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_44"
                 android:fontFamily="@font/suit_bold"
-                android:text="@string/write_information_message"
+                android:text="@string/write_information_message_essential"
                 android:textColor="@color/black_700"
                 android:textSize="@dimen/size_24"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,91 +54,11 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
             <TextView
-                android:id="@+id/tv_purchase_link"
-                style="@style/Theme.AppCompat.TextView.Write.Subject"
-                android:text="@string/write_purchase_link"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/et_title" />
-
-            <TextView
-                android:id="@+id/tv_enter_purchase_link"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_enter_purchase_link"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_purchase_link" />
-
-            <EditText
-                android:id="@+id/et_purchase_link"
-                style="@style/Theme.AppCompat.TextView.Write.EditText"
-                android:layout_marginEnd="10dp"
-                android:text="@={vm.productUrl}"
-                app:layout_constraintEnd_toStartOf="@id/btn_extract_image"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_enter_purchase_link" />
-
-            <ImageView
-                android:id="@+id/iv_clear_url"
-                android:layout_width="@dimen/icon_size_20"
-                android:layout_height="@dimen/icon_size_20"
-                android:layout_marginEnd="@dimen/size_5"
-                android:onClick="@{() -> vm.clearProductUrl()}"
-                android:src="@drawable/btn_offering_write_clear"
-                app:layout_constraintBottom_toBottomOf="@+id/et_purchase_link"
-                app:layout_constraintEnd_toEndOf="@+id/et_purchase_link"
-                app:layout_constraintTop_toTopOf="@+id/et_purchase_link" />
-
-            <Button
-                android:id="@+id/btn_extract_image"
-                android:layout_width="79dp"
-                android:layout_height="@dimen/size_44"
-                android:background="@drawable/btn_background_selector"
-                android:enabled="@{vm.extractButtonEnabled}"
-                android:onClick="@{() -> vm.postProductImageOg()}"
-                android:text="@string/write_extract_image"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_purchase_link" />
-
-            <TextView
-                android:id="@+id/tv_photo"
-                style="@style/Theme.AppCompat.TextView.Write.Subject"
-                android:text="@string/all_photo"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/et_purchase_link" />
-
-            <ImageView
-                android:id="@+id/iv_upload_photo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="@dimen/size_9"
-                android:background="@drawable/bg_radius_10dp"
-                android:clipToOutline="true"
-                android:onClick="@{() -> vm.onUploadPhotoClick()}"
-                android:scaleType="centerCrop"
-                android:src="@drawable/btn_upload_photo"
-                app:importProductImageUrl="@{vm.thumbnailUrl}"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_photo" />
-
-            <ImageView
-                android:id="@+id/iv_delete_image"
-                android:layout_width="@dimen/icon_size_30"
-                android:layout_height="@dimen/icon_size_30"
-                android:onClick="@{() -> vm.clearProductImage()}"
-                android:src="@drawable/btn_offering_write_delete_image"
-                app:isVisible="@{vm.deleteImageVisible}"
-                app:layout_constraintBottom_toTopOf="@+id/iv_upload_photo"
-                app:layout_constraintEnd_toEndOf="@+id/iv_upload_photo"
-                app:layout_constraintStart_toEndOf="@+id/iv_upload_photo"
-                app:layout_constraintTop_toTopOf="@+id/iv_upload_photo" />
-
-            <TextView
                 android:id="@+id/tv_total_personnel"
                 style="@style/Theme.AppCompat.TextView.Write.Subject"
                 android:text="@string/write_total_personnel"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/iv_upload_photo" />
+                app:layout_constraintTop_toBottomOf="@id/et_title" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.Write.Asterisk"
@@ -238,70 +158,11 @@
                 tools:text="10,000원" />
 
             <TextView
-                android:id="@+id/tv_individual_price"
-                style="@style/Theme.AppCompat.TextView.Write.Subject"
-                android:text="@string/write_individual_price"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_per_n_price" />
-
-            <TextView
-                android:id="@+id/tv_information_individual_price_description"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_information_individual_price_description"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_individual_price" />
-
-            <EditText
-                android:id="@+id/et_individual_price"
-                style="@style/Theme.AppCompat.TextView.Write.EditText"
-                android:text="@={vm.originPrice}"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description" />
-
-            <TextView
-                android:id="@+id/tv_discount_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_11"
-                android:fontFamily="@font/suit_bold"
-                android:text="@string/write_discount_rate"
-                android:textColor="@color/main_color"
-                android:textSize="@dimen/size_15"
-                app:isVisible="@{vm.discountRateVisibility}"
-                app:layout_constraintStart_toStartOf="@id/et_total_price"
-                app:layout_constraintTop_toBottomOf="@id/et_individual_price" />
-
-            <TextView
-                android:id="@+id/tv_discount_rate_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/suit_bold"
-                android:text="@{@string/write_discount_rate_value(vm.discountRate)}"
-                android:textColor="@color/main_color"
-                android:textSize="@dimen/size_15"
-                app:isVisible="@{vm.discountRateVisibility}"
-                app:layout_constraintStart_toEndOf="@id/tv_discount_rate"
-                app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
-                tools:text="10" />
-
-            <TextView
-                android:id="@+id/tv_discount_rate_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/suit_bold"
-                android:text="@string/all_percentage"
-                android:textColor="@color/main_color"
-                android:textSize="@dimen/size_15"
-                app:isVisible="@{vm.discountRateVisibility}"
-                app:layout_constraintStart_toEndOf="@id/tv_discount_rate_value"
-                app:layout_constraintTop_toTopOf="@id/tv_discount_rate" />
-
-            <TextView
                 android:id="@+id/tv_place"
                 style="@style/Theme.AppCompat.TextView.Write.Subject"
                 android:text="@string/all_place"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_discount_rate" />
+                app:layout_constraintTop_toBottomOf="@id/tv_per_n_price" />
 
             <TextView
                 style="@style/Theme.AppCompat.TextView.Write.Asterisk"
@@ -343,6 +204,7 @@
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:fontFamily="@font/suit_medium"
                 android:gravity="center_vertical"
+                android:hint="@string/write_deadline_description"
                 android:onClick="@{() -> vm.makeDeadlineChoiceEvent()}"
                 android:text="@{vm.deadline}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -357,43 +219,7 @@
                 app:layout_constraintEnd_toEndOf="@id/tv_deadline_value"
                 app:layout_constraintTop_toTopOf="@id/tv_deadline_value" />
 
-            <TextView
-                android:id="@+id/tv_contents"
-                style="@style/Theme.AppCompat.TextView.Write.Subject"
-                android:text="@string/write_contents"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_deadline_value" />
-
-            <TextView
-                android:id="@+id/textView"
-                style="@style/Theme.AppCompat.TextView.Write.Asterisk"
-                app:layout_constraintStart_toEndOf="@id/tv_contents"
-                app:layout_constraintTop_toTopOf="@id/tv_contents" />
-
-            <EditText
-                android:id="@+id/et_contents"
-                style="@style/Theme.AppCompat.TextView.Write.EditText"
-                android:layout_height="278dp"
-                android:gravity="top"
-                android:hint="@string/write_deadline_contents_description"
-                android:padding="12dp"
-                android:text="@={vm.description}"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_contents" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_6"
-                android:layout_marginEnd="@dimen/size_8"
-                android:fontFamily="@font/suit_medium"
-                android:text="@string/write_under_1000"
-                android:textColor="@color/gray_400"
-                android:textSize="@dimen/font_size_12"
-                app:layout_constraintEnd_toEndOf="@id/et_contents"
-                app:layout_constraintTop_toBottomOf="@id/et_contents" />
-
-            <Button
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btn_submit_offering_write"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
@@ -409,7 +235,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_contents" />
+                app:layout_constraintTop_toBottomOf="@id/tv_deadline_value" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

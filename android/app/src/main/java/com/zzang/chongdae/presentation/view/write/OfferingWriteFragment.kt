@@ -19,7 +19,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
-import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
+import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
 import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.util.PermissionManager
@@ -28,7 +28,7 @@ import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
 class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
-    private var _fragmentBinding: FragmentOfferingWriteBinding? = null
+    private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
     private var _dateTimePickerBinding: DialogDateTimePickerBinding? = null
@@ -219,7 +219,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
     ) {
-        _fragmentBinding = FragmentOfferingWriteBinding.inflate(inflater, container, false)
+        _fragmentBinding = FragmentOfferingWriteEssentialBinding.inflate(inflater, container, false)
         fragmentBinding.vm = viewModel
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
 
