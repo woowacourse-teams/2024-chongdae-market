@@ -45,19 +45,13 @@
                 app:layout_constraintStart_toEndOf="@id/tv_title"
                 app:layout_constraintTop_toTopOf="@id/tv_title" />
 
-            <TextView
-                android:id="@+id/tv_enter_title"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_enter_offering_title"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
             <EditText
                 android:id="@+id/et_title"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:hint="@string/write_enter_offering_title"
                 android:text="@={vm.title}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_enter_title" />
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
             <TextView
                 android:id="@+id/tv_purchase_link"
@@ -151,14 +145,6 @@
                 app:layout_constraintStart_toEndOf="@id/tv_total_personnel"
                 app:layout_constraintTop_toTopOf="@id/tv_total_personnel" />
 
-
-            <TextView
-                android:id="@+id/tv_information_total_personnel"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_information_total_personnel"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_total_personnel" />
-
             <Button
                 android:id="@+id/btn_minus_total_personnel"
                 android:layout_width="38dp"
@@ -172,7 +158,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_20"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
+                app:layout_constraintTop_toBottomOf="@id/tv_total_personnel" />
 
 
             <EditText
@@ -180,14 +166,14 @@
                 android:layout_width="100dp"
                 android:layout_height="@dimen/size_40"
                 android:layout_marginStart="@dimen/size_7"
-                android:layout_marginTop="@dimen/size_18"
+                android:layout_marginTop="-1dp"
                 android:background="@drawable/et_border_main_color"
                 android:gravity="center"
                 android:text="@={vm.totalCount}"
                 android:textColor="@color/gray_900"
                 android:textSize="20dp"
                 app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel"
+                app:layout_constraintTop_toTopOf="@id/btn_minus_total_personnel"
                 tools:text="2" />
 
             <Button
@@ -195,7 +181,6 @@
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="@dimen/size_7"
-                android:layout_marginTop="@dimen/size_19"
                 android:background="@drawable/btn_offering_write_minus_total_personnel"
                 android:fontFamily="@font/suit_bold"
                 android:gravity="center"
@@ -204,7 +189,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_20"
                 app:layout_constraintStart_toEndOf="@id/et_total_personnel"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_total_personnel" />
+                app:layout_constraintTop_toTopOf="@id/btn_minus_total_personnel" />
 
             <TextView
                 android:id="@+id/tv_total_price"
@@ -218,56 +203,38 @@
                 app:layout_constraintStart_toEndOf="@id/tv_total_price"
                 app:layout_constraintTop_toTopOf="@id/tv_total_price" />
 
-            <TextView
-                android:id="@+id/tv_information_total_price"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_information_total_price"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
-
             <EditText
                 android:id="@+id/et_total_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
+                android:hint="@string/write_information_total_price"
                 android:text="@={vm.totalPrice}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_total_price" />
-
-            <TextView
-                android:id="@+id/tv_rounds_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/write_rounds_description"
-                android:textColor="@color/gray_500"
-                android:textSize="@dimen/size_10"
-                app:isVisible="@{vm.splitPriceVisibility}"
-                app:layout_constraintStart_toStartOf="@id/et_total_price"
-                app:layout_constraintTop_toBottomOf="@id/et_total_price" />
+                app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
 
             <TextView
                 android:id="@+id/tv_per_n_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_4"
+                android:layout_marginTop="@dimen/size_10"
                 android:fontFamily="@font/suit_bold"
                 android:text="@string/write_per_n_price"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
                 app:isVisible="@{vm.splitPriceVisibility}"
                 app:layout_constraintStart_toStartOf="@id/et_total_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description" />
+                app:layout_constraintTop_toBottomOf="@id/et_total_price" />
 
             <TextView
                 android:id="@+id/tv_per_n_price_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_4"
                 android:fontFamily="@font/suit_bold"
                 android:text="@{@string/all_money_amount_text(vm.splitPrice)}"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/size_15"
                 app:isVisible="@{vm.splitPriceVisibility}"
                 app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
-                app:layout_constraintTop_toBottomOf="@id/tv_rounds_description"
+                app:layout_constraintTop_toTopOf="@id/tv_per_n_price"
                 tools:text="10,000원" />
 
             <TextView
@@ -284,20 +251,12 @@
                 app:layout_constraintStart_toStartOf="@id/tv_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_individual_price" />
 
-            <TextView
-                android:id="@+id/tv_information_individual_price_description2"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_information_individual_price_description2"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description" />
-
             <EditText
                 android:id="@+id/et_individual_price"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:text="@={vm.originPrice}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description2" />
+                app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description" />
 
             <TextView
                 android:id="@+id/tv_discount_rate"
@@ -350,20 +309,13 @@
                 app:layout_constraintTop_toTopOf="@id/tv_place" />
 
             <TextView
-                android:id="@+id/tv_information_place"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_information_place"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_place" />
-
-            <TextView
                 android:id="@+id/tv_place_value"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:gravity="center_vertical"
                 android:hint="@string/write_search_place"
                 android:text="@={vm.meetingAddress}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_information_place" />
+                app:layout_constraintTop_toBottomOf="@id/tv_place" />
 
             <EditText
                 android:id="@+id/et_place_detail"
@@ -387,21 +339,14 @@
                 app:layout_constraintTop_toTopOf="@id/tv_deadline" />
 
             <TextView
-                android:id="@+id/tv_deadline_description"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_deadline_description"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_deadline" />
-
-            <TextView
                 android:id="@+id/tv_deadline_value"
                 style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:fontFamily="@font/suit_medium"
                 android:gravity="center_vertical"
                 android:onClick="@{() -> vm.makeDeadlineChoiceEvent()}"
-                android:text="@={vm.deadline}"
+                android:text="@{vm.deadline}"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_deadline_description" />
+                app:layout_constraintTop_toBottomOf="@id/tv_deadline" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -420,44 +365,33 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_deadline_value" />
 
             <TextView
+                android:id="@+id/textView"
                 style="@style/Theme.AppCompat.TextView.Write.Asterisk"
                 app:layout_constraintStart_toEndOf="@id/tv_contents"
                 app:layout_constraintTop_toTopOf="@id/tv_contents" />
 
-            <TextView
-                android:id="@+id/tv_deadline_contents_description"
-                style="@style/Theme.AppCompat.TextView.Write.Description"
-                android:text="@string/write_deadline_contents_description"
-                app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_contents" />
-
             <EditText
                 android:id="@+id/et_contents"
-                android:layout_width="0dp"
+                style="@style/Theme.AppCompat.TextView.Write.EditText"
                 android:layout_height="278dp"
-                android:layout_marginTop="@dimen/size_11"
-                android:background="@drawable/et_border_gray"
-                android:fontFamily="@font/suit_medium"
                 android:gravity="top"
+                android:hint="@string/write_deadline_contents_description"
                 android:padding="12dp"
                 android:text="@={vm.description}"
-                android:textColor="@color/gray_font"
-                android:textSize="14dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_deadline_contents_description" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_contents" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_6"
                 android:layout_marginEnd="@dimen/size_8"
-                android:layout_marginBottom="@dimen/size_6"
                 android:fontFamily="@font/suit_medium"
                 android:text="@string/write_under_1000"
                 android:textColor="@color/gray_400"
                 android:textSize="@dimen/font_size_12"
-                app:layout_constraintBottom_toBottomOf="@id/et_contents"
-                app:layout_constraintEnd_toEndOf="@id/et_contents" />
+                app:layout_constraintEnd_toEndOf="@id/et_contents"
+                app:layout_constraintTop_toBottomOf="@id/et_contents" />
 
             <Button
                 android:id="@+id/btn_submit_offering_write"

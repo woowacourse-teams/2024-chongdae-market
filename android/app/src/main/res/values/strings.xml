@@ -91,26 +91,26 @@
     <string name="offering_members">참여자 목록</string>
 
     <!--    offering_write-->
-    <string name="write_information_message"><font color="#F15642">공동 구매</font>할 물품의 정보를\n입력해 주세요.</string>
-    <string name="write_enter_offering_title">게시글의 제목을 입력해 주세요.</string>
+    <string name="write_information_message"><font color="#F15642">공동 구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
+    <string name="write_enter_offering_title">제목을 입력해 주세요.</string>
     <string name="write_upload_photo">최대 50MB까지 업로드 가능합니다.</string>
     <string name="write_purchase_link">물품 구매 링크</string>
     <string name="write_enter_purchase_link">구매하실 물품의 링크를 입력해 주세요.</string>
     <string name="write_total_personnel">총원</string>
     <string name="write_information_total_personnel">2명 이상 10,000명 이하로 입력해 주세요.</string>
     <string name="write_total_price">총 가격</string>
-    <string name="write_information_total_price">너무 고가의 물품은 주의가 필요해요!</string>
+    <string name="write_information_total_price">너무 고가의 물품은 <font color="#F15642">주의가 필요해요!</font></string>
     <string name="write_rounds_description">1원 단위까지 반올림</string>
     <string name="write_per_n_price">예상 엔빵 가격 :\u00A0</string>
     <string name="write_individual_price">낱개 가격</string>
-    <string name="write_information_individual_price_description">1개만 구입할 때의 가격을 입력해 주세요.</string>
+    <string name="write_information_individual_price_description">공구를 진행하지 않고 낱개로 구입할 때의 가격을 입력해 주세요.</string>
     <string name="write_information_individual_price_description2">입력 시 공구 성공률이 높아져요!</string>
     <string name="write_discount_rate">공구 할인율 :\u00A0</string>
     <string name="write_information_place">거래 희망 장소를 검색해 주세요.</string>
     <string name="write_search_place"> 주소 검색</string>
     <string name="write_enter_place_detail"> 상세 주소를 입력해 주세요</string>
-    <string name="write_deadline">모집 종료 시간</string>
-    <string name="write_deadline_description">모집 종료할 시간을 입력해 주세요.</string>
+    <string name="write_deadline">모집 종료 날짜</string>
+    <string name="write_deadline_description">모집 종료할 날짜를 입력해 주세요.</string>
     <string name="write_contents">내용</string>
     <string name="write_deadline_contents_description">공동 구매에 대한 자세한 내용을 입력해 주세요.</string>
     <string name="write_under_1000">1000자 이하</string>
