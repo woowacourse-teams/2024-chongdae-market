@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class MemberPreferences(private val dataStore: DataStore<Preferences>) {
+class MemberDataStore(private val dataStore: DataStore<Preferences>) {
     val memberIdFlow: Flow<Long?> =
         dataStore.data.map { preferences ->
             preferences[MEMBER_ID_KEY]

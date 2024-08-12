@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.data.local.source.MemberPreferences
+import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-    private val memberPreferences: MemberPreferences,
+    private val memberDataStore: MemberDataStore,
 ) : ViewModel(), OnParticipationClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
@@ -50,7 +50,7 @@ class OfferingDetailViewModel(
 
     private fun loadOffering() {
         viewModelScope.launch {
-            val memberId = memberPreferences.memberIdFlow.first() ?: -1
+            val memberId = memberDataStore.memberIdFlow.first() ?: -1
             offeringDetailRepository.fetchOfferingDetail(
                 memberId = memberId,
                 offeringId = offeringId,
@@ -103,7 +103,7 @@ class OfferingDetailViewModel(
         fun getFactory(
             offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
-            memberPreferences: MemberPreferences,
+            memberDataStore: MemberDataStore,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
@@ -112,7 +112,7 @@ class OfferingDetailViewModel(
                 return OfferingDetailViewModel(
                     offeringId,
                     offeringDetailRepository,
-                    memberPreferences,
+                    memberDataStore,
                 ) as T
             }
         }

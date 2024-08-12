@@ -10,7 +10,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.local.source.MemberPreferences
+import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.databinding.ActivityOfferingDetailBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
@@ -25,7 +25,7 @@ class OfferingDetailActivity : AppCompatActivity() {
         OfferingDetailViewModel.getFactory(
             offeringId = offeringId,
             offeringDetailRepository = (application as ChongdaeApp).offeringDetailRepository,
-            MemberPreferences(applicationContext.dataStore),
+            MemberDataStore(applicationContext.dataStore),
         )
     }
 
