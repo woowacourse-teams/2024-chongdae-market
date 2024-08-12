@@ -12,6 +12,8 @@ import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.presentation.util.MutableSingleLiveData
+import com.zzang.chongdae.presentation.util.SingleLiveData
 import com.zzang.chongdae.presentation.util.handleAccessTokenExpiration
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -53,6 +55,9 @@ class CommentDetailViewModel(
 
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
+
+    private val _onBackPressedEvent = MutableSingleLiveData<Unit>()
+    val onBackPressedEvent: SingleLiveData<Unit> get() = _onBackPressedEvent
 
     init {
         startPolling()
@@ -157,6 +162,10 @@ class CommentDetailViewModel(
                 handleAccessTokenExpiration(authRepository, it) { loadMeetings() }
             }
         }
+    }
+
+    fun onBackClick() {
+        _onBackPressedEvent.setValue(Unit)
     }
 
     override fun onCleared() {

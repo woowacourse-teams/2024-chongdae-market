@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -56,7 +58,6 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         setupDrawerToggle()
         initAdapter()
         setUpObserve()
-        observeComments()
     }
 
     private fun initBinding() {
@@ -88,6 +89,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun setUpObserve() {
         observeComments()
         observeUpdateOfferingEvent()
+        observeBackEvent()
     }
 
     private fun observeComments() {
@@ -103,6 +105,12 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun observeUpdateOfferingEvent() {
         viewModel.showStatusDialogEvent.observe(this) {
             showUpdateStatusDialog()
+        }
+    }
+
+    private fun observeBackEvent() {
+        viewModel.onBackPressedEvent.observe(this) {
+            finish()
         }
     }
 
@@ -139,6 +147,13 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            this.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(motionEvent)
     }
 
     companion object {
