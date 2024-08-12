@@ -34,11 +34,13 @@
 
             <ImageView
                 android:id="@+id/iv_back"
-                android:layout_width="@dimen/icon_size_20"
-                android:layout_height="@dimen/icon_size_20"
-                android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginTop="@dimen/margin_30"
+                android:layout_width="@dimen/size_40"
+                android:layout_height="@dimen/size_40"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
+                android:onClick="@{() -> vm.onBackClick()}"
+                android:padding="@dimen/margin_10"
                 android:src="@drawable/btn_left_vector"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

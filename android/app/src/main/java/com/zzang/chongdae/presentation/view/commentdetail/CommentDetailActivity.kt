@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -58,7 +59,6 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         setupDrawerToggle()
         initAdapter()
         setUpObserve()
-        observeComments()
     }
 
     private fun initBinding() {
@@ -90,6 +90,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun setUpObserve() {
         observeComments()
         observeUpdateOfferingEvent()
+        observeBackEvent()
     }
 
     private fun observeComments() {
@@ -105,6 +106,12 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun observeUpdateOfferingEvent() {
         viewModel.showStatusDialogEvent.observe(this) {
             showUpdateStatusDialog()
+        }
+    }
+    
+    private fun observeBackEvent() {
+        viewModel.onBackPressedEvent.observe(this) {
+            finish()
         }
     }
 
