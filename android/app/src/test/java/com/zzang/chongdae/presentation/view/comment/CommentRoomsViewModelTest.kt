@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.comment
 
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
@@ -20,12 +21,14 @@ import java.time.LocalDateTime
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CommentRoomsViewModelTest {
     private lateinit var viewModel: CommentRoomsViewModel
+    private lateinit var authRepository: AuthRepository
     private lateinit var offeringRepository: CommentRoomsRepository
 
     @BeforeEach
     fun setUp() {
+        authRepository = mockk<AuthRepository>()
         offeringRepository = mockk<CommentRoomsRepository>()
-        viewModel = CommentRoomsViewModel(offeringRepository)
+        viewModel = CommentRoomsViewModel(authRepository, offeringRepository)
     }
 
     @DisplayName("댓글방 목록을 확인할 수 있어야 한다")
@@ -33,7 +36,7 @@ class CommentRoomsViewModelTest {
     fun loadCommentRooms() {
         // given
         coEvery {
-            offeringRepository.fetchCommentRooms(1).getOrThrow()
+            offeringRepository.fetchCommentRooms().getOrThrow()
         } returns TestFixture.COMMENT_ROOMS_STUB
 
         // when

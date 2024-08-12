@@ -1,13 +1,14 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
-import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import com.zzang.chongdae.repository.FakeDataStore
 import com.zzang.chongdae.repository.FakeOfferingDetailRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
 import com.zzang.chongdae.util.getOrAwaitValue
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -20,16 +21,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class OfferingDetailViewModelTest {
     private lateinit var viewModel: OfferingDetailViewModel
+    private lateinit var dataStore: DataStore<Preferences>
     private lateinit var offeringDetailRepository: OfferingDetailRepository
-    private lateinit var context: Context
     private val offeringId = 1L
 
     @BeforeEach
     fun setUp() {
-        context = mockk<Context>(relaxed = true)
-        every { context.applicationContext } returns context
+        dataStore = FakeDataStore()
         offeringDetailRepository = FakeOfferingDetailRepository()
-        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, context)
+        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, MemberDataStore(dataStore))
     }
 
     @DisplayName("공구에 참여한다")

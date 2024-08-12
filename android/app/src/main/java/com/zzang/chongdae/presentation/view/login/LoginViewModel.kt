@@ -1,15 +1,11 @@
 package com.zzang.chongdae.presentation.view.login
 
-import android.content.Context
 import android.util.Log
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
@@ -18,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val context: Context,
+    private val memberDataStore: MemberDataStore,
 ) : ViewModel() {
     private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
@@ -44,13 +40,10 @@ class LoginViewModel(
             authRepository.saveSignup(
                 ci = ci,
             ).onSuccess {
-                context.dataStore.edit { preferences ->
-                    preferences[MEMBER_ID_KEY] = it.memberId
-                    preferences[NICKNAME_KEY] = it.nickName
-                }
+                memberDataStore.saveMember(it.memberId, it.nickName)
                 postLogin(ci)
             }.onFailure {
-                Log.e("error", it.message.toString())
+                Log.e("error", "postSignup: ${it.message}")
                 when (it.message) {
                     HttpStatusCode.NOT_FOUND_404.code -> postLogin(ci)
                     HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
@@ -72,20 +65,16 @@ class LoginViewModel(
     }
 
     companion object {
-        val Context.dataStore by preferencesDataStore(name = "settings")
-        val MEMBER_ID_KEY = longPreferencesKey("member_id_key")
-        val NICKNAME_KEY = stringPreferencesKey("nickname_key")
-
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
             authRepository: AuthRepository,
-            context: Context,
+            memberDataStore: MemberDataStore,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return LoginViewModel(authRepository, context) as T
+                return LoginViewModel(authRepository, memberDataStore) as T
             }
         }
     }

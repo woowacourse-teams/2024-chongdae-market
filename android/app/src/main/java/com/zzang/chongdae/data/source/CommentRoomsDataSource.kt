@@ -3,5 +3,5 @@ package com.zzang.chongdae.data.source
 import com.zzang.chongdae.data.remote.dto.response.CommentRoomsResponse
 
 interface CommentRoomsDataSource {
-    suspend fun fetchCommentRooms(memberId: Long): Result<CommentRoomsResponse>
+    suspend fun fetchCommentRooms(): Result<CommentRoomsResponse>
 }

@@ -7,9 +7,14 @@ import com.zzang.chongdae.data.source.CommentRoomsDataSource
 class CommentRoomsDataSourceImpl(
     private val commentApiService: CommentApiService,
 ) : CommentRoomsDataSource {
-    override suspend fun fetchCommentRooms(memberId: Long): Result<CommentRoomsResponse> {
+    override suspend fun fetchCommentRooms(): Result<CommentRoomsResponse> {
         return runCatching {
-            commentApiService.getCommentRooms(memberId).body() ?: throw IllegalStateException()
+            val response = commentApiService.getCommentRooms()
+            if (response.isSuccessful) {
+                response.body() ?: error("에러 발생: null")
+            } else {
+                error("${response.code()}")
+            }
         }
     }
 }
