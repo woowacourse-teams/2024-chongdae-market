@@ -60,7 +60,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_comment_text"
-            tools:listitem="@layout/item_comment_room" />
+            tools:listitem="@layout/item_comment_room_participant" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
