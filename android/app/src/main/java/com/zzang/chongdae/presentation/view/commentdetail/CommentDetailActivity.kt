@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -108,7 +107,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
             showUpdateStatusDialog()
         }
     }
-    
+
     private fun observeBackEvent() {
         viewModel.onBackPressedEvent.observe(this) {
             finish()

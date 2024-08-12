@@ -55,7 +55,7 @@ class CommentDetailViewModel(
 
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
-    
+
     private val _onBackPressedEvent = MutableSingleLiveData<Unit>()
     val onBackPressedEvent: SingleLiveData<Unit> get() = _onBackPressedEvent
 
