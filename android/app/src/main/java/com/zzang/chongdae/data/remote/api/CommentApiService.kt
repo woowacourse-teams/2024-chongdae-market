@@ -8,18 +8,14 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface CommentApiService {
     @GET("/comments")
-    suspend fun getCommentRooms(
-        @Query("member-id") memberId: Long,
-    ): Response<CommentRoomsResponse>
+    suspend fun getCommentRooms(): Response<CommentRoomsResponse>
 
     @GET("/comments/{offering-id}")
     suspend fun getComments(
         @Path("offering-id") offeringId: Long,
-        @Query("member-id") memberId: Long,
     ): Response<CommentsResponse>
 
     @POST("/comments")

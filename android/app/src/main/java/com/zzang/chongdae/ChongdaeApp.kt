@@ -1,6 +1,8 @@
 package com.zzang.chongdae
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
 import com.zzang.chongdae.data.local.database.AppDatabase
@@ -78,5 +80,9 @@ class ChongdaeApp : Application() {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
         FirebaseApp.initializeApp(this)
+    }
+
+    companion object {
+        val Context.dataStore by preferencesDataStore(name = "member_preferences")
     }
 }
