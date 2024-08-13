@@ -112,6 +112,4 @@ public class OfferingMemberService {
             throw new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND);
         }
     }
-
-
 }
