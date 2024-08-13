@@ -11,7 +11,6 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
 
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
@@ -43,7 +41,6 @@ public class CommentService {
     public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
         List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(member);
         List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
-                .filter(offeringWithRole -> offeringWithRole.getOffering().hasParticipant())
                 .map(this::toCommentRoomAllResponseItem)
                 .toList();
         return new CommentRoomAllResponse(responseItems);

@@ -122,10 +122,6 @@ public class OfferingEntity extends BaseTimeEntity {
         return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail, meetingAddressDong);
     }
 
-    public boolean hasParticipant() {
-        return currentCount > INITIAL_COUNT;
-    }
-
     public boolean isStatusGrouping() {
         return this.roomStatus.isGrouping();
     }
