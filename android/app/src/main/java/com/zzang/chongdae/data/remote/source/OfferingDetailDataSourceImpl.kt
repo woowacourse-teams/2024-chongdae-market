@@ -10,12 +10,9 @@ class OfferingDetailDataSourceImpl(
     private val offeringApiService: OfferingApiService,
     private val participationApiService: ParticipationApiService,
 ) : OfferingDetailDataSource {
-    override suspend fun fetchOfferingDetail(
-        offeringId: Long,
-        memberId: Long,
-    ): Result<OfferingDetailResponse> =
+    override suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetailResponse> =
         runCatching {
-            offeringApiService.getOfferingDetail(offeringId = offeringId, memberId = memberId)
+            offeringApiService.getOfferingDetail(offeringId = offeringId)
                 .body()
                 ?: throw IllegalStateException()
         }

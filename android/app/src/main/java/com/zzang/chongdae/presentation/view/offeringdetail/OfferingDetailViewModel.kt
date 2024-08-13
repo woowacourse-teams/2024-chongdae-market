@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
@@ -52,7 +51,6 @@ class OfferingDetailViewModel(
         viewModelScope.launch {
             val memberId = memberDataStore.memberIdFlow.first() ?: -1
             offeringDetailRepository.fetchOfferingDetail(
-                memberId = memberId,
                 offeringId = offeringId,
             )
                 .onSuccess {
@@ -71,7 +69,6 @@ class OfferingDetailViewModel(
     override fun onClickParticipation() {
         viewModelScope.launch {
             offeringDetailRepository.saveParticipation(
-                memberId = BuildConfig.TOKEN.toLong(),
                 offeringId = offeringId,
             ).onSuccess {
                 _isParticipated.value = true
@@ -88,7 +85,6 @@ class OfferingDetailViewModel(
         isParticipated: Boolean,
     ) = offeringCondition.isAvailable() && !isParticipated
 
-    // 총대여부를 확인하는 메서드(로그인 기능 구현 시 수정 예정)
     private fun isRepresentative(
         it: OfferingDetail,
         memberId: Long,
