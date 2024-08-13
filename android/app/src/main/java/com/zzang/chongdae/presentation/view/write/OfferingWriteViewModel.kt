@@ -133,7 +133,7 @@ class OfferingWriteViewModel(
                 thumbnailUrl.value = it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url)
+                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
             }
         }
     }
@@ -143,13 +143,13 @@ class OfferingWriteViewModel(
             _writeUIState.value = WriteUIState.Loading
             offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
                 if (it.imageUrl.isBlank()) {
-                    _writeUIState.value = WriteUIState.Error(R.string.error_empty_product_url)
+                    _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
                     return@launch
                 }
                 thumbnailUrl.value = HTTPS + it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url)
+                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
             }
         }
     }
@@ -260,7 +260,7 @@ class OfferingWriteViewModel(
                 makeFinishEvent()
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _writeUIState.value = WriteUIState.Error(R.string.write_error_writing)
+                _writeUIState.value = WriteUIState.Error(R.string.write_error_writing, it.message.toString())
             }
         }
     }
@@ -279,7 +279,7 @@ class OfferingWriteViewModel(
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
         val totalCountConverted = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalCountConverted < MINIMUM_TOTAL_COUNT || totalCountConverted > MAXIMUM_TOTAL_COUNT) {
-            _writeUIState.value = WriteUIState.Error(R.string.write_invalid_total_count)
+            _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_count)
             return null
         }
         return totalCountConverted
@@ -288,21 +288,21 @@ class OfferingWriteViewModel(
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
         val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalPriceConverted < 0) {
-            _writeUIState.value = WriteUIState.Error(R.string.write_invalid_total_price)
+            _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_price)
             return null
         }
         return totalPriceConverted
     }
 
     private fun makeOriginPriceInvalidEvent() {
-        _writeUIState.value = WriteUIState.Error(R.string.write_invalid_each_price)
+        _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_each_price)
     }
 
     private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {
         if (originPrice.value.isNullOrBlank()) return false
         val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
         if (discountRateValue <= 0f) {
-            _writeUIState.value = WriteUIState.Error(R.string.write_origin_price_cheaper_than_total_price)
+            _writeUIState.value = WriteUIState.InvalidInput(R.string.write_origin_price_cheaper_than_total_price)
             return true
         }
         return false

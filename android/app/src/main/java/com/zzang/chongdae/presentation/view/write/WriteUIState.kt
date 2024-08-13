@@ -19,5 +19,6 @@ sealed class WriteUIState {
 
     data class Error(
         @StringRes val message: Int,
+        val errorMessage: String,
     ) : WriteUIState()
 }

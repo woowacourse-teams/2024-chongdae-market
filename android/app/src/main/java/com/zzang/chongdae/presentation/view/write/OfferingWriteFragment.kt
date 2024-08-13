@@ -135,6 +135,9 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
                 is WriteUIState.Empty -> {
                     showToast(state.message)
                 }
+                is WriteUIState.InvalidInput -> {
+                    showToast(state.message)
+                }
                 else -> {}
             }
         }
