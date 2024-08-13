@@ -130,6 +130,10 @@ public class OfferingEntity extends BaseTimeEntity {
         return this.roomStatus.isGrouping();
     }
 
+    public boolean isProposed(MemberEntity other) {
+        return this.member.equals(other);
+    }
+
     public boolean isNotProposedBy(MemberEntity other) {
         return !this.member.equals(other);
     }

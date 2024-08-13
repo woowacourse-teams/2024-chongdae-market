@@ -48,13 +48,11 @@ public class OfferingService {
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         OfferingStatus offeringStatus = offering.toOfferingStatus();
-
+        Boolean isProposed = offering.isProposed(member);
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
-
-        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
+        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isProposed, isParticipated);
     }
 
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {

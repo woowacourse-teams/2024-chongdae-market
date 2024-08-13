@@ -66,6 +66,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                         + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("memberId").description("공모자 회원 id"),
                 fieldWithPath("nickname").description("공모자 회원 닉네임"),
+                fieldWithPath("isProposed").description("공모자 여부"),
                 fieldWithPath("isParticipated").description("공모 참여 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
@@ -85,8 +86,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            MemberEntity member = memberFixture.createMember();
-            offeringFixture.createOffering(member);
+            MemberEntity proposer = memberFixture.createMember();
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
         }
 
         @DisplayName("공모 id로 공모 상세 정보를 조회할 수 있다")
