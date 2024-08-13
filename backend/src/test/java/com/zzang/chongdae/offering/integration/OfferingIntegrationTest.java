@@ -503,7 +503,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("status").description("상태"),
                 fieldWithPath("imageUrl").description("이미지 url"),
-                fieldWithPath("buttonText").description("버튼 text")
+                fieldWithPath("buttonText").description("버튼 text"),
+                fieldWithPath("message").description("alert 메시지"),
+                fieldWithPath("title").description("공모글 제목"),
+                fieldWithPath("isProposer").description("로그인 사용자의 총대 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 상태 조회")
@@ -531,6 +534,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOfferingStatus_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-comment-room-status-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()
@@ -542,6 +546,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-comment-room-status-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()
@@ -596,6 +601,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(200);
 
             RestAssured.given().log().all()
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", offering.getId())
                     .when().get("/offerings/{offering-id}/status")
                     .then().log().all()

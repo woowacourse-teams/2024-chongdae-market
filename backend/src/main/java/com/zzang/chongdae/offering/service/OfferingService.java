@@ -10,6 +10,7 @@ import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offering.service.dto.CommentRoomInfoResponse;
 import com.zzang.chongdae.offering.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
@@ -21,7 +22,6 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
@@ -120,13 +120,14 @@ public class OfferingService {
         return savedOffering.getId();
     }
 
-    public OfferingStatusResponse getOfferingStatus(Long offeringId) {
+    public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
+        // TODO : 로그인 사용자가 참여자인지 확인
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         if (offering.isStatusGrouping() && offering.toOfferingStatus().isAutoConfirmed()) {
             offering.moveStatus();
         }
-        return new OfferingStatusResponse(offering.getRoomStatus());
+        return new CommentRoomInfoResponse(offering, member);
     }
 
     @Transactional
