@@ -42,7 +42,7 @@ public class OfferingService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final StorageService storageService;
-    private final ProductImageExtractor extractor;
+    private final ProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
@@ -147,7 +147,7 @@ public class OfferingService {
     }
 
     public OfferingProductImageResponse extractProductImageFromOg(OfferingProductImageRequest request) {
-        String imageUrl = extractor.extract(request.productUrl());
+        String imageUrl = imageExtractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
     }
 }
