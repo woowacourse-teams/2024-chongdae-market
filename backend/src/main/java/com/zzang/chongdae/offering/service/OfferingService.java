@@ -141,12 +141,12 @@ public class OfferingService {
         return new CommentRoomStatusResponse(updatedStatus);
     }
 
-    public OfferingProductImageResponse uploadProductImage(MultipartFile image) {
+    public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {
         String imageUrl = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
         return new OfferingProductImageResponse(imageUrl);
     }
 
-    public OfferingProductImageResponse extractProductImage(OfferingProductImageRequest request) {
+    public OfferingProductImageResponse extractProductImageFromOg(OfferingProductImageRequest request) {
         String imageUrl = extractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
     }
