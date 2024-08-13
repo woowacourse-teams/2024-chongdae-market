@@ -33,6 +33,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
 
     private var _dateTimePickerBinding: DialogDateTimePickerBinding? = null
     private val dateTimePickerBinding get() = _dateTimePickerBinding!!
+
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
     private lateinit var permissionManager: PermissionManager
@@ -73,11 +74,15 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     ) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
-        observeInvalidInputEvent()
-        observeFinishEvent()
-        observeImageUploadEvent()
+        setUpObserve()
         selectDeadline()
         searchPlace()
+    }
+
+    private fun setUpObserve() {
+        observeFinishEvent()
+        observeImageUploadEvent()
+        observeUIState()
     }
 
     private fun initializePhotoPicker() {
@@ -117,6 +122,23 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
                 launchPhotoPicker()
             } else {
                 permissionManager.requestPermissions()
+            }
+        }
+    }
+
+    private fun observeUIState() {
+        viewModel.writeUIState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is WriteUIState.Error -> {
+                    showToast(state.message)
+                }
+                is WriteUIState.Empty -> {
+                    showToast(state.message)
+                }
+                is WriteUIState.InvalidInput -> {
+                    showToast(state.message)
+                }
+                else -> {}
             }
         }
     }
@@ -228,24 +250,6 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         dateTimePickerBinding.onClickListener = this
     }
 
-    private fun observeInvalidInputEvent() {
-        viewModel.invalidTotalCountEvent.observe(viewLifecycleOwner) {
-            showToast(R.string.write_invalid_total_count)
-        }
-        viewModel.invalidTotalPriceEvent.observe(viewLifecycleOwner) {
-            showToast(R.string.write_invalid_total_price)
-        }
-        viewModel.invalidOriginPriceEvent.observe(viewLifecycleOwner) {
-            showToast(R.string.write_invalid_each_price)
-        }
-        viewModel.originPriceCheaperThanSplitPriceEvent.observe(viewLifecycleOwner) {
-            showToast(R.string.write_origin_price_cheaper_than_total_price)
-        }
-        viewModel.errorEvent.observe(viewLifecycleOwner) {
-            showToast(it)
-        }
-    }
-
     private fun observeFinishEvent() {
         viewModel.finishEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
@@ -259,13 +263,13 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     }
 
     private fun showToast(
-        @StringRes message: Int,
+        @StringRes messageId: Int,
     ) {
         toast?.cancel()
         toast =
             Toast.makeText(
                 requireActivity(),
-                message,
+                getString(messageId),
                 Toast.LENGTH_SHORT,
             )
         toast?.show()
