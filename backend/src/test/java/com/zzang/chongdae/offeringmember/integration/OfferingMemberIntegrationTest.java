@@ -10,6 +10,7 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import io.restassured.RestAssured;
@@ -116,6 +117,101 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 참여 취소")
+    @Nested
+    class CancelParticipate {
+
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
+                .summary("공모 참여 취소")
+                .description("공모 참여를 취소합니다.")
+                .pathParameters(queryParameterDescriptors)
+                .requestSchema(schema("CancelParticipateSuccessRequest"))
+                .responseSchema(schema("CancelParticipateSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = ResourceSnippetParameters.builder()
+                .summary("공모 참여 취소")
+                .description("공모 참여를 취소합니다.")
+                .pathParameters(queryParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("CancelParticipateFailRequest"))
+                .responseSchema(schema("CancelParticipateFailResponse"))
+                .build();
+        MemberEntity proposer;
+        MemberEntity participant;
+        OfferingEntity offeringWithGrouping;
+        OfferingEntity offeringWithInProgress;
+        OfferingEntity offeringNotParticipated;
+
+        @BeforeEach
+        void setUp() {
+            proposer = memberFixture.createMember();
+            participant = memberFixture.createMember("poke");
+
+            offeringWithGrouping = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offeringWithGrouping);
+            offeringMemberFixture.createParticipant(participant, offeringWithGrouping);
+
+            offeringWithInProgress = offeringFixture.createOffering(proposer, CommentRoomStatus.BUYING);
+            offeringMemberFixture.createProposer(proposer, offeringWithInProgress);
+            offeringMemberFixture.createParticipant(participant, offeringWithInProgress);
+
+            offeringNotParticipated = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offeringNotParticipated);
+
+        }
+
+        @DisplayName("공모 참여 취소를 할 수 있다.")
+        @Test
+        void should_cancelSuccess() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("cancel-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .pathParam("offering-id", offeringWithGrouping.getId())
+                    .when().delete("/participations/{offering-id}")
+                    .then().log().all()
+                    .statusCode(202);
+        }
+
+        @DisplayName("공모자는 본인이 만든 공모 참여를 취소할 수 없다.")
+        @Test
+        void should_throwException_when_cancelProposer() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("cancel-fail-offering-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", offeringWithGrouping.getId())
+                    .when().delete("/participations/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래가 진행 중인 공모는 참여를 취소할 수 없다.")
+        @Test
+        void should_throwException_when_cancelInProgress() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("cancel-fail-offering-in-progress", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .pathParam("offering-id", offeringWithInProgress.getId())
+                    .when().delete("/participations/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여하지 않은 공모는 취소할 수 없다.")
+        @Test
+        void should_throwException_when_cancelNotParticipated() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("cancel-fail-offering-not-participated", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .pathParam("offering-id", offeringNotParticipated.getId())
+                    .when().delete("/participations/{offering-id}")
                     .then().log().all()
                     .statusCode(400);
         }

@@ -14,7 +14,7 @@ public class OfferingFixture {
     @Autowired
     private OfferingRepository offeringRepository;
 
-    public OfferingEntity createOffering(MemberEntity member) {
+    public OfferingEntity createOffering(MemberEntity member, CommentRoomStatus commentRoomStatus) {
         OfferingEntity offering = new OfferingEntity(
                 member,
                 "title",
@@ -30,8 +30,14 @@ public class OfferingFixture {
                 false,
                 5000,
                 1000,
-                CommentRoomStatus.GROUPING
+                commentRoomStatus
         );
         return offeringRepository.save(offering);
     }
+
+    public OfferingEntity createOffering(MemberEntity member) {
+        return createOffering(member, CommentRoomStatus.GROUPING);
+    }
+
+
 }
