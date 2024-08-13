@@ -53,32 +53,37 @@
             app:layout_constraintBottom_toBottomOf="@id/et_search"
             app:layout_constraintEnd_toEndOf="@id/et_search" />
 
-        <CheckBox
-            android:id="@+id/cb_joinable"
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
+        <RadioGroup
+            android:id="@+id/rg_filters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.joinableFilter.name, isChecked)}"
-            android:text="@{vm.joinableFilter.value}"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_search" />
+            app:layout_constraintTop_toBottomOf="@id/et_search">
 
-        <CheckBox
-            android:id="@+id/cb_imminent"
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
-            android:layout_marginStart="10dp"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.imminentFilter.name, isChecked)}"
-            android:text="@{vm.imminentFilter.value}"
-            app:layout_constraintStart_toEndOf="@id/cb_joinable"
-            app:layout_constraintTop_toTopOf="@id/cb_joinable" />
+            <RadioButton
+                android:id="@+id/cb_joinable"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton.Filter"
+                android:onClick="@{(button) -> vm.onClickFilter(vm.joinableFilter.name, button)}"
+                android:text="@{vm.joinableFilter.value}" />
+            <!--                android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.joinableFilter.name, isChecked, button)}"-->
 
-        <CheckBox
-            android:id="@+id/cb_high_discount"
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox.Filter"
-            android:layout_marginStart="10dp"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onClickFilter(vm.highDiscountFilter.name, isChecked)}"
-            android:text="@{vm.highDiscountFilter.value}"
-            app:layout_constraintStart_toEndOf="@id/cb_imminent"
-            app:layout_constraintTop_toTopOf="@id/cb_joinable" />
+            <RadioButton
+                android:id="@+id/cb_imminent"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton.Filter"
+                android:layout_marginStart="10dp"
+                android:onClick="@{(button) -> vm.onClickFilter(vm.imminentFilter.name, button)}"
+                android:text="@{vm.imminentFilter.value}" />
+
+            <RadioButton
+                android:id="@+id/cb_high_discount"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton.Filter"
+                android:layout_marginStart="10dp"
+                android:onClick="@{(button) -> vm.onClickFilter(vm.highDiscountFilter.name, button)}"
+                android:text="@{vm.highDiscountFilter.value}" />
+
+        </RadioGroup>
 
         <CheckBox
             android:id="@+id/cb_upside"
@@ -87,8 +92,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:onClick="@{() -> onUpsideClickListener.onClickUpside()}"
-            app:layout_constraintStart_toEndOf="@id/cb_high_discount"
-            app:layout_constraintTop_toTopOf="@id/cb_joinable" />
+            app:layout_constraintStart_toEndOf="@id/rg_filters"
+            app:layout_constraintTop_toTopOf="@id/rg_filters" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_offerings"
@@ -100,7 +105,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cb_joinable"
+            app:layout_constraintTop_toBottomOf="@id/rg_filters"
             tools:listitem="@layout/item_offering" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
