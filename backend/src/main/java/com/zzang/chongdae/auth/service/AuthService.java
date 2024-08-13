@@ -1,11 +1,11 @@
 package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
+import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
+import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
+import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
-import com.zzang.chongdae.auth.service.dto.SignupMemberDto;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
-import com.zzang.chongdae.auth.service.dto.SignupResponseDto;
-import com.zzang.chongdae.auth.service.dto.TokenDto;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
@@ -24,7 +24,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
 
-    public SignupResponseDto login(LoginRequest request) {
+    public AuthInfoDto login(LoginRequest request) {
         String password = passwordEncoder.encode(request.ci());
         MemberEntity member = memberRepository.findByPassword(password)
                 .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_PASSWORD));
@@ -32,7 +32,7 @@ public class AuthService {
     }
 
     @Transactional
-    public SignupResponseDto signup(SignupRequest request) {
+    public AuthInfoDto signup(SignupRequest request) {
         String password = passwordEncoder.encode(request.ci());
         if (memberRepository.existsByPassword(password)) {
             throw new MarketException(AuthErrorCode.DUPLICATED_MEMBER);
@@ -42,13 +42,13 @@ public class AuthService {
         return createTokenByMember(savedMember);
     }
 
-    private SignupResponseDto createTokenByMember(MemberEntity member) {
-        SignupMemberDto memberDto = new SignupMemberDto(member);
-        TokenDto tokenDto = jwtTokenProvider.createAuthToken(member.getId().toString());
-        return new SignupResponseDto(memberDto, tokenDto);
+    private AuthInfoDto createTokenByMember(MemberEntity member) {
+        AuthMemberDto authMember = new AuthMemberDto(member);
+        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
+        return new AuthInfoDto(authMember, authToken);
     }
 
-    public TokenDto refresh(String refreshToken) {
+    public AuthTokenDto refresh(String refreshToken) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
         return jwtTokenProvider.createAuthToken(memberId.toString());
     }

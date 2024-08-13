@@ -1,11 +1,12 @@
 package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
+import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
+import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.LoginResponse;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.auth.service.dto.SignupResponse;
-import com.zzang.chongdae.auth.service.dto.SignupResponseDto;
-import com.zzang.chongdae.auth.service.dto.TokenDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,20 +27,20 @@ public class AuthController {
     private final CookieConsumer cookieConsumer;
 
     @PostMapping("/auth/login")
-    public ResponseEntity<SignupResponse> login(
+    public ResponseEntity<LoginResponse> login(
             @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
-        SignupResponseDto responseDto = authService.login(request);
-        addTokenToHttpServletResponse(responseDto.tokenDto(), servletResponse);
-        SignupResponse response = new SignupResponse(responseDto.memberDto());
+        AuthInfoDto authInfo = authService.login(request);
+        addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
+        LoginResponse response = new LoginResponse(authInfo.authMember());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/auth/signup")
     public ResponseEntity<SignupResponse> signup(
             @RequestBody SignupRequest request, HttpServletResponse servletResponse) {
-        SignupResponseDto responseDto = authService.signup(request);
-        addTokenToHttpServletResponse(responseDto.tokenDto(), servletResponse);
-        SignupResponse response = new SignupResponse(responseDto.memberDto());
+        AuthInfoDto authInfo = authService.signup(request);
+        addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
+        SignupResponse response = new SignupResponse(authInfo.authMember());
         return ResponseEntity.ok(response);
     }
 
@@ -47,13 +48,13 @@ public class AuthController {
     public ResponseEntity<Void> refresh(
             HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         String refreshToken = cookieConsumer.getRefreshToken(servletRequest.getCookies());
-        TokenDto tokenDto = authService.refresh(refreshToken);
-        addTokenToHttpServletResponse(tokenDto, servletResponse);
+        AuthTokenDto authToken = authService.refresh(refreshToken);
+        addTokenToHttpServletResponse(authToken, servletResponse);
         return ResponseEntity.ok().build();
     }
 
-    private void addTokenToHttpServletResponse(TokenDto tokenDto, HttpServletResponse servletResponse) {
-        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
+    private void addTokenToHttpServletResponse(AuthTokenDto authToken, HttpServletResponse servletResponse) {
+        List<Cookie> cookies = cookieExtractor.extractAuthCookies(authToken);
         cookieConsumer.addCookies(servletResponse, cookies);
     }
 }
