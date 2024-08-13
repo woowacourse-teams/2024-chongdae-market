@@ -5,6 +5,8 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
@@ -165,6 +167,135 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .when().get("/comments")
                     .then().log().all()
                     .statusCode(200);
+        }
+    }
+
+    @DisplayName("댓글방 정보 조회")
+    @Nested
+    class GetCommentRoomInfo {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("status").description("상태"),
+                fieldWithPath("imageUrl").description("이미지 url"),
+                fieldWithPath("buttonText").description("버튼 text"),
+                fieldWithPath("message").description("alert 메시지"),
+                fieldWithPath("title").description("공모글 제목"),
+                fieldWithPath("isProposer").description("로그인 사용자의 총대 여부")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("댓글방 정보 조회")
+                .description("공모 id를 통해 댓글방의 정보를 조회합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("CommentRoomInfoSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("댓글방 정보 조회")
+                .description("공모 id를 통해 댓글방의 정보를 조회합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("CommentRoomInfoFailResponse"))
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            MemberEntity member = memberFixture.createMember();
+            offeringFixture.createOffering(member);
+        }
+
+        @DisplayName("공모 id로 댓글방 정보를 조회할 수 있다")
+        @Test
+        void should_responseCommentRoomInfo_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("get-comment-room-info-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", 1)
+                    .when().get("/comments/{offering-id}/info")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모에 대해 댓글방 정보를 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            given(spec).log().all()
+                    .filter(document("get-comment-room-info-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", 100)
+                    .when().get("/comments/{offering-id}/info")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("댓글방 상태 변경")
+    @Nested
+    class UpdateCommentRoomStatus {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("updatedStatus").description("변경된 상태")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("댓글방 상태 변경")
+                .description("댓글방의 상태를 변경합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("CommentRoomStatusUpdateSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("댓글방 상태 변경")
+                .description("댓글방의 상태를 변경합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("CommentRoomStatusUpdateFailResponse"))
+                .build();
+        MemberEntity member;
+        OfferingEntity offering;
+
+        @BeforeEach
+        void setUp() {
+            member = memberFixture.createMember();
+            offering = offeringFixture.createOffering(member);
+            offeringMemberFixture.createProposer(member, offering);
+            commentFixture.createComment(member, offering);
+        }
+
+        @DisplayName("댓글방 상태를 다음 상태로 변경할 수 있다.")
+        @Test
+        void should_updateStatus_when_givenOfferingIdAndMemberId() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("update-comment-room-status-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", offering.getId())
+                    .when().patch("/comments/{offering-id}/status")
+                    .then().log().all()
+                    .statusCode(200);
+
+            RestAssured.given().log().all()
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", offering.getId())
+                    .when().get("/comments/{offering-id}/info")
+                    .then().log().all()
+                    .statusCode(200)
+                    .body("status", is("BUYING"));
+        }
+
+        @DisplayName("유효하지 않은 공모에 대해 댓글방 상태를 변경할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", offering.getId() + 100)
+                    .when().patch("/comments/{offering-id}/status")
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 

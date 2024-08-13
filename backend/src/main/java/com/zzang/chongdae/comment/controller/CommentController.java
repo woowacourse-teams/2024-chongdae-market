@@ -3,6 +3,8 @@ package com.zzang.chongdae.comment.controller;
 import com.zzang.chongdae.comment.service.CommentService;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import jakarta.validation.Valid;
@@ -10,6 +12,7 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +36,22 @@ public class CommentController {
     public ResponseEntity<CommentRoomAllResponse> getAllCommentRoom(
             MemberEntity member) {
         CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/comments/{offering-id}/info")
+    public ResponseEntity<CommentRoomInfoResponse> getCommentRoomInfo(
+            @PathVariable(value = "offering-id") Long offeringId,
+            MemberEntity member) {
+        CommentRoomInfoResponse response = commentService.getCommentRoomInfo(offeringId, member);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/comments/{offering-id}/status")
+    public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
+            @PathVariable(value = "offering-id") Long offeringId,
+            MemberEntity member) {
+        CommentRoomStatusResponse response = commentService.updateCommentRoomStatus(offeringId, member);
         return ResponseEntity.ok(response);
     }
 

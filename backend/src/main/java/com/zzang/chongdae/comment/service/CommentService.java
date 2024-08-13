@@ -9,10 +9,12 @@ import com.zzang.chongdae.comment.service.dto.CommentCreatedAtResponse;
 import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
+import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
@@ -22,13 +24,13 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
 
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
@@ -64,6 +66,28 @@ public class CommentService {
         return rawComment
                 .map(CommentLatestResponse::new)
                 .orElseGet(() -> new CommentLatestResponse(null, null));
+    }
+
+    public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
+        // TODO : 로그인 사용자가 참여자인지 확인
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        if (offering.isStatusGrouping() && offering.toOfferingStatus().isAutoConfirmed()) {
+            offering.moveStatus();
+        }
+        return new CommentRoomInfoResponse(offering, member);
+    }
+
+    @Transactional
+    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
+        // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        CommentRoomStatus updatedStatus = offering.moveStatus();
+        if (updatedStatus.equals(CommentRoomStatus.BUYING)) {
+            offering.manuallyConfirm();
+        }
+        return new CommentRoomStatusResponse(updatedStatus);
     }
 
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {

@@ -2,8 +2,6 @@ package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
-import com.zzang.chongdae.offering.service.dto.CommentRoomInfoResponse;
-import com.zzang.chongdae.offering.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
@@ -84,22 +82,6 @@ public class OfferingController {
             MemberEntity member) {
         Long offeringId = offeringService.saveOffering(request, member);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
-    }
-
-    @GetMapping("/offerings/{offering-id}/status")
-    public ResponseEntity<CommentRoomInfoResponse> getCommentRoomInfo(
-            @PathVariable(value = "offering-id") Long offeringId,
-            MemberEntity member) {
-        CommentRoomInfoResponse response = offeringService.getCommentRoomInfo(offeringId, member);
-        return ResponseEntity.ok(response);
-    }
-
-    @PatchMapping("/offerings/{offering-id}/status")
-    public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
-            @PathVariable(value = "offering-id") Long offeringId,
-            MemberEntity member) {
-        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, member);
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/offerings/product-images/s3")
