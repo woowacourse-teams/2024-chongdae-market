@@ -51,26 +51,11 @@ class OfferingWriteViewModel(
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
-    private val _errorEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
-    val errorEvent: SingleLiveData<Int> get() = _errorEvent
-
     private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
 
     private val _extractButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val extractButtonEnabled: LiveData<Boolean> get() = _extractButtonEnabled
-
-    private val _invalidTotalCountEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val invalidTotalCountEvent: SingleLiveData<Boolean> get() = _invalidTotalCountEvent
-
-    private val _invalidTotalPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val invalidTotalPriceEvent: SingleLiveData<Boolean> get() = _invalidTotalPriceEvent
-
-    private val _invalidOriginPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val invalidOriginPriceEvent: SingleLiveData<Boolean> get() = _invalidOriginPriceEvent
-
-    private val _originPriceCheaperThanSplitPriceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val originPriceCheaperThanSplitPriceEvent: SingleLiveData<Boolean> get() = _originPriceCheaperThanSplitPriceEvent
 
     private val _splitPrice: MediatorLiveData<Int> = MediatorLiveData(ERROR_INTEGER_FORMAT)
     val splitPrice: LiveData<Int> get() = _splitPrice
@@ -92,6 +77,11 @@ class OfferingWriteViewModel(
 
     private val _imageUploadEvent = MutableLiveData<Unit>()
     val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
+
+    private val _writeUIState = MutableLiveData<WriteUIState>(WriteUIState.Initial)
+    val writeUIState: LiveData<WriteUIState> get() = _writeUIState
+
+    val isLoading: LiveData<Boolean> = _writeUIState.map { it is WriteUIState.Loading }
 
     init {
         _submitButtonEnabled.apply {
@@ -137,26 +127,29 @@ class OfferingWriteViewModel(
 
     fun uploadImageFile(multipartBody: MultipartBody.Part) {
         viewModelScope.launch {
+            _writeUIState.value = WriteUIState.Loading
             offeringRepository.saveProductImageS3(multipartBody).onSuccess {
+                _writeUIState.value = WriteUIState.Success(it.imageUrl)
                 thumbnailUrl.value = it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _errorEvent.setValue(R.string.all_error_image_upload)
+                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url)
             }
         }
     }
 
     fun postProductImageOg() {
         viewModelScope.launch {
+            _writeUIState.value = WriteUIState.Loading
             offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
-                if (it.imageUrl.isNullOrBlank()) {
-                    _errorEvent.setValue(R.string.error_empty_product_url)
+                if (it.imageUrl.isBlank()) {
+                    _writeUIState.value = WriteUIState.Error(R.string.error_empty_product_url)
                     return@launch
                 }
                 thumbnailUrl.value = HTTPS + it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _errorEvent.setValue(R.string.error_invalid_product_url)
+                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url)
             }
         }
     }
@@ -224,7 +217,6 @@ class OfferingWriteViewModel(
         deadline.value = dateTime
     }
 
-    // memberId는 임시값을 보내고 있음!
     fun postOffering() {
         val memberId = BuildConfig.TOKEN.toLong()
         val title = title.value ?: return
@@ -245,7 +237,7 @@ class OfferingWriteViewModel(
             makeOriginPriceInvalidEvent()
             return
         }
-        if (isOriginPriceCheaperThanSplitPriceEvent() == true) return
+        if (isOriginPriceCheaperThanSplitPriceEvent()) return
 
         viewModelScope.launch {
             offeringRepository.saveOffering(
@@ -268,6 +260,7 @@ class OfferingWriteViewModel(
                 makeFinishEvent()
             }.onFailure {
                 Log.e("error", it.message.toString())
+                _writeUIState.value = WriteUIState.Error(R.string.write_error_writing)
             }
         }
     }
@@ -286,7 +279,7 @@ class OfferingWriteViewModel(
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
         val totalCountConverted = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalCountConverted < MINIMUM_TOTAL_COUNT || totalCountConverted > MAXIMUM_TOTAL_COUNT) {
-            _invalidTotalCountEvent.setValue(true)
+            _writeUIState.value = WriteUIState.Error(R.string.write_invalid_total_count)
             return null
         }
         return totalCountConverted
@@ -295,21 +288,21 @@ class OfferingWriteViewModel(
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
         val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalPriceConverted < 0) {
-            _invalidTotalPriceEvent.setValue(true)
+            _writeUIState.value = WriteUIState.Error(R.string.write_invalid_total_price)
             return null
         }
         return totalPriceConverted
     }
 
     private fun makeOriginPriceInvalidEvent() {
-        _invalidOriginPriceEvent.setValue(true)
+        _writeUIState.value = WriteUIState.Error(R.string.write_invalid_each_price)
     }
 
     private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {
         if (originPrice.value.isNullOrBlank()) return false
         val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
         if (discountRateValue <= 0f) {
-            _originPriceCheaperThanSplitPriceEvent.setValue(true)
+            _writeUIState.value = WriteUIState.Error(R.string.write_origin_price_cheaper_than_total_price)
             return true
         }
         return false
