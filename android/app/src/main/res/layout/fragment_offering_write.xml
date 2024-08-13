@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/size_26">
-
+            
             <TextView
                 android:id="@+id/tv_information_message"
                 android:layout_width="wrap_content"
@@ -129,8 +129,8 @@
 
             <ImageView
                 android:id="@+id/iv_delete_image"
-                android:layout_width="@dimen/icon_size_30"
-                android:layout_height="@dimen/icon_size_30"
+                android:layout_width="@dimen/icon_size_24"
+                android:layout_height="@dimen/icon_size_24"
                 android:onClick="@{() -> vm.clearProductImage()}"
                 android:src="@drawable/btn_offering_write_delete_image"
                 app:isVisible="@{vm.deleteImageVisible}"
@@ -476,6 +476,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_contents" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="@dimen/size_20"
+                android:layout_height="@dimen/size_20"
+                app:isVisible="@{vm.isLoading}"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_upload_photo"
+                app:layout_constraintEnd_toEndOf="@+id/iv_upload_photo"
+                app:layout_constraintStart_toStartOf="@+id/iv_upload_photo"
+                app:layout_constraintTop_toTopOf="@+id/iv_upload_photo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
