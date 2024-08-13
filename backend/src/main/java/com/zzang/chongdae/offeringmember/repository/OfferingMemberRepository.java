@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEntity, Long> {
 
-    int countByOffering(OfferingEntity offering);
-
     Boolean existsByOfferingAndMember(OfferingEntity offering, MemberEntity member);
 
     List<OfferingMemberEntity> findAllByOffering(OfferingEntity offering);
