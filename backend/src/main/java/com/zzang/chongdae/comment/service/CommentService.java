@@ -12,7 +12,6 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -39,21 +38,19 @@ public class CommentService {
     }
 
     public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
-        List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(member);
-        List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
-                .map(this::toCommentRoomAllResponseItem)
+        List<OfferingEntity> commentRooms = offeringRepository.findCommentRoomsByMember(member);
+        List<CommentRoomAllResponseItem> responseItems = commentRooms.stream()
+                .map(commentsRoom -> toCommentRoomAllResponseItem(commentsRoom, member))
                 .toList();
         return new CommentRoomAllResponse(responseItems);
     }
 
-    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingWithRole offeringWithRole) {
-        OfferingEntity offering = offeringWithRole.getOffering();
-        OfferingMemberRole role = offeringWithRole.getRole();
+    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingEntity offering, MemberEntity member) {
         return new CommentRoomAllResponseItem(
                 offering.getId(),
                 offering.getTitle(),
-                toCommentLatestResponse(offering),
-                role.isProposer());
+                offering.isProposedBy(member),
+                toCommentLatestResponse(offering));
     }
 
     private CommentLatestResponse toCommentLatestResponse(OfferingEntity offering) {
