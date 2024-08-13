@@ -2,6 +2,7 @@ package com.zzang.chongdae.offeringmember.service;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
@@ -35,8 +36,9 @@ public class OfferingMemberService {
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
+
         offeringMemberRepository.save(offeringMember);
-        offering.updateCurrentCount();
+        offering.participate();
         return offeringMember.getId();
     }
 
@@ -55,6 +57,36 @@ public class OfferingMemberService {
     private void validateDuplicate(OfferingEntity offering, MemberEntity member) {
         if (offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
             throw new MarketException(OfferingMemberErrorCode.DUPLICATED);
+        }
+    }
+
+    @Transactional
+    public void cancelParticipate(Long offeringId, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingAndMember(offering, member)
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
+        validateCancel(offeringMember);
+        offeringMemberRepository.delete(offeringMember);
+        offering.leave();
+    }
+
+    private void validateCancel(OfferingMemberEntity offeringMember) {
+        validateCancelProposer(offeringMember);
+        validateInProgress(offeringMember);
+    }
+
+    private void validateCancelProposer(OfferingMemberEntity offeringMember) {
+        if (offeringMember.isProposer()) {
+            throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_PROPOSER);
+        }
+    }
+
+    private void validateInProgress(OfferingMemberEntity offeringMember) {
+        OfferingEntity offering = offeringMember.getOffering();
+        CommentRoomStatus roomStatus = offering.getRoomStatus();
+        if (roomStatus.isInProgress()) {
+            throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_IN_PROGRESS);
         }
     }
 
@@ -80,4 +112,6 @@ public class OfferingMemberService {
             throw new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND);
         }
     }
+
+
 }

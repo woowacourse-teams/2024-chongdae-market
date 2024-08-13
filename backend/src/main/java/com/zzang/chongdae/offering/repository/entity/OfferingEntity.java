@@ -97,8 +97,12 @@ public class OfferingEntity extends BaseTimeEntity {
                 originPrice, roomStatus);
     }
 
-    public void updateCurrentCount() {
+    public void participate() {
         currentCount++;
+    }
+
+    public void leave() {
+        currentCount--;
     }
 
     public CommentRoomStatus moveStatus() {
