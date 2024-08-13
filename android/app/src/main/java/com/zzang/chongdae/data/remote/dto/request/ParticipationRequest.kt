@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ParticipationRequest(
-    @SerialName("memberId") val memberId: Long,
     @SerialName("offeringId") val offeringId: Long,
 )

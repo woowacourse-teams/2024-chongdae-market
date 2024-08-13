@@ -31,7 +31,6 @@ interface OfferingApiService {
     @GET("/offerings/{offering-id}")
     suspend fun getOfferingDetail(
         @Path("offering-id") offeringId: Long,
-        @Query("member-id") memberId: Long,
     ): Response<OfferingDetailResponse>
 
     @GET("/offerings/{offering-id}/meetings")
