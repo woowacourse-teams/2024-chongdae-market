@@ -26,19 +26,20 @@ public class AuthController {
     private final CookieConsumer cookieConsumer;
 
     @PostMapping("/auth/login")
-    public ResponseEntity<Void> login(
+    public ResponseEntity<SignupResponse> login(
             @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
-        TokenDto tokenDto = authService.login(request);
-        addTokenToHttpServletResponse(tokenDto, servletResponse);
-        return ResponseEntity.ok().build();
+        SignupResponseDto responseDto = authService.login(request);
+        addTokenToHttpServletResponse(responseDto.tokenDto(), servletResponse);
+        SignupResponse response = new SignupResponse(responseDto.memberDto());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/auth/signup")
     public ResponseEntity<SignupResponse> signup(
             @RequestBody SignupRequest request, HttpServletResponse servletResponse) {
-        SignupResponseDto output = authService.signup(request);
-        SignupResponse response = new SignupResponse(output);
-        addTokenToHttpServletResponse(output.token(), servletResponse);
+        SignupResponseDto responseDto = authService.signup(request);
+        addTokenToHttpServletResponse(responseDto.tokenDto(), servletResponse);
+        SignupResponse response = new SignupResponse(responseDto.memberDto());
         return ResponseEntity.ok(response);
     }
 
