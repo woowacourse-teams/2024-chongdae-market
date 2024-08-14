@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
@@ -20,7 +19,7 @@ import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.PermissionManager
 
-class OfferingWriteFragmentOptional : Fragment() {
+class OfferingWriteOptionalFragment : Fragment() {
     private var _fragmentBinding: FragmentOfferingWriteOptionalBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
@@ -50,7 +49,10 @@ class OfferingWriteFragmentOptional : Fragment() {
         return fragmentBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setUpObserve()
     }
@@ -72,7 +74,8 @@ class OfferingWriteFragmentOptional : Fragment() {
 //                contentType = "button",
 //            )
             showToast(R.string.write_success_writing)
-//            parentFragmentManager.popBackStack()
+            parentFragmentManager.popBackStack()
+            findNavController().popBackStack(R.id.offering_write_optional_fragment, true)
         }
     }
 

@@ -1,35 +1,28 @@
 package com.zzang.chongdae.presentation.view.write
 
 import android.app.Dialog
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
-import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
-import com.zzang.chongdae.presentation.util.PermissionManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
-class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener {
+class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener {
     private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
@@ -200,8 +193,6 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
                 name = "submit_offering_event",
                 contentType = "button",
             )
-//            showToast(R.string.write_success_writing)
-//            parentFragmentManager.popBackStack()
             findNavController().navigate(R.id.action_offering_write_fragment_essential_to_offering_write_fragment_optional)
         }
     }
