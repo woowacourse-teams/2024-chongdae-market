@@ -16,6 +16,10 @@ public class LoggingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        if (((HttpServletRequest) request).getRequestURI().startsWith("/h2-console/")) {
+            chain.doFilter(request, response);
+            return;
+        }
         if (isMultipart(request)) {
             chain.doFilter(request, response);
             return;
