@@ -20,3 +20,18 @@ data class OfferingDetail(
     val condition: OfferingCondition,
     val isParticipated: Boolean,
 )
+
+fun OfferingDetail.toOffering(): Offering {
+    return Offering(
+        id = this.id,
+        title = this.title,
+        meetingAddress = this.meetingAddress,
+        thumbnailUrl = this.thumbnailUrl,
+        totalCount = this.totalCount,
+        currentCount = this.currentCount.value,
+        dividedPrice = this.dividedPrice,
+        eachPrice = this.totalPrice / this.totalCount,
+        condition = this.condition,
+        isOpen = !this.deadline.isBefore(LocalDateTime.now()),
+    )
+}

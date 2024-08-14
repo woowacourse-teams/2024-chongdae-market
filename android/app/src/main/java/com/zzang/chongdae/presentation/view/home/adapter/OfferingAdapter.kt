@@ -12,6 +12,7 @@ class OfferingAdapter(
     private val onOfferingClickListener: OnOfferingClickListener,
 ) : PagingDataAdapter<Offering, OfferingViewHolder>(productComparator) {
     private var searchKeyword: String? = null
+    private val updatedOfferings: MutableList<Offering> = mutableListOf()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -26,11 +27,23 @@ class OfferingAdapter(
         holder: OfferingViewHolder,
         position: Int,
     ) {
-        getItem(position)?.let { holder.bind(it, onOfferingClickListener, searchKeyword) }
+        getItem(position)?.let { offering ->
+            val updatedOffering = updatedOfferings.firstOrNull { offering.id == it.id }
+            if (updatedOffering != null) {
+                holder.bind(updatedOffering, onOfferingClickListener, searchKeyword)
+                return
+            }
+            holder.bind(offering, onOfferingClickListener, searchKeyword)
+        }
     }
 
     fun setSearchKeyword(keyword: String?) {
         searchKeyword = keyword
+    }
+
+    fun addUpdatedItem(offering: Offering) {
+        updatedOfferings.add(offering)
+        notifyDataSetChanged()
     }
 
     companion object {
@@ -47,7 +60,7 @@ class OfferingAdapter(
                     oldItem: Offering,
                     newItem: Offering,
                 ): Boolean {
-                    return oldItem.title == newItem.title
+                    return oldItem == newItem
                 }
             }
     }

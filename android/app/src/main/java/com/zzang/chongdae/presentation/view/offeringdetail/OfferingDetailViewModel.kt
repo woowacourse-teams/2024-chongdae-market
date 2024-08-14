@@ -43,6 +43,9 @@ class OfferingDetailViewModel(
     private val _commentDetailEvent: MutableSingleLiveData<String> = MutableSingleLiveData()
     val commentDetailEvent: SingleLiveData<String> get() = _commentDetailEvent
 
+    private val _updatedOfferingId: MutableLiveData<Long> = MutableLiveData()
+    val updatedOfferingId: LiveData<Long> get() = _updatedOfferingId
+
     init {
         loadOffering()
     }
@@ -74,6 +77,7 @@ class OfferingDetailViewModel(
                 _isParticipated.value = true
                 _isAvailable.value = false
                 _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
+                _updatedOfferingId.value = offeringId
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }

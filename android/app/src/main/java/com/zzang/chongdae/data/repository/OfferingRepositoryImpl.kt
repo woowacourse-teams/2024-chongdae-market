@@ -21,11 +21,11 @@ class OfferingRepositoryImpl(
         search: String?,
         lastOfferingId: Long?,
         pageSize: Int?,
-    ): List<Offering> {
+    ): Result<List<Offering>> {
         return offeringRemoteDataSource.fetchOfferings(filter, search, lastOfferingId, pageSize)
             .mapCatching {
                 it.offerings.map { it.toDomain() }
-            }.getOrThrow()
+            }
     }
 
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {

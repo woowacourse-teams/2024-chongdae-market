@@ -1,5 +1,6 @@
 package com.zzang.chongdae.domain.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.zzang.chongdae.domain.model.Offering
@@ -19,12 +20,18 @@ class OfferingPagingSource(
                     search = search,
                     lastOfferingId = lastOfferingId,
                     pageSize = params.loadSize,
-                )
+                ).getOrThrow()
+
+            val prevKey = if (lastOfferingId == null) null else lastOfferingId + DEFAULT_PAGE_SIZE
+            val nextKey =
+                if (offerings.isEmpty() || offerings.size < DEFAULT_PAGE_SIZE) null else offerings.last().id
+
+            Log.e("seogi", "prevKey: $prevKey nextKey: $nextKey")
 
             LoadResult.Page(
                 data = offerings,
-                prevKey = lastOfferingId,
-                nextKey = if (offerings.isEmpty() || offerings.size < DEFAULT_PAGE_SIZE) null else offerings.last().id,
+                prevKey = prevKey,
+                nextKey = nextKey,
             )
         }.onFailure { throwable ->
             LoadResult.Error<Long, Offering>(throwable)
@@ -33,7 +40,7 @@ class OfferingPagingSource(
 
     override fun getRefreshKey(state: PagingState<Long, Offering>): Long? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey
+            state.closestPageToPosition(anchorPosition)?.prevKey?.minus(DEFAULT_PAGE_SIZE)
         }
     }
 
