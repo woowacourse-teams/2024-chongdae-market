@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
+import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
@@ -26,7 +27,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
-    private var _dateTimePickerBinding: DialogDateTimePickerBinding? = null
+    private var _dateTimePickerBinding: DialogDatePickerBinding? = null
     private val dateTimePickerBinding get() = _dateTimePickerBinding!!
 
     private var toast: Toast? = null
@@ -106,39 +107,14 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         }
     }
 
-    override fun onDateTimeSubmitButtonClick() {
-        viewModel.updateTradeDate(
-            dateTimePickerBinding.tvDate.text.toString(),
-            dateTimePickerBinding.tvTime.text.toString(),
-        )
-        dialog.dismiss()
-    }
-
-    override fun onDateTimeCancelButtonClick() {
-        dialog.dismiss()
-    }
-
-    private fun setDateTimeText(dateTimeBinding: DialogDateTimePickerBinding) {
+    private fun setDateTimeText(dateTimeBinding: DialogDatePickerBinding) {
         val calendar = Calendar.getInstance()
         updateDate(calendar, dateTimeBinding)
-        updateTime(calendar, dateTimeBinding)
-    }
-
-    private fun updateTime(
-        calendar: Calendar,
-        dateTimeBinding: DialogDateTimePickerBinding,
-    ) {
-        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-        updateTimeTextView(dateTimeBinding.tvTime, hourOfDay, minute)
-        dateTimeBinding.pickerTime.setOnTimeChangedListener { _, hourOfDay, minute ->
-            updateTimeTextView(dateTimeBinding.tvTime, hourOfDay, minute)
-        }
     }
 
     private fun updateDate(
         calendar: Calendar,
-        dateTimeBinding: DialogDateTimePickerBinding,
+        dateTimeBinding: DialogDatePickerBinding,
     ) {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -147,6 +123,17 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         dateTimeBinding.pickerDate.setOnDateChangedListener { _, year, monthOfYear, dayOfMonth ->
             updateDateTextView(dateTimeBinding.tvDate, year, monthOfYear, dayOfMonth)
         }
+    }
+
+    override fun onDateTimeSubmitButtonClick() {
+        viewModel.updateTradeDate(
+            dateTimePickerBinding.tvDate.text.toString(),
+        )
+        dialog.dismiss()
+    }
+
+    override fun onDateTimeCancelButtonClick() {
+        dialog.dismiss()
     }
 
     private fun updateDateTextView(
@@ -181,7 +168,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         fragmentBinding.vm = viewModel
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
 
-        _dateTimePickerBinding = DialogDateTimePickerBinding.inflate(inflater, container, false)
+        _dateTimePickerBinding = DialogDatePickerBinding.inflate(inflater, container, false)
         dateTimePickerBinding.vm = viewModel
         dateTimePickerBinding.onClickListener = this
     }

@@ -209,10 +209,9 @@ class OfferingWriteViewModel(
 
     fun updateTradeDate(
         date: String,
-        time: String,
     ) {
-        val dateTime = "$date $time"
-        val inputFormat = SimpleDateFormat(INPUT_DATE_TIME_FORMAT, Locale.KOREAN)
+        val dateTime = "$date"
+        val inputFormat = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.KOREAN)
         val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
 
         val parsedDateTime = inputFormat.parse(dateTime)
@@ -325,6 +324,7 @@ class OfferingWriteViewModel(
         private const val MINIMUM_TOTAL_COUNT = 2
         private const val MAXIMUM_TOTAL_COUNT = 10_000
         private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
+        private const val INPUT_DATE_FORMAT = "yyyy년 M월 d일"
         private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
         const val HTTPS = "https:"
 
