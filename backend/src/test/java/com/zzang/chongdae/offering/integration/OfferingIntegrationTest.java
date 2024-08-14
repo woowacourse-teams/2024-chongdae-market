@@ -13,7 +13,7 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -60,8 +60,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
                 fieldWithPath("dividedPrice").description("n빵 가격"),
                 fieldWithPath("totalPrice").description("총가격"),
-                fieldWithPath("condition").description("공모 상태"
-                        + getEnumValuesAsString(OfferingCondition.class)),
+                fieldWithPath("status").description("공모 상태"
+                        + getEnumValuesAsString(OfferingStatus.class)),
                 fieldWithPath("memberId").description("공모자 회원 id"),
                 fieldWithPath("nickname").description("공모자 회원 닉네임"),
                 fieldWithPath("isProposer").description("공모자 여부"),
@@ -134,8 +134,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("offerings[].thumbnailUrl").description("사진 링크"),
                 fieldWithPath("offerings[].dividedPrice").description("n빵 가격"),
                 fieldWithPath("offerings[].originPrice").description("원 가격"),
-                fieldWithPath("offerings[].condition").description("공모 상태"
-                        + getEnumValuesAsString(OfferingCondition.class)),
+                fieldWithPath("offerings[].status").description("공모 상태"
+                        + getEnumValuesAsString(OfferingStatus.class)),
                 fieldWithPath("offerings[].isOpen").description("공모 참여 가능 여부")
         );
         ResourceSnippetParameters successSnippets = builder()

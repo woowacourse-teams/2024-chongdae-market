@@ -5,6 +5,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -63,7 +64,7 @@ public class OfferingEntity extends BaseTimeEntity {
 
     private String meetingAddressDetail;
 
-    private String meetingAddressDong; // TODO: nullable?
+    private String meetingAddressDong;
 
     @NotNull
     @Positive
@@ -83,6 +84,13 @@ public class OfferingEntity extends BaseTimeEntity {
     @Positive
     private Integer originPrice;
 
+    @Positive
+    private Double discountRate;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private OfferingStatus offeringStatus;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private CommentRoomStatus roomStatus;
@@ -91,10 +99,11 @@ public class OfferingEntity extends BaseTimeEntity {
                           LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
                           Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
-                          Integer originPrice, CommentRoomStatus roomStatus) {
+                          Integer originPrice, Double discountRate,
+                          OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, isManualConfirmed, totalPrice,
-                originPrice, roomStatus);
+                originPrice, discountRate, offeringStatus, roomStatus);
     }
 
     public void participate() {
@@ -118,8 +127,8 @@ public class OfferingEntity extends BaseTimeEntity {
         return new OfferingPrice(totalCount, totalPrice, originPrice);
     }
 
-    public OfferingStatus toOfferingStatus() {
-        return new OfferingStatus(deadline, totalCount, isManualConfirmed, currentCount);
+    public OfferingCondition toOfferingCondition() {
+        return new OfferingCondition(deadline, totalCount, isManualConfirmed, currentCount);
     }
 
     public OfferingMeeting toOfferingMeeting() {

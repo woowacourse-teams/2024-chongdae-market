@@ -24,6 +24,7 @@ public class OfferingPrice {
     public double calculateDiscountRate() {
         return (double) (originPrice - totalPrice / totalCount) / originPrice;
     }
+    // TODO : 소수점 밑 둘째 자리에서 반올림
 
     public void validateOriginPrice() {
         int dividedPrice = totalPrice / totalCount;
