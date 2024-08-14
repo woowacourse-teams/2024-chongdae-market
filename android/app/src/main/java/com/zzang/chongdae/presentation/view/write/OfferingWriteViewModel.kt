@@ -285,7 +285,6 @@ class OfferingWriteViewModel(
     }
 
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
-        Log.d("alsong", "makeTotalPriceInvalidEvent: $totalPrice")
         val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalPriceConverted < 0) {
             _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_price)
@@ -309,7 +308,6 @@ class OfferingWriteViewModel(
     }
 
     fun makeNavigateToOptionalEvent() {
-        Log.d("alsong", "makeNavigateToOptionalEvent: ${totalPrice.value}")
         _navigateToOptionalEvent.setValue(true)
     }
 

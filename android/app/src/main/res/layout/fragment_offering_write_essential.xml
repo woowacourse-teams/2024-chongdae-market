@@ -100,6 +100,8 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:text="@={vm.totalCount}"
+                    android:maxLength="4"
+                    android:maxLines="1"
                     android:textColor="@color/gray_900"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
@@ -138,6 +140,8 @@
                     style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
                     android:hint="@string/write_information_total_price"
                     android:text="@={vm.totalPrice}"
+                    android:maxLength="7"
+                    android:maxLines="1"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
 

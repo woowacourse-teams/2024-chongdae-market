@@ -13,10 +13,12 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.util.PermissionManager
 
 class OfferingWriteOptionalFragment : Fragment() {
@@ -32,6 +34,14 @@ class OfferingWriteOptionalFragment : Fragment() {
         OfferingWriteViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
+    }
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(requireContext())
+    }
+
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,11 +78,11 @@ class OfferingWriteOptionalFragment : Fragment() {
 
     private fun observeSubmitOfferingEvent() {
         viewModel.submitOfferingEvent.observe(viewLifecycleOwner) {
-//            firebaseAnalyticsManager.logSelectContentEvent(
-//                id = "submit_offering_event",
-//                name = "submit_offering_event",
-//                contentType = "button",
-//            )
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "submit_offering_event",
+                name = "submit_offering_event",
+                contentType = "button",
+            )
             showToast(R.string.write_success_writing)
             parentFragmentManager.popBackStack()
             findNavController().popBackStack(R.id.offering_write_optional_fragment, true)
