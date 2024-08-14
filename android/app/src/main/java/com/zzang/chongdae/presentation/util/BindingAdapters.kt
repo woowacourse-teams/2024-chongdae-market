@@ -298,18 +298,30 @@ fun ImageView.setImageProposer(proposer: Boolean) {
     setImageResource(imageRes)
 }
 
-@BindingAdapter("splitPriceValidity","splitPrice")
-fun TextView.setSplitPriceText(isSplitPriceValid: Boolean, splitPrice: Int) {
+@BindingAdapter("splitPriceValidity", "splitPrice")
+fun TextView.setSplitPriceText(
+    isSplitPriceValid: Boolean,
+    splitPrice: Int,
+) {
     val text =
-        if (isSplitPriceValid) context.getString(R.string.all_percentage_comma).format(splitPrice)
-        else context.getString(R.string.all_minus)
+        if (isSplitPriceValid) {
+            context.getString(R.string.all_percentage_comma).format(splitPrice)
+        } else {
+            context.getString(R.string.all_minus)
+        }
     this.text = text
 }
 
-@BindingAdapter("discountRateValidity","discountRate")
-fun TextView.setDiscountRateValidity(discountRateValidity: Boolean, discountRate: Float) {
+@BindingAdapter("discountRateValidity", "discountRate")
+fun TextView.setDiscountRateValidity(
+    discountRateValidity: Boolean,
+    discountRate: Float,
+) {
     val text =
-        if (discountRateValidity) discountRate.toString()
-        else context.getString(R.string.all_minus)
+        if (discountRateValidity) {
+            discountRate.toString()
+        } else {
+            context.getString(R.string.all_minus)
+        }
     this.text = text
 }

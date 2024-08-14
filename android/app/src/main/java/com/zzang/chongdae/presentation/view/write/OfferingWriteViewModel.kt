@@ -207,9 +207,7 @@ class OfferingWriteViewModel(
         _tradeDateChoiceEvent.setValue(true)
     }
 
-    fun updateTradeDate(
-        date: String,
-    ) {
+    fun updateTradeDate(date: String) {
         val dateTime = "$date"
         val inputFormat = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.KOREAN)
         val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
