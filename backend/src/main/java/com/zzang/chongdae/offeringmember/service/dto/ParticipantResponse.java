@@ -5,6 +5,6 @@ import java.util.List;
 public record ParticipantResponse(ProposerResponseItem proposer,
                                   List<ParticipantResponseItem> participants,
                                   ParticipantCountResponseItem count,
-                                  ParticipantPriceResponseItem price
+                                  Integer price
 ) {
 }

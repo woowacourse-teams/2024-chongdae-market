@@ -132,7 +132,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                 fieldWithPath("participants[].nickname").description("공모 참여자 닉네임"),
                 fieldWithPath("count.currentCount").description("공모 참여자 현재원(작성자 + 참여자)"),
                 fieldWithPath("count.totalCount").description("공모 참여자 총원"),
-                fieldWithPath("price.estimated").description("공모 참여자 예상 정산 가격")
+                fieldWithPath("price").description("공모 참여자 예상 정산 가격")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여자 목록 조회")

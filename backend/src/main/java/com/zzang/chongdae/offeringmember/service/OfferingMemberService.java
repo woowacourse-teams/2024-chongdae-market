@@ -12,7 +12,6 @@ import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantCountResponseItem;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipantPriceResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
@@ -74,12 +73,10 @@ public class OfferingMemberService {
         List<ParticipantResponseItem> participantsResponseItem = participants.stream()
                 .map(ParticipantResponseItem::new)
                 .toList();
-        ParticipantCountResponseItem countResponseItem
-                = new ParticipantCountResponseItem(offering.getCurrentCount(), offering.getTotalCount());
-        ParticipantPriceResponseItem estimatedPriceItem
-                = new ParticipantPriceResponseItem(offering.toOfferingPrice().calculateDividedPrice());
+        ParticipantCountResponseItem countResponseItem = new ParticipantCountResponseItem(offering);
+        Integer estimatedPrice = offering.toOfferingPrice().calculateDividedPrice();
         return new ParticipantResponse(
-                proposerResponseItem, participantsResponseItem,countResponseItem, estimatedPriceItem);
+                proposerResponseItem, participantsResponseItem,countResponseItem, estimatedPrice);
     }
 
     private void validateParticipants(OfferingEntity offering, MemberEntity member) {
