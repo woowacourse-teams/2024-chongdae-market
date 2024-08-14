@@ -167,7 +167,7 @@ class CommentDetailViewModel(
         }
     }
 
-    fun exitOffering()  {
+    fun exitOffering() {
         _onExitOfferingEvent.setValue(Unit)
     }
 
