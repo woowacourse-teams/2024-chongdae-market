@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
+import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.databinding.FragmentMyPageBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -16,7 +18,7 @@ class MyPageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MyPageViewModel by viewModels {
-        MyPageViewModel.getFactory()
+        MyPageViewModel.getFactory(MemberDataStore(requireContext().dataStore))
     }
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {

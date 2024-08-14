@@ -45,16 +45,17 @@
             android:layout_marginStart="47dp"
             android:layout_marginTop="43dp"
             android:src="@drawable/ic_my_page_profile"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+            app:layout_constraintTop_toBottomOf="@id/horizon_line"
+            app:layout_constraintVertical_bias="0.4" />
 
         <TextView
             android:id="@+id/tv_welcome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="37dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginStart="@dimen/size_35"
+            android:layout_marginTop="@dimen/size_35"
             android:fontFamily="@font/suit_medium"
             android:text="@string/my_page_welcome_text"
             android:textColor="@color/black_1000"
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_3"
             android:fontFamily="@font/suit_semibold"
-            android:text="@{vm.nickname}"
+            android:text="@{vm.nickName}"
             android:textColor="@color/main_color"
             android:textSize="@dimen/font_size_24"
             android:textStyle="bold"
@@ -80,13 +81,14 @@
             android:id="@+id/tv_nickname_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_2"
             android:fontFamily="@font/suit_semibold"
             android:text="@string/my_page_nickname_title"
             android:textColor="@color/gray_900"
-            android:textSize="@dimen/font_size_22"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
+            android:textSize="@dimen/font_size_24"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
             app:layout_constraintStart_toEndOf="@id/tv_nickname"
-            app:layout_constraintTop_toBottomOf="@+id/tv_welcome_text" />
+            app:layout_constraintTop_toTopOf="@id/tv_nickname" />
 
         <ImageView
             android:id="@+id/iv_nickname_modification"
@@ -130,7 +132,7 @@
 
         <TextView
             android:id="@+id/tv_terms_of_use"
-            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_terms_of_use_text"
             app:layout_constraintBottom_toBottomOf="@id/iv_terms_of_use"
@@ -148,7 +150,7 @@
 
         <TextView
             android:id="@+id/tv_privacy"
-            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_privacy_text"
             app:layout_constraintBottom_toBottomOf="@id/iv_privacy"
@@ -166,7 +168,7 @@
 
         <TextView
             android:id="@+id/tv_logout"
-            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_logout_text"
             app:layout_constraintBottom_toBottomOf="@id/iv_logout"
@@ -184,7 +186,7 @@
 
         <TextView
             android:id="@+id/tv_unsubscribing"
-            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_withdrawal_text"
             app:layout_constraintBottom_toBottomOf="@id/iv_withdrawal"
