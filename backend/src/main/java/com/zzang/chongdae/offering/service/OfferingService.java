@@ -5,7 +5,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -46,10 +46,10 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         OfferingPrice offeringPrice = offering.toOfferingPrice();
-        OfferingStatus offeringStatus = offering.toOfferingStatus();
+        OfferingCondition offeringCondition = offering.toOfferingCondition();
         Boolean isProposer = offering.isProposedBy(member); // TODO: 추후 도메인으로 분리
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
-        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isProposer, isParticipated);
+        return new OfferingDetailResponse(offering, offeringPrice, offeringCondition, isProposer, isParticipated);
     }
 
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
@@ -59,8 +59,8 @@ public class OfferingService {
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
-                    OfferingStatus offeringStatus = offering.toOfferingStatus();
-                    return new OfferingAllResponseItem(offering, offeringPrice, offeringStatus);
+                    OfferingCondition offeringCondition = offering.toOfferingCondition();
+                    return new OfferingAllResponseItem(offering, offeringPrice, offeringCondition);
                 })
                 .toList()
         );

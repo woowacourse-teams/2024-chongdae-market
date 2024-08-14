@@ -1,27 +1,66 @@
 package com.zzang.chongdae.offering.domain;
 
-public enum OfferingCondition {
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    FULL,
-    IMMINENT,
-    CONFIRMED,
-    AVAILABLE;
+@Getter
+@AllArgsConstructor
+public class OfferingCondition {
 
-    public static OfferingCondition decideBy(OfferingStatus offeringStatus) {
-        if (offeringStatus.isManualConfirmed() || offeringStatus.isAutoConfirmed()
-                || (offeringStatus.isDeadlineOver() && offeringStatus.isCountNotFull())) {
-            return CONFIRMED;
+    private final LocalDateTime deadline;
+    private final int totalCount;
+    private final boolean isManualConfirmed;
+    private final int currentCount;
+
+    public OfferingStatus decideOfferingStatus() {
+        return OfferingStatus.decideBy(this);
+    }
+
+    public boolean isCountFull() {
+        return this.totalCount == this.currentCount;
+    }
+
+    public boolean isCountNotFull() {
+        return !isCountFull();
+    }
+
+    public boolean isCountAlmostFull() {
+        if (totalCount <= 3) {
+            return (totalCount - currentCount) < 2;
         }
-        if (offeringStatus.isCountFull() && offeringStatus.isDeadlineNotOver()) {
-            return FULL;
-        }
-        if (offeringStatus.isCountAlmostFull() || offeringStatus.isDeadlineAlmostOver()) {
-            return IMMINENT;
-        }
-        return AVAILABLE;
+        return (totalCount - currentCount) < 3;
+    }
+
+    public boolean isDeadlineAlmostOver() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime threshold = deadline.minusHours(6);
+        return threshold.isBefore(now) && now.isBefore(deadline); // deadline - 6 < now < deadline
+    }
+
+    public boolean isDeadlineOver() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(this.deadline) || now.isEqual(this.deadline);
+    }
+
+    public boolean isDeadlineNotOver() {
+        return LocalDateTime.now().isBefore(this.deadline);
+    }
+
+    public boolean isAutoConfirmed() {
+        return isCountFull() && isDeadlineOver();
+    }
+
+    public boolean isManualConfirmed() {
+        return isManualConfirmed;
     }
 
     public boolean isOpen() {
-        return this == AVAILABLE || this == IMMINENT;
+        OfferingStatus offeringStatus = decideOfferingStatus();
+        return offeringStatus.isOpen();
+    }
+
+    public boolean isClosed() {
+        return !isOpen();
     }
 }
