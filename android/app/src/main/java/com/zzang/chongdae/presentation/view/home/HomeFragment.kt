@@ -2,9 +2,11 @@ package com.zzang.chongdae.presentation.view.home
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -51,8 +53,20 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
     ) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+        initSearchListener()
         setUpOfferingsObserve()
         navigateToOfferingWriteFragment()
+    }
+
+    private fun initSearchListener() {
+        binding.etSearch.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                viewModel.fetchOfferings()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     override fun onStart() {
