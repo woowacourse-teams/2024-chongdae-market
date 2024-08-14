@@ -72,8 +72,8 @@ class OfferingWriteViewModel(
     private val _tradeDateChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val tradeDateChoiceEvent: SingleLiveData<Boolean> get() = _tradeDateChoiceEvent
 
-    private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _finishEvent
+    private val _navigateToOptionalEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _navigateToOptionalEvent
 
     private val _imageUploadEvent = MutableLiveData<Unit>()
     val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
@@ -305,7 +305,7 @@ class OfferingWriteViewModel(
     }
 
     private fun makeFinishEvent() {
-        _finishEvent.setValue(true)
+        _navigateToOptionalEvent.setValue(true)
     }
 
     companion object {
