@@ -127,7 +127,7 @@ public class OfferingEntity extends BaseTimeEntity {
     }
 
     public boolean isProposedBy(MemberEntity other) {
-        return this.member.equals(other);
+        return this.member.isSame(other);
     }
 
     public boolean isNotProposedBy(MemberEntity other) {

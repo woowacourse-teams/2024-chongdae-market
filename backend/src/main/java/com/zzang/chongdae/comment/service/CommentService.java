@@ -63,20 +63,8 @@ public class CommentService {
 
         List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
-                .map(comment -> toCommentAllResponseItem(comment, member))
+                .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
         return new CommentAllResponse(responseItems);
-    }
-
-    private CommentAllResponseItem toCommentAllResponseItem(CommentEntity comment, MemberEntity member) {
-        MemberEntity commentWriter = comment.getMember();
-        OfferingEntity offering = comment.getOffering();
-        return new CommentAllResponseItem(
-                comment.getId(),
-                comment.getCreatedAt(),
-                comment.getContent(),
-                commentWriter.getNickname(),
-                offering.isProposedBy(commentWriter),
-                commentWriter.equals(member));
     }
 }
