@@ -50,9 +50,9 @@ public class OfferingService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         OfferingStatus offeringStatus = offering.toOfferingStatus();
-        Boolean isProposed = offering.isProposedBy(member); // TODO: 추후 도메인으로 분리
+        Boolean isProposer = offering.isProposedBy(member); // TODO: 추후 도메인으로 분리
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
-        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isProposed, isParticipated);
+        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isProposer, isParticipated);
     }
 
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {

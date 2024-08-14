@@ -21,13 +21,13 @@ public record OfferingDetailResponse(Long id,
                                      OfferingCondition condition,
                                      Long memberId,
                                      String nickname,
-                                     Boolean isProposed,
+                                     Boolean isProposer,
                                      Boolean isParticipated) {
 
     public OfferingDetailResponse(OfferingEntity offering,
                                   OfferingPrice offeringPrice,
                                   OfferingStatus offeringStatus,
-                                  Boolean isProposed,
+                                  Boolean isProposer,
                                   Boolean isParticipated) {
         this(offering.getId(),
                 offering.getTitle(),
@@ -44,7 +44,7 @@ public record OfferingDetailResponse(Long id,
                 offeringStatus.decideOfferingCondition(),
                 offering.getMember().getId(),
                 offering.getMember().getNickname(),
-                isProposed,
+                isProposer,
                 isParticipated
         );
     }

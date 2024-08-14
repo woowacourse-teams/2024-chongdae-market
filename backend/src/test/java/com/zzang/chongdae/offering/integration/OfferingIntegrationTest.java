@@ -66,7 +66,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                         + getEnumValuesAsString(OfferingCondition.class)),
                 fieldWithPath("memberId").description("공모자 회원 id"),
                 fieldWithPath("nickname").description("공모자 회원 닉네임"),
-                fieldWithPath("isProposed").description("공모자 여부"),
+                fieldWithPath("isProposer").description("공모자 여부"),
                 fieldWithPath("isParticipated").description("공모 참여 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
