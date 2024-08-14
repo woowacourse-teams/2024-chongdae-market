@@ -13,6 +13,7 @@
     <string name="all_minus">-</string>
     <string name="all_won">원</string>
     <string name="all_percentage">%</string>
+    <string name="all_percentage_comma">%,d</string>
     <string name="all_place">거래 장소</string>
     <string name="all_am">오전</string>
     <string name="all_pm">오후</string>

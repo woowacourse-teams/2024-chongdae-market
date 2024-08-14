@@ -61,10 +61,10 @@ class OfferingWriteViewModel(
     val splitPrice: LiveData<Int> get() = _splitPrice
 
     private val _discountRate: MediatorLiveData<Float> = MediatorLiveData(ERROR_FLOAT_FORMAT)
-    val splitPriceVisibility: LiveData<Boolean>
+    val splitPriceValidity: LiveData<Boolean>
         get() = _splitPrice.map { it >= 0 }
 
-    val discountRateVisibility: LiveData<Boolean>
+    val discountRateValidity: LiveData<Boolean>
         get() = _discountRate.map { it >= 0 }
 
     val discountRate: LiveData<Float> get() = _discountRate

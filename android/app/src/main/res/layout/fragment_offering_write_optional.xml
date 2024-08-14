@@ -168,7 +168,6 @@
                     android:text="@string/write_discount_rate"
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/size_15"
-                    app:isVisible="@{vm.discountRateVisibility}"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
                     app:layout_constraintTop_toBottomOf="@id/et_individual_price" />
 
@@ -180,7 +179,8 @@
                     android:text="@{@string/write_discount_rate_value(vm.discountRate)}"
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/size_15"
-                    app:isVisible="@{vm.discountRateVisibility}"
+                    app:discountRate="@{vm.discountRate}"
+                    app:discountRateValidity="@{vm.discountRateValidity}"
                     app:layout_constraintStart_toEndOf="@id/tv_discount_rate"
                     app:layout_constraintTop_toTopOf="@id/tv_discount_rate"
                     tools:text="10" />
@@ -193,7 +193,6 @@
                     android:text="@string/all_percentage"
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/size_15"
-                    app:isVisible="@{vm.discountRateVisibility}"
                     app:layout_constraintStart_toEndOf="@id/tv_discount_rate_value"
                     app:layout_constraintTop_toTopOf="@id/tv_discount_rate" />
 
@@ -227,12 +226,12 @@
                     android:layout_marginTop="@dimen/size_6"
                     android:layout_marginEnd="@dimen/size_8"
                     android:fontFamily="@font/suit_medium"
+                    android:paddingBottom="16dp"
                     android:text="@string/write_under_1000"
                     android:textColor="@color/gray_400"
                     android:textSize="@dimen/font_size_12"
                     app:layout_constraintEnd_toEndOf="@id/et_contents"
-                    app:layout_constraintTop_toBottomOf="@id/et_contents"
-                    android:paddingBottom="16dp"/>
+                    app:layout_constraintTop_toBottomOf="@id/et_contents" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

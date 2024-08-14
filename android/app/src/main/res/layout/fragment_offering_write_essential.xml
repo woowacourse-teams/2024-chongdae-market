@@ -99,9 +99,9 @@
                     android:background="@drawable/et_border_main_color"
                     android:gravity="center"
                     android:inputType="number"
-                    android:text="@={vm.totalCount}"
                     android:maxLength="4"
                     android:maxLines="1"
+                    android:text="@={vm.totalCount}"
                     android:textColor="@color/gray_900"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
@@ -139,9 +139,9 @@
                     android:id="@+id/et_total_price"
                     style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
                     android:hint="@string/write_information_total_price"
-                    android:text="@={vm.totalPrice}"
                     android:maxLength="7"
                     android:maxLines="1"
+                    android:text="@={vm.totalPrice}"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
 
@@ -166,7 +166,6 @@
                     android:text="@string/write_per_n_price"
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/size_15"
-                    app:isVisible="@{vm.splitPriceVisibility}"
                     app:layout_constraintStart_toStartOf="@id/et_total_price"
                     app:layout_constraintTop_toBottomOf="@id/et_total_price" />
 
@@ -175,13 +174,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/suit_bold"
-                    android:text="@{@string/all_money_amount_text(vm.splitPrice)}"
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/size_15"
-                    app:isVisible="@{vm.splitPriceVisibility}"
                     app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
                     app:layout_constraintTop_toTopOf="@id/tv_per_n_price"
-                    tools:text="10,000원" />
+                    app:splitPrice="@{vm.splitPrice}"
+                    app:splitPriceValidity="@{vm.splitPriceValidity}"
+                    tools:text="10,000" />
+
+                <TextView
+                    android:id="@+id/tv_per_n_price_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="@string/all_won"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/size_15"
+                    app:layout_constraintStart_toEndOf="@id/tv_per_n_price_value"
+                    app:layout_constraintTop_toTopOf="@id/tv_per_n_price" />
 
                 <TextView
                     android:id="@+id/tv_place"

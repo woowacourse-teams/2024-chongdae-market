@@ -221,6 +221,7 @@ private fun OfferingCondition.toOfferingConditionText(
             currentCount,
             totalCount,
         )
+
     OfferingCondition.CONFIRMED -> context.getString(R.string.participant_end)
     OfferingCondition.AVAILABLE ->
         context.getString(
@@ -295,4 +296,20 @@ fun TextView.setTime(localTime: LocalTime) {
 fun ImageView.setImageProposer(proposer: Boolean) {
     val imageRes = if (proposer) R.drawable.ic_proposer else R.drawable.ic_not_proposer
     setImageResource(imageRes)
+}
+
+@BindingAdapter("splitPriceValidity","splitPrice")
+fun TextView.setSplitPriceText(isSplitPriceValid: Boolean, splitPrice: Int) {
+    val text =
+        if (isSplitPriceValid) context.getString(R.string.all_percentage_comma).format(splitPrice)
+        else context.getString(R.string.all_minus)
+    this.text = text
+}
+
+@BindingAdapter("discountRateValidity","discountRate")
+fun TextView.setDiscountRateValidity(discountRateValidity: Boolean, discountRate: Float) {
+    val text =
+        if (discountRateValidity) discountRate.toString()
+        else context.getString(R.string.all_minus)
+    this.text = text
 }
