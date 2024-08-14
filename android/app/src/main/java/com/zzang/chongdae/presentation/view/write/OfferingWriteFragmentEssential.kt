@@ -15,6 +15,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
@@ -80,7 +81,7 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
     }
 
     private fun setUpObserve() {
-        observeFinishEvent()
+        observeNavigateToOptionalEvent()
         observeImageUploadEvent()
         observeUIState()
     }
@@ -250,15 +251,16 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
         dateTimePickerBinding.onClickListener = this
     }
 
-    private fun observeFinishEvent() {
-        viewModel.finishEvent.observe(viewLifecycleOwner) {
+    private fun observeNavigateToOptionalEvent() {
+        viewModel.navigateToOptionalEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "submit_offering_event",
                 name = "submit_offering_event",
                 contentType = "button",
             )
-            showToast(R.string.write_success_writing)
-            parentFragmentManager.popBackStack()
+//            showToast(R.string.write_success_writing)
+//            parentFragmentManager.popBackStack()
+            findNavController().navigate(R.id.action_offering_write_fragment_essential_to_offering_write_fragment_optional)
         }
     }
 

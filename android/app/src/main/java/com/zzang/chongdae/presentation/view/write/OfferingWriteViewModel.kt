@@ -73,7 +73,7 @@ class OfferingWriteViewModel(
     val tradeDateChoiceEvent: SingleLiveData<Boolean> get() = _tradeDateChoiceEvent
 
     private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
+    val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _finishEvent
 
     private val _imageUploadEvent = MutableLiveData<Unit>()
     val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
@@ -89,9 +89,7 @@ class OfferingWriteViewModel(
             addSource(totalCount) { updateSubmitButtonEnabled() }
             addSource(totalPrice) { updateSubmitButtonEnabled() }
             addSource(meetingAddress) { updateSubmitButtonEnabled() }
-            addSource(meetingAddressDetail) { updateSubmitButtonEnabled() }
             addSource(tradeDate) { updateSubmitButtonEnabled() }
-            addSource(description) { updateSubmitButtonEnabled() }
         }
 
         _splitPrice.apply {
