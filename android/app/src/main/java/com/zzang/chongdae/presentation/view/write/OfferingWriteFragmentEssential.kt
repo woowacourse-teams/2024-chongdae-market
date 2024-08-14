@@ -163,7 +163,7 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
     }
 
     private fun selectDeadline() {
-        viewModel.deadlineChoiceEvent.observe(viewLifecycleOwner) {
+        viewModel.tradeDateChoiceEvent.observe(viewLifecycleOwner) {
             dialog.setContentView(dateTimePickerBinding.root)
             dialog.show()
             setDateTimeText(dateTimePickerBinding)
@@ -171,7 +171,7 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
     }
 
     override fun onDateTimeSubmitButtonClick() {
-        viewModel.updateDeadline(
+        viewModel.updateTradeDate(
             dateTimePickerBinding.tvDate.text.toString(),
             dateTimePickerBinding.tvTime.text.toString(),
         )

@@ -13,7 +13,7 @@
     <string name="all_minus">-</string>
     <string name="all_won">원</string>
     <string name="all_percentage">%</string>
-    <string name="all_place">장소</string>
+    <string name="all_place">거래 장소</string>
     <string name="all_am">오전</string>
     <string name="all_pm">오후</string>
     <string name="all_permission_granted">권한이 허용되었습니다.</string>
@@ -108,8 +108,8 @@
     <string name="write_information_place">거래 희망 장소를 검색해 주세요.</string>
     <string name="write_search_place"> 주소 검색</string>
     <string name="write_enter_place_detail"> 상세 주소를 입력해 주세요. (선택)</string>
-    <string name="write_deadline">모집 종료 날짜</string>
-    <string name="write_deadline_description">모집 종료할 날짜를 입력해 주세요.</string>
+    <string name="write_deadline">거래 날짜</string>
+    <string name="write_deadline_description">거래할 날짜를 입력해 주세요.</string>
     <string name="write_contents">내용</string>
     <string name="write_deadline_contents_description">공동 구매에 대한 자세한 내용을 입력해 주세요.</string>
     <string name="write_under_1000">1000자 이하</string>

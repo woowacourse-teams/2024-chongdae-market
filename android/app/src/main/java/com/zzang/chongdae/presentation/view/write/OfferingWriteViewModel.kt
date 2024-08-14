@@ -45,9 +45,9 @@ class OfferingWriteViewModel(
 
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
-    val deadline: MutableLiveData<String> = MutableLiveData("")
+    val tradeDate: MutableLiveData<String> = MutableLiveData("")
 
-    private val deadlineValue: MutableLiveData<String> = MutableLiveData("")
+    private val tradeDateValue: MutableLiveData<String> = MutableLiveData("")
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
@@ -69,8 +69,8 @@ class OfferingWriteViewModel(
 
     val discountRate: LiveData<Float> get() = _discountRate
 
-    private val _deadlineChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val deadlineChoiceEvent: SingleLiveData<Boolean> get() = _deadlineChoiceEvent
+    private val _tradeDateChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val tradeDateChoiceEvent: SingleLiveData<Boolean> get() = _tradeDateChoiceEvent
 
     private val _finishEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val finishEvent: SingleLiveData<Boolean> get() = _finishEvent
@@ -90,7 +90,7 @@ class OfferingWriteViewModel(
             addSource(totalPrice) { updateSubmitButtonEnabled() }
             addSource(meetingAddress) { updateSubmitButtonEnabled() }
             addSource(meetingAddressDetail) { updateSubmitButtonEnabled() }
-            addSource(deadline) { updateSubmitButtonEnabled() }
+            addSource(tradeDate) { updateSubmitButtonEnabled() }
             addSource(description) { updateSubmitButtonEnabled() }
         }
 
@@ -171,9 +171,7 @@ class OfferingWriteViewModel(
             !totalCount.value.isNullOrBlank() &&
             !totalPrice.value.isNullOrBlank() &&
             !meetingAddress.value.isNullOrBlank() &&
-            !meetingAddressDetail.value.isNullOrBlank() &&
-            !deadline.value.isNullOrBlank() &&
-            !description.value.isNullOrBlank()
+            !tradeDate.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
@@ -200,11 +198,11 @@ class OfferingWriteViewModel(
         this.totalCount.value = totalCount.number.toString()
     }
 
-    fun makeDeadlineChoiceEvent() {
-        _deadlineChoiceEvent.setValue(true)
+    fun makeTradeDateChoiceEvent() {
+        _tradeDateChoiceEvent.setValue(true)
     }
 
-    fun updateDeadline(
+    fun updateTradeDate(
         date: String,
         time: String,
     ) {
@@ -213,8 +211,8 @@ class OfferingWriteViewModel(
         val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
 
         val parsedDateTime = inputFormat.parse(dateTime)
-        deadlineValue.value = parsedDateTime?.let { outputFormat.format(it) }
-        deadline.value = dateTime
+        tradeDateValue.value = parsedDateTime?.let { outputFormat.format(it) }
+        tradeDate.value = dateTime
     }
 
     fun postOffering() {
@@ -224,7 +222,7 @@ class OfferingWriteViewModel(
         val totalPrice = totalPrice.value ?: return
         val meetingAddress = meetingAddress.value ?: return
         val meetingAddressDetail = meetingAddressDetail.value ?: return
-        val deadline = deadlineValue.value ?: return
+        val tradeDate = tradeDateValue.value ?: return
         val description = description.value ?: return
 
         val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
@@ -253,7 +251,7 @@ class OfferingWriteViewModel(
                         meetingAddress = meetingAddress,
                         meetingAddressDong = meetingAddressDong.value,
                         meetingAddressDetail = meetingAddressDetail,
-                        deadline = deadline,
+                        deadline = tradeDate,
                         description = description,
                     ),
             ).onSuccess {

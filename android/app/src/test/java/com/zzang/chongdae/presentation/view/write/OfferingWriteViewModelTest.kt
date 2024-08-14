@@ -101,7 +101,7 @@ class OfferingWriteViewModelTest {
             totalPrice.value = "1000"
             meetingAddress.value = "테스트 장소"
             meetingAddressDetail.value = "테스트 장소 상세"
-            deadline.value = "테스트 시간"
+            tradeDate.value = "테스트 시간"
             description.value = "테스트 내용"
         }
 
@@ -120,7 +120,7 @@ class OfferingWriteViewModelTest {
             totalPrice.value = ""
             meetingAddress.value = "  "
             meetingAddressDetail.value = "             "
-            deadline.value = "테스트 시간"
+            tradeDate.value = "테스트 시간"
             description.value = "테스트 내용"
         }
 
