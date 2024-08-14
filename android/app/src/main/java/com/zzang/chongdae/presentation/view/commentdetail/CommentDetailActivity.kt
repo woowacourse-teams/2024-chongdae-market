@@ -73,6 +73,11 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 return@setOnClickListener
             }
             binding.drawerLayout.openDrawer(GravityCompat.END)
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "more_comment_detail_options_event",
+                name = "more_comment_detail_options_event",
+                contentType = "button",
+            )
         }
     }
 
@@ -89,6 +94,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun setUpObserve() {
         observeComments()
         observeUpdateOfferingEvent()
+        observeExitOfferingEvent()
         observeBackEvent()
     }
 
@@ -105,6 +111,17 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun observeUpdateOfferingEvent() {
         viewModel.showStatusDialogEvent.observe(this) {
             showUpdateStatusDialog()
+        }
+    }
+
+    private fun observeExitOfferingEvent() {
+        viewModel.onExitOfferingEvent.observe(this) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "exit_offering_event",
+                name = "exit_offering_event",
+                contentType = "button",
+            )
+            finish()
         }
     }
 
@@ -141,6 +158,11 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
 
     override fun onCancelClick() {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "cancel_update_offering_status_event",
+            name = "cancel_update_offering_status_event",
+            contentType = "button",
+        )
         dialog.dismiss()
     }
 
