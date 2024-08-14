@@ -66,10 +66,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="6dp"
+            android:ellipsize="end"
             android:fontFamily="@font/suit_bold"
+            android:maxLines="1"
             android:text="@{offering.title}"
             android:textColor="@color/black_900"
-            android:textSize="@dimen/font_size_16"
+            android:textSize="@dimen/size_16"
             app:colorId="@{@color/search_keyword}"
             app:layout_constraintStart_toEndOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
@@ -104,6 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="17dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text='@{offering.eachPrice != null ? @string/strike_money_amount_text(offering.eachPrice) : ""}'
             app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
             app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
@@ -116,13 +120,12 @@
             android:layout_marginStart="5dp"
             android:text='@{offering.eachPrice != null ? @string/main_discount_rate_text(offering.calculateDiscountRate()) : ""}'
             android:textColor="@color/main_color"
-            android:textSize="@dimen/font_size_13"
+            android:textSize="@dimen/size_13"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_divided_price"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
             tools:text="53%" />
-
 
         <TextView
             android:id="@+id/tv_divided_price"
@@ -131,6 +134,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="@dimen/size_40"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@{@string/all_money_amount_text(offering.dividedPrice)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_meeting_address"
