@@ -51,8 +51,8 @@ class OfferingWriteViewModel(
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
-    private val _submitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
-    val submitButtonEnabled: LiveData<Boolean> get() = _submitButtonEnabled
+    private val _essentialSubmitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val essentialSubmitButtonEnabled: LiveData<Boolean> get() = _essentialSubmitButtonEnabled
 
     private val _extractButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val extractButtonEnabled: LiveData<Boolean> get() = _extractButtonEnabled
@@ -75,6 +75,9 @@ class OfferingWriteViewModel(
     private val _navigateToOptionalEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _navigateToOptionalEvent
 
+    private val _submitOfferingEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val submitOfferingEvent: SingleLiveData<Unit> get() = _submitOfferingEvent
+
     private val _imageUploadEvent = MutableLiveData<Unit>()
     val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
 
@@ -84,7 +87,7 @@ class OfferingWriteViewModel(
     val isLoading: LiveData<Boolean> = _writeUIState.map { it is WriteUIState.Loading }
 
     init {
-        _submitButtonEnabled.apply {
+        _essentialSubmitButtonEnabled.apply {
             addSource(title) { updateSubmitButtonEnabled() }
             addSource(totalCount) { updateSubmitButtonEnabled() }
             addSource(totalPrice) { updateSubmitButtonEnabled() }
@@ -165,7 +168,7 @@ class OfferingWriteViewModel(
     }
 
     private fun updateSubmitButtonEnabled() {
-        _submitButtonEnabled.value = !title.value.isNullOrBlank() &&
+        _essentialSubmitButtonEnabled.value = !title.value.isNullOrBlank() &&
             !totalCount.value.isNullOrBlank() &&
             !totalPrice.value.isNullOrBlank() &&
             !meetingAddress.value.isNullOrBlank() &&
@@ -253,7 +256,7 @@ class OfferingWriteViewModel(
                         description = description,
                     ),
             ).onSuccess {
-                makeFinishEvent()
+                makeSubmitOfferingEvent()
             }.onFailure {
                 Log.e("error", it.message.toString())
                 _writeUIState.value = WriteUIState.Error(R.string.write_error_writing, it.message.toString())
@@ -282,6 +285,7 @@ class OfferingWriteViewModel(
     }
 
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
+        Log.d("alsong", "makeTotalPriceInvalidEvent: $totalPrice")
         val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
         if (totalPriceConverted < 0) {
             _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_price)
@@ -304,8 +308,13 @@ class OfferingWriteViewModel(
         return false
     }
 
-    private fun makeFinishEvent() {
+    fun makeNavigateToOptionalEvent() {
+        Log.d("alsong", "makeNavigateToOptionalEvent: ${totalPrice.value}")
         _navigateToOptionalEvent.setValue(true)
+    }
+
+    fun makeSubmitOfferingEvent() {
+        _submitOfferingEvent.setValue(Unit)
     }
 
     companion object {

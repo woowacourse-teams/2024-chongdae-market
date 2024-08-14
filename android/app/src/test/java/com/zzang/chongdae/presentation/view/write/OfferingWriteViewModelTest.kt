@@ -106,7 +106,7 @@ class OfferingWriteViewModelTest {
         }
 
         // then
-        val result = viewModel.submitButtonEnabled.getOrAwaitValue()
+        val result = viewModel.essentialSubmitButtonEnabled.getOrAwaitValue()
         assertThat(result).isTrue()
     }
 
@@ -125,7 +125,7 @@ class OfferingWriteViewModelTest {
         }
 
         // then
-        val result = viewModel.submitButtonEnabled.getOrAwaitValue()
+        val result = viewModel.essentialSubmitButtonEnabled.getOrAwaitValue()
         assertThat(result).isFalse()
     }
 }

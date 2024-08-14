@@ -254,10 +254,9 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="@dimen/size_34"
                 android:background="@drawable/btn_background_selector"
-                android:enabled="@{vm.submitButtonEnabled}"
                 android:fontFamily="@font/suit_medium"
                 android:onClick="@{() -> vm.postOffering()}"
-                android:text="@{vm.submitButtonEnabled ? @string/write_start_offering : @string/write_start_offering_button_disabled}"
+                android:text="@string/write_start_offering"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -266,5 +265,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="공동구매 시작하기!" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

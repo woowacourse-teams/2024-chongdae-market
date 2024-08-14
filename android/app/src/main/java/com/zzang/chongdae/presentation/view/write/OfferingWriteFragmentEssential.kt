@@ -13,6 +13,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,10 +38,8 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
 
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
-    private lateinit var permissionManager: PermissionManager
-    private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val viewModel: OfferingWriteViewModel by viewModels {
+    private val viewModel: OfferingWriteViewModel by activityViewModels {
         OfferingWriteViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
@@ -52,12 +51,6 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
 
     private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
         FirebaseAnalyticsManager(firebaseAnalytics)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setUpPermissionManager()
-        initializePhotoPicker()
     }
 
     override fun onCreateView(
@@ -82,49 +75,7 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
 
     private fun setUpObserve() {
         observeNavigateToOptionalEvent()
-        observeImageUploadEvent()
         observeUIState()
-    }
-
-    private fun initializePhotoPicker() {
-        pickMediaLauncher =
-            registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
-                handleMediaResult(uri)
-            }
-    }
-
-    private fun launchPhotoPicker() {
-        pickMediaLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-    }
-
-    private fun handleMediaResult(uri: Uri?) {
-        if (uri != null) {
-            val multipartBodyPart = FileUtils.getMultipartBodyPart(requireContext(), uri, "image")
-            if (multipartBodyPart != null) {
-                viewModel.uploadImageFile(multipartBodyPart)
-            } else {
-                showToast(R.string.all_error_file_conversion)
-            }
-        }
-    }
-
-    private fun setUpPermissionManager() {
-        permissionManager =
-            PermissionManager(
-                fragment = this,
-                onPermissionGranted = { onPermissionsGranted() },
-                onPermissionDenied = { onPermissionsDenied() },
-            )
-    }
-
-    private fun observeImageUploadEvent() {
-        viewModel.imageUploadEvent.observe(viewLifecycleOwner) {
-            if (permissionManager.isAndroid13OrAbove()) {
-                launchPhotoPicker()
-            } else {
-                permissionManager.requestPermissions()
-            }
-        }
     }
 
     private fun observeUIState() {
@@ -142,15 +93,6 @@ class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener 
                 else -> {}
             }
         }
-    }
-
-    private fun onPermissionsGranted() {
-        showToast(R.string.all_permission_granted)
-        launchPhotoPicker()
-    }
-
-    private fun onPermissionsDenied() {
-        showToast(R.string.all_permission_denied)
     }
 
     private fun searchPlace() {
