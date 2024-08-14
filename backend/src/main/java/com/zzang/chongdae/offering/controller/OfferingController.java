@@ -2,7 +2,6 @@ package com.zzang.chongdae.offering.controller;
 
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
-import com.zzang.chongdae.offering.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
@@ -11,7 +10,6 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -84,21 +82,6 @@ public class OfferingController {
             MemberEntity member) {
         Long offeringId = offeringService.saveOffering(request, member);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
-    }
-
-    @GetMapping("/offerings/{offering-id}/status")
-    public ResponseEntity<OfferingStatusResponse> getOfferingStatus(
-            @PathVariable(value = "offering-id") Long offeringId) { // TODO : 로그인 사용자가 참여자인지 확인
-        OfferingStatusResponse response = offeringService.getOfferingStatus(offeringId);
-        return ResponseEntity.ok(response);
-    }
-
-    @PatchMapping("/offerings/{offering-id}/status")
-    public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
-            @PathVariable(value = "offering-id") Long offeringId,
-            MemberEntity member) {
-        CommentRoomStatusResponse response = offeringService.updateCommentRoomStatus(offeringId, member);
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/offerings/product-images/s3")

@@ -10,11 +10,13 @@ import java.io.StringWriter;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -49,12 +51,29 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> handle(MissingServletRequestParameterException e) {
         ErrorMessage errorMessage = new ErrorMessage(
-                "해당 쿼리 파리미터 값이 존재하지 않습니다 :[%s]".formatted(e.getParameterName()));
+                "해당 쿼리 파리미터 값이 존재하지 않습니다: [%s]".formatted(e.getParameterName()));
         return ResponseEntity
                 .badRequest()
                 .body(errorMessage);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handle(HttpMessageNotReadableException e) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                "유효하지 않은 요청 형태입니다: [%s]".formatted(e.getMessage().split(":")[0]));
+        return ResponseEntity
+                .badRequest()
+                .body(errorMessage);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handle(NoResourceFoundException e) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                "유효하지 않은 요청 형태입니다: [%s]".formatted(e.getMessage().split(":")[0]));
+        return ResponseEntity
+                .badRequest()
+                .body(errorMessage);
+    }
 
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response)

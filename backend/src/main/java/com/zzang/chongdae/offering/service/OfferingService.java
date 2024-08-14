@@ -2,7 +2,6 @@ package com.zzang.chongdae.offering.service;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
@@ -10,7 +9,6 @@ import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
-import com.zzang.chongdae.offering.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
@@ -21,7 +19,6 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingStatusResponse;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
@@ -116,27 +113,6 @@ public class OfferingService {
         offeringMemberRepository.save(offeringMember);
 
         return savedOffering.getId();
-    }
-
-    public OfferingStatusResponse getOfferingStatus(Long offeringId) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        if (offering.isStatusGrouping() && offering.toOfferingStatus().isAutoConfirmed()) {
-            offering.moveStatus();
-        }
-        return new OfferingStatusResponse(offering.getRoomStatus());
-    }
-
-    @Transactional
-    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
-        // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        CommentRoomStatus updatedStatus = offering.moveStatus();
-        if (updatedStatus.equals(CommentRoomStatus.BUYING)) {
-            offering.manuallyConfirm();
-        }
-        return new CommentRoomStatusResponse(updatedStatus);
     }
 
     public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {

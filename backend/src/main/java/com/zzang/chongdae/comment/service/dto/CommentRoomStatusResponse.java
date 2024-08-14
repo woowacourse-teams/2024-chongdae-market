@@ -1,4 +1,4 @@
-package com.zzang.chongdae.offering.service.dto;
+package com.zzang.chongdae.comment.service.dto;
 
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 
