@@ -17,4 +17,16 @@ class FirebaseAnalyticsManager(private val firebaseAnalytics: FirebaseAnalytics)
             }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
     }
+
+    fun logScreenView(
+        screenName: String,
+        screenClass: String,
+    ) {
+        val bundle =
+            Bundle().apply {
+                putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
+                putString(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass)
+            }
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+    }
 }

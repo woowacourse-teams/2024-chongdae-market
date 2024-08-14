@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.view.MyPageFragment">
+    tools:context=".presentation.view.mypage.MyPageFragment">
 
     <TextView
         android:id="@+id/tv_my_page_title"

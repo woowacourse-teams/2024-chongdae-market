@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_comment_rooms" />
     <fragment
         android:id="@+id/my_page_fragment"
-        android:name="com.zzang.chongdae.presentation.view.MyPageFragment"
+        android:name="com.zzang.chongdae.presentation.view.mypage.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" />
     <fragment
