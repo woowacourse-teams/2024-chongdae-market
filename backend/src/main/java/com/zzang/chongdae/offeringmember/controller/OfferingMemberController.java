@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,14 @@ public class OfferingMemberController {
             MemberEntity member) {
         Long id = offeringMemberService.participate(request, member);
         return ResponseEntity.created(URI.create("/participations/" + id)).build();
+    }
+
+    @DeleteMapping("/participations")
+    public ResponseEntity<Void> cancelParticipate(
+            @RequestParam(value = "offering-id") Long offeringId,
+            MemberEntity member) {
+        offeringMemberService.cancelParticipate(offeringId, member);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/participants")

@@ -26,4 +26,8 @@ public enum CommentRoomStatus {
     public boolean isGrouping() {
         return this == GROUPING;
     }
+
+    public boolean isInProgress() {
+        return this != GROUPING;
+    }
 }
