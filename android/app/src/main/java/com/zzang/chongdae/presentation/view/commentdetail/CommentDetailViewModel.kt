@@ -56,6 +56,9 @@ class CommentDetailViewModel(
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
 
+    private val _onExitOfferingEvent = MutableSingleLiveData<Unit>()
+    val onExitOfferingEvent: SingleLiveData<Unit> get() = _onExitOfferingEvent
+
     private val _onBackPressedEvent = MutableSingleLiveData<Unit>()
     val onBackPressedEvent: SingleLiveData<Unit> get() = _onBackPressedEvent
 
@@ -162,6 +165,10 @@ class CommentDetailViewModel(
                 handleAccessTokenExpiration(authRepository, it) { loadMeetings() }
             }
         }
+    }
+
+    fun exitOffering()  {
+        _onExitOfferingEvent.setValue(Unit)
     }
 
     fun onBackClick() {

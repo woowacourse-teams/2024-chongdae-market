@@ -94,6 +94,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun setUpObserve() {
         observeComments()
         observeUpdateOfferingEvent()
+        observeExitOfferingEvent()
         observeBackEvent()
     }
 
@@ -110,6 +111,17 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun observeUpdateOfferingEvent() {
         viewModel.showStatusDialogEvent.observe(this) {
             showUpdateStatusDialog()
+        }
+    }
+
+    private fun observeExitOfferingEvent() {
+        viewModel.onExitOfferingEvent.observe(this) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "exit_offering_event",
+                name = "exit_offering_event",
+                contentType = "button",
+            )
+            finish()
         }
     }
 
