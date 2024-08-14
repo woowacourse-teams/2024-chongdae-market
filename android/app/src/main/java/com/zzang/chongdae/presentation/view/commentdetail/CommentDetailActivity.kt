@@ -73,6 +73,11 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 return@setOnClickListener
             }
             binding.drawerLayout.openDrawer(GravityCompat.END)
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "more_comment_detail_options_event",
+                name = "more_comment_detail_options_event",
+                contentType = "button",
+            )
         }
     }
 
