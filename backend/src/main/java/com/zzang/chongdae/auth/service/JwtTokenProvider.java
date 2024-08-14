@@ -1,7 +1,7 @@
 package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
-import com.zzang.chongdae.auth.service.dto.TokenDto;
+import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.global.exception.MarketException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -36,8 +36,8 @@ public class JwtTokenProvider {
         this.clock = clock;
     }
 
-    public TokenDto createAuthToken(String payload) {
-        return new TokenDto(createToken(payload, accessSecretKey, accessTokenExpired),
+    public AuthTokenDto createAuthToken(String payload) {
+        return new AuthTokenDto(createToken(payload, accessSecretKey, accessTokenExpired),
                 createToken(payload, refreshSecretKey, refreshTokenExpired));
     }
 
