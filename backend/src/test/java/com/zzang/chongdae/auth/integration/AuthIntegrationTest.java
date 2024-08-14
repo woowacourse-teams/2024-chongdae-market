@@ -36,6 +36,10 @@ class AuthIntegrationTest extends IntegrationTest {
         List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("ci").description("회원 식별자 인증 정보")
         );
+        List<FieldDescriptor> responseDescriptors = List.of(
+                fieldWithPath("memberId").description("회원 id"),
+                fieldWithPath("nickname").description("닉네임")
+        );
         List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
                 headerWithName("Set-Cookie").description("""
                         access_token=a.b.c; Path=/; HttpOnly \n
@@ -46,8 +50,10 @@ class AuthIntegrationTest extends IntegrationTest {
                 .summary("회원 로그인")
                 .description("회원 식별자 인증 정보로 로그인 합니다.")
                 .requestFields(requestDescriptors)
+                .responseFields(responseDescriptors)
                 .responseHeaders(responseHeaderDescriptors)
                 .requestSchema(schema("LonginRequest"))
+                .responseSchema(schema("LoginResponse"))
                 .build();
 
         MemberEntity member;
