@@ -37,7 +37,7 @@ public class MemberEntity extends BaseTimeEntity {
         this(null, nickname, password);
     }
 
-    public boolean isSameMember(Long memberId) {
-        return this.id.equals(memberId);
+    public boolean isSame(MemberEntity other) {
+        return this.equals(other);
     }
 }

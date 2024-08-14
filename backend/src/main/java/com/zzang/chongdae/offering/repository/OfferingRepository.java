@@ -1,7 +1,6 @@
 package com.zzang.chongdae.offering.repository;
 
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,12 +11,12 @@ import org.springframework.data.jpa.repository.Query;
 public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> {
 
     @Query("""
-                SELECT new com.zzang.chongdae.offering.domain.OfferingWithRole(o, om.role)
+                SELECT o
                 FROM OfferingEntity as o JOIN OfferingMemberEntity as om
                     ON o.id = om.offering.id
                 WHERE om.member = :member
             """)
-    List<OfferingWithRole> findAllWithRoleByMember(MemberEntity member);
+    List<OfferingEntity> findCommentRoomsByMember(MemberEntity member);
 
     @Query("""
             SELECT o
