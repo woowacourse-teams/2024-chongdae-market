@@ -27,7 +27,7 @@ import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
-class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
+class OfferingWriteFragmentEssential : Fragment(), OnOfferingWriteClickListener {
     private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 

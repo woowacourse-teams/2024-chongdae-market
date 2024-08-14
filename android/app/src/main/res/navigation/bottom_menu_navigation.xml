@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_my_page" />
     <fragment
         android:id="@+id/offering_write_fragment"
-        android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteFragment"
+        android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteFragmentEssential"
         android:label="fragment_write_fragment"
         tools:layout="@layout/fragment_offering_write_essential" />
 </navigation>
