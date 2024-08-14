@@ -1,8 +1,8 @@
 package com.zzang.chongdae.offering.service.dto;
 
-import com.zzang.chongdae.offering.domain.OfferingCondition;
-import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 
@@ -18,7 +18,7 @@ public record OfferingDetailResponse(Long id,
                                      String thumbnailUrl,
                                      Integer dividedPrice,
                                      Integer totalPrice,
-                                     OfferingCondition condition,
+                                     OfferingStatus status,
                                      Long memberId,
                                      String nickname,
                                      Boolean isProposer,
@@ -26,7 +26,7 @@ public record OfferingDetailResponse(Long id,
 
     public OfferingDetailResponse(OfferingEntity offering,
                                   OfferingPrice offeringPrice,
-                                  OfferingStatus offeringStatus,
+                                  OfferingCondition offeringCondition,
                                   Boolean isProposer,
                                   Boolean isParticipated) {
         this(offering.getId(),
@@ -36,12 +36,12 @@ public record OfferingDetailResponse(Long id,
                 offering.getMeetingAddressDetail(),
                 offering.getDescription(),
                 offering.getDeadline(),
-                offeringStatus.getCurrentCount(),
+                offeringCondition.getCurrentCount(),
                 offering.getTotalCount(),
                 offering.getThumbnailUrl(),
                 offeringPrice.calculateDividedPrice(),
                 offering.getTotalPrice(),
-                offeringStatus.decideOfferingCondition(),
+                offeringCondition.decideOfferingStatus(),
                 offering.getMember().getId(),
                 offering.getMember().getNickname(),
                 isProposer,

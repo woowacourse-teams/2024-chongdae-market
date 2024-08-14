@@ -1,9 +1,9 @@
 package com.zzang.chongdae.offering.service.dto;
 
-import static com.zzang.chongdae.offering.domain.CommentRoomStatus.GROUPING;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +41,7 @@ public record OfferingSaveRequest(@NotBlank
     public OfferingEntity toEntity(MemberEntity member) {
         return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, 1, false,
-                totalPrice, originPrice, GROUPING);
+                totalPrice, originPrice, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+        // TODO : 각자 맡은 팀에서 계산하는 로직 생각하기, 객체로 빼서 만드셈~
     }
 }
