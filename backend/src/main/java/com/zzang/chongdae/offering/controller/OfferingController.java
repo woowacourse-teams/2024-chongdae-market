@@ -102,16 +102,16 @@ public class OfferingController {
     }
 
     @PostMapping("/offerings/product-images/s3")
-    public ResponseEntity<OfferingProductImageResponse> uploadProductImage(
+    public ResponseEntity<OfferingProductImageResponse> uploadProductImageToS3(
             @RequestParam MultipartFile image) {
-        OfferingProductImageResponse response = offeringService.uploadProductImage(image);
+        OfferingProductImageResponse response = offeringService.uploadProductImageToS3(image);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/offerings/product-images/og")
-    public ResponseEntity<OfferingProductImageResponse> extractProductImage(
+    public ResponseEntity<OfferingProductImageResponse> extractProductImageFromOg(
             @RequestBody @Valid OfferingProductImageRequest request) {
-        OfferingProductImageResponse response = offeringService.extractProductImage(request);
+        OfferingProductImageResponse response = offeringService.extractProductImageFromOg(request);
         return ResponseEntity.ok(response);
     }
 }
