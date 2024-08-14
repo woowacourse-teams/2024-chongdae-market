@@ -177,7 +177,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .pathParam("offering-id", offeringWithGrouping.getId())
                     .when().delete("/participations/{offering-id}")
                     .then().log().all()
-                    .statusCode(202);
+                    .statusCode(204);
         }
 
         @DisplayName("공모자는 본인이 만든 공모 참여를 취소할 수 없다.")

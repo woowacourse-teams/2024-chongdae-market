@@ -35,7 +35,7 @@ public class OfferingMemberController {
             @PathVariable(value = "offering-id") Long offeringId,
             MemberEntity member) {
         offeringMemberService.cancelParticipate(offeringId, member);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/participants")
