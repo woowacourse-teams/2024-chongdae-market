@@ -5,11 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.R
+import com.zzang.chongdae.databinding.FragmentMyPageBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
+import com.zzang.chongdae.presentation.view.MainActivity
 
 class MyPageFragment : Fragment() {
+    private var _binding: FragmentMyPageBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: MyPageViewModel by viewModels {
+        MyPageViewModel.getFactory()
+    }
+
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
     }
@@ -21,8 +30,30 @@ class MyPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_my_page, container, false)
+    ): View {
+        initBinding(inflater, container)
+        return binding.root
+    }
+
+    private fun initBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ) {
+        _binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).hideBottomNavigation()
+        setUpObserve()
+    }
+
+    private fun setUpObserve() {
     }
 
     override fun onResume() {
