@@ -146,6 +146,11 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
 
     override fun onCancelClick() {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "cancel_update_offering_status_event",
+            name = "cancel_update_offering_status_event",
+            contentType = "button",
+        )
         dialog.dismiss()
     }
 
