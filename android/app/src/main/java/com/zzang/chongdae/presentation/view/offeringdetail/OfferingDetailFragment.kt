@@ -16,13 +16,14 @@ import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
+import com.zzang.chongdae.presentation.view.home.HomeFragment
 
 class OfferingDetailFragment : Fragment() {
     private var _binding: FragmentOfferingDetailBinding? = null
     private val binding get() = _binding!!
     private val offeringId by lazy {
-        arguments?.getLong("offering_id")
-            ?: throw IllegalArgumentException("offering_id is required")
+        arguments?.getLong(HomeFragment.OFFERING_ID)
+            ?: throw IllegalArgumentException()
     }
     private val viewModel: OfferingDetailViewModel by viewModels {
         OfferingDetailViewModel.getFactory(

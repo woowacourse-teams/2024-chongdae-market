@@ -153,16 +153,12 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
             name = "read_offering_detail_event",
             contentType = "item",
         )
-        // 전달할 데이터를 포함하는 Bundle 생성
-        val bundle =
-            Bundle().apply {
-                putLong("offering_id", offeringId)
-            }
 
-        // Fragment 간 이동 시 데이터를 전달
         findNavController().navigate(
             R.id.action_home_fragment_to_offering_detail_fragment,
-            bundle,
+            Bundle().apply {
+                putLong(OFFERING_ID, offeringId)
+            },
         )
     }
 
@@ -178,5 +174,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
 
     override fun onClickUpside() {
         scrollToTop()
+    }
+
+    companion object{
+        const val OFFERING_ID = "offering_id"
     }
 }
