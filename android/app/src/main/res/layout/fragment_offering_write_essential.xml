@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
-            android:id="@+id/sv_main_write_view"
+            android:id="@+id/sv_main_write_essential"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/layout_submit_button"
@@ -247,12 +247,11 @@
             android:id="@+id/layout_submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:paddingHorizontal="@dimen/size_26"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sv_main_write_view">
+            app:layout_constraintTop_toBottomOf="@id/sv_main_write_essential">
 
             <Button
                 android:id="@+id/btn_submit_offering_write"
