@@ -10,6 +10,19 @@ import com.zzang.chongdae.data.local.source.MemberDataStore
 class MyPageViewModel(memberDataStore: MemberDataStore) : ViewModel() {
     val nickName: LiveData<String?> = memberDataStore.nickNameFlow.asLiveData()
     
+
+    private val _logoutEvent = MutableSingleLiveData<Unit>()
+    val logoutEvent: SingleLiveData<Unit> get() = _logoutEvent
+    fun clearDataStore() {
+        viewModelScope.launch {
+            memberDataStore.clearAllData()
+        }
+    }
+
+    fun onClickLogout() {
+        _logoutEvent.setValue(Unit)
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun getFactory(memberDataStore: MemberDataStore) =

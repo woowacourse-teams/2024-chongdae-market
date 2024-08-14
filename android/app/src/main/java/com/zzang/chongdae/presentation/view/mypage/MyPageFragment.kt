@@ -56,6 +56,20 @@ class MyPageFragment : Fragment() {
     }
 
     private fun setUpObserve() {
+        viewModel.logoutEvent.observe(viewLifecycleOwner) {
+            clearDataAndLogout()
+        }
+    }
+
+    private fun clearDataAndLogout() {
+        viewModel.clearDataStore()
+
+        val intent =
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        startActivity(intent)
+    }
     }
 
     override fun onResume() {
