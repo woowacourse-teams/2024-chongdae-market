@@ -132,14 +132,14 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여 취소")
                 .description("공모 참여를 취소합니다.")
-                .pathParameters(queryParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .requestSchema(schema("CancelParticipateSuccessRequest"))
                 .responseSchema(schema("CancelParticipateSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여 취소")
                 .description("공모 참여를 취소합니다.")
-                .pathParameters(queryParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .requestSchema(schema("CancelParticipateFailRequest"))
                 .responseSchema(schema("CancelParticipateFailResponse"))
@@ -174,8 +174,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithCi("poke5678"))
-                    .pathParam("offering-id", offeringWithGrouping.getId())
-                    .when().delete("/participations/{offering-id}")
+                    .queryParam("offering-id", offeringWithGrouping.getId())
+                    .when().delete("/participations")
                     .then().log().all()
                     .statusCode(204);
         }
@@ -186,8 +186,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-fail-offering-proposer", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", offeringWithGrouping.getId())
-                    .when().delete("/participations/{offering-id}")
+                    .queryParam("offering-id", offeringWithGrouping.getId())
+                    .when().delete("/participations")
                     .then().log().all()
                     .statusCode(400);
         }
@@ -198,8 +198,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-fail-offering-in-progress", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithCi("poke5678"))
-                    .pathParam("offering-id", offeringWithInProgress.getId())
-                    .when().delete("/participations/{offering-id}")
+                    .queryParam("offering-id", offeringWithInProgress.getId())
+                    .when().delete("/participations")
                     .then().log().all()
                     .statusCode(400);
         }
@@ -210,8 +210,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-fail-offering-not-participated", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithCi("poke5678"))
-                    .pathParam("offering-id", offeringNotParticipated.getId())
-                    .when().delete("/participations/{offering-id}")
+                    .queryParam("offering-id", offeringNotParticipated.getId())
+                    .when().delete("/participations")
                     .then().log().all()
                     .statusCode(400);
         }
