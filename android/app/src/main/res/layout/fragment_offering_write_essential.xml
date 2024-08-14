@@ -13,8 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/size_26">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:id="@+id/sv_main_write_view"
@@ -26,9 +25,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/temp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/size_26">
 
                 <TextView
                     android:id="@+id/tv_information_message"
@@ -99,8 +98,8 @@
                     android:layout_marginTop="-1dp"
                     android:background="@drawable/et_border_main_color"
                     android:gravity="center"
-                    android:text="@={vm.totalCount}"
                     android:inputType="number"
+                    android:text="@={vm.totalCount}"
                     android:textColor="@color/gray_900"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
@@ -136,12 +135,9 @@
 
                 <EditText
                     android:id="@+id/et_total_price"
-                    style="@style/Theme.AppCompat.TextView.Write.EditText"
-                    android:layout_width="230dp"
+                    style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
                     android:hint="@string/write_information_total_price"
                     android:text="@={vm.totalPrice}"
-                    android:inputType="number"
-                    app:layout_constraintEnd_toEndOf="0dp"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
 
@@ -252,6 +248,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:paddingHorizontal="@dimen/size_26"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -259,7 +256,7 @@
 
             <Button
                 android:id="@+id/btn_submit_offering_write"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="@dimen/size_34"

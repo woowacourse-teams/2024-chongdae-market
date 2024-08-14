@@ -132,10 +132,9 @@
 
             <EditText
                 android:id="@+id/et_individual_price"
-                style="@style/Theme.AppCompat.TextView.Write.EditText"
+                style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
                 android:text="@={vm.originPrice}"
                 android:layout_width="230dp"
-                app:layout_constraintEnd_toEndOf="0dp"
                 app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
                 app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description" />
 
