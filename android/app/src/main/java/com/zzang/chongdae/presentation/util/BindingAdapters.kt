@@ -300,11 +300,11 @@ fun ImageView.setImageProposer(proposer: Boolean) {
 
 @BindingAdapter("splitPriceValidity", "splitPrice")
 fun TextView.setSplitPriceText(
-    isSplitPriceValid: Boolean,
-    splitPrice: Int,
+    isSplitPriceValid: Boolean?,
+    splitPrice: Int?,
 ) {
     val text =
-        if (isSplitPriceValid) {
+        if (isSplitPriceValid == true) {
             context.getString(R.string.all_percentage_comma).format(splitPrice)
         } else {
             context.getString(R.string.all_minus)
@@ -314,11 +314,11 @@ fun TextView.setSplitPriceText(
 
 @BindingAdapter("discountRateValidity", "discountRate")
 fun TextView.setDiscountRateValidity(
-    discountRateValidity: Boolean,
-    discountRate: Float,
+    discountRateValidity: Boolean?,
+    discountRate: Float?,
 ) {
     val text =
-        if (discountRateValidity) {
+        if (discountRateValidity == true) {
             discountRate.toString()
         } else {
             context.getString(R.string.all_minus)
