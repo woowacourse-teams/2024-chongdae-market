@@ -43,18 +43,11 @@ public class CommentService {
     }
 
     private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingEntity offering, MemberEntity member) {
-        return new CommentRoomAllResponseItem(
-                offering.getId(),
-                offering.getTitle(),
-                offering.isProposedBy(member),
-                toCommentLatestResponse(offering));
-    }
-
-    private CommentLatestResponse toCommentLatestResponse(OfferingEntity offering) {
-        Optional<CommentEntity> rawComment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
-        return rawComment
+        Optional<CommentEntity> comment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
+        CommentLatestResponse commentLatestResponse = comment
                 .map(CommentLatestResponse::new)
                 .orElseGet(() -> new CommentLatestResponse(null, null));
+        return new CommentRoomAllResponseItem(offering, member, commentLatestResponse);
     }
 
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
