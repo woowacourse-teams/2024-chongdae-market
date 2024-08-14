@@ -1,23 +1,18 @@
 package com.zzang.chongdae.comment.service;
 
-import com.zzang.chongdae.comment.domain.CommentWithRole;
 import com.zzang.chongdae.comment.repository.CommentRepository;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponseItem;
-import com.zzang.chongdae.comment.service.dto.CommentCreatedAtResponse;
 import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingWithRole;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
-import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +23,6 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
 
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
@@ -41,52 +35,29 @@ public class CommentService {
     }
 
     public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
-        List<OfferingWithRole> offeringsWithRole = offeringRepository.findAllWithRoleByMember(member);
-        List<CommentRoomAllResponseItem> responseItems = offeringsWithRole.stream()
-                .filter(offeringWithRole -> offeringWithRole.getOffering().hasParticipant())
-                .map(this::toCommentRoomAllResponseItem)
+        List<OfferingEntity> commentRooms = offeringRepository.findCommentRoomsByMember(member);
+        List<CommentRoomAllResponseItem> responseItems = commentRooms.stream()
+                .map(commentsRoom -> toCommentRoomAllResponseItem(commentsRoom, member))
                 .toList();
         return new CommentRoomAllResponse(responseItems);
     }
 
-    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingWithRole offeringWithRole) {
-        OfferingEntity offering = offeringWithRole.getOffering();
-        OfferingMemberRole role = offeringWithRole.getRole();
-        return new CommentRoomAllResponseItem(
-                offering.getId(),
-                offering.getTitle(),
-                toCommentLatestResponse(offering),
-                role.isProposer());
-    }
-
-    private CommentLatestResponse toCommentLatestResponse(OfferingEntity offering) {
-        Optional<CommentEntity> rawComment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
-        return rawComment
+    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingEntity offering, MemberEntity member) {
+        Optional<CommentEntity> comment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
+        CommentLatestResponse commentLatestResponse = comment
                 .map(CommentLatestResponse::new)
                 .orElseGet(() -> new CommentLatestResponse(null, null));
+        return new CommentRoomAllResponseItem(offering, member, commentLatestResponse);
     }
 
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
-        List<CommentWithRole> commentsWithRole = commentRepository.findAllWithRoleByOffering(offering);
-        List<CommentAllResponseItem> responseItems = commentsWithRole.stream()
-                .map(commentWithRole -> toCommentAllResponseItem(commentWithRole, member.getId()))
+        List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
+        List<CommentAllResponseItem> responseItems = comments.stream()
+                .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
         return new CommentAllResponse(responseItems);
-    }
-
-    private CommentAllResponseItem toCommentAllResponseItem(CommentWithRole commentWithRole, long loginMemberId) {
-        CommentEntity comment = commentWithRole.getComment();
-        OfferingMemberRole role = commentWithRole.getRole();
-        MemberEntity member = comment.getMember();
-        return new CommentAllResponseItem(
-                comment.getId(),
-                new CommentCreatedAtResponse(comment.getCreatedAt()),
-                comment.getContent(),
-                member.getNickname(),
-                role.isProposer(),
-                member.isSameMember(loginMemberId));
     }
 }

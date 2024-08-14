@@ -42,4 +42,8 @@ public class CommentEntity extends BaseTimeEntity {
     public CommentEntity(MemberEntity member, OfferingEntity offering, String content) {
         this(null, member, offering, content);
     }
+
+    public boolean isOwnedBy(MemberEntity other) {
+        return this.member.isSame(other);
+    }
 }
