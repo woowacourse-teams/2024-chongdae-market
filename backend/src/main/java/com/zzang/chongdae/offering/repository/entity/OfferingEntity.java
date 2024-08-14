@@ -5,7 +5,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -118,8 +118,8 @@ public class OfferingEntity extends BaseTimeEntity {
         return new OfferingPrice(totalCount, totalPrice, originPrice);
     }
 
-    public OfferingStatus toOfferingStatus() {
-        return new OfferingStatus(deadline, totalCount, isManualConfirmed, currentCount);
+    public OfferingCondition toOfferingCondition() {
+        return new OfferingCondition(deadline, totalCount, isManualConfirmed, currentCount);
     }
 
     public OfferingMeeting toOfferingMeeting() {

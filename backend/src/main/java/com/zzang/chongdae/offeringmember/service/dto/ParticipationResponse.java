@@ -1,13 +1,13 @@
 package com.zzang.chongdae.offeringmember.service.dto;
 
-import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 
-public record ParticipationResponse(OfferingCondition offeringCondition, Integer currentCount) {
+public record ParticipationResponse(OfferingStatus offeringStatus, Integer currentCount) {
 
-    public ParticipationResponse(OfferingStatus offeringStatus) {
-        this(offeringStatus.decideOfferingCondition(),
-                offeringStatus.getCurrentCount()
+    public ParticipationResponse(OfferingCondition offeringCondition) {
+        this(offeringCondition.decideOfferingStatus(),
+                offeringCondition.getCurrentCount()
         );
     }
 }

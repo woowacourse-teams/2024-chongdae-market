@@ -3,7 +3,7 @@ package com.zzang.chongdae.offeringmember.service;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -49,8 +49,8 @@ public class OfferingMemberService {
     }
 
     private void validateClosed(OfferingEntity offering) {
-        OfferingStatus offeringStatus = offering.toOfferingStatus();
-        if (offeringStatus.isClosed()) {
+        OfferingCondition offeringCondition = offering.toOfferingCondition();
+        if (offeringCondition.isClosed()) {
             throw new MarketException(OfferingErrorCode.CANNOT_PARTICIPATE);
         }
     }
