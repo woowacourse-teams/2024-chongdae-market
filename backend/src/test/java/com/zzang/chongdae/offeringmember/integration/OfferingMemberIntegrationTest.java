@@ -225,7 +225,10 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("proposer.nickname").description("공모 작성자 닉네임"),
-                fieldWithPath("participants[].nickname").description("공모 참여자 닉네임")
+                fieldWithPath("participants[].nickname").description("공모 참여자 닉네임"),
+                fieldWithPath("count.currentCount").description("공모 참여자 현재원(작성자 + 참여자)"),
+                fieldWithPath("count.totalCount").description("공모 참여자 총원"),
+                fieldWithPath("price").description("공모 참여자 예상 정산 가격")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여자 목록 조회")
