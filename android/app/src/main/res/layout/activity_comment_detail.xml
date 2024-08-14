@@ -342,6 +342,7 @@
                 android:layout_width="@dimen/icon_size_24"
                 android:layout_height="@dimen/icon_size_24"
                 android:layout_marginStart="@dimen/margin_20"
+                android:onClick="@{() -> vm.exitOffering()}"
                 android:src="@drawable/btn_exit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
