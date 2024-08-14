@@ -37,7 +37,7 @@ public class OfferingMemberFixture {
         );
         OfferingMemberEntity result = offeringMemberRepository.save(offeringMember);
         offering = offeringRepository.findById(offering.getId()).orElseThrow();
-        offering.updateCurrentCount();
+        offering.participate();
         return result;
     }
 }
