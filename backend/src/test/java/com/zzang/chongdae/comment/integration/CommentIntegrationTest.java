@@ -335,7 +335,7 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class GetAllComment {
 
-        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
@@ -350,14 +350,14 @@ public class CommentIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
-                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("CommentAllSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
-                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("CommentAllFailResponse"))
                 .build();
@@ -378,8 +378,8 @@ public class CommentIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", offering.getId())
-                    .when().get("/comments/{offering-id}")
+                    .queryParam("offering-id", offering.getId())
+                    .when().get("/comments/messages")
                     .then().log().all()
                     .statusCode(200);
         }
@@ -390,8 +390,8 @@ public class CommentIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", offering.getId() + 100)
-                    .when().get("/comments/{offering-id}")
+                    .queryParam("offering-id", offering.getId() + 100)
+                    .when().get("/comments/messages")
                     .then().log().all()
                     .statusCode(400);
         }
