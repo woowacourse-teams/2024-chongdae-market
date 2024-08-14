@@ -85,7 +85,7 @@ class OfferingWriteOptionalFragment : Fragment() {
             )
             showToast(R.string.write_success_writing)
             parentFragmentManager.popBackStack()
-            findNavController().popBackStack(R.id.offering_write_optional_fragment, true)
+            findNavController().popBackStack(R.id.offering_write_fragment_essential, true)
         }
     }
 
