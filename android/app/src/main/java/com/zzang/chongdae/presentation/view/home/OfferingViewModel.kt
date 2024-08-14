@@ -1,6 +1,8 @@
 package com.zzang.chongdae.presentation.view.home
 
 import android.util.Log
+import android.view.View
+import android.widget.RadioButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -114,14 +116,18 @@ class OfferingViewModel(
 
     override fun onClickFilter(
         filterName: FilterName,
-        isChecked: Boolean,
+        button: View,
     ) {
         _filterOfferingsEvent.setValue(Unit)
+        val isChecked = (button as RadioButton).isChecked
 
         // 현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
         if (filterName == FilterName.JOINABLE) return
 
-        if (isChecked) {
+        if (selectedFilter.value == filterName.toString()) {
+            selectedFilter.value = null
+            button.isChecked = false
+        } else if (isChecked) {
             selectedFilter.value = filterName.toString()
         } else {
             selectedFilter.value = null
