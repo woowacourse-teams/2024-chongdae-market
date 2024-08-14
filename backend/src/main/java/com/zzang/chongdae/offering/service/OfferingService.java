@@ -39,19 +39,17 @@ public class OfferingService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final StorageService storageService;
-    private final ProductImageExtractor extractor;
+    private final ProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         OfferingStatus offeringStatus = offering.toOfferingStatus();
-
+        Boolean isProposer = offering.isProposedBy(member); // TODO: 추후 도메인으로 분리
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
-
-        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
+        return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isProposer, isParticipated);
     }
 
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
@@ -117,13 +115,13 @@ public class OfferingService {
         return savedOffering.getId();
     }
 
-    public OfferingProductImageResponse uploadProductImage(MultipartFile image) {
+    public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {
         String imageUrl = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
         return new OfferingProductImageResponse(imageUrl);
     }
 
-    public OfferingProductImageResponse extractProductImage(OfferingProductImageRequest request) {
-        String imageUrl = extractor.extract(request.productUrl());
+    public OfferingProductImageResponse extractProductImageFromOg(OfferingProductImageRequest request) {
+        String imageUrl = imageExtractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
     }
 }

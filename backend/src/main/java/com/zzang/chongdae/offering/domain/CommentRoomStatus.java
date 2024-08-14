@@ -30,4 +30,8 @@ public enum CommentRoomStatus {
     public boolean isBuying() {
         return this == BUYING;
     }
+
+    public boolean isInProgress() {
+        return this != GROUPING;
+    }
 }

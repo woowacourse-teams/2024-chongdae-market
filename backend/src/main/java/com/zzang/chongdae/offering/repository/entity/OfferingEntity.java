@@ -97,8 +97,12 @@ public class OfferingEntity extends BaseTimeEntity {
                 originPrice, roomStatus);
     }
 
-    public void updateCurrentCount() {
+    public void participate() {
         currentCount++;
+    }
+
+    public void leave() {
+        currentCount--;
     }
 
     public CommentRoomStatus moveStatus() {
@@ -122,16 +126,12 @@ public class OfferingEntity extends BaseTimeEntity {
         return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail, meetingAddressDong);
     }
 
-    public boolean hasParticipant() {
-        return currentCount > INITIAL_COUNT;
-    }
-
     public boolean isStatusGrouping() {
         return this.roomStatus.isGrouping();
     }
 
     public boolean isProposedBy(MemberEntity other) {
-        return this.member.equals(other);
+        return this.member.isSame(other);
     }
 
     public boolean isNotProposedBy(MemberEntity other) {
