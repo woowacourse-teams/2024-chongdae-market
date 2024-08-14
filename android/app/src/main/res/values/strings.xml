@@ -24,10 +24,8 @@
     <string name="all_change">변경하기</string>
 
     <!--    login-->
-    <string name="login_with_kakao">카카오톡으로</string>
-    <string name="login_easily">간편하게\u00A0</string>
-    <string name="login_group_purchase">공동구매\u00A0</string>
-    <string name="login_start">시작하기\u00A0</string>
+    <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
+    <string name="login_with_kakao_button">카카오 로그인</string>
 
     <!--    menu-->
     <string name="bottom_home">홈</string>
@@ -128,5 +126,6 @@
     <string name="write_selected_date">%d년 %d월 %d일</string>
     <string name="write_selected_time">%s %d시 %d분</string>
     <string name="write_success_writing">공모가 게시되었어요!</string>
+    <string name="write_error_writing">공모 게시에 실패했어요🥲</string>
     <string name="update_state_dialog_message">공동구매 <font color="#F15642">진행 상황</font>을 <font color="#F15642">변경</font>하시겠습니까?</string>
 </resources>

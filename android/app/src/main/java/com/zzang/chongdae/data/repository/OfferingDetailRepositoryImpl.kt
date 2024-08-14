@@ -9,22 +9,15 @@ import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 class OfferingDetailRepositoryImpl(
     private val offeringDetailDataSource: OfferingDetailDataSource,
 ) : OfferingDetailRepository {
-    override suspend fun fetchOfferingDetail(
-        memberId: Long,
-        offeringId: Long,
-    ): Result<OfferingDetail> =
+    override suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetail> =
         offeringDetailDataSource.fetchOfferingDetail(
             offeringId = offeringId,
-            memberId = memberId,
         ).mapCatching {
             it.toDomain()
         }
 
-    override suspend fun saveParticipation(
-        memberId: Long,
-        offeringId: Long,
-    ): Result<Unit> =
+    override suspend fun saveParticipation(offeringId: Long): Result<Unit> =
         offeringDetailDataSource.saveParticipation(
-            participationRequest = ParticipationRequest(memberId, offeringId),
+            participationRequest = ParticipationRequest(offeringId),
         )
 }
