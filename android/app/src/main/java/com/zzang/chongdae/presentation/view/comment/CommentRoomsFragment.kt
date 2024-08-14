@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.FragmentCommentRoomsBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomsAdapter
 import com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
@@ -16,6 +18,13 @@ import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
     private var _binding: FragmentCommentRoomsBinding? = null
     private val binding get() = _binding!!
+
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(requireContext())
+    }
+    private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
+        FirebaseAnalyticsManager(firebaseAnalytics)
+    }
 
     private val commentRoomsAdapter: CommentRoomsAdapter by lazy {
         CommentRoomsAdapter(this)
@@ -60,6 +69,14 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
 
     private fun updateCommentRooms() {
         viewModel.updateCommentRooms()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalyticsManager.logScreenView(
+            screenName = "CommentRoomsFragment",
+            screenClass = this::class.java.simpleName,
+        )
     }
 
     override fun onDestroyView() {
