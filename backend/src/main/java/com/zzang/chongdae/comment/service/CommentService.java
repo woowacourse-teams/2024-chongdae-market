@@ -93,7 +93,7 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         CommentRoomStatus updatedStatus = offering.moveStatus();
-        if (updatedStatus.equals(CommentRoomStatus.BUYING)) {
+        if (updatedStatus.isBuying()) {
             offering.manuallyConfirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
