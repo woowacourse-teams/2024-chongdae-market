@@ -1,5 +1,7 @@
 package com.zzang.chongdae.presentation.view.mypage
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.databinding.FragmentMyPageBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.login.LoginActivity
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
@@ -56,6 +59,9 @@ class MyPageFragment : Fragment() {
     }
 
     private fun setUpObserve() {
+        viewModel.openUrlInBrowserEvent.observe(viewLifecycleOwner) {
+            openUrlInBrowser(it)
+        }
         viewModel.logoutEvent.observe(viewLifecycleOwner) {
             clearDataAndLogout()
         }
@@ -70,6 +76,13 @@ class MyPageFragment : Fragment() {
             }
         startActivity(intent)
     }
+
+    private fun openUrlInBrowser(url: String) {
+        val intent =
+            Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(url)
+            }
+        startActivity(intent)
     }
 
     override fun onResume() {
