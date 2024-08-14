@@ -11,7 +11,7 @@ INSERT INTO OFFERING (IS_MANUAL_CONFIRMED, TOTAL_COUNT, TOTAL_PRICE, ORIGIN_PRIC
                       UPDATED_AT, MEMBER_ID, DEADLINE, DESCRIPTION,
                       MEETING_ADDRESS, MEETING_ADDRESS_DETAIL, MEETING_ADDRESS_DONG,
                       PRODUCT_URL, THUMBNAIL_URL, TITLE, ROOM_STATUS)
-VALUES (FALSE, 2, 10000, 5000, 1, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 1, '2024-09-01 00:00:00', '공동구매해요',
+VALUES (FALSE, 10, 10000, 5000, 1, '2024-07-15 00:00:00', '2024-07-15 00:00:00', 1, '2024-08-14 16:00:00', '공동구매해요',
         '서울특별시 강남구 테헤란로 201', '101동 101호', '신천동', 'https://www.naver.com',
         'https://github.com/user-attachments/assets/87de86ac-b07e-4297-ac29-425b635fbae3',
         '간식 같이 사요', 'GROUPING'),
