@@ -20,6 +20,8 @@ import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
+import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
+import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final OfferingRepository offeringRepository;
+    private final OfferingMemberRepository offeringMemberRepository;
 
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
@@ -69,13 +72,19 @@ public class CommentService {
     }
 
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
-        // TODO : 로그인 사용자가 참여자인지 확인
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        validateIsJoined(member, offering);
         if (offering.isStatusGrouping() && offering.toOfferingStatus().isAutoConfirmed()) {
             offering.moveStatus();
         }
         return new CommentRoomInfoResponse(offering, member);
+    }
+
+    private void validateIsJoined(MemberEntity member, OfferingEntity offering) {
+        if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
+            throw new MarketException(OfferingMemberErrorCode.NOT_FOUND);
+        }
     }
 
     @Transactional

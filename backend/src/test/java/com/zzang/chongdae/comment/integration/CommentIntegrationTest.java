@@ -200,10 +200,16 @@ public class CommentIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("CommentRoomInfoFailResponse"))
                 .build();
 
+        OfferingEntity offering;
+        MemberEntity member;
+        MemberEntity invalidMember;
+
         @BeforeEach
         void setUp() {
-            MemberEntity member = memberFixture.createMember();
-            offeringFixture.createOffering(member);
+            member = memberFixture.createMember("ever");
+            invalidMember = memberFixture.createMember("invalid");
+            offering = offeringFixture.createOffering(member);
+            offeringMemberFixture.createProposer(member, offering);
         }
 
         @DisplayName("공모 id로 댓글방 정보를 조회할 수 있다")
@@ -211,8 +217,8 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_responseCommentRoomInfo_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
-                    .queryParam("offering-id", 1)
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .queryParam("offering-id", offering.getId())
                     .when().get("/comments/info")
                     .then().log().all()
                     .statusCode(200);
@@ -223,8 +229,20 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
-                    .queryParam("offering-id", 100)
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .queryParam("offering-id", offering.getId() + 100)
+                    .when().get("/comments/info")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("총대 혹은 참여자가 아닌 사용자가 댓글방 정보를 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidMember() {
+            given(spec).log().all()
+                    .filter(document("get-comment-room-info-fail-invalid-member", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("invalid5678"))
+                    .queryParam("offering-id", offering.getId())
                     .when().get("/comments/info")
                     .then().log().all()
                     .statusCode(400);
