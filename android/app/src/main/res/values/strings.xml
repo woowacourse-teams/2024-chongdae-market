@@ -89,8 +89,8 @@
     <string name="offering_members">참여자 목록</string>
 
     <!--    offering_write-->
-    <string name="write_information_message_essential"><font color="#F15642">공동 구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
-    <string name="write_information_message_optional">추가 정보를 입력해서\n<font color="#F15642">공동 구매 성공률</font>을 높여보세요!</string>
+    <string name="write_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
+    <string name="write_information_message_optional">추가 정보를 입력해서\n<font color="#F15642">공동구매 성공률</font>을 높여보세요!</string>
     <string name="write_enter_offering_title">제목을 입력해 주세요.</string>
     <string name="write_upload_photo">최대 50MB까지 업로드 가능합니다.</string>
     <string name="write_purchase_link">물품 구매 링크</string>
@@ -111,7 +111,7 @@
     <string name="write_deadline">거래 날짜</string>
     <string name="write_deadline_description">거래할 날짜를 입력해 주세요.</string>
     <string name="write_contents">내용</string>
-    <string name="write_deadline_contents_description">공동 구매에 대한 자세한 내용을 입력해 주세요.</string>
+    <string name="write_deadline_contents_description">공동구매에 대한 자세한 내용을 입력해 주세요.</string>
     <string name="write_under_1000">1000자 이하</string>
     <string name="write_start_offering">공동구매 시작하기!</string>
     <string name="write_start_offering_button_disabled">필수 항목을 모두 입력해 주세요.</string>

@@ -195,6 +195,10 @@ class OfferingWriteViewModel(
     }
 
     fun decreaseTotalCount() {
+        if (Count.fromString(totalCount.value).number < 0) {
+            this.totalCount.value = MINIMUM_TOTAL_COUNT.toString()
+            return
+        }
         val totalCount = Count.fromString(totalCount.value).decrease()
         this.totalCount.value = totalCount.number.toString()
     }
@@ -276,12 +280,12 @@ class OfferingWriteViewModel(
     }
 
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
-        val totalCountConverted = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
-        if (totalCountConverted < MINIMUM_TOTAL_COUNT || totalCountConverted > MAXIMUM_TOTAL_COUNT) {
+        val totalCountValue = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
+        if (totalCountValue < MINIMUM_TOTAL_COUNT || totalCountValue > MAXIMUM_TOTAL_COUNT) {
             _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_count)
             return null
         }
-        return totalCountConverted
+        return totalCountValue
     }
 
     private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
