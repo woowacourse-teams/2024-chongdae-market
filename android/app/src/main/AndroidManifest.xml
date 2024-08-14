@@ -40,10 +40,6 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
         <activity
-            android:name=".presentation.view.offeringdetail.OfferingDetailActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".presentation.view.commentdetail.CommentDetailActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
