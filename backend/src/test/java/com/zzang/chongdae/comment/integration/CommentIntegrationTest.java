@@ -174,7 +174,7 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class GetCommentRoomInfo {
 
-        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
@@ -188,14 +188,14 @@ public class CommentIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 정보 조회")
                 .description("공모 id를 통해 댓글방의 정보를 조회합니다.")
-                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("CommentRoomInfoSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("댓글방 정보 조회")
                 .description("공모 id를 통해 댓글방의 정보를 조회합니다.")
-                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("CommentRoomInfoFailResponse"))
                 .build();
@@ -212,8 +212,8 @@ public class CommentIntegrationTest extends IntegrationTest {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", 1)
-                    .when().get("/comments/{offering-id}/info")
+                    .queryParam("offering-id", 1)
+                    .when().get("/comments/info")
                     .then().log().all()
                     .statusCode(200);
         }
@@ -224,8 +224,8 @@ public class CommentIntegrationTest extends IntegrationTest {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", 100)
-                    .when().get("/comments/{offering-id}/info")
+                    .queryParam("offering-id", 100)
+                    .when().get("/comments/info")
                     .then().log().all()
                     .statusCode(400);
         }
@@ -235,7 +235,7 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class UpdateCommentRoomStatus {
 
-        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
@@ -244,14 +244,14 @@ public class CommentIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 상태 변경")
                 .description("댓글방의 상태를 변경합니다.")
-                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("CommentRoomStatusUpdateSuccessResponse"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("댓글방 상태 변경")
                 .description("댓글방의 상태를 변경합니다.")
-                .pathParameters(pathParameterDescriptors)
+                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("CommentRoomStatusUpdateFailResponse"))
                 .build();
@@ -272,15 +272,15 @@ public class CommentIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", offering.getId())
-                    .when().patch("/comments/{offering-id}/status")
+                    .queryParam("offering-id", offering.getId())
+                    .when().patch("/comments/status")
                     .then().log().all()
                     .statusCode(200);
 
             RestAssured.given().log().all()
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", offering.getId())
-                    .when().get("/comments/{offering-id}/info")
+                    .queryParam("offering-id", offering.getId())
+                    .when().get("/comments/info")
                     .then().log().all()
                     .statusCode(200)
                     .body("status", is("BUYING"));
@@ -292,8 +292,8 @@ public class CommentIntegrationTest extends IntegrationTest {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
-                    .pathParam("offering-id", offering.getId() + 100)
-                    .when().patch("/comments/{offering-id}/status")
+                    .queryParam("offering-id", offering.getId() + 100)
+                    .when().patch("/comments/status")
                     .then().log().all()
                     .statusCode(400);
         }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -39,17 +40,17 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/comments/{offering-id}/info")
+    @GetMapping("/comments/info")
     public ResponseEntity<CommentRoomInfoResponse> getCommentRoomInfo(
-            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestParam(value = "offering-id") Long offeringId,
             MemberEntity member) {
         CommentRoomInfoResponse response = commentService.getCommentRoomInfo(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/comments/{offering-id}/status")
+    @PatchMapping("/comments/status")
     public ResponseEntity<CommentRoomStatusResponse> updateCommentRoomStatus(
-            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestParam(value = "offering-id") Long offeringId,
             MemberEntity member) {
         CommentRoomStatusResponse response = commentService.updateCommentRoomStatus(offeringId, member);
         return ResponseEntity.ok(response);
