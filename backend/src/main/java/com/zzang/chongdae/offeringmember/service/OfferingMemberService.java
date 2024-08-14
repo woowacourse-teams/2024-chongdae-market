@@ -72,11 +72,11 @@ public class OfferingMemberService {
     }
 
     private void validateCancel(OfferingMemberEntity offeringMember) {
-        validateCancelProposer(offeringMember);
+        validateIsProposer(offeringMember);
         validateInProgress(offeringMember);
     }
 
-    private void validateCancelProposer(OfferingMemberEntity offeringMember) {
+    private void validateIsProposer(OfferingMemberEntity offeringMember) {
         if (offeringMember.isProposer()) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_PROPOSER);
         }
