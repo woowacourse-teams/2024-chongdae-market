@@ -100,6 +100,7 @@
                     android:background="@drawable/et_border_main_color"
                     android:gravity="center"
                     android:text="@={vm.totalCount}"
+                    android:inputType="number"
                     android:textColor="@color/gray_900"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
@@ -136,10 +137,25 @@
                 <EditText
                     android:id="@+id/et_total_price"
                     style="@style/Theme.AppCompat.TextView.Write.EditText"
+                    android:layout_width="230dp"
                     android:hint="@string/write_information_total_price"
                     android:text="@={vm.totalPrice}"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="0dp"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="원"
+                    android:textColor="@color/black_900"
+                    android:textSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="@id/et_total_price"
+                    app:layout_constraintStart_toEndOf="@id/et_total_price"
+                    app:layout_constraintTop_toTopOf="@id/et_total_price" />
 
                 <TextView
                     android:id="@+id/tv_per_n_price"
