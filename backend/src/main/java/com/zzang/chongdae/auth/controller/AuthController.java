@@ -37,7 +37,7 @@ public class AuthController {
 
     @PostMapping("/auth/signup")
     public ResponseEntity<SignupResponse> signup(
-            @RequestBody SignupRequest request, HttpServletResponse servletResponse) {
+            @RequestBody @Valid SignupRequest request, HttpServletResponse servletResponse) {
         AuthInfoDto authInfo = authService.signup(request);
         addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
         SignupResponse response = new SignupResponse(authInfo.authMember());
