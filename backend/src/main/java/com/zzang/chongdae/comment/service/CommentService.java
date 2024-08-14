@@ -1,6 +1,7 @@
 package com.zzang.chongdae.comment.service;
 
 import com.zzang.chongdae.comment.domain.CommentWithRole;
+import com.zzang.chongdae.comment.exception.CommentErrorCode;
 import com.zzang.chongdae.comment.repository.CommentRepository;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
@@ -89,14 +90,20 @@ public class CommentService {
 
     @Transactional
     public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
-        // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        validateIsProposer(member, offering);
         CommentRoomStatus updatedStatus = offering.moveStatus();
         if (updatedStatus.isBuying()) {
             offering.manuallyConfirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
+    }
+
+    private void validateIsProposer(MemberEntity member, OfferingEntity offering) {
+        if (offering.isNotProposedBy(member)) {
+            throw new MarketException(CommentErrorCode.NOT_PROPOSER);
+        }
     }
 
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {

@@ -274,11 +274,13 @@ public class CommentIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("CommentRoomStatusUpdateFailResponse"))
                 .build();
         MemberEntity member;
+        MemberEntity invalidMember;
         OfferingEntity offering;
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("ever");
+            invalidMember = memberFixture.createMember("invalid");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
             commentFixture.createComment(member, offering);
@@ -289,14 +291,14 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_updateStatus_when_givenOfferingIdAndMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
                     .queryParam("offering-id", offering.getId())
                     .when().patch("/comments/status")
                     .then().log().all()
                     .statusCode(200);
 
             RestAssured.given().log().all()
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
                     .queryParam("offering-id", offering.getId())
                     .when().get("/comments/info")
                     .then().log().all()
@@ -309,7 +311,19 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .queryParam("offering-id", offering.getId() + 100)
+                    .when().patch("/comments/status")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("총대가 아닌 사용자가 댓글방 상태를 변경할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidMember() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("update-comment-room-status-fail-invalid-member", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithCi("invalid5678"))
                     .queryParam("offering-id", offering.getId() + 100)
                     .when().patch("/comments/status")
                     .then().log().all()
