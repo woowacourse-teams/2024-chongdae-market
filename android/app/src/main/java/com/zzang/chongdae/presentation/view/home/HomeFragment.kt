@@ -176,7 +176,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         scrollToTop()
     }
 
-    companion object{
+    companion object {
         const val OFFERING_ID = "offering_id"
     }
 }

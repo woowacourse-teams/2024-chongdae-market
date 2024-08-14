@@ -37,7 +37,7 @@ class OfferingViewModel(
     val search: MutableLiveData<String?> = MutableLiveData(null)
 
     private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
-    val filters: MutableLiveData<List<Filter>> get() = _filters
+    val filters: LiveData<List<Filter>> get() = _filters
 
     val joinableFilter: LiveData<Filter> =
         _filters.map {
@@ -62,8 +62,8 @@ class OfferingViewModel(
     private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
-    private val _updatedOffering: MutableLiveData<Offering> = MutableLiveData()
-    val updatedOffering: MutableLiveData<Offering> get() = _updatedOffering
+    private val _updatedOffering: MutableSingleLiveData<Offering> = MutableSingleLiveData()
+    val updatedOffering: SingleLiveData<Offering> get() = _updatedOffering
 
     init {
         fetchOfferings()
@@ -149,7 +149,7 @@ class OfferingViewModel(
             offeringDetailRepository.fetchOfferingDetail(
                 offeringId = offeringId,
             ).onSuccess {
-                _updatedOffering.value = it.toOffering()
+                _updatedOffering.setValue(it.toOffering())
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }
