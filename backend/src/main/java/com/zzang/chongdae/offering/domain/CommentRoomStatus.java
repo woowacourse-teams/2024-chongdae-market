@@ -28,6 +28,6 @@ public enum CommentRoomStatus {
     }
 
     public boolean isInProgress() {
-        return this == TRADING || this == BUYING;
+        return this != GROUPING;
     }
 }
