@@ -94,6 +94,7 @@
     <dimen name="font_size_72">72sp</dimen>
     <dimen name="font_size_36">36sp</dimen>
     <dimen name="font_size_24">24sp</dimen>
+    <dimen name="font_size_23">23sp</dimen>
     <dimen name="font_size_22">22sp</dimen>
     <dimen name="font_size_20">20sp</dimen>
     <dimen name="font_size_18">18sp</dimen>
