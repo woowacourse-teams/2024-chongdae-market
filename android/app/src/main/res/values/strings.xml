@@ -47,7 +47,7 @@
 
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>
-    <string name="my_page_nickname_title">&#160;님</string>
+    <string name="my_page_nickname_title">님</string>
     <!--    offering_detail-->
     <string name="detail_product_url_title">물품 링크:&#160;</string>
     <string name="detail_product_url_text">바로가기</string>
