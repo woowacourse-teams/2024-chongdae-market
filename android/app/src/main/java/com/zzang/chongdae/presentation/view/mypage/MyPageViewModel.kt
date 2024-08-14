@@ -26,12 +26,6 @@ class MyPageViewModel(private val memberDataStore: MemberDataStore) : ViewModel(
         "https://silent-apparatus-578.notion.site/f1f5cd1609d4469dba3ab7d0f95c183c?pvs=4"
     private val withdrawalUrl = "https://forms.gle/z5MUzVTUoyunfqEu8"
 
-    fun clearDataStore() {
-        viewModelScope.launch {
-            memberDataStore.clearAllData()
-        }
-    }
-
     fun onClickTermsOfUse() {
         _openUrlInBrowserEvent.setValue(termsOfUseUrl)
     }
