@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class OfferingWriteRequest(
-    @SerialName("memberId") val memberId: Long,
     @SerialName("title") val title: String,
     @SerialName("productUrl") val productUrl: String?,
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,

@@ -223,7 +223,6 @@ class OfferingWriteViewModel(
     }
 
     fun postOffering() {
-        val memberId = BuildConfig.TOKEN.toLong()
         val title = title.value ?: return
         val totalCount = totalCount.value ?: return
         val totalPrice = totalPrice.value ?: return
@@ -248,7 +247,6 @@ class OfferingWriteViewModel(
             offeringRepository.saveOffering(
                 uiModel =
                     OfferingWriteUiModel(
-                        memberId = memberId,
                         title = title,
                         productUrl = productUrl.value,
                         thumbnailUrl = thumbnailUrl.value,
