@@ -51,6 +51,9 @@ class OfferingWriteViewModel(
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
+    val descriptionLength: LiveData<Int>
+        get() = description.map { it.length }
+
     private val _essentialSubmitButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val essentialSubmitButtonEnabled: LiveData<Boolean> get() = _essentialSubmitButtonEnabled
 
@@ -134,7 +137,8 @@ class OfferingWriteViewModel(
                 thumbnailUrl.value = it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
+                _writeUIState.value =
+                    WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
             }
         }
     }
@@ -150,7 +154,8 @@ class OfferingWriteViewModel(
                 thumbnailUrl.value = HTTPS + it.imageUrl
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _writeUIState.value = WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
+                _writeUIState.value =
+                    WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
             }
         }
     }
@@ -169,10 +174,10 @@ class OfferingWriteViewModel(
 
     private fun updateSubmitButtonEnabled() {
         _essentialSubmitButtonEnabled.value = !title.value.isNullOrBlank() &&
-            !totalCount.value.isNullOrBlank() &&
-            !totalPrice.value.isNullOrBlank() &&
-            !meetingAddress.value.isNullOrBlank() &&
-            !tradeDate.value.isNullOrBlank()
+                !totalCount.value.isNullOrBlank() &&
+                !totalPrice.value.isNullOrBlank() &&
+                !meetingAddress.value.isNullOrBlank() &&
+                !tradeDate.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
@@ -242,25 +247,26 @@ class OfferingWriteViewModel(
         viewModelScope.launch {
             offeringRepository.saveOffering(
                 uiModel =
-                    OfferingWriteUiModel(
-                        memberId = memberId,
-                        title = title,
-                        productUrl = productUrl.value,
-                        thumbnailUrl = thumbnailUrl.value,
-                        totalCount = totalCountConverted,
-                        totalPrice = totalPriceConverted,
-                        originPrice = originPriceNotBlank,
-                        meetingAddress = meetingAddress,
-                        meetingAddressDong = meetingAddressDong.value,
-                        meetingAddressDetail = meetingAddressDetail,
-                        deadline = tradeDate,
-                        description = description,
-                    ),
+                OfferingWriteUiModel(
+                    memberId = memberId,
+                    title = title,
+                    productUrl = productUrl.value,
+                    thumbnailUrl = thumbnailUrl.value,
+                    totalCount = totalCountConverted,
+                    totalPrice = totalPriceConverted,
+                    originPrice = originPriceNotBlank,
+                    meetingAddress = meetingAddress,
+                    meetingAddressDong = meetingAddressDong.value,
+                    meetingAddressDetail = meetingAddressDetail,
+                    deadline = tradeDate,
+                    description = description,
+                ),
             ).onSuccess {
                 makeSubmitOfferingEvent()
             }.onFailure {
                 Log.e("error", it.message.toString())
-                _writeUIState.value = WriteUIState.Error(R.string.write_error_writing, it.message.toString())
+                _writeUIState.value =
+                    WriteUIState.Error(R.string.write_error_writing, it.message.toString())
             }
         }
     }
@@ -302,7 +308,8 @@ class OfferingWriteViewModel(
         if (originPrice.value.isNullOrBlank()) return false
         val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
         if (discountRateValue <= 0f) {
-            _writeUIState.value = WriteUIState.InvalidInput(R.string.write_origin_price_cheaper_than_total_price)
+            _writeUIState.value =
+                WriteUIState.InvalidInput(R.string.write_origin_price_cheaper_than_total_price)
             return true
         }
         return false
