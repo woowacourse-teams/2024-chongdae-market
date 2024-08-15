@@ -10,6 +10,7 @@ import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -324,4 +325,9 @@ fun TextView.setDiscountRateValidity(
             context.getString(R.string.all_minus)
         }
     this.text = text
+}
+
+@BindingAdapter("originPrice")
+fun EditText.setOriginPriceHint(originPrice: Int){
+    this.hint = context.getString(R.string.write_current_split_price).format(originPrice)
 }

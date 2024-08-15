@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:fontFamily="@font/suit_medium"
-                    android:text="원"
+                    android:text="@string/all_won"
                     android:textColor="@color/black_900"
                     android:textSize="20dp"
                     app:layout_constraintBottom_toBottomOf="@id/et_total_price"
