@@ -9,10 +9,10 @@ import com.zzang.chongdae.domain.repository.AuthRepository
 class AuthRepositoryImpl(
     private val authRemoteDataSource: AuthRemoteDataSource,
 ) : AuthRepository {
-    override suspend fun saveLogin(ci: String): Result<Unit> {
+    override suspend fun saveLogin(ci: String): Result<Member> {
         return authRemoteDataSource.saveLogin(
             ciRequest = CiRequest(ci),
-        )
+        ).mapCatching { it.toDomain() }
     }
 
     override suspend fun saveRefresh(): Result<Unit> {

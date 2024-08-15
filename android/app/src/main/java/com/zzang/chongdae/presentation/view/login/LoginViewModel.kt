@@ -24,6 +24,7 @@ class LoginViewModel(
             authRepository.saveLogin(
                 ci = ci,
             ).onSuccess {
+                memberDataStore.saveMember(it.memberId, it.nickName)
                 _navigateEvent.setValue(true)
             }.onFailure {
                 Log.e("error", "postLogin: ${it.message}")

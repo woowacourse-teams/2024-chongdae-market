@@ -10,7 +10,7 @@ interface AuthApiService {
     @POST("/auth/login")
     suspend fun postLogin(
         @Body ci: CiRequest,
-    ): Response<Unit>
+    ): Response<MemberResponse>
 
     @POST("/auth/refresh")
     suspend fun postRefresh(): Response<Unit>

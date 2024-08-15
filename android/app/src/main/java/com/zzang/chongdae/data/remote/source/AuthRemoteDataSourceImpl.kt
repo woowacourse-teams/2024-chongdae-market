@@ -8,7 +8,7 @@ import com.zzang.chongdae.data.source.AuthRemoteDataSource
 class AuthRemoteDataSourceImpl(
     private val service: AuthApiService,
 ) : AuthRemoteDataSource {
-    override suspend fun saveLogin(ciRequest: CiRequest): Result<Unit> {
+    override suspend fun saveLogin(ciRequest: CiRequest): Result<MemberResponse> {
         return runCatching {
             val response = service.postLogin(ciRequest)
             if (response.isSuccessful) {
