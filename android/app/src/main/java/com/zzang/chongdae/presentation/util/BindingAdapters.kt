@@ -328,6 +328,6 @@ fun TextView.setDiscountRateValidity(
 }
 
 @BindingAdapter("originPrice")
-fun EditText.setOriginPriceHint(originPrice: Int){
+fun EditText.setOriginPriceHint(originPrice: Int) {
     this.hint = context.getString(R.string.write_current_split_price).format(originPrice)
 }

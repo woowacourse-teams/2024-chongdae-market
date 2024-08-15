@@ -174,10 +174,10 @@ class OfferingWriteViewModel(
 
     private fun updateSubmitButtonEnabled() {
         _essentialSubmitButtonEnabled.value = !title.value.isNullOrBlank() &&
-                !totalCount.value.isNullOrBlank() &&
-                !totalPrice.value.isNullOrBlank() &&
-                !meetingAddress.value.isNullOrBlank() &&
-                !tradeDate.value.isNullOrBlank()
+            !totalCount.value.isNullOrBlank() &&
+            !totalPrice.value.isNullOrBlank() &&
+            !meetingAddress.value.isNullOrBlank() &&
+            !tradeDate.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
@@ -247,20 +247,20 @@ class OfferingWriteViewModel(
         viewModelScope.launch {
             offeringRepository.saveOffering(
                 uiModel =
-                OfferingWriteUiModel(
-                    memberId = memberId,
-                    title = title,
-                    productUrl = productUrl.value,
-                    thumbnailUrl = thumbnailUrl.value,
-                    totalCount = totalCountConverted,
-                    totalPrice = totalPriceConverted,
-                    originPrice = originPriceNotBlank,
-                    meetingAddress = meetingAddress,
-                    meetingAddressDong = meetingAddressDong.value,
-                    meetingAddressDetail = meetingAddressDetail,
-                    deadline = tradeDate,
-                    description = description,
-                ),
+                    OfferingWriteUiModel(
+                        memberId = memberId,
+                        title = title,
+                        productUrl = productUrl.value,
+                        thumbnailUrl = thumbnailUrl.value,
+                        totalCount = totalCountConverted,
+                        totalPrice = totalPriceConverted,
+                        originPrice = originPriceNotBlank,
+                        meetingAddress = meetingAddress,
+                        meetingAddressDong = meetingAddressDong.value,
+                        meetingAddressDetail = meetingAddressDetail,
+                        deadline = tradeDate,
+                        description = description,
+                    ),
             ).onSuccess {
                 makeSubmitOfferingEvent()
             }.onFailure {
