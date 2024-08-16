@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OfferingMeeting {
 
-    private final LocalDateTime deadline;
+    private final LocalDateTime meetingDate;
     private final String meetingAddress;
     private final String meetingAddressDetail;
     private final String meetingAddressDong;
