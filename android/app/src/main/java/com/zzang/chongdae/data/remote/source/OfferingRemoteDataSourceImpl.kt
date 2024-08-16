@@ -4,7 +4,7 @@ import com.zzang.chongdae.data.mapper.toProductUrlRequest
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
+import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
@@ -64,13 +64,13 @@ class OfferingRemoteDataSourceImpl(
             service.getFilters().body() ?: throw IllegalStateException()
         }
 
-    override suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatusResponse> {
+    override suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse> {
         return runCatching {
-            val response: Response<OfferingStatusResponse> = service.getOfferingStatus(offeringId)
+            val response: Response<MeetingsResponse> = service.getMeetings(offeringId)
             if (response.isSuccessful) {
                 response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("$ERROR_PREFIX${response.code()}")
+                error("${ERROR_PREFIX}${response.code()}")
             }
         }
     }

@@ -5,10 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MeetingsResponse(
-    @SerialName("deadline")
-    val deadline: String,
+    @SerialName("meetingDate")
+    val meetingDate: String,
     @SerialName("meetingAddress")
     val meetingAddress: String,
     @SerialName("meetingAddressDetail")
     val meetingAddressDetail: String,
+    @SerialName("meetingAddressDong")
+    val meetingAddressDong: String?,
 )

@@ -5,7 +5,8 @@ import com.zzang.chongdae.domain.model.Meetings
 
 fun MeetingsResponse.toDomain() =
     Meetings(
-        deadline = this.deadline.toLocalDateTime(),
+        meetingDate = this.meetingDate.toLocalDateTime(),
         meetingAddress = this.meetingAddress,
         meetingAddressDetail = this.meetingAddressDetail,
+        meetingAddressDong = this.meetingAddressDong,
     )
