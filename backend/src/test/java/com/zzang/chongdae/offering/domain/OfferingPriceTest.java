@@ -17,7 +17,7 @@ class OfferingPriceTest {
         double actual = offeringPrice.calculateDiscountRate();
 
         // then
-        double expected = 0.3;
+        double expected = 33.3;
         assertEquals(actual, expected);
     }
 }

@@ -28,7 +28,8 @@ public class OfferingPrice {
         if (originPrice == null) {
             return null;
         }
-        double discountRate = (double) (originPrice - totalPrice / totalCount) / originPrice;
+        int dividedPrice = totalPrice / totalCount;
+        double discountRate = (double) (originPrice - dividedPrice) / originPrice * 100;
         return roundHalfUp(discountRate, ROUNDING_SCALE);
     }
 
