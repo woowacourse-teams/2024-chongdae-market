@@ -1,45 +1,38 @@
 package com.zzang.chongdae.presentation.view.write
 
 import android.app.Dialog
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.databinding.DialogDateTimePickerBinding
-import com.zzang.chongdae.databinding.FragmentOfferingWriteBinding
-import com.zzang.chongdae.presentation.util.FileUtils
+import com.zzang.chongdae.databinding.DialogDatePickerBinding
+import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
-import com.zzang.chongdae.presentation.util.PermissionManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import java.util.Calendar
 
-class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
-    private var _fragmentBinding: FragmentOfferingWriteBinding? = null
+class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener {
+    private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
-    private var _dateTimePickerBinding: DialogDateTimePickerBinding? = null
+    private var _dateTimePickerBinding: DialogDatePickerBinding? = null
     private val dateTimePickerBinding get() = _dateTimePickerBinding!!
 
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
-    private lateinit var permissionManager: PermissionManager
-    private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val viewModel: OfferingWriteViewModel by viewModels {
+    private val viewModel: OfferingWriteViewModel by activityViewModels {
         OfferingWriteViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
         )
@@ -51,12 +44,6 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
 
     private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
         FirebaseAnalyticsManager(firebaseAnalytics)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setUpPermissionManager()
-        initializePhotoPicker()
     }
 
     override fun onCreateView(
@@ -75,55 +62,13 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
         setUpObserve()
-        selectDeadline()
+        selectMeetingDate()
         searchPlace()
     }
 
     private fun setUpObserve() {
-        observeFinishEvent()
-        observeImageUploadEvent()
+        observeNavigateToOptionalEvent()
         observeUIState()
-    }
-
-    private fun initializePhotoPicker() {
-        pickMediaLauncher =
-            registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
-                handleMediaResult(uri)
-            }
-    }
-
-    private fun launchPhotoPicker() {
-        pickMediaLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-    }
-
-    private fun handleMediaResult(uri: Uri?) {
-        if (uri != null) {
-            val multipartBodyPart = FileUtils.getMultipartBodyPart(requireContext(), uri, "image")
-            if (multipartBodyPart != null) {
-                viewModel.uploadImageFile(multipartBodyPart)
-            } else {
-                showToast(R.string.all_error_file_conversion)
-            }
-        }
-    }
-
-    private fun setUpPermissionManager() {
-        permissionManager =
-            PermissionManager(
-                fragment = this,
-                onPermissionGranted = { onPermissionsGranted() },
-                onPermissionDenied = { onPermissionsDenied() },
-            )
-    }
-
-    private fun observeImageUploadEvent() {
-        viewModel.imageUploadEvent.observe(viewLifecycleOwner) {
-            if (permissionManager.isAndroid13OrAbove()) {
-                launchPhotoPicker()
-            } else {
-                permissionManager.requestPermissions()
-            }
-        }
     }
 
     private fun observeUIState() {
@@ -143,15 +88,6 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         }
     }
 
-    private fun onPermissionsGranted() {
-        showToast(R.string.all_permission_granted)
-        launchPhotoPicker()
-    }
-
-    private fun onPermissionsDenied() {
-        showToast(R.string.all_permission_denied)
-    }
-
     private fun searchPlace() {
         fragmentBinding.tvPlaceValue.setOnClickListener {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
@@ -162,47 +98,22 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         }
     }
 
-    private fun selectDeadline() {
-        viewModel.deadlineChoiceEvent.observe(viewLifecycleOwner) {
+    private fun selectMeetingDate() {
+        viewModel.meetingDateChoiceEvent.observe(viewLifecycleOwner) {
             dialog.setContentView(dateTimePickerBinding.root)
             dialog.show()
             setDateTimeText(dateTimePickerBinding)
         }
     }
 
-    override fun onDateTimeSubmitButtonClick() {
-        viewModel.updateDeadline(
-            dateTimePickerBinding.tvDate.text.toString(),
-            dateTimePickerBinding.tvTime.text.toString(),
-        )
-        dialog.dismiss()
-    }
-
-    override fun onDateTimeCancelButtonClick() {
-        dialog.dismiss()
-    }
-
-    private fun setDateTimeText(dateTimeBinding: DialogDateTimePickerBinding) {
+    private fun setDateTimeText(dateTimeBinding: DialogDatePickerBinding) {
         val calendar = Calendar.getInstance()
         updateDate(calendar, dateTimeBinding)
-        updateTime(calendar, dateTimeBinding)
-    }
-
-    private fun updateTime(
-        calendar: Calendar,
-        dateTimeBinding: DialogDateTimePickerBinding,
-    ) {
-        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-        updateTimeTextView(dateTimeBinding.tvTime, hourOfDay, minute)
-        dateTimeBinding.pickerTime.setOnTimeChangedListener { _, hourOfDay, minute ->
-            updateTimeTextView(dateTimeBinding.tvTime, hourOfDay, minute)
-        }
     }
 
     private fun updateDate(
         calendar: Calendar,
-        dateTimeBinding: DialogDateTimePickerBinding,
+        dateTimeBinding: DialogDatePickerBinding,
     ) {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -211,6 +122,17 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         dateTimeBinding.pickerDate.setOnDateChangedListener { _, year, monthOfYear, dayOfMonth ->
             updateDateTextView(dateTimeBinding.tvDate, year, monthOfYear, dayOfMonth)
         }
+    }
+
+    override fun onDateTimeSubmitButtonClick() {
+        viewModel.updateMeetingDate(
+            dateTimePickerBinding.tvDate.text.toString(),
+        )
+        dialog.dismiss()
+    }
+
+    override fun onDateTimeCancelButtonClick() {
+        dialog.dismiss()
     }
 
     private fun updateDateTextView(
@@ -241,24 +163,23 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
     ) {
-        _fragmentBinding = FragmentOfferingWriteBinding.inflate(inflater, container, false)
+        _fragmentBinding = FragmentOfferingWriteEssentialBinding.inflate(inflater, container, false)
         fragmentBinding.vm = viewModel
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
 
-        _dateTimePickerBinding = DialogDateTimePickerBinding.inflate(inflater, container, false)
+        _dateTimePickerBinding = DialogDatePickerBinding.inflate(inflater, container, false)
         dateTimePickerBinding.vm = viewModel
         dateTimePickerBinding.onClickListener = this
     }
 
-    private fun observeFinishEvent() {
-        viewModel.finishEvent.observe(viewLifecycleOwner) {
+    private fun observeNavigateToOptionalEvent() {
+        viewModel.navigateToOptionalEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
-                id = "submit_offering_event",
-                name = "submit_offering_event",
+                id = "submit_offering_write_essential_event",
+                name = "submit_offering_write_essential_event",
                 contentType = "button",
             )
-            showToast(R.string.write_success_writing)
-            parentFragmentManager.popBackStack()
+            findNavController().navigate(R.id.action_offering_write_fragment_essential_to_offering_write_fragment_optional)
         }
     }
 
@@ -278,7 +199,7 @@ class OfferingWriteFragment : Fragment(), OnOfferingWriteClickListener {
     override fun onResume() {
         super.onResume()
         firebaseAnalyticsManager.logScreenView(
-            screenName = "OfferingWriteFragment",
+            screenName = "OfferingWriteEssentialFragment",
             screenClass = this::class.java.simpleName,
         )
     }

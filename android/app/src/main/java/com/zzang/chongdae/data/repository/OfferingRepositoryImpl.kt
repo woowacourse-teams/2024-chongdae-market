@@ -32,7 +32,6 @@ class OfferingRepositoryImpl(
         return offeringRemoteDataSource.saveOffering(
             offeringWriteRequest =
                 OfferingWriteRequest(
-                    memberId = uiModel.memberId,
                     title = uiModel.title,
                     productUrl = uiModel.productUrl,
                     thumbnailUrl = uiModel.thumbnailUrl,
@@ -42,7 +41,7 @@ class OfferingRepositoryImpl(
                     meetingAddress = uiModel.meetingAddress,
                     meetingAddressDong = uiModel.meetingAddressDong,
                     meetingAddressDetail = uiModel.meetingAddressDetail,
-                    deadline = uiModel.deadline,
+                    meetingDate = uiModel.meetingDate,
                     description = uiModel.description,
                 ),
         )

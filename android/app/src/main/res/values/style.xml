@@ -110,6 +110,19 @@
         <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
+    <style name="Theme.AppCompat.TextView.Write.EditTextPrice" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">230dp</item>
+        <item name="android:layout_height">@dimen/size_44</item>
+        <item name="android:textSize">@dimen/size_15</item>
+        <item name="android:textColor">@color/gray_900</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textColorHint">@color/gray_font</item>
+        <item name="android:background">@drawable/et_border_gray</item>
+        <item name="android:layout_marginTop">@dimen/size_16</item>
+        <item name="android:paddingHorizontal">@dimen/size_8</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+
     <style name="Theme.AppCompat.TextView.Normal.Gray900.Size17" parent="@style/Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

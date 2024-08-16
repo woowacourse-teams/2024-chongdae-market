@@ -17,10 +17,10 @@ class OfferingViewHolder(
         binding.offering = offering
         binding.onOfferingClickListener = onOfferingClickListener
         binding.searchKeyword = searchKeyword
-        setCancellationLineToEachPrice()
+        setCancellationLineToOriginPrice()
     }
 
-    private fun setCancellationLineToEachPrice() {
+    private fun setCancellationLineToOriginPrice() {
         binding.tvOriginPrice.apply {
             this.paintFlags = this.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         }
