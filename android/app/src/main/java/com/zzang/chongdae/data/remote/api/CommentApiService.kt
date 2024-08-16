@@ -13,9 +13,9 @@ interface CommentApiService {
     @GET("/comments")
     suspend fun getCommentRooms(): Response<CommentRoomsResponse>
 
-    @GET("/comments/{offering-id}")
+    @GET("/comments/messages")
     suspend fun getComments(
-        @Path("offering-id") offeringId: Long,
+        @Query("offering-id") offeringId: Long,
     ): Response<CommentsResponse>
 
     @POST("/comments")
