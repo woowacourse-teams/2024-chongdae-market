@@ -304,13 +304,18 @@ fun TextView.setSplitPriceText(
     isSplitPriceValid: Boolean?,
     splitPrice: Int?,
 ) {
-    val text =
-        if (isSplitPriceValid == true) {
-            context.getString(R.string.all_percentage_comma).format(splitPrice)
-        } else {
-            context.getString(R.string.all_minus)
-        }
+    val text = setSplitPrice(isSplitPriceValid, splitPrice)
     this.text = text
+}
+
+private fun TextView.setSplitPrice(
+    isSplitPriceValid: Boolean?,
+    splitPrice: Int?
+): String {
+    if (isSplitPriceValid == true) {
+        return context.getString(R.string.all_percentage_comma).format(splitPrice)
+    }
+    return context.getString(R.string.all_minus)
 }
 
 @BindingAdapter("discountRateValidity", "discountRate")
@@ -318,13 +323,19 @@ fun TextView.setDiscountRateValidity(
     discountRateValidity: Boolean?,
     discountRate: Float?,
 ) {
-    val text =
-        if (discountRateValidity == true) {
-            context.getString(R.string.write_discount_rate_value).format(discountRate)
-        } else {
-            context.getString(R.string.all_minus)
-        }
+    val text = setDiscountRate(discountRateValidity, discountRate)
     this.text = text
+}
+
+private fun TextView.setDiscountRate(
+    discountRateValidity: Boolean?,
+    discountRate: Float?
+): String {
+    if (discountRateValidity == true) {
+        return context.getString(R.string.write_discount_rate_value).format(discountRate)
+    }
+    return context.getString(R.string.all_minus)
+
 }
 
 @BindingAdapter("originPrice")
