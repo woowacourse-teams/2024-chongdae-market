@@ -43,8 +43,13 @@ class OfferingAdapter(
 
     fun addUpdatedItem(offering: Offering) {
         updatedOfferings.add(offering)
-        notifyDataSetChanged()
+        val position = findPositionByOfferingID(offering)
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
     }
+
+    private fun findPositionByOfferingID(offering: Offering) = snapshot().items.indexOfFirst { it.id == offering.id }
 
     companion object {
         private val productComparator =
