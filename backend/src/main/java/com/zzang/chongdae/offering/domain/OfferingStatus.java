@@ -10,10 +10,10 @@ public enum OfferingStatus {
     public static OfferingStatus decideBy(OfferingCondition offeringCondition) {
         if (offeringCondition.isManualConfirmed() || offeringCondition.isAutoConfirmed()
                 || (offeringCondition.isMeetingDateOver() && offeringCondition.isCountNotFull())) {
-            return CONFIRMED;
+            return CONFIRMED; // TODO: isManualConfirmed() || isMeetingDateOver()만 하면 됨
         }
         if (offeringCondition.isCountFull() && offeringCondition.isMeetingDateNotOver()) {
-            return FULL;
+            return FULL; // TODO: isCountFull()만 하면 됨
         }
         if (offeringCondition.isCountAlmostFull() || offeringCondition.isMeetingDateAlmostOver()) {
             return IMMINENT;

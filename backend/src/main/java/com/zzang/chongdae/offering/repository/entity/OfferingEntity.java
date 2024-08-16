@@ -114,7 +114,7 @@ public class OfferingEntity extends BaseTimeEntity {
         currentCount--;
     }
 
-    public CommentRoomStatus moveStatus() {
+    public CommentRoomStatus moveCommentRoomStatus() {
         this.roomStatus = roomStatus.nextStatus();
         return this.roomStatus;
     }
