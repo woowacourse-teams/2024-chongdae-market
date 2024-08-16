@@ -16,10 +16,10 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
     protected List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threshold = LocalDateTime.now().plusHours(6);
-        LocalDateTime outOfRangeDeadline = LocalDateTime.now();
+        LocalDateTime outOfRangeMeetingDate = LocalDateTime.now();
         Long outOfRangeId = findOutOfRangeId();
         return offeringRepository.findImminentOfferingsWithKeyword(
-                now, threshold, outOfRangeDeadline, outOfRangeId, searchKeyword, pageable);
+                now, threshold, outOfRangeMeetingDate, outOfRangeId, searchKeyword, pageable);
     }
 
     @Override
@@ -27,9 +27,9 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threshold = LocalDateTime.now().plusHours(6);
-        LocalDateTime lastDeadline = lastOffering.getDeadline();
+        LocalDateTime lastMeetingDate = lastOffering.getMeetingDate();
         Long lastId = lastOffering.getId();
         return offeringRepository.findImminentOfferingsWithKeyword(
-                now, threshold, lastDeadline, lastId, searchKeyword, pageable);
+                now, threshold, lastMeetingDate, lastId, searchKeyword, pageable);
     }
 }

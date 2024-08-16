@@ -13,9 +13,9 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
@@ -54,7 +54,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("meetingAddress").description("모집 주소"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("description").description("내용"),
-                fieldWithPath("deadline").description("마감시간"),
+                fieldWithPath("meetingDate").description("마감시간"),
                 fieldWithPath("currentCount").description("현재원"),
                 fieldWithPath("totalCount").description("총원"),
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
@@ -177,7 +177,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("deadline").description("마감시간"),
+                fieldWithPath("meetingDate").description("마감시간"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소")
@@ -237,13 +237,13 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("deadline").description("마감시간 (필수)"),
+                fieldWithPath("meetingDate").description("마감시간 (필수)"),
                 fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("deadline").description("마감시간"),
+                fieldWithPath("meetingDate").description("마감시간"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소")
@@ -386,7 +386,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소"),
-                fieldWithPath("deadline").description("모집 종료 시간 (필수)"),
+                fieldWithPath("meetingDate").description("모집 종료 시간 (필수)"),
                 fieldWithPath("description").description("내용 (필수)")
         );
         ResourceSnippetParameters successSnippets = builder()

@@ -33,13 +33,13 @@ public record OfferingSaveRequest(@NotBlank
 
                                   @NotNull
                                   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-                                  LocalDateTime deadline,
+                                  LocalDateTime meetingDate,
 
                                   @NotNull
                                   String description) {
 
     public OfferingEntity toEntity(MemberEntity member) {
-        return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
+        return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, 1, false,
                 totalPrice, originPrice, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
         // TODO : 각자 맡은 팀에서 계산하는 로직 생각하기, 객체로 빼서 만드셈~
