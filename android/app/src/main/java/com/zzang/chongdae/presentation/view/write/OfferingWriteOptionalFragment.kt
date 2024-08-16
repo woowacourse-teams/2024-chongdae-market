@@ -174,4 +174,9 @@ class OfferingWriteOptionalFragment : Fragment() {
     private fun onPermissionsDenied() {
         showToast(R.string.all_permission_denied)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _fragmentBinding = null
+    }
 }
