@@ -5,8 +5,8 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.domain.model.Filter
+import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
@@ -65,13 +65,9 @@ class OfferingRepositoryImpl(
         }
     }
 
-    override suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatus> {
-        return offeringRemoteDataSource.fetchOfferingStatus(offeringId).mapCatching {
+    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
+        return offeringRemoteDataSource.fetchMeetings(offeringId).mapCatching {
             it.toDomain()
         }
-    }
-
-    override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
-        return offeringRemoteDataSource.updateOfferingStatus(offeringId)
     }
 }

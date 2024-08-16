@@ -8,7 +8,7 @@ import com.zzang.chongdae.data.source.comment.CommentLocalDataSource
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.Meetings
+import com.zzang.chongdae.domain.model.CommentOfferingInfo
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 
 class CommentDetailRepositoryImpl(
@@ -16,12 +16,6 @@ class CommentDetailRepositoryImpl(
     private val commentLocalDataSource: CommentLocalDataSource,
     private val commentRemoteDataSource: CommentRemoteDataSource,
 ) : CommentDetailRepository {
-    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
-        return commentRemoteDataSource.getMeetings(offeringId).mapCatching {
-            it.toDomain()
-        }
-    }
-
     override suspend fun saveComment(
         offeringId: Long,
         comment: String,
@@ -64,5 +58,17 @@ class CommentDetailRepositoryImpl(
         } catch (e: Exception) {
             return Result.failure(e)
         }
+    }
+
+    override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfo> {
+        return commentRemoteDataSource.fetchCommentOfferingInfo(
+            offeringId,
+        ).mapCatching { commentOfferingInfo ->
+            commentOfferingInfo.toDomain()
+        }
+    }
+
+    override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
+        return commentRemoteDataSource.updateOfferingStatus(offeringId)
     }
 }

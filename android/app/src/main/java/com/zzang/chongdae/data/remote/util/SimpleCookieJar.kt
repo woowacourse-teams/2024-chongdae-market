@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.remote.source
+package com.zzang.chongdae.data.remote.util
 
 import okhttp3.Cookie
 import okhttp3.CookieJar
