@@ -207,12 +207,6 @@
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
                     app:layout_constraintTop_toBottomOf="@id/tv_discount_rate" />
 
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/Theme.AppCompat.TextView.Write.Asterisk"
-                    app:layout_constraintStart_toEndOf="@id/tv_contents"
-                    app:layout_constraintTop_toTopOf="@id/tv_contents" />
-
                 <EditText
                     android:id="@+id/et_contents"
                     style="@style/Theme.AppCompat.TextView.Write.EditText"
