@@ -67,7 +67,7 @@ class CommentDetailRepositoryImpl(
             commentOfferingInfo.toDomain()
         }
     }
-    
+
     override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
         return commentRemoteDataSource.updateOfferingStatus(offeringId)
     }

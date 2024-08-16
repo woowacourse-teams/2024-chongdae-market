@@ -64,7 +64,7 @@ class OfferingRepositoryImpl(
             it.filters.map { it.toDomain() }
         }
     }
-    
+
     override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
         return offeringRemoteDataSource.fetchMeetings(offeringId).mapCatching {
             it.toDomain()

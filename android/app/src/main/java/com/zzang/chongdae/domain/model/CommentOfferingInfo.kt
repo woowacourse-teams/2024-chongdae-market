@@ -6,5 +6,5 @@ class CommentOfferingInfo(
     val buttonText: String,
     val message: String,
     val title: String,
-    val isProposer: Boolean
+    val isProposer: Boolean,
 )

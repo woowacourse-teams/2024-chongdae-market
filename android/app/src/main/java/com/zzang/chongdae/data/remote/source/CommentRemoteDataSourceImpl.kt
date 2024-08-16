@@ -2,15 +2,14 @@ package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.api.CommentApiService
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
-import com.zzang.chongdae.data.remote.dto.response.CommentsResponse
 import com.zzang.chongdae.data.remote.dto.response.CommentOfferingInfoResponse
+import com.zzang.chongdae.data.remote.dto.response.CommentsResponse
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import retrofit2.Response
 
 class CommentRemoteDataSourceImpl(
     private val service: CommentApiService,
 ) : CommentRemoteDataSource {
-    
     override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit> =
         runCatching {
             val response = service.postComment(commentRequest)
@@ -43,7 +42,7 @@ class CommentRemoteDataSourceImpl(
             }
         }
     }
-    
+
     override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
         return runCatching {
             val response = service.patchOfferingStatus(offeringId)

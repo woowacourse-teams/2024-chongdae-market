@@ -1,9 +1,9 @@
 package com.zzang.chongdae.data.remote.api
 
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
+import com.zzang.chongdae.data.remote.dto.response.CommentOfferingInfoResponse
 import com.zzang.chongdae.data.remote.dto.response.CommentRoomsResponse
 import com.zzang.chongdae.data.remote.dto.response.CommentsResponse
-import com.zzang.chongdae.data.remote.dto.response.CommentOfferingInfoResponse
 import com.zzang.chongdae.data.remote.dto.response.UpdatedStatusResponse
 import retrofit2.Response
 import retrofit2.http.Body
