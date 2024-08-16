@@ -1,4 +1,4 @@
-package com.zzang.chongdae.offering.util.httpclient;
+package com.zzang.chongdae.offering.util.httpclient.crawler;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
