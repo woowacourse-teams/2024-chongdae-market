@@ -83,6 +83,7 @@ public class CommentService {
         CommentRoomStatus updatedStatus = offering.moveCommentRoomStatus();
         if (updatedStatus.isBuying()) {
             offering.updateOfferingStatus(OfferingStatus.CONFIRMED);
+            offering.manuallyConfirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
     }

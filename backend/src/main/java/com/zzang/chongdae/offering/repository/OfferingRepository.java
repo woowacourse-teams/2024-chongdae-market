@@ -60,10 +60,11 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     Long findMaxId();
 
     @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE o.meetingDate = :meetingDate
-                AND o.offeringStatus != :offeringStatus
-        """)
-    List<OfferingEntity> findByMeetingDateAndOfferingStatusNot(LocalDateTime meetingDate, OfferingStatus offeringStatus);
+                SELECT o
+                FROM OfferingEntity o
+                WHERE o.meetingDate = :meetingDate
+                    AND o.offeringStatus != :offeringStatus
+            """)
+    List<OfferingEntity> findByMeetingDateAndOfferingStatusNot(LocalDateTime meetingDate,
+                                                               OfferingStatus offeringStatus);
 }
