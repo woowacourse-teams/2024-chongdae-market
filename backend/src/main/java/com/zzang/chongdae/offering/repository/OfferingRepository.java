@@ -42,6 +42,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             SELECT o
             FROM OfferingEntity o
             WHERE (o.offeringStatus != 'CONFIRMED')
+               AND (o.discountRate IS NOT NULL)
                AND (o.discountRate < :lastDiscountRate OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.discountRate DESC, o.id DESC
