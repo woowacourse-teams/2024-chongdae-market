@@ -1,15 +1,21 @@
 package com.zzang.chongdae.presentation.view.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -19,7 +25,8 @@ import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
-import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivity
+import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener {
     private var _binding: FragmentHomeBinding? = null
@@ -29,6 +36,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            offeringDetailRepository = (requireActivity().application as ChongdaeApp).offeringDetailRepository,
         )
     }
 
@@ -57,24 +65,24 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         initSearchListener()
         setUpOfferingsObserve()
         navigateToOfferingWriteFragment()
+        initFragmentResultListener()
+    }
+
+    private fun initFragmentResultListener() {
+        setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
+            viewModel.fetchOfferingDetail(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
+        }
     }
 
     private fun initSearchListener() {
         binding.etSearch.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-                viewModel.fetchOfferings()
+                viewModel.onClickSearchButton()
                 true
             } else {
                 false
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        viewModel.fetchOfferings()
-        offeringAdapter.refresh()
     }
 
     override fun onResume() {
@@ -103,6 +111,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                offeringAdapter.loadStateFlow.collect { loadState ->
+                    binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
+                }
+            }
+        }
         binding.rvOfferings.adapter = offeringAdapter
         binding.rvOfferings.addItemDecoration(
             DividerItemDecoration(
@@ -118,16 +133,21 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         }
 
         viewModel.searchEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
             offeringAdapter.setSearchKeyword(it)
         }
 
         viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "filter_offerings_event",
                 name = "filter_offerings_event",
                 contentType = "checkbox",
             )
-            scrollToTop()
+        }
+
+        viewModel.updatedOffering.observe(viewLifecycleOwner) {
+            offeringAdapter.addUpdatedItem(it)
         }
     }
 
@@ -137,7 +157,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
             name = "read_offering_detail_event",
             contentType = "item",
         )
-        OfferingDetailActivity.startActivity(activity as Context, offeringId)
+
+        findNavController().navigate(
+            R.id.action_home_fragment_to_offering_detail_fragment,
+            Bundle().apply {
+                putLong(OFFERING_ID, offeringId)
+            },
+        )
     }
 
     private fun scrollToTop() {
@@ -152,5 +178,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
 
     override fun onClickUpside() {
         scrollToTop()
+    }
+
+    companion object {
+        const val OFFERING_ID = "offering_id"
     }
 }
