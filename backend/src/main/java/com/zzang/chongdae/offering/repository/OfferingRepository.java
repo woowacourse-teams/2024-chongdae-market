@@ -36,8 +36,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
     List<OfferingEntity> findImminentOfferingsWithKeyword(
-            LocalDateTime now, LocalDateTime threshold, LocalDateTime lastMeetingDate, Long lastId, String keyword,
-            Pageable pageable);
+            LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
             SELECT o
