@@ -57,7 +57,7 @@
             android:paddingVertical="2dp"
             app:layout_constraintStart_toStartOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
-            app:offeringCondition="@{offering.condition}"
+            app:offeringCondition="@{offering.status}"
             tools:text="@string/main_offering_closed" />
 
         <TextView
@@ -95,7 +95,7 @@
             android:textColor="@color/gray_300"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
             app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
-            app:offeringConditionForComment="@{offering.condition}"
+            app:offeringConditionForComment="@{offering.status}"
             app:remaining="@{offering.totalCount - offering.currentCount}"
             tools:text="공구가 마감되었어요." />
 

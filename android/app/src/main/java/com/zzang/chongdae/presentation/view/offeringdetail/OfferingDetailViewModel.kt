@@ -7,20 +7,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-    private val memberDataStore: MemberDataStore,
 ) : ViewModel(), OnParticipationClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
@@ -52,7 +49,6 @@ class OfferingDetailViewModel(
 
     private fun loadOffering() {
         viewModelScope.launch {
-            val memberId = memberDataStore.memberIdFlow.first() ?: -1
             offeringDetailRepository.fetchOfferingDetail(
                 offeringId = offeringId,
             )
@@ -62,7 +58,7 @@ class OfferingDetailViewModel(
                     _offeringCondition.value = it.condition
                     _isParticipated.value = it.isParticipated
                     _isAvailable.value = isParticipationEnabled(it.condition, it.isParticipated)
-                    _isRepresentative.value = isRepresentative(it, memberId)
+                    _isRepresentative.value = it.isProposer
                 }.onFailure {
                     Log.e("error", it.message.toString())
                 }
@@ -89,13 +85,6 @@ class OfferingDetailViewModel(
         isParticipated: Boolean,
     ) = offeringCondition.isAvailable() && !isParticipated
 
-    private fun isRepresentative(
-        it: OfferingDetail,
-        memberId: Long,
-    ): Boolean {
-        return it.memberId == memberId.toString()
-    }
-
     companion object {
         private const val DEFAULT_TITLE = ""
 
@@ -103,7 +92,6 @@ class OfferingDetailViewModel(
         fun getFactory(
             offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
-            memberDataStore: MemberDataStore,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
@@ -112,7 +100,6 @@ class OfferingDetailViewModel(
                 return OfferingDetailViewModel(
                     offeringId,
                     offeringDetailRepository,
-                    memberDataStore,
                 ) as T
             }
         }

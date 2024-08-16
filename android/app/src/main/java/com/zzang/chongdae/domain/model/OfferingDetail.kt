@@ -6,7 +6,7 @@ data class OfferingDetail(
     val id: Long,
     val title: String,
     val nickname: String,
-    val memberId: String,
+    val isProposer: Boolean,
     val productUrl: String?,
     val thumbnailUrl: String?,
     val dividedPrice: Int,
@@ -31,7 +31,7 @@ fun OfferingDetail.toOffering(): Offering {
         currentCount = this.currentCount.value,
         dividedPrice = this.dividedPrice,
         eachPrice = this.totalPrice / this.totalCount,
-        condition = this.condition,
+        status = this.condition,
         isOpen = !this.deadline.isBefore(LocalDateTime.now()),
     )
 }

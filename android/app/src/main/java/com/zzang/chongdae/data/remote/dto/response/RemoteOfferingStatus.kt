@@ -2,7 +2,7 @@ package com.zzang.chongdae.data.remote.dto.response
 
 import kotlinx.serialization.SerialName
 
-enum class RemoteOfferingCondition {
+enum class RemoteOfferingStatus {
     @SerialName("FULL")
     FULL,
 
