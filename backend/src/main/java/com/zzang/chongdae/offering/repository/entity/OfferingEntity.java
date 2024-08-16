@@ -75,7 +75,7 @@ public class OfferingEntity extends BaseTimeEntity {
     private Integer currentCount = INITIAL_COUNT;
 
     @NotNull
-    private Boolean isManualConfirmed;
+    private Boolean isManualConfirmed; // TODO: remove
 
     @NotNull
     @Positive
@@ -133,10 +133,6 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public OfferingMeeting toOfferingMeeting() {
         return new OfferingMeeting(meetingDate, meetingAddress, meetingAddressDetail, meetingAddressDong);
-    }
-
-    public boolean isStatusGrouping() {
-        return this.roomStatus.isGrouping();
     }
 
     public boolean isProposedBy(MemberEntity other) {
