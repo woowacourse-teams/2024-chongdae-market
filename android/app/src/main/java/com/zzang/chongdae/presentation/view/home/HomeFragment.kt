@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.CheckBox
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -22,6 +23,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.FragmentHomeBinding
+import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
@@ -66,6 +68,38 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         setUpOfferingsObserve()
         navigateToOfferingWriteFragment()
         initFragmentResultListener()
+        setOnCheckboxListener()
+    }
+
+    private fun setOnCheckboxListener() {
+        binding.cbJoinable.setOnClickListener {
+            handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
+        }
+
+        binding.cbImminent.setOnClickListener {
+            handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
+        }
+
+        binding.cbHighDiscount.setOnClickListener {
+            handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
+        }
+
+        viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
+            updateCheckBoxStates(selectedFilter)
+        }
+    }
+
+    private fun handleCheckBoxSelection(
+        filterName: FilterName,
+        isChecked: Boolean,
+    ) {
+        viewModel.onClickFilter(filterName, isChecked)
+    }
+
+    private fun updateCheckBoxStates(selectedFilterName: String?) {
+        binding.cbJoinable.isChecked = selectedFilterName == FilterName.JOINABLE.name
+        binding.cbImminent.isChecked = selectedFilterName == FilterName.IMMINENT.name
+        binding.cbHighDiscount.isChecked = selectedFilterName == FilterName.HIGH_DISCOUNT.name
     }
 
     private fun initFragmentResultListener() {

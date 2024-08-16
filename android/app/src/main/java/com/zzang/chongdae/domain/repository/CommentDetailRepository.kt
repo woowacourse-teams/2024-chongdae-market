@@ -1,11 +1,9 @@
 package com.zzang.chongdae.domain.repository
 
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.Meetings
+import com.zzang.chongdae.domain.model.CommentOfferingInfo
 
 interface CommentDetailRepository {
-    suspend fun fetchMeetings(offeringId: Long): Result<Meetings>
-
     suspend fun saveComment(
         offeringId: Long,
         comment: String,
@@ -14,4 +12,8 @@ interface CommentDetailRepository {
     suspend fun fetchComments(offeringId: Long): Result<List<Comment>>
 
     suspend fun fetchCommentsWithRoom(offeringId: Long): Result<List<Comment>>
+
+    suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfo>
+
+    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
 }

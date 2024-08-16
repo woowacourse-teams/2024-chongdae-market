@@ -2,18 +2,16 @@ package com.zzang.chongdae.data.remote.api
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.request.ProductUrlRequest
-import com.zzang.chongdae.data.remote.dto.response.FiltersResponse
-import com.zzang.chongdae.data.remote.dto.response.MeetingsResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingDetailResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingStatusResponse
-import com.zzang.chongdae.data.remote.dto.response.OfferingsResponse
-import com.zzang.chongdae.data.remote.dto.response.ProductUrlResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -56,14 +54,4 @@ interface OfferingApiService {
     suspend fun postProductImageS3(
         @Part image: MultipartBody.Part,
     ): Response<ProductUrlResponse>
-
-    @GET("/offerings/{offering-id}/status")
-    suspend fun getOfferingStatus(
-        @Path("offering-id") offeringId: Long,
-    ): Response<OfferingStatusResponse>
-
-    @PATCH("/offerings/{offering-id}/status")
-    suspend fun patchOfferingStatus(
-        @Path("offering-id") offeringId: Long,
-    ): Response<Unit>
 }

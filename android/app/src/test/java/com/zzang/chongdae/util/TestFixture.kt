@@ -5,6 +5,7 @@ import com.zzang.chongdae.data.mapper.toLocalDateTime
 import com.zzang.chongdae.data.mapper.toLocalTime
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentCreatedAt
+import com.zzang.chongdae.domain.model.CommentOfferingInfo
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.CurrentCount
 import com.zzang.chongdae.domain.model.Filter
@@ -14,7 +15,6 @@ import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.model.ProductUrl
 import okhttp3.MultipartBody
 import java.time.LocalDateTime
@@ -22,9 +22,10 @@ import java.time.LocalDateTime
 object TestFixture {
     val meetings: Meetings =
         Meetings(
-            deadline = "2021-10-10T10:10:10".toLocalDateTime(),
+            meetingDate = "2021-10-10T10:10:10".toLocalDateTime(),
             meetingAddress = "address",
             meetingAddressDetail = "addressDetail",
+            meetingAddressDong = null,
         )
 
     val comment: Comment =
@@ -45,18 +46,24 @@ object TestFixture {
             comment,
         )
 
-    val offeringStatus: OfferingStatus =
-        OfferingStatus(
-            imageUrl = "imageUrl",
+    val commentOfferingInfo: CommentOfferingInfo =
+        CommentOfferingInfo(
             status = "status",
+            imageUrl = "imageUrl",
             buttonText = "buttonText",
+            message = "message",
+            title = "title",
+            isProposer = true,
         )
 
-    val offeringStatus2: OfferingStatus =
-        OfferingStatus(
+    val commentOfferingInfo2: CommentOfferingInfo =
+        CommentOfferingInfo(
             imageUrl = "imageUrl2",
             status = "status2",
             buttonText = "buttonText2",
+            message = "message2",
+            title = "title2",
+            isProposer = false,
         )
 
     val OFFERINGS_STUB =

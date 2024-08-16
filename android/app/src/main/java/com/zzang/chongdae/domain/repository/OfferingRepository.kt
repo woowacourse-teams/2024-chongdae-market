@@ -1,8 +1,8 @@
 package com.zzang.chongdae.domain.repository
 
 import com.zzang.chongdae.domain.model.Filter
+import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import okhttp3.MultipartBody
@@ -23,7 +23,5 @@ interface OfferingRepository {
 
     suspend fun fetchFilters(): Result<List<Filter>>
 
-    suspend fun fetchOfferingStatus(offeringId: Long): Result<OfferingStatus>
-
-    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
+    suspend fun fetchMeetings(offeringId: Long): Result<Meetings>
 }

@@ -2,7 +2,7 @@ package com.zzang.chongdae.data.remote.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.data.remote.source.SimpleCookieJar
+import com.zzang.chongdae.data.remote.util.SimpleCookieJar
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
