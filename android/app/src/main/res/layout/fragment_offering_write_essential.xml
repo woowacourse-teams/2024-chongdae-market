@@ -99,7 +99,7 @@
                     android:background="@drawable/et_border_main_color"
                     android:gravity="center"
                     android:inputType="number"
-                    android:maxLength="4"
+                    android:maxLength="3"
                     android:maxLines="1"
                     android:text="@={vm.totalCount}"
                     android:textColor="@color/gray_900"
