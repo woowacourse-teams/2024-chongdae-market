@@ -3,9 +3,9 @@ package com.zzang.chongdae.offering.repository.entity;
 import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
-import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,7 +57,7 @@ public class OfferingEntity extends BaseTimeEntity {
     private String productUrl;
 
     @NotNull
-    private LocalDateTime deadline;
+    private LocalDateTime meetingDate;
 
     @NotNull
     private String meetingAddress;
@@ -96,12 +96,12 @@ public class OfferingEntity extends BaseTimeEntity {
     private CommentRoomStatus roomStatus;
 
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
-                          LocalDateTime deadline, String meetingAddress, String meetingAddressDetail,
+                          LocalDateTime meetingDate, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
                           Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
                           Integer originPrice, Double discountRate,
                           OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
-        this(null, member, title, description, thumbnailUrl, productUrl, deadline, meetingAddress,
+        this(null, member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, isManualConfirmed, totalPrice,
                 originPrice, discountRate, offeringStatus, roomStatus);
     }
@@ -128,11 +128,11 @@ public class OfferingEntity extends BaseTimeEntity {
     }
 
     public OfferingCondition toOfferingCondition() {
-        return new OfferingCondition(deadline, totalCount, isManualConfirmed, currentCount);
+        return new OfferingCondition(meetingDate, totalCount, isManualConfirmed, currentCount);
     }
 
     public OfferingMeeting toOfferingMeeting() {
-        return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail, meetingAddressDong);
+        return new OfferingMeeting(meetingDate, meetingAddress, meetingAddressDetail, meetingAddressDong);
     }
 
     public boolean isStatusGrouping() {
@@ -148,7 +148,7 @@ public class OfferingEntity extends BaseTimeEntity {
     }
 
     public void updateMeeting(OfferingMeeting offeringMeeting) {
-        this.deadline = offeringMeeting.getDeadline();
+        this.meetingDate = offeringMeeting.getMeetingDate();
         this.meetingAddress = offeringMeeting.getMeetingAddress();
         this.meetingAddressDetail = offeringMeeting.getMeetingAddressDetail();
         this.meetingAddressDong = offeringMeeting.getMeetingAddressDong();

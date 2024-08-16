@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OfferingCondition {
 
-    private final LocalDateTime deadline;
+    private final LocalDateTime meetingDate;
     private final int totalCount;
     private final boolean isManualConfirmed;
     private final int currentCount;
@@ -32,23 +32,23 @@ public class OfferingCondition {
         return (totalCount - currentCount) < 3;
     }
 
-    public boolean isDeadlineAlmostOver() {
+    public boolean isMeetingDateAlmostOver() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threshold = deadline.minusHours(6);
-        return threshold.isBefore(now) && now.isBefore(deadline); // deadline - 6 < now < deadline
+        LocalDateTime threshold = meetingDate.minusHours(6);
+        return threshold.isBefore(now) && now.isBefore(meetingDate);
     }
 
-    public boolean isDeadlineOver() {
-        LocalDateTime now = LocalDateTime.now();
-        return now.isAfter(this.deadline) || now.isEqual(this.deadline);
+    public boolean isMeetingDateOver() {
+        return !isMeetingDateNotOver();
     }
 
-    public boolean isDeadlineNotOver() {
-        return LocalDateTime.now().isBefore(this.deadline);
+    public boolean isMeetingDateNotOver() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(this.meetingDate);
     }
 
     public boolean isAutoConfirmed() {
-        return isCountFull() && isDeadlineOver();
+        return isCountFull() && isMeetingDateOver();
     }
 
     public boolean isManualConfirmed() {
