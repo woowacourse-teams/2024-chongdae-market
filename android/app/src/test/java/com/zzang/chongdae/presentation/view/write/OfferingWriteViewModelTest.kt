@@ -100,7 +100,7 @@ class OfferingWriteViewModelTest {
             totalCount.value = "2"
             totalPrice.value = "1000"
             meetingAddress.value = "테스트 장소"
-            tradeDate.value = "테스트 시간"
+            meetingDate.value = "테스트 시간"
         }
 
         // then
@@ -117,7 +117,7 @@ class OfferingWriteViewModelTest {
             totalCount.value = "\n"
             totalPrice.value = ""
             meetingAddress.value = "  "
-            tradeDate.value = "테스트 시간"
+            meetingDate.value = "테스트 시간"
         }
 
         // then

@@ -62,7 +62,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideBottomNavigation()
         setUpObserve()
-        selectDeadline()
+        selectMeetingDate()
         searchPlace()
     }
 
@@ -98,8 +98,8 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         }
     }
 
-    private fun selectDeadline() {
-        viewModel.tradeDateChoiceEvent.observe(viewLifecycleOwner) {
+    private fun selectMeetingDate() {
+        viewModel.meetingDateChoiceEvent.observe(viewLifecycleOwner) {
             dialog.setContentView(dateTimePickerBinding.root)
             dialog.show()
             setDateTimeText(dateTimePickerBinding)
@@ -125,7 +125,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     }
 
     override fun onDateTimeSubmitButtonClick() {
-        viewModel.updateTradeDate(
+        viewModel.updateMeetingDate(
             dateTimePickerBinding.tvDate.text.toString(),
         )
         dialog.dismiss()

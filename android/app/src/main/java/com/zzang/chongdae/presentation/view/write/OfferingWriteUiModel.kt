@@ -10,6 +10,6 @@ data class OfferingWriteUiModel(
     val meetingAddress: String,
     val meetingAddressDong: String?,
     val meetingAddressDetail: String,
-    val deadline: String,
+    val meetingDate: String,
     val description: String,
 )

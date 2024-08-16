@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
@@ -45,9 +44,9 @@ class OfferingWriteViewModel(
 
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
-    val tradeDate: MutableLiveData<String> = MutableLiveData("")
+    val meetingDate: MutableLiveData<String> = MutableLiveData("")
 
-    private val tradeDateValue: MutableLiveData<String> = MutableLiveData("")
+    private val meetingDateValue: MutableLiveData<String> = MutableLiveData("")
 
     val description: MutableLiveData<String> = MutableLiveData("")
 
@@ -72,8 +71,8 @@ class OfferingWriteViewModel(
 
     val discountRate: LiveData<Float> get() = _discountRate
 
-    private val _tradeDateChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val tradeDateChoiceEvent: SingleLiveData<Boolean> get() = _tradeDateChoiceEvent
+    private val _meetingDateChoiceEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
+    val meetingDateChoiceEvent: SingleLiveData<Boolean> get() = _meetingDateChoiceEvent
 
     private val _navigateToOptionalEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _navigateToOptionalEvent
@@ -95,7 +94,7 @@ class OfferingWriteViewModel(
             addSource(totalCount) { updateSubmitButtonEnabled() }
             addSource(totalPrice) { updateSubmitButtonEnabled() }
             addSource(meetingAddress) { updateSubmitButtonEnabled() }
-            addSource(tradeDate) { updateSubmitButtonEnabled() }
+            addSource(meetingDate) { updateSubmitButtonEnabled() }
         }
 
         _splitPrice.apply {
@@ -177,7 +176,7 @@ class OfferingWriteViewModel(
             !totalCount.value.isNullOrBlank() &&
             !totalPrice.value.isNullOrBlank() &&
             !meetingAddress.value.isNullOrBlank() &&
-            !tradeDate.value.isNullOrBlank()
+            !meetingDate.value.isNullOrBlank()
     }
 
     private fun updateSplitPrice() {
@@ -208,18 +207,18 @@ class OfferingWriteViewModel(
         this.totalCount.value = totalCount.number.toString()
     }
 
-    fun makeTradeDateChoiceEvent() {
-        _tradeDateChoiceEvent.setValue(true)
+    fun makeMeetingDateChoiceEvent() {
+        _meetingDateChoiceEvent.setValue(true)
     }
 
-    fun updateTradeDate(date: String) {
+    fun updateMeetingDate(date: String) {
         val dateTime = "$date"
         val inputFormat = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.KOREAN)
         val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
 
         val parsedDateTime = inputFormat.parse(dateTime)
-        tradeDateValue.value = parsedDateTime?.let { outputFormat.format(it) }
-        tradeDate.value = dateTime
+        meetingDateValue.value = parsedDateTime?.let { outputFormat.format(it) }
+        meetingDate.value = dateTime
     }
 
     fun postOffering() {
@@ -228,7 +227,7 @@ class OfferingWriteViewModel(
         val totalPrice = totalPrice.value ?: return
         val meetingAddress = meetingAddress.value ?: return
         val meetingAddressDetail = meetingAddressDetail.value ?: return
-        val tradeDate = tradeDateValue.value ?: return
+        val meetingDate = meetingDateValue.value ?: return
         val description = description.value ?: return
 
         val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
@@ -256,7 +255,7 @@ class OfferingWriteViewModel(
                         meetingAddress = meetingAddress,
                         meetingAddressDong = meetingAddressDong.value,
                         meetingAddressDetail = meetingAddressDetail,
-                        deadline = tradeDate,
+                        meetingDate = meetingDate,
                         description = description,
                     ),
             ).onSuccess {
