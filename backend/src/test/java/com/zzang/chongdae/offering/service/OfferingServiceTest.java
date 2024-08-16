@@ -1,6 +1,6 @@
 package com.zzang.chongdae.offering.service;
 
-import com.zzang.chongdae.global.integration.IntegrationTest;
+import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import java.time.LocalDateTime;
@@ -9,8 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-// TODO: service 테스트 환경도 IntegrationTest 동일하게 적용하지 않을 경우 data.sql 정보가 db에 저장됨
-public class OfferingServiceTest extends IntegrationTest {
+public class OfferingServiceTest extends ServiceTest {
 
     @Autowired
     OfferingService offeringService;

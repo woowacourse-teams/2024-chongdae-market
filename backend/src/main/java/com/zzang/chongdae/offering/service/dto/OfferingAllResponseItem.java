@@ -16,8 +16,7 @@ public record OfferingAllResponseItem(Long id,
                                       OfferingStatus status,
                                       Boolean isOpen) {
 
-    public OfferingAllResponseItem(
-            OfferingEntity offering, OfferingPrice offeringPrice) {
+    public OfferingAllResponseItem(OfferingEntity offering, OfferingPrice offeringPrice) {
         this(offering.getId(),
                 offering.getTitle(),
                 offering.getMeetingAddressDong(),

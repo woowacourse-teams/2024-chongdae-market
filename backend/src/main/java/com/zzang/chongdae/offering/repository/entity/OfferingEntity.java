@@ -78,7 +78,7 @@ public class OfferingEntity extends BaseTimeEntity {
     private Integer currentCount = INITIAL_COUNT;
 
     @NotNull
-    private Boolean isManualConfirmed;
+    private Boolean isManualConfirmed; // TODO: remove
 
     @NotNull
     @Positive
@@ -117,7 +117,7 @@ public class OfferingEntity extends BaseTimeEntity {
         currentCount--;
     }
 
-    public CommentRoomStatus moveStatus() {
+    public CommentRoomStatus moveCommentRoomStatus() {
         this.roomStatus = roomStatus.nextStatus();
         return this.roomStatus;
     }
@@ -138,10 +138,6 @@ public class OfferingEntity extends BaseTimeEntity {
         return new OfferingMeeting(meetingDate, meetingAddress, meetingAddressDetail, meetingAddressDong);
     }
 
-    public boolean isStatusGrouping() {
-        return this.roomStatus.isGrouping();
-    }
-
     public boolean isProposedBy(MemberEntity other) {
         return this.member.isSame(other);
     }
@@ -155,5 +151,13 @@ public class OfferingEntity extends BaseTimeEntity {
         this.meetingAddress = offeringMeeting.getMeetingAddress();
         this.meetingAddressDetail = offeringMeeting.getMeetingAddressDetail();
         this.meetingAddressDong = offeringMeeting.getMeetingAddressDong();
+    }
+
+    public void updateOfferingStatus(OfferingStatus offeringStatus) {
+        this.offeringStatus = offeringStatus;
+    }
+
+    public void updateRoomStatus(CommentRoomStatus roomStatus) {
+        this.roomStatus = roomStatus;
     }
 }
