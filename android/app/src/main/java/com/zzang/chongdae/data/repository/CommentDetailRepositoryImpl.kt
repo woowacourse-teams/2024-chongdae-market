@@ -65,4 +65,12 @@ class CommentDetailRepositoryImpl(
             return Result.failure(e)
         }
     }
+
+    override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfo> {
+        return commentRemoteDataSource.fetchCommentOfferingInfo(
+            offeringId,
+        ).mapCatching { commentOfferingInfo ->
+            commentOfferingInfo.toDomain()
+        }
+    }
 }

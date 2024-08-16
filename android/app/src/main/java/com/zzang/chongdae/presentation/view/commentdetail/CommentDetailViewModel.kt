@@ -70,7 +70,7 @@ class CommentDetailViewModel(
 
     private fun updateStatusInfo() {
         viewModelScope.launch {
-            offeringRepository.fetchOfferingStatus(offeringId).onSuccess {
+            commentDetailRepository.fetchCommentOfferingInfo(offeringId).onSuccess {
                 _offeringStatusButtonText.value = it.buttonText
                 _offeringStatusImageUrl.value = it.imageUrl
             }.onFailure {
@@ -156,7 +156,7 @@ class CommentDetailViewModel(
         viewModelScope.launch {
             commentDetailRepository.fetchMeetings(offeringId).onSuccess {
                 if (it != cachedMeetings) {
-                    _deadline.value = it.deadline
+                    _deadline.value = it.meetingDate
                     _location.value = it.meetingAddress
                     _locationDetail.value = it.meetingAddressDetail
                 }
