@@ -53,7 +53,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             ORDER BY (o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
-            double discountRate, Long lastId, String keyword, Pageable pageable);
+            Double discountRate, Long lastId, String keyword, Pageable pageable);
 
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();

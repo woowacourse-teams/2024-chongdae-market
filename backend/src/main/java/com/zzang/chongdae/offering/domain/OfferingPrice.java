@@ -11,6 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OfferingPrice {
 
+    private static final int ROUNDING_SCALE = 2;
+
     private final int totalCount;
     private final int totalPrice;
     private final Integer originPrice;
@@ -21,12 +23,22 @@ public class OfferingPrice {
                 .intValue();
     }
 
-    public double calculateDiscountRate() {
-        return (double) (originPrice - totalPrice / totalCount) / originPrice;
+    public Double calculateDiscountRate() {
+        validateOriginPrice();
+        if (originPrice == null) {
+            return null;
+        }
+        double discountRate = (double) (originPrice - totalPrice / totalCount) / originPrice;
+        return roundHalfUp(discountRate, ROUNDING_SCALE);
     }
-    // TODO : 소수점 밑 둘째 자리에서 반올림
 
-    public void validateOriginPrice() {
+    private double roundHalfUp(double number, int roundingScale) {
+        BigDecimal bigDecimal = new BigDecimal(number);
+        bigDecimal = bigDecimal.setScale(roundingScale, RoundingMode.HALF_UP);
+        return bigDecimal.doubleValue();
+    }
+
+    private void validateOriginPrice() {
         int dividedPrice = totalPrice / totalCount;
         if (originPrice != null && originPrice < dividedPrice) {
             throw new MarketException(OfferingErrorCode.CANNOT_ORIGIN_PRICE_LESS_THEN_DIVIDED_PRICE);
