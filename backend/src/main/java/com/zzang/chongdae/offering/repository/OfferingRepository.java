@@ -1,6 +1,7 @@
 package com.zzang.chongdae.offering.repository;
 
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,4 +63,13 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
 
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE o.meetingDate = :meetingDate
+                AND o.offeringStatus != :offeringStatus
+            """)
+    List<OfferingEntity> findByMeetingDateAndOfferingStatusNot(LocalDateTime meetingDate,
+                                                               OfferingStatus offeringStatus);
 }

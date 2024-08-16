@@ -14,6 +14,7 @@ import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -62,9 +63,6 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        if (offering.isStatusGrouping() && offering.toOfferingCondition().isAutoConfirmed()) {
-            offering.moveStatus();
-        }
         return new CommentRoomInfoResponse(offering, member);
     }
 
@@ -79,8 +77,9 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(member, offering);
-        CommentRoomStatus updatedStatus = offering.moveStatus();
+        CommentRoomStatus updatedStatus = offering.moveCommentRoomStatus();
         if (updatedStatus.isBuying()) {
+            offering.updateOfferingStatus(OfferingStatus.CONFIRMED);
             offering.manuallyConfirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
