@@ -70,7 +70,7 @@ object TestFixture {
                 currentCount = 0,
                 dividedPrice = 0,
                 eachPrice = null,
-                condition = OfferingCondition.CONFIRMED,
+                status = OfferingCondition.CONFIRMED,
                 isOpen = false,
             )
         }
