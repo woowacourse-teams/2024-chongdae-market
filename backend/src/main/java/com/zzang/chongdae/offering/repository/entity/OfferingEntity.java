@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ import lombok.NoArgsConstructor;
 public class OfferingEntity extends BaseTimeEntity {
 
     private static final int INITIAL_COUNT = 1;
+    private static final int MAX_TOTAL_COUNT = 999;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,6 +70,7 @@ public class OfferingEntity extends BaseTimeEntity {
 
     @NotNull
     @Positive
+    @Max(value = MAX_TOTAL_COUNT, message = "최대로 설정 가능한 공모 모집 인원수를 초과하였습니다.")
     private Integer totalCount;
 
     @NotNull

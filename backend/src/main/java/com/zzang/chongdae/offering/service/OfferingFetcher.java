@@ -4,6 +4,7 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.offeringfetchstrategy.HighDiscountOfferingStrategy;
 import com.zzang.chongdae.offering.domain.offeringfetchstrategy.ImminentOfferingStrategy;
+import com.zzang.chongdae.offering.domain.offeringfetchstrategy.JoinableOfferingStrategy;
 import com.zzang.chongdae.offering.domain.offeringfetchstrategy.OfferingFetchStrategy;
 import com.zzang.chongdae.offering.domain.offeringfetchstrategy.RecentOfferingStrategy;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -27,7 +28,8 @@ public class OfferingFetcher {
         this.strategyMap = Map.of(
                 OfferingFilter.RECENT, new RecentOfferingStrategy(offeringRepository),
                 OfferingFilter.IMMINENT, new ImminentOfferingStrategy(offeringRepository),
-                OfferingFilter.HIGH_DISCOUNT, new HighDiscountOfferingStrategy(offeringRepository)
+                OfferingFilter.HIGH_DISCOUNT, new HighDiscountOfferingStrategy(offeringRepository),
+                OfferingFilter.JOINABLE, new JoinableOfferingStrategy(offeringRepository)
         );
     }
 

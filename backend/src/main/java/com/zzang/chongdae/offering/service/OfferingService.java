@@ -59,8 +59,7 @@ public class OfferingService {
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
-                    OfferingCondition offeringCondition = offering.toOfferingCondition();
-                    return new OfferingAllResponseItem(offering, offeringPrice, offeringCondition);
+                    return new OfferingAllResponseItem(offering, offeringPrice);
                 })
                 .toList()
         );
@@ -105,8 +104,6 @@ public class OfferingService {
 
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
-        OfferingPrice offeringPrice = offering.toOfferingPrice();
-        offeringPrice.validateOriginPrice();
         OfferingEntity savedOffering = offeringRepository.save(offering);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);

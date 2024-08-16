@@ -1,4 +1,4 @@
-package com.zzang.chongdae.offering.util.httpclient;
+package com.zzang.chongdae.offering.util.httpclient.crawler;
 
 public interface HtmlCrawler {
 
