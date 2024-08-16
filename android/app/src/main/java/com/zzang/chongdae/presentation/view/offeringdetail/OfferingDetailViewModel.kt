@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-) : ViewModel(), OnParticipationClickListener {
+) : ViewModel(), OnParticipationClickListener, OnOfferingReportClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
@@ -42,6 +43,9 @@ class OfferingDetailViewModel(
 
     private val _updatedOfferingId: MutableLiveData<Long> = MutableLiveData()
     val updatedOfferingId: LiveData<Long> get() = _updatedOfferingId
+
+    private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
     init {
         loadOffering()
@@ -78,6 +82,10 @@ class OfferingDetailViewModel(
                 Log.e("Error", it.message.toString())
             }
         }
+    }
+
+    override fun onClickReport() {
+        _reportEvent.setValue(R.string.report_url)
     }
 
     private fun isParticipationEnabled(

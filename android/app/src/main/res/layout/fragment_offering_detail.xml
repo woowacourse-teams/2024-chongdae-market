@@ -36,10 +36,12 @@
                     android:id="@+id/iv_product"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
                     android:scaleType="centerCrop"
                     app:detailProductImageUrl="@{vm.offeringDetail.thumbnailUrl}"
                     app:layout_constraintDimensionRatio="360:260"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/img_detail_product_default" />
@@ -50,6 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
                     android:fontFamily="@font/suit_medium"
+                    android:onClick="@{() -> vm.onClickReport()}"
                     android:text="@string/all_report_text"
                     android:textColor="@color/gray_font"
                     android:textSize="15sp"
@@ -62,6 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/size_10"
+                    android:onClick="@{() -> vm.onClickReport()}"
                     android:src="@drawable/ic_detail_report"
                     app:layout_constraintBottom_toBottomOf="@id/tv_report_comment"
                     app:layout_constraintEnd_toEndOf="parent" />

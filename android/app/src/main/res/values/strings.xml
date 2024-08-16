@@ -23,6 +23,7 @@
     <string name="all_error_image_upload">이미지 업로드에 실패했습니다.</string>
     <string name="all_cancel">취소하기</string>
     <string name="all_change">변경하기</string>
+    <string name="report_url">https://docs.google.com/forms/d/e/1FAIpQLSdyHhWqwY0-iJsa6MrbD2f3rdES4dhXekkRbQ2T3HmnIgV1TA/viewform</string>
 
     <!--    login-->
     <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
