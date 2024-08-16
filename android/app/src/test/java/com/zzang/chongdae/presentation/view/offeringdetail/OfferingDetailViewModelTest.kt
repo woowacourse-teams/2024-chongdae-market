@@ -2,7 +2,6 @@ package com.zzang.chongdae.presentation.view.offeringdetail
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.repository.FakeDataStore
 import com.zzang.chongdae.repository.FakeOfferingDetailRepository
@@ -29,7 +28,7 @@ class OfferingDetailViewModelTest {
     fun setUp() {
         dataStore = FakeDataStore()
         offeringDetailRepository = FakeOfferingDetailRepository()
-        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, MemberDataStore(dataStore))
+        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository)
     }
 
     @DisplayName("공구에 참여한다")

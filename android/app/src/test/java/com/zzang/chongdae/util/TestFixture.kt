@@ -70,7 +70,7 @@ object TestFixture {
                 currentCount = 0,
                 dividedPrice = 0,
                 eachPrice = null,
-                condition = OfferingCondition.CONFIRMED,
+                status = OfferingCondition.CONFIRMED,
                 isOpen = false,
             )
         }
@@ -103,7 +103,7 @@ object TestFixture {
             id = 1,
             title = "Test",
             nickname = "Test",
-            memberId = "1L",
+            isProposer = true,
             productUrl = "TEST",
             thumbnailUrl = null,
             dividedPrice = 1000,
