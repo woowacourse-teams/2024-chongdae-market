@@ -29,7 +29,7 @@ class FakeOfferingRepository : OfferingRepository {
                     totalCount = 0,
                     currentCount = 0,
                     dividedPrice = 0,
-                    eachPrice = null,
+                    originPrice = null,
                     status = OfferingCondition.CONFIRMED,
                     isOpen = false,
                 ),

@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class OfferingWriteRequest(
-    @SerialName("memberId") val memberId: Long,
     @SerialName("title") val title: String,
     @SerialName("productUrl") val productUrl: String?,
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
@@ -15,6 +14,6 @@ data class OfferingWriteRequest(
     @SerialName("meetingAddress") val meetingAddress: String,
     @SerialName("meetingAddressDong") val meetingAddressDong: String?,
     @SerialName("meetingAddressDetail") val meetingAddressDetail: String,
-    @SerialName("deadline") val deadline: String,
+    @SerialName("meetingDate") val meetingDate: String,
     @SerialName("description") val description: String,
 )

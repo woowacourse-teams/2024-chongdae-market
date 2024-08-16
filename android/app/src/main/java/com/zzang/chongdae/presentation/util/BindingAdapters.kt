@@ -10,6 +10,7 @@ import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -221,6 +222,7 @@ private fun OfferingCondition.toOfferingConditionText(
             currentCount,
             totalCount,
         )
+
     OfferingCondition.CONFIRMED -> context.getString(R.string.participant_end)
     OfferingCondition.AVAILABLE ->
         context.getString(
@@ -295,4 +297,47 @@ fun TextView.setTime(localTime: LocalTime) {
 fun ImageView.setImageProposer(proposer: Boolean) {
     val imageRes = if (proposer) R.drawable.ic_proposer else R.drawable.ic_not_proposer
     setImageResource(imageRes)
+}
+
+@BindingAdapter("splitPriceValidity", "splitPrice")
+fun TextView.setSplitPriceText(
+    isSplitPriceValid: Boolean?,
+    splitPrice: Int?,
+) {
+    val text = setSplitPrice(isSplitPriceValid, splitPrice)
+    this.text = text
+}
+
+private fun TextView.setSplitPrice(
+    isSplitPriceValid: Boolean?,
+    splitPrice: Int?,
+): String {
+    if (isSplitPriceValid == true) {
+        return context.getString(R.string.all_percentage_comma).format(splitPrice)
+    }
+    return context.getString(R.string.all_minus)
+}
+
+@BindingAdapter("discountRateValidity", "discountRate")
+fun TextView.setDiscountRateValidity(
+    discountRateValidity: Boolean?,
+    discountRate: Float?,
+) {
+    val text = setDiscountRate(discountRateValidity, discountRate)
+    this.text = text
+}
+
+private fun TextView.setDiscountRate(
+    discountRateValidity: Boolean?,
+    discountRate: Float?,
+): String {
+    if (discountRateValidity == true) {
+        return context.getString(R.string.write_discount_rate_value).format(discountRate)
+    }
+    return context.getString(R.string.all_minus)
+}
+
+@BindingAdapter("originPrice")
+fun EditText.setOriginPriceHint(originPrice: Int) {
+    this.hint = context.getString(R.string.write_current_split_price).format(originPrice)
 }

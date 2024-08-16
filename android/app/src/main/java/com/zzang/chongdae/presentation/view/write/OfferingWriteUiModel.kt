@@ -1,7 +1,6 @@
 package com.zzang.chongdae.presentation.view.write
 
 data class OfferingWriteUiModel(
-    val memberId: Long,
     val title: String,
     val productUrl: String?,
     val thumbnailUrl: String?,
@@ -11,6 +10,6 @@ data class OfferingWriteUiModel(
     val meetingAddress: String,
     val meetingAddressDong: String?,
     val meetingAddressDetail: String,
-    val deadline: String,
+    val meetingDate: String,
     val description: String,
 )

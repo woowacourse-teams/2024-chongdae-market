@@ -100,13 +100,11 @@ class OfferingWriteViewModelTest {
             totalCount.value = "2"
             totalPrice.value = "1000"
             meetingAddress.value = "테스트 장소"
-            meetingAddressDetail.value = "테스트 장소 상세"
-            deadline.value = "테스트 시간"
-            description.value = "테스트 내용"
+            meetingDate.value = "테스트 시간"
         }
 
         // then
-        val result = viewModel.submitButtonEnabled.getOrAwaitValue()
+        val result = viewModel.essentialSubmitButtonEnabled.getOrAwaitValue()
         assertThat(result).isTrue()
     }
 
@@ -119,13 +117,11 @@ class OfferingWriteViewModelTest {
             totalCount.value = "\n"
             totalPrice.value = ""
             meetingAddress.value = "  "
-            meetingAddressDetail.value = "             "
-            deadline.value = "테스트 시간"
-            description.value = "테스트 내용"
+            meetingDate.value = "테스트 시간"
         }
 
         // then
-        val result = viewModel.submitButtonEnabled.getOrAwaitValue()
+        val result = viewModel.essentialSubmitButtonEnabled.getOrAwaitValue()
         assertThat(result).isFalse()
     }
 }
