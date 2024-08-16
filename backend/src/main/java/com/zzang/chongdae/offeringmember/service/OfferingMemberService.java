@@ -3,7 +3,7 @@ package com.zzang.chongdae.offeringmember.service;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
-import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -37,9 +37,11 @@ public class OfferingMemberService {
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
-
         offeringMemberRepository.save(offeringMember);
+
         offering.participate();
+        OfferingStatus offeringStatus = offering.toOfferingCondition().decideOfferingStatus();
+        offering.updateOfferingStatus(offeringStatus);
         return offeringMember.getId();
     }
 
@@ -49,8 +51,7 @@ public class OfferingMemberService {
     }
 
     private void validateClosed(OfferingEntity offering) {
-        OfferingCondition offeringCondition = offering.toOfferingCondition();
-        if (offeringCondition.isClosed()) {
+        if (offering.getOfferingStatus().isClosed()) {
             throw new MarketException(OfferingErrorCode.CANNOT_PARTICIPATE);
         }
     }
@@ -70,6 +71,8 @@ public class OfferingMemberService {
         validateCancel(offeringMember);
         offeringMemberRepository.delete(offeringMember);
         offering.leave();
+        OfferingStatus offeringStatus = offering.toOfferingCondition().decideOfferingStatus();
+        offering.updateOfferingStatus(offeringStatus);
     }
 
     private void validateCancel(OfferingMemberEntity offeringMember) {
@@ -108,7 +111,7 @@ public class OfferingMemberService {
         ParticipantCountResponseItem countResponseItem = new ParticipantCountResponseItem(offering);
         Integer estimatedPrice = offering.toOfferingPrice().calculateDividedPrice();
         return new ParticipantResponse(
-                proposerResponseItem, participantsResponseItem,countResponseItem, estimatedPrice);
+                proposerResponseItem, participantsResponseItem, countResponseItem, estimatedPrice);
     }
 
     private void validateParticipants(OfferingEntity offering, MemberEntity member) {

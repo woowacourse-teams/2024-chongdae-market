@@ -24,4 +24,8 @@ public enum OfferingStatus {
     public boolean isOpen() {
         return this == AVAILABLE || this == IMMINENT;
     }
+
+    public boolean isClosed() {
+        return this == CONFIRMED || this == FULL;
+    }
 }
