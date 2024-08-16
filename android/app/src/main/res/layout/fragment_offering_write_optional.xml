@@ -126,27 +126,27 @@
                     app:layout_constraintTop_toTopOf="@+id/iv_upload_photo" />
 
                 <TextView
-                    android:id="@+id/tv_individual_price"
+                    android:id="@+id/tv_origin_price"
                     style="@style/Theme.AppCompat.TextView.Write.Subject"
-                    android:text="@string/write_individual_price"
+                    android:text="@string/write_origin_price"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
                     app:layout_constraintTop_toBottomOf="@id/iv_upload_photo" />
 
                 <TextView
-                    android:id="@+id/tv_information_individual_price_description"
+                    android:id="@+id/tv_information_origin_price_description"
                     style="@style/Theme.AppCompat.TextView.Write.Description"
-                    android:text="@string/write_information_individual_price_description"
+                    android:text="@string/write_information_origin_price_description"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
-                    app:layout_constraintTop_toBottomOf="@id/tv_individual_price" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_origin_price" />
 
                 <EditText
                     android:id="@+id/et_origin_price"
                     style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
                     android:layout_width="230dp"
-                    android:gravity="center"
+                    android:gravity="left|center"
                     android:text="@={vm.originPrice}"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
-                    app:layout_constraintTop_toBottomOf="@id/tv_information_individual_price_description"
+                    app:layout_constraintTop_toBottomOf="@id/tv_information_origin_price_description"
                     app:originPrice="@{vm.splitPrice}"
                     tools:hint="현재 엔빵 금액: 10,000원" />
 
