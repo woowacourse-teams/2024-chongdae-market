@@ -10,7 +10,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -109,6 +111,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                offeringAdapter.loadStateFlow.collect { loadState ->
+                    binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
+                }
+            }
+        }
         binding.rvOfferings.adapter = offeringAdapter
         binding.rvOfferings.addItemDecoration(
             DividerItemDecoration(
@@ -116,11 +125,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
                 LinearLayoutManager.VERTICAL,
             ),
         )
-        lifecycleScope.launch {
-            offeringAdapter.loadStateFlow.collect { loadState ->
-                binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
-            }
-        }
     }
 
     private fun setUpOfferingsObserve() {
