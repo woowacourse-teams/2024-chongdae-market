@@ -14,7 +14,7 @@ import lombok.Getter;
 public enum OfferingFilter {
 
     JOINABLE("참여가능만", VISIBLE), // 처음: 참여 가능한 것 중 id가 가장 높은 값 10개 / 이후: 참여 가능한 것 중 마지막 id보다 낮은 것 x개 찾기
-    IMMINENT("마감임박순", VISIBLE), // 처음: 현재 시간보다 큰 것 중 가장 작은 값 10개 / 이후: lastMeetingDate 보다 큰 것 x개 찾기
+    IMMINENT("마감임박만", VISIBLE), // 처음: 현재 시간보다 큰 것 중 가장 작은 값 10개 / 이후: lastMeetingDate 보다 큰 것 x개 찾기
     HIGH_DISCOUNT("높은할인율순", VISIBLE), // 처음: 할인율(n빵가격/낱개가격) 가장 높은 값 10개 / 이후: 마지막 할인율(n빵가격/낱개가격)보다 낮은 것 x개 찾기
     RECENT("최신순", INVISIBLE); // 처음: id가 가장 높은 값 10개 / 이후: 마지막 id보다 낮은 것 x개 찾기
 
