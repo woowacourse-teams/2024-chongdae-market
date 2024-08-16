@@ -175,8 +175,8 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     private fun observeNavigateToOptionalEvent() {
         viewModel.navigateToOptionalEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
-                id = "submit_offering_event",
-                name = "submit_offering_event",
+                id = "submit_offering_write_essential_event",
+                name = "submit_offering_write_essential_event",
                 contentType = "button",
             )
             findNavController().navigate(R.id.action_offering_write_fragment_essential_to_offering_write_fragment_optional)
@@ -199,7 +199,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     override fun onResume() {
         super.onResume()
         firebaseAnalyticsManager.logScreenView(
-            screenName = "OfferingWriteFragment",
+            screenName = "OfferingWriteEssentialFragment",
             screenClass = this::class.java.simpleName,
         )
     }

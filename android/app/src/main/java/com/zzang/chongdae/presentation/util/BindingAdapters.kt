@@ -310,7 +310,7 @@ fun TextView.setSplitPriceText(
 
 private fun TextView.setSplitPrice(
     isSplitPriceValid: Boolean?,
-    splitPrice: Int?
+    splitPrice: Int?,
 ): String {
     if (isSplitPriceValid == true) {
         return context.getString(R.string.all_percentage_comma).format(splitPrice)
@@ -329,13 +329,12 @@ fun TextView.setDiscountRateValidity(
 
 private fun TextView.setDiscountRate(
     discountRateValidity: Boolean?,
-    discountRate: Float?
+    discountRate: Float?,
 ): String {
     if (discountRateValidity == true) {
         return context.getString(R.string.write_discount_rate_value).format(discountRate)
     }
     return context.getString(R.string.all_minus)
-
 }
 
 @BindingAdapter("originPrice")
