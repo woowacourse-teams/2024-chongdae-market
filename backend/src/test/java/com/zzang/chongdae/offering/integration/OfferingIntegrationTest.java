@@ -511,7 +511,34 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("create-offering-success", resource(failSnippets)))
+                    .filter(document("create-offering-fail-with-invalid-originPrice", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("최대로 설정 가능한 공모 모집 인원수를 초과하는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_overMaximumTotalCount() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    999999999,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-fail-with-invalid-totalCount", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)

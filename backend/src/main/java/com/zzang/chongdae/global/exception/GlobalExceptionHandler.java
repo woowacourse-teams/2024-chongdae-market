@@ -4,9 +4,12 @@ import com.zzang.chongdae.logging.config.CachedHttpServletResponseWrapper;
 import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handle(MethodArgumentNotValidException e) {
         ErrorMessage errorMessage = new ErrorMessage(
                 "요청값이 유효하지 않습니다: [%s]".formatted(e.getAllErrors().get(0).getDefaultMessage()));
+        return ResponseEntity
+                .badRequest()
+                .body(errorMessage);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handle(ConstraintViolationException e) {
+        List<String> messages = e.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessage)
+                .toList();
+        ErrorMessage errorMessage = new ErrorMessage(
+                "요청값이 유효하지 않습니다: [%s]".formatted(messages.get(0)));
         return ResponseEntity
                 .badRequest()
                 .body(errorMessage);
