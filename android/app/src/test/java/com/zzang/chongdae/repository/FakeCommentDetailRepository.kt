@@ -1,18 +1,14 @@
 package com.zzang.chongdae.repository
 
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.Meetings
+import com.zzang.chongdae.domain.model.CommentOfferingInfo
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.util.TestFixture
+import com.zzang.chongdae.util.TestFixture.commentOfferingInfo
 
 class FakeCommentDetailRepository : CommentDetailRepository {
     private val comments: MutableList<Comment> = TestFixture.comments
-
-    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
-        return Result.success(
-            TestFixture.meetings,
-        )
-    }
+    private var commentOfferingInfo: CommentOfferingInfo = TestFixture.commentOfferingInfo
 
     override suspend fun saveComment(
         offeringId: Long,
@@ -32,5 +28,15 @@ class FakeCommentDetailRepository : CommentDetailRepository {
         return Result.success(
             comments.toList(),
         )
+    }
+
+    override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfo> =
+        Result.success(
+            commentOfferingInfo,
+        )
+
+    override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
+        commentOfferingInfo = TestFixture.commentOfferingInfo2
+        return Result.success(Unit)
     }
 }
