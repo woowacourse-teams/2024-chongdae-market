@@ -21,10 +21,6 @@ public class OfferingCondition {
         return this.totalCount == this.currentCount;
     }
 
-    public boolean isCountNotFull() {
-        return !isCountFull();
-    }
-
     public boolean isCountAlmostFull() {
         if (totalCount <= 3) {
             return (totalCount - currentCount) < 2;
@@ -58,9 +54,5 @@ public class OfferingCondition {
     public boolean isOpen() {
         OfferingStatus offeringStatus = decideOfferingStatus();
         return offeringStatus.isOpen();
-    }
-
-    public boolean isClosed() {
-        return !isOpen();
     }
 }

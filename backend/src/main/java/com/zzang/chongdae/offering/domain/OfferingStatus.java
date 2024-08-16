@@ -8,11 +8,10 @@ public enum OfferingStatus {
     AVAILABLE;
 
     public static OfferingStatus decideBy(OfferingCondition offeringCondition) {
-        if (offeringCondition.isManualConfirmed() || offeringCondition.isAutoConfirmed()
-                || (offeringCondition.isMeetingDateOver() && offeringCondition.isCountNotFull())) {
+        if (offeringCondition.isManualConfirmed() || (offeringCondition.isMeetingDateOver())) {
             return CONFIRMED;
         }
-        if (offeringCondition.isCountFull() && offeringCondition.isMeetingDateNotOver()) {
+        if (offeringCondition.isCountFull()) {
             return FULL;
         }
         if (offeringCondition.isCountAlmostFull() || offeringCondition.isMeetingDateAlmostOver()) {
@@ -23,5 +22,9 @@ public enum OfferingStatus {
 
     public boolean isOpen() {
         return this == AVAILABLE || this == IMMINENT;
+    }
+
+    public boolean isClosed() {
+        return this == CONFIRMED || this == FULL;
     }
 }
