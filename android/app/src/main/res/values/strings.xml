@@ -58,7 +58,7 @@
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
     <string name="total_price">(총 가격 %,d원)</string>
-    <string name="due_datetime">M월 dd일 HH시</string>
+    <string name="due_datetime">yyyy년 M월 d일</string>
     <string name="my_page_terms_of_use_text">이용약관</string>
     <string name="my_page_privacy_text">개인정보처리 방침</string>
     <string name="my_page_logout_text">로그아웃</string>
@@ -76,7 +76,7 @@
     <string name="comment_detail">comment_detail</string>
     <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
     <string name="comment_detail_message_hint">메시지를 입력하세요.</string>
-    <string name="detail_deadline_comment_text">마감 시간</string>
+    <string name="detail_meeting_date_comment_text">거래 날짜</string>
 
     <!--    comment_detail-->
     <string name="recruiting">모집중</string>

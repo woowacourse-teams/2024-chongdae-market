@@ -242,23 +242,23 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
-                        android:id="@+id/tv_deadline_comment"
+                        android:id="@+id/tv_meeting_date_comment"
                         style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="23dp"
-                        android:text="@string/detail_deadline_comment_text"
+                        android:text="@string/detail_meeting_date_comment_text"
                         app:layout_constraintBottom_toBottomOf="@id/iv_time"
                         app:layout_constraintStart_toEndOf="@id/iv_time"
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
-                        android:id="@+id/tv_deadline"
+                        android:id="@+id/tv_meeting_date"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
                         android:layout_marginTop="8dp"
-                        app:formattedDate="@{vm.offeringDetail.deadline}"
+                        app:formattedDate="@{vm.offeringDetail.meetingDate}"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
                         app:layout_constraintTop_toBottomOf="@id/iv_time"
-                        tools:text="12월 11일 18시" />
+                        tools:text="2024년 3월 28일" />
 
                     <ImageView
                         android:id="@+id/iv_location"
@@ -267,7 +267,7 @@
                         android:layout_marginStart="60dp"
                         android:layout_marginTop="23dp"
                         android:src="@drawable/ic_detail_location"
-                        app:layout_constraintStart_toEndOf="@id/tv_deadline_comment"
+                        app:layout_constraintStart_toEndOf="@id/tv_meeting_date_comment"
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView

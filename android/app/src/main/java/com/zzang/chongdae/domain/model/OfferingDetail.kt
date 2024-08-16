@@ -11,7 +11,7 @@ data class OfferingDetail(
     val thumbnailUrl: String?,
     val dividedPrice: Int,
     val totalPrice: Int,
-    val deadline: LocalDateTime,
+    val meetingDate: LocalDateTime,
     val currentCount: CurrentCount,
     val totalCount: Int,
     val meetingAddress: String,
@@ -32,6 +32,6 @@ fun OfferingDetail.toOffering(): Offering {
         dividedPrice = this.dividedPrice,
         originPrice = this.totalPrice / this.totalCount,
         status = this.condition,
-        isOpen = !this.deadline.isBefore(LocalDateTime.now()),
+        isOpen = !this.meetingDate.isBefore(LocalDateTime.now()),
     )
 }

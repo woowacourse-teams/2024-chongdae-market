@@ -11,7 +11,7 @@ data class OfferingDetailResponse(
     @SerialName("meetingAddress") val meetingAddress: String,
     @SerialName("meetingAddressDetail") val meetingAddressDetail: String,
     @SerialName("description") val description: String,
-    @SerialName("meetingDate") val deadline: String,
+    @SerialName("meetingDate") val meetingDate: String,
     @SerialName("currentCount") val currentCount: Int,
     @SerialName("totalCount") val totalCount: Int,
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
