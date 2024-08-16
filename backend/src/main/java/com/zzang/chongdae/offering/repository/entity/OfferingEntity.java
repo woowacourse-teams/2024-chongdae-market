@@ -153,4 +153,12 @@ public class OfferingEntity extends BaseTimeEntity {
         this.meetingAddressDetail = offeringMeeting.getMeetingAddressDetail();
         this.meetingAddressDong = offeringMeeting.getMeetingAddressDong();
     }
+
+    public void updateOfferingStatus(OfferingStatus offeringStatus) {
+        this.offeringStatus = offeringStatus;
+    }
+
+    public void updateRoomStatus(CommentRoomStatus roomStatus) {
+        this.roomStatus = roomStatus;
+    }
 }
