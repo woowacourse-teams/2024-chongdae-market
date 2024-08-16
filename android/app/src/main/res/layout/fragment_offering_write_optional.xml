@@ -225,18 +225,30 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_contents" />
 
                 <TextView
+                    android:id="@+id/tv_current_description_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="@{@string/write_current_description_count(vm.descriptionLength)}"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/font_size_12"
+                    app:layout_constraintTop_toTopOf="@id/tv_total_description_count"
+                    app:layout_constraintEnd_toStartOf="@id/tv_total_description_count"
+                    tools:text="10자" />
+
+                <TextView
+                    android:id="@+id/tv_total_description_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_6"
                     android:layout_marginEnd="@dimen/size_8"
                     android:fontFamily="@font/suit_medium"
                     android:paddingBottom="16dp"
-                    android:text="@{@string/write_under_1000(vm.descriptionLength)}"
-                    android:textColor="@color/gray_400"
+                    android:text="@string/write_under_1000"
+                    android:textColor="@color/gray_500"
                     android:textSize="@dimen/font_size_12"
                     app:layout_constraintEnd_toEndOf="@id/et_contents"
-                    app:layout_constraintTop_toBottomOf="@id/et_contents"
-                    tools:text="0자 / 1000자" />
+                    app:layout_constraintTop_toBottomOf="@id/et_contents" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
