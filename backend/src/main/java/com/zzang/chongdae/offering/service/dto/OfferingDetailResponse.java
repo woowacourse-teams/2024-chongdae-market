@@ -1,8 +1,8 @@
 package com.zzang.chongdae.offering.service.dto;
 
-import com.zzang.chongdae.offering.domain.OfferingStatus;
-import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ public record OfferingDetailResponse(Long id,
                                      String meetingAddress,
                                      String meetingAddressDetail,
                                      String description,
-                                     LocalDateTime deadline,
+                                     LocalDateTime meetingDate,
                                      Integer currentCount,
                                      Integer totalCount,
                                      String thumbnailUrl,
@@ -35,7 +35,7 @@ public record OfferingDetailResponse(Long id,
                 offering.getMeetingAddress(),
                 offering.getMeetingAddressDetail(),
                 offering.getDescription(),
-                offering.getDeadline(),
+                offering.getMeetingDate(),
                 offeringCondition.getCurrentCount(),
                 offering.getTotalCount(),
                 offering.getThumbnailUrl(),
