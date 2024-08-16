@@ -30,8 +30,8 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE o.offeringStatus = 'IMMINENT'
-                AND ((o.meetingDate > :lastMeetingDate) OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
+            WHERE (o.offeringStatus = 'IMMINENT')
+                AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
                 AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
@@ -42,14 +42,25 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE o.offeringStatus != 'CONFIRMED'
-               AND ((o.discountRate < :lastDiscountRate) OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
+            WHERE (o.offeringStatus != 'CONFIRMED')
+               AND (o.discountRate < :lastDiscountRate OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
-    
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.offeringStatus = 'AVAILABLE' OR o.offeringStatus = 'IMMINENT')
+               AND (o.id < :lastId)
+               AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+            ORDER BY o.id DESC
+            """)
+    List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
+
+
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();
 }
