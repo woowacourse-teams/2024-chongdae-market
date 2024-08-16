@@ -9,13 +9,13 @@ public enum OfferingStatus {
 
     public static OfferingStatus decideBy(OfferingCondition offeringCondition) {
         if (offeringCondition.isManualConfirmed() || offeringCondition.isAutoConfirmed()
-                || (offeringCondition.isDeadlineOver() && offeringCondition.isCountNotFull())) {
+                || (offeringCondition.isMeetingDateOver() && offeringCondition.isCountNotFull())) {
             return CONFIRMED;
         }
-        if (offeringCondition.isCountFull() && offeringCondition.isDeadlineNotOver()) {
+        if (offeringCondition.isCountFull() && offeringCondition.isMeetingDateNotOver()) {
             return FULL;
         }
-        if (offeringCondition.isCountAlmostFull() || offeringCondition.isDeadlineAlmostOver()) {
+        if (offeringCondition.isCountAlmostFull() || offeringCondition.isMeetingDateAlmostOver()) {
             return IMMINENT;
         }
         return AVAILABLE;
