@@ -103,7 +103,7 @@ object TestFixture {
             id = 1,
             title = "Test",
             nickname = "Test",
-            memberId = "1L",
+            isProposer = true,
             productUrl = "TEST",
             thumbnailUrl = null,
             dividedPrice = 1000,
