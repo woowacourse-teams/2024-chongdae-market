@@ -1,8 +1,8 @@
 package com.zzang.chongdae.offering.config;
 
 import com.zzang.chongdae.offering.service.ProductImageExtractor;
-import com.zzang.chongdae.offering.util.httpclient.HtmlCrawler;
-import com.zzang.chongdae.offering.util.httpclient.JsoupHtmlCrawler;
+import com.zzang.chongdae.offering.util.httpclient.crawler.HtmlCrawler;
+import com.zzang.chongdae.offering.util.httpclient.crawler.JsoupHtmlCrawler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

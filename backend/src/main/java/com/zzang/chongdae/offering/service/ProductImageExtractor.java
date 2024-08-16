@@ -1,6 +1,6 @@
 package com.zzang.chongdae.offering.service;
 
-import com.zzang.chongdae.offering.util.httpclient.HtmlCrawler;
+import com.zzang.chongdae.offering.util.httpclient.crawler.HtmlCrawler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

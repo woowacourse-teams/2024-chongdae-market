@@ -1,8 +1,8 @@
 package com.zzang.chongdae.offering.config;
 
 import com.zzang.chongdae.offering.service.ProductImageExtractor;
-import com.zzang.chongdae.offering.util.httpclient.FakeHtmlCrawler;
-import com.zzang.chongdae.offering.util.httpclient.HtmlCrawler;
+import com.zzang.chongdae.offering.util.httpclient.crawler.FakeHtmlCrawler;
+import com.zzang.chongdae.offering.util.httpclient.crawler.HtmlCrawler;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
