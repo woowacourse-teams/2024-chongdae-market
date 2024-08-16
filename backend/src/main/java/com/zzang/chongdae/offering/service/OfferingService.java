@@ -39,7 +39,7 @@ public class OfferingService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final StorageService storageService;
-    private final NaverApiProductImageExtractor imageExtractor;
+    private final ProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {

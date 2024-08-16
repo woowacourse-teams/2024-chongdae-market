@@ -2,10 +2,8 @@ package com.zzang.chongdae.offering.service;
 
 import com.zzang.chongdae.offering.util.httpclient.crawler.HtmlCrawler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
 public class OgTagProductImageExtractor implements ProductImageExtractor {
 
     public static final String OG_IMAGE_PROPERTY = "og:image";

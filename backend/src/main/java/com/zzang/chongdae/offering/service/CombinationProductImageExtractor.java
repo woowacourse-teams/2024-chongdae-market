@@ -2,10 +2,8 @@ package com.zzang.chongdae.offering.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
 public class CombinationProductImageExtractor implements ProductImageExtractor {
 
     private final List<ProductImageExtractor> extractors;
