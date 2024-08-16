@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.data.remote.api.CommentApiService
-import com.zzang.chongdae.data.remote.dto.response.CommentRoomsResponse
+import com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomsResponse
 import com.zzang.chongdae.data.source.CommentRoomsDataSource
 
 class CommentRoomsDataSourceImpl(

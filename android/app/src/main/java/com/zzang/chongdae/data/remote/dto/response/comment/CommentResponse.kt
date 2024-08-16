@@ -1,20 +1,20 @@
-package com.zzang.chongdae.data.remote.dto.response
+package com.zzang.chongdae.data.remote.dto.response.comment
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable()
+@Serializable
 data class CommentResponse(
     @SerialName("commentId")
     val commentId: Long,
-    @SerialName("content")
-    val content: String,
     @SerialName("createdAt")
     val commentCreatedAtResponse: CommentCreatedAtResponse,
-    @SerialName("isMine")
-    val isMine: Boolean,
-    @SerialName("isProposer")
-    val isProposer: Boolean,
+    @SerialName("content")
+    val content: String,
     @SerialName("nickname")
     val nickname: String,
+    @SerialName("isProposer")
+    val isProposer: Boolean,
+    @SerialName("isMine")
+    val isMine: Boolean,
 )

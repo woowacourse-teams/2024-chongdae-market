@@ -43,7 +43,7 @@ class CommentDetailViewModelTest {
         // when
         // then
         val result = viewModel.offeringStatusImageUrl.getOrAwaitValue()
-        assertThat(result).isEqualTo(TestFixture.offeringStatus.imageUrl)
+        assertThat(result).isEqualTo(TestFixture.commentOfferingInfo.imageUrl)
     }
 
     @DisplayName("공동구매 상세 정보를 업데이트한다")
@@ -56,7 +56,7 @@ class CommentDetailViewModelTest {
         viewModel.updateOfferingStatus()
         // then
         val result = viewModel.offeringStatusImageUrl.getOrAwaitValue()
-        assertThat(result).isEqualTo(TestFixture.offeringStatus2.imageUrl)
+        assertThat(result).isEqualTo(TestFixture.commentOfferingInfo2.imageUrl)
     }
 
     @DisplayName("댓글 목록을 불러온다")
@@ -113,6 +113,6 @@ class CommentDetailViewModelTest {
         // when
         // then
         val result = viewModel.deadline.getOrAwaitValue()
-        assertThat(result).isEqualTo(TestFixture.meetings.deadline)
+        assertThat(result).isEqualTo(TestFixture.meetings.meetingDate)
     }
 }
