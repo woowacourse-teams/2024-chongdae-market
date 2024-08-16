@@ -50,6 +50,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_information_message" />
 
                 <TextView
+                    android:id="@+id/tv_title_asterisk"
                     style="@style/Theme.AppCompat.TextView.Write.Asterisk"
                     app:layout_constraintStart_toEndOf="@id/tv_title"
                     app:layout_constraintTop_toTopOf="@id/tv_title" />
@@ -70,6 +71,7 @@
                     app:layout_constraintTop_toBottomOf="@id/et_title" />
 
                 <TextView
+                    android:id="@+id/tv_total_count_asterisk"
                     style="@style/Theme.AppCompat.TextView.Write.Asterisk"
                     app:layout_constraintStart_toEndOf="@id/tv_total_personnel"
                     app:layout_constraintTop_toTopOf="@id/tv_total_personnel" />
@@ -131,6 +133,7 @@
                     app:layout_constraintTop_toBottomOf="@id/btn_minus_total_personnel" />
 
                 <TextView
+                    android:id="@+id/tv_total_price_asterisk"
                     style="@style/Theme.AppCompat.TextView.Write.Asterisk"
                     app:layout_constraintStart_toEndOf="@id/tv_total_price"
                     app:layout_constraintTop_toTopOf="@id/tv_total_price" />
@@ -201,6 +204,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_per_n_price" />
 
                 <TextView
+                    android:id="@+id/tv_meeting_Address_asterisk"
                     style="@style/Theme.AppCompat.TextView.Write.Asterisk"
                     app:layout_constraintStart_toEndOf="@id/tv_place"
                     app:layout_constraintTop_toTopOf="@id/tv_place" />
@@ -231,6 +235,7 @@
                     app:layout_constraintTop_toBottomOf="@id/et_place_detail" />
 
                 <TextView
+                    android:id="@+id/tv_meeting_date_asterisk"
                     style="@style/Theme.AppCompat.TextView.Write.Asterisk"
                     app:layout_constraintStart_toEndOf="@id/tv_deadline"
                     app:layout_constraintTop_toTopOf="@id/tv_deadline" />
@@ -247,6 +252,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_deadline" />
 
                 <ImageView
+                    android:id="@+id/iv_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/size_8"
