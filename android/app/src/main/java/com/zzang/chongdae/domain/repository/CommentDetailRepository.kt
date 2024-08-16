@@ -15,4 +15,6 @@ interface CommentDetailRepository {
     suspend fun fetchCommentsWithRoom(offeringId: Long): Result<List<Comment>>
 
     suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfo>
+
+    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
 }

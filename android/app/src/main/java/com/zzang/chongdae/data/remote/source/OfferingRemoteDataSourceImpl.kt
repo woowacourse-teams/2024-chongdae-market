@@ -75,17 +75,6 @@ class OfferingRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
-        return runCatching {
-            val response = service.patchOfferingStatus(offeringId)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error("$ERROR_PREFIX${response.code()}")
-            }
-        }
-    }
-
     companion object {
         private const val ERROR_PREFIX = "에러 발생: "
         private const val ERROR_NULL_MESSAGE = "null"

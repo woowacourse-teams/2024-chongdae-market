@@ -10,4 +10,6 @@ interface CommentRemoteDataSource {
     suspend fun fetchComments(offeringId: Long): Result<CommentsResponse>
 
     suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfoResponse>
+
+    suspend fun updateOfferingStatus(offeringId: Long): Result<Unit>
 }

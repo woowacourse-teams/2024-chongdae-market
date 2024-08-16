@@ -70,8 +70,4 @@ class OfferingRepositoryImpl(
             it.toDomain()
         }
     }
-
-    override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
-        return offeringRemoteDataSource.updateOfferingStatus(offeringId)
-    }
 }

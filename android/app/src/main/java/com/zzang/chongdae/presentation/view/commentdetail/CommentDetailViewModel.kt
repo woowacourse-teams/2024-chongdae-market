@@ -86,7 +86,7 @@ class CommentDetailViewModel(
 
     fun updateOfferingStatus() {
         viewModelScope.launch {
-            offeringRepository.updateOfferingStatus(offeringId).onSuccess {
+            commentDetailRepository.updateOfferingStatus(offeringId).onSuccess {
                 updateStatusInfo()
             }.onFailure {
                 Log.e("error", "updateOfferingStatus: ${it.message}")
