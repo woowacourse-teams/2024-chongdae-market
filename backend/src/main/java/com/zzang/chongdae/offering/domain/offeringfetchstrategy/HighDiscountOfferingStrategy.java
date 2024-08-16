@@ -22,8 +22,8 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
     @Override
     protected List<OfferingEntity> fetchOfferingsWithLastOffering(
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
-        double discountRate = lastOffering.toOfferingPrice().calculateDiscountRate();
-        return offeringRepository.findHighDiscountOfferingsWithKeyword(discountRate, lastOffering.getId(),
-                searchKeyword, pageable);
+        double lastDiscountRate = lastOffering.toOfferingPrice().calculateDiscountRate();
+        return offeringRepository.findHighDiscountOfferingsWithKeyword(
+                lastDiscountRate, lastOffering.getId(), searchKeyword, pageable);
     }
 }

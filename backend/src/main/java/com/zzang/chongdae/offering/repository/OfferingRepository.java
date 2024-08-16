@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> {
 
     @Query("""
-                SELECT o
-                FROM OfferingEntity as o JOIN OfferingMemberEntity as om
-                    ON o.id = om.offering.id
-                WHERE om.member = :member
+            SELECT o
+            FROM OfferingEntity as o JOIN OfferingMemberEntity as om
+                ON o.id = om.offering.id
+            WHERE om.member = :member
             """)
     List<OfferingEntity> findCommentRoomsByMember(MemberEntity member);
 
@@ -30,14 +30,9 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE ((o.meetingDate > :lastMeetingDate AND o.meetingDate < :threshold)
-                OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId AND o.meetingDate < :threshold)
-                OR (o.totalCount <= 3 AND (o.totalCount - o.currentCount) < 2 AND (o.totalCount - o.currentCount) > 0)
-                OR (o.totalCount > 3 AND (o.totalCount - o.currentCount) < 3 AND (o.totalCount - o.currentCount) > 0))
-            AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
-            AND (o.isManualConfirmed IS FALSE)
-            AND (o.meetingDate >= :now)
-            AND ((o.meetingDate > :lastMeetingDate) OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
+            WHERE o.offeringStatus = 'IMMINENT'
+                AND ((o.meetingDate > :lastMeetingDate) OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
+                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
     List<OfferingEntity> findImminentOfferingsWithKeyword(
@@ -47,14 +42,14 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE ((o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice < :discountRate
-                    OR ((o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice = :discountRate AND o.id < :lastId))
+            WHERE o.offeringStatus != 'CONFIRMED'
+               AND ((o.discountRate < :lastDiscountRate) OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
-            ORDER BY (o.originPrice - (o.totalPrice * 1.0 / o.totalCount)) / o.originPrice DESC, o.id DESC
+            ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
-            double discountRate, Long lastId, String keyword, Pageable pageable);
-
+            double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
+    
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();
 }
