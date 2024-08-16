@@ -1,6 +1,8 @@
 package com.zzang.chongdae.presentation.view.home
 
 import android.util.Log
+import android.view.View
+import android.widget.RadioButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +18,9 @@ import androidx.paging.map
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.toOffering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
+import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -25,14 +29,15 @@ import kotlinx.coroutines.launch
 
 class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
-) : ViewModel(), OnFilterClickListener {
+    private val offeringDetailRepository: OfferingDetailRepository,
+) : ViewModel(), OnFilterClickListener, OnSearchClickListener {
     private val _offerings = MutableLiveData<PagingData<Offering>>()
     val offerings: LiveData<PagingData<Offering>> get() = _offerings
 
     val search: MutableLiveData<String?> = MutableLiveData(null)
 
     private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
-    val filters: MutableLiveData<List<Filter>> get() = _filters
+    val filters: LiveData<List<Filter>> get() = _filters
 
     val joinableFilter: LiveData<Filter> =
         _filters.map {
@@ -57,11 +62,15 @@ class OfferingViewModel(
     private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
+    private val _updatedOffering: MutableSingleLiveData<Offering> = MutableSingleLiveData()
+    val updatedOffering: SingleLiveData<Offering> get() = _updatedOffering
+
     init {
+        fetchOfferings()
         fetchFilters()
     }
 
-    fun fetchOfferings() {
+    private fun fetchOfferings() {
         viewModelScope.launch {
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
@@ -84,7 +93,6 @@ class OfferingViewModel(
                     }
             }
         }
-        _searchEvent.setValue(search.value)
     }
 
     private fun removeAsterisks(title: String): String {
@@ -114,35 +122,57 @@ class OfferingViewModel(
 
     override fun onClickFilter(
         filterName: FilterName,
-        isChecked: Boolean,
+        button: View,
     ) {
-        _filterOfferingsEvent.setValue(Unit)
-
+        val isChecked = (button as RadioButton).isChecked
         // 현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
         if (filterName == FilterName.JOINABLE) return
-
-        if (isChecked) {
+        if (selectedFilter.value == filterName.toString()) {
+            selectedFilter.value = null
+            button.isChecked = false
+        } else if (isChecked) {
             selectedFilter.value = filterName.toString()
         } else {
             selectedFilter.value = null
         }
+        _filterOfferingsEvent.setValue(Unit)
         fetchOfferings()
+    }
+
+    override fun onClickSearchButton() {
+        _searchEvent.setValue(search.value)
+        fetchOfferings()
+    }
+
+    fun fetchOfferingDetail(offeringId: Long) {
+        viewModelScope.launch {
+            offeringDetailRepository.fetchOfferingDetail(
+                offeringId = offeringId,
+            ).onSuccess {
+                _updatedOffering.setValue(it.toOffering())
+            }.onFailure {
+                Log.e("Error", it.message.toString())
+            }
+        }
     }
 
     companion object {
         private const val PAGE_SIZE = 10
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringRepository: OfferingRepository) =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return OfferingViewModel(
-                        offeringRepository,
-                    ) as T
-                }
+        fun getFactory(
+            offeringRepository: OfferingRepository,
+            offeringDetailRepository: OfferingDetailRepository,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return OfferingViewModel(
+                    offeringRepository,
+                    offeringDetailRepository,
+                ) as T
             }
+        }
     }
 }

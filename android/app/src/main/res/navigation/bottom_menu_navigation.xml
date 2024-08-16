@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_home_fragment_to_offering_write_fragment"
             app:destination="@id/offering_write_fragment_essential" />
+        <action
+            android:id="@+id/action_home_fragment_to_offering_detail_fragment"
+            app:destination="@id/offering_detail_fragment" />
     </fragment>
     <fragment
         android:id="@+id/comment_room_fragment"
@@ -21,7 +24,7 @@
         tools:layout="@layout/fragment_comment_rooms" />
     <fragment
         android:id="@+id/my_page_fragment"
-        android:name="com.zzang.chongdae.presentation.view.MyPageFragment"
+        android:name="com.zzang.chongdae.presentation.view.mypage.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" />
     <fragment
@@ -38,4 +41,11 @@
         android:id="@+id/offering_write_optional_fragment"
         android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment"
         tools:layout="@layout/fragment_offering_write_optional" />
+
+    <fragment
+        android:id="@+id/offering_detail_fragment"
+        android:name="com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment"
+        android:label="fragment_detail_fragment"
+        tools:layout="@layout/fragment_offering_detail" />
+
 </navigation>

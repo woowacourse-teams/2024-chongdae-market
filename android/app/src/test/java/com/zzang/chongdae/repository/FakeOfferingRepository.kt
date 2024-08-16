@@ -2,6 +2,7 @@ package com.zzang.chongdae.repository
 
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingStatus
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -17,8 +18,23 @@ class FakeOfferingRepository : OfferingRepository {
         search: String?,
         lastOfferingId: Long?,
         pageSize: Int?,
-    ): List<Offering> {
-        TODO("Not yet implemented")
+    ): Result<List<Offering>> {
+        return Result.success(
+            listOf(
+                Offering(
+                    id = 0,
+                    title = "",
+                    meetingAddress = "",
+                    thumbnailUrl = null,
+                    totalCount = 0,
+                    currentCount = 0,
+                    dividedPrice = 0,
+                    eachPrice = null,
+                    status = OfferingCondition.CONFIRMED,
+                    isOpen = false,
+                ),
+            ),
+        )
     }
 
     override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {

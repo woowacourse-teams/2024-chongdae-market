@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".presentation.view.offeringdetail.OfferingDetailActivity">
+        tools:context=".presentation.view.offeringdetail.OfferingDetailFragment">
 
         <ScrollView
             android:id="@+id/sv_layout"

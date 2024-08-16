@@ -1,179 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.view.MyPageFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_my_page_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:text="@string/my_page_title_text"
-        android:textColor="@color/my_page_title"
-        android:textSize="@dimen/font_size_17"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <View
-        android:id="@+id/horizon_line"
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.mypage.MyPageViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/horizon_line"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_my_page_title" />
+        android:layout_height="match_parent"
+        tools:context=".presentation.view.mypage.MyPageFragment">
 
-    <ImageView
-        android:id="@+id/iv_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="43dp"
-        android:src="@drawable/ic_my_page_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+        <TextView
+            android:id="@+id/tv_my_page_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/suit_medium"
+            android:text="@string/my_page_title_text"
+            android:textColor="@color/my_page_title"
+            android:textSize="@dimen/font_size_17"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_welcome_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="35dp"
-        android:text="@string/my_page_welcome_text"
-        android:textColor="@color/black_1000"
-        android:textSize="@dimen/font_size_14"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/iv_profile"
-        app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+        <View
+            android:id="@+id/horizon_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/horizon_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_my_page_title" />
 
-    <TextView
-        android:id="@+id/tv_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/main_color"
-        android:textSize="@dimen/font_size_20"
-        android:text="총알0328"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/tv_welcome_text"
-        app:layout_constraintTop_toBottomOf="@id/tv_welcome_text"
-        tools:text="총알133" />
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="47dp"
+            android:layout_marginTop="43dp"
+            android:src="@drawable/ic_my_page_profile"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horizon_line"
+            app:layout_constraintVertical_bias="0.4" />
 
-    <TextView
-        android:id="@+id/tv_nickname_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_page_nickname_title"
-        android:textColor="@color/black_1000"
-        android:textSize="@dimen/font_size_20"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/tv_nickname"
-        app:layout_constraintTop_toTopOf="@id/tv_nickname" />
+        <TextView
+            android:id="@+id/tv_welcome_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_35"
+            android:layout_marginTop="@dimen/size_35"
+            android:fontFamily="@font/suit_medium"
+            android:text="@string/my_page_welcome_text"
+            android:textColor="@color/black_1000"
+            android:textSize="@dimen/font_size_18"
+            app:layout_constraintStart_toEndOf="@id/iv_profile"
+            app:layout_constraintTop_toBottomOf="@id/horizon_line" />
 
-    <ImageView
-        android:id="@+id/iv_nickname_modification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/ic_my_page_nickname_modification"
-        app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
-        app:layout_constraintStart_toEndOf="@id/tv_nickname_title"
-        app:layout_constraintTop_toTopOf="@id/tv_nickname" />
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_3"
+            android:fontFamily="@font/suit_semibold"
+            android:text="@{vm.nickName}"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/font_size_24"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_welcome_text"
+            app:layout_constraintTop_toBottomOf="@id/tv_welcome_text"
+            tools:text="총알133" />
 
-    <ImageView
-        android:id="@+id/iv_my_offerings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="55dp"
-        android:src="@drawable/ic_my_page_my_offerings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile" />
+        <TextView
+            android:id="@+id/tv_nickname_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_2"
+            android:fontFamily="@font/suit_semibold"
+            android:text="@string/my_page_nickname_title"
+            android:textColor="@color/gray_900"
+            android:textSize="@dimen/font_size_24"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
+            app:layout_constraintStart_toEndOf="@id/tv_nickname"
+            app:layout_constraintTop_toTopOf="@id/tv_nickname" />
 
-    <TextView
-        android:id="@+id/tv_my_offerings"
-        style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
-        android:layout_marginStart="12dp"
-        android:text="@string/my_page_offerings_text"
-        app:layout_constraintBottom_toBottomOf="@id/iv_my_offerings"
-        app:layout_constraintStart_toEndOf="@id/iv_my_offerings"
-        app:layout_constraintTop_toTopOf="@id/iv_my_offerings" />
+        <ImageView
+            android:id="@+id/iv_nickname_modification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_my_page_nickname_modification"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
+            app:layout_constraintStart_toEndOf="@id/tv_nickname_title"
+            app:layout_constraintTop_toTopOf="@id/tv_nickname" />
 
-    <ImageView
-        android:id="@+id/iv_terms_of_use"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:src="@drawable/ic_my_page_terms_of_use"
-        app:layout_constraintStart_toStartOf="@id/iv_my_offerings"
-        app:layout_constraintTop_toBottomOf="@id/iv_my_offerings" />
+        <!--        <ImageView-->
+        <!--            android:id="@+id/iv_my_offerings"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="42dp"-->
+        <!--            android:layout_marginTop="55dp"-->
+        <!--            android:src="@drawable/ic_my_page_my_offerings"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/iv_profile" />-->
 
-    <TextView
-        android:id="@+id/tv_terms_of_use"
-        style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
-        android:layout_marginStart="12dp"
-        android:text="@string/my_page_terms_of_use_text"
-        app:layout_constraintBottom_toBottomOf="@id/iv_terms_of_use"
-        app:layout_constraintStart_toEndOf="@id/iv_terms_of_use"
-        app:layout_constraintTop_toTopOf="@id/iv_terms_of_use" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_my_offerings"-->
+        <!--            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"-->
+        <!--            android:layout_marginStart="12dp"-->
+        <!--            android:text="@string/my_page_offerings_text"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@id/iv_my_offerings"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/iv_my_offerings"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/iv_my_offerings" />-->
 
-    <ImageView
-        android:id="@+id/iv_privacy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:src="@drawable/ic_my_page_privacy"
-        app:layout_constraintStart_toStartOf="@id/iv_my_offerings"
-        app:layout_constraintTop_toBottomOf="@id/tv_terms_of_use" />
+        <ImageView
+            android:id="@+id/iv_terms_of_use"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="55dp"
+            android:src="@drawable/ic_my_page_terms_of_use"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile" />
 
-    <TextView
-        android:id="@+id/tv_privacy"
-        style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
-        android:layout_marginStart="12dp"
-        android:text="@string/my_page_privacy_text"
-        app:layout_constraintBottom_toBottomOf="@id/iv_privacy"
-        app:layout_constraintStart_toEndOf="@id/iv_privacy"
-        app:layout_constraintTop_toTopOf="@id/iv_privacy" />
+        <TextView
+            android:id="@+id/tv_terms_of_use"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:padding="@dimen/size_12"
+            android:text="@string/my_page_terms_of_use_text"
+            android:onClick="@{() -> vm.onClickTermsOfUse()}"
+            app:layout_constraintBottom_toBottomOf="@id/iv_terms_of_use"
+            app:layout_constraintStart_toEndOf="@id/iv_terms_of_use"
+            app:layout_constraintTop_toTopOf="@id/iv_terms_of_use"/>
 
-    <ImageView
-        android:id="@+id/iv_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:src="@drawable/ic_my_page_logout"
-        app:layout_constraintStart_toStartOf="@id/iv_my_offerings"
-        app:layout_constraintTop_toBottomOf="@id/iv_privacy" />
+        <ImageView
+            android:id="@+id/iv_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:src="@drawable/ic_my_page_privacy"
+            app:layout_constraintStart_toStartOf="@id/iv_terms_of_use"
+            app:layout_constraintTop_toBottomOf="@id/iv_terms_of_use" />
 
-    <TextView
-        android:id="@+id/tv_logout"
-        style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
-        android:layout_marginStart="12dp"
-        android:text="@string/my_page_logout_text"
-        app:layout_constraintBottom_toBottomOf="@id/iv_logout"
-        app:layout_constraintStart_toEndOf="@id/iv_logout"
-        app:layout_constraintTop_toTopOf="@id/iv_logout" />
+        <TextView
+            android:id="@+id/tv_privacy"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:padding="@dimen/size_12"
+            android:text="@string/my_page_privacy_text"
+            android:onClick="@{() -> vm.onClickPrivacy()}"
+            app:layout_constraintBottom_toBottomOf="@id/iv_privacy"
+            app:layout_constraintStart_toEndOf="@id/iv_privacy"
+            app:layout_constraintTop_toTopOf="@id/iv_privacy"/>
 
-    <ImageView
-        android:id="@+id/iv_withdrawal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:src="@drawable/ic_my_page_withdrawal"
-        app:layout_constraintStart_toStartOf="@id/iv_my_offerings"
-        app:layout_constraintTop_toBottomOf="@id/iv_logout" />
+        <ImageView
+            android:id="@+id/iv_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:src="@drawable/ic_my_page_logout"
+            app:layout_constraintStart_toStartOf="@id/iv_privacy"
+            app:layout_constraintTop_toBottomOf="@id/iv_privacy" />
 
-    <TextView
-        android:id="@+id/tv_withdrawal"
-        style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"
-        android:layout_marginStart="12dp"
-        android:text="@string/my_page_withdrawal_text"
-        app:layout_constraintBottom_toBottomOf="@id/iv_withdrawal"
-        app:layout_constraintStart_toEndOf="@id/iv_withdrawal"
-        app:layout_constraintTop_toTopOf="@id/iv_withdrawal" />
+        <TextView
+            android:id="@+id/tv_logout"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:padding="@dimen/size_12"
+            android:text="@string/my_page_logout_text"
+            android:onClick="@{() -> vm.onClickLogout()}"
+            app:layout_constraintBottom_toBottomOf="@id/iv_logout"
+            app:layout_constraintStart_toEndOf="@id/iv_logout"
+            app:layout_constraintTop_toTopOf="@id/iv_logout" />
 
+        <ImageView
+            android:id="@+id/iv_withdrawal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:src="@drawable/ic_my_page_withdrawal"
+            app:layout_constraintStart_toStartOf="@id/iv_logout"
+            app:layout_constraintTop_toBottomOf="@id/iv_logout" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_withdrawal"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:padding="@dimen/size_12"
+            android:text="@string/my_page_withdrawal_text"
+            android:onClick="@{() -> vm.onClickWithdrawal()}"
+            app:layout_constraintBottom_toBottomOf="@id/iv_withdrawal"
+            app:layout_constraintStart_toEndOf="@id/iv_withdrawal"
+            app:layout_constraintTop_toTopOf="@id/iv_withdrawal" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

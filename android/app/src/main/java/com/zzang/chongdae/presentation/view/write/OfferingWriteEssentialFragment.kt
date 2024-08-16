@@ -196,6 +196,14 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         toast?.show()
     }
 
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalyticsManager.logScreenView(
+            screenName = "OfferingWriteFragment",
+            screenClass = this::class.java.simpleName,
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _fragmentBinding = null
