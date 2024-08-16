@@ -59,8 +59,7 @@ public class OfferingService {
         return new OfferingAllResponse(offerings.stream()
                 .map(offering -> {
                     OfferingPrice offeringPrice = offering.toOfferingPrice();
-                    OfferingCondition offeringCondition = offering.toOfferingCondition();
-                    return new OfferingAllResponseItem(offering, offeringPrice, offeringCondition);
+                    return new OfferingAllResponseItem(offering, offeringPrice);
                 })
                 .toList()
         );
