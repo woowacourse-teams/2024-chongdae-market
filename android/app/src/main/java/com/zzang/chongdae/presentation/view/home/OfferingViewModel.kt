@@ -123,9 +123,9 @@ class OfferingViewModel(
         filterName: FilterName,
         isChecked: Boolean,
     ) {
-        if (isChecked) { // 새로운 필터 선택
+        if (isChecked) {
             _selectedFilter.value = filterName.toString()
-        } else { // 선택 해제
+        } else {
             _selectedFilter.value = null
         }
 
