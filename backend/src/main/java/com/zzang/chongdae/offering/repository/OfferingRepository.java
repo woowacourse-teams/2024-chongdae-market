@@ -60,7 +60,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             """)
     List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
 
-
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();
 }
