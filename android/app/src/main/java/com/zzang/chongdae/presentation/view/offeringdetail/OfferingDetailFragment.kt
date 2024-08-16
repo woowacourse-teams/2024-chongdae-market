@@ -10,8 +10,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
-import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
-import com.zzang.chongdae.data.local.source.MemberDataStore
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -29,7 +27,6 @@ class OfferingDetailFragment : Fragment() {
         OfferingDetailViewModel.getFactory(
             offeringId = offeringId,
             offeringDetailRepository = (requireActivity().application as ChongdaeApp).offeringDetailRepository,
-            MemberDataStore(requireActivity().applicationContext.dataStore),
         )
     }
 

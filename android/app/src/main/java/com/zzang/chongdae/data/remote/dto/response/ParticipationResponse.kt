@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ParticipationResponse(
-    @SerialName("offeringCondition") val offeringCondition: RemoteOfferingCondition,
+    @SerialName("offeringCondition") val offeringCondition: RemoteOfferingStatus,
     @SerialName("currentCount") val currentCount: Int,
 )

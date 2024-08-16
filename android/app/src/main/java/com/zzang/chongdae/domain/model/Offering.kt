@@ -9,7 +9,7 @@ data class Offering(
     val currentCount: Int,
     val dividedPrice: Int,
     val eachPrice: Int?,
-    val condition: OfferingCondition,
+    val status: OfferingCondition,
     val isOpen: Boolean,
 ) {
     fun calculateDiscountRate(): Float? {
