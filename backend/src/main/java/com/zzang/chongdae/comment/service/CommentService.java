@@ -63,9 +63,6 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        if (offering.isStatusGrouping() && offering.toOfferingCondition().isAutoConfirmed()) {
-            offering.moveCommentRoomStatus(); // TODO : 자동 확정 로직
-        }
         return new CommentRoomInfoResponse(offering, member);
     }
 
