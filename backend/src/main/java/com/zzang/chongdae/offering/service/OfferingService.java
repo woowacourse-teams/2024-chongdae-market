@@ -2,10 +2,10 @@ package com.zzang.chongdae.offering.service;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
-import com.zzang.chongdae.offering.domain.OfferingCondition;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -39,7 +39,7 @@ public class OfferingService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final StorageService storageService;
-    private final ProductImageExtractor imageExtractor;
+    private final NaverApiProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
