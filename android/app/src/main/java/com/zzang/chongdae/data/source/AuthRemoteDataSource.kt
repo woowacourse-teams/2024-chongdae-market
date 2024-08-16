@@ -4,7 +4,7 @@ import com.zzang.chongdae.data.remote.dto.request.CiRequest
 import com.zzang.chongdae.data.remote.dto.response.MemberResponse
 
 interface AuthRemoteDataSource {
-    suspend fun saveLogin(ciRequest: CiRequest): Result<Unit>
+    suspend fun saveLogin(ciRequest: CiRequest): Result<MemberResponse>
 
     suspend fun saveRefresh(): Result<Unit>
 

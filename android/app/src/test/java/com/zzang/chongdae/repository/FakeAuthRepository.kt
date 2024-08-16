@@ -4,7 +4,7 @@ import com.zzang.chongdae.domain.model.Member
 import com.zzang.chongdae.domain.repository.AuthRepository
 
 class FakeAuthRepository : AuthRepository {
-    override suspend fun saveLogin(ci: String): Result<Unit> {
+    override suspend fun saveLogin(ci: String): Result<Member> {
         TODO("Not yet implemented")
     }
 
