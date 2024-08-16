@@ -11,7 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OfferingPrice {
 
-    private static final int ROUNDING_SCALE = 2;
+    private static final int ROUNDING_SCALE = 1;
 
     private final int totalCount;
     private final int totalPrice;
