@@ -1,8 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
 import android.util.Log
-import android.view.View
-import android.widget.RadioButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,7 +52,8 @@ class OfferingViewModel(
             it.first { it.name == FilterName.HIGH_DISCOUNT }
         }
 
-    private val selectedFilter = MutableLiveData<String?>()
+    private val _selectedFilter: MutableLiveData<String?> = MutableLiveData<String?>()
+    val selectedFilter: LiveData<String?> get() = _selectedFilter
 
     private val _searchEvent: MutableSingleLiveData<String?> = MutableSingleLiveData(null)
     val searchEvent: SingleLiveData<String?> get() = _searchEvent
@@ -75,7 +74,7 @@ class OfferingViewModel(
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
-                    OfferingPagingSource(offeringRepository, search.value, selectedFilter.value)
+                    OfferingPagingSource(offeringRepository, search.value, _selectedFilter.value)
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
                 _offerings.value =
@@ -122,19 +121,14 @@ class OfferingViewModel(
 
     override fun onClickFilter(
         filterName: FilterName,
-        button: View,
+        isChecked: Boolean,
     ) {
-        val isChecked = (button as RadioButton).isChecked
-        // 현재 서버에서 참여가능만 필터 기능이 구현되지 않아 임시로 분기처리
-        if (filterName == FilterName.JOINABLE) return
-        if (selectedFilter.value == filterName.toString()) {
-            selectedFilter.value = null
-            button.isChecked = false
-        } else if (isChecked) {
-            selectedFilter.value = filterName.toString()
-        } else {
-            selectedFilter.value = null
+        if (isChecked) { // 새로운 필터 선택
+            _selectedFilter.value = filterName.toString()
+        } else { // 선택 해제
+            _selectedFilter.value = null
         }
+
         _filterOfferingsEvent.setValue(Unit)
         fetchOfferings()
     }
