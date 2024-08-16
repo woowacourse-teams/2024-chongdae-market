@@ -269,14 +269,14 @@ class OfferingWriteViewModel(
     }
 
     private fun originPriceToPositiveIntOrNull(input: String?): Int? {
-        val eachPriceInputTrim = input?.trim()
-        if (eachPriceInputTrim.isNullOrBlank()) {
+        val originPriceInputTrim = input?.trim()
+        if (originPriceInputTrim.isNullOrBlank()) {
             return null
         }
-        if (eachPriceInputTrim.toInt() < 0) {
+        if (originPriceInputTrim.toInt() < 0) {
             throw NumberFormatException()
         }
-        return eachPriceInputTrim.toInt()
+        return originPriceInputTrim.toInt()
     }
 
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
@@ -298,7 +298,7 @@ class OfferingWriteViewModel(
     }
 
     private fun makeOriginPriceInvalidEvent() {
-        _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_each_price)
+        _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_origin_price)
     }
 
     private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {

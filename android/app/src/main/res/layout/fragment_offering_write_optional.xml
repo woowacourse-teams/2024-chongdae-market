@@ -140,7 +140,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_individual_price" />
 
                 <EditText
-                    android:id="@+id/et_individual_price"
+                    android:id="@+id/et_origin_price"
                     style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
                     android:layout_width="230dp"
                     android:gravity="center"
@@ -158,9 +158,9 @@
                     android:text="@string/all_won"
                     android:textColor="@color/black_900"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toBottomOf="@id/et_individual_price"
-                    app:layout_constraintStart_toEndOf="@id/et_individual_price"
-                    app:layout_constraintTop_toTopOf="@id/et_individual_price" />
+                    app:layout_constraintBottom_toBottomOf="@id/et_origin_price"
+                    app:layout_constraintStart_toEndOf="@id/et_origin_price"
+                    app:layout_constraintTop_toTopOf="@id/et_origin_price" />
 
                 <TextView
                     android:id="@+id/tv_discount_rate"
@@ -172,7 +172,7 @@
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/size_15"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
-                    app:layout_constraintTop_toBottomOf="@id/et_individual_price" />
+                    app:layout_constraintTop_toBottomOf="@id/et_origin_price" />
 
                 <TextView
                     android:id="@+id/tv_discount_rate_value"

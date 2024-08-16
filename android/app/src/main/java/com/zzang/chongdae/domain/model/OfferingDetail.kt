@@ -30,7 +30,7 @@ fun OfferingDetail.toOffering(): Offering {
         totalCount = this.totalCount,
         currentCount = this.currentCount.value,
         dividedPrice = this.dividedPrice,
-        eachPrice = this.totalPrice / this.totalCount,
+        originPrice = this.totalPrice / this.totalCount,
         status = this.condition,
         isOpen = !this.deadline.isBefore(LocalDateTime.now()),
     )

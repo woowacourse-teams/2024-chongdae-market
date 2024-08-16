@@ -8,13 +8,13 @@ data class Offering(
     val totalCount: Int,
     val currentCount: Int,
     val dividedPrice: Int,
-    val eachPrice: Int?,
+    val originPrice: Int?,
     val status: OfferingCondition,
     val isOpen: Boolean,
 ) {
     fun calculateDiscountRate(): Float? {
-        if (eachPrice == null) return null
-        val discountPrice = eachPrice - dividedPrice
-        return (discountPrice.toFloat() / eachPrice) * 100
+        if (originPrice == null) return null
+        val discountPrice = originPrice - dividedPrice
+        return (discountPrice.toFloat() / originPrice) * 100
     }
 }

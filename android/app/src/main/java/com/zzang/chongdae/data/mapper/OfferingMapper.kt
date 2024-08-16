@@ -12,7 +12,7 @@ fun RemoteOffering.toDomain() =
         totalCount = this.totalCount,
         currentCount = this.currentCount,
         dividedPrice = this.dividedPrice,
-        eachPrice = this.originPrice,
+        originPrice = this.originPrice,
         status = this.status.toDomain(),
         isOpen = this.isOpen,
     )
