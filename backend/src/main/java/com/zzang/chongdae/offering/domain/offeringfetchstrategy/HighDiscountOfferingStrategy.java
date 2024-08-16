@@ -22,7 +22,7 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
     @Override
     protected List<OfferingEntity> fetchOfferingsWithLastOffering(
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
-        double lastDiscountRate = lastOffering.getDiscountRate();
+        Double lastDiscountRate = lastOffering.getDiscountRate();
         return offeringRepository.findHighDiscountOfferingsWithKeyword(
                 lastDiscountRate, lastOffering.getId(), searchKeyword, pageable);
     }

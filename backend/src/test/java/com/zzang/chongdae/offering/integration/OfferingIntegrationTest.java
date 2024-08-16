@@ -421,7 +421,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "www.naver.com/favicon.ico",
                     5,
                     10000,
-                    2000,
+                    5000,
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
@@ -431,6 +431,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(201);
+        }
+
+        @DisplayName("원가격을 작성하지 않은 공모 정보를 받아 공모를 작성 할 수 있다.")
+        @Test
+        void should_createOffering_when_givenOfferingWithoutOriginPriceCreateRequest() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    5,
+                    10000,
+                    null,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-success-without-originPrice", resource(successSnippets)))
                     .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
