@@ -320,7 +320,7 @@ fun TextView.setDiscountRateValidity(
 ) {
     val text =
         if (discountRateValidity == true) {
-            discountRate.toString()
+            context.getString(R.string.write_discount_rate_value).format(discountRate)
         } else {
             context.getString(R.string.all_minus)
         }

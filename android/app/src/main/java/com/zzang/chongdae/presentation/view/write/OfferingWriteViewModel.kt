@@ -316,8 +316,22 @@ class OfferingWriteViewModel(
         _navigateToOptionalEvent.setValue(true)
     }
 
-    fun makeSubmitOfferingEvent() {
+    private fun makeSubmitOfferingEvent() {
         _submitOfferingEvent.setValue(Unit)
+    }
+
+    fun initOfferingWriteInputs() {
+        title.value = ""
+        productUrl.value = ""
+        thumbnailUrl.value = ""
+        totalCount.value = "$MINIMUM_TOTAL_COUNT"
+        totalPrice.value = ""
+        originPrice.value = ""
+        meetingAddress.value = ""
+        meetingAddressDetail.value = ""
+        meetingDate.value = ""
+        meetingDateValue.value = ""
+        description.value = ""
     }
 
     companion object {
