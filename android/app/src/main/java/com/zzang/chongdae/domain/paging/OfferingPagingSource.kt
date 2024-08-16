@@ -19,12 +19,16 @@ class OfferingPagingSource(
                     search = search,
                     lastOfferingId = lastOfferingId,
                     pageSize = params.loadSize,
-                )
+                ).getOrThrow()
+
+            val prevKey = if (lastOfferingId == null) null else lastOfferingId + DEFAULT_PAGE_SIZE
+            val nextKey =
+                if (offerings.isEmpty() || offerings.size < DEFAULT_PAGE_SIZE) null else offerings.last().id
 
             LoadResult.Page(
                 data = offerings,
-                prevKey = lastOfferingId,
-                nextKey = if (offerings.isEmpty() || offerings.size < DEFAULT_PAGE_SIZE) null else offerings.last().id,
+                prevKey = prevKey,
+                nextKey = nextKey,
             )
         }.onFailure { throwable ->
             LoadResult.Error<Long, Offering>(throwable)
@@ -33,7 +37,7 @@ class OfferingPagingSource(
 
     override fun getRefreshKey(state: PagingState<Long, Offering>): Long? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey
+            state.closestPageToPosition(anchorPosition)?.prevKey?.minus(DEFAULT_PAGE_SIZE)
         }
     }
 
