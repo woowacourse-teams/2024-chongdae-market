@@ -64,6 +64,9 @@ class OfferingViewModel(
     private val _updatedOffering: MutableSingleLiveData<Offering> = MutableSingleLiveData()
     val updatedOffering: SingleLiveData<Offering> get() = _updatedOffering
 
+    private val _offeringsRefreshEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val offeringsRefreshEvent: SingleLiveData<Unit> get() = _offeringsRefreshEvent
+
     init {
         fetchOfferings()
         fetchFilters()
@@ -147,6 +150,13 @@ class OfferingViewModel(
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }
+        }
+    }
+
+    fun refreshOfferingsByOfferingWriteEvent(isSuccess: Boolean) {
+        if (isSuccess) {
+            _offeringsRefreshEvent.setValue(Unit)
+            fetchOfferings()
         }
     }
 

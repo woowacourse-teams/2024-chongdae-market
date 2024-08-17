@@ -28,9 +28,10 @@ import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
+import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
 import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener {
+class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -106,6 +107,14 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
             viewModel.fetchOfferingDetail(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
         }
+
+        setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
+            viewModel.refreshOfferingsByOfferingWriteEvent(
+                bundle.getBoolean(
+                    OfferingWriteOptionalFragment.NEW_OFFERING_EVENT_KEY,
+                ),
+            )
+        }
     }
 
     private fun initSearchListener() {
@@ -140,7 +149,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
-        binding.onUpsideClickListener = this
     }
 
     private fun initAdapter() {
@@ -162,6 +170,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
     }
 
     private fun setUpOfferingsObserve() {
+        viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+        }
+
         viewModel.offerings.observe(viewLifecycleOwner) {
             offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
@@ -200,18 +212,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
         )
     }
 
-    private fun scrollToTop() {
-        binding.rvOfferings.smoothScrollToPosition(0)
-    }
-
     private fun navigateToOfferingWriteFragment() {
         binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
         }
-    }
-
-    override fun onClickUpside() {
-        scrollToTop()
     }
 
     companion object {
