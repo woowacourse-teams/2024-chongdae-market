@@ -49,6 +49,12 @@ class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun removeAllData() {
+        dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
     companion object {
         val MEMBER_ID_KEY = longPreferencesKey("member_id_key")
         val NICKNAME_KEY = stringPreferencesKey("nickname_key")

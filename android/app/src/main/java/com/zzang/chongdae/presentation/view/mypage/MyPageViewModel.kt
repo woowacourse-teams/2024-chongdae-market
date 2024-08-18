@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import kotlinx.coroutines.launch
 
 class MyPageViewModel(private val userPreferencesDataStore: UserPreferencesDataStore) : ViewModel() {
     val nickName: LiveData<String?> = userPreferencesDataStore.nickNameFlow.asLiveData()
@@ -33,6 +35,9 @@ class MyPageViewModel(private val userPreferencesDataStore: UserPreferencesDataS
     }
 
     fun onClickLogout() {
+        viewModelScope.launch {
+            userPreferencesDataStore.removeAllData()
+        }
         _logoutEvent.setValue(Unit)
     }
 
