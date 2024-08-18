@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.data.local.source.MemberDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 
-class MyPageViewModel(private val memberDataStore: MemberDataStore) : ViewModel() {
-    val nickName: LiveData<String?> = memberDataStore.nickNameFlow.asLiveData()
+class MyPageViewModel(private val userPreferencesDataStore: UserPreferencesDataStore) : ViewModel() {
+    val nickName: LiveData<String?> = userPreferencesDataStore.nickNameFlow.asLiveData()
 
     private val _openUrlInBrowserEvent = MutableSingleLiveData<String>()
     val openUrlInBrowserEvent: SingleLiveData<String> get() = _openUrlInBrowserEvent
@@ -42,13 +42,13 @@ class MyPageViewModel(private val memberDataStore: MemberDataStore) : ViewModel(
 
     companion object {
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(memberDataStore: MemberDataStore) =
+        fun getFactory(userPreferencesDataStore: UserPreferencesDataStore) =
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
-                    return MyPageViewModel(memberDataStore) as T
+                    return MyPageViewModel(userPreferencesDataStore) as T
                 }
             }
     }

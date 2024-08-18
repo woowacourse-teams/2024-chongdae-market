@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.data.local.source.MemberDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val memberDataStore: MemberDataStore,
+    private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel() {
     private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
@@ -24,7 +24,7 @@ class LoginViewModel(
             authRepository.saveLogin(
                 ci = ci,
             ).onSuccess {
-                memberDataStore.saveMember(it.memberId, it.nickName)
+                userPreferencesDataStore.saveMember(it.memberId, it.nickName)
                 _navigateEvent.setValue(true)
             }.onFailure {
                 Log.e("error", "postLogin: ${it.message}")
@@ -41,7 +41,7 @@ class LoginViewModel(
             authRepository.saveSignup(
                 ci = ci,
             ).onSuccess {
-                memberDataStore.saveMember(it.memberId, it.nickName)
+                userPreferencesDataStore.saveMember(it.memberId, it.nickName)
                 postLogin(ci)
             }.onFailure {
                 Log.e("error", "postSignup: ${it.message}")
@@ -69,13 +69,13 @@ class LoginViewModel(
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
             authRepository: AuthRepository,
-            memberDataStore: MemberDataStore,
+            userPreferencesDataStore: UserPreferencesDataStore,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return LoginViewModel(authRepository, memberDataStore) as T
+                return LoginViewModel(authRepository, userPreferencesDataStore) as T
             }
         }
     }

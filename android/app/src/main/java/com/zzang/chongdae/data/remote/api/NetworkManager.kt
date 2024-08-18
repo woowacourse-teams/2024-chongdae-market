@@ -2,7 +2,10 @@ package com.zzang.chongdae.data.remote.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.data.remote.util.SimpleCookieJar
+import com.zzang.chongdae.ChongdaeApp
+import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
+import com.zzang.chongdae.data.remote.util.TokensCookieJar
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,6 +21,7 @@ object NetworkManager {
         }
 
     private fun getRetrofit(): Retrofit {
+        val userDataStore = UserPreferencesDataStore(ChongdaeApp.chongdaeApplicationContext.dataStore)
         if (instance == null) {
             val contentType = "application/json".toMediaType()
             instance =
@@ -26,7 +30,7 @@ object NetworkManager {
                     .addConverterFactory(json.asConverterFactory(contentType))
                     .client(
                         OkHttpClient.Builder()
-                            .cookieJar(SimpleCookieJar())
+                            .cookieJar(TokensCookieJar(userDataStore))
                             .build(),
                     )
                     .build()

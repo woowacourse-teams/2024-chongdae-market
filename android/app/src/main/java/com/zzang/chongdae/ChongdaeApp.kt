@@ -79,9 +79,13 @@ class ChongdaeApp : Application() {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
         FirebaseApp.initializeApp(this)
+        _chongdaeApplicationContext = this
     }
 
     companion object {
         val Context.dataStore by preferencesDataStore(name = "member_preferences")
+
+        private lateinit var _chongdaeApplicationContext: Context
+        val chongdaeApplicationContext get() = _chongdaeApplicationContext
     }
 }
