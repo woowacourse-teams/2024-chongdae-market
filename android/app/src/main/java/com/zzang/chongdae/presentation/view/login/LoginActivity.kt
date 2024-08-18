@@ -46,7 +46,14 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
+        passLoginIfAlreadyLoggedIn()
         observeNavigateEvent()
+    }
+
+    private fun passLoginIfAlreadyLoggedIn() {
+        viewModel.alreadyLoggedInEvent.observe(this) {
+            navigateToNextActivity()
+        }
     }
 
     private fun initBinding() {
@@ -103,14 +110,18 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     }
 
     private fun observeNavigateEvent() {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "login_event",
+            name = "login_event",
+            contentType = "button",
+        )
         viewModel.navigateEvent.observe(this) {
-            firebaseAnalyticsManager.logSelectContentEvent(
-                id = "login_event",
-                name = "login_event",
-                contentType = "button",
-            )
-            MainActivity.startActivity(this)
-            finish()
+            navigateToNextActivity()
         }
+    }
+
+    private fun navigateToNextActivity() {
+        MainActivity.startActivity(this)
+        finish()
     }
 }

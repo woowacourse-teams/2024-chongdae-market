@@ -10,14 +10,32 @@ import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
     private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel() {
-    private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
+    private val _navigateEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val navigateEvent: SingleLiveData<Unit> get() = _navigateEvent
+
+    private val _alreadyLoggedInEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val alreadyLoggedInEvent: SingleLiveData<Unit> get() = _alreadyLoggedInEvent
+
+    init {
+        makeAlreadyLoggedInEvent()
+    }
+
+    private fun makeAlreadyLoggedInEvent() {
+        var accessToken: String? = null
+        viewModelScope.launch {
+            accessToken = userPreferencesDataStore.accessTokenFlow.first()
+        }
+        if (accessToken != null) {
+            _alreadyLoggedInEvent.setValue(Unit)
+        }
+    }
 
     fun postLogin(ci: String) {
         viewModelScope.launch {
@@ -25,7 +43,7 @@ class LoginViewModel(
                 ci = ci,
             ).onSuccess {
                 userPreferencesDataStore.saveMember(it.memberId, it.nickName)
-                _navigateEvent.setValue(true)
+                _navigateEvent.setValue(Unit)
             }.onFailure {
                 Log.e("error", "postLogin: ${it.message}")
                 when (it.message) {
