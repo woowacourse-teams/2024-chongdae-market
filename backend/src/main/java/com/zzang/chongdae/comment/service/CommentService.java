@@ -37,10 +37,16 @@ public class CommentService {
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-
+        validateIsJoined(member, offering);
         CommentEntity comment = new CommentEntity(member, offering, request.content());
         CommentEntity savedComment = commentRepository.save(comment);
         return savedComment.getId();
+    }
+
+    private void validateIsJoined(MemberEntity member, OfferingEntity offering) {
+        if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
+            throw new MarketException(OfferingMemberErrorCode.NOT_FOUND);
+        }
     }
 
     public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
@@ -66,12 +72,6 @@ public class CommentService {
         return new CommentRoomInfoResponse(offering, member);
     }
 
-    private void validateIsJoined(MemberEntity member, OfferingEntity offering) {
-        if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
-            throw new MarketException(OfferingMemberErrorCode.NOT_FOUND);
-        }
-    }
-
     @Transactional
     public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -94,7 +94,7 @@ public class CommentService {
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-
+        validateIsJoined(member, offering);
         List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .map(comment -> new CommentAllResponseItem(comment, member))
