@@ -18,14 +18,6 @@ class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataS
         loadTokensFromDataStore()
     }
 
-    private fun loadTokensFromDataStore() {
-        val accessToken = loadAccessTokenFromDataStore() ?: return
-        val refreshToken = loadRefreshTokenFromDataStore() ?: return
-        val accessTokenCookie = makeTokenCookie(ACCESS_TOKEN_NAME, accessToken)
-        val refreshTokenCookie = makeTokenCookie(REFRESH_TOKEN_NAME, refreshToken)
-        cookies[urlHost] = listOf(accessTokenCookie, refreshTokenCookie)
-    }
-
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
         return cookies[url.host] ?: emptyList()
     }
@@ -46,20 +38,14 @@ class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataS
         }
     }
 
-    private fun loadAccessTokenFromDataStore(): String? {
-        var accessToken: String? = null
+    private fun loadTokensFromDataStore() {
         CoroutineScope(Dispatchers.IO).launch {
-            accessToken = userPreferencesDataStore.accessTokenFlow.first()
+            val accessToken = userPreferencesDataStore.accessTokenFlow.first() ?: return@launch
+            val refreshToken = userPreferencesDataStore.refreshTokenFlow.first() ?: return@launch
+            val accessTokenCookie = makeTokenCookie(ACCESS_TOKEN_NAME, accessToken)
+            val refreshTokenCookie = makeTokenCookie(REFRESH_TOKEN_NAME, refreshToken)
+            cookies[urlHost] = listOf(accessTokenCookie, refreshTokenCookie)
         }
-        return accessToken
-    }
-
-    private fun loadRefreshTokenFromDataStore(): String? {
-        var refreshToken: String? = null
-        CoroutineScope(Dispatchers.IO).launch {
-            refreshToken = userPreferencesDataStore.refreshTokenFlow.first()
-        }
-        return refreshToken
     }
 
     private fun makeTokenCookie(

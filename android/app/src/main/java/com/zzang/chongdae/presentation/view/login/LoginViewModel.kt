@@ -28,12 +28,11 @@ class LoginViewModel(
     }
 
     private fun makeAlreadyLoggedInEvent() {
-        var accessToken: String? = null
         viewModelScope.launch {
-            accessToken = userPreferencesDataStore.accessTokenFlow.first()
-        }
-        if (accessToken != null) {
-            _alreadyLoggedInEvent.setValue(Unit)
+            val accessToken = userPreferencesDataStore.accessTokenFlow.first()
+            if (accessToken != null) {
+                _alreadyLoggedInEvent.setValue(Unit)
+            }
         }
     }
 
