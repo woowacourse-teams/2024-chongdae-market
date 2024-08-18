@@ -54,7 +54,6 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).hideBottomNavigation()
         setUpObserve()
     }
 
