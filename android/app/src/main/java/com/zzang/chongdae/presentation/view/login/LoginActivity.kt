@@ -1,5 +1,7 @@
 package com.zzang.chongdae.presentation.view.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -123,5 +125,13 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private fun navigateToNextActivity() {
         MainActivity.startActivity(this)
         finish()
+    }
+
+    companion object {
+        fun startActivity(context: Context) =
+            Intent(context, LoginActivity::class.java).run {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                context.startActivity(this)
+            }
     }
 }
