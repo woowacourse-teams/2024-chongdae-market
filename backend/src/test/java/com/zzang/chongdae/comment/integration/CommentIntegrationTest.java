@@ -52,6 +52,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void setUp() {
             member = memberFixture.createMember();
             offering = offeringFixture.createOffering(member);
+            offeringMemberFixture.createProposer(member, offering);
         }
 
         @DisplayName("댓글을 작성할 수 있다")

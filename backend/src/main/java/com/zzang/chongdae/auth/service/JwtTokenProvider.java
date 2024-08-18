@@ -54,6 +54,10 @@ public class JwtTokenProvider {
         return new Date(now.getTime() + expired.toMillis());
     }
 
+    public void validateAccessToken(String token) {
+        getClaims(token, accessSecretKey).getSubject();
+    }
+
     public Long getMemberIdByAccessToken(String token) {
         String memberId = getClaims(token, accessSecretKey).getSubject();
         return Long.valueOf(memberId);
