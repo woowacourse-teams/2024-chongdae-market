@@ -158,6 +158,8 @@ class OfferingViewModel(
 
     fun refreshOfferingsByOfferingWriteEvent(isSuccess: Boolean) {
         if (isSuccess) {
+            search.value = null
+            _selectedFilter.value = null
             _offeringsRefreshEvent.setValue(Unit)
             fetchOfferings()
         }
