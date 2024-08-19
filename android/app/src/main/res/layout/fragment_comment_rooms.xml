@@ -63,5 +63,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_comment_room_participant" />
 
+        <View
+            android:id="@+id/view_divide_line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_300"
+            app:layout_constraintTop_toBottomOf="@id/rv_comment_room"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
