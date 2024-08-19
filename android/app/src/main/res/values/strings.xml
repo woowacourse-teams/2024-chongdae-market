@@ -50,6 +50,7 @@
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>
     <string name="my_page_nickname_title">님</string>
+
     <!--    offering_detail-->
     <string name="detail_product_url_title">물품 링크:&#160;</string>
     <string name="detail_product_url_text">바로가기</string>
@@ -132,4 +133,5 @@
     <string name="write_error_writing">공모 게시에 실패했어요🥲</string>
     <string name="write_update_state_dialog_message">공동구매 <font color="#F15642">진행 상황</font>을 <font color="#F15642">변경</font>하시겠습니까?</string>
     <string name="write_current_split_price">현재 엔빵 가격: %,d원</string>
+    <string name="detail_move_comment_detail">참여중인 채팅방</string>
 </resources>
