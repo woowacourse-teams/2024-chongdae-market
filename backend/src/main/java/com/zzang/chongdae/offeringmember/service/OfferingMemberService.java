@@ -40,7 +40,7 @@ public class OfferingMemberService {
         offeringMemberRepository.save(offeringMember);
 
         offering.participate();
-        OfferingStatus offeringStatus = offering.toOfferingCondition().decideOfferingStatus();
+        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
         return offeringMember.getId();
     }
@@ -71,7 +71,7 @@ public class OfferingMemberService {
         validateCancel(offeringMember);
         offeringMemberRepository.delete(offeringMember);
         offering.leave();
-        OfferingStatus offeringStatus = offering.toOfferingCondition().decideOfferingStatus();
+        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
     }
 

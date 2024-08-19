@@ -2,7 +2,7 @@ package com.zzang.chongdae.offering.service;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
@@ -46,10 +46,11 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         OfferingPrice offeringPrice = offering.toOfferingPrice();
-        OfferingCondition offeringCondition = offering.toOfferingCondition();
+        OfferingJoinedCount offeringJoinedCount = offering.toOfferingJoinedCount();
         Boolean isProposer = offering.isProposedBy(member); // TODO: 추후 도메인으로 분리
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
-        return new OfferingDetailResponse(offering, offeringPrice, offeringCondition, isProposer, isParticipated);
+        return new OfferingDetailResponse(
+                offering, offeringPrice, offeringJoinedCount, isProposer, isParticipated);
     }
 
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
