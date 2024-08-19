@@ -84,9 +84,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="내발산동"
+            android:text="@{offering.meetingAddressDong}"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_offering_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
+            tools:text="내발산동" />
 
         <TextView
             android:id="@+id/tv_offering_condition_comment"
