@@ -19,6 +19,18 @@
         android:layout_height="match_parent"
         tools:context=".presentation.view.comment.CommentRoomsFragment">
 
+        <ImageView
+            android:id="@+id/iv_empty_comment_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center_vertical"
+            android:src="@drawable/img_comment_room_empty_comment_room"
+            app:isVisible="@{vm.isCommentRoomsEmpty}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_comment_text"
             android:layout_width="wrap_content"
@@ -32,34 +44,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_empty_comment_room"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:foregroundGravity="center_vertical"
-            android:src="@drawable/img_comment_room_empty_comment_room"
-            app:isVisible="@{vm.isCommentRoomsEmpty}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <View
             android:id="@+id/view_divide_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/gray_300"
-            app:layout_constraintBottom_toTopOf="@id/rv_comment_room"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_comment_text"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comment_room"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_comment_text"
+            app:layout_constraintTop_toBottomOf="@id/view_divide_line"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_comment_room_participant" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
