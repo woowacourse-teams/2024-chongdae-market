@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "develop-BE" ]
     paths: [ "backend/**" ]
-    # pull_request:
-    # branches: [ "develop-BE" ]
+  pull_request:
+    branches: [ "develop-BE" ]
 
 jobs:
 
@@ -38,10 +38,7 @@ jobs:
 #        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
       - name: Build with Gradle Wrapper
-        run: |
-          ./gradlew clean
-          ./gradlew copyOasToSwagger
-          ./gradlew build
+        run: ./gradlew clean build
         working-directory: ./backend
 
       - name: Docker build and push
