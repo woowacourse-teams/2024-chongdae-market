@@ -61,8 +61,9 @@ class OfferingViewModel(
     private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
-    private val _updatedOffering: MutableSingleLiveData<Offering> = MutableSingleLiveData()
-    val updatedOffering: SingleLiveData<Offering> get() = _updatedOffering
+    private val _updatedOffering: MutableSingleLiveData<MutableList<Offering>> =
+        MutableSingleLiveData(mutableListOf())
+    val updatedOffering: SingleLiveData<MutableList<Offering>> get() = _updatedOffering
 
     private val _offeringsRefreshEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val offeringsRefreshEvent: SingleLiveData<Unit> get() = _offeringsRefreshEvent
@@ -146,7 +147,9 @@ class OfferingViewModel(
             offeringDetailRepository.fetchOfferingDetail(
                 offeringId = offeringId,
             ).onSuccess {
-                _updatedOffering.setValue(it.toOffering())
+                val updatedOfferings = _updatedOffering.getValue() ?: mutableListOf()
+                updatedOfferings.add(it.toOffering())
+                _updatedOffering.setValue(updatedOfferings)
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }
@@ -155,6 +158,8 @@ class OfferingViewModel(
 
     fun refreshOfferingsByOfferingWriteEvent(isSuccess: Boolean) {
         if (isSuccess) {
+            search.value = null
+            _selectedFilter.value = null
             _offeringsRefreshEvent.setValue(Unit)
             fetchOfferings()
         }

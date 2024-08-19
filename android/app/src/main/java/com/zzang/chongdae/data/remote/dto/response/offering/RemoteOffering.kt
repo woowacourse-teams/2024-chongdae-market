@@ -13,6 +13,7 @@ data class RemoteOffering(
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("originPrice") val originPrice: Int?,
+    @SerialName("discountRate") val discountRate: Float?,
     @SerialName("status") val status: RemoteOfferingStatus,
     @SerialName("isOpen") val isOpen: Boolean,
 )
