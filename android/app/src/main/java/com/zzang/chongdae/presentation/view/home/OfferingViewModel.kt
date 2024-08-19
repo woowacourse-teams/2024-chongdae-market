@@ -61,8 +61,9 @@ class OfferingViewModel(
     private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
-    private val _updatedOffering: MutableSingleLiveData<Offering> = MutableSingleLiveData()
-    val updatedOffering: SingleLiveData<Offering> get() = _updatedOffering
+    private val _updatedOffering: MutableSingleLiveData<MutableList<Offering>> =
+        MutableSingleLiveData(mutableListOf())
+    val updatedOffering: SingleLiveData<MutableList<Offering>> get() = _updatedOffering
 
     private val _offeringsRefreshEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val offeringsRefreshEvent: SingleLiveData<Unit> get() = _offeringsRefreshEvent
@@ -85,10 +86,10 @@ class OfferingViewModel(
                         if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
                             return@map it.copy(
                                 title =
-                                    highlightSearchKeyword(
-                                        it.title,
-                                        search.value!!,
-                                    ),
+                                highlightSearchKeyword(
+                                    it.title,
+                                    search.value!!,
+                                ),
                             )
                         }
                         it.copy(title = removeAsterisks(it.title))
@@ -146,7 +147,9 @@ class OfferingViewModel(
             offeringDetailRepository.fetchOfferingDetail(
                 offeringId = offeringId,
             ).onSuccess {
-                _updatedOffering.setValue(it.toOffering())
+                val updatedOfferings = _updatedOffering.getValue() ?: mutableListOf()
+                updatedOfferings.add(it.toOffering())
+                _updatedOffering.setValue(updatedOfferings)
             }.onFailure {
                 Log.e("Error", it.message.toString())
             }
