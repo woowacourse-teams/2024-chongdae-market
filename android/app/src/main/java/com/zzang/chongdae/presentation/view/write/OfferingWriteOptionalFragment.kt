@@ -10,8 +10,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
@@ -86,6 +88,11 @@ class OfferingWriteOptionalFragment : Fragment() {
             showToast(R.string.write_success_writing)
             findNavController().popBackStack(R.id.offering_write_fragment_essential, true)
             viewModel.initOfferingWriteInputs()
+
+            setFragmentResult(
+                OFFERING_WRITE_BUNDLE_KEY,
+                bundleOf(NEW_OFFERING_EVENT_KEY to true),
+            )
         }
     }
 
@@ -155,12 +162,15 @@ class OfferingWriteOptionalFragment : Fragment() {
                 is WriteUIState.Error -> {
                     showToast(state.message)
                 }
+
                 is WriteUIState.Empty -> {
                     showToast(state.message)
                 }
+
                 is WriteUIState.InvalidInput -> {
                     showToast(state.message)
                 }
+
                 else -> {}
             }
         }
@@ -178,5 +188,10 @@ class OfferingWriteOptionalFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _fragmentBinding = null
+    }
+
+    companion object {
+        const val OFFERING_WRITE_BUNDLE_KEY = "offering_write_bundle_key"
+        const val NEW_OFFERING_EVENT_KEY = "new_offering_event_key"
     }
 }

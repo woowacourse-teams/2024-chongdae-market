@@ -1,5 +1,7 @@
 package com.zzang.chongdae.presentation.view.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -11,7 +13,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
-import com.zzang.chongdae.data.local.source.MemberDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.databinding.ActivityLoginBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -23,7 +25,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModel.getFactory(
             authRepository = (application as ChongdaeApp).authRepository,
-            memberDataStore = MemberDataStore(applicationContext.dataStore),
+            userPreferencesDataStore = UserPreferencesDataStore(applicationContext.dataStore),
         )
     }
 
@@ -46,7 +48,29 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
-        observeNavigateEvent()
+        setupObserve()
+    }
+
+    private fun setupObserve() {
+        observeAlreadyLoggedInEvent()
+        observeLoginSuccessEvent()
+    }
+
+    private fun observeAlreadyLoggedInEvent() {
+        viewModel.alreadyLoggedInEvent.observe(this) {
+            navigateToNextActivity()
+        }
+    }
+
+    private fun observeLoginSuccessEvent() {
+        viewModel.loginSuccessEvent.observe(this) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "login_event",
+                name = "login_event",
+                contentType = "button",
+            )
+            navigateToNextActivity()
+        }
     }
 
     private fun initBinding() {
@@ -102,15 +126,16 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         }
     }
 
-    private fun observeNavigateEvent() {
-        viewModel.navigateEvent.observe(this) {
-            firebaseAnalyticsManager.logSelectContentEvent(
-                id = "login_event",
-                name = "login_event",
-                contentType = "button",
-            )
-            MainActivity.startActivity(this)
-            finish()
-        }
+    private fun navigateToNextActivity() {
+        MainActivity.startActivity(this)
+        finish()
+    }
+
+    companion object {
+        fun startActivity(context: Context) =
+            Intent(context, LoginActivity::class.java).run {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                context.startActivity(this)
+            }
     }
 }
