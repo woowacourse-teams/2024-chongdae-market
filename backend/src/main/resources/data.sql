@@ -9,10 +9,10 @@ VALUES ('dora', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'PtgtJCnn307FyCBvR
 
 INSERT INTO OFFERING (IS_MANUAL_CONFIRMED, TOTAL_COUNT, CURRENT_COUNT, TOTAL_PRICE, ORIGIN_PRICE, DISCOUNT_RATE,
                       CREATED_AT, UPDATED_AT, MEMBER_ID, MEETING_DATE, DESCRIPTION, MEETING_ADDRESS,
-                      MEETING_ADDRESS_DETAIL,
-                      MEETING_ADDRESS_DONG, PRODUCT_URL, THUMBNAIL_URL, TITLE, OFFERING_STATUS, ROOM_STATUS)
+                      MEETING_ADDRESS_DONG,
+                      MEETING_ADDRESS_DETAIL, PRODUCT_URL, THUMBNAIL_URL, TITLE, OFFERING_STATUS, ROOM_STATUS)
 VALUES (FALSE, 8, 6, 10000, 1838, 32, '2024-04-22 00:00:00', '2024-04-22 00:00:00', 1, '2024-08-18 00:00:00',
-        '공동 구매 해요  1', '서울특별시 강남구 테헤란로 201', '101동 101호', '봉천동', 'www.naver.com',
+        '공동 구매 해요  1', '서울특별시 강남구 테헤란로 201', '봉천동', '101동 101호', 'www.naver.com',
         'https://github.com/user-attachments/assets/897ef4cf-006e-4d88-9e91-d15bf37e9063', '음쓰 봉투 공구하실 분?', 'IMMINENT',
         'DONE'),
        (FALSE, 6, 5, 5000, 1108, 24.8, '2024-04-25 00:00:00', '2024-04-25 00:00:00', 2, '2024-08-25 00:00:00',
