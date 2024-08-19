@@ -3,7 +3,7 @@ package com.zzang.chongdae.offering.repository.entity;
 import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
-import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
@@ -78,9 +78,6 @@ public class OfferingEntity extends BaseTimeEntity {
     private Integer currentCount = INITIAL_COUNT;
 
     @NotNull
-    private Boolean isManualConfirmed; // TODO: remove
-
-    @NotNull
     @Positive
     private Integer totalPrice;
 
@@ -101,11 +98,11 @@ public class OfferingEntity extends BaseTimeEntity {
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime meetingDate, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
-                          Integer totalCount, Integer currentCount, Boolean isManualConfirmed, Integer totalPrice,
+                          Integer totalCount, Integer currentCount, Integer totalPrice,
                           Integer originPrice, Double discountRate,
                           OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
-                meetingAddressDetail, meetingAddressDong, totalCount, currentCount, isManualConfirmed, totalPrice,
+                meetingAddressDetail, meetingAddressDong, totalCount, currentCount, totalPrice,
                 originPrice, discountRate, offeringStatus, roomStatus);
     }
 
@@ -122,16 +119,12 @@ public class OfferingEntity extends BaseTimeEntity {
         return this.roomStatus;
     }
 
-    public void manuallyConfirm() {
-        this.isManualConfirmed = true;
-    }
-
     public OfferingPrice toOfferingPrice() {
         return new OfferingPrice(totalCount, totalPrice, originPrice);
     }
 
-    public OfferingCondition toOfferingCondition() {
-        return new OfferingCondition(meetingDate, totalCount, isManualConfirmed, currentCount);
+    public OfferingJoinedCount toOfferingJoinedCount() {
+        return new OfferingJoinedCount(totalCount, currentCount);
     }
 
     public OfferingMeeting toOfferingMeeting() {

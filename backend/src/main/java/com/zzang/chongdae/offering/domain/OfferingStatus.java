@@ -7,14 +7,11 @@ public enum OfferingStatus {
     CONFIRMED,
     AVAILABLE;
 
-    public static OfferingStatus decideBy(OfferingCondition offeringCondition) {
-        if (offeringCondition.isManualConfirmed() || (offeringCondition.isMeetingDateOver())) {
-            return CONFIRMED;
-        }
-        if (offeringCondition.isCountFull()) {
+    public static OfferingStatus decideByJoinedCount(OfferingJoinedCount offeringJoinedCount) {
+        if (offeringJoinedCount.isCountFull()) {
             return FULL;
         }
-        if (offeringCondition.isCountAlmostFull() || offeringCondition.isMeetingDateAlmostOver()) {
+        if (offeringJoinedCount.isCountAlmostFull()) {
             return IMMINENT;
         }
         return AVAILABLE;

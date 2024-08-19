@@ -1,6 +1,6 @@
 package com.zzang.chongdae.offering.service.dto;
 
-import com.zzang.chongdae.offering.domain.OfferingCondition;
+import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -26,7 +26,7 @@ public record OfferingDetailResponse(Long id,
 
     public OfferingDetailResponse(OfferingEntity offering,
                                   OfferingPrice offeringPrice,
-                                  OfferingCondition offeringCondition,
+                                  OfferingJoinedCount offeringJoinedCount,
                                   Boolean isProposer,
                                   Boolean isParticipated) {
         this(offering.getId(),
@@ -36,12 +36,12 @@ public record OfferingDetailResponse(Long id,
                 offering.getMeetingAddressDetail(),
                 offering.getDescription(),
                 offering.getMeetingDate(),
-                offeringCondition.getCurrentCount(),
+                offeringJoinedCount.getCurrentCount(),
                 offering.getTotalCount(),
                 offering.getThumbnailUrl(),
                 offeringPrice.calculateDividedPrice(),
                 offering.getTotalPrice(),
-                offeringCondition.decideOfferingStatus(),
+                offering.getOfferingStatus(),
                 offering.getMember().getId(),
                 offering.getMember().getNickname(),
                 isProposer,
