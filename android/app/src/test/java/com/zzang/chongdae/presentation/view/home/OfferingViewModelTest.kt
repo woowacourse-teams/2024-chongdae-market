@@ -1,8 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
-import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
-import com.zzang.chongdae.repository.FakeOfferingDetailRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
 import com.zzang.chongdae.util.TestFixture
@@ -22,12 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 class OfferingViewModelTest {
     private lateinit var viewModel: OfferingViewModel
     private lateinit var offeringRepository: OfferingRepository
-    private lateinit var offeringDetailRepository: OfferingDetailRepository
 
     @BeforeEach
     fun setUp() {
         offeringRepository = mockk<OfferingRepository>()
-        offeringDetailRepository = FakeOfferingDetailRepository()
 
         coEvery {
             offeringRepository.fetchOfferings(null, null, null, null)
@@ -37,7 +33,7 @@ class OfferingViewModelTest {
             offeringRepository.fetchFilters().getOrThrow()
         } returns TestFixture.FILTERS_STUB
 
-        viewModel = OfferingViewModel(offeringRepository, offeringDetailRepository)
+        viewModel = OfferingViewModel(offeringRepository)
     }
 
     @DisplayName("필터 정보를 불러온다")
