@@ -152,10 +152,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            MemberEntity member = memberFixture.createMember();
-            for (int i = 0; i < 11; i++) {
-                offeringFixture.createOffering(member);
-            }
+            MemberEntity proposer = memberFixture.createMember();
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
         }
 
         @DisplayName("공모 단건을 조회할 수 있다")
