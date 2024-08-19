@@ -193,8 +193,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         }
 
         viewModel.updatedOffering.observe(viewLifecycleOwner) {
-            offeringAdapter.addUpdatedItem(it)
+            offeringAdapter.addUpdatedItem(it.toList())
         }
+        viewModel.updatedOffering.getValue()?.toList()?.let { offeringAdapter.addUpdatedItem(it) }
     }
 
     override fun onClick(offeringId: Long) {

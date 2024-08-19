@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@{offering.meetingAddressDong}"
+            android:text='@{offering.meetingAddressDong != null ? offering.meetingAddressDong : ""}'
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
             app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
             tools:text="내발산동" />
@@ -92,7 +92,7 @@
         <TextView
             android:id="@+id/tv_offering_condition_comment"
             style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:textColor="@color/gray_300"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
             app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
