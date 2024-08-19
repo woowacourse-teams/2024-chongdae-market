@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class RemoteOffering(
     @SerialName("id") val id: Long,
     @SerialName("title") val title: String,
-    @SerialName("meetingAddressDong") val meetingAddress: String?,
+    @SerialName("meetingAddressDong") val meetingAddressDong: String?,
     @SerialName("currentCount") val currentCount: Int,
     @SerialName("totalCount") val totalCount: Int,
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,

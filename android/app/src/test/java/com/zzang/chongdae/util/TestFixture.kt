@@ -71,7 +71,7 @@ object TestFixture {
             Offering(
                 id = it.toLong(),
                 title = "",
-                meetingAddress = "",
+                meetingAddressDong = "",
                 thumbnailUrl = null,
                 totalCount = 0,
                 currentCount = 0,

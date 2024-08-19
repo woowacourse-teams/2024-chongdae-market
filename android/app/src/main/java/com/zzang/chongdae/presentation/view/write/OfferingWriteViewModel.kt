@@ -40,8 +40,6 @@ class OfferingWriteViewModel(
 
     val meetingAddress: MutableLiveData<String> = MutableLiveData("")
 
-    private val meetingAddressDong: MutableLiveData<String?> = MutableLiveData()
-
     val meetingAddressDetail: MutableLiveData<String> = MutableLiveData("")
 
     val meetingDate: MutableLiveData<String> = MutableLiveData("")
@@ -232,6 +230,7 @@ class OfferingWriteViewModel(
 
         val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
         val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return
+        val meetingAddressDong = extractDong(meetingAddress)
 
         var originPriceNotBlank: Int? = 0
         runCatching {
@@ -253,7 +252,7 @@ class OfferingWriteViewModel(
                         totalPrice = totalPriceConverted,
                         originPrice = originPriceNotBlank,
                         meetingAddress = meetingAddress,
-                        meetingAddressDong = meetingAddressDong.value,
+                        meetingAddressDong = meetingAddressDong,
                         meetingAddressDetail = meetingAddressDetail,
                         meetingDate = meetingDate,
                         description = description,
@@ -277,6 +276,13 @@ class OfferingWriteViewModel(
             throw NumberFormatException()
         }
         return originPriceInputTrim.toInt()
+    }
+
+    private fun extractDong(address: String): String? {
+        val regex = """\((.*?)\)""".toRegex()
+        val matchResult = regex.find(address)
+        val content = matchResult?.groups?.get(1)?.value
+        return content?.split(",")?.get(0)?.trim()
     }
 
     private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
