@@ -160,6 +160,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseAllOffering_when_givenPageInfo() {
             given(spec).log().all()
                     .filter(document("get-all-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .queryParam("filter", "RECENT")
                     .queryParam("search", "title")
                     .queryParam("last-id", 10)
@@ -362,11 +363,17 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingFilterSuccessResponse"))
                 .build();
 
+        @BeforeEach
+        void setUp() {
+            memberFixture.createMember();
+        }
+
         @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
         @Test
         void should_responseOfferingFilter_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-all-offering-filter-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .when().get("/offerings/filters")
                     .then().log().all()
                     .statusCode(200);
@@ -575,6 +582,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingProductImageResponse"))
                 .build();
 
+        @BeforeEach
+        void setUp() {
+            memberFixture.createMember();
+        }
+
         @DisplayName("상품 링크를 받아 이미지를 추출합니다.")
         @Test
         void should_extractImageUrl_when_givenProductUrl() {
@@ -582,6 +594,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("extract-product-image-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -596,6 +609,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("extract-product-image-fail", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -610,6 +624,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("extract-product-image-fail-request-with-null", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -644,6 +659,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
+            memberFixture.createMember();
             image = new File("src/test/resources/test-image.png");
             MultipartFile mockImage = new MockMultipartFile("emptyImageFile", new byte[0]);
             given(storageService.uploadFile(mockImage, "path"))
@@ -655,6 +671,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_uploadImageUrl_when_givenImageFile() {
             given(spec).log().all()
                     .filter(document("upload-product-image-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .multiPart("image", image)
                     .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                     .when().post("/offerings/product-images/s3")
