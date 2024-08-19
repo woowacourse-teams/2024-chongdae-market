@@ -8,10 +8,10 @@ VALUES ('dora', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'PtgtJCnn307FyCBvR
        ('chaechae', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WCkwnMjy/yW6odwkADguEIcHjFVELq+JLy+WeojvJ88=');
 
 INSERT INTO OFFERING (TOTAL_COUNT, CURRENT_COUNT, TOTAL_PRICE, ORIGIN_PRICE, DISCOUNT_RATE, CREATED_AT, UPDATED_AT,
-                      MEMBER_ID, MEETING_DATE, DESCRIPTION, MEETING_ADDRESS, MEETING_ADDRESS_DETAIL,
-                      MEETING_ADDRESS_DONG, PRODUCT_URL, THUMBNAIL_URL, TITLE, OFFERING_STATUS, ROOM_STATUS)
+                      MEMBER_ID, MEETING_DATE, DESCRIPTION, MEETING_ADDRESS, MEETING_ADDRESS_DONG,
+                      MEETING_ADDRESS_DETAIL, PRODUCT_URL, THUMBNAIL_URL, TITLE, OFFERING_STATUS, ROOM_STATUS)
 VALUES (9, 9, 50000, 7056, 21.3, '2024-04-29 00:00:00', '2024-04-29 00:00:00', 1, '2024-09-04 00:00:00', '공동 구매 해요  1',
-        '서울특별시 강남구 테헤란로 201', '101동 101호', '봉천동', 'www.naver.com',
+        '서울특별시 강남구 테헤란로 201', '봉천동', '101동 101호', 'www.naver.com',
         'https://github.com/user-attachments/assets/c6b07e2f-3c7a-44f9-8d3c-a3431866d8f3', '음쓰 봉투 공구하실 분?', 'FULL',
         'GROUPING'),
        (5, 4, 30000, 6780, 11.5, '2024-07-08 00:00:00', '2024-07-08 00:00:00', 2, '2024-08-27 00:00:00', '공동 구매 해요  2',
