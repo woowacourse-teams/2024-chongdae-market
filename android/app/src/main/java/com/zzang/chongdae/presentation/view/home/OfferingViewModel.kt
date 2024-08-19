@@ -16,9 +16,7 @@ import androidx.paging.map
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.toOffering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
-import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -27,7 +25,6 @@ import kotlinx.coroutines.launch
 
 class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
-    private val offeringDetailRepository: OfferingDetailRepository,
 ) : ViewModel(), OnFilterClickListener, OnSearchClickListener {
     private val _offerings = MutableLiveData<PagingData<Offering>>()
     val offerings: LiveData<PagingData<Offering>> get() = _offerings
@@ -142,13 +139,13 @@ class OfferingViewModel(
         fetchOfferings()
     }
 
-    fun fetchOfferingDetail(offeringId: Long) {
+    fun fetchUpdatedOffering(offeringId: Long) {
         viewModelScope.launch {
-            offeringDetailRepository.fetchOfferingDetail(
+            offeringRepository.fetchOffering(
                 offeringId = offeringId,
             ).onSuccess {
                 val updatedOfferings = _updatedOffering.getValue() ?: mutableListOf()
-                updatedOfferings.add(it.toOffering())
+                updatedOfferings.add(it)
                 _updatedOffering.setValue(updatedOfferings)
             }.onFailure {
                 Log.e("Error", it.message.toString())
@@ -169,19 +166,16 @@ class OfferingViewModel(
         private const val PAGE_SIZE = 10
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(
-            offeringRepository: OfferingRepository,
-            offeringDetailRepository: OfferingDetailRepository,
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras,
-            ): T {
-                return OfferingViewModel(
-                    offeringRepository,
-                    offeringDetailRepository,
-                ) as T
+        fun getFactory(offeringRepository: OfferingRepository) =
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>,
+                    extras: CreationExtras,
+                ): T {
+                    return OfferingViewModel(
+                        offeringRepository,
+                    ) as T
+                }
             }
-        }
     }
 }

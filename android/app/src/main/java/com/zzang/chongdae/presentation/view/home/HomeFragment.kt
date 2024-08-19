@@ -39,7 +39,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
-            offeringDetailRepository = (requireActivity().application as ChongdaeApp).offeringDetailRepository,
         )
     }
 
@@ -105,7 +104,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     private fun initFragmentResultListener() {
         setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
-            viewModel.fetchOfferingDetail(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
+            viewModel.fetchUpdatedOffering(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
         }
 
         setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->

@@ -31,14 +31,7 @@ class OfferingAdapter(
         getItem(position)?.let { offering ->
             val updatedOffering = updatedOfferings.firstOrNull { offering.id == it.id }
             if (updatedOffering != null) {
-                holder.bind(
-                    offering.copy(
-                        currentCount = updatedOffering.currentCount,
-                        status = updatedOffering.status,
-                    ),
-                    onOfferingClickListener,
-                    searchKeyword,
-                )
+                holder.bind(updatedOffering, onOfferingClickListener, searchKeyword)
                 return
             }
             holder.bind(offering, onOfferingClickListener, searchKeyword)

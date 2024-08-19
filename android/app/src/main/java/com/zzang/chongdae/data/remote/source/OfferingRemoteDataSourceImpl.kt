@@ -7,6 +7,7 @@ import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -14,6 +15,13 @@ import retrofit2.Response
 class OfferingRemoteDataSourceImpl(
     private val service: OfferingApiService,
 ) : OfferingRemoteDataSource {
+    override suspend fun fetchOffering(offeringId: Long): Result<RemoteOffering> =
+        runCatching {
+            service.getOffering(offeringId = offeringId)
+                .body()
+                ?: throw IllegalStateException()
+        }
+
     override suspend fun fetchOfferings(
         filter: String?,
         search: String?,
