@@ -34,7 +34,7 @@ public class OfferingController {
 
     private final OfferingService offeringService;
 
-    @GetMapping("/offerings/{offering-id}")
+    @GetMapping("/offerings/{offering-id}/detail")
     public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
             @PathVariable(value = "offering-id") Long offeringId,
             MemberEntity member) {

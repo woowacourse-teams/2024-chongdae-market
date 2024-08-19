@@ -96,7 +96,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .filter(document("get-offering-detail-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 1)
-                    .when().get("/offerings/{offering-id}")
+                    .when().get("/offerings/{offering-id}/detail")
                     .then().log().all()
                     .statusCode(200);
         }
@@ -108,7 +108,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 100)
-                    .when().get("/offerings/{offering-id}")
+                    .when().get("/offerings/{offering-id}/detail")
                     .then().log().all()
                     .statusCode(400);
         }
