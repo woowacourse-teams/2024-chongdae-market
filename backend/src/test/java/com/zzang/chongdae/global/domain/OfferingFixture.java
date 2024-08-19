@@ -28,7 +28,6 @@ public class OfferingFixture {
                 "meetingAddressDong",
                 5,
                 1,
-                false,
                 5000,
                 1000,
                 33.3,
