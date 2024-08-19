@@ -78,9 +78,8 @@ public class CommentService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(member, offering);
         CommentRoomStatus updatedStatus = offering.moveCommentRoomStatus();
-        if (updatedStatus.isBuying()) {
+        if (updatedStatus.isBuying()) { // TODO : 도메인으로 정리
             offering.updateOfferingStatus(OfferingStatus.CONFIRMED);
-            offering.manuallyConfirm();
         }
         return new CommentRoomStatusResponse(updatedStatus);
     }
