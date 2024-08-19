@@ -1,5 +1,7 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,9 +56,25 @@ class OfferingDetailFragment : Fragment() {
         setUpMoveCommentDetailEventObserve()
         (activity as MainActivity).hideBottomNavigation()
 
+        setUpObserve()
+    }
+
+    private fun setUpObserve() {
         viewModel.updatedOfferingId.observe(viewLifecycleOwner) {
             setFragmentResult(OFFERING_DETAIL_BUNDLE_KEY, bundleOf(UPDATED_OFFERING_ID_KEY to it))
         }
+
+        viewModel.reportEvent.observe(viewLifecycleOwner) { reportUrlId ->
+            openUrlInBrowser(getString(reportUrlId))
+        }
+    }
+
+    private fun openUrlInBrowser(url: String) {
+        val intent =
+            Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(url)
+            }
+        startActivity(intent)
     }
 
     override fun onDestroy() {

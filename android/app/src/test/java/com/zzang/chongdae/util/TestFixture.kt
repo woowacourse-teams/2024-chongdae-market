@@ -115,7 +115,7 @@ object TestFixture {
             thumbnailUrl = null,
             dividedPrice = 1000,
             totalPrice = 1000,
-            deadline = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1),
+            meetingDate = LocalDateTime.of(1, 1, 1, 1, 1, 1, 1),
             currentCount = CurrentCount(value = 1000),
             totalCount = 1000,
             meetingAddress = "TEST",

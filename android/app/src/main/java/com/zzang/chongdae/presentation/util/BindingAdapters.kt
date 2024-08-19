@@ -196,17 +196,12 @@ fun TextView.bindFormattedDate(datetime: LocalDateTime?) {
         datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.due_datetime)))
 }
 
-@BindingAdapter("currentCount", "totalCount", "isParticipated", "condition")
+@BindingAdapter("currentCount", "totalCount", "condition")
 fun TextView.bindStatusComment(
     currentCount: Int,
     totalCount: Int,
-    isParticipated: Boolean,
     condition: OfferingCondition?,
 ) {
-    if (isParticipated) {
-        this.text = context.getString(R.string.participant_already)
-        return
-    }
     this.text = condition?.toOfferingConditionText(this.context, currentCount, totalCount)
 }
 
