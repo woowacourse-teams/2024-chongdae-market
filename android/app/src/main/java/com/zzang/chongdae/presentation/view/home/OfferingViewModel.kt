@@ -86,10 +86,10 @@ class OfferingViewModel(
                         if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
                             return@map it.copy(
                                 title =
-                                highlightSearchKeyword(
-                                    it.title,
-                                    search.value!!,
-                                ),
+                                    highlightSearchKeyword(
+                                        it.title,
+                                        search.value!!,
+                                    ),
                             )
                         }
                         it.copy(title = removeAsterisks(it.title))

@@ -34,8 +34,10 @@ class OfferingAdapter(
                 holder.bind(
                     offering.copy(
                         currentCount = updatedOffering.currentCount,
-                        status = updatedOffering.status
-                    ), onOfferingClickListener, searchKeyword
+                        status = updatedOffering.status,
+                    ),
+                    onOfferingClickListener,
+                    searchKeyword,
                 )
                 return
             }
@@ -48,7 +50,7 @@ class OfferingAdapter(
     }
 
     fun addUpdatedItem(updatedOfferings: List<Offering>) {
-        Log.e("seogi","${updatedOfferings}")
+        Log.e("seogi", "$updatedOfferings")
         this.updatedOfferings = updatedOfferings
         updatedOfferings.forEach { offering ->
             val position = findPositionByOfferingID(offering)
@@ -58,8 +60,7 @@ class OfferingAdapter(
         }
     }
 
-    private fun findPositionByOfferingID(offering: Offering) =
-        snapshot().items.indexOfFirst { it.id == offering.id }
+    private fun findPositionByOfferingID(offering: Offering) = snapshot().items.indexOfFirst { it.id == offering.id }
 
     companion object {
         private val productComparator =
