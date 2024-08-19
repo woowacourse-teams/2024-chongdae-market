@@ -9,11 +9,6 @@
             name="vm"
             type="com.zzang.chongdae.presentation.view.home.OfferingViewModel" />
 
-
-        <variable
-            name="onUpsideClickListener"
-            type="com.zzang.chongdae.presentation.view.home.OnUpsideClickListener" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
