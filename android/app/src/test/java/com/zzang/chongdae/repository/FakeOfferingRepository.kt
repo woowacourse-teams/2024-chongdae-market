@@ -22,7 +22,7 @@ class FakeOfferingRepository : OfferingRepository {
                 Offering(
                     id = 0,
                     title = "",
-                    meetingAddress = "",
+                    meetingAddressDong = "",
                     thumbnailUrl = null,
                     totalCount = 0,
                     currentCount = 0,

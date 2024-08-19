@@ -25,7 +25,7 @@ fun OfferingDetail.toOffering(): Offering {
     return Offering(
         id = this.id,
         title = this.title,
-        meetingAddress = this.meetingAddress,
+        meetingAddressDong = this.meetingAddress,
         thumbnailUrl = this.thumbnailUrl,
         totalCount = this.totalCount,
         currentCount = this.currentCount.value,

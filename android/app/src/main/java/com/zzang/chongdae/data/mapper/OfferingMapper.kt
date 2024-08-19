@@ -7,7 +7,7 @@ fun RemoteOffering.toDomain() =
     Offering(
         id = this.id,
         title = this.title,
-        meetingAddress = this.meetingAddress ?: "",
+        meetingAddressDong = this.meetingAddressDong ?: "",
         thumbnailUrl = this.thumbnailUrl,
         totalCount = this.totalCount,
         currentCount = this.currentCount,
