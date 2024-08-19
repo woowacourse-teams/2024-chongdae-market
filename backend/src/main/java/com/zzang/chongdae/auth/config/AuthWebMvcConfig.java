@@ -27,7 +27,9 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthorizationInterceptor(cookieConsumer, jwtTokenProvider))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/auth/login", "/auth/signup",
+                .excludePathPatterns(
+                        "/auth/login",
+                        "/auth/signup",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/v3/api-docs/swagger-config",
