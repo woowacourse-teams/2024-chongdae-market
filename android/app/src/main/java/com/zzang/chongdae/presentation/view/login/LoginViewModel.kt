@@ -17,8 +17,8 @@ class LoginViewModel(
     private val authRepository: AuthRepository,
     private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel() {
-    private val _navigateEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val navigateEvent: SingleLiveData<Unit> get() = _navigateEvent
+    private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val loginSuccessEvent: SingleLiveData<Unit> get() = _loginSuccessEvent
 
     private val _alreadyLoggedInEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val alreadyLoggedInEvent: SingleLiveData<Unit> get() = _alreadyLoggedInEvent
@@ -42,7 +42,7 @@ class LoginViewModel(
                 ci = ci,
             ).onSuccess {
                 userPreferencesDataStore.saveMember(it.memberId, it.nickName)
-                _navigateEvent.setValue(Unit)
+                _loginSuccessEvent.setValue(Unit)
             }.onFailure {
                 Log.e("error", "postLogin: ${it.message}")
                 when (it.message) {

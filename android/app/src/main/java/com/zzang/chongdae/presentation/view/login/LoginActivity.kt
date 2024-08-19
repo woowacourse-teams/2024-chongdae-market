@@ -48,12 +48,27 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
-        passLoginIfAlreadyLoggedIn()
-        observeNavigateEvent()
+        setupObserve()
     }
 
-    private fun passLoginIfAlreadyLoggedIn() {
+    private fun setupObserve() {
+        observeAlreadyLoggedInEvent()
+        observeLoginSuccessEvent()
+    }
+
+    private fun observeAlreadyLoggedInEvent() {
         viewModel.alreadyLoggedInEvent.observe(this) {
+            navigateToNextActivity()
+        }
+    }
+
+    private fun observeLoginSuccessEvent() {
+        viewModel.loginSuccessEvent.observe(this) {
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "login_event",
+                name = "login_event",
+                contentType = "button",
+            )
             navigateToNextActivity()
         }
     }
@@ -108,17 +123,6 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 val email = user.kakaoAccount?.email ?: return@me
                 viewModel.postLogin(email)
             }
-        }
-    }
-
-    private fun observeNavigateEvent() {
-        firebaseAnalyticsManager.logSelectContentEvent(
-            id = "login_event",
-            name = "login_event",
-            contentType = "button",
-        )
-        viewModel.navigateEvent.observe(this) {
-            navigateToNextActivity()
         }
     }
 
