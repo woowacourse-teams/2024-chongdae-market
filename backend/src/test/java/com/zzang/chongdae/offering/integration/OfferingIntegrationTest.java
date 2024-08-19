@@ -96,16 +96,84 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .filter(document("get-offering-detail-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 1)
+                    .when().get("/offerings/{offering-id}/detail")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("유효하지 않은 공모를 상세 조회할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            given(spec).log().all()
+                    .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", 100)
+                    .when().get("/offerings/{offering-id}/detail")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 단건 조회")
+    @Nested
+    class GetOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("id").description("공모 id"),
+                fieldWithPath("title").description("제목"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소"),
+                fieldWithPath("currentCount").description("현재원"),
+                fieldWithPath("totalCount").description("총원"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("dividedPrice").description("n빵 가격"),
+                fieldWithPath("originPrice").description("원 가격"),
+                fieldWithPath("discountRate").description("할인율"),
+                fieldWithPath("status").description("공모 상태"
+                        + getEnumValuesAsString(OfferingStatus.class)),
+                fieldWithPath("isOpen").description("공모 참여 가능 여부")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 단건 조회")
+                .description("공모 단건을 조회합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(successResponseDescriptors)
+                .responseSchema(schema("OfferingSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 단건 조회")
+                .description("공모 id를 통해 공모의 단건 정보를 조회합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("OfferingFailResponse"))
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            MemberEntity proposer = memberFixture.createMember();
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+        }
+
+        @DisplayName("공모 단건을 조회할 수 있다")
+        @Test
+        void should_responseOffering_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("get-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
+                    .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(200);
         }
 
-        @DisplayName("유효하지 않은 공모를 조회할 경우 예외가 발생한다.")
+        @DisplayName("유효하지 않은 공모를 단건 조회할 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
-                    .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
+                    .filter(document("get-offering-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}")
