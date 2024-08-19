@@ -3,6 +3,7 @@ package com.zzang.chongdae.offering.controller;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
@@ -34,14 +35,6 @@ public class OfferingController {
 
     private final OfferingService offeringService;
 
-    @GetMapping("/offerings/{offering-id}")
-    public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
-            @PathVariable(value = "offering-id") Long offeringId,
-            MemberEntity member) {
-        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, member);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/offerings")
     public ResponseEntity<OfferingAllResponse> getAllOffering(
             @RequestParam(value = "filter", defaultValue = "RECENT") String filterName,
@@ -56,6 +49,21 @@ public class OfferingController {
     @GetMapping("/offerings/filters")
     public ResponseEntity<OfferingFilterAllResponse> getAllOfferingFilter() {
         OfferingFilterAllResponse response = offeringService.getAllOfferingFilter();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/offerings/{offering-id}")
+    public ResponseEntity<OfferingAllResponseItem> getOffering(
+            @PathVariable(value = "offering-id") Long offeringId) {
+        OfferingAllResponseItem response = offeringService.getOffering(offeringId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/offerings/{offering-id}/detail")
+    public ResponseEntity<OfferingDetailResponse> getOfferingDetail(
+            @PathVariable(value = "offering-id") Long offeringId,
+            MemberEntity member) {
+        OfferingDetailResponse response = offeringService.getOfferingDetail(offeringId, member);
         return ResponseEntity.ok(response);
     }
 
