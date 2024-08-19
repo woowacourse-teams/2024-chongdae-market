@@ -26,7 +26,7 @@ interface OfferingApiService {
         @Query("page-size") pageSize: Int?,
     ): Response<OfferingsResponse>
 
-    @GET("/offerings/{offering-id}")
+    @GET("/offerings/{offering-id}/detail")
     suspend fun getOfferingDetail(
         @Path("offering-id") offeringId: Long,
     ): Response<OfferingDetailResponse>
