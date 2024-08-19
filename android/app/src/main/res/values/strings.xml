@@ -23,6 +23,7 @@
     <string name="all_error_image_upload">이미지 업로드에 실패했습니다.</string>
     <string name="all_cancel">취소하기</string>
     <string name="all_change">변경하기</string>
+    <string name="report_url">https://docs.google.com/forms/d/e/1FAIpQLSdyHhWqwY0-iJsa6MrbD2f3rdES4dhXekkRbQ2T3HmnIgV1TA/viewform</string>
 
     <!--    login-->
     <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
@@ -49,6 +50,7 @@
     <!--    my_page-->
     <string name="my_page_welcome_text">안녕하세요</string>
     <string name="my_page_nickname_title">님</string>
+
     <!--    offering_detail-->
     <string name="detail_product_url_title">물품 링크:&#160;</string>
     <string name="detail_product_url_text">바로가기</string>
@@ -57,7 +59,7 @@
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
     <string name="total_price">(총 가격 %,d원)</string>
-    <string name="due_datetime">M월 dd일 HH시</string>
+    <string name="due_datetime">yyyy년 M월 d일</string>
     <string name="my_page_terms_of_use_text">이용약관</string>
     <string name="my_page_privacy_text">개인정보처리 방침</string>
     <string name="my_page_logout_text">로그아웃</string>
@@ -75,7 +77,7 @@
     <string name="comment_detail">comment_detail</string>
     <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
     <string name="comment_detail_message_hint">메시지를 입력하세요.</string>
-    <string name="detail_deadline_comment_text">마감 시간</string>
+    <string name="detail_meeting_date_comment_text">거래 날짜</string>
 
     <!--    comment_detail-->
     <string name="recruiting">모집중</string>
@@ -131,4 +133,5 @@
     <string name="write_error_writing">공모 게시에 실패했어요🥲</string>
     <string name="write_update_state_dialog_message">공동구매 <font color="#F15642">진행 상황</font>을 <font color="#F15642">변경</font>하시겠습니까?</string>
     <string name="write_current_split_price">현재 엔빵 가격: %,d원</string>
+    <string name="detail_move_comment_detail">참여중인 채팅방</string>
 </resources>

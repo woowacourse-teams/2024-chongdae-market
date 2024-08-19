@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
@@ -18,7 +19,10 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
-) : ViewModel(), OnParticipationClickListener {
+) : ViewModel(),
+    OnParticipationClickListener,
+    OnOfferingReportClickListener,
+    OnMoveCommentDetailClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
@@ -28,11 +32,11 @@ class OfferingDetailViewModel(
     private val _offeringCondition: MutableLiveData<OfferingCondition> = MutableLiveData()
     val offeringCondition: LiveData<OfferingCondition> get() = _offeringCondition
 
-    private val _isParticipated: MutableLiveData<Boolean> = MutableLiveData(true)
+    private val _isParticipated: MutableLiveData<Boolean> = MutableLiveData(false)
     val isParticipated: LiveData<Boolean> get() = _isParticipated
 
-    private val _isAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isAvailable: LiveData<Boolean> get() = _isAvailable
+    private val _isParticipationAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
+    val isParticipationAvailable: LiveData<Boolean> get() = _isParticipationAvailable
 
     private val _isRepresentative: MutableLiveData<Boolean> = MutableLiveData(true)
     val isRepresentative: LiveData<Boolean> get() = _isRepresentative
@@ -42,6 +46,9 @@ class OfferingDetailViewModel(
 
     private val _updatedOfferingId: MutableLiveData<Long> = MutableLiveData()
     val updatedOfferingId: LiveData<Long> get() = _updatedOfferingId
+
+    private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
     init {
         loadOffering()
@@ -57,7 +64,8 @@ class OfferingDetailViewModel(
                     _currentCount.value = it.currentCount.value
                     _offeringCondition.value = it.condition
                     _isParticipated.value = it.isParticipated
-                    _isAvailable.value = isParticipationEnabled(it.condition, it.isParticipated)
+                    _isParticipationAvailable.value =
+                        isParticipationEnabled(it.condition, it.isParticipated)
                     _isRepresentative.value = it.isProposer
                 }.onFailure {
                     Log.e("error", it.message.toString())
@@ -71,7 +79,6 @@ class OfferingDetailViewModel(
                 offeringId = offeringId,
             ).onSuccess {
                 _isParticipated.value = true
-                _isAvailable.value = false
                 _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
                 _updatedOfferingId.value = offeringId
             }.onFailure {
@@ -80,10 +87,18 @@ class OfferingDetailViewModel(
         }
     }
 
+    override fun onClickMoveCommentDetail() {
+        _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
+    }
+
+    override fun onClickReport() {
+        _reportEvent.setValue(R.string.report_url)
+    }
+
     private fun isParticipationEnabled(
         offeringCondition: OfferingCondition,
         isParticipated: Boolean,
-    ) = offeringCondition.isAvailable() && !isParticipated
+    ) = !isParticipated && offeringCondition.isAvailable()
 
     companion object {
         private const val DEFAULT_TITLE = ""

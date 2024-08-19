@@ -50,10 +50,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
                     android:fontFamily="@font/suit_medium"
+                    android:onClick="@{() -> vm.onClickReport()}"
                     android:text="@string/all_report_text"
                     android:textColor="@color/gray_font"
                     android:textSize="15sp"
-                    app:isVisible="@{!vm.isRepresentative()}"
+                    app:isVisible="@{!vm.isRepresentative}"
                     app:layout_constraintEnd_toStartOf="@id/iv_report"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,6 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/size_10"
+                    android:onClick="@{() -> vm.onClickReport()}"
                     android:src="@drawable/ic_detail_report"
                     app:layout_constraintBottom_toBottomOf="@id/tv_report_comment"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -123,7 +125,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="60dp"
                         android:src="@drawable/ic_detail_modify"
-                        app:isVisible="@{vm.isRepresentative()}"
+                        app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/ic_detail_divide_line"
-                        app:isVisible="@{vm.isRepresentative()}"
+                        app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintStart_toEndOf="@id/iv_modify"
                         app:layout_constraintTop_toTopOf="@id/iv_modify" />
 
@@ -143,7 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/ic_detail_remove"
-                        app:isVisible="@{vm.isRepresentative()}"
+                        app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintStart_toEndOf="@id/view_divide_line"
                         app:layout_constraintTop_toTopOf="@id/view_divide_line" />
 
@@ -152,6 +154,7 @@
                         style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
                         android:layout_marginTop="18dp"
                         android:text="@string/detail_product_url_title"
+                        app:isVisible="@{vm.offeringDetail.productUrl != null}"
                         app:layout_constraintBottom_toTopOf="@id/horizon_line"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
@@ -163,6 +166,7 @@
                         android:text="@string/detail_product_url_text"
                         android:textColor="@color/main_color"
                         android:textSize="16sp"
+                        app:isVisible="@{vm.offeringDetail.productUrl != null}"
                         app:layout_constraintBottom_toBottomOf="@id/tv_product_link_comment"
                         app:layout_constraintStart_toEndOf="@id/tv_product_link_comment"
                         app:layout_constraintTop_toTopOf="@id/tv_product_link_comment"
@@ -236,23 +240,23 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
-                        android:id="@+id/tv_deadline_comment"
+                        android:id="@+id/tv_meeting_date_comment"
                         style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="23dp"
-                        android:text="@string/detail_deadline_comment_text"
+                        android:text="@string/detail_meeting_date_comment_text"
                         app:layout_constraintBottom_toBottomOf="@id/iv_time"
                         app:layout_constraintStart_toEndOf="@id/iv_time"
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
-                        android:id="@+id/tv_deadline"
+                        android:id="@+id/tv_meeting_date"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
                         android:layout_marginTop="8dp"
-                        app:formattedDate="@{vm.offeringDetail.deadline}"
+                        app:formattedDate="@{vm.offeringDetail.meetingDate}"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
                         app:layout_constraintTop_toBottomOf="@id/iv_time"
-                        tools:text="12월 11일 18시" />
+                        tools:text="2024년 3월 28일" />
 
                     <ImageView
                         android:id="@+id/iv_location"
@@ -261,7 +265,7 @@
                         android:layout_marginStart="60dp"
                         android:layout_marginTop="23dp"
                         android:src="@drawable/ic_detail_location"
-                        app:layout_constraintStart_toEndOf="@id/tv_deadline_comment"
+                        app:layout_constraintStart_toEndOf="@id/tv_meeting_date_comment"
                         app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
 
                     <TextView
@@ -336,14 +340,13 @@
             android:layout_marginHorizontal="19dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/btn_participation_enabled"
-            android:enabled="@{vm.isAvailable}"
+            android:enabled="@{vm.isParticipationAvailable}"
             android:fontFamily="@font/suit_medium"
             android:onClick="@{() -> vm.onClickParticipation()}"
             android:textColor="@color/white"
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"
-            app:isParticipated="@{vm.isParticipated}"
-            app:isVisible="@{!vm.isRepresentative}"
+            app:isVisible="@{!vm.isParticipated}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -351,6 +354,23 @@
             app:totalCount="@{vm.offeringDetail.totalCount}"
             tools:enabled="true"
             tools:text="참여하기(1/4)" />
+
+        <Button
+            android:id="@+id/btn_move_comment_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btn_participation_opened"
+            android:fontFamily="@font/suit_medium"
+            android:onClick="@{() -> vm.onClickMoveCommentDetail()}"
+            android:text="@string/detail_move_comment_detail"
+            android:textColor="@color/white"
+            app:isVisible="@{vm.isParticipated}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
