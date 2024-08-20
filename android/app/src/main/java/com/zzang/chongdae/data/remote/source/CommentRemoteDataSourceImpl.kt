@@ -4,58 +4,32 @@ import com.zzang.chongdae.data.remote.api.CommentApiService
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse
+import com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse
+import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
-import retrofit2.Response
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 
 class CommentRemoteDataSourceImpl(
     private val service: CommentApiService,
 ) : CommentRemoteDataSource {
-    override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit> =
-        runCatching {
-            val response = service.postComment(commentRequest)
-            if (response.isSuccessful) {
-                response.body() ?: error("에러 발생: null")
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
+    override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit, DataError.Network> =
+        safeApiCall {
+            service.postComment(commentRequest)
         }
 
-    override suspend fun fetchComments(offeringId: Long): Result<CommentsResponse> =
-        runCatching {
-            val response: Response<CommentsResponse> =
-                service.getComments(offeringId)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
+    override suspend fun fetchComments(offeringId: Long): Result<CommentsResponse, DataError.Network> =
+        safeApiCall {
+            service.getComments(offeringId)
         }
 
-    override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfoResponse> {
-        return runCatching {
-            val response: Response<CommentOfferingInfoResponse> =
-                service.getCommentOfferingInfo(offeringId)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
+    override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfoResponse, DataError.Network> =
+        safeApiCall {
+            service.getCommentOfferingInfo(offeringId)
         }
-    }
 
-    override suspend fun updateOfferingStatus(offeringId: Long): Result<Unit> {
-        return runCatching {
-            val response = service.patchOfferingStatus(offeringId)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
+    override suspend fun updateOfferingStatus(offeringId: Long): Result<UpdatedStatusResponse, DataError.Network> =
+        safeApiCall {
+            service.patchOfferingStatus(offeringId)
         }
-    }
-
-    companion object {
-        const val ERROR_PREFIX = "에러 발생: "
-        const val ERROR_NULL_MESSAGE = "null"
-    }
 }
