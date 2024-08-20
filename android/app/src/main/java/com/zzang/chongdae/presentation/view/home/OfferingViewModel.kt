@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +16,10 @@ import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
 
 class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel(), OnFilterClickListener, OnSearchClickListener {
     private val _offerings = MutableLiveData<PagingData<Offering>>()
     val offerings: LiveData<PagingData<Offering>> get() = _offerings
@@ -112,10 +115,20 @@ class OfferingViewModel(
 
     private fun fetchFilters() {
         viewModelScope.launch {
-            offeringRepository.fetchFilters().onSuccess {
-                _filters.value = it
-            }.onFailure {
-                Log.e("error", it.message.toString())
+            when (val result = offeringRepository.fetchFilters()) {
+                is Result.Error -> {
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            fetchFilters()
+                        }
+                        else -> DataError.Network.UNKNOWN
+                    }
+                }
+
+                is Result.Success -> {
+                    _filters.value = result.data
+                }
             }
         }
     }
@@ -141,14 +154,22 @@ class OfferingViewModel(
 
     fun fetchUpdatedOffering(offeringId: Long) {
         viewModelScope.launch {
-            offeringRepository.fetchOffering(
-                offeringId = offeringId,
-            ).onSuccess {
-                val updatedOfferings = _updatedOffering.getValue() ?: mutableListOf()
-                updatedOfferings.add(it)
-                _updatedOffering.setValue(updatedOfferings)
-            }.onFailure {
-                Log.e("Error", it.message.toString())
+            when (val result = offeringRepository.fetchOffering(offeringId)) {
+                is Result.Error -> {
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            fetchUpdatedOffering(offeringId)
+                        }
+                        else -> DataError.Network.UNKNOWN
+                    }
+                }
+
+                is Result.Success -> {
+                    val updatedOfferings = _updatedOffering.getValue() ?: mutableListOf()
+                    updatedOfferings.add(result.data)
+                    _updatedOffering.setValue(updatedOfferings)
+                }
             }
         }
     }
@@ -166,16 +187,19 @@ class OfferingViewModel(
         private const val PAGE_SIZE = 10
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringRepository: OfferingRepository) =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return OfferingViewModel(
-                        offeringRepository,
-                    ) as T
-                }
+        fun getFactory(
+            offeringRepository: OfferingRepository,
+            authRepository: AuthRepository,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return OfferingViewModel(
+                    offeringRepository,
+                    authRepository,
+                ) as T
             }
+        }
     }
 }
