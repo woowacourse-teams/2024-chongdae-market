@@ -2,7 +2,7 @@ package com.zzang.chongdae.presentation.view.commentdetail.model.information
 
 import com.zzang.chongdae.domain.model.CommentOfferingInfo
 
-class CommentOfferingInfoUiModel (
+class CommentOfferingInfoUiModel(
     val status: String,
     val imageUrl: String,
     val buttonText: String,
@@ -10,7 +10,7 @@ class CommentOfferingInfoUiModel (
     val title: String,
     val isProposer: Boolean,
 ) {
-    companion object{
+    companion object {
         fun CommentOfferingInfo.toUiModel(): CommentOfferingInfoUiModel {
             return CommentOfferingInfoUiModel(
                 status = status,
