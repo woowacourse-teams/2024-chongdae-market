@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: validate
+
+security:
+  jwt:
+    token:
+      access-secret-key: ${JWT_ACCESS_SECRET_KEY}
+      refresh-secret-key: ${JWT_REFRESH_SECRET_KEY}
+      access-token-expired: 30m
+      refresh-token-expired: 14d
+
+amazon:
+  s3:
+    bucket: techcourse-project-2024
+  cloudfront:
+    redirectUrl: d3a5rfnjdz82qu.cloudfront.net
+
+
+logging:
+  level:
+    com.zzang.chongdae: INFO
+  file:
+    name: /logs/backend.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      file-name-pattern: /logs/backend.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 100MB
+      max-history: 14
