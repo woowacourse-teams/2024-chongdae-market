@@ -47,8 +47,8 @@ public class MemberEntity extends BaseTimeEntity {
         this(null, nickname, AuthProvider.KAKAO, "", password);
     }
 
-    public MemberEntity(String nickname, AuthProvider provider, String loginId) {
-        this(null, nickname, provider, loginId, "");
+    public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
+        this(null, nickname, provider, loginId, password);
     }
 
     public boolean isSame(MemberEntity other) {

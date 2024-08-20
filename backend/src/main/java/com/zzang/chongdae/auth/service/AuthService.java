@@ -13,6 +13,7 @@ import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +55,8 @@ public class AuthService {
     }
 
     private MemberEntity signup(AuthProvider provider, String loginId) {
-        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId);
+        String password = passwordEncoder.encode(UUID.randomUUID().toString());
+        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId, password);
         return memberRepository.save(member);
     }
 
