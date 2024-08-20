@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.commentdetail.adapter
+package com.zzang.chongdae.presentation.view.commentdetail.adapter.comment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

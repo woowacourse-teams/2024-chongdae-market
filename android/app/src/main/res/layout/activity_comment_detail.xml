@@ -52,7 +52,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/suit_medium"
                 android:maxLines="1"
-                android:text="@{vm.offeringTitle}"
+                android:text="@{vm.title}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_20"
                 app:layout_constraintBottom_toBottomOf="@id/iv_back"
@@ -76,7 +76,7 @@
             <View
                 android:id="@+id/white_round_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_120"
+                android:layout_height="@dimen/size_130"
                 android:layout_marginTop="@dimen/margin_20"
                 android:background="@drawable/bg_white_radius_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -85,12 +85,12 @@
 
             <ImageView
                 android:id="@+id/iv_offering_status"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/size_80"
+                android:layout_width="285dp"
+                android:layout_height="@dimen/size_100"
                 android:layout_marginTop="@dimen/margin_20"
                 android:background="@drawable/bg_white_radius_16dp"
                 android:contentDescription="@string/comment_detail"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/white_round_view"
@@ -113,10 +113,11 @@
                 android:elevation="5dp"
                 android:fontFamily="@font/suit_semibold"
                 android:gravity="center"
-                android:onClick="@{() -> vm.updateOffering()}"
+                android:onClick="@{() -> vm.updateOfferingEvent()}"
                 android:text="@{vm.offeringStatusButtonText}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_15"
+                app:isVisible="@{vm.isProposer()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/white_round_view"
@@ -314,19 +315,66 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_offering_members" />
 
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:id="@+id/rv_offering_members"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="0dp"-->
-            <!--                android:layout_marginTop="@dimen/margin_10"-->
-            <!--                android:paddingBottom="@dimen/size_50"-->
-            <!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-            <!--                app:layout_constraintBottom_toTopOf="@+id/horizon_line"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/tv_offering_members"-->
-            <!--                tools:itemCount="5"-->
-            <!--                tools:listitem="@layout/item_offering_member" />-->
+            <ImageView
+                android:id="@+id/iv_proposer"
+                android:layout_width="@dimen/size_30"
+                android:layout_height="@dimen/size_30"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/size_20"
+                android:src="@drawable/ic_proposer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_offering_members" />
+
+            <TextView
+                android:id="@+id/tv_proposer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_medium"
+                android:textSize="@dimen/size_14"
+                android:textColor="@color/gray_600"
+                android:layout_marginStart="@dimen/size_15"
+                android:text="@{vm.participants.proposer.nickname}"
+                app:layout_constraintBottom_toBottomOf="@id/iv_proposer"
+                app:layout_constraintStart_toEndOf="@id/iv_proposer"
+                app:layout_constraintTop_toTopOf="@id/iv_proposer"
+                app:layout_constraintVertical_bias="0.4"
+                tools:text="총대 닉네임" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_offering_members"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/size_50"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/horizon_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_proposer"
+                tools:itemCount="15"
+                tools:listitem="@layout/item_offering_member" />
+
+            <TextView
+                android:id="@+id/tv_comment_detail_expected_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_semibold"
+                android:text="@string/comment_detail_expected_price"
+                android:textColor="@color/gray_500"
+                app:layout_constraintBottom_toTopOf="@+id/horizon_line"
+                app:layout_constraintStart_toStartOf="@+id/tv_offering_members"
+                app:layout_constraintTop_toBottomOf="@+id/rv_offering_members" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:fontFamily="@font/suit_semibold"
+                android:text='@{String.format(@string/all_money_amount_text, vm.participants.price)}'
+                android:textColor="@color/main_color"
+                app:layout_constraintBottom_toTopOf="@+id/horizon_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_offering_members" />
 
             <View
                 android:id="@+id/horizon_line"

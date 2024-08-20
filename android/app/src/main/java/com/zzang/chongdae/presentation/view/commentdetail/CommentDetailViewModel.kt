@@ -9,22 +9,23 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.Meetings
-import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
-import com.zzang.chongdae.presentation.util.handleAccessTokenExpiration
+import com.zzang.chongdae.presentation.view.commentdetail.model.ParticipantUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.ParticipantsUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.ProposerUiModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class CommentDetailViewModel(
-    private val authRepository: AuthRepository,
     private val offeringId: Long,
-    val offeringTitle: String,
     private val offeringRepository: OfferingRepository,
+    private val participantRepository: ParticipantRepository,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
     private var cachedComments: List<Comment> = emptyList()
@@ -35,6 +36,7 @@ class CommentDetailViewModel(
     private val _isCollapsibleViewVisible = MutableLiveData(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
+    // meeting
     private val _deadline = MutableLiveData<LocalDateTime>()
     val deadline: LiveData<LocalDateTime> get() = _deadline
 
@@ -44,8 +46,19 @@ class CommentDetailViewModel(
     private val _locationDetail = MutableLiveData<String>()
     val locationDetail: LiveData<String> get() = _locationDetail
 
+    // comments
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
+
+    // info
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String> get() = _title
+
+    private val _isProposer = MutableLiveData<Boolean>()
+    val isProposer: LiveData<Boolean> get() = _isProposer
+
+    private val _offeringStatusMessage = MutableLiveData<String>()
+    val offeringStatusMessage: LiveData<String> get() = _offeringStatusMessage
 
     private val _offeringStatusButtonText = MutableLiveData<String>()
     val offeringStatusButtonText: LiveData<String> get() = _offeringStatusButtonText
@@ -53,6 +66,11 @@ class CommentDetailViewModel(
     private val _offeringStatusImageUrl = MutableLiveData<String>()
     val offeringStatusImageUrl: LiveData<String> get() = _offeringStatusImageUrl
 
+    // participants
+    private val _participants = MutableLiveData<ParticipantsUiModel>()
+    val participants: LiveData<ParticipantsUiModel> get() = _participants
+
+    // events
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
 
@@ -64,33 +82,45 @@ class CommentDetailViewModel(
 
     init {
         startPolling()
-        updateStatusInfo()
+        updateCommentInfo()
         loadMeetings()
+        loadParticipants()
     }
 
-    private fun updateStatusInfo() {
+    private fun startPolling() {
+        pollJob?.cancel()
+        pollJob =
+            viewModelScope.launch {
+                while (true) {
+                    loadComments()
+                    delay(1000)
+                }
+            }
+    }
+
+    private fun updateCommentInfo() {
         viewModelScope.launch {
             commentDetailRepository.fetchCommentOfferingInfo(offeringId).onSuccess {
+                _title.value = it.title
+                _isProposer.value = it.isProposer
                 _offeringStatusButtonText.value = it.buttonText
                 _offeringStatusImageUrl.value = it.imageUrl
             }.onFailure {
                 Log.e("error", "updateStatusInfo: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { updateStatusInfo() }
             }
         }
     }
 
-    fun updateOffering() {
+    fun updateOfferingEvent() {
         _showStatusDialogEvent.value = Unit
     }
 
     fun updateOfferingStatus() {
         viewModelScope.launch {
             commentDetailRepository.updateOfferingStatus(offeringId).onSuccess {
-                updateStatusInfo()
+                updateCommentInfo()
             }.onFailure {
                 Log.e("error", "updateOfferingStatus: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { updateOfferingStatus() }
             }
         }
     }
@@ -106,30 +136,7 @@ class CommentDetailViewModel(
                 }
             }.onFailure {
                 Log.e("error", "loadComments: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { loadComments() }
             }
-        }
-    }
-
-    private fun startPolling() {
-        pollJob?.cancel()
-        pollJob =
-            viewModelScope.launch {
-                while (true) {
-                    loadComments()
-                    delay(1000)
-                }
-            }
-    }
-
-    private fun stopPolling() {
-        pollJob?.cancel()
-    }
-
-    fun toggleCollapsibleView() {
-        _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
-        if (_isCollapsibleViewVisible.value == true) {
-            loadMeetings()
         }
     }
 
@@ -147,7 +154,31 @@ class CommentDetailViewModel(
                 commentContent.value = ""
             }.onFailure {
                 Log.e("error", "postComment: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { postComment() }
+            }
+        }
+    }
+
+    fun toggleCollapsibleView() {
+        _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
+        if (_isCollapsibleViewVisible.value == true) {
+            loadMeetings()
+        }
+    }
+
+    private fun loadParticipants() {
+        viewModelScope.launch {
+            participantRepository.fetchParticipants(offeringId).onSuccess { participantsResponse ->
+                _participants.value =
+                    ParticipantsUiModel(
+                        proposer = ProposerUiModel(nickname = participantsResponse.proposer.nickname),
+                        participants = participantsResponse.participants.map { ParticipantUiModel(nickname = it.nickname) },
+                        totalCount = participantsResponse.participantCount.totalCount,
+                        currentCount = participantsResponse.participantCount.currentCount,
+                        price = participantsResponse.price,
+                    )
+                Log.d("participants", "loadParticipants: ${participantsResponse.participants}")
+            }.onFailure {
+                Log.e("error", "loadParticipants: ${it.message}")
             }
         }
     }
@@ -162,7 +193,6 @@ class CommentDetailViewModel(
                 }
             }.onFailure {
                 Log.e("error", "loadMeetings: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { loadMeetings() }
             }
         }
     }
@@ -180,25 +210,27 @@ class CommentDetailViewModel(
         stopPolling()
     }
 
+    private fun stopPolling() {
+        pollJob?.cancel()
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
-            authRepository: AuthRepository,
             offeringId: Long,
-            offeringTitle: String,
             offeringRepository: OfferingRepository,
+            participantRepository: ParticipantRepository,
             commentDetailRepository: CommentDetailRepository,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return CommentDetailViewModel(
-                    authRepository,
-                    offeringId,
-                    offeringTitle,
-                    offeringRepository,
-                    commentDetailRepository,
+                return com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel(
+                    offeringId = offeringId,
+                    offeringRepository = offeringRepository,
+                    participantRepository = participantRepository,
+                    commentDetailRepository = commentDetailRepository,
                 ) as T
             }
         }

@@ -18,19 +18,21 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
-import com.zzang.chongdae.presentation.view.commentdetail.adapter.CommentAdapter
+import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
+import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
 
 class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private var _binding: ActivityCommentDetailBinding? = null
     private val binding get() = _binding!!
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
+    private val participantAdapter: ParticipantAdapter by lazy { ParticipantAdapter() }
     private val dialog: Dialog by lazy { Dialog(this) }
+
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
-            authRepository = (application as ChongdaeApp).authRepository,
             offeringId = offeringId,
-            offeringTitle = offeringTitle,
             offeringRepository = (application as ChongdaeApp).offeringRepository,
+            participantRepository = (application as ChongdaeApp).participantRepository,
             commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,
         )
     }
@@ -40,9 +42,6 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
             EXTRA_OFFERING_ID_KEY,
             EXTRA_DEFAULT_VALUE,
         )
-    }
-    private val offeringTitle by lazy {
-        intent.getStringExtra(EXTRA_OFFERING_TITLE_KEY) ?: DEFAULT_OFFERING_TITLE
     }
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
@@ -89,10 +88,12 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                     stackFromEnd = true
                 }
         }
+        binding.rvOfferingMembers.adapter = participantAdapter
     }
 
     private fun setUpObserve() {
         observeComments()
+        observeParticipants()
         observeUpdateOfferingEvent()
         observeExitOfferingEvent()
         observeBackEvent()
@@ -104,6 +105,14 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 binding.rvComments.doOnPreDraw {
                     binding.rvComments.scrollToPosition(comments.size - 1)
                 }
+            }
+        }
+    }
+
+    private fun observeParticipants() {
+        viewModel.participants.observe(this) { participants ->
+            participants?.let {
+                participantAdapter.submitList(it.participants)
             }
         }
     }
@@ -181,16 +190,12 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     companion object {
         private const val EXTRA_DEFAULT_VALUE = 1L
         private const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
-        private const val EXTRA_OFFERING_TITLE_KEY = "offering_title_key"
-        private const val DEFAULT_OFFERING_TITLE = "공구 제목을 불러오지 못했어요."
 
         fun startActivity(
             context: Context,
             offeringId: Long,
-            offeringTitle: String,
         ) = Intent(context, CommentDetailActivity::class.java).run {
             putExtra(EXTRA_OFFERING_ID_KEY, offeringId)
-            putExtra(EXTRA_OFFERING_TITLE_KEY, offeringTitle)
             context.startActivity(this)
         }
     }
