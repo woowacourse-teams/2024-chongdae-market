@@ -75,7 +75,6 @@ class OfferingViewModel(
     }
 
     private fun fetchOfferings() {
-        Log.e("seogi", "fetchOfferings")
         viewModelScope.launch {
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),

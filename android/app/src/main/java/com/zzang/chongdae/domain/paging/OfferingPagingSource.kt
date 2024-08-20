@@ -29,7 +29,6 @@ class OfferingPagingSource(
             when (offerings) {
                 is Result.Error -> {
                     authRepository.saveRefresh()
-                    Log.e("seogi", "${offerings.error.name}")
                     retry()
                     load(params)
                 }
