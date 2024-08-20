@@ -168,7 +168,7 @@ class CommentDetailViewModel(
     }
 
     fun exitOffering() {
-       viewModelScope.launch {
+        viewModelScope.launch {
             participantRepository.deleteParticipations(offeringId).onSuccess {
                 _onExitOfferingEvent.setValue(Unit)
             }.onFailure {

@@ -19,7 +19,7 @@ interface ParticipationApiService {
     suspend fun getParticipants(
         @Query("offering-id") offeringId: Long,
     ): Response<ParticipantsResponse>
-    
+
     @DELETE("/participations")
     suspend fun deleteParticipations(
         @Query("offering-id") offeringId: Long,
