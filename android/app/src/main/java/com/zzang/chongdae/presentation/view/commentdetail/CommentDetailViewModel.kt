@@ -140,6 +140,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
+                            Log.d("error", "loadComments: ${result.error}")
                             authRepository.saveRefresh()
                             loadComments()
                         }

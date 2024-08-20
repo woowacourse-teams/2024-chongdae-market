@@ -12,7 +12,7 @@ import okhttp3.HttpUrl
 
 class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataStore) : CookieJar {
     private val cookies: MutableMap<String, List<Cookie>> = mutableMapOf()
-    private val urlHost = BuildConfig.BASE_URL.removePrefix(URL_PREFIX).removePrefix(URL_PREFIX)
+    private val urlHost = BuildConfig.BASE_URL.removePrefix(URL_PREFIX_HTTP).removePrefix(URL_PREFIX_HTTPS)
         .substringBefore("/")
 
     init {
@@ -64,6 +64,7 @@ class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataS
     companion object {
         private const val ACCESS_TOKEN_NAME = "access_token"
         private const val REFRESH_TOKEN_NAME = "refresh_token"
-        private const val URL_PREFIX = "http://"
+        private const val URL_PREFIX_HTTP = "http://"
+        private const val URL_PREFIX_HTTPS = "https://"
     }
 }
