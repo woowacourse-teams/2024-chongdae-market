@@ -1,6 +1,7 @@
 package com.zzang.chongdae.auth.service;
 
-import com.zzang.chongdae.auth.service.dto.KakaoUserInfoResponseDto;
+import com.zzang.chongdae.auth.exception.KakaoLoginExceptionHandler;
+import com.zzang.chongdae.auth.service.dto.KakaoLoginResponseDto;
 import com.zzang.chongdae.member.domain.AuthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -15,11 +16,12 @@ public class AuthClient {
     private final RestClient restClient;
 
     public String getKakaoUserInfo(String accessToken) {
-        KakaoUserInfoResponseDto responseDto = restClient.get()
+        KakaoLoginResponseDto responseDto = restClient.get()
                 .uri(GET_KAKAO_USER_INFO_URI)
                 .header(HttpHeaders.AUTHORIZATION, createAuthorization(accessToken))
                 .retrieve()
-                .body(KakaoUserInfoResponseDto.class);
+                .onStatus(new KakaoLoginExceptionHandler())
+                .body(KakaoLoginResponseDto.class);
         return AuthProvider.KAKAO.buildLoginId(responseDto.id().toString()); // TODO: NPE 처리 고려하기
     }
 
