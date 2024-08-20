@@ -67,7 +67,7 @@ class FakeOfferingRepository : OfferingRepository {
     }
 
     override suspend fun fetchFilters(): Result<List<Filter>, DataError.Network> {
-        TODO("Not yet implemented")
+        return Result.Success(TestFixture.FILTERS_STUB)
     }
 
     override suspend fun fetchMeetings(offeringId: Long): Result<Meetings, DataError.Network> =
