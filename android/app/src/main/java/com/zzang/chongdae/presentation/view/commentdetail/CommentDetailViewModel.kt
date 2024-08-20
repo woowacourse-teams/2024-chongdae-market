@@ -8,19 +8,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
-import com.zzang.chongdae.presentation.view.commentdetail.model.ParticipantUiModel
-import com.zzang.chongdae.presentation.view.commentdetail.model.ParticipantsUiModel
-import com.zzang.chongdae.presentation.view.commentdetail.model.ProposerUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ProposerUiModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class CommentDetailViewModel(
     private val offeringId: Long,
@@ -29,24 +28,15 @@ class CommentDetailViewModel(
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
     private var cachedComments: List<Comment> = emptyList()
-    private val cachedMeetings: Meetings? = null
     private var pollJob: Job? = null
     val commentContent = MutableLiveData("")
 
     private val _isCollapsibleViewVisible = MutableLiveData(false)
     val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
 
-    // meeting
-    private val _deadline = MutableLiveData<LocalDateTime>()
-    val deadline: LiveData<LocalDateTime> get() = _deadline
+    private val _meetings = MutableLiveData<MeetingsUiModel>()
+    val meetings: LiveData<MeetingsUiModel> get() = _meetings
 
-    private val _location = MutableLiveData<String>()
-    val location: LiveData<String> get() = _location
-
-    private val _locationDetail = MutableLiveData<String>()
-    val locationDetail: LiveData<String> get() = _locationDetail
-
-    // comments
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
 
@@ -171,12 +161,16 @@ class CommentDetailViewModel(
                 _participants.value =
                     ParticipantsUiModel(
                         proposer = ProposerUiModel(nickname = participantsResponse.proposer.nickname),
-                        participants = participantsResponse.participants.map { ParticipantUiModel(nickname = it.nickname) },
+                        participants =
+                            participantsResponse.participants.map {
+                                ParticipantUiModel(
+                                    nickname = it.nickname,
+                                )
+                            },
                         totalCount = participantsResponse.participantCount.totalCount,
                         currentCount = participantsResponse.participantCount.currentCount,
                         price = participantsResponse.price,
                     )
-                Log.d("participants", "loadParticipants: ${participantsResponse.participants}")
             }.onFailure {
                 Log.e("error", "loadParticipants: ${it.message}")
             }
@@ -185,12 +179,13 @@ class CommentDetailViewModel(
 
     private fun loadMeetings() {
         viewModelScope.launch {
-            offeringRepository.fetchMeetings(offeringId).onSuccess {
-                if (it != cachedMeetings) {
-                    _deadline.value = it.meetingDate
-                    _location.value = it.meetingAddress
-                    _locationDetail.value = it.meetingAddressDetail
-                }
+            offeringRepository.fetchMeetings(offeringId).onSuccess { meetings ->
+                _meetings.value =
+                    MeetingsUiModel(
+                        meetingDate = meetings.meetingDate,
+                        meetingAddress = meetings.meetingAddress,
+                        meetingAddressDetail = meetings.meetingAddressDetail,
+                    )
             }.onFailure {
                 Log.e("error", "loadMeetings: ${it.message}")
             }

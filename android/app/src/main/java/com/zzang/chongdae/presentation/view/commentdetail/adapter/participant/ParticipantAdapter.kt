@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.zzang.chongdae.databinding.ItemOfferingMemberBinding
-import com.zzang.chongdae.presentation.view.commentdetail.model.ParticipantUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantUiModel
 
 class ParticipantAdapter : ListAdapter<ParticipantUiModel, ParticipantViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(

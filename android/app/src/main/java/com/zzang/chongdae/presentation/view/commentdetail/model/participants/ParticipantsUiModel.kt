@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.commentdetail.model
+package com.zzang.chongdae.presentation.view.commentdetail.model.participants
 
 data class ParticipantsUiModel(
     val proposer: ProposerUiModel,
