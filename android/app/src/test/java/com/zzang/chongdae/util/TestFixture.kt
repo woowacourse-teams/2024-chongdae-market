@@ -16,6 +16,10 @@ import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.model.ProductUrl
+import com.zzang.chongdae.domain.model.participant.Participant
+import com.zzang.chongdae.domain.model.participant.ParticipantCount
+import com.zzang.chongdae.domain.model.participant.Participants
+import com.zzang.chongdae.domain.model.participant.Proposer
 import okhttp3.MultipartBody
 import java.time.LocalDateTime
 
@@ -64,6 +68,17 @@ object TestFixture {
             message = "message2",
             title = "title2",
             isProposer = false,
+        )
+
+    val participants: Participants =
+        Participants(
+            proposer = Proposer(nickname = "proposer nickname"),
+            participants =
+                listOf(
+                    Participant(nickname = "participant nickname"),
+                ),
+            participantCount = ParticipantCount(currentCount = 1, totalCount = 4),
+            price = 1000,
         )
 
     val OFFERINGS_STUB =

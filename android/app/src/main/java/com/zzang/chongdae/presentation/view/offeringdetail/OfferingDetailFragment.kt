@@ -99,7 +99,7 @@ class OfferingDetailFragment : Fragment() {
                 name = "participate_offering_event",
                 contentType = "button",
             )
-            CommentDetailActivity.startActivity(requireContext(), offeringId, offeringTitle)
+            CommentDetailActivity.startActivity(requireContext(), offeringId)
         }
     }
 
