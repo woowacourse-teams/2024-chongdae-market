@@ -300,7 +300,7 @@
                 style="@style/Theme.AppCompat.TextView.Normal.Gray900.Size17"
                 android:layout_marginStart="@dimen/size_25"
                 android:layout_marginTop="@dimen/size_25"
-                android:text="@string/offering_members"
+                android:text="@{String.format(@string/offering_members, vm.participants.currentCount, vm.participants.totalCount)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

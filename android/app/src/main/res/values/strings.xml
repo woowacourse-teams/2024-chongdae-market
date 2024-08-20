@@ -89,7 +89,7 @@
     <string name="schedule_confirm">일정확정</string>
     <string name="purchase_confirm">구매확정</string>
     <string name="deal_confirm">거래확정</string>
-    <string name="offering_members">참여자 목록</string>
+    <string name="offering_members">참여자 목록 (%d명/%d명)</string>
     <string name="comment_detail_expected_price">예상 공동구매 엔빵 가격</string>
 
     <!--    offering_write-->
