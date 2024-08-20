@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,10 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
@@ -19,6 +21,7 @@ import kotlinx.coroutines.launch
 class OfferingDetailViewModel(
     private val offeringId: Long,
     private val offeringDetailRepository: OfferingDetailRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel(),
     OnParticipationClickListener,
     OnOfferingReportClickListener,
@@ -56,33 +59,40 @@ class OfferingDetailViewModel(
 
     private fun loadOffering() {
         viewModelScope.launch {
-            offeringDetailRepository.fetchOfferingDetail(
-                offeringId = offeringId,
-            )
-                .onSuccess {
-                    _offeringDetail.value = it
-                    _currentCount.value = it.currentCount.value
-                    _offeringCondition.value = it.condition
-                    _isParticipated.value = it.isParticipated
+            when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> authRepository.saveRefresh()
+                        else -> DataError.Network.UNKNOWN
+                    }
+
+                is Result.Success -> {
+                    _offeringDetail.value = result.data
+                    _currentCount.value = result.data.currentCount.value
+                    _offeringCondition.value = result.data.condition
+                    _isParticipated.value = result.data.isParticipated
                     _isParticipationAvailable.value =
-                        isParticipationEnabled(it.condition, it.isParticipated)
-                    _isRepresentative.value = it.isProposer
-                }.onFailure {
-                    Log.e("error", it.message.toString())
+                        isParticipationEnabled(result.data.condition, result.data.isParticipated)
+                    _isRepresentative.value = result.data.isProposer
                 }
+            }
         }
     }
 
     override fun onClickParticipation() {
         viewModelScope.launch {
-            offeringDetailRepository.saveParticipation(
-                offeringId = offeringId,
-            ).onSuccess {
-                _isParticipated.value = true
-                _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
-                _updatedOfferingId.value = offeringId
-            }.onFailure {
-                Log.e("Error", it.message.toString())
+            when (val result = offeringDetailRepository.saveParticipation(offeringId)) {
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> authRepository.saveRefresh()
+                        else -> DataError.Network.UNKNOWN
+                    }
+
+                is Result.Success -> {
+                    _isParticipated.value = true
+                    _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
+                    _updatedOfferingId.value = offeringId
+                }
             }
         }
     }
@@ -107,6 +117,7 @@ class OfferingDetailViewModel(
         fun getFactory(
             offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
+            authRepository: AuthRepository,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
@@ -115,6 +126,7 @@ class OfferingDetailViewModel(
                 return OfferingDetailViewModel(
                     offeringId,
                     offeringDetailRepository,
+                    authRepository,
                 ) as T
             }
         }
