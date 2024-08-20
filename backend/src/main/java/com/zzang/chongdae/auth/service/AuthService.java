@@ -5,7 +5,6 @@ import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
-import com.zzang.chongdae.auth.service.dto.KakaoUserInfoResponseDto;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.global.exception.MarketException;
@@ -47,16 +46,15 @@ public class AuthService {
     }
 
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
-        KakaoUserInfoResponseDto kakaoUserInfo = authClient.getKakaoUserInfo(request.accessToken());
+        String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
-        String providerId = kakaoUserInfo.id().toString();
-        MemberEntity member = memberRepository.findByProviderAndProviderId(provider, providerId)
-                .orElseGet(() -> signup(provider, providerId));
+        MemberEntity member = memberRepository.findByLoginId(loginId)
+                .orElseGet(() -> signup(provider, loginId));
         return login(member);
     }
 
-    private MemberEntity signup(AuthProvider provider, String providerId) {
-        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, providerId);
+    private MemberEntity signup(AuthProvider provider, String loginId) {
+        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId);
         return memberRepository.save(member);
     }
 

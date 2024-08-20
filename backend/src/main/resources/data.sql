@@ -1,11 +1,18 @@
-INSERT INTO MEMBER (NICKNAME, CREATED_AT, UPDATED_AT, PASSWORD)
-VALUES ('dora', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'PtgtJCnn307FyCBvRprsy+42rX7dg00qVLWkPbl2Ag0='),
-       ('poke', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'XimRQY0Y2avPH6KxGK4ZOXB4+MT3Sfb605ZEPidVNpQ='),
-       ('mason', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WBmuFn7FSb5jG03SKBB0K7MNk0mNg9FLPoHyTbi4Tl0='),
-       ('ever', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'UhN2JlsRhvNn7XY2WYlfDwI9/d/XoRvr8Ls7tbeYZWg='),
-       ('alsong', '2024-07-15 00:00:00', '2024-07-15 00:00:00', '+qY3Pnqyjj9amVGZ1Bu63iJX6cpon7kQiIvqAG0ExkE='),
-       ('seogi', '2024-07-15 00:00:00', '2024-07-15 00:00:00', '0CWUdyVQ1TP+GGlI9W2d5Gao/5HgT0MSeIwald0Qcsw='),
-       ('chaechae', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WCkwnMjy/yW6odwkADguEIcHjFVELq+JLy+WeojvJ88=');
+INSERT INTO MEMBER (NICKNAME, CREATED_AT, UPDATED_AT, PASSWORD, LOGIN_ID, PROVIDER)
+VALUES ('dora', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'PtgtJCnn307FyCBvRprsy+42rX7dg00qVLWkPbl2Ag0=', 'dora',
+        'KAKAO'),
+       ('poke', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'XimRQY0Y2avPH6KxGK4ZOXB4+MT3Sfb605ZEPidVNpQ=', 'poke',
+        'KAKAO'),
+       ('mason', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WBmuFn7FSb5jG03SKBB0K7MNk0mNg9FLPoHyTbi4Tl0=', 'mason',
+        'KAKAO'),
+       ('ever', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'UhN2JlsRhvNn7XY2WYlfDwI9/d/XoRvr8Ls7tbeYZWg=', 'ever',
+        'KAKAO'),
+       ('alsong', '2024-07-15 00:00:00', '2024-07-15 00:00:00', '+qY3Pnqyjj9amVGZ1Bu63iJX6cpon7kQiIvqAG0ExkE=',
+        'alsong', 'KAKAO'),
+       ('seogi', '2024-07-15 00:00:00', '2024-07-15 00:00:00', '0CWUdyVQ1TP+GGlI9W2d5Gao/5HgT0MSeIwald0Qcsw=', 'seogi',
+        'KAKAO'),
+       ('chaechae', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WCkwnMjy/yW6odwkADguEIcHjFVELq+JLy+WeojvJ88=',
+        'chaechae', 'KAKAO');
 
 INSERT INTO OFFERING (TOTAL_COUNT, CURRENT_COUNT, TOTAL_PRICE, ORIGIN_PRICE, DISCOUNT_RATE, CREATED_AT, UPDATED_AT,
                       MEMBER_ID, MEETING_DATE, DESCRIPTION, MEETING_ADDRESS, MEETING_ADDRESS_DONG,

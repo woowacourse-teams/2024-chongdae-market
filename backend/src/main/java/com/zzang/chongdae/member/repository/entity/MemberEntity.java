@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,12 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Table(
-        name = "member",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"provider", "providerId"})
-        }
-)
+@Table(name = "member")
 @Entity
 public class MemberEntity extends BaseTimeEntity {
 
@@ -39,20 +33,22 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(unique = true, length = 10)
     private String nickname;
 
-    @NotNull
-    private String password; // TODO: 지우기
-
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
-    private String providerId;
+    @NotNull
+    @Column(unique = true)
+    private String loginId;
+
+    @NotNull
+    private String password; // TODO: 일반 로그인 들어올 시 salt 추가
 
     public MemberEntity(String nickname, String password) {
-        this(null, nickname, password, AuthProvider.KAKAO, ""); // TODO: 지우기
+        this(null, nickname, AuthProvider.KAKAO, "", password);
     }
 
-    public MemberEntity(String nickname, AuthProvider provider, String providerId) {
-        this(null, nickname, "", provider, providerId); // TODO: 지우기
+    public MemberEntity(String nickname, AuthProvider provider, String loginId) {
+        this(null, nickname, provider, loginId, "");
     }
 
     public boolean isSame(MemberEntity other) {
