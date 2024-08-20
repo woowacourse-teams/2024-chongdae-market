@@ -5,6 +5,7 @@ import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.auth.service.dto.LoginResponse;
+import com.zzang.chongdae.logging.config.LoggingMasked;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ public class AuthController {
     private final CookieProducer cookieExtractor;
     private final CookieConsumer cookieConsumer;
 
+    @LoggingMasked
     @PostMapping("/auth/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(
             @RequestBody @Valid KakaoLoginRequest request, HttpServletResponse servletResponse) {
