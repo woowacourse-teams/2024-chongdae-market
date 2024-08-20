@@ -73,6 +73,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
 
     override fun onResume() {
         super.onResume()
+        updateCommentRooms()
         firebaseAnalyticsManager.logScreenView(
             screenName = "CommentRoomsFragment",
             screenClass = this::class.java.simpleName,
