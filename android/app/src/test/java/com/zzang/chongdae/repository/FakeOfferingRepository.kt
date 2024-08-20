@@ -11,6 +11,23 @@ import com.zzang.chongdae.util.TestFixture
 import okhttp3.MultipartBody
 
 class FakeOfferingRepository : OfferingRepository {
+    override suspend fun fetchOffering(offeringId: Long): Result<Offering> {
+        return Result.success(
+            Offering(
+                id = 0,
+                title = "",
+                meetingAddressDong = "",
+                thumbnailUrl = null,
+                totalCount = 0,
+                currentCount = 0,
+                dividedPrice = 0,
+                originPrice = null,
+                status = OfferingCondition.CONFIRMED,
+                isOpen = false,
+            ),
+        )
+    }
+
     override suspend fun fetchOfferings(
         filter: String?,
         search: String?,

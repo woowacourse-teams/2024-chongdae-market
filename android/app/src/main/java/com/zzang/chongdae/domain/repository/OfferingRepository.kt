@@ -8,6 +8,8 @@ import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import okhttp3.MultipartBody
 
 interface OfferingRepository {
+    suspend fun fetchOffering(offeringId: Long): Result<Offering>
+
     suspend fun fetchOfferings(
         filter: String?,
         search: String?,
