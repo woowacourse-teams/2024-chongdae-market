@@ -7,6 +7,7 @@ import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -27,6 +28,11 @@ interface OfferingApiService {
     ): Response<OfferingsResponse>
 
     @GET("/offerings/{offering-id}")
+    suspend fun getOffering(
+        @Path("offering-id") offeringId: Long,
+    ): Response<RemoteOffering>
+
+    @GET("/offerings/{offering-id}/detail")
     suspend fun getOfferingDetail(
         @Path("offering-id") offeringId: Long,
     ): Response<OfferingDetailResponse>
