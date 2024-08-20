@@ -133,8 +133,13 @@ class OfferingWriteViewModel(
     fun uploadImageFile(multipartBody: MultipartBody.Part) {
         viewModelScope.launch {
             when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
+                is Result.Success -> {
+                    _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
+                    thumbnailUrl.value = result.data.imageUrl
+                }
+
                 is Result.Error -> {
-                    Log.e("error", "${result.error}")
+                    Log.e("error", "uploadImageFile: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             authRepository.saveRefresh()
@@ -143,11 +148,6 @@ class OfferingWriteViewModel(
                         else -> {}
                     }
                 }
-
-                is Result.Success -> {
-                    _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
-                    thumbnailUrl.value = result.data.imageUrl
-                }
             }
         }
     }
@@ -155,8 +155,16 @@ class OfferingWriteViewModel(
     fun postProductImageOg() {
         viewModelScope.launch {
             when (val result = offeringRepository.saveProductImageOg(productUrl.value ?: "")) {
+                is Result.Success -> {
+                    if (result.data.imageUrl.isBlank()) {
+                        _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
+                        return@launch
+                    }
+                    thumbnailUrl.value = HTTPS + result.data.imageUrl
+                }
+
                 is Result.Error -> {
-                    Log.e("error", "${result.error}")
+                    Log.e("error", "postProductImageOg: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             authRepository.saveRefresh()
@@ -168,14 +176,6 @@ class OfferingWriteViewModel(
                                 WriteUIState.Error(R.string.error_invalid_product_url, "${result.error}")
                         }
                     }
-                }
-
-                is Result.Success -> {
-                    if (result.data.imageUrl.isBlank()) {
-                        _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
-                        return@launch
-                    }
-                    thumbnailUrl.value = HTTPS + result.data.imageUrl
                 }
             }
         }
@@ -285,8 +285,10 @@ class OfferingWriteViewModel(
                             ),
                     )
             ) {
+                is Result.Success -> makeSubmitOfferingEvent()
+
                 is Result.Error -> {
-                    Log.e("error", "${result.error}")
+                    Log.e("error", "postOffering: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             authRepository.saveRefresh()
@@ -298,8 +300,6 @@ class OfferingWriteViewModel(
                         }
                     }
                 }
-
-                is Result.Success -> makeSubmitOfferingEvent()
             }
         }
     }

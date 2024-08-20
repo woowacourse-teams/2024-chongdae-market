@@ -40,18 +40,17 @@ class LoginViewModel(
     fun postLogin(ci: String) {
         viewModelScope.launch {
             when (val result = authRepository.saveLogin(ci = ci)) {
-                is Result.Error -> {
-                    Log.e("error", "postLogin: ${result.error}")
-                    when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> postRefreshToken(ci)
-                        DataError.Network.NOT_FOUND -> postSignup(ci)
-                        else -> {}
-                    }
-                }
-
                 is Result.Success -> {
                     userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
                     _loginSuccessEvent.setValue(Unit)
+                }
+
+                is Result.Error -> {
+                    Log.e("error", "postLogin: ${result.error}")
+                    when (result.error) {
+                        DataError.Network.NOT_FOUND -> postSignup(ci)
+                        else -> {}
+                    }
                 }
             }
         }
@@ -60,34 +59,14 @@ class LoginViewModel(
     private fun postSignup(ci: String) {
         viewModelScope.launch {
             when (val result = authRepository.saveSignup(ci = ci)) {
-                is Result.Error -> {
-                    Log.e("error", "postSignup: ${result.error}")
-                    when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> postRefreshToken(ci)
-//                        DataError.Network.NOT_FOUND -> postLogin(ci)
-                        else -> {}
-                    }
-                }
-
                 is Result.Success -> {
                     userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
                     postLogin(ci)
                 }
-            }
-        }
-    }
 
-    private fun postRefreshToken(ci: String) {
-        viewModelScope.launch {
-            when (val result = authRepository.saveRefresh()) {
                 is Result.Error -> {
-                    when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> postLogin(ci)
-                        else -> {}
-                    }
+                    Log.e("error", "postSignup: ${result.error}")
                 }
-
-                is Result.Success -> {}
             }
         }
     }
