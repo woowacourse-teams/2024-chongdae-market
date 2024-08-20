@@ -42,11 +42,7 @@ public class MemberEntity extends BaseTimeEntity {
 
     @NotNull
     private String password; // TODO: 일반 로그인 들어올 시 salt 추가
-
-    public MemberEntity(String nickname, String password) {
-        this(null, nickname, AuthProvider.KAKAO, "", password);
-    }
-
+    
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
         this(null, nickname, provider, loginId, password);
     }

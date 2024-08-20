@@ -65,7 +65,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -81,7 +81,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-my-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -97,7 +97,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -113,7 +113,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-request-with-null", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/participations")
@@ -165,7 +165,6 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
 
             offeringNotParticipated = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offeringNotParticipated);
-
         }
 
         @DisplayName("공모 참여 취소를 할 수 있다.")
@@ -173,7 +172,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_cancelSuccess() {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .queryParam("offering-id", offeringWithGrouping.getId())
                     .when().delete("/participations")
                     .then().log().all()
@@ -185,7 +184,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_throwException_when_cancelProposer() {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-fail-offering-proposer", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .queryParam("offering-id", offeringWithGrouping.getId())
                     .when().delete("/participations")
                     .then().log().all()
@@ -197,7 +196,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_throwException_when_cancelInProgress() {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-fail-offering-in-progress", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .queryParam("offering-id", offeringWithInProgress.getId())
                     .when().delete("/participations")
                     .then().log().all()
@@ -209,7 +208,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_throwException_when_cancelNotParticipated() {
             RestAssured.given(spec).log().all()
                     .filter(document("cancel-fail-offering-not-participated", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("poke5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .queryParam("offering-id", offeringNotParticipated.getId())
                     .when().delete("/participations")
                     .then().log().all()
@@ -264,7 +263,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_participantsSuccess() {
             RestAssured.given(spec).log().all()
                     .filter(document("participants-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("dora5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .queryParam("offering-id", offering.getId())
                     .when().get("/participants")
                     .then().log().all()
@@ -276,7 +275,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             RestAssured.given(spec).log().all()
                     .filter(document("participants-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("dora5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .queryParam("offering-id", 1000)
                     .when().get("/participants")
                     .then().log().all()
@@ -288,7 +287,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         void should_throwException_when_emptyValue() {
             RestAssured.given(spec).log().all()
                     .filter(document("participants-fail-request-with-null", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("dora5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .when().get("/participants?offering-id=")
                     .then().log().all()
                     .statusCode(400);

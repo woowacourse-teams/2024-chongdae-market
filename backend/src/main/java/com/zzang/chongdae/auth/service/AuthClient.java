@@ -20,7 +20,7 @@ public class AuthClient {
                 .header(HttpHeaders.AUTHORIZATION, createAuthorization(accessToken))
                 .retrieve()
                 .body(KakaoUserInfoResponseDto.class);
-        return AuthProvider.KAKAO.buildLoginId(responseDto.id()); // TODO: NPE 처리 고려하기
+        return AuthProvider.KAKAO.buildLoginId(responseDto.id().toString()); // TODO: NPE 처리 고려하기
     }
 
     private String createAuthorization(String accessToken) {
