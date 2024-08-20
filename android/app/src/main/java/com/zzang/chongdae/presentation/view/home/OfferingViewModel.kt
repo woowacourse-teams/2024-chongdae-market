@@ -78,7 +78,12 @@ class OfferingViewModel(
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
-                    OfferingPagingSource(offeringRepository, search.value, _selectedFilter.value)
+                    OfferingPagingSource(
+                        offeringRepository,
+                        search.value,
+                        _selectedFilter.value,
+                        { fetchOfferings() },
+                    )
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
                 _offerings.value =

@@ -4,11 +4,13 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.util.Result
 
 class OfferingPagingSource(
     private val offeringsRepository: OfferingRepository,
     private val search: String?,
     private val filter: String?,
+    private val retry: () -> Unit,
 ) : PagingSource<Long, Offering>() {
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Offering> {
         val lastOfferingId = params.key
@@ -19,17 +21,27 @@ class OfferingPagingSource(
                     search = search,
                     lastOfferingId = lastOfferingId,
                     pageSize = params.loadSize,
-                ).getOrThrow()
+                )
 
-            val prevKey = if (lastOfferingId == null) null else lastOfferingId + DEFAULT_PAGE_SIZE
-            val nextKey =
-                if (offerings.isEmpty() || offerings.size < DEFAULT_PAGE_SIZE) null else offerings.last().id
+            when (offerings) {
+                is Result.Error -> {
+                    retry()
+                    LoadResult.Error(Throwable("Failed to load data"))
+                }
 
-            LoadResult.Page(
-                data = offerings,
-                prevKey = prevKey,
-                nextKey = nextKey,
-            )
+                is Result.Success -> {
+                    val prevKey =
+                        if (lastOfferingId == null) null else lastOfferingId + DEFAULT_PAGE_SIZE
+                    val nextKey =
+                        if (offerings.data.isEmpty() || offerings.data.size < DEFAULT_PAGE_SIZE) null else offerings.data.last().id
+
+                    LoadResult.Page(
+                        data = offerings.data,
+                        prevKey = prevKey,
+                        nextKey = nextKey,
+                    )
+                }
+            }
         }.onFailure { throwable ->
             LoadResult.Error<Long, Offering>(throwable)
         }.getOrThrow()
