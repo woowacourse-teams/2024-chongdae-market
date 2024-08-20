@@ -15,7 +15,6 @@ import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.model.Participation
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.model.participant.Participant
 import com.zzang.chongdae.domain.model.participant.ParticipantCount
@@ -70,13 +69,14 @@ object TestFixture {
             title = "title2",
             isProposer = false,
         )
-    
+
     val participants: Participants =
         Participants(
             proposer = Proposer(nickname = "proposer nickname"),
-            participants = listOf(
-                Participant(nickname = "participant nickname"),
-            ),
+            participants =
+                listOf(
+                    Participant(nickname = "participant nickname"),
+                ),
             participantCount = ParticipantCount(currentCount = 1, totalCount = 4),
             price = 1000,
         )

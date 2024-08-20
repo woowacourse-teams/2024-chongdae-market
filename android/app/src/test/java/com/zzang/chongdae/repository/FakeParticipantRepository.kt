@@ -6,6 +6,6 @@ import com.zzang.chongdae.util.TestFixture.participants
 
 class FakeParticipantRepository : ParticipantRepository {
     override suspend fun fetchParticipants(offeringId: Long): Result<Participants> {
-       return Result.success(participants)
+        return Result.success(participants)
     }
 }

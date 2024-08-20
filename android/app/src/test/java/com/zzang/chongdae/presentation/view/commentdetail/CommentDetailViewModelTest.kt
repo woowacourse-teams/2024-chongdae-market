@@ -36,7 +36,7 @@ class CommentDetailViewModelTest {
         offeringRepository = FakeOfferingRepository()
         participantRepository = FakeParticipantRepository()
         commentDetailRepository = FakeCommentDetailRepository()
-        viewModel = CommentDetailViewModel(offeringId,  offeringRepository,participantRepository, commentDetailRepository)
+        viewModel = CommentDetailViewModel(offeringId, offeringRepository, participantRepository, commentDetailRepository)
     }
 
     @DisplayName("공동구매 상태를 불러온다")
