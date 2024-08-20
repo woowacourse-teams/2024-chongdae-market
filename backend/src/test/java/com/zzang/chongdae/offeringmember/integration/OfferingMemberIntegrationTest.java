@@ -51,7 +51,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            proposer = memberFixture.createMember();
+            proposer = memberFixture.createMember("dora");
             participant = memberFixture.createMember("poke");
             offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
@@ -152,7 +152,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            proposer = memberFixture.createMember();
+            proposer = memberFixture.createMember("dora");
             participant = memberFixture.createMember("poke");
 
             offeringWithGrouping = offeringFixture.createOffering(proposer);

@@ -12,10 +12,6 @@ public class MemberFixture {
     @Autowired
     private MemberRepository memberRepository;
 
-    public MemberEntity createMember() {
-        return createMember("dora");
-    }
-
     public MemberEntity createMember(String nickname) {
         MemberEntity member = new MemberEntity(
                 nickname,

@@ -50,7 +50,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
         }
@@ -151,7 +151,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
             MemberEntity participant = memberFixture.createMember("참여자");
@@ -367,7 +367,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
             commentFixture.createComment(member, offering);

@@ -86,7 +86,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            proposer = memberFixture.createMember();
+            proposer = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
         }
@@ -156,7 +156,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            proposer = memberFixture.createMember();
+            proposer = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
         }
@@ -220,10 +220,10 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .build();
 
         MemberEntity member;
-        
+
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             for (int i = 0; i < 11; i++) {
                 offeringFixture.createOffering(member);
             }
@@ -277,7 +277,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
         }
@@ -443,7 +443,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
         }
 
         @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
@@ -494,7 +494,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
         }
 
         @DisplayName("공모 정보를 받아 공모를 작성 할 수 있다.")
@@ -664,7 +664,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
         }
 
         @DisplayName("상품 링크를 받아 이미지를 추출합니다.")
@@ -740,7 +740,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             image = new File("src/test/resources/test-image.png");
             MultipartFile mockImage = new MockMultipartFile("emptyImageFile", new byte[0]);
             given(storageService.uploadFile(mockImage, "path"))

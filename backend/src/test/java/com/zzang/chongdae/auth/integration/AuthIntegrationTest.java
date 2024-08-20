@@ -66,7 +66,7 @@ class AuthIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             BDDMockito.given(authClient.getKakaoUserInfo(any()))
                     .willReturn(member.getLoginId());
         }
@@ -119,7 +119,7 @@ class AuthIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             now = Date.from(clock.instant());
         }
 
