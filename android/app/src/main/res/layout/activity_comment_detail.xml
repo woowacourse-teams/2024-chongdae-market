@@ -310,6 +310,7 @@
                 android:layout_height="@dimen/icon_size_24"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/ic_detail_report"
+                android:onClick="@{() -> vm.onClickReport()}"
                 app:layout_constraintBottom_toBottomOf="@id/tv_offering_members"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_offering_members" />

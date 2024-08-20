@@ -3,6 +3,7 @@ package com.zzang.chongdae.presentation.view.commentdetail
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
@@ -95,6 +96,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         observeComments()
         observeParticipants()
         observeUpdateOfferingEvent()
+        observeReportEvent()
         observeExitOfferingEvent()
         observeBackEvent()
     }
@@ -115,6 +117,20 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 participantAdapter.submitList(it.participants)
             }
         }
+    }
+
+    private fun observeReportEvent() {
+        viewModel.reportEvent.observe(this) { reportUrlId ->
+            openUrlInBrowser(getString(reportUrlId))
+        }
+    }
+
+    private fun openUrlInBrowser(url: String) {
+        val intent =
+            Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(url)
+            }
+        startActivity(intent)
     }
 
     private fun observeUpdateOfferingEvent() {

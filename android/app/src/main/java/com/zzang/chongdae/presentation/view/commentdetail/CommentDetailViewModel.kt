@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -50,6 +51,9 @@ class CommentDetailViewModel(
 
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
+
+    private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
     private val _onExitOfferingEvent = MutableSingleLiveData<Unit>()
     val onExitOfferingEvent: SingleLiveData<Unit> get() = _onExitOfferingEvent
@@ -157,6 +161,10 @@ class CommentDetailViewModel(
                 Log.e("error", "loadMeetings: ${it.message}")
             }
         }
+    }
+
+    fun onClickReport() {
+        _reportEvent.setValue(R.string.report_url)
     }
 
     fun exitOffering() {
