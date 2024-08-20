@@ -16,6 +16,11 @@ class OfferingRepositoryImpl(
     private val offeringLocalDataSource: OfferingLocalDataSource,
     private val offeringRemoteDataSource: OfferingRemoteDataSource,
 ) : OfferingRepository {
+    override suspend fun fetchOffering(offeringId: Long): Result<Offering> =
+        offeringRemoteDataSource.fetchOffering(offeringId = offeringId).mapCatching {
+            it.toDomain()
+        }
+
     override suspend fun fetchOfferings(
         filter: String?,
         search: String?,
