@@ -4,4 +4,6 @@ import com.zzang.chongdae.data.remote.dto.response.participants.ParticipantsResp
 
 interface ParticipantRemoteDataSource {
     suspend fun fetchParticipants(offeringId: Long): Result<ParticipantsResponse>
+    
+    suspend fun deleteParticipations(offeringId: Long): Result<Unit>
 }
