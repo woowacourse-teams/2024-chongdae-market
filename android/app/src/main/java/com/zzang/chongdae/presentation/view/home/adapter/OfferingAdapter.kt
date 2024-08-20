@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -43,7 +42,6 @@ class OfferingAdapter(
     }
 
     fun addUpdatedItem(updatedOfferings: List<Offering>) {
-        Log.e("seogi", "$updatedOfferings")
         this.updatedOfferings = updatedOfferings
         updatedOfferings.forEach { offering ->
             val position = findPositionByOfferingID(offering)
