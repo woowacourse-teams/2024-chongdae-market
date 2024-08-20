@@ -149,15 +149,6 @@ class OfferingWriteViewModel(
                     thumbnailUrl.value = result.data.imageUrl
                 }
             }
-//            _writeUIState.value = WriteUIState.Loading
-//            offeringRepository.saveProductImageS3(multipartBody).onSuccess {
-//                _writeUIState.value = WriteUIState.Success(it.imageUrl)
-//                thumbnailUrl.value = it.imageUrl
-//            }.onFailure {
-//                Log.e("error", it.message.toString())
-//                _writeUIState.value =
-//                    WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
-//            }
         }
     }
 
@@ -310,28 +301,6 @@ class OfferingWriteViewModel(
 
                 is Result.Success -> makeSubmitOfferingEvent()
             }
-            /*offeringRepository.saveOffering(
-                uiModel =
-                OfferingWriteUiModel(
-                    title = title,
-                    productUrl = productUrl.value,
-                    thumbnailUrl = thumbnailUrl.value,
-                    totalCount = totalCountConverted,
-                    totalPrice = totalPriceConverted,
-                    originPrice = originPriceNotBlank,
-                    meetingAddress = meetingAddress,
-                    meetingAddressDong = meetingAddressDong,
-                    meetingAddressDetail = meetingAddressDetail,
-                    meetingDate = meetingDate,
-                    description = description,
-                ),
-            ).onSuccess {
-                makeSubmitOfferingEvent()
-            }.onFailure {
-                Log.e("error", it.message.toString())
-                _writeUIState.value =
-                    WriteUIState.Error(R.string.write_error_writing, it.message.toString())
-            }*/
         }
     }
 
