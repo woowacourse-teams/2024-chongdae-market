@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -74,12 +75,14 @@ class OfferingViewModel(
     }
 
     private fun fetchOfferings() {
+        Log.e("seogi", "fetchOfferings")
         viewModelScope.launch {
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
                     OfferingPagingSource(
                         offeringRepository,
+                        authRepository,
                         search.value,
                         _selectedFilter.value,
                         { fetchOfferings() },

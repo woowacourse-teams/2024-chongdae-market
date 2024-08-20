@@ -1,13 +1,16 @@
 package com.zzang.chongdae.domain.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.util.Result
 
 class OfferingPagingSource(
     private val offeringsRepository: OfferingRepository,
+    private val authRepository: AuthRepository,
     private val search: String?,
     private val filter: String?,
     private val retry: () -> Unit,
@@ -25,8 +28,10 @@ class OfferingPagingSource(
 
             when (offerings) {
                 is Result.Error -> {
+                    authRepository.saveRefresh()
+                    Log.e("seogi", "${offerings.error.name}")
                     retry()
-                    LoadResult.Error(Throwable("Failed to load data"))
+                    load(params)
                 }
 
                 is Result.Success -> {
