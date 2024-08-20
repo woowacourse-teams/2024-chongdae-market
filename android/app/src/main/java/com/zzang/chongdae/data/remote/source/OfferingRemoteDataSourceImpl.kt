@@ -31,7 +31,7 @@ class OfferingRemoteDataSourceImpl(
             if (response.isSuccessful) {
                 response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("$ERROR_PREFIX${response.code()}")
+                error(ERROR_PREFIX + response.code())
             }
         }
     }
@@ -43,7 +43,7 @@ class OfferingRemoteDataSourceImpl(
             if (response.isSuccessful) {
                 response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("$ERROR_PREFIX${response.code()}")
+                error(ERROR_PREFIX + response.code())
             }
         }
     }
@@ -54,7 +54,7 @@ class OfferingRemoteDataSourceImpl(
             if (response.isSuccessful) {
                 response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("$ERROR_PREFIX${response.code()}")
+                error(ERROR_PREFIX + response.code())
             }
         }
     }
@@ -70,7 +70,7 @@ class OfferingRemoteDataSourceImpl(
             if (response.isSuccessful) {
                 response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
             } else {
-                error("${ERROR_PREFIX}${response.code()}")
+                error(ERROR_PREFIX + response.code())
             }
         }
     }
