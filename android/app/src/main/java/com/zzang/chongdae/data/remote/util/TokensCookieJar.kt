@@ -12,7 +12,8 @@ import okhttp3.HttpUrl
 
 class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataStore) : CookieJar {
     private val cookies: MutableMap<String, List<Cookie>> = mutableMapOf()
-    private val urlHost = BuildConfig.BASE_URL.removePrefix(URL_PREFIX)
+    private val urlHost = BuildConfig.BASE_URL.removePrefix(URL_PREFIX).removePrefix(URL_PREFIX)
+        .substringBefore("/")
 
     init {
         loadTokensFromDataStore()
