@@ -1,7 +1,9 @@
 package com.zzang.chongdae.presentation.view.write
 
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel.Companion.HTTPS
+import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeOfferingRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
@@ -21,11 +23,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 class OfferingWriteViewModelTest {
     private lateinit var viewModel: OfferingWriteViewModel
     private lateinit var offeringRepository: OfferingRepository
+    private lateinit var authRepository: AuthRepository
 
     @BeforeEach
     fun setUp() {
         offeringRepository = FakeOfferingRepository()
-        viewModel = OfferingWriteViewModel(offeringRepository)
+        authRepository = FakeAuthRepository()
+        viewModel = OfferingWriteViewModel(offeringRepository, authRepository)
     }
 
     @DisplayName("상품 url을 통해 og 이미지 정보를 가져온다")
