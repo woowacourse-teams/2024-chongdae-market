@@ -17,7 +17,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
-import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
@@ -32,6 +31,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
             offeringId = offeringId,
+            authRepository = (application as ChongdaeApp).authRepository,
             offeringRepository = (application as ChongdaeApp).offeringRepository,
             participantRepository = (application as ChongdaeApp).participantRepository,
             commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,

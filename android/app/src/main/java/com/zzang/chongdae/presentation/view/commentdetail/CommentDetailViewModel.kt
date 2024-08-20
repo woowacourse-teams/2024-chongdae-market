@@ -9,9 +9,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Comment
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel
@@ -23,9 +26,11 @@ import com.zzang.chongdae.presentation.view.commentdetail.model.participants.Par
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 
 class CommentDetailViewModel(
     private val offeringId: Long,
+    private val authRepository: AuthRepository,
     private val offeringRepository: OfferingRepository,
     private val participantRepository: ParticipantRepository,
     private val commentDetailRepository: CommentDetailRepository,
@@ -81,10 +86,19 @@ class CommentDetailViewModel(
 
     private fun updateCommentInfo() {
         viewModelScope.launch {
-            commentDetailRepository.fetchCommentOfferingInfo(offeringId).onSuccess {
-                _commentOfferingInfo.value = it.toUiModel()
-            }.onFailure {
-                Log.e("error", "updateStatusInfo: ${it.message}")
+            when (val result = commentDetailRepository.fetchCommentOfferingInfo(offeringId)) {
+                is Result.Success -> _commentOfferingInfo.value = result.data.toUiModel()
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            updateCommentInfo()
+                        }
+
+                        else -> {
+                            Log.e("error", "updateCommentInfo: ${result.error}")
+                        }
+                    }
             }
         }
     }
@@ -95,25 +109,45 @@ class CommentDetailViewModel(
 
     fun updateOfferingStatus() {
         viewModelScope.launch {
-            commentDetailRepository.updateOfferingStatus(offeringId).onSuccess {
-                updateCommentInfo()
-            }.onFailure {
-                Log.e("error", "updateOfferingStatus: ${it.message}")
+            when (val result = commentDetailRepository.updateOfferingStatus(offeringId)) {
+                is Result.Success -> updateCommentInfo()
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            updateOfferingStatus()
+                        }
+
+                        else -> {
+                            Log.e("error", "updateOfferingStatus: ${result.error}")
+                        }
+                    }
             }
         }
     }
 
     fun loadComments() {
         viewModelScope.launch {
-            commentDetailRepository.fetchComments(
-                offeringId = offeringId,
-            ).onSuccess { newComments ->
-                if (newComments != cachedComments) {
-                    cachedComments = newComments
-                    _comments.value = newComments
+            when (val result = commentDetailRepository.fetchComments(offeringId)) {
+                is Result.Success -> {
+                    val newComments = result.data
+                    if (cachedComments != newComments) {
+                        _comments.value = newComments
+                        cachedComments = newComments
+                    }
                 }
-            }.onFailure {
-                Log.e("error", "loadComments: ${it.message}")
+
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            loadComments()
+                        }
+
+                        else -> {
+                            Log.e("error", "loadComments: ${result.error}")
+                        }
+                    }
             }
         }
     }
@@ -125,13 +159,22 @@ class CommentDetailViewModel(
         }
 
         viewModelScope.launch {
-            commentDetailRepository.saveComment(
-                offeringId = offeringId,
-                comment = content,
-            ).onSuccess {
-                commentContent.value = ""
-            }.onFailure {
-                Log.e("error", "postComment: ${it.message}")
+            when (val result = commentDetailRepository.saveComment(offeringId, content)) {
+                is Result.Success -> {
+                    commentContent.value = ""
+                }
+
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            postComment()
+                        }
+
+                        else -> {
+                            Log.e("error", "postComment: ${result.error}")
+                        }
+                    }
             }
         }
     }
@@ -145,20 +188,38 @@ class CommentDetailViewModel(
 
     private fun loadParticipants() {
         viewModelScope.launch {
-            participantRepository.fetchParticipants(offeringId).onSuccess { participantsResponse ->
-                _participants.value = participantsResponse.toUiModel()
-            }.onFailure {
-                Log.e("error", "loadParticipants: ${it.message}")
+            when (val result = participantRepository.fetchParticipants(offeringId)) {
+                is Result.Success -> _participants.value = result.data.toUiModel()
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            loadParticipants()
+                        }
+
+                        else -> {
+                            Log.e("error", "loadParticipants: ${result.error}")
+                        }
+                    }
             }
         }
     }
 
     private fun loadMeetings() {
         viewModelScope.launch {
-            offeringRepository.fetchMeetings(offeringId).onSuccess { meetings ->
-                _meetings.value = meetings.toUiModel()
-            }.onFailure {
-                Log.e("error", "loadMeetings: ${it.message}")
+            when (val result = offeringRepository.fetchMeetings(offeringId)) {
+                is Result.Success -> _meetings.value = result.data.toUiModel()
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            loadMeetings()
+                        }
+
+                        else -> {
+                            Log.e("error", "loadMeetings: ${result.error}")
+                        }
+                    }
             }
         }
     }
@@ -169,10 +230,19 @@ class CommentDetailViewModel(
 
     fun exitOffering() {
         viewModelScope.launch {
-            participantRepository.deleteParticipations(offeringId).onSuccess {
-                _onExitOfferingEvent.setValue(Unit)
-            }.onFailure {
-                Log.e("error", "exitOffering: ${it.message}")
+            when (val result = participantRepository.deleteParticipations(offeringId)) {
+                is Result.Success -> _onExitOfferingEvent.setValue(Unit)
+                is Result.Error ->
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            exitOffering()
+                        }
+
+                        else -> {
+                            Log.e("error", "exitOffering: ${result.error}")
+                        }
+                    }
             }
         }
     }
@@ -194,6 +264,7 @@ class CommentDetailViewModel(
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
             offeringId: Long,
+            authRepository: AuthRepository,
             offeringRepository: OfferingRepository,
             participantRepository: ParticipantRepository,
             commentDetailRepository: CommentDetailRepository,
@@ -204,6 +275,7 @@ class CommentDetailViewModel(
             ): T {
                 return CommentDetailViewModel(
                     offeringId = offeringId,
+                    authRepository = authRepository,
                     offeringRepository = offeringRepository,
                     participantRepository = participantRepository,
                     commentDetailRepository = commentDetailRepository,
