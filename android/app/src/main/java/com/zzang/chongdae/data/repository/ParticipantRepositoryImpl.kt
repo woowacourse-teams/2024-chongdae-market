@@ -16,4 +16,8 @@ class ParticipantRepositoryImpl(
             response.toDomain()
         }
     }
+
+    override suspend fun deleteParticipations(offeringId: Long): Result<Unit> {
+        return participantRemoteDataSource.deleteParticipations(offeringId)
+    }
 }

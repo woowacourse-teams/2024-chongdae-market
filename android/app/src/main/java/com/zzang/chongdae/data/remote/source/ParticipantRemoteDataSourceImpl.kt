@@ -19,6 +19,16 @@ class ParticipantRemoteDataSourceImpl(
             }
         }
 
+    override suspend fun deleteParticipations(offeringId: Long): Result<Unit> =
+        runCatching {
+            val response: Response<Unit> = service.deleteParticipations(offeringId)
+            if (response.isSuccessful) {
+                Unit
+            } else {
+                error(ERROR_PREFIX + response.code())
+            }
+        }
+
     companion object {
         const val ERROR_PREFIX = "에러 발생: "
         const val ERROR_NULL_MESSAGE = "null"
