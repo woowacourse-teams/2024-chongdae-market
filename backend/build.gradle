@@ -71,6 +71,10 @@ tasks.register('copyOasToSwagger', Copy) {
 
 bootJar {
     dependsOn copyOasToSwagger
+    from('src/main/resources/static/swagger-ui') {
+        include 'openapi3.yaml'
+        into 'static/swagger-ui/'
+    }
 }
 
 jar {
