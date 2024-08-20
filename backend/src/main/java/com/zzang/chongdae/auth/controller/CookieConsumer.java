@@ -30,12 +30,12 @@ public class CookieConsumer {
 
     private String getTokenByCookieName(String cookieName, Cookie[] cookies) {
         if (cookies == null) {
-            throw new MarketException(AuthErrorCode.INVALID_TOKEN);
+            throw new MarketException(AuthErrorCode.COOKIE_NOT_EXIST);
         }
         return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals(cookieName))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_TOKEN));
+                .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_COOKIE));
     }
 }
