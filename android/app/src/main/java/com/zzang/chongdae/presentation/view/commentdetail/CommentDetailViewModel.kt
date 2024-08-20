@@ -26,7 +26,6 @@ import com.zzang.chongdae.presentation.view.commentdetail.model.participants.Par
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 
 class CommentDetailViewModel(
     private val offeringId: Long,
