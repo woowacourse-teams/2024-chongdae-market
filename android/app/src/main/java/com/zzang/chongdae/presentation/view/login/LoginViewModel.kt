@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
-import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.zzang.chongdae.domain.util.Result
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
@@ -38,16 +39,19 @@ class LoginViewModel(
 
     fun postLogin(ci: String) {
         viewModelScope.launch {
-            authRepository.saveLogin(
-                ci = ci,
-            ).onSuccess {
-                userPreferencesDataStore.saveMember(it.memberId, it.nickName)
-                _loginSuccessEvent.setValue(Unit)
-            }.onFailure {
-                Log.e("error", "postLogin: ${it.message}")
-                when (it.message) {
-                    HttpStatusCode.NOT_FOUND_404.code -> postSignup(ci)
-                    HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
+            when (val result = authRepository.saveLogin(ci = ci)){
+                is Result.Error -> {
+                    Log.e("error", "postLogin: ${result.error}")
+                    when(result.error) {
+                        DataError.Network.UNAUTHORIZED -> postRefreshToken(ci)
+                        DataError.Network.NOT_FOUND -> postSignup(ci)
+                        else -> {}
+                    }
+                }
+
+                is Result.Success -> {
+                    userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
+                    _loginSuccessEvent.setValue(Unit)
                 }
             }
         }
@@ -55,16 +59,19 @@ class LoginViewModel(
 
     private fun postSignup(ci: String) {
         viewModelScope.launch {
-            authRepository.saveSignup(
-                ci = ci,
-            ).onSuccess {
-                userPreferencesDataStore.saveMember(it.memberId, it.nickName)
-                postLogin(ci)
-            }.onFailure {
-                Log.e("error", "postSignup: ${it.message}")
-                when (it.message) {
-                    HttpStatusCode.NOT_FOUND_404.code -> postLogin(ci)
-                    HttpStatusCode.UNAUTHORIZED_401.code -> postRefreshToken(ci)
+            when (val result = authRepository.saveLogin(ci = ci)) {
+                is Result.Error -> {
+                    Log.e("error", "postSignup: ${result.error}")
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> postRefreshToken(ci)
+                        DataError.Network.NOT_FOUND -> postLogin(ci)
+                        else -> {}
+                    }
+                }
+
+                is Result.Success -> {
+                    userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
+                    postLogin(ci)
                 }
             }
         }
@@ -72,12 +79,15 @@ class LoginViewModel(
 
     private fun postRefreshToken(ci: String) {
         viewModelScope.launch {
-            authRepository.saveRefresh().onSuccess {
-            }.onFailure {
-                Log.e("error", "postRefresh: ${it.message}")
-                when (it.message) {
-                    HttpStatusCode.UNAUTHORIZED_401.code -> postLogin(ci)
+            when (val result = authRepository.saveRefresh()) {
+                is Result.Error -> {
+                    when(result.error) {
+                        DataError.Network.UNAUTHORIZED -> postLogin(ci)
+                        else -> {}
+                    }
                 }
+
+                is Result.Success -> {}
             }
         }
     }
