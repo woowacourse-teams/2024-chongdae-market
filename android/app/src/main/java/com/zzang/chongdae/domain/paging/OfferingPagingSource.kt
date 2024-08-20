@@ -1,6 +1,5 @@
 package com.zzang.chongdae.domain.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.zzang.chongdae.domain.model.Offering
