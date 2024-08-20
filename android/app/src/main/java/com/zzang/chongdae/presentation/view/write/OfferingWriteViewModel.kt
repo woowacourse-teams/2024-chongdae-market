@@ -140,7 +140,6 @@ class OfferingWriteViewModel(
                             authRepository.saveRefresh()
                             uploadImageFile(multipartBody)
                         }
-
                         else -> {}
                     }
                 }
@@ -297,14 +296,15 @@ class OfferingWriteViewModel(
             ) {
                 is Result.Error -> {
                     Log.e("error", "${result.error}")
-                    _writeUIState.value =
-                        WriteUIState.Error(R.string.write_error_writing, "${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             authRepository.saveRefresh()
                             postOffering()
                         }
-                        else -> {}
+                        else -> {
+                            _writeUIState.value =
+                                WriteUIState.Error(R.string.write_error_writing, "${result.error}")
+                        }
                     }
                 }
 

@@ -59,12 +59,12 @@ class LoginViewModel(
 
     private fun postSignup(ci: String) {
         viewModelScope.launch {
-            when (val result = authRepository.saveLogin(ci = ci)) {
+            when (val result = authRepository.saveSignup(ci = ci)) {
                 is Result.Error -> {
                     Log.e("error", "postSignup: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> postRefreshToken(ci)
-                        DataError.Network.NOT_FOUND -> postLogin(ci)
+//                        DataError.Network.NOT_FOUND -> postLogin(ci)
                         else -> {}
                     }
                 }
