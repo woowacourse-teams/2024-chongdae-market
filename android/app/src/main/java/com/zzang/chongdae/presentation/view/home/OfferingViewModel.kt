@@ -84,8 +84,7 @@ class OfferingViewModel(
                         authRepository,
                         search.value,
                         _selectedFilter.value,
-                        { fetchOfferings() },
-                    )
+                    ) { fetchOfferings() }
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
                 _offerings.value =
