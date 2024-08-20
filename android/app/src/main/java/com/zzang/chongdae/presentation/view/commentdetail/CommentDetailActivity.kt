@@ -149,7 +149,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 false,
             )
 
-        dialogBinding.viewModel = viewModel
+        dialogBinding.vm = viewModel
         dialogBinding.listener = this
 
         dialog.setContentView(dialogBinding.root)

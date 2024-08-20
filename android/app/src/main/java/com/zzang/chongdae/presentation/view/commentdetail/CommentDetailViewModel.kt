@@ -13,6 +13,8 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel.Companion.toUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel
@@ -40,27 +42,12 @@ class CommentDetailViewModel(
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
 
-    // info
-    private val _title = MutableLiveData<String>()
-    val title: LiveData<String> get() = _title
+    private val _commentOfferingInfo = MutableLiveData<CommentOfferingInfoUiModel>()
+    val commentOfferingInfo: LiveData<CommentOfferingInfoUiModel> get() = _commentOfferingInfo
 
-    private val _isProposer = MutableLiveData<Boolean>()
-    val isProposer: LiveData<Boolean> get() = _isProposer
-
-    private val _offeringStatusMessage = MutableLiveData<String>()
-    val offeringStatusMessage: LiveData<String> get() = _offeringStatusMessage
-
-    private val _offeringStatusButtonText = MutableLiveData<String>()
-    val offeringStatusButtonText: LiveData<String> get() = _offeringStatusButtonText
-
-    private val _offeringStatusImageUrl = MutableLiveData<String>()
-    val offeringStatusImageUrl: LiveData<String> get() = _offeringStatusImageUrl
-
-    // participants
     private val _participants = MutableLiveData<ParticipantsUiModel>()
     val participants: LiveData<ParticipantsUiModel> get() = _participants
 
-    // events
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
 
@@ -91,10 +78,7 @@ class CommentDetailViewModel(
     private fun updateCommentInfo() {
         viewModelScope.launch {
             commentDetailRepository.fetchCommentOfferingInfo(offeringId).onSuccess {
-                _title.value = it.title
-                _isProposer.value = it.isProposer
-                _offeringStatusButtonText.value = it.buttonText
-                _offeringStatusImageUrl.value = it.imageUrl
+               _commentOfferingInfo.value = it.toUiModel()
             }.onFailure {
                 Log.e("error", "updateStatusInfo: ${it.message}")
             }

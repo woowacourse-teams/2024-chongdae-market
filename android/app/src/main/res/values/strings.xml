@@ -22,7 +22,7 @@
     <string name="all_error_file_conversion">파일을 찾을 수 없습니다.</string>
     <string name="all_error_image_upload">이미지 업로드에 실패했습니다.</string>
     <string name="all_cancel">취소하기</string>
-    <string name="all_change">변경하기</string>
+    <string name="all_confirm">확정하기</string>
     <string name="report_url">https://docs.google.com/forms/d/e/1FAIpQLSdyHhWqwY0-iJsa6MrbD2f3rdES4dhXekkRbQ2T3HmnIgV1TA/viewform</string>
 
     <!--    login-->
