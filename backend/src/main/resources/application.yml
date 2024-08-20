@@ -59,3 +59,7 @@ logging:
       file-name-pattern: /logs/backend.%d{yyyy-MM-dd}.%i.log
       max-file-size: 100MB
       max-history: 14
+
+auth:
+  connect-timeout-length: 3s
+  read-timeout-length: 3s

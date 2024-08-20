@@ -4,9 +4,12 @@ import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
+import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
+import com.zzang.chongdae.auth.service.dto.KakaoUserInfoResponseDto;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
 import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.domain.AuthProvider;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -23,12 +26,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
+    private final AuthClient authClient;
 
     public AuthInfoDto login(LoginRequest request) {
         String password = passwordEncoder.encode(request.ci());
         MemberEntity member = memberRepository.findByPassword(password)
                 .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_PASSWORD));
-        return createTokenByMember(member);
+        return login(member);
     }
 
     @Transactional
@@ -39,10 +43,24 @@ public class AuthService {
         }
         MemberEntity member = new MemberEntity(nickNameGenerator.generate(), password);
         MemberEntity savedMember = memberRepository.save(member);
-        return createTokenByMember(savedMember);
+        return login(savedMember);
     }
 
-    private AuthInfoDto createTokenByMember(MemberEntity member) {
+    public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
+        KakaoUserInfoResponseDto kakaoUserInfo = authClient.getKakaoUserInfo(request.accessToken());
+        AuthProvider provider = AuthProvider.KAKAO;
+        String providerId = kakaoUserInfo.id().toString();
+        MemberEntity member = memberRepository.findByProviderAndProviderId(provider, providerId)
+                .orElseGet(() -> signup(provider, providerId));
+        return login(member);
+    }
+
+    private MemberEntity signup(AuthProvider provider, String providerId) {
+        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, providerId);
+        return memberRepository.save(member);
+    }
+
+    private AuthInfoDto login(MemberEntity member) {
         AuthMemberDto authMember = new AuthMemberDto(member);
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
         return new AuthInfoDto(authMember, authToken);

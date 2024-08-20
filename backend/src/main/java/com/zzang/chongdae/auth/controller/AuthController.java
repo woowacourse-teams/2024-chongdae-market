@@ -3,6 +3,7 @@ package com.zzang.chongdae.auth.controller;
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
+import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.auth.service.dto.LoginRequest;
 import com.zzang.chongdae.auth.service.dto.LoginResponse;
 import com.zzang.chongdae.auth.service.dto.SignupRequest;
@@ -41,6 +42,15 @@ public class AuthController {
         AuthInfoDto authInfo = authService.signup(request);
         addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
         SignupResponse response = new SignupResponse(authInfo.authMember());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/auth/login/kakao")
+    public ResponseEntity<LoginResponse> kakaoLogin(
+            @RequestBody @Valid KakaoLoginRequest request, HttpServletResponse servletResponse) {
+        AuthInfoDto authInfo = authService.kakaoLogin(request);
+        addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
+        LoginResponse response = new LoginResponse(authInfo.authMember());
         return ResponseEntity.ok(response);
     }
 

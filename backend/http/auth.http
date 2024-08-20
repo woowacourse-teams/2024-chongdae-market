@@ -14,5 +14,13 @@ Content-Type: application/json
   "ci": "poke1234567"
 }
 
+### 카카오 로그인 API
+POST {{base-url}}/auth/login/kakao
+Content-Type: application/json
+
+{
+  "accessToken": "UOtuvPTcosFzqOfUClUElcZZxoJ8Cje_AAAAAQorDKcAAAGRbdll1sTTXs9KIG_V"
+}
+
 ### 토큰 재발급 API
 POST {{base-url}}/auth/refresh
