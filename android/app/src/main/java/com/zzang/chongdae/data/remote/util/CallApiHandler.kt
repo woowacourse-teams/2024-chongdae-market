@@ -6,9 +6,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 
-inline fun <T> safeApiCall(
-    call: () -> Response<T>
-): Result<T, DataError.Network> {
+inline fun <T> safeApiCall(call: () -> Response<T>): Result<T, DataError.Network> {
     return try {
         val response = call()
         if (response.isSuccessful) {

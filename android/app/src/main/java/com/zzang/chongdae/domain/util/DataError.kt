@@ -1,7 +1,7 @@
 package com.zzang.chongdae.domain.util
 
 sealed interface DataError : Error {
-    enum class Network: DataError {
+    enum class Network : DataError {
         UNAUTHORIZED,
         UNKNOWN,
         NULL,
