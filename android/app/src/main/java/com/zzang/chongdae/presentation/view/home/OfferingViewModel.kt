@@ -118,7 +118,10 @@ class OfferingViewModel(
             when (val result = offeringRepository.fetchFilters()) {
                 is Result.Error -> {
                     when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> authRepository.saveRefresh()
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            fetchFilters()
+                        }
                         else -> DataError.Network.UNKNOWN
                     }
                 }
@@ -154,7 +157,10 @@ class OfferingViewModel(
             when (val result = offeringRepository.fetchOffering(offeringId)) {
                 is Result.Error -> {
                     when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> authRepository.saveRefresh()
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            fetchUpdatedOffering(offeringId)
+                        }
                         else -> DataError.Network.UNKNOWN
                     }
                 }
