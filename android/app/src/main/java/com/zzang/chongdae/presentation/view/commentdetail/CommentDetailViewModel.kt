@@ -168,7 +168,13 @@ class CommentDetailViewModel(
     }
 
     fun exitOffering() {
-        _onExitOfferingEvent.setValue(Unit)
+        viewModelScope.launch {
+            participantRepository.deleteParticipations(offeringId).onSuccess {
+                _onExitOfferingEvent.setValue(Unit)
+            }.onFailure {
+                Log.e("error", "exitOffering: ${it.message}")
+            }
+        }
     }
 
     fun onBackClick() {
@@ -196,7 +202,7 @@ class CommentDetailViewModel(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel(
+                return CommentDetailViewModel(
                     offeringId = offeringId,
                     offeringRepository = offeringRepository,
                     participantRepository = participantRepository,
