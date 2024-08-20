@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.comment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,7 @@ class CommentRoomsViewModel(
         viewModelScope.launch {
             when (val result = commentRoomsRepository.fetchCommentRooms()) {
                 is Result.Error -> {
-                    when(result.error) {
+                    when (result.error) {
                         DataError.Network.UNAUTHORIZED -> authRepository.saveRefresh()
                         else -> {}
                     }

@@ -8,11 +8,11 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import com.zzang.chongdae.domain.util.Result
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
@@ -39,10 +39,10 @@ class LoginViewModel(
 
     fun postLogin(ci: String) {
         viewModelScope.launch {
-            when (val result = authRepository.saveLogin(ci = ci)){
+            when (val result = authRepository.saveLogin(ci = ci)) {
                 is Result.Error -> {
                     Log.e("error", "postLogin: ${result.error}")
-                    when(result.error) {
+                    when (result.error) {
                         DataError.Network.UNAUTHORIZED -> postRefreshToken(ci)
                         DataError.Network.NOT_FOUND -> postSignup(ci)
                         else -> {}
@@ -81,7 +81,7 @@ class LoginViewModel(
         viewModelScope.launch {
             when (val result = authRepository.saveRefresh()) {
                 is Result.Error -> {
-                    when(result.error) {
+                    when (result.error) {
                         DataError.Network.UNAUTHORIZED -> postLogin(ci)
                         else -> {}
                     }

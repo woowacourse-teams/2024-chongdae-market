@@ -13,7 +13,10 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.Price
+import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.launch
@@ -23,6 +26,7 @@ import java.util.Locale
 
 class OfferingWriteViewModel(
     private val offeringRepository: OfferingRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 
@@ -128,31 +132,61 @@ class OfferingWriteViewModel(
 
     fun uploadImageFile(multipartBody: MultipartBody.Part) {
         viewModelScope.launch {
-            _writeUIState.value = WriteUIState.Loading
-            offeringRepository.saveProductImageS3(multipartBody).onSuccess {
-                _writeUIState.value = WriteUIState.Success(it.imageUrl)
-                thumbnailUrl.value = it.imageUrl
-            }.onFailure {
-                Log.e("error", it.message.toString())
-                _writeUIState.value =
-                    WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
+            when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
+                is Result.Error -> {
+                    Log.e("error", "${result.error}")
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            uploadImageFile(multipartBody)
+                        }
+
+                        else -> {}
+                    }
+                }
+
+                is Result.Success -> {
+                    _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
+                    thumbnailUrl.value = result.data.imageUrl
+                }
             }
+//            _writeUIState.value = WriteUIState.Loading
+//            offeringRepository.saveProductImageS3(multipartBody).onSuccess {
+//                _writeUIState.value = WriteUIState.Success(it.imageUrl)
+//                thumbnailUrl.value = it.imageUrl
+//            }.onFailure {
+//                Log.e("error", it.message.toString())
+//                _writeUIState.value =
+//                    WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
+//            }
         }
     }
 
     fun postProductImageOg() {
         viewModelScope.launch {
-            _writeUIState.value = WriteUIState.Loading
-            offeringRepository.saveProductImageOg(productUrl.value ?: "").onSuccess {
-                if (it.imageUrl.isBlank()) {
-                    _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
-                    return@launch
+            when (val result = offeringRepository.saveProductImageOg(productUrl.value ?: "")) {
+                is Result.Error -> {
+                    Log.e("error", "${result.error}")
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            postProductImageOg()
+                        }
+
+                        else -> {
+                            _writeUIState.value =
+                                WriteUIState.Error(R.string.error_invalid_product_url, "${result.error}")
+                        }
+                    }
                 }
-                thumbnailUrl.value = HTTPS + it.imageUrl
-            }.onFailure {
-                Log.e("error", it.message.toString())
-                _writeUIState.value =
-                    WriteUIState.Error(R.string.error_invalid_product_url, it.message.toString())
+
+                is Result.Success -> {
+                    if (result.data.imageUrl.isBlank()) {
+                        _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
+                        return@launch
+                    }
+                    thumbnailUrl.value = HTTPS + result.data.imageUrl
+                }
             }
         }
     }
@@ -242,28 +276,62 @@ class OfferingWriteViewModel(
         if (isOriginPriceCheaperThanSplitPriceEvent()) return
 
         viewModelScope.launch {
-            offeringRepository.saveOffering(
+            when (
+                val result =
+                    offeringRepository.saveOffering(
+                        uiModel =
+                            OfferingWriteUiModel(
+                                title = title,
+                                productUrl = productUrl.value,
+                                thumbnailUrl = thumbnailUrl.value,
+                                totalCount = totalCountConverted,
+                                totalPrice = totalPriceConverted,
+                                originPrice = originPriceNotBlank,
+                                meetingAddress = meetingAddress,
+                                meetingAddressDong = meetingAddressDong,
+                                meetingAddressDetail = meetingAddressDetail,
+                                meetingDate = meetingDate,
+                                description = description,
+                            ),
+                    )
+            ) {
+                is Result.Error -> {
+                    Log.e("error", "${result.error}")
+                    _writeUIState.value =
+                        WriteUIState.Error(R.string.write_error_writing, "${result.error}")
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            postOffering()
+                        }
+                        else -> {}
+                    }
+                }
+
+                is Result.Success -> makeSubmitOfferingEvent()
+            }
+            /*offeringRepository.saveOffering(
                 uiModel =
-                    OfferingWriteUiModel(
-                        title = title,
-                        productUrl = productUrl.value,
-                        thumbnailUrl = thumbnailUrl.value,
-                        totalCount = totalCountConverted,
-                        totalPrice = totalPriceConverted,
-                        originPrice = originPriceNotBlank,
-                        meetingAddress = meetingAddress,
-                        meetingAddressDong = meetingAddressDong,
-                        meetingAddressDetail = meetingAddressDetail,
-                        meetingDate = meetingDate,
-                        description = description,
-                    ),
+                OfferingWriteUiModel(
+                    title = title,
+                    productUrl = productUrl.value,
+                    thumbnailUrl = thumbnailUrl.value,
+                    totalCount = totalCountConverted,
+                    totalPrice = totalPriceConverted,
+                    originPrice = originPriceNotBlank,
+                    meetingAddress = meetingAddress,
+                    meetingAddressDong = meetingAddressDong,
+                    meetingAddressDetail = meetingAddressDetail,
+                    meetingDate = meetingDate,
+                    description = description,
+                ),
             ).onSuccess {
                 makeSubmitOfferingEvent()
             }.onFailure {
                 Log.e("error", it.message.toString())
                 _writeUIState.value =
                     WriteUIState.Error(R.string.write_error_writing, it.message.toString())
-            }
+            }*/
         }
     }
 
@@ -351,16 +419,19 @@ class OfferingWriteViewModel(
         const val HTTPS = "https:"
 
         @Suppress("UNCHECKED_CAST")
-        fun getFactory(offeringRepository: OfferingRepository) =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return OfferingWriteViewModel(
-                        offeringRepository,
-                    ) as T
-                }
+        fun getFactory(
+            offeringRepository: OfferingRepository,
+            authRepository: AuthRepository,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return OfferingWriteViewModel(
+                    offeringRepository,
+                    authRepository,
+                ) as T
             }
+        }
     }
 }
