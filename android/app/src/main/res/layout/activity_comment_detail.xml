@@ -323,7 +323,7 @@
                 android:layout_marginTop="@dimen/size_20"
                 android:src="@drawable/ic_proposer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_offering_members" />
+                app:layout_constraintTop_toBottomOf="@id/tv_offering_members" />
 
             <TextView
                 android:id="@+id/tv_proposer"
@@ -361,20 +361,21 @@
                 android:fontFamily="@font/suit_semibold"
                 android:text="@string/comment_detail_expected_price"
                 android:textColor="@color/gray_500"
-                app:layout_constraintBottom_toTopOf="@+id/horizon_line"
-                app:layout_constraintStart_toStartOf="@+id/tv_offering_members"
-                app:layout_constraintTop_toBottomOf="@+id/rv_offering_members" />
+                app:layout_constraintBottom_toTopOf="@id/horizon_line"
+                app:layout_constraintStart_toStartOf="@id/tv_offering_members"
+                app:layout_constraintTop_toBottomOf="@id/rv_offering_members" />
 
             <TextView
+                android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:fontFamily="@font/suit_semibold"
                 android:text='@{String.format(@string/all_money_amount_text, vm.participants.price)}'
                 android:textColor="@color/main_color"
-                app:layout_constraintBottom_toTopOf="@+id/horizon_line"
+                app:layout_constraintBottom_toTopOf="@id/horizon_line"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_offering_members" />
+                app:layout_constraintTop_toBottomOf="@id/rv_offering_members" />
 
             <View
                 android:id="@+id/horizon_line"
@@ -394,7 +395,7 @@
                 android:src="@drawable/btn_exit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/horizon_line" />
+                app:layout_constraintTop_toTopOf="@id/horizon_line" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
