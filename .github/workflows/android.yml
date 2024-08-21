@@ -166,7 +166,7 @@ jobs:
           packageName: com.zzang.chongdae
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: alpha
-#          status: inProgress
+          status: completed
 #          inAppUpdatePriority: 2
 #          userFraction: 0.33
 #          whatsNewDirectory: distribution/whatsnew
