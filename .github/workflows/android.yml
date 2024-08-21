@@ -6,7 +6,7 @@ on:
       - "develop-AN"
       - "feature/414-android-cd"
     paths:
-      - '/**'
+      - '**'
   pull_request:
     branches:
       - "develop-AN"
