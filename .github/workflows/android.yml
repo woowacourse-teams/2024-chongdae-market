@@ -167,7 +167,7 @@ jobs:
 
       - name: Sign AAB
         id: sign
-        uses: actions/upload-artifact@v2.3.1
+        uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: ./android/app/build/outputs/bundle/release
           output: ./android/build/release/signed
@@ -179,7 +179,7 @@ jobs:
       - name: Upload AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: app/service_account.json
+          serviceAccountJsonPlainText: app/service_account.json
           packageName: com.zzang.chongdae
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: alpha
