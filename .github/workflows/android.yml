@@ -133,7 +133,7 @@ jobs:
 
       - name: Create service_account.json
         id: createServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_KEY }}' > app/service_account.json
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > app/service_account.json
 
       - name: Set up environment variable for BuildConfig
         env:
