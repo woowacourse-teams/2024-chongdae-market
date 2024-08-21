@@ -14,6 +14,7 @@ on:
     paths:
       - 'android/**'
 
+
 defaults:
   run:
     working-directory: ./android
