@@ -32,6 +32,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
             offeringId = offeringId,
+            authRepository = (application as ChongdaeApp).authRepository,
             offeringRepository = (application as ChongdaeApp).offeringRepository,
             participantRepository = (application as ChongdaeApp).participantRepository,
             commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,

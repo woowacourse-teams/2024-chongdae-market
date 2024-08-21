@@ -6,7 +6,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
 import com.zzang.chongdae.data.local.database.AppDatabase
-import com.zzang.chongdae.data.local.source.CommentLocalDataSourceImpl
 import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
 import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.AuthRemoteDataSourceImpl
@@ -33,7 +32,6 @@ class ChongdaeApp : Application() {
     private val networkManager: NetworkManager by lazy { NetworkManager }
 
     private val offeringDao by lazy { appDatabase.offeringDao() }
-    private val commentDao by lazy { appDatabase.commentDao() }
 
     val offeringRepository: OfferingRepository by lazy {
         OfferingRepositoryImpl(
@@ -44,8 +42,6 @@ class ChongdaeApp : Application() {
 
     val commentDetailRepository: CommentDetailRepository by lazy {
         CommentDetailRepositoryImpl(
-            offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
-            commentLocalDataSource = CommentLocalDataSourceImpl(commentDao),
             commentRemoteDataSource =
                 CommentRemoteDataSourceImpl(
                     service = networkManager.commentService(),

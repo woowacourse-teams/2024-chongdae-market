@@ -39,6 +39,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
         )
     }
 
