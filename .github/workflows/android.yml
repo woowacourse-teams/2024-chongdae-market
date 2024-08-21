@@ -10,7 +10,6 @@ on:
   pull_request:
     branches:
       - "develop-AN"
-      - "feature/414-android-cd"
     paths:
       - 'android/**'
 
