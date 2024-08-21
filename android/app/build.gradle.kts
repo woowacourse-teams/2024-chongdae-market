@@ -86,7 +86,7 @@ android {
 }
 
 dependencies {
-    val navigationVersion = "2.7.7"
+    val navigationVersion = "2.7.8"
     val fragmentVersion = "1.8.1"
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
