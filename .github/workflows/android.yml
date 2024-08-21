@@ -165,7 +165,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.zzang.chongdae
-          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: alpha
 #          status: inProgress
 #          inAppUpdatePriority: 2
