@@ -113,7 +113,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
 
     private fun isKakaoTalkLoginCanceled(error: Throwable?): Boolean {
         return error is ClientError && error.reason == ClientErrorCause.Cancelled
-        Log.d("alsong", "")
+        Log.d("alsong", " ")
     }
 
     private fun loadUserInformation() {
