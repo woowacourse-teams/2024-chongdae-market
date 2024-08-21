@@ -184,7 +184,7 @@ class OfferingViewModel(
                         }
 
                         else -> {
-                            Log.e("error", "fetchFilters Error: ${result.error.name}")
+                            Log.e("error", "fetchUpdatedOffering Error: ${result.error.name}")
                         }
                     }
                 }
