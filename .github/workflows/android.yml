@@ -135,7 +135,6 @@ jobs:
         env:
           KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
 
-
       - name: Build release AAB
         run: ./gradlew bundleRelease -Pandroid.injected.signing.store.file=KEYSTORE_NAME.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
