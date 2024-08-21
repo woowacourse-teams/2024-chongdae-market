@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - "develop-AN"
-      - "414-android-cd"
+      - "feature/414-android-cd"
     paths:
       - 'android/**'
   pull_request:
     branches:
       - "develop-AN"
-      - "414-android-cd"
+      - "feature/414-android-cd"
     paths:
       - 'android/**'
 
@@ -114,7 +114,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_test
-    if: startsWith(github.ref, 'refs/heads/414-android-cd/')
+    if: startsWith(github.ref, 'refs/heads/feature/414-android-cd/')
     steps:
       - uses: actions/checkout@v4
 
