@@ -8,80 +8,38 @@ import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
+import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import okhttp3.MultipartBody
-import retrofit2.Response
 
 class OfferingRemoteDataSourceImpl(
     private val service: OfferingApiService,
 ) : OfferingRemoteDataSource {
-    override suspend fun fetchOffering(offeringId: Long): Result<RemoteOffering> =
-        runCatching {
-            service.getOffering(offeringId = offeringId)
-                .body()
-                ?: throw IllegalStateException()
-        }
+    override suspend fun fetchOffering(offeringId: Long): Result<RemoteOffering, DataError.Network> =
+        safeApiCall { service.getOffering(offeringId) }
 
     override suspend fun fetchOfferings(
         filter: String?,
         search: String?,
         lastOfferingId: Long?,
         pageSize: Int?,
-    ): Result<OfferingsResponse> =
-        runCatching {
-            service.getOfferings(filter, search, lastOfferingId, pageSize).body()
-                ?: throw IllegalStateException()
-        }
+    ): Result<OfferingsResponse, DataError.Network> = safeApiCall { service.getOfferings(filter, search, lastOfferingId, pageSize) }
 
-    override suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit> {
-        return runCatching {
-            val response = service.postOfferingWrite(offeringWriteRequest)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
-        }
-    }
+    override suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit, DataError.Network> =
+        safeApiCall { service.postOfferingWrite((offeringWriteRequest)) }
 
-    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrlResponse> {
-        return runCatching {
-            val response: Response<ProductUrlResponse> =
-                service.postProductImageOg(productUrl.toProductUrlRequest())
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
-        }
-    }
+    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrlResponse, DataError.Network> =
+        safeApiCall { service.postProductImageOg((productUrl.toProductUrlRequest())) }
 
-    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse> {
-        return runCatching {
-            val response: Response<ProductUrlResponse> = service.postProductImageS3(image)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
-        }
-    }
+    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse, DataError.Network> =
+        safeApiCall { service.postProductImageS3(image) }
 
-    override suspend fun fetchFilters(): Result<FiltersResponse> =
-        runCatching {
-            service.getFilters().body() ?: throw IllegalStateException()
-        }
+    override suspend fun fetchFilters(): Result<FiltersResponse, DataError.Network> = safeApiCall { service.getFilters() }
 
-    override suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse> {
-        return runCatching {
-            val response: Response<MeetingsResponse> = service.getMeetings(offeringId)
-            if (response.isSuccessful) {
-                response.body() ?: error(ERROR_PREFIX + ERROR_NULL_MESSAGE)
-            } else {
-                error(ERROR_PREFIX + response.code())
-            }
-        }
-    }
+    override suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse, DataError.Network> =
+        safeApiCall { service.getMeetings(offeringId) }
 
     companion object {
         private const val ERROR_PREFIX = "에러 발생: "

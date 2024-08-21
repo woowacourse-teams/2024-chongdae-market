@@ -10,7 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
-import com.zzang.chongdae.presentation.util.handleAccessTokenExpiration
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import kotlinx.coroutines.launch
 
 class CommentRoomsViewModel(
@@ -28,11 +29,18 @@ class CommentRoomsViewModel(
 
     fun updateCommentRooms() {
         viewModelScope.launch {
-            commentRoomsRepository.fetchCommentRooms().onSuccess {
-                _commentRooms.value = it
-            }.onFailure {
-                Log.e("error", "updateCommentRooms: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { updateCommentRooms() }
+            when (val result = commentRoomsRepository.fetchCommentRooms()) {
+                is Result.Error -> {
+                    Log.e("error", "${result.error}")
+                    when (result.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            updateCommentRooms()
+                        }
+                        else -> {}
+                    }
+                }
+                is Result.Success -> _commentRooms.value = result.data
             }
         }
     }
