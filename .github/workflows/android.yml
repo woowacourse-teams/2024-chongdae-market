@@ -146,7 +146,6 @@ jobs:
           NATIVE_APP_KEY: ${{ secrets.NATIVE_APP_KEY }}
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
-          echo "sdk.dir=/Users/chaehyun/Library/Android/sdk" > ./local.properties
           echo "base_url=$BASE_URL" >> ./local.properties
           echo "token=$TOKEN" >> ./local.properties
           echo "native_app_key=$NATIVE_APP_KEY" >> ./local.properties
