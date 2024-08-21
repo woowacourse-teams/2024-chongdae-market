@@ -141,9 +141,9 @@ jobs:
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-          BASE_URL: ${{ secrets.BASE_URL }}
-          TOKEN: ${{ secrets.TOKEN }}
-          NATIVE_APP_KEY: ${{ secrets.NATIVE_APP_KEY }}
+#          BASE_URL: ${{ secrets.BASE_URL }}
+#          TOKEN: ${{ secrets.TOKEN }}
+#          NATIVE_APP_KEY: ${{ secrets.NATIVE_APP_KEY }}
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 #          echo "base_url=$BASE_URL" >> ./local.properties
