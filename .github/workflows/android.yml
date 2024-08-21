@@ -166,7 +166,7 @@ jobs:
       - name: Upload AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ secret.SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.zzang.chongdae
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: production
