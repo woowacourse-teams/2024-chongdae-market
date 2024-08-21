@@ -137,7 +137,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      ####
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
@@ -169,7 +168,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.zzang.chongdae
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
-          track: production
+          track: alpha
 #          status: inProgress
 #          inAppUpdatePriority: 2
 #          userFraction: 0.33
