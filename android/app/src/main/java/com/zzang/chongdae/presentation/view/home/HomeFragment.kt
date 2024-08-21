@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.CheckBox
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var toast: Toast? = null
 
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
@@ -87,6 +90,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
         viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
             updateCheckBoxStates(selectedFilter)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { errMsgId ->
+            showToast(errMsgId)
         }
     }
 
@@ -217,6 +224,19 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
         }
+    }
+
+    private fun showToast(
+        @StringRes messageId: Int,
+    ) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireActivity(),
+                getString(messageId),
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     companion object {
