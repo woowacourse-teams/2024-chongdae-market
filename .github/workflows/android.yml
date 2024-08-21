@@ -165,7 +165,8 @@ jobs:
         id: sign
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: ./android/app/build/outputs/bundle/release
+          output: ./android/build/release/signed
           signingKeyBase64: ${{ secrets.ENCODED_KEYSTORE }}
           alias: ${{ secrets.AN_ALIAS }}
           keyStorePassword: ${{ secrets.AN_KEYSTORE_PASSWORD }}
@@ -174,7 +175,7 @@ jobs:
 #      - name: Upload AAB to Google Play
 #        uses: r0adkll/upload-google-play@v1
 #        with:
-#          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+#          serviceAccountJsonPlainText: app/google-services.json
 #          packageName: com.zzang.chongdae
 #          releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
 #          track: alpha
