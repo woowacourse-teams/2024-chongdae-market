@@ -193,7 +193,7 @@ fun View.setIsVisible(isVisible: Boolean) {
 @BindingAdapter("formattedDate")
 fun TextView.bindFormattedDate(datetime: LocalDateTime?) {
     this.text =
-        datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.due_datetime)))
+        datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.all_due_datetime)))
 }
 
 @BindingAdapter("currentCount", "totalCount", "condition")
@@ -210,18 +210,18 @@ private fun OfferingCondition.toOfferingConditionText(
     currentCount: Int,
     totalCount: Int,
 ) = when (this) {
-    OfferingCondition.FULL -> context.getString(R.string.participant_full)
+    OfferingCondition.FULL -> context.getString(R.string.offering_detail_participant_full)
     OfferingCondition.IMMINENT ->
         context.getString(
-            R.string.participant_count,
+            R.string.offering_detail_participant_count,
             currentCount,
             totalCount,
         )
 
-    OfferingCondition.CONFIRMED -> context.getString(R.string.participant_end)
+    OfferingCondition.CONFIRMED -> context.getString(R.string.offering_detail_participant_end)
     OfferingCondition.AVAILABLE ->
         context.getString(
-            R.string.participant_count,
+            R.string.offering_detail_participant_count,
             currentCount,
             totalCount,
         )

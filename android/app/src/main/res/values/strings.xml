@@ -24,6 +24,8 @@
     <string name="all_cancel">취소하기</string>
     <string name="all_confirm">확정하기</string>
     <string name="report_url">https://docs.google.com/forms/d/e/1FAIpQLSdyHhWqwY0-iJsa6MrbD2f3rdES4dhXekkRbQ2T3HmnIgV1TA/viewform</string>
+    <string name="all_due_datetime">yyyy년 M월 d일</string>
+
 
     <!--    login-->
     <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
@@ -55,22 +57,21 @@
     <string name="my_page_privacy_text">개인정보처리 방침</string>
     <string name="my_page_logout_text">로그아웃</string>
     <string name="my_page_withdrawal_text">회원 탈퇴</string>
-
-    <!--    offering_detail-->
-    <string name="detail_product_url_title">물품 링크:&#160;</string>
-    <string name="detail_product_url_text">바로가기</string>
-    <string name="offering_detail_load_error_mesage">해당 공모가 존재하지 않습니다.</string>
-    <string name="detail_divided_money_title">엔빵 가격</string>
-    <string name="detail_move_comment_detail">참여중인 채팅방</string>
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
-    <string name="total_price">(총 가격 %,d원)</string>
-    <string name="due_datetime">yyyy년 M월 d일</string>
-    <string name="participant_count">참여하기(%d/%d)</string>
-    <string name="participant_full">인원이 다 찼어요!</string>
+
+    <!--    offering_detail-->
+    <string name="offering_detail_product_url_title">물품 링크:&#160;</string>
+    <string name="offering_detail_product_url_text">바로가기</string>
+    <string name="offering_detail_load_error_mesage">해당 공모가 존재하지 않습니다.</string>
+    <string name="offering_detail_divided_money_title">엔빵 가격</string>
+    <string name="offering_detail_move_comment_detail">참여중인 채팅방</string>
+    <string name="offering_detail_total_price">(총 가격 %,d원)</string>
+    <string name="offering_detail_participant_count">참여하기(%d/%d)</string>
+    <string name="offering_detail_participant_full">인원이 다 찼어요!</string>
     <string name="offering_detail_participation_error">참여할 수 없는 공모입니다.</string>
-    <string name="participant_already">이미 참여중이에요!</string>
-    <string name="participant_end">마감되었어요!</string>
+    <string name="offering_detail_participant_already">이미 참여중이에요!</string>
+    <string name="offering_detail_participant_end">마감되었어요!</string>
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
