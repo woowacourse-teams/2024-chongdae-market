@@ -167,7 +167,7 @@ jobs:
 
       - name: Sign AAB
         id: sign
-        uses: r0adkll/sign-android-release@v1
+        uses: Tlaster/android-sign@v1
         with:
           releaseDirectory: ./android/app/build/outputs/bundle/release
           output: ./android/build/release/signed
