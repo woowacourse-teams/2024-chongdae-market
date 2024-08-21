@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,6 +54,9 @@ class OfferingDetailViewModel(
     private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
     val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
+    private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val error: SingleLiveData<Int> get() = _error
+
     init {
         loadOffering()
     }
@@ -66,7 +70,14 @@ class OfferingDetailViewModel(
                             authRepository.saveRefresh()
                             loadOffering()
                         }
-                        else -> DataError.Network.UNKNOWN
+
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.offering_detail_load_error_mesage)
+                        }
+
+                        else -> {
+                            Log.e("error", "loadOffering Error: ${result.error.name}")
+                        }
                     }
 
                 is Result.Success -> {
@@ -91,7 +102,14 @@ class OfferingDetailViewModel(
                             authRepository.saveRefresh()
                             onClickParticipation()
                         }
-                        else -> DataError.Network.UNKNOWN
+
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.offering_detail_participation_error)
+                        }
+
+                        else -> {
+                            Log.e("error", "onClickParticipation Error: ${result.error.name}")
+                        }
                     }
 
                 is Result.Success -> {
