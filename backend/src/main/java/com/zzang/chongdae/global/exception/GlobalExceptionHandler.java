@@ -1,6 +1,7 @@
 package com.zzang.chongdae.global.exception;
 
 import com.zzang.chongdae.logging.config.CachedHttpServletResponseWrapper;
+import com.zzang.chongdae.logging.domain.MemberIdentifier;
 import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -96,6 +97,7 @@ public class GlobalExceptionHandler {
         ErrorMessage errorMessage = new ErrorMessage("서버 관리자에게 문의하세요");
 
         String identifier = UUID.randomUUID().toString();
+        MemberIdentifier memberIdentifier = new MemberIdentifier(request.getCookies());
         String httpMethod = request.getMethod();
         String uri = request.getRequestURI();
         String requestBody = new String(request.getInputStream().readAllBytes());
@@ -112,8 +114,16 @@ public class GlobalExceptionHandler {
         long endTime = System.currentTimeMillis();
         String latency = endTime - startTime + "ms";
 
-        LoggingErrorResponse logResponse = new LoggingErrorResponse(identifier, httpMethod, uri, requestBody,
-                "500", responseBody, latency, stackTrace);
+        LoggingErrorResponse logResponse = new LoggingErrorResponse(
+                identifier,
+                memberIdentifier.getIdInfo(),
+                httpMethod,
+                uri,
+                requestBody,
+                "500",
+                responseBody,
+                latency,
+                stackTrace);
         log.error(logResponse.toString());
 
         return ResponseEntity
