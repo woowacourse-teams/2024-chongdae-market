@@ -50,7 +50,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
         }
@@ -65,7 +65,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -83,7 +83,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-fail-request-with-null", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -101,7 +101,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-fail-request-with-long-content", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -119,7 +119,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -151,7 +151,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
             MemberEntity participant = memberFixture.createMember("참여자");
@@ -164,7 +164,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_responseAllCommentRoom_when_givenMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-room-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .when().get("/comments")
                     .then().log().all()
                     .statusCode(200);
@@ -218,7 +218,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_responseCommentRoomInfo_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId())
                     .when().get("/comments/info")
                     .then().log().all()
@@ -230,7 +230,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId() + 100)
                     .when().get("/comments/info")
                     .then().log().all()
@@ -242,7 +242,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidMember() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-member", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("invalid5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(invalidMember))
                     .queryParam("offering-id", offering.getId())
                     .when().get("/comments/info")
                     .then().log().all()
@@ -292,14 +292,14 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_updateStatus_when_givenOfferingIdAndMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId())
                     .when().patch("/comments/status")
                     .then().log().all()
                     .statusCode(200);
 
             RestAssured.given().log().all()
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId())
                     .when().get("/comments/info")
                     .then().log().all()
@@ -312,7 +312,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("ever5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId() + 100)
                     .when().patch("/comments/status")
                     .then().log().all()
@@ -324,7 +324,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidMember() {
             RestAssured.given(spec).log().all()
                     .filter(document("update-comment-room-status-fail-invalid-member", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi("invalid5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(invalidMember))
                     .queryParam("offering-id", offering.getId() + 100)
                     .when().patch("/comments/status")
                     .then().log().all()
@@ -367,7 +367,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
             commentFixture.createComment(member, offering);
@@ -378,7 +378,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_responseAllComment_when_givenOfferingIdAndMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId())
                     .when().get("/comments/messages")
                     .then().log().all()
@@ -390,7 +390,7 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("offering-id", offering.getId() + 100)
                     .when().get("/comments/messages")
                     .then().log().all()

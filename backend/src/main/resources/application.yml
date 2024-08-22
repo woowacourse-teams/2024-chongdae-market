@@ -3,9 +3,6 @@ spring:
     name: chongdae
   datasource:
     url: jdbc:h2:mem:database
-  #  h2:
-  #    console:
-  #      enabled: true
   jpa:
     show-sql: true
     defer-datasource-initialization: true
@@ -59,3 +56,7 @@ logging:
       file-name-pattern: /logs/backend.%d{yyyy-MM-dd}.%i.log
       max-file-size: 100MB
       max-history: 14
+
+auth:
+  connect-timeout-length: 3s
+  read-timeout-length: 3s

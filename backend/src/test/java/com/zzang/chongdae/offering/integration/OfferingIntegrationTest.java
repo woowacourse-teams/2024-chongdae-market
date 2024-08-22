@@ -82,9 +82,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingDetailFailResponse"))
                 .build();
 
+        MemberEntity proposer;
+
         @BeforeEach
         void setUp() {
-            MemberEntity proposer = memberFixture.createMember();
+            proposer = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
         }
@@ -94,7 +96,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOfferingDetail_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-offering-detail-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/detail")
                     .then().log().all()
@@ -106,7 +108,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-offering-detail-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/detail")
                     .then().log().all()
@@ -150,9 +152,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingFailResponse"))
                 .build();
 
+        MemberEntity proposer;
+
         @BeforeEach
         void setUp() {
-            MemberEntity proposer = memberFixture.createMember();
+            proposer = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
         }
@@ -162,7 +166,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOffering_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-offering-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}")
                     .then().log().all()
@@ -174,7 +178,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-offering-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}")
                     .then().log().all()
@@ -215,9 +219,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingAllSuccessResponse"))
                 .build();
 
+        MemberEntity member;
+
         @BeforeEach
         void setUp() {
-            MemberEntity member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             for (int i = 0; i < 11; i++) {
                 offeringFixture.createOffering(member);
             }
@@ -228,7 +234,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseAllOffering_when_givenPageInfo() {
             given(spec).log().all()
                     .filter(document("get-all-offering-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .queryParam("filter", "RECENT")
                     .queryParam("search", "title")
                     .queryParam("last-id", 10)
@@ -267,9 +273,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingMeetingFailResponse"))
                 .build();
 
+        MemberEntity member;
+
         @BeforeEach
         void setUp() {
-            MemberEntity member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(member);
             offeringMemberFixture.createProposer(member, offering);
         }
@@ -279,7 +287,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOfferingMeeting_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-offering-meeting-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .pathParam("offering-id", 1)
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
@@ -291,7 +299,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-offering-meeting-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .pathParam("offering-id", 100)
                     .when().get("/offerings/{offering-id}/meetings")
                     .then().log().all()
@@ -361,7 +369,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("update-offering-meeting-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi(proposer.getNickname() + "5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .pathParam("offering-id", offering.getId())
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -382,7 +390,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("update-offering-meeting-fail-not-proposer", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi(participant.getNickname() + "5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .pathParam("offering-id", offering.getId())
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -403,7 +411,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("update-offering-meeting-fail-invalid-offering", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookiesWithCi(proposer.getNickname() + "5678"))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .pathParam("offering-id", offering.getId() + 10000)
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -431,9 +439,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingFilterSuccessResponse"))
                 .build();
 
+        private MemberEntity member;
+
         @BeforeEach
         void setUp() {
-            memberFixture.createMember();
+            member = memberFixture.createMember("dora");
         }
 
         @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
@@ -441,7 +451,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_responseOfferingFilter_when_givenOfferingId() {
             given(spec).log().all()
                     .filter(document("get-all-offering-filter-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .when().get("/offerings/filters")
                     .then().log().all()
                     .statusCode(200);
@@ -484,7 +494,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember();
+            member = memberFixture.createMember("dora");
         }
 
         @DisplayName("공모 정보를 받아 공모를 작성 할 수 있다.")
@@ -506,7 +516,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
@@ -533,7 +543,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-success-without-originPrice", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
@@ -560,7 +570,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-fail-request-with-null", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
@@ -587,7 +597,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-fail-with-invalid-originPrice", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
@@ -614,7 +624,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-fail-with-invalid-totalCount", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings")
@@ -650,9 +660,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingProductImageResponse"))
                 .build();
 
+        private MemberEntity member;
+
         @BeforeEach
         void setUp() {
-            memberFixture.createMember();
+            member = memberFixture.createMember("dora");
         }
 
         @DisplayName("상품 링크를 받아 이미지를 추출합니다.")
@@ -662,7 +674,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("extract-product-image-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -677,7 +689,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("extract-product-image-fail", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -692,7 +704,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("extract-product-image-fail-request-with-null", resource(failSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/offerings/product-images/og")
@@ -724,10 +736,11 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .build();
 
         private File image;
+        private MemberEntity member;
 
         @BeforeEach
         void setUp() {
-            memberFixture.createMember();
+            member = memberFixture.createMember("dora");
             image = new File("src/test/resources/test-image.png");
             MultipartFile mockImage = new MockMultipartFile("emptyImageFile", new byte[0]);
             given(storageService.uploadFile(mockImage, "path"))
@@ -739,7 +752,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void should_uploadImageUrl_when_givenImageFile() {
             given(spec).log().all()
                     .filter(document("upload-product-image-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookies())
+                    .cookies(cookieProvider.createCookiesWithMember(member))
                     .multiPart("image", image)
                     .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                     .when().post("/offerings/product-images/s3")

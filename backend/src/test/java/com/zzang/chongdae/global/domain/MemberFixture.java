@@ -1,6 +1,6 @@
 package com.zzang.chongdae.global.domain;
 
-import com.zzang.chongdae.auth.service.PasswordEncoder;
+import com.zzang.chongdae.member.domain.AuthProvider;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +12,12 @@ public class MemberFixture {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public MemberEntity createMember() {
-        MemberEntity member = new MemberEntity("dora", passwordEncoder.encode("dora1234"));
-        return memberRepository.save(member);
-    }
-
     public MemberEntity createMember(String nickname) {
-        MemberEntity member = new MemberEntity(nickname, passwordEncoder.encode(nickname + "5678"));
+        MemberEntity member = new MemberEntity(
+                nickname,
+                AuthProvider.KAKAO,
+                AuthProvider.KAKAO.buildLoginId(nickname),
+                "1234");
         return memberRepository.save(member);
     }
 }
