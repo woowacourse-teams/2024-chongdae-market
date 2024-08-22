@@ -13,6 +13,17 @@ public class OgTagProductImageExtractor implements ProductImageExtractor {
     @Override
     public String extract(String productUrl) {
         String html = htmlCrawler.scrap(productUrl);
-        return htmlCrawler.parseOpenGraph(html, OG_IMAGE_PROPERTY);
+        return removeHttpHttps(htmlCrawler.parseOpenGraph(html, OG_IMAGE_PROPERTY));
     }
+
+    public String removeHttpHttps(String url) {
+        if (url.startsWith("http:")) {
+            return url.substring("http:".length());
+        }
+        if (url.startsWith("https:")) {
+            return url.substring("https:".length());
+        }
+        return url;
+    }
+
 }
