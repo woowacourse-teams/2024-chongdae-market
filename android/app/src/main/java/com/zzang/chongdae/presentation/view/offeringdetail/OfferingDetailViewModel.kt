@@ -25,7 +25,8 @@ class OfferingDetailViewModel(
 ) : ViewModel(),
     OnParticipationClickListener,
     OnOfferingReportClickListener,
-    OnMoveCommentDetailClickListener {
+    OnMoveCommentDetailClickListener,
+    OnProductLinkClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
@@ -53,6 +54,9 @@ class OfferingDetailViewModel(
     private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
     val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
+    private val _productLinkRedirectEvent: MutableSingleLiveData<String> = MutableSingleLiveData()
+    val productLinkRedirectEvent: SingleLiveData<String> get() = _productLinkRedirectEvent
+
     init {
         loadOffering()
     }
@@ -66,6 +70,7 @@ class OfferingDetailViewModel(
                             authRepository.saveRefresh()
                             loadOffering()
                         }
+
                         else -> DataError.Network.UNKNOWN
                     }
 
@@ -91,6 +96,7 @@ class OfferingDetailViewModel(
                             authRepository.saveRefresh()
                             onClickParticipation()
                         }
+
                         else -> DataError.Network.UNKNOWN
                     }
 
@@ -109,6 +115,10 @@ class OfferingDetailViewModel(
 
     override fun onClickReport() {
         _reportEvent.setValue(R.string.report_url)
+    }
+
+    override fun onClickProductRedirectText(productUrl: String) {
+        _productLinkRedirectEvent.setValue(productUrl)
     }
 
     private fun isParticipationEnabled(
