@@ -131,10 +131,10 @@ private fun OfferingCondition.toOfferingComment(
     context: Context,
     remaining: Int,
 ) = when (this) {
-    OfferingCondition.FULL -> context.getString(R.string.main_offering_condition_full_comment)
+    OfferingCondition.FULL -> context.getString(R.string.home_offering_condition_full_comment)
     OfferingCondition.IMMINENT ->
         Html.fromHtml(
-            context.getString(R.string.main_offering_condition_continue_comment)
+            context.getString(R.string.home_offering_condition_continue_comment)
                 .format(remaining),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
@@ -171,10 +171,10 @@ private fun TextView.setColor(colorId: Int) {
 
 private fun OfferingCondition.toOfferingConditionText(context: Context) =
     when (this) {
-        OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
-        OfferingCondition.IMMINENT -> context.getString(R.string.main_offering_imminent) // 마감임박
-        OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_closed) // 공구마감
-        OfferingCondition.AVAILABLE -> context.getString(R.string.main_offering_continue) // 모집중
+        OfferingCondition.FULL -> context.getString(R.string.home_offering_full) // 인원 만석
+        OfferingCondition.IMMINENT -> context.getString(R.string.home_offering_imminent) // 마감임박
+        OfferingCondition.CONFIRMED -> context.getString(R.string.home_offering_closed) // 공구마감
+        OfferingCondition.AVAILABLE -> context.getString(R.string.home_offering_continue) // 모집중
     }
 
 private fun OfferingCondition.toStyle() =
@@ -193,7 +193,7 @@ fun View.setIsVisible(isVisible: Boolean) {
 @BindingAdapter("formattedDate")
 fun TextView.bindFormattedDate(datetime: LocalDateTime?) {
     this.text =
-        datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.due_datetime)))
+        datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.all_due_datetime)))
 }
 
 @BindingAdapter("currentCount", "totalCount", "condition")
@@ -210,18 +210,18 @@ private fun OfferingCondition.toOfferingConditionText(
     currentCount: Int,
     totalCount: Int,
 ) = when (this) {
-    OfferingCondition.FULL -> context.getString(R.string.participant_full)
+    OfferingCondition.FULL -> context.getString(R.string.offering_detail_participant_full)
     OfferingCondition.IMMINENT ->
         context.getString(
-            R.string.participant_count,
+            R.string.offering_detail_participant_count,
             currentCount,
             totalCount,
         )
 
-    OfferingCondition.CONFIRMED -> context.getString(R.string.participant_end)
+    OfferingCondition.CONFIRMED -> context.getString(R.string.offering_detail_participant_end)
     OfferingCondition.AVAILABLE ->
         context.getString(
-            R.string.participant_count,
+            R.string.offering_detail_participant_count,
             currentCount,
             totalCount,
         )
