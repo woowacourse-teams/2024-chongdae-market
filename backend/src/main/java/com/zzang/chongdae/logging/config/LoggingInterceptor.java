@@ -9,8 +9,11 @@ import com.zzang.chongdae.logging.dto.LoggingWarnResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Slf4j
@@ -28,6 +31,15 @@ public class LoggingInterceptor implements HandlerInterceptor {
                                 HttpServletResponse response,
                                 Object handler,
                                 Exception ex) throws IOException {
+
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
+            return;
+        }
+        Method method = handlerMethod.getMethod();
+        if (method.isAnnotationPresent(LoggingMasked.class)) {
+            return;
+        }
+
         if (isMultipart(request)) {
             return;
         }
