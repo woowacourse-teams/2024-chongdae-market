@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.commentdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +24,7 @@ import com.zzang.chongdae.presentation.view.commentdetail.model.participants.Par
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel.Companion.toUiModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class CommentDetailViewModel(
@@ -65,6 +65,9 @@ class CommentDetailViewModel(
     private val _onBackPressedEvent = MutableSingleLiveData<Unit>()
     val onBackPressedEvent: SingleLiveData<Unit> get() = _onBackPressedEvent
 
+    private val _errorEvent = MutableLiveData<String>()
+    val errorEvent: MutableLiveData<String> get() = _errorEvent
+
     init {
         startPolling()
         updateCommentInfo()
@@ -76,7 +79,7 @@ class CommentDetailViewModel(
         pollJob?.cancel()
         pollJob =
             viewModelScope.launch {
-                while (true) {
+                while (this.isActive) {
                     loadComments()
                     delay(1000)
                 }
@@ -93,9 +96,8 @@ class CommentDetailViewModel(
                             authRepository.saveRefresh()
                             updateCommentInfo()
                         }
-
                         else -> {
-                            Log.e("error", "updateCommentInfo: ${result.error}")
+                            errorEvent.value = result.error.name
                         }
                     }
             }
@@ -118,7 +120,7 @@ class CommentDetailViewModel(
                         }
 
                         else -> {
-                            Log.e("error", "updateOfferingStatus: ${result.error}")
+                            errorEvent.value = result.error.name
                         }
                     }
             }
@@ -139,13 +141,12 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            Log.d("error", "loadComments: ${result.error}")
                             authRepository.saveRefresh()
                             loadComments()
                         }
-
                         else -> {
-                            Log.e("error", "loadComments: ${result.error}")
+                            pollJob?.cancel()
+                            errorEvent.value = result.error.name
                         }
                     }
             }
@@ -170,9 +171,8 @@ class CommentDetailViewModel(
                             authRepository.saveRefresh()
                             postComment()
                         }
-
                         else -> {
-                            Log.e("error", "postComment: ${result.error}")
+                            errorEvent.value = result.error.name
                         }
                     }
             }
@@ -196,9 +196,8 @@ class CommentDetailViewModel(
                             authRepository.saveRefresh()
                             loadParticipants()
                         }
-
                         else -> {
-                            Log.e("error", "loadParticipants: ${result.error}")
+                            errorEvent.value = result.error.name
                         }
                     }
             }
@@ -215,9 +214,8 @@ class CommentDetailViewModel(
                             authRepository.saveRefresh()
                             loadMeetings()
                         }
-
                         else -> {
-                            Log.e("error", "loadMeetings: ${result.error}")
+                            errorEvent.value = result.error.name
                         }
                     }
             }
@@ -231,16 +229,22 @@ class CommentDetailViewModel(
     fun exitOffering() {
         viewModelScope.launch {
             when (val result = participantRepository.deleteParticipations(offeringId)) {
-                is Result.Success -> _onExitOfferingEvent.setValue(Unit)
+                is Result.Success -> {
+                    _onExitOfferingEvent.setValue(Unit)
+                    pollJob?.cancel()
+                }
                 is Result.Error ->
                     when (result.error) {
+                        DataError.Network.NULL -> {
+                            _onExitOfferingEvent.setValue(Unit)
+                            pollJob?.cancel()
+                        }
                         DataError.Network.UNAUTHORIZED -> {
                             authRepository.saveRefresh()
                             exitOffering()
                         }
-
                         else -> {
-                            Log.e("error", "exitOffering: ${result.error}")
+                            _errorEvent.value = result.error.name
                         }
                     }
             }
