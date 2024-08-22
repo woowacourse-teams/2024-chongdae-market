@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".presentation.view.offeringdetail.OfferingDetailFragment">
+
+        <ScrollView
+            android:id="@+id/sv_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/btn_participate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:detailProductImageUrl="@{vm.offeringDetail.thumbnailUrl}"
+                    app:layout_constraintDimensionRatio="360:260"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/img_detail_product_default" />
+
+                <TextView
+                    android:id="@+id/tv_report_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
+                    android:fontFamily="@font/suit_medium"
+                    android:onClick="@{() -> vm.onClickReport()}"
+                    android:text="@string/all_report_text"
+                    android:textColor="@color/gray_font"
+                    android:textSize="15sp"
+                    app:isVisible="@{!vm.isRepresentative}"
+                    app:layout_constraintEnd_toStartOf="@id/iv_report"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_10"
+                    android:onClick="@{() -> vm.onClickReport()}"
+                    android:src="@drawable/ic_detail_report"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_report_comment"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="224dp"
+                    android:background="@drawable/bg_white_radius_16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="23dp"
+                        android:layout_marginTop="44dp"
+                        android:fontFamily="@font/suit_bold"
+                        android:paddingEnd="23dp"
+                        android:paddingBottom="12dp"
+                        android:text="@{vm.offeringDetail.title}"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toTopOf="@id/iv_user_emoticon"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="여기는 제목이 들어가요" />
+
+                    <ImageView
+                        android:id="@+id/iv_user_emoticon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_detail_user"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+                    <TextView
+                        android:id="@+id/tv_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/suit_medium"
+                        android:text="@{vm.offeringDetail.nickname}"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toEndOf="@id/iv_user_emoticon"
+                        app:layout_constraintTop_toBottomOf="@id/tv_title"
+                        tools:text="가나다라마바사아자차" />
+
+                    <ImageView
+                        android:id="@+id/iv_modify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="60dp"
+                        android:src="@drawable/ic_detail_modify"
+                        app:isVisible="@{vm.isRepresentative}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/view_divide_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/ic_detail_divide_line"
+                        app:isVisible="@{vm.isRepresentative}"
+                        app:layout_constraintStart_toEndOf="@id/iv_modify"
+                        app:layout_constraintTop_toTopOf="@id/iv_modify" />
+
+                    <ImageView
+                        android:id="@+id/iv_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/ic_detail_remove"
+                        app:isVisible="@{vm.isRepresentative}"
+                        app:layout_constraintStart_toEndOf="@id/view_divide_line"
+                        app:layout_constraintTop_toTopOf="@id/view_divide_line" />
+
+                    <TextView
+                        android:id="@+id/tv_product_link_comment"
+                        style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
+                        android:layout_marginTop="18dp"
+                        android:text="@string/offering_detail_product_url_title"
+                        app:isVisible="@{vm.offeringDetail.productUrl != null}"
+                        app:layout_constraintBottom_toTopOf="@id/horizon_line"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="@string/offering_detail_product_url_text"
+                        android:onClick="@{() -> vm.onClickProductRedirectText(vm.offeringDetail.productUrl)}"
+                        android:textColor="@color/main_color"
+                        android:textSize="16sp"
+                        app:isVisible="@{vm.offeringDetail.productUrl != null}"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_product_link_comment"
+                        app:layout_constraintStart_toEndOf="@id/tv_product_link_comment"
+                        app:layout_constraintTop_toTopOf="@id/tv_product_link_comment" />
+
+                    <View
+                        android:id="@+id/horizon_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/horizon_line"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_product_link_comment" />
+
+                    <ImageView
+                        android:id="@+id/iv_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_detail_money"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+
+                    <TextView
+                        android:id="@+id/tv_moeny_comment"
+                        style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/offering_detail_divided_money_title"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_money"
+                        app:layout_constraintStart_toEndOf="@id/iv_money"
+                        app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+
+                    <TextView
+                        android:id="@+id/tv_divided_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="@{@string/all_money_amount_text(vm.offeringDetail.dividedPrice)}"
+                        android:textColor="@color/main_color"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/iv_money"
+                        tools:text="10,000원" />
+
+                    <TextView
+                        android:id="@+id/tv_total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/suit_medium"
+                        android:text="@{@string/offering_detail_total_price(vm.offeringDetail.totalPrice)}"
+                        android:textColor="@color/gray_500"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
+                        app:layout_constraintStart_toEndOf="@id/tv_divided_price"
+                        app:layout_constraintTop_toBottomOf="@id/iv_money"
+                        tools:text="(총 가격 40,000원)" />
+
+                    <ImageView
+                        android:id="@+id/iv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="23dp"
+                        android:src="@drawable/ic_detail_clock"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+                    <TextView
+                        android:id="@+id/tv_meeting_date_comment"
+                        style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="23dp"
+                        android:text="@string/detail_meeting_date_comment_text"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_time"
+                        app:layout_constraintStart_toEndOf="@id/iv_time"
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+                    <TextView
+                        android:id="@+id/tv_meeting_date"
+                        style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:layout_marginTop="8dp"
+                        app:formattedDate="@{vm.offeringDetail.meetingDate}"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/iv_time"
+                        tools:text="2024년 3월 28일" />
+
+                    <ImageView
+                        android:id="@+id/iv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginTop="23dp"
+                        android:src="@drawable/ic_detail_location"
+                        app:layout_constraintStart_toEndOf="@id/tv_meeting_date_comment"
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+                    <TextView
+                        android:id="@+id/tv_recruit_location_comment"
+                        style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
+                        android:layout_marginTop="23dp"
+                        android:text="모집 장소"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_location"
+                        app:layout_constraintStart_toEndOf="@id/iv_location"
+                        app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+                    <TextView
+                        android:id="@+id/tv_meeting_address"
+                        style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:paddingEnd="@dimen/size_5"
+                        android:text="@{vm.offeringDetail.meetingAddress}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/iv_location"
+                        app:layout_constraintTop_toBottomOf="@id/iv_location"
+                        tools:text="부산광역시 강서구 녹산산단382로14번가길 10~29번지(송정동)" />
+
+                    <TextView
+                        android:id="@+id/tv_meeting_address_detail"
+                        style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="@dimen/size_4"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:paddingEnd="@dimen/size_5"
+                        android:text="@{vm.offeringDetail.meetingAddressDetail}"
+                        app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
+                        app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
+                        tools:text="102동 106호" />
+
+                    <View
+                        android:id="@+id/horizon_line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/horizon_line"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_meeting_address_detail" />
+
+                    <TextView
+                        android:id="@+id/tv_content_comment"
+                        style="@style/Theme.AppCompat.TextView.Bold.Gray900.Size16"
+                        android:layout_marginTop="9dp"
+                        android:text="내용"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/horizon_line2" />
+
+                    <TextView
+                        android:id="@+id/tv_content"
+                        style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginEnd="18dp"
+                        android:text="@{vm.offeringDetail.description}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/tv_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_content_comment"
+                        tools:text="내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다. 내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다. 내용입니다.내용입니다.내용입니다.내용입니다.내용입니다
+내용입니다.내용입니다.내용입니다.내용입니다.내용입니다
+내용입니다.내용입니다.내용입니다.내용입니다.내용입니다
+내용입니다.내용입니다.내용입니다.내용입니다.내용입니다" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_participate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btn_participation_enabled"
+            android:enabled="@{vm.isParticipationAvailable}"
+            android:fontFamily="@font/suit_medium"
+            android:onClick="@{() -> vm.onClickParticipation()}"
+            android:textColor="@color/white"
+            app:condition="@{vm.offeringCondition}"
+            app:currentCount="@{vm.currentCount}"
+            app:isVisible="@{!vm.isParticipated}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_layout"
+            app:totalCount="@{vm.offeringDetail.totalCount}"
+            tools:enabled="true"
+            tools:text="참여하기(1/4)" />
+
+        <Button
+            android:id="@+id/btn_move_comment_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btn_participation_opened"
+            android:fontFamily="@font/suit_medium"
+            android:onClick="@{() -> vm.onClickMoveCommentDetail()}"
+            android:text="@string/offering_detail_move_comment_detail"
+            android:textColor="@color/white"
+            app:isVisible="@{vm.isParticipated}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

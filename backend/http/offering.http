@@ -1,0 +1,26 @@
+### 공모 상세 조회 API
+GET {{base-url}}/offerings/1
+
+### 공모 목록 조회 API
+GET {{base-url}}/offerings?filter=IMMINENT&last-id=4
+
+### 공모 필터 목록 조회 API
+GET {{base-url}}/offerings/filters
+
+### 공모 작성 API
+POST {{base-url}}/offerings
+Content-Type: application/json
+
+{
+  "title": "공모 제목",
+  "productUrl": "www.naver.com",
+  "thumbnailUrl": "www.naver.com/favicon.ico",
+  "totalCount": 5,
+  "totalPrice": 10000,
+  "originPrice": null,
+  "meetingAddress": "서울특별시 광진구 구의강변로 3길 11",
+  "meetingAddressDetail": "상세주소아파트",
+  "meetingAddressDong": "구의동",
+  "meetingDate": "2024-10-11T10:00:00",
+  "description": "내용입니다."
+}

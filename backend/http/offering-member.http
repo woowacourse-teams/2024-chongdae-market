@@ -1,0 +1,8 @@
+### 공모 참여 API
+POST {{base-url}}/participations
+Content-Type: application/json
+
+{
+  "memberId": 2,
+  "offeringId": 2
+}

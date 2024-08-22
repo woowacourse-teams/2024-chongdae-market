@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AppCompat.TextView.Bold.Gray900.Size16" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/gray_900</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Normal.Gray500.Size14" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/suit_medium</item>
+        <item name="android:textColor">@color/gray_500</item>
+
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Normal.Gray700.Size12" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_12</item>
+        <item name="fontFamily">@font/suit_medium</item>
+        <item name="android:textColor">@color/gray_500</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Bold.MainColor.Size25" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">25dp</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/main_color</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Offering.Continue" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_12</item>
+        <item name="android:text">@string/home_offering_continue</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Offering.Closed" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/home_offering_closed</item>
+        <item name="android:textSize">@dimen/size_12</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Offering.Full" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_12</item>
+        <item name="android:text">@string/home_offering_full</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Bold.Black1000.Size15" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/font_size_15</item>
+        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textColor">@color/black_1000</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.Subject" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_20</item>
+        <item name="android:textColor">@color/black_700</item>
+        <item name="android:layout_marginTop">@dimen/size_40</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.Description" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_13</item>
+        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:layout_marginTop">@dimen/size_8</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.Asterisk" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_14</item>
+        <item name="android:textColor">@color/main_color</item>
+        <item name="android:layout_marginStart">@dimen/size_4</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+        <item name="android:text">@string/all_asterisk</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.EditText" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/size_44</item>
+        <item name="android:textSize">@dimen/size_15</item>
+        <item name="android:textColor">@color/gray_900</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="android:textColorHint">@color/gray_font</item>
+        <item name="android:background">@drawable/et_border_gray</item>
+        <item name="android:layout_marginTop">@dimen/size_16</item>
+        <item name="android:paddingHorizontal">@dimen/size_8</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Write.EditTextPrice" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">230dp</item>
+        <item name="android:layout_height">@dimen/size_44</item>
+        <item name="android:textSize">@dimen/size_15</item>
+        <item name="android:textColor">@color/gray_900</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textColorHint">@color/gray_font</item>
+        <item name="android:background">@drawable/et_border_gray</item>
+        <item name="android:layout_marginTop">@dimen/size_16</item>
+        <item name="android:paddingHorizontal">@dimen/size_8</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+
+    <style name="Theme.AppCompat.TextView.Normal.Gray900.Size17" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/size_17</item>
+        <item name="fontFamily">@font/suit_medium</item>
+        <item name="android:textColor">@color/gray_900</item>
+    </style>
+
+    <style name="Widget.AppCompat.CompoundButton.CheckBox.Filter" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/suit_regular</item>
+        <item name="android:textColor">@color/gray_900</item>
+        <item name="android:background">@drawable/bg_main_filter</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawableStart">@drawable/btn_main_filter</item>
+        <item name="android:drawablePadding">3dp</item>
+        <item name="android:paddingVertical">6dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
+    <style name="Widget.AppCompat.CompoundButton.CheckBox.Upside" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray_900</item>
+        <item name="android:background">@drawable/bg_main_gray_color_10dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingVertical">3dp</item>
+        <item name="android:drawableStart">@drawable/btn_upside</item>
+    </style>
+
+    <!--    DateTimePicker Custom   -->
+    <style name="DefaultNumberPickerTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#00000000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/suit_medium</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+</resources>
