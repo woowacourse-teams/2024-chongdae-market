@@ -182,7 +182,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.zzang.chongdae
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
-          track: closed
+          track: "총대마켓 - 비공개 테스트"
 #          status: completed
 #          inAppUpdatePriority: 2
 #          userFraction: 0.33
