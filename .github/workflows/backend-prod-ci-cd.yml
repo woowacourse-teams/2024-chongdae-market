@@ -60,4 +60,4 @@ jobs:
           docker rm ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
           docker image prune -a -f
           docker pull ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} —-network nginx_network -d -p 80:8080 -v /logs:/logs -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
+          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} —-network nginx_network -d -v /logs:/logs -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
