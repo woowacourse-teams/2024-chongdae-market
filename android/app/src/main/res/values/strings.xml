@@ -1,3 +1,141 @@
 <resources>
-    <string name="app_name">chongdae</string>
+
+    <string name="app_name">총대마켓</string>
+
+    <!--    all-->
+    <string name="all_money_amount_text">%,d원</string>
+    <string name="all_report_text">신고하기</string>
+    <string name="all_edit_text">수정</string>
+    <string name="all_asterisk">*</string>
+    <string name="all_title">제목</string>
+    <string name="all_photo">사진</string>
+    <string name="all_plus">+</string>
+    <string name="all_minus">-</string>
+    <string name="all_won">원</string>
+    <string name="all_percentage">%</string>
+    <string name="all_percentage_comma">%,d</string>
+    <string name="all_place">거래 장소</string>
+    <string name="all_am">오전</string>
+    <string name="all_pm">오후</string>
+    <string name="all_permission_granted">권한이 허용되었습니다.</string>
+    <string name="all_permission_denied">권한이 거부되었습니다.</string>
+    <string name="all_error_file_conversion">파일을 찾을 수 없습니다.</string>
+    <string name="all_error_image_upload">이미지 업로드에 실패했습니다.</string>
+    <string name="all_cancel">취소하기</string>
+    <string name="all_confirm">확정하기</string>
+    <string name="report_url">https://docs.google.com/forms/d/e/1FAIpQLSdyHhWqwY0-iJsa6MrbD2f3rdES4dhXekkRbQ2T3HmnIgV1TA/viewform</string>
+    <string name="all_due_datetime">yyyy년 M월 d일</string>
+
+
+    <!--    login-->
+    <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
+    <string name="login_with_kakao_button">카카오 로그인</string>
+
+    <!--    menu-->
+    <string name="bottom_home">홈</string>
+    <string name="bottom_chat">채팅방</string>
+    <string name="bottom_my_page">마이페이지</string>
+
+    <!--    home-->
+    <string name="home_search_hint_text">검색할 내용을 입력해주세요.</string>
+    <string name="home_offering_continue">모집중</string>
+    <string name="home_offering_closed">모집마감</string>
+    <string name="home_offering_imminent">마감임박</string>
+    <string name="home_offering_full">인원만석</string>
+    <string name="home_offering_condition_imminent_comment">마감이 얼마 안남았어요!</string>
+    <string name="home_offering_condition_closed_comment">공구가 마감되었어요.</string>
+    <string name="home_offering_condition_full_comment">인원이 빠질 수도 있어요</string>
+    <string name="home_offering_condition_continue_comment">마감까지 &lt;font color="#F15642">%d명 &lt;/font> 남았어요</string>
+    <string name="home_discount_rate_text">%.1f%%↓</string>
+    <string name="home_filter_error_message">필터 정보를 불러올 수 없습니다.</string>
+    <string name="home_updated_offering_error_mesasge">업데이트된 공모 목록을 가져올 수 없습니다.</string>
+
+    <!--    my_page-->
+    <string name="my_page_welcome_text">안녕하세요</string>
+    <string name="my_page_nickname_title">님</string>
+    <string name="my_page_terms_of_use_text">이용약관</string>
+    <string name="my_page_privacy_text">개인정보처리 방침</string>
+    <string name="my_page_logout_text">로그아웃</string>
+    <string name="my_page_withdrawal_text">회원 탈퇴</string>
+    <string name="my_page_title_text">마이페이지</string>
+    <string name="my_page_offerings_text">내가 올린 공구</string>
+
+    <!--    offering_detail-->
+    <string name="offering_detail_product_url_title">물품 링크:&#160;</string>
+    <string name="offering_detail_product_url_text">바로가기</string>
+    <string name="offering_detail_load_error_mesage">해당 공모가 존재하지 않습니다.</string>
+    <string name="offering_detail_divided_money_title">엔빵 가격</string>
+    <string name="offering_detail_move_comment_detail">참여중인 채팅방</string>
+    <string name="offering_detail_total_price">(총 가격 %,d원)</string>
+    <string name="offering_detail_participant_count">참여하기(%d/%d)</string>
+    <string name="offering_detail_participant_full">인원이 다 찼어요!</string>
+    <string name="offering_detail_participation_error">참여할 수 없는 공모입니다.</string>
+    <string name="offering_detail_participant_already">이미 참여중이에요!</string>
+    <string name="offering_detail_participant_end">마감되었어요!</string>
+
+    <!--    comment_room-->
+    <string name="comment_text">채팅</string>
+    <string name="amPmTime">"a hh:mm"</string>
+
+    <!--    offering_status-->
+    <string name="comment_detail">comment_detail</string>
+    <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
+    <string name="comment_detail_message_hint">메시지를 입력하세요.</string>
+    <string name="detail_meeting_date_comment_text">거래 날짜</string>
+
+    <!--    comment_detail-->
+    <string name="recruiting">모집중</string>
+    <string name="scheduling">일정조정중</string>
+    <string name="purchasing">구매중</string>
+    <string name="dealing">거래중</string>
+    <string name="completed">거래완료</string>
+    <string name="participant_confirm">인원확정</string>
+    <string name="schedule_confirm">일정확정</string>
+    <string name="purchase_confirm">구매확정</string>
+    <string name="deal_confirm">거래확정</string>
+    <string name="offering_members">참여자 목록 (%d명/%d명)</string>
+    <string name="comment_detail_expected_price">예상 공동구매 엔빵 가격</string>
+
+    <!--    offering_write-->
+    <string name="write_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
+    <string name="write_information_message_optional">추가 정보를 입력해서\n<font color="#F15642">공동구매 성공률</font>을 높여보세요!</string>
+    <string name="write_enter_offering_title">제목을 입력해 주세요.</string>
+    <string name="write_upload_photo">최대 50MB까지 업로드 가능합니다.</string>
+    <string name="write_purchase_link">물품 구매 링크</string>
+    <string name="write_enter_purchase_link">구매하실 물품의 링크를 입력해 주세요.</string>
+    <string name="write_total_personnel">총원</string>
+    <string name="write_information_total_personnel">2명 이상 10,000명 이하로 입력해 주세요.</string>
+    <string name="write_total_price">총 가격</string>
+    <string name="write_information_total_price">너무 고가의 물품은 <font color="#F15642">주의가 필요해요!</font></string>
+    <string name="write_rounds_description">1원 단위까지 반올림</string>
+    <string name="write_per_n_price">예상 엔빵 가격 :\u00A0</string>
+    <string name="write_origin_price">낱개 가격</string>
+    <string name="write_information_origin_price_description">공구를 진행하지 않고 낱개로 구입할 때의 가격을 입력해 주세요.</string>
+    <string name="write_information_origin_price_description2">입력 시 공구 성공률이 높아져요!</string>
+    <string name="write_discount_rate">공구 할인율 :\u00A0</string>
+    <string name="write_information_place">거래 희망 장소를 검색해 주세요.</string>
+    <string name="write_search_place"> 주소 검색</string>
+    <string name="write_enter_place_detail"> 상세 주소를 입력해 주세요. (선택)</string>
+    <string name="write_deadline">거래 날짜</string>
+    <string name="write_deadline_description">거래할 날짜를 입력해 주세요.</string>
+    <string name="write_contents">내용</string>
+    <string name="write_deadline_contents_description">공동구매에 대한 자세한 내용을 입력해 주세요.</string>
+    <string name="write_current_description_count">%d자</string>
+    <string name="write_under_1000">\u00A0/ 1000자</string>
+    <string name="write_start_offering">공동구매 시작하기!</string>
+    <string name="write_start_offering_button_disabled">필수 항목을 모두 입력해 주세요.</string>
+    <string name="write_invalid_total_count">총원은 2이상 10,000이하의 정수를 입력해 주세요.</string>
+    <string name="write_invalid_total_price">총 가격은 0이상의 정수를 입력해 주세요.</string>
+    <string name="write_invalid_origin_price">낱개 가격은 0이상의 정수를 입력해 주세요.</string>
+    <string name="write_origin_price_cheaper_than_total_price">예상 엔빵 가격은 낱개 가격보다 낮아야 합니다.</string>
+    <string name="write_discount_rate_value">%.1f</string>
+    <string name="error_invalid_product_url">대표 이미지가 유효하지 않습니다.</string>
+    <string name="error_empty_product_url">대표 이미지가 존재하지 않습니다.</string>
+    <string name="write_extract_image">사진 추출</string>
+    <string name="write_selected_date">%d년 %d월 %d일</string>
+    <string name="write_selected_time">%s %d시 %d분</string>
+    <string name="write_success_writing">공모가 게시되었어요!</string>
+    <string name="write_error_writing">공모 게시에 실패했어요🥲</string>
+    <string name="write_update_state_dialog_message">공동구매 <font color="#F15642">진행 상황</font>을 <font color="#F15642">변경</font>하시겠습니까?</string>
+    <string name="write_current_split_price">현재 엔빵 가격: %,d원</string>
 </resources>
