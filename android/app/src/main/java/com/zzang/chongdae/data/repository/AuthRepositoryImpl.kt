@@ -18,6 +18,20 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun saveRefresh(): Result<Unit, DataError.Network> {
-        return authRemoteDataSource.saveRefresh()
+        return when (val result = authRemoteDataSource.saveRefresh()) {
+            is Result.Error -> {
+                when (result.error) {
+                    DataError.Network.UNAUTHORIZED -> {
+                        return Result.Error(result.msg, DataError.Network.FAIL_REFRESH)
+                    }
+
+                    else -> {
+                        return Result.Error(result.msg, DataError.Network.UNAUTHORIZED)
+                    }
+                }
+            }
+
+            is Result.Success -> result
+        }
     }
 }
