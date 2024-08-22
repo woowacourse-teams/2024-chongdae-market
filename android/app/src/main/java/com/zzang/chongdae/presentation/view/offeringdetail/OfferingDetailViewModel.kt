@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -57,6 +58,9 @@ class OfferingDetailViewModel(
     private val _productLinkRedirectEvent: MutableSingleLiveData<String> = MutableSingleLiveData()
     val productLinkRedirectEvent: SingleLiveData<String> get() = _productLinkRedirectEvent
 
+    private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val error: SingleLiveData<Int> get() = _error
+
     init {
         loadOffering()
     }
@@ -71,7 +75,13 @@ class OfferingDetailViewModel(
                             loadOffering()
                         }
 
-                        else -> DataError.Network.UNKNOWN
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.offering_detail_load_error_mesage)
+                        }
+
+                        else -> {
+                            Log.e("error", "loadOffering Error: ${result.error.name}")
+                        }
                     }
 
                 is Result.Success -> {
@@ -97,7 +107,13 @@ class OfferingDetailViewModel(
                             onClickParticipation()
                         }
 
-                        else -> DataError.Network.UNKNOWN
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.offering_detail_participation_error)
+                        }
+
+                        else -> {
+                            Log.e("error", "onClickParticipation Error: ${result.error.name}")
+                        }
                     }
 
                 is Result.Success -> {

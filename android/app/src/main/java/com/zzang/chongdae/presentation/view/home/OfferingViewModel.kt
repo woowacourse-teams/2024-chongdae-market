@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
@@ -67,6 +69,9 @@ class OfferingViewModel(
 
     private val _offeringsRefreshEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val offeringsRefreshEvent: SingleLiveData<Unit> get() = _offeringsRefreshEvent
+
+    private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val error: SingleLiveData<Int> get() = _error
 
     init {
         fetchOfferings()
@@ -127,7 +132,14 @@ class OfferingViewModel(
                             authRepository.saveRefresh()
                             fetchFilters()
                         }
-                        else -> DataError.Network.UNKNOWN
+
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.home_filter_error_message)
+                        }
+
+                        else -> {
+                            Log.e("error", "fetchFilters Error: ${result.error.name}")
+                        }
                     }
                 }
 
@@ -166,7 +178,14 @@ class OfferingViewModel(
                             authRepository.saveRefresh()
                             fetchUpdatedOffering(offeringId)
                         }
-                        else -> DataError.Network.UNKNOWN
+
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.home_updated_offering_error_mesasge)
+                        }
+
+                        else -> {
+                            Log.e("error", "fetchUpdatedOffering Error: ${result.error.name}")
+                        }
                     }
                 }
 

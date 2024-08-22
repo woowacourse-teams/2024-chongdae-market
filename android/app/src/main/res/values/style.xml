@@ -38,7 +38,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/size_12</item>
-        <item name="android:text">@string/main_offering_continue</item>
+        <item name="android:text">@string/home_offering_continue</item>
         <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -46,7 +46,7 @@
     <style name="Theme.AppCompat.TextView.Offering.Closed" parent="@style/Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:text">@string/main_offering_closed</item>
+        <item name="android:text">@string/home_offering_closed</item>
         <item name="android:textSize">@dimen/size_12</item>
         <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/white</item>
@@ -56,7 +56,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/size_12</item>
-        <item name="android:text">@string/main_offering_full</item>
+        <item name="android:text">@string/home_offering_full</item>
         <item name="fontFamily">@font/suit_bold</item>
         <item name="android:textColor">@color/white</item>
     </style>
