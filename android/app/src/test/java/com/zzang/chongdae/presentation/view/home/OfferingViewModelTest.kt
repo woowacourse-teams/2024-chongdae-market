@@ -1,8 +1,10 @@
 package com.zzang.chongdae.presentation.view.home
 
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.repository.FakeAuthRepository
+import com.zzang.chongdae.repository.FakeDataStore
 import com.zzang.chongdae.repository.FakeOfferingRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
@@ -21,12 +23,14 @@ class OfferingViewModelTest {
     private lateinit var viewModel: OfferingViewModel
     private lateinit var offeringRepository: OfferingRepository
     private lateinit var authRepository: AuthRepository
+    private lateinit var userPreferencesDataStore: UserPreferencesDataStore
 
     @BeforeEach
     fun setUp() {
         offeringRepository = FakeOfferingRepository()
         authRepository = FakeAuthRepository()
-        viewModel = OfferingViewModel(offeringRepository, authRepository)
+        userPreferencesDataStore = UserPreferencesDataStore(FakeDataStore())
+        viewModel = OfferingViewModel(offeringRepository, authRepository, userPreferencesDataStore)
     }
 
     @DisplayName("필터 정보를 불러온다")
