@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragmentCommentRooms"
+            type="com.zzang.chongdae.presentation.view.comment.CommentRoomsFragment" />
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.comment.CommentRoomsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.view.comment.CommentRoomsFragment">
+
+        <ImageView
+            android:id="@+id/iv_empty_comment_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center_vertical"
+            android:src="@drawable/img_comment_room_empty_comment_room"
+            app:isVisible="@{vm.isCommentRoomsEmpty}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_comment_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="21dp"
+            android:fontFamily="@font/suit_medium"
+            android:text="@string/comment_text"
+            android:textColor="@color/black_1100"
+            android:textSize="@dimen/font_size_18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view_divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/gray_300"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_comment_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comment_room"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_divide_line"
+            tools:listitem="@layout/item_comment_room_participant" />
+
+        <View
+            android:id="@+id/view_divide_line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_300"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_comment_room" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

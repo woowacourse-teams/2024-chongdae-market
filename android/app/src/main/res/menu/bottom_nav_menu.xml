@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/comment_room_fragment"
+        android:enabled="true"
+        android:icon="@drawable/btn_chat"
+        android:title="@string/bottom_chat"/>
+    <item
+        android:id="@+id/home_fragment"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:icon="@drawable/btn_home"
+        android:title="@string/bottom_home"/>
+    <item
+        android:id="@+id/my_page_fragment"
+        android:enabled="true"
+        app:showAsAction="always"
+        android:icon="@drawable/btn_my_page"
+        android:title="@string/bottom_my_page"/>
+</menu>
