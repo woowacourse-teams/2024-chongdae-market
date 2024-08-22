@@ -25,5 +25,4 @@ public class OgTagProductImageExtractor implements ProductImageExtractor {
         }
         return url;
     }
-
 }
