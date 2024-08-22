@@ -12,16 +12,16 @@ inline fun <T> safeApiCall(call: () -> Response<T>): Result<T, DataError.Network
         if (response.isSuccessful) {
             response.body()?.let {
                 Result.Success(it)
-            } ?: Result.Error(DataError.Network.NULL)
+            } ?: Result.Error(response.message(), DataError.Network.NULL)
         } else {
-            Result.Error(handleHttpError(response.code()))
+            Result.Error(response.message(), handleHttpError(response.code()))
         }
     } catch (e: IOException) {
-        Result.Error(DataError.Network.CONNECTION_ERROR)
+        Result.Error(e.message ?: "Unknown IO error", DataError.Network.CONNECTION_ERROR)
     } catch (e: HttpException) {
-        Result.Error(handleHttpError(e.code()))
+        Result.Error(e.message ?: "Unknown HTTP error", handleHttpError(e.code()))
     } catch (e: Exception) {
-        Result.Error(DataError.Network.UNKNOWN)
+        Result.Error(e.message ?: "Unknown error", DataError.Network.UNKNOWN)
     }
 }
 
