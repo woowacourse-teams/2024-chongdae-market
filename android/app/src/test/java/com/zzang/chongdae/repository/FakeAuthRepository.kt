@@ -13,8 +13,4 @@ class FakeAuthRepository : AuthRepository {
     override suspend fun saveRefresh(): Result<Unit, DataError.Network> {
         TODO("Not yet implemented")
     }
-
-    override suspend fun saveSignup(ci: String): Result<Member, DataError.Network> {
-        TODO("Not yet implemented")
-    }
 }
