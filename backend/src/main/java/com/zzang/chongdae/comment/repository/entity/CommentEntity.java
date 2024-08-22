@@ -29,9 +29,11 @@ public class CommentEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
     private MemberEntity member;
 
+    @NotNull
     @ManyToOne
     private OfferingEntity offering;
 
