@@ -12,7 +12,15 @@ VALUES ('dora', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'PtgtJCnn307FyCBvR
        ('seogi', '2024-07-15 00:00:00', '2024-07-15 00:00:00', '0CWUdyVQ1TP+GGlI9W2d5Gao/5HgT0MSeIwald0Qcsw=',
         'KAKAO_seogi1234', 'KAKAO'),
        ('chaechae', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'WCkwnMjy/yW6odwkADguEIcHjFVELq+JLy+WeojvJ88=',
-        'KAKAO_chaechae1234', 'KAKAO');
+        'KAKAO_chaechae1234', 'KAKAO'),
+       ('tommy', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'FDCoOHIo4OPB8wBuYLLf1b3ZRTBSzNll45s8nmyQjdQ=',
+        'KAKAO_tommy1234', 'KAKAO'),
+       ('james', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'Z2XFMZIARj17tEES+PIavOqFkT4xl5eIKPvQdtHTb00=',
+        'KAKAO_james1234', 'KAKAO'),
+       ('jason', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'VQaSJjY9GBmpLaCga6sCpKYFBEC3G8VNva5seJzDwvg=',
+        'KAKAO_jason1234', 'KAKAO'),
+       ('lisa', '2024-07-15 00:00:00', '2024-07-15 00:00:00', 'MaG6sq0cGDEXwmZ++LWXXtIcJ6QqQgTwyIll8xExJdk=',
+        'KAKAO_lisa1234', 'KAKAO');
 
 INSERT INTO OFFERING (TOTAL_COUNT, CURRENT_COUNT, TOTAL_PRICE, ORIGIN_PRICE, DISCOUNT_RATE, CREATED_AT, UPDATED_AT,
                       MEMBER_ID, MEETING_DATE, DESCRIPTION, MEETING_ADDRESS, MEETING_ADDRESS_DONG,
