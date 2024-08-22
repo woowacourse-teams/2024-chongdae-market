@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
@@ -104,13 +105,13 @@ class OfferingDetailFragment : Fragment() {
     }
 
     private fun setUpMoveCommentDetailEventObserve() {
-        viewModel.commentDetailEvent.observe(this) { offeringTitle ->
-
+        viewModel.commentDetailEvent.observe(this) {
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "Offering_Item_ID: $offeringId",
                 name = "participate_offering_event",
                 contentType = "button",
             )
+            findNavController().popBackStack()
             CommentDetailActivity.startActivity(requireContext(), offeringId)
         }
     }
