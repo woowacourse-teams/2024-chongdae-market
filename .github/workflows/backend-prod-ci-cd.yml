@@ -6,11 +6,11 @@ on:
     paths:
       - "backend/**"
       - ".github/workflows/backend-prod-ci-cd.yml"
-  pull_request:
-    branches: [ "develop-BE" ]
-    paths:
-      - "backend/**"
-      - ".github/workflows/backend-prod-ci-cd.yml"
+  # pull_request:
+  #   branches: [ "develop-BE" ]
+  #   paths:
+  #     - "backend/**"
+  #     - ".github/workflows/backend-prod-ci-cd.yml"
 
 jobs:
 
