@@ -3,10 +3,14 @@ name: Backend Dev CI/CD Workflow
 on:
   push:
     branches: [ "develop-BE" ]
-    paths: [ "backend/**" ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-dev-ci-cd.yml"
   # pull_request:
   #   branches: [ "develop-BE" ]
-  #   paths: [ "backend/**" ]
+  #   paths:
+      # - "backend/**"
+      # - ".github/workflows/backend-dev-ci-cd.yml"
 
 jobs:
 
