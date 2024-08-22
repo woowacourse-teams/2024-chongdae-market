@@ -41,6 +41,7 @@ public class OfferingEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
     private MemberEntity member;
 
