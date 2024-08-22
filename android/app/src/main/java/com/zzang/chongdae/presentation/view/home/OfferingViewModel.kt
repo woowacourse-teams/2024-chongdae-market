@@ -14,6 +14,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.zzang.chongdae.R
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 class OfferingViewModel(
     private val offeringRepository: OfferingRepository,
     private val authRepository: AuthRepository,
+    private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel(), OnFilterClickListener, OnSearchClickListener {
     private val _offerings = MutableLiveData<PagingData<Offering>>()
     val offerings: LiveData<PagingData<Offering>> get() = _offerings
@@ -73,9 +75,12 @@ class OfferingViewModel(
     private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
     val error: SingleLiveData<Int> get() = _error
 
+    private val _refreshTokenExpiredEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val refreshTokenExpiredEvent: SingleLiveData<Unit> get() = _refreshTokenExpiredEvent
+
     init {
-        fetchOfferings()
         fetchFilters()
+        fetchOfferings()
     }
 
     private fun fetchOfferings() {
@@ -127,10 +132,16 @@ class OfferingViewModel(
         viewModelScope.launch {
             when (val result = offeringRepository.fetchFilters()) {
                 is Result.Error -> {
+                    Log.d("error", "fetchFilters: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             authRepository.saveRefresh()
                             fetchFilters()
+                        }
+
+                        DataError.Network.FORBIDDEN -> {
+                            userPreferencesDataStore.removeAllData()
+                            _refreshTokenExpiredEvent.setValue(Unit)
                         }
 
                         DataError.Network.BAD_REQUEST -> {
@@ -214,6 +225,7 @@ class OfferingViewModel(
         fun getFactory(
             offeringRepository: OfferingRepository,
             authRepository: AuthRepository,
+            userPreferencesDataStore: UserPreferencesDataStore,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
@@ -222,6 +234,7 @@ class OfferingViewModel(
                 return OfferingViewModel(
                     offeringRepository,
                     authRepository,
+                    userPreferencesDataStore,
                 ) as T
             }
         }
