@@ -3,7 +3,9 @@ package com.zzang.chongdae.logging.domain;
 import jakarta.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Base64;
+import lombok.Getter;
 
+@Getter
 public class MemberIdentifier {
 
     public static String ACCESS_TOKEN_NAME = "access_token";
@@ -34,9 +36,5 @@ public class MemberIdentifier {
             return payload;
         }
         return ID_NOT_FOUND_INFO;
-    }
-
-    public String getIdInfo() {
-        return idInfo;
     }
 }
