@@ -1,17 +1,9 @@
-### 로그인 API
-POST {{base-url}}/auth/login
+### 카카오 로그인 API
+POST {{base-url}}/auth/login/kakao
 Content-Type: application/json
 
 {
-  "ci": "dora1234"
-}
-
-### 회원가입 API
-POST {{base-url}}/auth/signup
-Content-Type: application/json
-
-{
-  "ci": "poke1234567"
+  "accessToken": ""
 }
 
 ### 토큰 재발급 API

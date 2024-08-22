@@ -6,6 +6,7 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
+import com.zzang.chongdae.logging.config.LoggingMasked;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -55,6 +56,7 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
+    @LoggingMasked
     @GetMapping("/comments/messages")
     public ResponseEntity<CommentAllResponse> getAllComment(
             @RequestParam(value = "offering-id") Long offeringId,
