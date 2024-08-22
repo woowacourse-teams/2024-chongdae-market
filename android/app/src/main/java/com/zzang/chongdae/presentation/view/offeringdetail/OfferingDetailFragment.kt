@@ -75,6 +75,10 @@ class OfferingDetailFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { errMsgId ->
             showToast(errMsgId)
         }
+
+        viewModel.productLinkRedirectEvent.observe(viewLifecycleOwner) { productURL ->
+            openUrlInBrowser(productURL)
+        }
     }
 
     private fun openUrlInBrowser(url: String) {

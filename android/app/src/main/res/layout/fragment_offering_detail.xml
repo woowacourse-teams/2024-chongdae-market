@@ -164,13 +164,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
                         android:text="@string/offering_detail_product_url_text"
+                        android:onClick="@{() -> vm.onClickProductRedirectText(vm.offeringDetail.productUrl)}"
                         android:textColor="@color/main_color"
                         android:textSize="16sp"
                         app:isVisible="@{vm.offeringDetail.productUrl != null}"
                         app:layout_constraintBottom_toBottomOf="@id/tv_product_link_comment"
                         app:layout_constraintStart_toEndOf="@id/tv_product_link_comment"
-                        app:layout_constraintTop_toTopOf="@id/tv_product_link_comment"
-                        app:url="@{vm.offeringDetail.productUrl}" />
+                        app:layout_constraintTop_toTopOf="@id/tv_product_link_comment" />
 
                     <View
                         android:id="@+id/horizon_line"
@@ -280,15 +280,25 @@
                     <TextView
                         android:id="@+id/tv_meeting_address"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:layout_width="0dp"
                         android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:paddingEnd="@dimen/size_5"
                         android:text="@{vm.offeringDetail.meetingAddress}"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/iv_location"
                         app:layout_constraintTop_toBottomOf="@id/iv_location"
-                        tools:text="서울시 동작구 보라매로 70" />
+                        tools:text="부산광역시 강서구 녹산산단382로14번가길 10~29번지(송정동)" />
 
                     <TextView
                         android:id="@+id/tv_meeting_address_detail"
                         style="@style/Theme.AppCompat.TextView.Normal.Gray500.Size14"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="@dimen/size_4"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:paddingEnd="@dimen/size_5"
                         android:text="@{vm.offeringDetail.meetingAddressDetail}"
                         app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
                         app:layout_constraintTop_toBottomOf="@id/tv_meeting_address"
