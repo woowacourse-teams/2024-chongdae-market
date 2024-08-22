@@ -2,6 +2,7 @@ package com.zzang.chongdae.logging.config;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.logging.domain.HttpStatusCategory;
+import com.zzang.chongdae.logging.domain.MemberIdentifier;
 import com.zzang.chongdae.logging.dto.LoggingInfoFailResponse;
 import com.zzang.chongdae.logging.dto.LoggingInfoSuccessResponse;
 import com.zzang.chongdae.logging.dto.LoggingWarnResponse;
@@ -48,6 +49,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
         String latency = endTime - startTime + "ms";
 
         String identifier = UUID.randomUUID().toString();
+        MemberIdentifier memberIdentifier = new MemberIdentifier(request.getCookies());
         String httpMethod = request.getMethod();
         String uri = request.getRequestURI();
         String requestBody = new String(request.getInputStream().readAllBytes());
@@ -58,18 +60,38 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
         HttpStatusCategory statusCategory = HttpStatusCategory.fromStatusCode(cachedResponse.getStatus());
         if (statusCategory == HttpStatusCategory.INFO_SUCCESS) {
-            LoggingInfoSuccessResponse logResponse = new LoggingInfoSuccessResponse(identifier, httpMethod, uri,
-                    requestBody, statusCode, latency);
+            LoggingInfoSuccessResponse logResponse = new LoggingInfoSuccessResponse(
+                    identifier,
+                    memberIdentifier.getIdInfo(),
+                    httpMethod,
+                    uri,
+                    requestBody,
+                    statusCode,
+                    latency);
             log.info(logResponse.toString());
         }
         if (statusCategory == HttpStatusCategory.INFO_FAIL) {
-            LoggingInfoFailResponse logResponse = new LoggingInfoFailResponse(identifier, httpMethod, uri,
-                    requestBody, statusCode, responseBody, latency);
+            LoggingInfoFailResponse logResponse = new LoggingInfoFailResponse(
+                    identifier,
+                    memberIdentifier.getIdInfo(),
+                    httpMethod,
+                    uri,
+                    requestBody,
+                    statusCode,
+                    responseBody,
+                    latency);
             log.info(logResponse.toString());
         }
         if (statusCategory == HttpStatusCategory.WARN && ex instanceof MarketException) {
-            LoggingWarnResponse logResponse = new LoggingWarnResponse(identifier, httpMethod, uri,
-                    requestBody, statusCode, responseBody, latency);
+            LoggingWarnResponse logResponse = new LoggingWarnResponse(
+                    identifier,
+                    memberIdentifier.getIdInfo(),
+                    httpMethod,
+                    uri,
+                    requestBody,
+                    statusCode,
+                    responseBody,
+                    latency);
             log.warn(logResponse.toString());
         }
     }
