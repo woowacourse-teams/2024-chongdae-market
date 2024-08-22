@@ -4,6 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CiRequest(
-    @SerialName("ci") val ci: String,
+data class AccessTokenRequest(
+    @SerialName("accessToken") val accessToken: String,
 )
