@@ -37,9 +37,9 @@ class LoginViewModel(
         }
     }
 
-    fun postLogin(ci: String) {
+    fun postLogin(accessToken: String) {
         viewModelScope.launch {
-            when (val result = authRepository.saveLogin(ci = ci)) {
+            when (val result = authRepository.saveLogin(accessToken = accessToken)) {
                 is Result.Success -> {
                     userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
                     _loginSuccessEvent.setValue(Unit)
@@ -47,25 +47,6 @@ class LoginViewModel(
 
                 is Result.Error -> {
                     Log.e("error", "postLogin: ${result.error}")
-                    when (result.error) {
-                        DataError.Network.NOT_FOUND -> postSignup(ci)
-                        else -> {}
-                    }
-                }
-            }
-        }
-    }
-
-    private fun postSignup(ci: String) {
-        viewModelScope.launch {
-            when (val result = authRepository.saveSignup(ci = ci)) {
-                is Result.Success -> {
-                    userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
-                    postLogin(ci)
-                }
-
-                is Result.Error -> {
-                    Log.e("error", "postSignup: ${result.error}")
                 }
             }
         }

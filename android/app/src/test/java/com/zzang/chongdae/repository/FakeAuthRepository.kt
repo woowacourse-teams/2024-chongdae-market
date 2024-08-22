@@ -6,7 +6,7 @@ import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
 
 class FakeAuthRepository : AuthRepository {
-    override suspend fun saveLogin(ci: String): Result<Member, DataError.Network> {
+    override suspend fun saveLogin(accessToken: String): Result<Member, DataError.Network> {
         TODO("Not yet implemented")
     }
 
