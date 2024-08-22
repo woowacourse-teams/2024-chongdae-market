@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: chongdae
+  datasource:
+    url: jdbc:h2:mem:test
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+security:
+  jwt:
+    token:
+      access-secret-key: accessSecretKey
+      refresh-secret-key: refreshSecretKey
+      access-token-expired: 30m
+      refresh-token-expired: 14d

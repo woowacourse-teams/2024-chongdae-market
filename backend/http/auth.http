@@ -1,0 +1,10 @@
+### 카카오 로그인 API
+POST {{base-url}}/auth/login/kakao
+Content-Type: application/json
+
+{
+  "accessToken": ""
+}
+
+### 토큰 재발급 API
+POST {{base-url}}/auth/refresh
