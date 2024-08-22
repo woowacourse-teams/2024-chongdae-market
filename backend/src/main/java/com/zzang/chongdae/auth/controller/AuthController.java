@@ -3,10 +3,9 @@ package com.zzang.chongdae.auth.controller;
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
-import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.auth.service.dto.LoginResponse;
-import com.zzang.chongdae.auth.service.dto.SignupRequest;
-import com.zzang.chongdae.auth.service.dto.SignupResponse;
+import com.zzang.chongdae.logging.config.LoggingMasked;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,21 +25,13 @@ public class AuthController {
     private final CookieProducer cookieExtractor;
     private final CookieConsumer cookieConsumer;
 
-    @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> login(
-            @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
-        AuthInfoDto authInfo = authService.login(request);
+    @LoggingMasked
+    @PostMapping("/auth/login/kakao")
+    public ResponseEntity<LoginResponse> kakaoLogin(
+            @RequestBody @Valid KakaoLoginRequest request, HttpServletResponse servletResponse) {
+        AuthInfoDto authInfo = authService.kakaoLogin(request);
         addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
         LoginResponse response = new LoginResponse(authInfo.authMember());
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/auth/signup")
-    public ResponseEntity<SignupResponse> signup(
-            @RequestBody @Valid SignupRequest request, HttpServletResponse servletResponse) {
-        AuthInfoDto authInfo = authService.signup(request);
-        addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
-        SignupResponse response = new SignupResponse(authInfo.authMember());
         return ResponseEntity.ok(response);
     }
 
