@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -21,6 +23,7 @@ import com.zzang.chongdae.presentation.view.home.HomeFragment
 class OfferingDetailFragment : Fragment() {
     private var _binding: FragmentOfferingDetailBinding? = null
     private val binding get() = _binding!!
+    private var toast: Toast? = null
     private val offeringId by lazy {
         arguments?.getLong(HomeFragment.OFFERING_ID)
             ?: throw IllegalArgumentException()
@@ -69,6 +72,10 @@ class OfferingDetailFragment : Fragment() {
             openUrlInBrowser(getString(reportUrlId))
         }
 
+        viewModel.error.observe(viewLifecycleOwner) { errMsgId ->
+            showToast(errMsgId)
+        }
+
         viewModel.productLinkRedirectEvent.observe(viewLifecycleOwner) { productURL ->
             openUrlInBrowser(productURL)
         }
@@ -106,6 +113,19 @@ class OfferingDetailFragment : Fragment() {
             )
             CommentDetailActivity.startActivity(requireContext(), offeringId)
         }
+    }
+
+    private fun showToast(
+        @StringRes messageId: Int,
+    ) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireActivity(),
+                getString(messageId),
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     companion object {

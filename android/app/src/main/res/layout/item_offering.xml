@@ -58,7 +58,7 @@
             app:layout_constraintStart_toStartOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
             app:offeringCondition="@{offering.status}"
-            tools:text="@string/main_offering_closed" />
+            tools:text="@string/home_offering_closed" />
 
         <TextView
             android:id="@+id/tv_offering_title"
@@ -109,7 +109,7 @@
             android:layout_marginBottom="17dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text='@{offering.originPrice != null ? @string/strike_money_amount_text(offering.originPrice) : ""}'
+            android:text='@{offering.originPrice != null ? @string/all_money_amount_text(offering.originPrice) : ""}'
             app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
             app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
             app:layout_constraintTop_toTopOf="@id/tv_divided_price" />
@@ -119,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text='@{offering.originPrice != null ? @string/main_discount_rate_text(offering.calculateDiscountRate()) : ""}'
+            android:text='@{offering.originPrice != null ? @string/home_discount_rate_text(offering.calculateDiscountRate()) : ""}'
             android:textColor="@color/main_color"
             android:textSize="@dimen/size_13"
             android:textStyle="bold"
