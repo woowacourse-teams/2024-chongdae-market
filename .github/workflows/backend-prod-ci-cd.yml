@@ -38,7 +38,7 @@ jobs:
         working-directory: ./backend
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x copyOasToSwagger
         working-directory: ./backend
 
       - name: Docker build and push
