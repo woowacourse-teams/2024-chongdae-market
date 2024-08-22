@@ -5,6 +5,7 @@ import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +17,8 @@ public abstract class OfferingFetchStrategy {
     protected final OfferingRepository offeringRepository;
 
     protected Long findOutOfRangeId() {
-        return offeringRepository.findMaxId() + OUT_OF_RANGE_ID_OFFSET;
+        return Optional.ofNullable(offeringRepository.findMaxId())
+                .orElse(0L) + OUT_OF_RANGE_ID_OFFSET;
     }
 
     public List<OfferingEntity> fetchOfferings(String searchKeyword, Long lastId, Pageable pageable) {
