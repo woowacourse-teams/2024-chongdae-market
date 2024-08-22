@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         if (error != null) {
             Log.e("error", "카카오계정으로 로그인 실패", error)
         } else if (token != null) {
-            loadUserInformation()
+            loadUserInformation(token.accessToken)
         }
     }
 
@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 Log.e("error", "카카오톡으로 로그인 실패", error)
                 loginWithKakaoAcountIfKakaoTalkLoginFailed(error)
             } else if (token != null) {
-                loadUserInformation()
+                loadUserInformation(token.accessToken)
             }
         }
     }
@@ -115,13 +115,12 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         return error is ClientError && error.reason == ClientErrorCause.Cancelled
     }
 
-    private fun loadUserInformation() {
+    private fun loadUserInformation(accessToken: String) {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Log.d("error", "사용자 정보 요청 실패 $error")
             } else if (user != null) {
-                val email = user.kakaoAccount?.email ?: return@me
-                viewModel.postLogin(email)
+                viewModel.postLogin(accessToken)
             }
         }
     }
