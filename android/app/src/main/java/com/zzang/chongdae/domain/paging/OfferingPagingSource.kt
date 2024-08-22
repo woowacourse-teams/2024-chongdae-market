@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
 
 class OfferingPagingSource(
@@ -27,9 +28,23 @@ class OfferingPagingSource(
 
             when (offerings) {
                 is Result.Error -> {
-                    authRepository.saveRefresh()
-                    retry()
-                    load(params)
+                    when (offerings.error) {
+                        DataError.Network.UNAUTHORIZED -> {
+                            authRepository.saveRefresh()
+                            retry()
+                            load(params)
+                        }
+
+                        else -> {
+                            val prevKey: Long? = null
+                            val nextKey: Long? = null
+                            LoadResult.Page(
+                                data = emptyList<Offering>(),
+                                prevKey = prevKey,
+                                nextKey = nextKey,
+                            )
+                        }
+                    }
                 }
 
                 is Result.Success -> {

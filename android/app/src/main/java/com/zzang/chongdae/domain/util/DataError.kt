@@ -11,5 +11,6 @@ sealed interface DataError : Error {
         SERVER_ERROR,
         BAD_REQUEST,
         CONFLICT,
+        FAIL_REFRESH,
     }
 }

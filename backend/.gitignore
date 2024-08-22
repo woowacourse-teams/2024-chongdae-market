@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Mac ###
+.DS_Store
+
+### RestDocs ###
+openapi3.yaml

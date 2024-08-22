@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -25,6 +26,7 @@ import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.Pa
 class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private var _binding: ActivityCommentDetailBinding? = null
     private val binding get() = _binding!!
+    private var toast: Toast? = null
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter() }
     private val participantAdapter: ParticipantAdapter by lazy { ParticipantAdapter() }
     private val dialog: Dialog by lazy { Dialog(this) }
@@ -100,6 +102,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         observeReportEvent()
         observeExitOfferingEvent()
         observeBackEvent()
+        observeErrorEvent()
     }
 
     private fun observeComments() {
@@ -154,6 +157,19 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun observeBackEvent() {
         viewModel.onBackPressedEvent.observe(this) {
             finish()
+        }
+    }
+
+    private fun observeErrorEvent() {
+        viewModel.errorEvent.observe(this) {
+            toast?.cancel()
+            toast =
+                Toast.makeText(
+                    this,
+                    it,
+                    Toast.LENGTH_SHORT,
+                )
+            toast?.show()
         }
     }
 

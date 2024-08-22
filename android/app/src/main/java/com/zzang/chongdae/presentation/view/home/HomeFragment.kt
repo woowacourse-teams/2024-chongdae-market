@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.CheckBox
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -21,12 +23,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
+import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.R
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
+import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
 import kotlinx.coroutines.launch
@@ -34,12 +39,14 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var toast: Toast? = null
 
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
             authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
+            userPreferencesDataStore = UserPreferencesDataStore(requireActivity().applicationContext.dataStore),
         )
     }
 
@@ -87,6 +94,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
         viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
             updateCheckBoxStates(selectedFilter)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { errMsgId ->
+            showToast(errMsgId)
         }
     }
 
@@ -196,6 +207,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             offeringAdapter.addUpdatedItem(it.toList())
         }
         viewModel.updatedOffering.getValue()?.toList()?.let { offeringAdapter.addUpdatedItem(it) }
+
+        viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {
+            LoginActivity.startActivity(requireContext())
+        }
     }
 
     override fun onClick(offeringId: Long) {
@@ -217,6 +232,19 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
         }
+    }
+
+    private fun showToast(
+        @StringRes messageId: Int,
+    ) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                requireActivity(),
+                getString(messageId),
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
     }
 
     companion object {

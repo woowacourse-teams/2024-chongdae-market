@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,8 @@ class OfferingDetailViewModel(
 ) : ViewModel(),
     OnParticipationClickListener,
     OnOfferingReportClickListener,
-    OnMoveCommentDetailClickListener {
+    OnMoveCommentDetailClickListener,
+    OnProductLinkClickListener {
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
@@ -53,6 +55,12 @@ class OfferingDetailViewModel(
     private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
     val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
+    private val _productLinkRedirectEvent: MutableSingleLiveData<String> = MutableSingleLiveData()
+    val productLinkRedirectEvent: SingleLiveData<String> get() = _productLinkRedirectEvent
+
+    private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val error: SingleLiveData<Int> get() = _error
+
     init {
         loadOffering()
     }
@@ -66,7 +74,14 @@ class OfferingDetailViewModel(
                             authRepository.saveRefresh()
                             loadOffering()
                         }
-                        else -> DataError.Network.UNKNOWN
+
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.offering_detail_load_error_mesage)
+                        }
+
+                        else -> {
+                            Log.e("error", "loadOffering Error: ${result.error.name}")
+                        }
                     }
 
                 is Result.Success -> {
@@ -91,7 +106,14 @@ class OfferingDetailViewModel(
                             authRepository.saveRefresh()
                             onClickParticipation()
                         }
-                        else -> DataError.Network.UNKNOWN
+
+                        DataError.Network.BAD_REQUEST -> {
+                            _error.setValue(R.string.offering_detail_participation_error)
+                        }
+
+                        else -> {
+                            Log.e("error", "onClickParticipation Error: ${result.error.name}")
+                        }
                     }
 
                 is Result.Success -> {
@@ -109,6 +131,10 @@ class OfferingDetailViewModel(
 
     override fun onClickReport() {
         _reportEvent.setValue(R.string.report_url)
+    }
+
+    override fun onClickProductRedirectText(productUrl: String) {
+        _productLinkRedirectEvent.setValue(productUrl)
     }
 
     private fun isParticipationEnabled(
