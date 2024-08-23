@@ -132,6 +132,7 @@ class OfferingWriteViewModel(
 
     fun uploadImageFile(multipartBody: MultipartBody.Part) {
         viewModelScope.launch {
+            _writeUIState.value = WriteUIState.Loading
             when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
                 is Result.Success -> {
                     _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
@@ -145,7 +146,10 @@ class OfferingWriteViewModel(
                             authRepository.saveRefresh()
                             uploadImageFile(multipartBody)
                         }
-                        else -> {}
+                        else -> {
+                            _writeUIState.value =
+                                WriteUIState.Error(R.string.all_error_image_upload, "${result.error}")
+                        }
                     }
                 }
             }
@@ -154,12 +158,14 @@ class OfferingWriteViewModel(
 
     fun postProductImageOg() {
         viewModelScope.launch {
+            _writeUIState.value = WriteUIState.Loading
             when (val result = offeringRepository.saveProductImageOg(productUrl.value ?: "")) {
                 is Result.Success -> {
                     if (result.data.imageUrl.isBlank()) {
                         _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
                         return@launch
                     }
+                    _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
                     thumbnailUrl.value = HTTPS + result.data.imageUrl
                 }
 
