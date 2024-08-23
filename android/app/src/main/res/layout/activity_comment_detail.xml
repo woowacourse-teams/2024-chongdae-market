@@ -259,7 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/size_23"
                 android:layout_marginBottom="@dimen/margin_30"
                 android:background="@drawable/bg_gray100_radius_16dp"
                 android:fontFamily="@font/suit_medium"

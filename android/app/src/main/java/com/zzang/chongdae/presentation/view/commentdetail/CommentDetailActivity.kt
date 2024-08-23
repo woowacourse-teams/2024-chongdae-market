@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -214,8 +215,19 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
-        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
-            this.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        val view = currentFocus
+        if (view != null && (view is EditText || view.id == R.id.iv_send_comment)) {
+            val screenCoords = IntArray(2)
+            view.getLocationOnScreen(screenCoords)
+            val x = motionEvent.rawX + view.left - screenCoords[0]
+            val y = motionEvent.rawY + view.top - screenCoords[1]
+
+            if (motionEvent.action == MotionEvent.ACTION_UP &&
+                (x < view.left || x >= view.right || y < view.top || y > view.bottom)
+            ) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
         }
         return super.dispatchTouchEvent(motionEvent)
     }
