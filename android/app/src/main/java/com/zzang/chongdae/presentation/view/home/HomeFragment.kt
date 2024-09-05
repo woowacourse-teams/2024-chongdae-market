@@ -164,6 +164,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
+        offeringAdapter.addLoadStateListener {
+            if (it.append.endOfPaginationReached) {
+                binding.tvEmptyItem.isVisible = isItemEmpty()
+            } else {
+                binding.tvEmptyItem.isVisible = false
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 offeringAdapter.loadStateFlow.collect { loadState ->
@@ -179,6 +186,8 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             ),
         )
     }
+
+    private fun isItemEmpty() = offeringAdapter.itemCount == 0
 
     private fun setUpOfferingsObserve() {
         viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
