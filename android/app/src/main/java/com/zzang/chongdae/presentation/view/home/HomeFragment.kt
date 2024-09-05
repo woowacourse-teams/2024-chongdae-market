@@ -120,7 +120,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         }
 
         setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
-            viewModel.refreshOfferingsByOfferingWriteEvent(
+            viewModel.refreshOfferings(
                 bundle.getBoolean(
                     OfferingWriteOptionalFragment.NEW_OFFERING_EVENT_KEY,
                 ),

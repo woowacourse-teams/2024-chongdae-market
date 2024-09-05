@@ -209,7 +209,7 @@ class OfferingViewModel(
         }
     }
 
-    fun refreshOfferingsByOfferingWriteEvent(isSuccess: Boolean) {
+    fun refreshOfferings(isSuccess: Boolean) {
         if (isSuccess) {
             search.value = null
             _selectedFilter.value = null
