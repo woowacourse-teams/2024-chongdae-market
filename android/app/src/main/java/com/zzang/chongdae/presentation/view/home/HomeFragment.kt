@@ -77,6 +77,14 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         navigateToOfferingWriteFragment()
         initFragmentResultListener()
         setOnCheckboxListener()
+        setOnSwipeRefreshListener()
+    }
+
+    private fun setOnSwipeRefreshListener() {
+        binding.swipeLayout.setOnRefreshListener {
+            binding.swipeLayout.isRefreshing = false
+            viewModel.swipeRefresh()
+        }
     }
 
     private fun setOnCheckboxListener() {
@@ -120,7 +128,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         }
 
         setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
-            viewModel.refreshOfferingsByOfferingWriteEvent(
+            viewModel.refreshOfferings(
                 bundle.getBoolean(
                     OfferingWriteOptionalFragment.NEW_OFFERING_EVENT_KEY,
                 ),
@@ -164,6 +172,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
+        offeringAdapter.addLoadStateListener {
+            if (it.append.endOfPaginationReached) {
+                binding.tvEmptyItem.isVisible = isItemEmpty()
+            } else {
+                binding.tvEmptyItem.isVisible = false
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 offeringAdapter.loadStateFlow.collect { loadState ->
@@ -179,6 +194,8 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             ),
         )
     }
+
+    private fun isItemEmpty() = offeringAdapter.itemCount == 0
 
     private fun setUpOfferingsObserve() {
         viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
