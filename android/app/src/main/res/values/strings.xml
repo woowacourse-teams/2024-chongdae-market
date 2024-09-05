@@ -37,7 +37,7 @@
     <string name="bottom_my_page">마이페이지</string>
 
     <!--    home-->
-    <string name="home_search_hint_text">검색할 내용을 입력해주세요.</string>
+    <string name="home_search_hint_text">검색할 제목이나 지역을 입력하세요.</string>
     <string name="home_offering_continue">모집중</string>
     <string name="home_offering_closed">모집마감</string>
     <string name="home_offering_imminent">마감임박</string>
