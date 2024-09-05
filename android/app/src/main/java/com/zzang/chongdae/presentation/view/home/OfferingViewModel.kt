@@ -209,13 +209,18 @@ class OfferingViewModel(
         }
     }
 
-    fun refreshOfferingsByOfferingWriteEvent(isSuccess: Boolean) {
+    fun refreshOfferings(isSuccess: Boolean) {
         if (isSuccess) {
             search.value = null
             _selectedFilter.value = null
             _offeringsRefreshEvent.setValue(Unit)
             fetchOfferings()
         }
+    }
+
+    fun swipeRefresh() {
+        _offeringsRefreshEvent.setValue(Unit)
+        fetchOfferings()
     }
 
     companion object {
