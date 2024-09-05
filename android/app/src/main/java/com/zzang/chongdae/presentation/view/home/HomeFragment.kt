@@ -77,6 +77,14 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         navigateToOfferingWriteFragment()
         initFragmentResultListener()
         setOnCheckboxListener()
+        setOnSwipeRefreshListener()
+    }
+
+    private fun setOnSwipeRefreshListener() {
+        binding.swipeLayout.setOnRefreshListener {
+            binding.swipeLayout.isRefreshing = false
+            viewModel.swipeRefresh()
+        }
     }
 
     private fun setOnCheckboxListener() {

@@ -172,6 +172,6 @@ dependencies {
     // mockk
     testImplementation("io.mockk:mockk:1.13.10")
 
-    //swipe refresh layout
-    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    // swipe refresh layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

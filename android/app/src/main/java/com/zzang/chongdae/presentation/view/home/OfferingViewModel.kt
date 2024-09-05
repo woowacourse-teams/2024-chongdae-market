@@ -218,6 +218,11 @@ class OfferingViewModel(
         }
     }
 
+    fun swipeRefresh() {
+        _offeringsRefreshEvent.setValue(Unit)
+        fetchOfferings()
+    }
+
     companion object {
         private const val PAGE_SIZE = 10
 
