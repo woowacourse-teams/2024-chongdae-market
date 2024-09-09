@@ -120,6 +120,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         updateDateTextView(dateTimeBinding.tvDate, year, month, day)
+        dateTimeBinding.pickerDate.minDate = System.currentTimeMillis()
         dateTimeBinding.pickerDate.setOnDateChangedListener { _, year, monthOfYear, dayOfMonth ->
             updateDateTextView(dateTimeBinding.tvDate, year, monthOfYear, dayOfMonth)
         }
