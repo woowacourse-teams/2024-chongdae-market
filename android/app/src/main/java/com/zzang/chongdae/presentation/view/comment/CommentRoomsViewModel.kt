@@ -31,11 +31,13 @@ class CommentRoomsViewModel(
         viewModelScope.launch {
             when (val result = commentRoomsRepository.fetchCommentRooms()) {
                 is Result.Error -> {
-                    Log.e("error", "${result.error}")
+                    Log.e("error", "updateCommentRooms: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            updateCommentRooms()
+                            when(authRepository.saveRefresh()) {
+                                is Result.Success -> updateCommentRooms()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {}
                     }

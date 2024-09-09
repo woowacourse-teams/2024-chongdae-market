@@ -143,8 +143,10 @@ class OfferingWriteViewModel(
                     Log.e("error", "uploadImageFile: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            uploadImageFile(multipartBody)
+                            when(authRepository.saveRefresh()) {
+                                is Result.Success -> uploadImageFile(multipartBody)
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             _writeUIState.value =
@@ -173,8 +175,10 @@ class OfferingWriteViewModel(
                     Log.e("error", "postProductImageOg: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            postProductImageOg()
+                            when(authRepository.saveRefresh()) {
+                                is Result.Success -> postProductImageOg()
+                                is Result.Error -> return@launch
+                            }
                         }
 
                         else -> {
@@ -297,8 +301,10 @@ class OfferingWriteViewModel(
                     Log.e("error", "postOffering: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            postOffering()
+                            when(authRepository.saveRefresh()) {
+                                is Result.Success -> postOffering()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             _writeUIState.value =
