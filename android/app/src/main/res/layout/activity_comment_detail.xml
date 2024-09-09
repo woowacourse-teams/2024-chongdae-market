@@ -279,7 +279,7 @@
 
             <ImageView
                 android:id="@+id/iv_send_comment"
-                android:layout_width="@dimen/size_44"
+                android:layout_width="@dimen/size_50"
                 android:layout_height="@dimen/size_44"
                 android:onClick="@{() -> vm.postComment()}"
                 android:padding="@dimen/margin_10"
@@ -309,8 +309,8 @@
                 android:layout_width="@dimen/icon_size_24"
                 android:layout_height="@dimen/icon_size_24"
                 android:layout_marginEnd="@dimen/margin_20"
-                android:src="@drawable/ic_detail_report"
                 android:onClick="@{() -> vm.onClickReport()}"
+                android:src="@drawable/ic_detail_report"
                 app:layout_constraintBottom_toBottomOf="@id/tv_offering_members"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_offering_members" />
