@@ -71,8 +71,10 @@ class OfferingDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            loadOffering()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> loadOffering()
+                                is Result.Error -> return@launch
+                            }
                         }
 
                         DataError.Network.BAD_REQUEST -> {
@@ -103,8 +105,10 @@ class OfferingDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            onClickParticipation()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> onClickParticipation()
+                                is Result.Error -> return@launch
+                            }
                         }
 
                         DataError.Network.BAD_REQUEST -> {
