@@ -93,7 +93,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> updateCommentInfo()
                                 is Result.Error -> return@launch
                             }
@@ -117,7 +117,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> updateOfferingStatus()
                                 is Result.Error -> return@launch
                             }
@@ -145,7 +145,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> loadComments()
                                 is Result.Error -> return@launch
                             }
@@ -174,7 +174,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> postComment()
                                 is Result.Error -> return@launch
                             }
@@ -201,7 +201,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> loadParticipants()
                                 is Result.Error -> return@launch
                             }
@@ -221,7 +221,7 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> loadMeetings()
                                 is Result.Error -> return@launch
                             }
@@ -252,7 +252,7 @@ class CommentDetailViewModel(
                             pollJob?.cancel()
                         }
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> exitOffering()
                                 is Result.Error -> return@launch
                             }

@@ -135,7 +135,7 @@ class OfferingViewModel(
                     Log.d("error", "fetchFilters: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> fetchFilters()
                                 is Result.Error -> {
                                     userPreferencesDataStore.removeAllData()
@@ -187,7 +187,7 @@ class OfferingViewModel(
                 is Result.Error -> {
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> fetchUpdatedOffering(offeringId)
                                 is Result.Error -> return@launch
                             }

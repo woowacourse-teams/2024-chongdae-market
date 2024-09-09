@@ -34,7 +34,7 @@ class CommentRoomsViewModel(
                     Log.e("error", "updateCommentRooms: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            when(authRepository.saveRefresh()) {
+                            when (authRepository.saveRefresh()) {
                                 is Result.Success -> updateCommentRooms()
                                 is Result.Error -> return@launch
                             }
