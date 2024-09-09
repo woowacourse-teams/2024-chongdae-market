@@ -135,13 +135,14 @@ class OfferingViewModel(
                     Log.d("error", "fetchFilters: ${result.error}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            fetchFilters()
-                        }
-
-                        DataError.Network.FORBIDDEN -> {
-                            userPreferencesDataStore.removeAllData()
-                            _refreshTokenExpiredEvent.setValue(Unit)
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> fetchFilters()
+                                is Result.Error -> {
+                                    userPreferencesDataStore.removeAllData()
+                                    _refreshTokenExpiredEvent.setValue(Unit)
+                                    return@launch
+                                }
+                            }
                         }
 
                         DataError.Network.BAD_REQUEST -> {
@@ -186,8 +187,10 @@ class OfferingViewModel(
                 is Result.Error -> {
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            fetchUpdatedOffering(offeringId)
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> fetchUpdatedOffering(offeringId)
+                                is Result.Error -> return@launch
+                            }
                         }
 
                         DataError.Network.BAD_REQUEST -> {
