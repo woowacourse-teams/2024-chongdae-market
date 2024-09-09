@@ -93,8 +93,10 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            updateCommentInfo()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> updateCommentInfo()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             errorEvent.value = result.error.name
@@ -115,8 +117,10 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            updateOfferingStatus()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> updateOfferingStatus()
+                                is Result.Error -> return@launch
+                            }
                         }
 
                         else -> {
@@ -141,8 +145,10 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            loadComments()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> loadComments()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             pollJob?.cancel()
@@ -168,8 +174,10 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            postComment()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> postComment()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             errorEvent.value = result.error.name
@@ -193,8 +201,10 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            loadParticipants()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> loadParticipants()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             errorEvent.value = result.error.name
@@ -211,8 +221,10 @@ class CommentDetailViewModel(
                 is Result.Error ->
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            loadMeetings()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> loadMeetings()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             errorEvent.value = result.error.name
@@ -240,8 +252,10 @@ class CommentDetailViewModel(
                             pollJob?.cancel()
                         }
                         DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            exitOffering()
+                            when (authRepository.saveRefresh()) {
+                                is Result.Success -> exitOffering()
+                                is Result.Error -> return@launch
+                            }
                         }
                         else -> {
                             _errorEvent.value = result.error.name
