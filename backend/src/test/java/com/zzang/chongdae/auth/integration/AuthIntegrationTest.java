@@ -19,6 +19,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.http.ContentType;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,9 +89,9 @@ class AuthIntegrationTest extends IntegrationTest {
         }
     }
 
-    @DisplayName("토큰 재발급")
+    @DisplayName("토큰 관리")
     @Nested
-    class Refresh {
+    class ManageToken {
 
         List<HeaderDescriptorWithType> responseHeaderDescriptors = List.of(
                 headerWithName("Set-Cookie").description("""
@@ -111,8 +112,14 @@ class AuthIntegrationTest extends IntegrationTest {
         @Value("${security.jwt.token.refresh-secret-key}")
         String refreshSecretKey;
 
+        @Value("${security.jwt.token.access-secret-key}")
+        String accessSecretKey;
+
         @Value("${security.jwt.token.refresh-token-expired}")
         Duration refreshTokenExpired;
+
+        @Value("${security.jwt.token.access-token-expired}")
+        Duration accessTokenExpired;
 
         MemberEntity member;
         Date now;
@@ -121,6 +128,35 @@ class AuthIntegrationTest extends IntegrationTest {
         void setUp() {
             member = memberFixture.createMember("dora");
             now = Date.from(clock.instant());
+        }
+
+        @DisplayName("만료된 accessToken 경우 예외 발생 후 401 코드를 반환한다.")
+        @Test
+        void should_throwException_when_givenExpiredAccessToken() {
+            Date alreadyExpiredAt = new Date(now.getTime() - accessTokenExpired.toMillis());
+            String expiredToken = Jwts.builder()
+                    .setSubject(member.getId().toString())
+                    .setExpiration(alreadyExpiredAt)
+                    .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(accessSecretKey.getBytes()))
+                    .compact();
+
+            given(spec).log().all()
+                    .filter(document("access-fail-expired-token", resource(failedSnippets)))
+                    .cookie("access_token", expiredToken)
+                    .when().get("/offerings")
+                    .then().log().all()
+                    .statusCode(401);
+        }
+
+        @DisplayName("유효하지 않은 accessToken인 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_givenInvalidAccessToken() {
+            given(spec).log().all()
+                    .filter(document("refresh-fail-invalid-token", resource(failedSnippets)))
+                    .cookie("access_token", "invalidRefreshToken")
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(401);
         }
 
         @DisplayName("refreshToken으로 accessToken과 refreshToken을 재발급 한다.")
@@ -147,14 +183,14 @@ class AuthIntegrationTest extends IntegrationTest {
                     .statusCode(401);
         }
 
-        @DisplayName("만료된 refeshToken인 경우 예외가 발생한다.")
+        @DisplayName("만료된 refeshToken인 경우 예외 발생 후 403 코드를 반환한다.")
         @Test
         void should_throwException_when_givenExpiredRefreshToken() {
             Date alreadyExpiredAt = new Date(now.getTime() - refreshTokenExpired.toMillis());
             String expiredToken = Jwts.builder()
                     .setSubject(member.getId().toString())
                     .setExpiration(alreadyExpiredAt)
-                    .signWith(SignatureAlgorithm.HS256, refreshSecretKey)
+                    .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(refreshSecretKey.getBytes()))
                     .compact();
 
             given(spec).log().all()
@@ -162,7 +198,7 @@ class AuthIntegrationTest extends IntegrationTest {
                     .cookie("refresh_token", expiredToken)
                     .when().post("/auth/refresh")
                     .then().log().all()
-                    .statusCode(401);
+                    .statusCode(403);
         }
     }
 }
