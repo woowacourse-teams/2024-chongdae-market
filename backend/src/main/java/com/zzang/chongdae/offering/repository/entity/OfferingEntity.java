@@ -25,11 +25,16 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
+@SQLDelete(sql = "UPDATE offering SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 @Table(name = "offering")
 @Entity
 public class OfferingEntity extends BaseTimeEntity {
@@ -96,6 +101,10 @@ public class OfferingEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private CommentRoomStatus roomStatus;
 
+    @NotNull
+    @ColumnDefault("false")
+    private Boolean isDeleted;
+
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime meetingDate, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
@@ -104,7 +113,7 @@ public class OfferingEntity extends BaseTimeEntity {
                           OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, totalPrice,
-                originPrice, discountRate, offeringStatus, roomStatus);
+                originPrice, discountRate, offeringStatus, roomStatus, false);
     }
 
     public void participate() {
