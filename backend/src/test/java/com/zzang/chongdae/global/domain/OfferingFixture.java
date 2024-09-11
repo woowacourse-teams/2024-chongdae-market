@@ -31,7 +31,7 @@ public class OfferingFixture {
                 5000,
                 1000,
                 33.3,
-                OfferingStatus.AVAILABLE, // TODO : 데이터 정합성 맞추기
+                OfferingStatus.AVAILABLE,
                 commentRoomStatus
         );
         return offeringRepository.save(offering);
@@ -40,6 +40,4 @@ public class OfferingFixture {
     public OfferingEntity createOffering(MemberEntity member) {
         return createOffering(member, CommentRoomStatus.GROUPING);
     }
-
-
 }
