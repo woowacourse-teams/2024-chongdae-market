@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_date_time_picker"
         android:orientation="vertical"
-        android:padding="10dp"
         android:theme="@style/DefaultNumberPickerTheme">
 
         <TextView
@@ -30,38 +29,38 @@
             android:fontFamily="@font/suit_bold"
             android:textColor="@color/main_color"
             android:textSize="@dimen/size_18"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="2024년 8월 6일" />
 
-        <View
+        <!--<View
             android:id="@+id/view_divide_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="18dp"
             android:background="@color/gray_300"
-            app:layout_constraintTop_toBottomOf="@id/tv_date" />
-
+            app:layout_constraintTop_toTopOf="parent" />-->
 
         <DatePicker
             android:id="@+id/picker_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:calendarViewShown="false"
-            android:datePickerMode="spinner"
+            android:datePickerMode="calendar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_divide_line" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <View
+        <!--<View
             android:id="@+id/view_shading_selected_date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/bg_date_time_picker_selected"
             app:layout_constraintBottom_toBottomOf="@id/picker_date"
             app:layout_constraintTop_toTopOf="@id/picker_date"
-            tools:layout_editor_absoluteX="10dp" />
+            tools:layout_editor_absoluteX="10dp" />-->
 
         <Button
             android:id="@+id/btn_submit"
@@ -82,7 +81,7 @@
             android:layout_width="164dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/btn_rounded_gray"
             android:onClick="@{() -> onClickListener.onDateTimeCancelButtonClick()}"
             android:text="취소"
