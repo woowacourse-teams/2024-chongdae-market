@@ -135,5 +135,14 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(offering, member);
+        validateTotalCount(offering, request);
+    }
+
+    private void validateTotalCount(OfferingEntity offering, OfferingModifyRequest request) {
+        Integer currentCount = offering.getCurrentCount();
+        Integer modifiedCount = request.totalCount();
+        if (modifiedCount <= currentCount) {
+            throw new MarketException(OfferingErrorCode.CANNOT_MODIFY_LESS_EQUAL_CURRENT_COUNT);
+        }
     }
 }
