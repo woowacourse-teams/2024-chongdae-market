@@ -24,6 +24,7 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -136,6 +137,7 @@ public class OfferingService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(offering, member);
         validateTotalCount(offering, request);
+        validateMeetingDate(request);
     }
 
     private void validateTotalCount(OfferingEntity offering, OfferingModifyRequest request) {
@@ -143,6 +145,14 @@ public class OfferingService {
         Integer modifiedCount = request.totalCount();
         if (modifiedCount <= currentCount) {
             throw new MarketException(OfferingErrorCode.CANNOT_MODIFY_LESS_EQUAL_CURRENT_COUNT);
+        }
+    }
+
+    private void validateMeetingDate(OfferingModifyRequest request) {
+        LocalDateTime modifiedDate = request.meetingDate();
+        LocalDateTime today = LocalDateTime.now();
+        if (modifiedDate.isBefore(today) || modifiedDate.isEqual(today)) {
+            throw new MarketException(OfferingErrorCode.CANNOT_MODIFY_BEFORE_NOW_MEETING_DATE);
         }
     }
 }
