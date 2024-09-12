@@ -7,6 +7,7 @@ import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -162,5 +163,19 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public void updateRoomStatus(CommentRoomStatus roomStatus) {
         this.roomStatus = roomStatus;
+    }
+
+    public void modifyOffering(OfferingModifyRequest request) {
+        this.title = request.title();
+        this.productUrl = request.productUrl();
+        this.thumbnailUrl = request.thumbnailUrl();
+        this.totalCount = request.totalCount();
+        this.totalPrice = request.totalPrice();
+        this.originPrice = request.originPrice();
+        this.meetingAddress = request.meetingAddress();
+        this.meetingAddressDetail = request.meetingAddressDetail();
+        this.meetingAddressDong = request.meetingAddressDong();
+        this.meetingDate = request.meetingDate();
+        this.description = request.description();
     }
 }

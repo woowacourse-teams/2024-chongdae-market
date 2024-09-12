@@ -39,7 +39,7 @@ public class OfferingPrice {
         return bigDecimal.doubleValue();
     }
 
-    private void validateOriginPrice() {
+    public void validateOriginPrice() {
         int dividedPrice = totalPrice / totalCount;
         if (originPrice != null && originPrice < dividedPrice) {
             throw new MarketException(OfferingErrorCode.CANNOT_ORIGIN_PRICE_LESS_THEN_DIVIDED_PRICE);

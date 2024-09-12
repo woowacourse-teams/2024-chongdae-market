@@ -138,7 +138,10 @@ public class OfferingService {
         validateIsProposer(offering, member);
         validateTotalCount(offering, request);
         validateMeetingDate(request);
+        validateOriginPrice(request);
+        offering.modifyOffering(request);
     }
+
 
     private void validateTotalCount(OfferingEntity offering, OfferingModifyRequest request) {
         Integer currentCount = offering.getCurrentCount();
@@ -146,6 +149,12 @@ public class OfferingService {
         if (modifiedCount <= currentCount) {
             throw new MarketException(OfferingErrorCode.CANNOT_MODIFY_LESS_EQUAL_CURRENT_COUNT);
         }
+    }
+
+    private void validateOriginPrice(OfferingModifyRequest request) {
+        OfferingPrice modifiedOfferingPrice = new OfferingPrice(request.totalCount(), request.totalPrice(),
+                request.originPrice());
+        modifiedOfferingPrice.validateOriginPrice();
     }
 
     private void validateMeetingDate(OfferingModifyRequest request) {

@@ -927,5 +927,35 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("수정 할 원가격이 N빵 가격보다 작을경우 수정할 수 없다.")
+        @Test
+        void should_throwException_when_originPriceLessThanDividePrice() {
+            OfferingModifyRequest request = new OfferingModifyRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    10,
+                    20000,
+                    1000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-offering-fail-less-than-divide-price", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
+
+
 }
