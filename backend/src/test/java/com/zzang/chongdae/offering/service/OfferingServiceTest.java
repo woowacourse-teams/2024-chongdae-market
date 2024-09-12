@@ -8,6 +8,7 @@ import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
+import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -70,6 +71,36 @@ public class OfferingServiceTest extends ServiceTest {
 
         // when
         Long actual = offeringService.saveOffering(request, member);
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @DisplayName("공모를 수정할 수 있음")
+    @Test
+    void should_modifyOffering_when_givenOfferingIdAndOfferingModifyRequest() {
+        // given
+        MemberEntity member = memberFixture.createMember("poke");
+        OfferingEntity offering = offeringFixture.createOffering(member);
+        String expected = "수정된 공모 제목";
+        OfferingModifyRequest request = new OfferingModifyRequest(
+                expected,
+                "https://to.be.updated/productUrl",
+                "https://to.be.updated/thumbnail/url",
+                10,
+                20000,
+                5000,
+                "수정할 모집 장소 주소",
+                "수정할 모집 상세 주소",
+                "수정된동",
+                LocalDateTime.parse("2024-12-31T00:00:00"),
+                "수정할 공모 상세 내용"
+        );
+
+        // when
+        offeringService.modifyOffering(offering.getId(), request, member);
+        OfferingAllResponseItem modifiedOffering = offeringService.getOffering(offering.getId());
+        String actual = modifiedOffering.title();
 
         // then
         assertEquals(expected, actual);

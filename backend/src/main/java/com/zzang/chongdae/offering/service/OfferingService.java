@@ -132,6 +132,7 @@ public class OfferingService {
         return new OfferingProductImageResponse(imageUrl);
     }
 
+    @Transactional
     public void modifyOffering(Long offeringId, OfferingModifyRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
