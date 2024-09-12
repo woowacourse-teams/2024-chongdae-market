@@ -18,6 +18,7 @@ import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.storage.service.StorageService;
@@ -759,5 +760,87 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(200);
         }
+    }
+
+    @DisplayName("공모 수정")
+    @Nested
+    class ModifyOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("title").description("제목 (필수)"),
+                fieldWithPath("productUrl").description("물품 구매 링크"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("totalCount").description("총원 (필수)"),
+                fieldWithPath("totalPrice").description("총가격 (필수)"),
+                fieldWithPath("originPrice").description("원 가격"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소"),
+                fieldWithPath("meetingDate").description("모집 종료 시간 (필수)"),
+                fieldWithPath("description").description("내용 (필수)")
+        );
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 수정")
+                .description("공모 정보를 받아 공모를 수정합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .requestFields(requestDescriptors)
+                .requestSchema(schema("OfferingModifyRequest"))
+                .build();
+
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 수정")
+                .description("공모 정보를 받아 공모를 수정합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("OfferingModifyRequest"))
+                .responseSchema(schema("OfferingModifyFailResponse"))
+                .build();
+
+        MemberEntity proposer;
+
+        @BeforeEach
+        void setUp() {
+            proposer = memberFixture.createMember("poke");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+            for (int i = 0; i < 9; i++) {
+                MemberEntity participant = memberFixture.createMember("poke_%d".formatted(i));
+                offeringMemberFixture.createParticipant(participant, offering);
+            }
+        }
+
+        @DisplayName("공모를 수정할 수 있다.")
+        @Test
+        void should_responseOfferingDetail_when_givenOfferingId() {
+            OfferingModifyRequest request = new OfferingModifyRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
     }
 }

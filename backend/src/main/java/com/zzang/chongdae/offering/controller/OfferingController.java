@@ -8,6 +8,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
@@ -90,6 +91,15 @@ public class OfferingController {
             MemberEntity member) {
         Long offeringId = offeringService.saveOffering(request, member);
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
+    }
+
+    @PatchMapping("/offerings/{offering-id}")
+    public ResponseEntity<Void> modifyOffering(
+            @PathVariable(value = "offering-id") Long offeringId,
+            @RequestBody @Valid OfferingModifyRequest request,
+            MemberEntity member) {
+        offeringService.modifyOffering(offeringId, request, member);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/offerings/product-images/s3")

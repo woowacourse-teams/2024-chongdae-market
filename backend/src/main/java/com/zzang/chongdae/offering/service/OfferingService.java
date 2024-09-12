@@ -16,6 +16,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
@@ -128,5 +129,9 @@ public class OfferingService {
     public OfferingProductImageResponse extractProductImageFromOg(OfferingProductImageRequest request) {
         String imageUrl = imageExtractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
+    }
+
+    public void modifyOffering(Long offeringId, OfferingModifyRequest request, MemberEntity member) {
+
     }
 }
