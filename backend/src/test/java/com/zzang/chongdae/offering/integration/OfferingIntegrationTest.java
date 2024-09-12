@@ -802,10 +802,12 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .build();
 
         MemberEntity proposer;
+        MemberEntity otherMember;
 
         @BeforeEach
         void setUp() {
             proposer = memberFixture.createMember("poke");
+            otherMember = memberFixture.createMember("other");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
             for (int i = 0; i < 9; i++) {
@@ -816,7 +818,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @DisplayName("공모를 수정할 수 있다.")
         @Test
-        void should_responseOfferingDetail_when_givenOfferingId() {
+        void should_modifyOffering_when_givenOfferingId() {
             OfferingModifyRequest request = new OfferingModifyRequest(
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
@@ -842,5 +844,32 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(200);
         }
 
+        @DisplayName("제안자가 아닌 사용자가 공모를 수정할 수 없다.")
+        @Test
+        void should_throwException_when_modifyOtherMember() {
+            OfferingModifyRequest request = new OfferingModifyRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-offering-fail-not-proposer", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(otherMember))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 }
