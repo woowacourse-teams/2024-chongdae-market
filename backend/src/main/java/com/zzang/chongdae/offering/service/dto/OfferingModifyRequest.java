@@ -36,9 +36,3 @@ public record OfferingModifyRequest(
         String description
 ) {
 }
-
-
-/*
-
-
- */
