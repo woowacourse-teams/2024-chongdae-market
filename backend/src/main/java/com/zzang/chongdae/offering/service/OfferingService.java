@@ -136,25 +136,19 @@ public class OfferingService {
     public void updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        OfferingEntity updatedOffering = request.toEntity(member);
         validateIsProposer(offering, member);
-        validateTotalCount(offering, request);
+        validateTotalCount(offering, updatedOffering);
         validateMeetingDate(request);
-        validateOriginPrice(request);
-        offering.updateOffering(request);
+        offering.update(updatedOffering);
     }
 
-    private void validateTotalCount(OfferingEntity offering, OfferingUpdateRequest request) {
+    private void validateTotalCount(OfferingEntity offering, OfferingEntity updatedOffering) {
         Integer currentCount = offering.getCurrentCount();
-        Integer modifiedCount = request.totalCount();
+        Integer modifiedCount = updatedOffering.getTotalCount();
         if (modifiedCount <= currentCount) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_EQUAL_CURRENT_COUNT);
         }
-    }
-
-    private void validateOriginPrice(OfferingUpdateRequest request) {
-        OfferingPrice modifiedOfferingPrice = new OfferingPrice(request.totalCount(), request.totalPrice(),
-                request.originPrice());
-        modifiedOfferingPrice.validateOriginPrice();
     }
 
     private void validateMeetingDate(OfferingUpdateRequest request) {
