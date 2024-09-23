@@ -13,6 +13,7 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
@@ -999,6 +1000,118 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().patch("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 삭제")
+    @Nested
+    class DeleteOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 삭제")
+                .description("공모 id를 통해 공모를 삭제합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseSchema(schema("OfferingDeleteSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 삭제")
+                .description("공모 id를 통해 공모를 삭제합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("OfferingDeleteFailResponse"))
+                .build();
+
+        MemberEntity proposer;
+        MemberEntity notProposer;
+        MemberEntity participant;
+        OfferingEntity offering;
+        OfferingEntity offeringInProgress;
+        OfferingEntity offeringDone;
+
+        @BeforeEach
+        void setUp() {
+            notProposer = memberFixture.createMember("never");
+            proposer = memberFixture.createMember("ever");
+            offering = offeringFixture.createOffering(proposer);
+            participant = memberFixture.createMember("naver");
+            offeringMemberFixture.createParticipant(participant, offering);
+            offeringInProgress = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
+            offeringDone = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
+        }
+
+        @DisplayName("공모 id로 공모를 삭제할 수 있다")
+        @Test
+        void should_deleteOffering_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @DisplayName("유효하지 않은 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offering.getId() + 9999)
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("총대가 아닌 사용자가 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_notProposer() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(notProposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여자가 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_participant() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-participant", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래 진행 중 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_unavailableStatus() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-in-progress", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offeringInProgress.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래가 완료된 공모를 삭제할 수 있다.")
+        @Test
+        void should_deleteOffering_when_givenDoneOffering() {
+            given().log().all()
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offeringDone.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(204);
         }
     }
 }

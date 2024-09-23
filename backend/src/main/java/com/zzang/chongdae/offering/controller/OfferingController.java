@@ -19,6 +19,7 @@ import jakarta.validation.constraints.Min;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -115,5 +116,13 @@ public class OfferingController {
             @RequestBody @Valid OfferingProductImageRequest request) {
         OfferingProductImageResponse response = offeringService.extractProductImageFromOg(request);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/offerings/{offering-id}")
+    public ResponseEntity<Void> deleteOffering(
+            @PathVariable(value = "offering-id") Long offeringId,
+            MemberEntity member) { // TODO: 머지 후 위치 조정
+        offeringService.deleteOffering(offeringId, member);
+        return ResponseEntity.noContent().build();
     }
 }

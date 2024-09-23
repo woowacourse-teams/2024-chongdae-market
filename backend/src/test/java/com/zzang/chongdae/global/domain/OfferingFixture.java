@@ -68,4 +68,8 @@ public class OfferingFixture {
     public void deleteOfferingById(Long offeringId) {
         offeringRepository.deleteById(offeringId);
     }
+
+    public long countOffering() {
+        return offeringRepository.count();
+    }
 }
