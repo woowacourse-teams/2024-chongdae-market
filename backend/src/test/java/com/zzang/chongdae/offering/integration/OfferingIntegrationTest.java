@@ -21,6 +21,7 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
 import com.zzang.chongdae.storage.service.StorageService;
 import io.restassured.http.ContentType;
 import java.io.File;
@@ -632,6 +633,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("거래 날짜를 내일보다 과거로 설정하는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_meetingDateBeforeTomorrow() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    10,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.now(),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-fail-with-invalid-meeting-date", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 
     @DisplayName("상품 이미지 추출")
@@ -759,6 +787,219 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().post("/offerings/product-images/s3")
                     .then().log().all()
                     .statusCode(200);
+        }
+    }
+
+    @DisplayName("공모 수정")
+    @Nested
+    class UpdateOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("title").description("제목 (필수)"),
+                fieldWithPath("productUrl").description("물품 구매 링크"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("totalCount").description("총원 (필수)"),
+                fieldWithPath("totalPrice").description("총가격 (필수)"),
+                fieldWithPath("originPrice").description("원 가격"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소"),
+                fieldWithPath("meetingDate").description("모집 종료 시간 (필수)"),
+                fieldWithPath("description").description("내용 (필수)")
+        );
+
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("id").description("공모 id"),
+                fieldWithPath("title").description("제목"),
+                fieldWithPath("productUrl").description("물품 링크"),
+                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("description").description("내용"),
+                fieldWithPath("meetingDate").description("마감시간"),
+                fieldWithPath("currentCount").description("현재원"),
+                fieldWithPath("totalCount").description("총원"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("dividedPrice").description("n빵 가격"),
+                fieldWithPath("totalPrice").description("총가격"),
+                fieldWithPath("status").description("공모 상태"
+                        + getEnumValuesAsString(OfferingStatus.class)),
+                fieldWithPath("memberId").description("공모자 회원 id"),
+                fieldWithPath("nickname").description("공모자 회원 닉네임")
+        );
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 수정")
+                .description("공모 정보를 받아 공모를 수정합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .requestFields(requestDescriptors)
+                .responseFields(successResponseDescriptors)
+                .requestSchema(schema("OfferingUpdateRequest"))
+                .build();
+
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 수정")
+                .description("공모 정보를 받아 공모를 수정합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("OfferingUpdateRequest"))
+                .responseSchema(schema("OfferingUpdateFailResponse"))
+                .build();
+
+        MemberEntity proposer;
+        MemberEntity otherMember;
+
+        @BeforeEach
+        void setUp() {
+            proposer = memberFixture.createMember("poke");
+            otherMember = memberFixture.createMember("other");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+            List<MemberEntity> participants = memberFixture.createMembers(9);
+            participants.forEach(participant -> offeringMemberFixture.createParticipant(participant, offering));
+        }
+
+        @DisplayName("공모를 수정할 수 있다.")
+        @Test
+        void should_updateOffering_when_givenOfferingId() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("제안자가 아닌 사용자가 공모를 수정할 수 없다.")
+        @Test
+        void should_throwException_when_updateOtherMember() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-fail-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(otherMember))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여 인원 이하 인원으로 공모를 수정할 수 없다.")
+        @Test
+        void should_throwException_when_updateTotalCountLessEqualThanCurrentCount() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    9,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-fail-less-than-current-count", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("모집 날짜가 현재와 같거나 지날 경우 수정할 수 없다.")
+        @Test
+        void should_throwException_when_modifyMeetingDateBeforeNowToday() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.now(),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-fail-before-now-today", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("수정 할 원가격이 N빵 가격보다 작을경우 수정할 수 없다.")
+        @Test
+        void should_throwException_when_originPriceLessThanDividePrice() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    500,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-offering-fail-less-than-divide-price", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
         }
     }
 
