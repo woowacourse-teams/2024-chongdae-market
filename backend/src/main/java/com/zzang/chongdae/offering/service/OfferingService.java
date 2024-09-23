@@ -6,6 +6,7 @@ import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.UpdatedOffering;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -19,6 +20,8 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateResponse;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
@@ -137,5 +140,22 @@ public class OfferingService {
     public OfferingProductImageResponse extractProductImageFromOg(OfferingProductImageRequest request) {
         String imageUrl = imageExtractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
+    }
+
+    @Transactional
+    public OfferingUpdateResponse updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        UpdatedOffering updatedOffering = request.toUpdatedOffering();
+        validateIsProposer(offering, member);
+        validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getOfferingPrice().getTotalCount());
+        offering.update(updatedOffering);
+        return new OfferingUpdateResponse(offering, offering.toOfferingPrice(), offering.toOfferingJoinedCount());
+    }
+
+    private void validateUpdatedTotalCount(Integer currentCount, Integer updatedTotalCount) {
+        if (updatedTotalCount < currentCount) {
+            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT);
+        }
     }
 }
