@@ -830,10 +830,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
             otherMember = memberFixture.createMember("other");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
-            for (int i = 0; i < 9; i++) {
-                MemberEntity participant = memberFixture.createMember("poke_%d".formatted(i));
-                offeringMemberFixture.createParticipant(participant, offering);
-            }
+            List<MemberEntity> participants = memberFixture.createMembers(9);
+            participants.forEach(participant -> offeringMemberFixture.createParticipant(participant, offering));
         }
 
         @DisplayName("공모를 수정할 수 있다.")
