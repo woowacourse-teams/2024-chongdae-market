@@ -15,10 +15,14 @@ public class OfferingFixture {
     @Autowired
     private OfferingRepository offeringRepository;
 
-    public OfferingEntity createOffering(MemberEntity member, CommentRoomStatus commentRoomStatus) {
+    private OfferingEntity createOffering(MemberEntity member,
+                                          String title,
+                                          Double discountRate,
+                                          OfferingStatus offeringStatus,
+                                          CommentRoomStatus commentRoomStatus) {
         OfferingEntity offering = new OfferingEntity(
                 member,
-                "title",
+                title,
                 "description",
                 "thumbnailUrl",
                 "productUrl",
@@ -30,14 +34,38 @@ public class OfferingFixture {
                 1,
                 5000,
                 1000,
-                33.3,
-                OfferingStatus.AVAILABLE,
+                discountRate,
+                offeringStatus,
                 commentRoomStatus
         );
         return offeringRepository.save(offering);
     }
 
+    public OfferingEntity createOffering(MemberEntity member, Double discountRate) {
+        return createOffering(member, "title", discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+    }
+
+    public OfferingEntity createOffering(MemberEntity member, CommentRoomStatus commentRoomStatus) {
+        return createOffering(member, "title", 33.3, OfferingStatus.AVAILABLE, commentRoomStatus);
+    }
+
+    public OfferingEntity createOffering(MemberEntity member, OfferingStatus offeringStatus) {
+        return createOffering(member, "title", 33.3, offeringStatus, CommentRoomStatus.GROUPING);
+    }
+
     public OfferingEntity createOffering(MemberEntity member) {
-        return createOffering(member, CommentRoomStatus.GROUPING);
+        return createOffering(member, "title", 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+    }
+
+    public OfferingEntity createOffering(MemberEntity member, String title) {
+        return createOffering(member, title, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+    }
+
+    public void deleteOffering(OfferingEntity offering) {
+        offeringRepository.delete(offering);
+    }
+
+    public void deleteOfferingById(Long offeringId) {
+        offeringRepository.deleteById(offeringId);
     }
 }
