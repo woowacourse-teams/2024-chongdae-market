@@ -89,7 +89,7 @@ public class OfferingMemberService {
     private void validateInProgress(OfferingMemberEntity offeringMember) {
         OfferingEntity offering = offeringMember.getOffering();
         CommentRoomStatus roomStatus = offering.getRoomStatus();
-        if (roomStatus.isInProgress()) {
+        if (roomStatus.isGrouped()) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_IN_PROGRESS);
         }
     }
