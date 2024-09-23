@@ -51,9 +51,10 @@ public class OfferingServiceTest extends ServiceTest {
         @DisplayName("존재하지 않는 공모 id를 통해 공모 상세를 조회할 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_givenInvalidOfferingId() {
-            // when & then
+            // given
             long invalidOfferingId = offering.getId() + 9999;
 
+            // when & then
             assertThatThrownBy(() -> offeringService.getOfferingDetail(invalidOfferingId, member))
                     .isInstanceOf(MarketException.class);
         }
