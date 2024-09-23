@@ -786,6 +786,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         MemberEntity proposer;
         MemberEntity notProposer;
+        MemberEntity participant;
         OfferingEntity offering;
         OfferingEntity offeringInProgress;
         OfferingEntity offeringDone;
@@ -795,6 +796,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
             notProposer = memberFixture.createMember("never");
             proposer = memberFixture.createMember("ever");
             offering = offeringFixture.createOffering(proposer);
+            participant = memberFixture.createMember("naver");
+            offeringMemberFixture.createParticipant(participant, offering);
             offeringInProgress = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
             offeringDone = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
         }
@@ -829,6 +832,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
             given(spec).log().all()
                     .filter(document("delete-offering-fail-not-proposer", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(notProposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여자가 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_participant() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-participant", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
                     .pathParam("offering-id", offering.getId())
                     .when().delete("/offerings/{offering-id}")
                     .then().log().all()
