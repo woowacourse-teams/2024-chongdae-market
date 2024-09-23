@@ -18,9 +18,9 @@ import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
 import com.zzang.chongdae.storage.service.StorageService;
 import io.restassured.http.ContentType;
 import java.io.File;
@@ -764,7 +764,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
     @DisplayName("공모 수정")
     @Nested
-    class ModifyOffering {
+    class UpdateOffering {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
@@ -789,7 +789,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .description("공모 정보를 받아 공모를 수정합니다.")
                 .pathParameters(pathParameterDescriptors)
                 .requestFields(requestDescriptors)
-                .requestSchema(schema("OfferingModifyRequest"))
+                .requestSchema(schema("OfferingUpdateRequest"))
                 .build();
 
         ResourceSnippetParameters failSnippets = builder()
@@ -797,8 +797,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .description("공모 정보를 받아 공모를 수정합니다.")
                 .requestFields(requestDescriptors)
                 .responseFields(failResponseDescriptors)
-                .requestSchema(schema("OfferingModifyRequest"))
-                .responseSchema(schema("OfferingModifyFailResponse"))
+                .requestSchema(schema("OfferingUpdateRequest"))
+                .responseSchema(schema("OfferingUpdateFailResponse"))
                 .build();
 
         MemberEntity proposer;
@@ -818,8 +818,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @DisplayName("공모를 수정할 수 있다.")
         @Test
-        void should_modifyOffering_when_givenOfferingId() {
-            OfferingModifyRequest request = new OfferingModifyRequest(
+        void should_updateOffering_when_givenOfferingId() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
                     "https://to.be.updated/thumbnail/url",
@@ -834,7 +834,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("patch-offering-success", resource(successSnippets)))
+                    .filter(document("update-offering-success", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .contentType(ContentType.JSON)
                     .pathParam("offering-id", 1)
@@ -846,8 +846,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @DisplayName("제안자가 아닌 사용자가 공모를 수정할 수 없다.")
         @Test
-        void should_throwException_when_modifyOtherMember() {
-            OfferingModifyRequest request = new OfferingModifyRequest(
+        void should_throwException_when_updateOtherMember() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
                     "https://to.be.updated/thumbnail/url",
@@ -862,7 +862,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("patch-offering-fail-not-proposer", resource(successSnippets)))
+                    .filter(document("update-offering-fail-not-proposer", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(otherMember))
                     .contentType(ContentType.JSON)
                     .pathParam("offering-id", 1)
@@ -874,8 +874,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
         @DisplayName("참여 인원 이하 인원으로 공모를 수정할 수 없다.")
         @Test
-        void should_throwException_when_modifyTotalCountLessEqualThanCurrentCount() {
-            OfferingModifyRequest request = new OfferingModifyRequest(
+        void should_throwException_when_updateTotalCountLessEqualThanCurrentCount() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
                     "https://to.be.updated/thumbnail/url",
@@ -890,7 +890,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("patch-offering-fail-less-equal-current-count", resource(successSnippets)))
+                    .filter(document("update-offering-fail-less-equal-current-count", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .contentType(ContentType.JSON)
                     .pathParam("offering-id", 1)
@@ -903,7 +903,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("모집 날짜가 현재와 같거나 지날 경우 수정할 수 없다.")
         @Test
         void should_throwException_when_modifyMeetingDateBeforeNowToday() {
-            OfferingModifyRequest request = new OfferingModifyRequest(
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
                     "https://to.be.updated/thumbnail/url",
@@ -918,7 +918,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("patch-offering-fail-before-now-today", resource(successSnippets)))
+                    .filter(document("update-offering-fail-before-now-today", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .contentType(ContentType.JSON)
                     .pathParam("offering-id", 1)
@@ -931,7 +931,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @DisplayName("수정 할 원가격이 N빵 가격보다 작을경우 수정할 수 없다.")
         @Test
         void should_throwException_when_originPriceLessThanDividePrice() {
-            OfferingModifyRequest request = new OfferingModifyRequest(
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
                     "https://to.be.updated/thumbnail/url",
@@ -946,7 +946,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("patch-offering-fail-less-than-divide-price", resource(successSnippets)))
+                    .filter(document("patch-offering-fail-less-than-divide-price", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .contentType(ContentType.JSON)
                     .pathParam("offering-id", 1)

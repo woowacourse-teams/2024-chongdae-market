@@ -8,8 +8,8 @@ import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
-import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,12 +78,12 @@ public class OfferingServiceTest extends ServiceTest {
 
     @DisplayName("공모를 수정할 수 있음")
     @Test
-    void should_modifyOffering_when_givenOfferingIdAndOfferingModifyRequest() {
+    void should_updateOffering_when_givenOfferingIdAndOfferingUpdateRequest() {
         // given
         MemberEntity member = memberFixture.createMember("poke");
         OfferingEntity offering = offeringFixture.createOffering(member);
         String expected = "수정된 공모 제목";
-        OfferingModifyRequest request = new OfferingModifyRequest(
+        OfferingUpdateRequest request = new OfferingUpdateRequest(
                 expected,
                 "https://to.be.updated/productUrl",
                 "https://to.be.updated/thumbnail/url",
@@ -98,7 +98,7 @@ public class OfferingServiceTest extends ServiceTest {
         );
 
         // when
-        offeringService.modifyOffering(offering.getId(), request, member);
+        offeringService.updateOffering(offering.getId(), request, member);
         OfferingAllResponseItem modifiedOffering = offeringService.getOffering(offering.getId());
         String actual = modifiedOffering.title();
 

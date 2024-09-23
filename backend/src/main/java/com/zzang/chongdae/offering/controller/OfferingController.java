@@ -8,10 +8,10 @@ import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -94,11 +94,11 @@ public class OfferingController {
     }
 
     @PatchMapping("/offerings/{offering-id}")
-    public ResponseEntity<Void> modifyOffering(
+    public ResponseEntity<Void> updateOffering(
             @PathVariable(value = "offering-id") Long offeringId,
-            @RequestBody @Valid OfferingModifyRequest request,
+            @RequestBody @Valid OfferingUpdateRequest request,
             MemberEntity member) {
-        offeringService.modifyOffering(offeringId, request, member);
+        offeringService.updateOffering(offeringId, request, member);
         return ResponseEntity.ok().build();
     }
 

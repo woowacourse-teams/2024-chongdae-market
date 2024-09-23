@@ -16,10 +16,10 @@ import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingModifyRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
@@ -133,36 +133,36 @@ public class OfferingService {
     }
 
     @Transactional
-    public void modifyOffering(Long offeringId, OfferingModifyRequest request, MemberEntity member) {
+    public void updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(offering, member);
         validateTotalCount(offering, request);
         validateMeetingDate(request);
         validateOriginPrice(request);
-        offering.modifyOffering(request);
+        offering.updateOffering(request);
     }
 
 
-    private void validateTotalCount(OfferingEntity offering, OfferingModifyRequest request) {
+    private void validateTotalCount(OfferingEntity offering, OfferingUpdateRequest request) {
         Integer currentCount = offering.getCurrentCount();
         Integer modifiedCount = request.totalCount();
         if (modifiedCount <= currentCount) {
-            throw new MarketException(OfferingErrorCode.CANNOT_MODIFY_LESS_EQUAL_CURRENT_COUNT);
+            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_EQUAL_CURRENT_COUNT);
         }
     }
 
-    private void validateOriginPrice(OfferingModifyRequest request) {
+    private void validateOriginPrice(OfferingUpdateRequest request) {
         OfferingPrice modifiedOfferingPrice = new OfferingPrice(request.totalCount(), request.totalPrice(),
                 request.originPrice());
         modifiedOfferingPrice.validateOriginPrice();
     }
 
-    private void validateMeetingDate(OfferingModifyRequest request) {
+    private void validateMeetingDate(OfferingUpdateRequest request) {
         LocalDateTime modifiedDate = request.meetingDate();
         LocalDateTime today = LocalDateTime.now();
         if (modifiedDate.isBefore(today) || modifiedDate.isEqual(today)) {
-            throw new MarketException(OfferingErrorCode.CANNOT_MODIFY_BEFORE_NOW_MEETING_DATE);
+            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_BEFORE_NOW_MEETING_DATE);
         }
     }
 }
