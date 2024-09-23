@@ -12,6 +12,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -94,12 +95,12 @@ public class OfferingController {
     }
 
     @PatchMapping("/offerings/{offering-id}")
-    public ResponseEntity<Void> updateOffering(
+    public ResponseEntity<OfferingUpdateResponse> updateOffering(
             @PathVariable(value = "offering-id") Long offeringId,
             @RequestBody @Valid OfferingUpdateRequest request,
             MemberEntity member) {
-        offeringService.updateOffering(offeringId, request, member);
-        return ResponseEntity.ok().build();
+        OfferingUpdateResponse response = offeringService.updateOffering(offeringId, request, member);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/offerings/product-images/s3")

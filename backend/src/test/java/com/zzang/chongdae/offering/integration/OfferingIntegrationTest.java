@@ -784,11 +784,31 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("description").description("내용 (필수)")
         );
 
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("id").description("공모 id"),
+                fieldWithPath("title").description("제목"),
+                fieldWithPath("productUrl").description("물품 링크"),
+                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("description").description("내용"),
+                fieldWithPath("meetingDate").description("마감시간"),
+                fieldWithPath("currentCount").description("현재원"),
+                fieldWithPath("totalCount").description("총원"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("dividedPrice").description("n빵 가격"),
+                fieldWithPath("totalPrice").description("총가격"),
+                fieldWithPath("status").description("공모 상태"
+                        + getEnumValuesAsString(OfferingStatus.class)),
+                fieldWithPath("memberId").description("공모자 회원 id"),
+                fieldWithPath("nickname").description("공모자 회원 닉네임")
+        );
+
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 수정")
                 .description("공모 정보를 받아 공모를 수정합니다.")
                 .pathParameters(pathParameterDescriptors)
                 .requestFields(requestDescriptors)
+                .responseFields(successResponseDescriptors)
                 .requestSchema(schema("OfferingUpdateRequest"))
                 .build();
 

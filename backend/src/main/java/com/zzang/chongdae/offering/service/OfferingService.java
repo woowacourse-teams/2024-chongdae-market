@@ -20,6 +20,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateResponse;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
@@ -133,7 +134,7 @@ public class OfferingService {
     }
 
     @Transactional
-    public void updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
+    public OfferingUpdateResponse updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         OfferingEntity updatedOffering = request.toEntity(member);
@@ -141,6 +142,7 @@ public class OfferingService {
         validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getTotalCount());
         validateUpdatedMeetingDate(updatedOffering.getMeetingDate());
         offering.update(updatedOffering);
+        return new OfferingUpdateResponse(offering, offering.toOfferingPrice(), offering.toOfferingJoinedCount());
     }
 
     private void validateUpdatedTotalCount(Integer currentCount, Integer updatedTotalCount) {
