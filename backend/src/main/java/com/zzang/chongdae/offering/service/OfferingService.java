@@ -129,4 +129,11 @@ public class OfferingService {
         String imageUrl = imageExtractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
     }
+
+    public void deleteOffering(Long offeringId, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        validateIsProposer(offering, member);
+        offeringRepository.delete(offering);
+    }
 }

@@ -760,4 +760,74 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(200);
         }
     }
+
+    @DisplayName("공모 삭제")
+    @Nested
+    class DeleteOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 삭제")
+                .description("공모 id를 통해 공모를 삭제합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseSchema(schema("OfferingDeleteSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 삭제")
+                .description("공모 id를 통해 공모를 삭제합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("OfferingDeleteFailResponse"))
+                .build();
+
+        MemberEntity proposer;
+        MemberEntity notProposer;
+        OfferingEntity offering;
+
+        @BeforeEach
+        void setUp() {
+            notProposer = memberFixture.createMember("never");
+            proposer = memberFixture.createMember("ever");
+            offering = offeringFixture.createOffering(proposer);
+        }
+
+        @DisplayName("공모 id로 공모를 삭제할 수 있다")
+        @Test
+        void should_deleteOffering_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @DisplayName("유효하지 않은 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offering.getId() + 9999)
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("총대가 아닌 사용자가 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_notProposer() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(notProposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
 }

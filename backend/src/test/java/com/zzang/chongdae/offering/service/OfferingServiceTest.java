@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offering.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -73,5 +74,46 @@ public class OfferingServiceTest extends ServiceTest {
 
         // then
         assertEquals(expected, actual);
+    }
+
+    @DisplayName("공모 id와 총대 엔티티가 주어졌을 때 공모를 삭제할 수 있다.")
+    @Test
+    void should_deleteOfferingSoftly_when_givenOfferingIdAndMember() {
+        // given
+        MemberEntity proposer = memberFixture.createMember("ever");
+        OfferingEntity offering = offeringFixture.createOffering(proposer);
+
+        // when
+        offeringService.deleteOffering(offering.getId(), proposer);
+
+        // then
+        assertThat(offeringFixture.countOffering()).isEqualTo(0);
+    }
+
+    @DisplayName("총대가 아닌 사용자가 삭제를 시도할 경우 예외가 발생한다.")
+    @Test
+    void should_throwException_when_deleteWithNotProposer() {
+        // given
+        MemberEntity notProposer = memberFixture.createMember("never");
+        MemberEntity proposer = memberFixture.createMember("ever");
+        OfferingEntity offering = offeringFixture.createOffering(proposer);
+
+        // when & then
+        assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), notProposer))
+                .isInstanceOf(MarketException.class);
+    }
+
+    @DisplayName("유효하지 않은 공모 id에 대해 삭제를 시도할 경우 예외가 발생한다.")
+    @Test
+    void should_throwException_when_deleteWithInvalidOfferingId() {
+        // given
+        MemberEntity proposer = memberFixture.createMember("ever");
+        OfferingEntity offering = offeringFixture.createOffering(proposer);
+
+        // when & then
+        long invalidOfferingId = offering.getId() + 9999;
+
+        assertThatThrownBy(() -> offeringService.deleteOffering(invalidOfferingId, proposer))
+                .isInstanceOf(MarketException.class);
     }
 }

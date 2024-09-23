@@ -40,4 +40,8 @@ public class OfferingFixture {
     public OfferingEntity createOffering(MemberEntity member) {
         return createOffering(member, CommentRoomStatus.GROUPING);
     }
+
+    public long countOffering() {
+        return offeringRepository.count();
+    }
 }
