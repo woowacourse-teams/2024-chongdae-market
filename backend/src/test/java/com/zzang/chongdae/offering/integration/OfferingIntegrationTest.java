@@ -879,7 +879,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "수정할 제목",
                     "https://to.be.updated/productUrl",
                     "https://to.be.updated/thumbnail/url",
-                    10,
+                    9,
                     20000,
                     5000,
                     "수정할 모집 장소 주소",
@@ -890,7 +890,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             );
 
             given(spec).log().all()
-                    .filter(document("update-offering-fail-less-equal-current-count", resource(failSnippets)))
+                    .filter(document("update-offering-fail-less-than-current-count", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .contentType(ContentType.JSON)
                     .pathParam("offering-id", 1)

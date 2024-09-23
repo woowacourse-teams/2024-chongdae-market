@@ -146,8 +146,8 @@ public class OfferingService {
     private void validateTotalCount(OfferingEntity offering, OfferingEntity updatedOffering) {
         Integer currentCount = offering.getCurrentCount();
         Integer modifiedCount = updatedOffering.getTotalCount();
-        if (modifiedCount <= currentCount) {
-            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_EQUAL_CURRENT_COUNT);
+        if (modifiedCount < currentCount) {
+            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT);
         }
     }
 
