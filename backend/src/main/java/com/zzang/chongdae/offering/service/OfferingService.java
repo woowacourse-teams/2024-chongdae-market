@@ -6,6 +6,7 @@ import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.UpdatedOffering;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -25,7 +26,6 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -137,10 +137,9 @@ public class OfferingService {
     public OfferingUpdateResponse updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        OfferingEntity updatedOffering = request.toEntity(member);
+        UpdatedOffering updatedOffering = request.toUpdatedOffering();
         validateIsProposer(offering, member);
-        validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getTotalCount());
-        validateUpdatedMeetingDate(updatedOffering.getMeetingDate());
+        validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getOfferingPrice().getTotalCount());
         offering.update(updatedOffering);
         return new OfferingUpdateResponse(offering, offering.toOfferingPrice(), offering.toOfferingJoinedCount());
     }
@@ -148,13 +147,6 @@ public class OfferingService {
     private void validateUpdatedTotalCount(Integer currentCount, Integer updatedTotalCount) {
         if (updatedTotalCount < currentCount) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT);
-        }
-    }
-
-    private void validateUpdatedMeetingDate(LocalDateTime updatedMeetingDate) {
-        LocalDateTime today = LocalDateTime.now();
-        if (updatedMeetingDate.isBefore(today) || updatedMeetingDate.isEqual(today)) {
-            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_BEFORE_NOW_MEETING_DATE);
         }
     }
 }
