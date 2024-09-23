@@ -138,23 +138,23 @@ public class OfferingService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         OfferingEntity updatedOffering = request.toEntity(member);
         validateIsProposer(offering, member);
-        validateTotalCount(offering, updatedOffering);
-        validateMeetingDate(request);
+        validateUpdatedTotalCount(offering, updatedOffering);
+        validateUpdatedMeetingDate(updatedOffering);
         offering.update(updatedOffering);
     }
 
-    private void validateTotalCount(OfferingEntity offering, OfferingEntity updatedOffering) {
+    private void validateUpdatedTotalCount(OfferingEntity offering, OfferingEntity updatedOffering) {
         Integer currentCount = offering.getCurrentCount();
-        Integer modifiedCount = updatedOffering.getTotalCount();
-        if (modifiedCount < currentCount) {
+        Integer updatedTotalCount = updatedOffering.getTotalCount();
+        if (updatedTotalCount < currentCount) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT);
         }
     }
 
-    private void validateMeetingDate(OfferingUpdateRequest request) {
-        LocalDateTime modifiedDate = request.meetingDate();
+    private void validateUpdatedMeetingDate(OfferingEntity updatedOffering) {
         LocalDateTime today = LocalDateTime.now();
-        if (modifiedDate.isBefore(today) || modifiedDate.isEqual(today)) {
+        LocalDateTime updatedMeetingDate = updatedOffering.getMeetingDate();
+        if (updatedMeetingDate.isBefore(today) || updatedMeetingDate.isEqual(today)) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_BEFORE_NOW_MEETING_DATE);
         }
     }
