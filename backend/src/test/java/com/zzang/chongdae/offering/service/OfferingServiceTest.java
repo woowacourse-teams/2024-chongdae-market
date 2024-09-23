@@ -349,112 +349,124 @@ public class OfferingServiceTest extends ServiceTest {
         }
     }
 
-    @DisplayName("공모를 수정할 수 있음")
-    @Test
-    void should_updateOffering_when_givenOfferingIdAndOfferingUpdateRequest() {
-        // given
-        MemberEntity member = memberFixture.createMember("poke");
-        OfferingEntity offering = offeringFixture.createOffering(member);
-        String expected = "수정된 공모 제목";
-        OfferingUpdateRequest request = new OfferingUpdateRequest(
-                expected,
-                "https://to.be.updated/productUrl",
-                "https://to.be.updated/thumbnail/url",
-                10,
-                20000,
-                5000,
-                "수정할 모집 장소 주소",
-                "수정할 모집 상세 주소",
-                "수정된동",
-                LocalDateTime.parse("2024-12-31T00:00:00"),
-                "수정할 공모 상세 내용"
-        );
+    @DisplayName("공모 수정")
+    @Nested
+    class UpdateOffering {
 
-        // when
-        offeringService.updateOffering(offering.getId(), request, member);
-        OfferingAllResponseItem modifiedOffering = offeringService.getOffering(offering.getId());
-        String actual = modifiedOffering.title();
+        @DisplayName("공모를 수정할 수 있음")
+        @Test
+        void should_updateOffering_when_givenOfferingIdAndOfferingUpdateRequest() {
+            // given
+            MemberEntity member = memberFixture.createMember("poke");
+            OfferingEntity offering = offeringFixture.createOffering(member);
+            String expected = "수정된 공모 제목";
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    expected,
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    10,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-12-31T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
 
-        // then
-        assertEquals(expected, actual);
+            // when
+            offeringService.updateOffering(offering.getId(), request, member);
+            OfferingAllResponseItem modifiedOffering = offeringService.getOffering(offering.getId());
+            String actual = modifiedOffering.title();
+
+            // then
+            assertEquals(expected, actual);
+        }
     }
 
-    @DisplayName("공모 id와 총대 엔티티가 주어졌을 때 공모를 삭제할 수 있다.")
-    @Test
-    void should_deleteOfferingSoftly_when_givenOfferingIdAndMember() {
-        // given
-        MemberEntity proposer = memberFixture.createMember("ever");
-        OfferingEntity offering = offeringFixture.createOffering(proposer);
+    @DisplayName("공모 삭제")
+    @Nested
+    class DeleteOffering {
 
-        // when
-        offeringService.deleteOffering(offering.getId(), proposer);
+        MemberEntity notProposer;
+        MemberEntity proposer;
 
-        // then
-        assertThat(offeringFixture.countOffering()).isEqualTo(0);
-    }
+        @BeforeEach
+        void setUp() {
+            notProposer = memberFixture.createMember("never");
+            proposer = memberFixture.createMember("ever");
+        }
 
-    @DisplayName("총대가 아닌 사용자가 삭제를 시도할 경우 예외가 발생한다.")
-    @Test
-    void should_throwException_when_deleteWithNotProposer() {
-        // given
-        MemberEntity notProposer = memberFixture.createMember("never");
-        MemberEntity proposer = memberFixture.createMember("ever");
-        OfferingEntity offering = offeringFixture.createOffering(proposer);
+        @DisplayName("공모 id와 총대 엔티티가 주어졌을 때 공모를 삭제할 수 있다.")
+        @Test
+        void should_deleteOfferingSoftly_when_givenOfferingIdAndMember() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
 
-        // when & then
-        assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), notProposer))
-                .isInstanceOf(MarketException.class);
-    }
+            // when
+            offeringService.deleteOffering(offering.getId(), proposer);
 
-    @DisplayName("유효하지 않은 공모 id에 대해 삭제를 시도할 경우 예외가 발생한다.")
-    @Test
-    void should_throwException_when_deleteWithInvalidOfferingId() {
-        // given
-        MemberEntity proposer = memberFixture.createMember("ever");
-        OfferingEntity offering = offeringFixture.createOffering(proposer);
+            // then
+            assertThat(offeringFixture.countOffering()).isEqualTo(0);
+        }
 
-        // when & then
-        long invalidOfferingId = offering.getId() + 9999;
+        @DisplayName("총대가 아닌 사용자가 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_deleteWithNotProposer() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
 
-        assertThatThrownBy(() -> offeringService.deleteOffering(invalidOfferingId, proposer))
-                .isInstanceOf(MarketException.class);
-    }
+            // when & then
+            assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), notProposer))
+                    .isInstanceOf(MarketException.class);
+        }
 
-    @DisplayName("거래 인원이 확정되고 거래가 완료되기 전 (구매 중 상태) 삭제를 시도할 경우 예외가 발생한다.")
-    @Test
-    void should_throwException_when_deleteAtBuyingStatus() {
-        // given
-        MemberEntity proposer = memberFixture.createMember("ever");
-        OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.BUYING);
+        @DisplayName("유효하지 않은 공모 id에 대해 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_deleteWithInvalidOfferingId() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
 
-        // when & then
-        assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
-                .isInstanceOf(MarketException.class);
-    }
+            // when & then
+            long invalidOfferingId = offering.getId() + 9999;
 
-    @DisplayName("거래 인원이 확정되고 거래가 완료되기 전 (거래 중 상태) 삭제를 시도할 경우 예외가 발생한다.")
-    @Test
-    void should_throwException_when_deleteAtTradingStatus() {
-        // given
-        MemberEntity proposer = memberFixture.createMember("ever");
-        OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
+            assertThatThrownBy(() -> offeringService.deleteOffering(invalidOfferingId, proposer))
+                    .isInstanceOf(MarketException.class);
+        }
 
-        // when & then
-        assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
-                .isInstanceOf(MarketException.class);
-    }
+        @DisplayName("거래 인원이 확정되고 거래가 완료되기 전 (구매 중 상태) 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_deleteAtBuyingStatus() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.BUYING);
 
-    @DisplayName("거래 완료 상태 공모의 경우 삭제가 가능하다.")
-    @Test
-    void should_deleteAvailable_when_statusDone() {
-        // given
-        MemberEntity proposer = memberFixture.createMember("ever");
-        OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
+            // when & then
+            assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
+                    .isInstanceOf(MarketException.class);
+        }
 
-        // when
-        offeringService.deleteOffering(offering.getId(), proposer);
+        @DisplayName("거래 인원이 확정되고 거래가 완료되기 전 (거래 중 상태) 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_deleteAtTradingStatus() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
 
-        // then
-        assertThat(offeringFixture.countOffering()).isEqualTo(0);
+            // when & then
+            assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
+                    .isInstanceOf(MarketException.class);
+        }
+
+        @DisplayName("거래 완료 상태 공모의 경우 삭제가 가능하다.")
+        @Test
+        void should_deleteAvailable_when_statusDone() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
+
+            // when
+            offeringService.deleteOffering(offering.getId(), proposer);
+
+            // then
+            assertThat(offeringFixture.countOffering()).isEqualTo(0);
+        }
     }
 }
