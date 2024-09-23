@@ -23,6 +23,7 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -112,12 +113,20 @@ public class OfferingService {
 
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
+        validateMeetingDate(offering);
         OfferingEntity savedOffering = offeringRepository.save(offering);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
         offeringMemberRepository.save(offeringMember);
 
         return savedOffering.getId();
+    }
+
+    private void validateMeetingDate(OfferingEntity offering) {
+        LocalDate thresholdDate = LocalDate.now().plusDays(1);
+        if (offering.getMeetingDate().toLocalDate().isBefore(thresholdDate)) {
+            throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
+        }
     }
 
     public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {
