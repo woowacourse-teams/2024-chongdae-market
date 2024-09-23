@@ -956,6 +956,4 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(400);
         }
     }
-
-
 }

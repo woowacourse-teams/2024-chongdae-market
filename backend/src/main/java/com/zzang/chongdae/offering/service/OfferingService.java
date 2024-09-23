@@ -143,7 +143,6 @@ public class OfferingService {
         offering.updateOffering(request);
     }
 
-
     private void validateTotalCount(OfferingEntity offering, OfferingUpdateRequest request) {
         Integer currentCount = offering.getCurrentCount();
         Integer modifiedCount = request.totalCount();
