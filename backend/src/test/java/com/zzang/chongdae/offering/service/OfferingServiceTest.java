@@ -142,7 +142,7 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(10, response.offerings().size());
         }
 
-        @DisplayName("마지막 페이지 이후로 최신순으로 공모 목록을 10개씩 조회할 수 있다")
+        @DisplayName("마지막 페이지 이후로 최신순으로 공모 목록을 조회할 수 있다")
         @Test
         void should_getRecentOfferings_when_givenLastId() {
             // given
@@ -170,7 +170,7 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(16, response.offerings().size());
         }
 
-        @DisplayName("검색어를 지정해 최신순으로 공모 목록을 10개씩 조회할 수 있다")
+        @DisplayName("검색어를 지정해 최신순으로 공모 목록을 조회할 수 있다")
         @Test
         void should_getOfferings_when_givenSearchKeyword() {
             // given
@@ -193,7 +193,7 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(17, response.offerings().size());
         }
 
-        @DisplayName("마지막 페이지 이후로 참여 가능한 공모 목록을 10개씩 조회할 수 있다")
+        @DisplayName("마지막 페이지 이후로 참여 가능한 공모 목록을 조회할 수 있다")
         @Test
         void should_getJoinableOfferings_when_givenLastId() {
             // given
@@ -232,20 +232,21 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(1, response.offerings().size());
         }
 
-        @DisplayName("마지막 페이지 이후로 마감 임박한 공모 목록을 10개씩 조회할 수 있다")
+        @DisplayName("마지막 페이지 이후로 마감 임박한 공모 목록을 조회할 수 있다")
         @Test
         void should_getImminentOfferings_when_givenLastId() {
             // given
             offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
-            OfferingAllResponse lastResponse = offeringService.getAllOffering("IMMINENT", null, null, 10);
+            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
+            OfferingAllResponse lastResponse = offeringService.getAllOffering("IMMINENT", null, null, 1);
             List<OfferingAllResponseItem> offerings = lastResponse.offerings();
             Long lastId = offerings.get(offerings.size() - 1).id();
 
             // when
-            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, lastId, 10);
+            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, lastId, 1);
 
             // then
-            assertEquals(0, response.offerings().size());
+            assertEquals(1, response.offerings().size());
         }
 
         @DisplayName("삭제한 공모는 마감 임박한 공모 목록 조회 시 포함되지 않는다")
@@ -279,7 +280,7 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(33.3, response.offerings().get(2).discountRate());
         }
 
-        @DisplayName("마지막 페이지 이후로 높은 할인율 순으로 공모 목록을 10개씩 조회할 수 있다")
+        @DisplayName("마지막 페이지 이후로 높은 할인율 순으로 공모 목록을 조회할 수 있다")
         @Test
         void should_getHighDiscountOfferings_when_givenLastDiscountRate() {
             // given
