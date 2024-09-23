@@ -788,6 +788,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         MemberEntity notProposer;
         OfferingEntity offering;
         OfferingEntity offeringInProgress;
+        OfferingEntity offeringDone;
 
         @BeforeEach
         void setUp() {
@@ -795,6 +796,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
             proposer = memberFixture.createMember("ever");
             offering = offeringFixture.createOffering(proposer);
             offeringInProgress = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
+            offeringDone = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
         }
 
         @DisplayName("공모 id로 공모를 삭제할 수 있다")
@@ -843,6 +845,17 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().delete("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(400);
+        }
+
+        @DisplayName("거래가 완료된 공모를 삭제할 수 있다.")
+        @Test
+        void should_deleteOffering_when_givenDoneOffering() {
+            given().log().all()
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offeringDone.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(204);
         }
     }
 }

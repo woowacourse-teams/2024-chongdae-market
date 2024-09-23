@@ -141,4 +141,18 @@ public class OfferingServiceTest extends ServiceTest {
         assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
                 .isInstanceOf(MarketException.class);
     }
+
+    @DisplayName("거래 완료 상태 공모의 경우 삭제가 가능하다.")
+    @Test
+    void should_deleteAvailable_when_statusDone() {
+        // given
+        MemberEntity proposer = memberFixture.createMember("ever");
+        OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
+
+        // when
+        offeringService.deleteOffering(offering.getId(), proposer);
+
+        // then
+        assertThat(offeringFixture.countOffering()).isEqualTo(0);
+    }
 }
