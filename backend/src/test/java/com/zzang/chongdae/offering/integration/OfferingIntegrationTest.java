@@ -631,6 +631,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("거래 날짜를 내일보다 과거로 설정하는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_meetingDateBeforeTomorrow() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    10,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.now(),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-fail-with-invalid-meeting-date", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
     }
 
     @DisplayName("상품 이미지 추출")
