@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
@@ -114,6 +115,30 @@ public class OfferingServiceTest extends ServiceTest {
         long invalidOfferingId = offering.getId() + 9999;
 
         assertThatThrownBy(() -> offeringService.deleteOffering(invalidOfferingId, proposer))
+                .isInstanceOf(MarketException.class);
+    }
+
+    @DisplayName("거래 인원이 확정되고 거래가 완료되기 전 (구매 중 상태) 삭제를 시도할 경우 예외가 발생한다.")
+    @Test
+    void should_throwException_when_deleteAtBuyingStatus() {
+        // given
+        MemberEntity proposer = memberFixture.createMember("ever");
+        OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.BUYING);
+
+        // when & then
+        assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
+                .isInstanceOf(MarketException.class);
+    }
+
+    @DisplayName("거래 인원이 확정되고 거래가 완료되기 전 (거래 중 상태) 삭제를 시도할 경우 예외가 발생한다.")
+    @Test
+    void should_throwException_when_deleteAtTradingStatus() {
+        // given
+        MemberEntity proposer = memberFixture.createMember("ever");
+        OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
+
+        // when & then
+        assertThatThrownBy(() -> offeringService.deleteOffering(offering.getId(), proposer))
                 .isInstanceOf(MarketException.class);
     }
 }

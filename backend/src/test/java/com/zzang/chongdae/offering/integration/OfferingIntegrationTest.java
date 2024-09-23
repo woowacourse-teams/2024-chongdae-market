@@ -13,6 +13,7 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
@@ -786,12 +787,14 @@ public class OfferingIntegrationTest extends IntegrationTest {
         MemberEntity proposer;
         MemberEntity notProposer;
         OfferingEntity offering;
+        OfferingEntity offeringInProgress;
 
         @BeforeEach
         void setUp() {
             notProposer = memberFixture.createMember("never");
             proposer = memberFixture.createMember("ever");
             offering = offeringFixture.createOffering(proposer);
+            offeringInProgress = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
         }
 
         @DisplayName("공모 id로 공모를 삭제할 수 있다")
@@ -825,6 +828,18 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .filter(document("delete-offering-fail-not-proposer", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(notProposer))
                     .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래 진행 중 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_unavailableStatus() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-in-progress", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offeringInProgress.getId())
                     .when().delete("/offerings/{offering-id}")
                     .then().log().all()
                     .statusCode(400);

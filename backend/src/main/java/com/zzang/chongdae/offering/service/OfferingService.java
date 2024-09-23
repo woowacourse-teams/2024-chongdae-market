@@ -134,6 +134,13 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(offering, member);
+        validateInProgress(offering);
         offeringRepository.delete(offering);
+    }
+
+    private void validateInProgress(OfferingEntity offering) {
+        if (offering.getRoomStatus().isInProgress()) {
+            throw new MarketException(OfferingErrorCode.CANNOT_DELETE_STATUS);
+        }
     }
 }
