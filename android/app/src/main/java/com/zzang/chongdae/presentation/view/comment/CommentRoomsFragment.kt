@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.databinding.FragmentCommentRoomsBinding
-import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
+import com.zzang.chongdae.common.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomsAdapter
 import com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity

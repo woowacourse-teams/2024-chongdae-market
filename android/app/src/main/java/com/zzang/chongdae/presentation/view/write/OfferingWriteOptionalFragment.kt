@@ -20,7 +20,7 @@ import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
-import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
+import com.zzang.chongdae.common.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.util.PermissionManager
 
 class OfferingWriteOptionalFragment : Fragment() {
