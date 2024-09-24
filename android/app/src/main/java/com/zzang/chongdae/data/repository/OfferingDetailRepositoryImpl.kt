@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.local.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
+import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.OfferingDetailDataSource
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
