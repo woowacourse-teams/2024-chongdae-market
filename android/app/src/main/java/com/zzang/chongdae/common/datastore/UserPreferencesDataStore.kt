@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.local.source
+package com.zzang.chongdae.common.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

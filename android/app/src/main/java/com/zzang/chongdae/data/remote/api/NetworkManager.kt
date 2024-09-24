@@ -5,7 +5,7 @@ import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.auth.api.AuthApiService
-import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
+import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.data.remote.util.TokensCookieJar
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
