@@ -15,6 +15,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
@@ -22,7 +23,6 @@ import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
-import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.collectLatest

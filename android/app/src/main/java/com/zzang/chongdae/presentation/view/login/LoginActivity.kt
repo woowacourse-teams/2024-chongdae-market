@@ -14,8 +14,8 @@ import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.common.FirebaseAnalyticsManager
-import com.zzang.chongdae.databinding.ActivityLoginBinding
 import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
+import com.zzang.chongdae.databinding.ActivityLoginBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
