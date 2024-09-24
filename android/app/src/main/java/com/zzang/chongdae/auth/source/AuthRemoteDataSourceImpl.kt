@@ -1,15 +1,14 @@
-package com.zzang.chongdae.remote.source
+package com.zzang.chongdae.auth.source
 
-import com.zzang.chongdae.data.source.AuthRemoteDataSource
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
-import com.zzang.chongdae.remote.api.AuthApiService
-import com.zzang.chongdae.remote.dto.request.AccessTokenRequest
-import com.zzang.chongdae.remote.dto.response.auth.MemberResponse
+import com.zzang.chongdae.auth.api.AuthApiService
+import com.zzang.chongdae.auth.dto.request.AccessTokenRequest
+import com.zzang.chongdae.auth.dto.response.MemberResponse
 import com.zzang.chongdae.remote.util.safeApiCall
 
 class AuthRemoteDataSourceImpl(
-    private val service: com.zzang.chongdae.remote.api.AuthApiService,
+    private val service: AuthApiService,
 ) : AuthRemoteDataSource {
     override suspend fun saveLogin(accessTokenRequest: AccessTokenRequest): Result<MemberResponse, DataError.Network> {
         return safeApiCall { service.postLogin(accessTokenRequest) }

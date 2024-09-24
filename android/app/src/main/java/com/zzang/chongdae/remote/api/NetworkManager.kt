@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
+import com.zzang.chongdae.auth.api.AuthApiService
 import com.zzang.chongdae.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.remote.util.TokensCookieJar
 import kotlinx.serialization.json.Json
@@ -21,13 +22,14 @@ object NetworkManager {
         }
 
     private fun getRetrofit(): Retrofit {
-        val userDataStore = UserPreferencesDataStore(ChongdaeApp.chongdaeApplicationContext.dataStore)
-        if (com.zzang.chongdae.remote.api.NetworkManager.instance == null) {
+        val userDataStore =
+            UserPreferencesDataStore(ChongdaeApp.chongdaeApplicationContext.dataStore)
+        if (instance == null) {
             val contentType = "application/json".toMediaType()
-            com.zzang.chongdae.remote.api.NetworkManager.instance =
+            instance =
                 Retrofit.Builder()
                     .baseUrl(BuildConfig.BASE_URL)
-                    .addConverterFactory(com.zzang.chongdae.remote.api.NetworkManager.json.asConverterFactory(contentType))
+                    .addConverterFactory(json.asConverterFactory(contentType))
                     .client(
                         OkHttpClient.Builder()
                             .cookieJar(TokensCookieJar(userDataStore))
@@ -35,22 +37,22 @@ object NetworkManager {
                     )
                     .build()
         }
-        return com.zzang.chongdae.remote.api.NetworkManager.instance!!
+        return instance!!
     }
 
-    fun offeringService(): com.zzang.chongdae.remote.api.OfferingApiService =
-        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-            .create(com.zzang.chongdae.remote.api.OfferingApiService::class.java)
+    fun offeringService(): OfferingApiService =
+        getRetrofit()
+            .create(OfferingApiService::class.java)
 
-    fun participationService(): com.zzang.chongdae.remote.api.ParticipationApiService =
-        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-            .create(com.zzang.chongdae.remote.api.ParticipationApiService::class.java)
+    fun participationService(): ParticipationApiService =
+        getRetrofit()
+            .create(ParticipationApiService::class.java)
 
-    fun commentService(): com.zzang.chongdae.remote.api.CommentApiService =
-        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-            .create(com.zzang.chongdae.remote.api.CommentApiService::class.java)
+    fun commentService(): CommentApiService =
+        getRetrofit()
+            .create(CommentApiService::class.java)
 
-    fun authService(): com.zzang.chongdae.remote.api.AuthApiService =
-        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-            .create(com.zzang.chongdae.remote.api.AuthApiService::class.java)
+    fun authService(): AuthApiService =
+        getRetrofit()
+            .create(AuthApiService::class.java)
 }

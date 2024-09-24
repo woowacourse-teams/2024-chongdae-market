@@ -11,7 +11,7 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result

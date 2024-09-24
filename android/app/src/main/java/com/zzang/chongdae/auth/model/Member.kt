@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.auth.model
 
 data class Member(
     val memberId: Long,

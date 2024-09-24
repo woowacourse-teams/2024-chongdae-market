@@ -13,7 +13,7 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result

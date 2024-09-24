@@ -1,6 +1,6 @@
-package com.zzang.chongdae.domain.repository
+package com.zzang.chongdae.auth.repository
 
-import com.zzang.chongdae.domain.model.Member
+import com.zzang.chongdae.auth.model.Member
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
 

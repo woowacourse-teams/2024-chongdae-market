@@ -3,7 +3,7 @@ package com.zzang.chongdae.domain.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
