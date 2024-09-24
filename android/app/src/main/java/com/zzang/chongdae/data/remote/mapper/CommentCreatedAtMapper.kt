@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.mapper
 
-import com.zzang.chongdae.domain.model.CommentCreatedAt
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentCreatedAtResponse
+import com.zzang.chongdae.domain.model.CommentCreatedAt
 
 fun CommentCreatedAtResponse.toDomain(): CommentCreatedAt {
     return CommentCreatedAt(

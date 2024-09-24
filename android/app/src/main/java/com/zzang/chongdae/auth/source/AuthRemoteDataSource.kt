@@ -2,8 +2,8 @@ package com.zzang.chongdae.auth.source
 
 import com.zzang.chongdae.auth.dto.request.AccessTokenRequest
 import com.zzang.chongdae.auth.dto.response.MemberResponse
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 
 interface AuthRemoteDataSource {
     suspend fun saveLogin(accessTokenRequest: AccessTokenRequest): Result<MemberResponse, DataError.Network>

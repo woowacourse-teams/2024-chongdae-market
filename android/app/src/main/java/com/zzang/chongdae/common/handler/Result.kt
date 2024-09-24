@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.util
+package com.zzang.chongdae.common.handler
 
 typealias RootError = Error
 

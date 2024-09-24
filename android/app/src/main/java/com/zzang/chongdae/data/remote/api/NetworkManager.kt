@@ -40,15 +40,11 @@ object NetworkManager {
         return instance!!
     }
 
-    fun offeringService(): OfferingApiService =
-        getRetrofit().create(OfferingApiService::class.java)
+    fun offeringService(): OfferingApiService = getRetrofit().create(OfferingApiService::class.java)
 
-    fun participationService(): ParticipationApiService =
-        getRetrofit().create(ParticipationApiService::class.java)
+    fun participationService(): ParticipationApiService = getRetrofit().create(ParticipationApiService::class.java)
 
-    fun commentService(): CommentApiService =
-        getRetrofit().create(CommentApiService::class.java)
+    fun commentService(): CommentApiService = getRetrofit().create(CommentApiService::class.java)
 
-    fun authService(): AuthApiService =
-        getRetrofit().create(AuthApiService::class.java)
+    fun authService(): AuthApiService = getRetrofit().create(AuthApiService::class.java)
 }

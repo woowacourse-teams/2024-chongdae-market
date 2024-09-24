@@ -1,4 +1,4 @@
-package com.zzang.chongdae.common
+package com.zzang.chongdae.common.firebase
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics

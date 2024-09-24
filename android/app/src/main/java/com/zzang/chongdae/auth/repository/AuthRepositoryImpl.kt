@@ -4,8 +4,8 @@ import com.zzang.chongdae.auth.dto.request.AccessTokenRequest
 import com.zzang.chongdae.auth.mapper.toDomain
 import com.zzang.chongdae.auth.model.Member
 import com.zzang.chongdae.auth.source.AuthRemoteDataSource
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 
 class AuthRepositoryImpl(
     private val authRemoteDataSource: AuthRemoteDataSource,

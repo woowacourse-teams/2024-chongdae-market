@@ -1,13 +1,13 @@
 package com.zzang.chongdae.repository
 
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import com.zzang.chongdae.util.TestFixture
 import okhttp3.MultipartBody

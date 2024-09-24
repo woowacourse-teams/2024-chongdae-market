@@ -1,11 +1,11 @@
 package com.zzang.chongdae.data.repository
 
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.mapper.participant.toDomain
 import com.zzang.chongdae.data.source.ParticipantRemoteDataSource
 import com.zzang.chongdae.domain.model.participant.Participants
 import com.zzang.chongdae.domain.repository.ParticipantRepository
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 
 class ParticipantRepositoryImpl(
     private val participantRemoteDataSource: ParticipantRemoteDataSource,

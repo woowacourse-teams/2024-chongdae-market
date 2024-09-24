@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.common.FirebaseAnalyticsManager
+import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.PermissionManager

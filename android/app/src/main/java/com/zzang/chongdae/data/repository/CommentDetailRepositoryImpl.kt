@@ -1,13 +1,13 @@
 package com.zzang.chongdae.data.repository
 
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentOfferingInfo
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 
 class CommentDetailRepositoryImpl(
     private val commentRemoteDataSource: CommentRemoteDataSource,

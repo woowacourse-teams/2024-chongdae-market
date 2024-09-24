@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 import kotlinx.coroutines.launch
 
 class CommentRoomsViewModel(
