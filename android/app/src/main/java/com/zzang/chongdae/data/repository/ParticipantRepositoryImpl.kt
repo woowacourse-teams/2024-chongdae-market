@@ -1,6 +1,6 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.mapper.participant.toDomain
+import com.zzang.chongdae.data.remote.mapper.participant.toDomain
 import com.zzang.chongdae.data.source.ParticipantRemoteDataSource
 import com.zzang.chongdae.domain.model.participant.Participants
 import com.zzang.chongdae.domain.repository.ParticipantRepository

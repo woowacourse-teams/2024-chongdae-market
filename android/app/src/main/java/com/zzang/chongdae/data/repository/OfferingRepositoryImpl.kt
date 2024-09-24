@@ -1,6 +1,6 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.mapper.toDomain
+import com.zzang.chongdae.data.local.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource

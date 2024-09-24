@@ -1,7 +1,8 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.mapper.toDomain
+import com.zzang.chongdae.data.local.mapper.toDomain
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
+import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentOfferingInfo

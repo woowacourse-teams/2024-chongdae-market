@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.mapper
+package com.zzang.chongdae.data.remote.mapper
 
 import com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomResponse
 import com.zzang.chongdae.domain.model.CommentRoom

@@ -1,6 +1,6 @@
 @file:Suppress("UNUSED_EXPRESSION")
 
-package com.zzang.chongdae.data.mapper
+package com.zzang.chongdae.data.remote.mapper
 
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteFilter
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteFilterName

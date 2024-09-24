@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.mapper.participant
+package com.zzang.chongdae.data.remote.mapper.participant
 
 import com.zzang.chongdae.data.remote.dto.response.participants.ParticipantsResponse
 import com.zzang.chongdae.data.remote.dto.response.participants.RemoteCount
