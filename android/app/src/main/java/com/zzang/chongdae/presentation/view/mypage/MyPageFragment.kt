@@ -12,7 +12,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.common.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentMyPageBinding
-import com.zzang.chongdae.local.source.UserPreferencesDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 
 class MyPageFragment : Fragment() {

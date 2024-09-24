@@ -1,6 +1,6 @@
 package com.zzang.chongdae.data.source.comment
 
-import com.zzang.chongdae.local.model.CommentEntity
+import com.zzang.chongdae.data.local.model.CommentEntity
 
 interface CommentLocalDataSource {
     suspend fun insertComments(comments: List<CommentEntity>)
