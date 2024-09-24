@@ -62,3 +62,12 @@ logging:
 auth:
   connect-timeout-length: 3s
   read-timeout-length: 3s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      path-mapping:
+        health: health-check
+      base-path: /
