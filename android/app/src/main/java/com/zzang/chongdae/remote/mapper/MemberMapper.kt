@@ -1,7 +1,7 @@
 package com.zzang.chongdae.remote.mapper
 
-import com.zzang.chongdae.data.remote.dto.response.auth.MemberResponse
 import com.zzang.chongdae.domain.model.Member
+import com.zzang.chongdae.remote.dto.response.auth.MemberResponse
 
 fun MemberResponse.toDomain(): Member {
     return Member(

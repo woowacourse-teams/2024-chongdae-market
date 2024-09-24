@@ -1,7 +1,7 @@
 package com.zzang.chongdae.remote.mapper
 
-import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
 import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.remote.dto.response.offering.OfferingDetailResponse
 
 fun OfferingDetailResponse.toDomain() =
     OfferingDetail(

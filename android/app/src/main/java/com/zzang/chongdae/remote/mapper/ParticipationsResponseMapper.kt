@@ -1,7 +1,7 @@
 package com.zzang.chongdae.remote.mapper
 
-import com.zzang.chongdae.data.remote.dto.response.offering.ParticipationResponse
 import com.zzang.chongdae.domain.model.Participation
+import com.zzang.chongdae.remote.dto.response.offering.ParticipationResponse
 
 fun ParticipationResponse.toDomain() =
     Participation(

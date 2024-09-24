@@ -1,7 +1,7 @@
 package com.zzang.chongdae.remote.mapper
 
-import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOfferingStatus
 import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.remote.dto.response.offering.RemoteOfferingStatus
 
 fun RemoteOfferingStatus.toDomain(): OfferingCondition {
     return when (this) {

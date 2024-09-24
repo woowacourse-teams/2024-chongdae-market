@@ -5,7 +5,7 @@ import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.local.source.UserPreferencesDataStore
-import com.zzang.chongdae.data.remote.util.TokensCookieJar
+import com.zzang.chongdae.remote.util.TokensCookieJar
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -38,15 +38,19 @@ object NetworkManager {
         return com.zzang.chongdae.remote.api.NetworkManager.instance!!
     }
 
-    fun offeringService(): com.zzang.chongdae.remote.api.OfferingApiService = com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-        .create(com.zzang.chongdae.remote.api.OfferingApiService::class.java)
+    fun offeringService(): com.zzang.chongdae.remote.api.OfferingApiService =
+        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
+            .create(com.zzang.chongdae.remote.api.OfferingApiService::class.java)
 
-    fun participationService(): com.zzang.chongdae.remote.api.ParticipationApiService = com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-        .create(com.zzang.chongdae.remote.api.ParticipationApiService::class.java)
+    fun participationService(): com.zzang.chongdae.remote.api.ParticipationApiService =
+        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
+            .create(com.zzang.chongdae.remote.api.ParticipationApiService::class.java)
 
-    fun commentService(): com.zzang.chongdae.remote.api.CommentApiService = com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-        .create(com.zzang.chongdae.remote.api.CommentApiService::class.java)
+    fun commentService(): com.zzang.chongdae.remote.api.CommentApiService =
+        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
+            .create(com.zzang.chongdae.remote.api.CommentApiService::class.java)
 
-    fun authService(): com.zzang.chongdae.remote.api.AuthApiService = com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
-        .create(com.zzang.chongdae.remote.api.AuthApiService::class.java)
+    fun authService(): com.zzang.chongdae.remote.api.AuthApiService =
+        com.zzang.chongdae.remote.api.NetworkManager.getRetrofit()
+            .create(com.zzang.chongdae.remote.api.AuthApiService::class.java)
 }

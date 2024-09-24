@@ -1,7 +1,7 @@
 package com.zzang.chongdae.remote.api
 
-import com.zzang.chongdae.data.remote.dto.request.AccessTokenRequest
-import com.zzang.chongdae.data.remote.dto.response.auth.MemberResponse
+import com.zzang.chongdae.remote.dto.request.AccessTokenRequest
+import com.zzang.chongdae.remote.dto.response.auth.MemberResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

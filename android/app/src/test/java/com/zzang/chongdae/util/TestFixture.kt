@@ -1,8 +1,5 @@
 package com.zzang.chongdae.util
 
-import com.zzang.chongdae.data.remote.mapper.toLocalDate
-import com.zzang.chongdae.data.remote.mapper.toLocalDateTime
-import com.zzang.chongdae.data.remote.mapper.toLocalTime
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentCreatedAt
 import com.zzang.chongdae.domain.model.CommentOfferingInfo
@@ -20,6 +17,9 @@ import com.zzang.chongdae.domain.model.participant.Participant
 import com.zzang.chongdae.domain.model.participant.ParticipantCount
 import com.zzang.chongdae.domain.model.participant.Participants
 import com.zzang.chongdae.domain.model.participant.Proposer
+import com.zzang.chongdae.remote.mapper.toLocalDate
+import com.zzang.chongdae.remote.mapper.toLocalDateTime
+import com.zzang.chongdae.remote.mapper.toLocalTime
 import okhttp3.MultipartBody
 import java.time.LocalDateTime
 

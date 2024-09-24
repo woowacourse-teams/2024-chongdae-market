@@ -1,7 +1,7 @@
 package com.zzang.chongdae.remote.api
 
-import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
-import com.zzang.chongdae.data.remote.dto.response.participants.ParticipantsResponse
+import com.zzang.chongdae.remote.dto.request.ParticipationRequest
+import com.zzang.chongdae.remote.dto.response.participants.ParticipantsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
