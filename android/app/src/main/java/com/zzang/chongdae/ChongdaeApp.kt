@@ -5,13 +5,14 @@ import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
+import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.auth.repository.AuthRepositoryImpl
+import com.zzang.chongdae.auth.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
 import com.zzang.chongdae.data.repository.ParticipantRepositoryImpl
-import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
@@ -19,7 +20,6 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.local.database.AppDatabase
 import com.zzang.chongdae.local.source.OfferingLocalDataSourceImpl
-import com.zzang.chongdae.auth.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.remote.source.CommentRemoteDataSourceImpl
 import com.zzang.chongdae.remote.source.CommentRoomsDataSourceImpl
 import com.zzang.chongdae.remote.source.OfferingDetailDataSourceImpl

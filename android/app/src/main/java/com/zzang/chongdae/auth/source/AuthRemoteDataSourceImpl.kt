@@ -1,10 +1,10 @@
 package com.zzang.chongdae.auth.source
 
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.auth.api.AuthApiService
 import com.zzang.chongdae.auth.dto.request.AccessTokenRequest
 import com.zzang.chongdae.auth.dto.response.MemberResponse
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.remote.util.safeApiCall
 
 class AuthRemoteDataSourceImpl(
