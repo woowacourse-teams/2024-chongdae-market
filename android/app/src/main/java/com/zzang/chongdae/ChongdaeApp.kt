@@ -5,15 +5,6 @@ import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
-import com.zzang.chongdae.data.local.database.AppDatabase
-import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
-import com.zzang.chongdae.data.remote.api.NetworkManager
-import com.zzang.chongdae.data.remote.source.AuthRemoteDataSourceImpl
-import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
-import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
-import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
-import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
-import com.zzang.chongdae.data.remote.source.ParticipantRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.AuthRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
 import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl
@@ -26,10 +17,18 @@ import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
+import com.zzang.chongdae.local.database.AppDatabase
+import com.zzang.chongdae.local.source.OfferingLocalDataSourceImpl
+import com.zzang.chongdae.remote.source.AuthRemoteDataSourceImpl
+import com.zzang.chongdae.remote.source.CommentRemoteDataSourceImpl
+import com.zzang.chongdae.remote.source.CommentRoomsDataSourceImpl
+import com.zzang.chongdae.remote.source.OfferingDetailDataSourceImpl
+import com.zzang.chongdae.remote.source.OfferingRemoteDataSourceImpl
+import com.zzang.chongdae.remote.source.ParticipantRemoteDataSourceImpl
 
 class ChongdaeApp : Application() {
     private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(this) }
-    private val networkManager: NetworkManager by lazy { NetworkManager }
+    private val networkManager: com.zzang.chongdae.remote.api.NetworkManager by lazy { com.zzang.chongdae.remote.api.NetworkManager }
 
     private val offeringDao by lazy { appDatabase.offeringDao() }
 

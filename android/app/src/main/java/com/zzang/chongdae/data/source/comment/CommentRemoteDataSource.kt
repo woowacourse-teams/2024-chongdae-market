@@ -1,11 +1,11 @@
 package com.zzang.chongdae.data.source.comment
 
-import com.zzang.chongdae.data.remote.dto.request.CommentRequest
-import com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse
-import com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse
-import com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
+import com.zzang.chongdae.remote.dto.request.CommentRequest
+import com.zzang.chongdae.remote.dto.response.comment.CommentOfferingInfoResponse
+import com.zzang.chongdae.remote.dto.response.comment.CommentsResponse
+import com.zzang.chongdae.remote.dto.response.comment.UpdatedStatusResponse
 
 interface CommentRemoteDataSource {
     suspend fun saveComment(commentRequest: CommentRequest): Result<Unit, DataError.Network>

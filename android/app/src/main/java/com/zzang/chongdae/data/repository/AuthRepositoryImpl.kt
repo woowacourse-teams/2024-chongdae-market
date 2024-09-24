@@ -1,12 +1,12 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.remote.dto.request.AccessTokenRequest
-import com.zzang.chongdae.data.remote.mapper.toDomain
+
 import com.zzang.chongdae.data.source.AuthRemoteDataSource
 import com.zzang.chongdae.domain.model.Member
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
+import com.zzang.chongdae.remote.dto.request.AccessTokenRequest
 
 class AuthRepositoryImpl(
     private val authRemoteDataSource: AuthRemoteDataSource,

@@ -14,7 +14,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
+import com.zzang.chongdae.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering

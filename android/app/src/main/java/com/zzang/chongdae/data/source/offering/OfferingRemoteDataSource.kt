@@ -8,6 +8,7 @@ import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
 import com.zzang.chongdae.domain.util.DataError
 import com.zzang.chongdae.domain.util.Result
+import com.zzang.chongdae.remote.dto.response.offering.RemoteOffering
 import okhttp3.MultipartBody
 
 interface OfferingRemoteDataSource {
