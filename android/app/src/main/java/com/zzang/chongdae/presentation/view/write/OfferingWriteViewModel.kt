@@ -15,6 +15,7 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
+import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
@@ -279,8 +280,8 @@ class OfferingWriteViewModel(
             when (
                 val result =
                     offeringRepository.saveOffering(
-                        uiModel =
-                            OfferingWriteUiModel(
+                        offeringWrite =
+                            OfferingWrite(
                                 title = title,
                                 productUrl = productUrl.value,
                                 thumbnailUrl = thumbnailUrl.value,

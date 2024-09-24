@@ -1,6 +1,6 @@
-package com.zzang.chongdae.presentation.view.write
+package com.zzang.chongdae.domain.model
 
-data class OfferingWriteUiModel(
+data class OfferingWrite(
     val title: String,
     val productUrl: String?,
     val thumbnailUrl: String?,

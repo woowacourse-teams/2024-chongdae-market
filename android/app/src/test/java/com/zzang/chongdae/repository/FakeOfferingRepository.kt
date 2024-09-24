@@ -6,9 +6,9 @@ import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
-import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import com.zzang.chongdae.util.TestFixture
 import okhttp3.MultipartBody
 
@@ -54,7 +54,7 @@ class FakeOfferingRepository : OfferingRepository {
         )
     }
 
-    override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit, DataError.Network> {
+    override suspend fun saveOffering(offeringWrite: OfferingWrite): Result<Unit, DataError.Network> {
         return Result.Success(Unit)
     }
 
