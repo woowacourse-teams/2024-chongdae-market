@@ -23,12 +23,11 @@ paging = "3.3.0"
 swiperefreshlayout = "1.1.0"
 datastore = "1.0.0"
 junit-jupiter = "5.10.2"
-assert-core = "3.25.3"
-kotest = "5.8.0"
-core-testing = "2.1.0"
-mannodermaus = "1.3.0"
-test = "1.4.0"
-mockwebserverVersion = "4.12.0"
+#assert-core = "3.25.3"
+#core-testing = "2.1.0"
+#mannodermaus = "1.3.0"
+#test = "1.4.0"
+#mockwebserverVersion = "4.12.0"
 
 [libraries]
 # 코어 라이브러리
@@ -63,12 +62,12 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version = "3.3.0" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigation" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
-assertj-core = { group = "org.assertj", name = "assertj-core", version = "assert-core" }
-kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "kotest" }
-core-testing = { group = "androidx.arch.core", name = "core-testing", version = "core-testing" }
-mannodermaus-test-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version = "mannodermaus" }
-mannodermaus-test-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version = "mannodermaus" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version = "test" }
+assertj-core = { group = "org.assertj", name = "assertj-core", version = "3.25.3" }
+kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "5.8.0" }
+core-testing = { group = "androidx.arch.core", name = "core-testing", version = "2.1.0" }
+mannodermaus-test-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version = "1.3.0" }
+mannodermaus-test-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version = "1.3.0" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version = "1.4.0" }
 
 # Retrofit 및 관련 라이브러리
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
