@@ -25,10 +25,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.R
-import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
+import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.login.LoginActivity
