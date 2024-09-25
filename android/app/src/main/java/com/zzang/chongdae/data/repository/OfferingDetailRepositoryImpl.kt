@@ -1,12 +1,12 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.mapper.toDomain
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
+import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.OfferingDetailDataSource
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 
 class OfferingDetailRepositoryImpl(
     private val offeringDetailDataSource: OfferingDetailDataSource,
