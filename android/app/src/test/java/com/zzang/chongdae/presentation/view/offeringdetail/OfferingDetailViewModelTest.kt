@@ -2,7 +2,7 @@ package com.zzang.chongdae.presentation.view.offeringdetail
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeDataStore

@@ -1,17 +1,17 @@
 package com.zzang.chongdae.data.repository
 
-import com.zzang.chongdae.data.mapper.toDomain
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
+import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
-import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import okhttp3.MultipartBody
 
 class OfferingRepositoryImpl(
@@ -35,21 +35,21 @@ class OfferingRepositoryImpl(
             }
     }
 
-    override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit, DataError.Network> {
+    override suspend fun saveOffering(offeringWrite: OfferingWrite): Result<Unit, DataError.Network> {
         return offeringRemoteDataSource.saveOffering(
             offeringWriteRequest =
                 OfferingWriteRequest(
-                    title = uiModel.title,
-                    productUrl = uiModel.productUrl,
-                    thumbnailUrl = uiModel.thumbnailUrl,
-                    totalCount = uiModel.totalCount,
-                    totalPrice = uiModel.totalPrice,
-                    originPrice = uiModel.originPrice,
-                    meetingAddress = uiModel.meetingAddress,
-                    meetingAddressDong = uiModel.meetingAddressDong,
-                    meetingAddressDetail = uiModel.meetingAddressDetail,
-                    meetingDate = uiModel.meetingDate,
-                    description = uiModel.description,
+                    title = offeringWrite.title,
+                    productUrl = offeringWrite.productUrl,
+                    thumbnailUrl = offeringWrite.thumbnailUrl,
+                    totalCount = offeringWrite.totalCount,
+                    totalPrice = offeringWrite.totalPrice,
+                    originPrice = offeringWrite.originPrice,
+                    meetingAddress = offeringWrite.meetingAddress,
+                    meetingAddressDong = offeringWrite.meetingAddressDong,
+                    meetingAddressDetail = offeringWrite.meetingAddressDetail,
+                    meetingDate = offeringWrite.meetingDate,
+                    description = offeringWrite.description,
                 ),
         )
     }

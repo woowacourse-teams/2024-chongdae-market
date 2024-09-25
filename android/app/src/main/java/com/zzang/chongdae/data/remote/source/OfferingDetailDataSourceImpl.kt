@@ -1,13 +1,13 @@
 package com.zzang.chongdae.data.remote.source
 
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.api.ParticipationApiService
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.OfferingDetailDataSource
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 
 class OfferingDetailDataSourceImpl(
     private val offeringApiService: OfferingApiService,
