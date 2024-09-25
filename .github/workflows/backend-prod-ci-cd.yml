@@ -69,8 +69,7 @@ jobs:
           docker rm ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
           docker image prune -a -f
           docker pull ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -v /logs:/logs -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-
+          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -v /logs:/logs -p 80:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
 
   deploy-b:
     needs: build-and-test
@@ -84,4 +83,4 @@ jobs:
           docker rm ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
           docker image prune -a -f
           docker pull ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -v /logs:/logs -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
+          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -v /logs:/logs -p 80:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
