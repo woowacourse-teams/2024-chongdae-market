@@ -34,8 +34,10 @@ import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!

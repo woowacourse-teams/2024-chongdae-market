@@ -6,11 +6,11 @@ import com.zzang.chongdae.auth.model.Member
 import com.zzang.chongdae.auth.source.AuthRemoteDataSource
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.SharedAuthDataSource
+import com.zzang.chongdae.di.annotations.AuthDataSourceQualifier
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    @SharedAuthDataSource private val authRemoteDataSource: AuthRemoteDataSource,
+    @AuthDataSourceQualifier private val authRemoteDataSource: AuthRemoteDataSource,
 ) : AuthRepository {
     override suspend fun saveLogin(accessToken: String): Result<Member, DataError.Network> {
         return authRemoteDataSource.saveLogin(

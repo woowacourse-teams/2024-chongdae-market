@@ -17,17 +17,14 @@ import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityLoginBinding
 import com.zzang.chongdae.presentation.view.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: LoginViewModel by viewModels {
-        LoginViewModel.getFactory(
-            authRepository = (application as ChongdaeApp).authRepository,
-            userPreferencesDataStore = UserPreferencesDataStore(applicationContext.dataStore),
-        )
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(this)

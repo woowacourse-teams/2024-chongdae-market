@@ -5,10 +5,15 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.zzang.chongdae.di.annotations.DataStoreQualifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserPreferencesDataStore(private val dataStore: DataStore<Preferences>) {
+class UserPreferencesDataStore @Inject constructor(
+    @DataStoreQualifier private val dataStore: DataStore<Preferences>,
+) {
     val memberIdFlow: Flow<Long?> =
         dataStore.data.map { preferences ->
             preferences[MEMBER_ID_KEY]

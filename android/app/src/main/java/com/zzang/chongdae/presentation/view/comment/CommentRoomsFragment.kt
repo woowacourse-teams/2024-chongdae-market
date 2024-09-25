@@ -14,7 +14,9 @@ import com.zzang.chongdae.databinding.FragmentCommentRoomsBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomsAdapter
 import com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
     private var _binding: FragmentCommentRoomsBinding? = null
     private val binding get() = _binding!!

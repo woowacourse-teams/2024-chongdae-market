@@ -8,13 +8,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.di.annotations.DataStoreQualifier
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
-    private val authRepository: AuthRepository,
+class LoginViewModel @Inject constructor(
+    @AuthRepositoryQualifier private val authRepository: AuthRepository,
     private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel() {
     private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()

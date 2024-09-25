@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di
+package com.zzang.chongdae.di.module
 
 import com.zzang.chongdae.auth.api.AuthApiService
 import com.zzang.chongdae.auth.repository.AuthRepository
@@ -6,38 +6,33 @@ import com.zzang.chongdae.auth.repository.AuthRepositoryImpl
 import com.zzang.chongdae.auth.source.AuthRemoteDataSource
 import com.zzang.chongdae.auth.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.data.remote.api.NetworkManager
+import com.zzang.chongdae.di.annotations.AuthApiServiceQualifier
+import com.zzang.chongdae.di.annotations.AuthDataSourceQualifier
+import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import dagger.Binds
+import dagger.Module
 import dagger.Provides
-import javax.inject.Qualifier
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class SharedAuthRepository
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class SharedAuthDataSource
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class SharedAuthApiService
-
-abstract class AuthModule {
+@InstallIn(SingletonComponent::class)
+@Module
+abstract class AuthDependencyModule {
     @Binds
     @Singleton
-    @SharedAuthRepository
+    @AuthRepositoryQualifier
     abstract fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    @SharedAuthDataSource
+    @AuthDataSourceQualifier
     abstract fun provideAuthDataSource(impl: AuthRemoteDataSourceImpl): AuthRemoteDataSource
 
     companion object {
         @Provides
         @Singleton
-        @SharedAuthApiService
+        @AuthApiServiceQualifier
         fun provideAuthApiService() : AuthApiService {
             return NetworkManager.authService()
         }
