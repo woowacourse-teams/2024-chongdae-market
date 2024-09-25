@@ -7,12 +7,12 @@ on:
       - "backend/**"
       - ".github/workflows/backend-prod-ci-cd.yml"
       - "Dockerfile"
-  # pull_request:
-  #   branches: [ "develop-BE" ]
-  #   paths:
-  #     - "backend/**"
-  #     - ".github/workflows/backend-prod-ci-cd.yml"
-  #     - "Dockerfile"
+  pull_request:
+    branches: [ "develop-BE" ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-prod-ci-cd.yml"
+      - "Dockerfile"
 
 jobs:
 
@@ -59,10 +59,13 @@ jobs:
 
   deploy:
     needs: build-and-test
-    runs-on: [ self-hosted, prod ]
+    strategy:
+      matrix:
+        environment: [ "prod-a", "prod-b" ]
+    runs-on: ${{ matrix.environment }}
 
     steps:
-      - name: Pull Image And Restart Container
+      - name: Pull Image And Restart Container on ${{ matrix.environment }}
         run: |
           docker login -u ${{ secrets.BE_DOCKERHUB_USERNAME }} -p ${{ secrets.BE_DOCKERHUB_PASSWORD }}
           docker stop ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
