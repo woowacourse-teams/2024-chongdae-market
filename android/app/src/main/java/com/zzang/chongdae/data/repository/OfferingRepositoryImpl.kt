@@ -4,6 +4,7 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
+import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.di.annotations.OfferingDataSourceQualifier
 import com.zzang.chongdae.domain.model.Filter
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class OfferingRepositoryImpl
     @Inject
     constructor(
-//    private val offeringLocalDataSource: OfferingLocalDataSource,
+//        private val offeringLocalDataSource: OfferingLocalDataSource,
         @OfferingDataSourceQualifier private val offeringRemoteDataSource: OfferingRemoteDataSource,
     ) : OfferingRepository {
         override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> =

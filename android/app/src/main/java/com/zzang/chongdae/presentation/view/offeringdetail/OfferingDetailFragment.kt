@@ -20,7 +20,9 @@ import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OfferingDetailFragment : Fragment() {
     private var _binding: FragmentOfferingDetailBinding? = null
     private val binding get() = _binding!!
