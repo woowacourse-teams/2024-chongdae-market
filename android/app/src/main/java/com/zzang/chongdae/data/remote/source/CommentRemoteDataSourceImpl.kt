@@ -10,29 +10,30 @@ import com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import com.zzang.chongdae.di.annotations.CommentDetailApiServiceQualifier
-import com.zzang.chongdae.di.annotations.CommentDetailDataSourceQualifier
 import javax.inject.Inject
 
-class CommentRemoteDataSourceImpl @Inject constructor(
-    @CommentDetailApiServiceQualifier private val service: CommentApiService,
-) : CommentRemoteDataSource {
-    override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit, DataError.Network> =
-        safeApiCall {
-            service.postComment(commentRequest)
-        }
+class CommentRemoteDataSourceImpl
+    @Inject
+    constructor(
+        @CommentDetailApiServiceQualifier private val service: CommentApiService,
+    ) : CommentRemoteDataSource {
+        override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit, DataError.Network> =
+            safeApiCall {
+                service.postComment(commentRequest)
+            }
 
-    override suspend fun fetchComments(offeringId: Long): Result<CommentsResponse, DataError.Network> =
-        safeApiCall {
-            service.getComments(offeringId)
-        }
+        override suspend fun fetchComments(offeringId: Long): Result<CommentsResponse, DataError.Network> =
+            safeApiCall {
+                service.getComments(offeringId)
+            }
 
-    override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfoResponse, DataError.Network> =
-        safeApiCall {
-            service.getCommentOfferingInfo(offeringId)
-        }
+        override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<CommentOfferingInfoResponse, DataError.Network> =
+            safeApiCall {
+                service.getCommentOfferingInfo(offeringId)
+            }
 
-    override suspend fun updateOfferingStatus(offeringId: Long): Result<UpdatedStatusResponse, DataError.Network> =
-        safeApiCall {
-            service.patchOfferingStatus(offeringId)
-        }
-}
+        override suspend fun updateOfferingStatus(offeringId: Long): Result<UpdatedStatusResponse, DataError.Network> =
+            safeApiCall {
+                service.patchOfferingStatus(offeringId)
+            }
+    }

@@ -5,9 +5,6 @@ import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
-import com.zzang.chongdae.di.annotations.CommentRoomsApiServiceQualifier
-import com.zzang.chongdae.di.annotations.CommentRoomsDataSourceQualifier
-import com.zzang.chongdae.di.annotations.CommentRoomsRepositoryQualifier
 import com.zzang.chongdae.di.annotations.OfferingApiServiceQualifier
 import com.zzang.chongdae.di.annotations.OfferingDataSourceQualifier
 import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier

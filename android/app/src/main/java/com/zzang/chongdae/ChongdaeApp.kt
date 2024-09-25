@@ -9,7 +9,6 @@ import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.auth.repository.AuthRepositoryImpl
 import com.zzang.chongdae.auth.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.data.local.database.AppDatabase
-import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
 import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
 import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
