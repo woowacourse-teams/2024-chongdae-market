@@ -44,13 +44,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     private var toast: Toast? = null
 
     private lateinit var offeringAdapter: OfferingAdapter
-    private val viewModel: OfferingViewModel by viewModels {
-        OfferingViewModel.getFactory(
-            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
-            authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
-            userPreferencesDataStore = UserPreferencesDataStore(requireActivity().applicationContext.dataStore),
-        )
-    }
+    private val viewModel: OfferingViewModel by viewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())

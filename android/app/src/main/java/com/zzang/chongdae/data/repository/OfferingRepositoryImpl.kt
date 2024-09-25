@@ -6,6 +6,7 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
+import com.zzang.chongdae.di.annotations.OfferingDataSourceQualifier
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
@@ -13,10 +14,11 @@ import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class OfferingRepositoryImpl(
-    private val offeringLocalDataSource: OfferingLocalDataSource,
-    private val offeringRemoteDataSource: OfferingRemoteDataSource,
+class OfferingRepositoryImpl @Inject constructor(
+//    private val offeringLocalDataSource: OfferingLocalDataSource,
+    @OfferingDataSourceQualifier private val offeringRemoteDataSource: OfferingRemoteDataSource,
 ) : OfferingRepository {
     override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> =
         offeringRemoteDataSource.fetchOffering(offeringId = offeringId).map {

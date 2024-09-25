@@ -13,6 +13,8 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.OfferingWrite
@@ -20,14 +22,17 @@ import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class OfferingWriteViewModel(
-    private val offeringRepository: OfferingRepository,
-    private val authRepository: AuthRepository,
+@HiltViewModel
+class OfferingWriteViewModel @Inject constructor(
+    @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
+    @AuthRepositoryQualifier private val authRepository: AuthRepository,
 ) : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData("")
 

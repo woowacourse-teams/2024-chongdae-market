@@ -20,8 +20,10 @@ import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener {
     private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
@@ -32,12 +34,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
 
-    private val viewModel: OfferingWriteViewModel by activityViewModels {
-        OfferingWriteViewModel.getFactory(
-            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
-            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
-        )
-    }
+    private val viewModel: OfferingWriteViewModel by activityViewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())

@@ -18,6 +18,8 @@ import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
@@ -27,10 +29,11 @@ import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OfferingViewModel(
-    private val offeringRepository: OfferingRepository,
-    private val authRepository: AuthRepository,
+class OfferingViewModel @Inject constructor(
+    @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
+    @AuthRepositoryQualifier private val authRepository: AuthRepository,
     private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel(), OnFilterClickListener, OnSearchClickListener {
     private val _offerings = MutableLiveData<PagingData<Offering>>()
@@ -101,10 +104,10 @@ class OfferingViewModel(
                         if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
                             return@map it.copy(
                                 title =
-                                    highlightSearchKeyword(
-                                        it.title,
-                                        search.value!!,
-                                    ),
+                                highlightSearchKeyword(
+                                    it.title,
+                                    search.value!!,
+                                ),
                             )
                         }
                         it.copy(title = removeAsterisks(it.title))

@@ -12,10 +12,12 @@ import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
 import com.zzang.chongdae.data.remote.mapper.toProductUrlRequest
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
+import com.zzang.chongdae.di.annotations.OfferingApiServiceQualifier
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
-class OfferingRemoteDataSourceImpl(
-    private val service: OfferingApiService,
+class OfferingRemoteDataSourceImpl @Inject constructor(
+    @OfferingApiServiceQualifier private val service: OfferingApiService,
 ) : OfferingRemoteDataSource {
     override suspend fun fetchOffering(offeringId: Long): Result<RemoteOffering, DataError.Network> =
         safeApiCall { service.getOffering(offeringId) }

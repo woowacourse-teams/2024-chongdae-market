@@ -37,7 +37,7 @@ class ChongdaeApp : Application() {
 
     val offeringRepository: OfferingRepository by lazy {
         OfferingRepositoryImpl(
-            offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
+//            offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
             offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringService()),
         )
     }
