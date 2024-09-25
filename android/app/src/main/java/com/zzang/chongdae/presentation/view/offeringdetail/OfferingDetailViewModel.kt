@@ -11,23 +11,36 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OfferingDetailViewModel(
-    private val offeringId: Long,
-    private val offeringDetailRepository: OfferingDetailRepository,
-    private val authRepository: AuthRepository,
+class OfferingDetailViewModel @AssistedInject constructor(
+    @Assisted private val offeringId: Long,
+    @OfferingRepositoryQualifier val offeringDetailRepository: OfferingDetailRepository,
+    @AuthRepositoryQualifier private val authRepository: AuthRepository,
 ) : ViewModel(),
     OnParticipationClickListener,
     OnOfferingReportClickListener,
     OnMoveCommentDetailClickListener,
     OnProductLinkClickListener {
+
+    @AssistedFactory
+    interface OfferingDetailAssistedFactory {
+        fun create(offeringId: Long): OfferingDetailViewModel
+    }
+
     private val _offeringDetail: MutableLiveData<OfferingDetail> = MutableLiveData()
     val offeringDetail: LiveData<OfferingDetail> get() = _offeringDetail
 
@@ -149,7 +162,7 @@ class OfferingDetailViewModel(
     companion object {
         private const val DEFAULT_TITLE = ""
 
-        @Suppress("UNCHECKED_CAST")
+        /*@Suppress("UNCHECKED_CAST")
         fun getFactory(
             offeringId: Long,
             offeringDetailRepository: OfferingDetailRepository,
@@ -164,6 +177,16 @@ class OfferingDetailViewModel(
                     offeringDetailRepository,
                     authRepository,
                 ) as T
+            }
+        }*/
+
+        @Suppress("UNCHECKED_CAST")
+        fun getFactory(
+            assistedFactory: OfferingDetailAssistedFactory,
+            offeringId: Long,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(offeringId) as T
             }
         }
     }
