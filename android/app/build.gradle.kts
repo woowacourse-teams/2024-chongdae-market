@@ -9,7 +9,6 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "2.0.0"
     id("com.google.firebase.crashlytics")
-    kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -167,6 +166,10 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    kapt("com.google.dagger:hilt-compiler:2.48.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }
