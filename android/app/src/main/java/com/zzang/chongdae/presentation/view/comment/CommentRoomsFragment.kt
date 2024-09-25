@@ -30,12 +30,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
         CommentRoomsAdapter(this)
     }
 
-    private val viewModel by viewModels<CommentRoomsViewModel> {
-        CommentRoomsViewModel.getFactory(
-            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
-            commentRoomsRepository = (requireActivity().application as ChongdaeApp).commentRoomsRepository,
-        )
-    }
+    private val viewModel by viewModels<CommentRoomsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

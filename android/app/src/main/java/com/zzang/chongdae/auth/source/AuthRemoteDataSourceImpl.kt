@@ -6,8 +6,9 @@ import com.zzang.chongdae.auth.dto.response.MemberResponse
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.util.safeApiCall
+import javax.inject.Inject
 
-class AuthRemoteDataSourceImpl(
+class AuthRemoteDataSourceImpl @Inject constructor(
     private val service: AuthApiService,
 ) : AuthRemoteDataSource {
     override suspend fun saveLogin(accessTokenRequest: AccessTokenRequest): Result<MemberResponse, DataError.Network> {

@@ -10,13 +10,18 @@ import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.di.SharedAuthRepository
+import com.zzang.chongdae.di.SharedCommentRoomsRepository
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CommentRoomsViewModel(
-    private val authRepository: AuthRepository,
-    private val commentRoomsRepository: CommentRoomsRepository,
+@HiltViewModel
+class CommentRoomsViewModel @Inject constructor(
+    @SharedAuthRepository private val authRepository: AuthRepository,
+    @SharedCommentRoomsRepository private val commentRoomsRepository: CommentRoomsRepository,
 ) : ViewModel() {
     private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
     val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms

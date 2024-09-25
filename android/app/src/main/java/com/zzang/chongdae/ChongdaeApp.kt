@@ -10,6 +10,7 @@ import com.zzang.chongdae.auth.repository.AuthRepositoryImpl
 import com.zzang.chongdae.auth.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.data.local.database.AppDatabase
 import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
+import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
 import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
@@ -25,12 +26,12 @@ import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class ChongdaeApp : Application() {
     private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(this) }
-    private val networkManager: com.zzang.chongdae.data.remote.api.NetworkManager by lazy {
-        com.zzang.chongdae.data.remote.api.NetworkManager
-    }
+    private val networkManager: NetworkManager by lazy { NetworkManager }
 
     private val offeringDao by lazy { appDatabase.offeringDao() }
 
