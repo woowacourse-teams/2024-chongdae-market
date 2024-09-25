@@ -160,24 +160,6 @@ class OfferingDetailViewModel
         companion object {
             private const val DEFAULT_TITLE = ""
 
-        /*@Suppress("UNCHECKED_CAST")
-        fun getFactory(
-            offeringId: Long,
-            offeringDetailRepository: OfferingDetailRepository,
-            authRepository: AuthRepository,
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras,
-            ): T {
-                return OfferingDetailViewModel(
-                    offeringId,
-                    offeringDetailRepository,
-                    authRepository,
-                ) as T
-            }
-        }*/
-
             @Suppress("UNCHECKED_CAST")
             fun getFactory(
                 assistedFactory: OfferingDetailAssistedFactory,

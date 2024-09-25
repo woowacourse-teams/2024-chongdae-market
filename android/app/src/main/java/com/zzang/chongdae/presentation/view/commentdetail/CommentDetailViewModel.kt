@@ -300,27 +300,6 @@ class CommentDetailViewModel
         }
 
         companion object {
-        /*@Suppress("UNCHECKED_CAST")
-        fun getFactory(
-            offeringId: Long,
-            authRepository: AuthRepository,
-            offeringRepository: OfferingRepository,
-            participantRepository: ParticipantRepository,
-            commentDetailRepository: CommentDetailRepository,
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras,
-            ): T {
-                return CommentDetailViewModel(
-                    offeringId = offeringId,
-                    authRepository = authRepository,
-                    offeringRepository = offeringRepository,
-                    participantRepository = participantRepository,
-                    commentDetailRepository = commentDetailRepository,
-                ) as T
-            }
-        }*/
             @Suppress("UNCHECKED_CAST")
             fun getFactory(
                 assistedFactory: CommentDetailAssistedFactory,
