@@ -76,7 +76,7 @@ jobs:
     runs-on: prod-b
 
     steps:
-      - name: Pull Image And Restart Container on Production A
+      - name: Pull Image And Restart Container on Production B
         run: |
           docker login -u ${{ secrets.BE_DOCKERHUB_USERNAME }} -p ${{ secrets.BE_DOCKERHUB_PASSWORD }}
           docker stop ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
