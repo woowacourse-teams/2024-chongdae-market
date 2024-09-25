@@ -5,12 +5,15 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
+import com.zzang.chongdae.di.annotations.CommentDetailDataSourceQualifier
+import com.zzang.chongdae.di.annotations.CommentDetailRepositoryQualifier
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentOfferingInfo
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
+import javax.inject.Inject
 
-class CommentDetailRepositoryImpl(
-    private val commentRemoteDataSource: CommentRemoteDataSource,
+class CommentDetailRepositoryImpl @Inject constructor(
+    @CommentDetailDataSourceQualifier private val commentRemoteDataSource: CommentRemoteDataSource,
 ) : CommentDetailRepository {
     override suspend fun saveComment(
         offeringId: Long,
