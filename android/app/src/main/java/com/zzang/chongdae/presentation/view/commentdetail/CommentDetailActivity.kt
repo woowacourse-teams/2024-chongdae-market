@@ -2,7 +2,6 @@ package com.zzang.chongdae.presentation.view.commentdetail
 
 import android.app.Dialog
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -35,10 +34,8 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private val participantAdapter: ParticipantAdapter by lazy { ParticipantAdapter() }
     private val dialog: Dialog by lazy { Dialog(this) }
 
-
     @Inject
     lateinit var commentDetailAssistedFactory: CommentDetailViewModel.CommentDetailAssistedFactory
-
 
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
