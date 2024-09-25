@@ -33,7 +33,7 @@ abstract class AuthDependencyModule {
         @Provides
         @Singleton
         @AuthApiServiceQualifier
-        fun provideAuthApiService() : AuthApiService {
+        fun provideAuthApiService(): AuthApiService {
             return NetworkManager.authService()
         }
     }

@@ -19,48 +19,50 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CommentRoomsViewModel @Inject constructor(
-    @AuthRepositoryQualifier private val authRepository: AuthRepository,
-    @CommentRoomsRepositoryQualifier private val commentRoomsRepository: CommentRoomsRepository,
-) : ViewModel() {
-    private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
-    val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms
+class CommentRoomsViewModel
+    @Inject
+    constructor(
+        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        @CommentRoomsRepositoryQualifier private val commentRoomsRepository: CommentRoomsRepository,
+    ) : ViewModel() {
+        private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
+        val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms
 
-    val isCommentRoomsEmpty: LiveData<Boolean>
-        get() =
-            commentRooms.map {
-                it.isEmpty()
-            }
-
-    fun updateCommentRooms() {
-        viewModelScope.launch {
-            when (val result = commentRoomsRepository.fetchCommentRooms()) {
-                is Result.Error -> {
-                    Log.e("error", "updateCommentRooms: ${result.error}")
-                    when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> {
-                            when (authRepository.saveRefresh()) {
-                                is Result.Success -> updateCommentRooms()
-                                is Result.Error -> return@launch
-                            }
-                        }
-                        else -> {}
-                    }
+        val isCommentRoomsEmpty: LiveData<Boolean>
+            get() =
+                commentRooms.map {
+                    it.isEmpty()
                 }
-                is Result.Success -> _commentRooms.value = result.data
-            }
-        }
-    }
 
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        fun getFactory(
-            authRepository: AuthRepository,
-            commentRoomsRepository: CommentRoomsRepository,
-        ) = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return CommentRoomsViewModel(authRepository, commentRoomsRepository) as T
+        fun updateCommentRooms() {
+            viewModelScope.launch {
+                when (val result = commentRoomsRepository.fetchCommentRooms()) {
+                    is Result.Error -> {
+                        Log.e("error", "updateCommentRooms: ${result.error}")
+                        when (result.error) {
+                            DataError.Network.UNAUTHORIZED -> {
+                                when (authRepository.saveRefresh()) {
+                                    is Result.Success -> updateCommentRooms()
+                                    is Result.Error -> return@launch
+                                }
+                            }
+                            else -> {}
+                        }
+                    }
+                    is Result.Success -> _commentRooms.value = result.data
+                }
+            }
+        }
+
+        companion object {
+            @Suppress("UNCHECKED_CAST")
+            fun getFactory(
+                authRepository: AuthRepository,
+                commentRoomsRepository: CommentRoomsRepository,
+            ) = object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return CommentRoomsViewModel(authRepository, commentRoomsRepository) as T
+                }
             }
         }
     }
-}

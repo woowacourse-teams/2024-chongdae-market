@@ -33,7 +33,7 @@ abstract class CommentRoomsDependencyModule {
         @Provides
         @Singleton
         @CommentRoomsApiServiceQualifier
-        fun provideCommentRoomsService() : CommentApiService {
+        fun provideCommentRoomsService(): CommentApiService {
             return NetworkManager.commentService()
         }
     }

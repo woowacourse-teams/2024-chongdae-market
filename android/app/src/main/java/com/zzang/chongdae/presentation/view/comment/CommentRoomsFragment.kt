@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentCommentRoomsBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomsAdapter

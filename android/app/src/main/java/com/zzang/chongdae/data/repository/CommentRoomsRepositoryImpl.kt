@@ -9,12 +9,14 @@ import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import javax.inject.Inject
 
-class CommentRoomsRepositoryImpl @Inject constructor(
-    @CommentRoomsDataSourceQualifier private val commentRoomsDataSource: CommentRoomsDataSource,
-) : CommentRoomsRepository {
-    override suspend fun fetchCommentRooms(): Result<List<CommentRoom>, DataError.Network> {
-        return commentRoomsDataSource.fetchCommentRooms().map {
-            it.commentRoom.map { it.toDomain() }
+class CommentRoomsRepositoryImpl
+    @Inject
+    constructor(
+        @CommentRoomsDataSourceQualifier private val commentRoomsDataSource: CommentRoomsDataSource,
+    ) : CommentRoomsRepository {
+        override suspend fun fetchCommentRooms(): Result<List<CommentRoom>, DataError.Network> {
+            return commentRoomsDataSource.fetchCommentRooms().map {
+                it.commentRoom.map { it.toDomain() }
+            }
         }
     }
-}

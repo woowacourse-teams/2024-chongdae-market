@@ -9,10 +9,12 @@ import com.zzang.chongdae.data.source.CommentRoomsDataSource
 import com.zzang.chongdae.di.annotations.CommentRoomsApiServiceQualifier
 import javax.inject.Inject
 
-class CommentRoomsDataSourceImpl @Inject constructor(
-    @CommentRoomsApiServiceQualifier private val commentApiService: CommentApiService,
-) : CommentRoomsDataSource {
-    override suspend fun fetchCommentRooms(): Result<CommentRoomsResponse, DataError.Network> {
-        return safeApiCall { commentApiService.getCommentRooms() }
+class CommentRoomsDataSourceImpl
+    @Inject
+    constructor(
+        @CommentRoomsApiServiceQualifier private val commentApiService: CommentApiService,
+    ) : CommentRoomsDataSource {
+        override suspend fun fetchCommentRooms(): Result<CommentRoomsResponse, DataError.Network> {
+            return safeApiCall { commentApiService.getCommentRooms() }
+        }
     }
-}
