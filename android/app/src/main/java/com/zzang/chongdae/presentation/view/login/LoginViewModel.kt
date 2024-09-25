@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import kotlinx.coroutines.flow.first
