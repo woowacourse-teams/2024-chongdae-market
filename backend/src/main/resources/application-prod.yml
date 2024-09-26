@@ -7,8 +7,8 @@ spring:
         password: ${SPRING_DATASOURCE_PASSWORD}
       write:
         jdbc-url: ${SPRING_WRITER_DATASOURCE_URL}
-        username: ${SPRING_DATASOURCE_USERNAME}
-        password: ${SPRING_DATASOURCE_PASSWORD}
+        username: ${SPRING_WRITER_DATASOURCE_USERNAME}
+        password: ${SPRING_WRITER_DATASOURCE_PASSWORD}
   jpa:
     defer-datasource-initialization: false
     hibernate:
