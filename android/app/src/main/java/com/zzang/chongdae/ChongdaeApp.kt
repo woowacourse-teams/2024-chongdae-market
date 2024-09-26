@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.kakao.sdk.common.KakaoSdk
+import com.zzang.chongdae.data.local.database.AppDatabase
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -21,5 +22,8 @@ class ChongdaeApp : Application() {
 
         private lateinit var _chongdaeAppContext: Context
         val chongdaeAppContext get() = _chongdaeAppContext
+
+        private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(chongdaeAppContext) }
+        val offeringDao by lazy { appDatabase.offeringDao() }
     }
 }

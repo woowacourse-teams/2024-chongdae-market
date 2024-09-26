@@ -8,8 +8,16 @@ annotation class OfferingRepositoryQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class OfferingDataSourceQualifier
+annotation class OfferingRemoteDataSourceQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class OfferingLocalDataSourceQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class OfferingApiServiceQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class OfferingDaoQualifier
