@@ -14,13 +14,15 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OfferingDetailFragment : Fragment() {
     private var _binding: FragmentOfferingDetailBinding? = null
     private val binding get() = _binding!!
@@ -29,11 +31,14 @@ class OfferingDetailFragment : Fragment() {
         arguments?.getLong(HomeFragment.OFFERING_ID)
             ?: throw IllegalArgumentException()
     }
+
+    @Inject
+    lateinit var offeringDetailAssistedFactory: OfferingDetailViewModel.OfferingDetailAssistedFactory
+
     private val viewModel: OfferingDetailViewModel by viewModels {
         OfferingDetailViewModel.getFactory(
+            assistedFactory = offeringDetailAssistedFactory,
             offeringId = offeringId,
-            offeringDetailRepository = (requireActivity().application as ChongdaeApp).offeringDetailRepository,
-            authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
         )
     }
 

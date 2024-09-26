@@ -9,6 +9,7 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "2.0.0"
     id("com.google.firebase.crashlytics")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -163,4 +164,12 @@ dependencies {
 
     // Swipe Refresh Layout
     implementation(libs.androidx.swiperefreshlayout)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }
