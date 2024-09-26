@@ -16,13 +16,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.PermissionManager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OfferingWriteOptionalFragment : Fragment() {
     private var _fragmentBinding: FragmentOfferingWriteOptionalBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
@@ -32,12 +33,7 @@ class OfferingWriteOptionalFragment : Fragment() {
     private lateinit var permissionManager: PermissionManager
     private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val viewModel: OfferingWriteViewModel by activityViewModels {
-        OfferingWriteViewModel.getFactory(
-            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
-            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
-        )
-    }
+    private val viewModel: OfferingWriteViewModel by activityViewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
