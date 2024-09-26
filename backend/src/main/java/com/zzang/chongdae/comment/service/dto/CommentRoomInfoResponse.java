@@ -1,6 +1,7 @@
 package com.zzang.chongdae.comment.service.dto;
 
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.BUYING;
+import static com.zzang.chongdae.offering.domain.CommentRoomStatus.DELETED;
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.DONE;
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.GROUPING;
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.TRADING;
@@ -17,7 +18,8 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                                       String buttonText,
                                       String message,
                                       String title,
-                                      boolean isProposer) {
+                                      boolean isProposer,
+                                      boolean isDeleted) {
 
     public CommentRoomInfoResponse(OfferingEntity offering, MemberEntity member) {
         this(offering.getRoomStatus(),
@@ -25,11 +27,23 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                 ViewMapper.toButton(offering.getRoomStatus()),
                 ViewMapper.toMessage(offering.getRoomStatus()),
                 offering.getTitle(),
-                offering.isProposedBy(member));
+                offering.isProposedBy(member),
+                false);
+    }
+
+    public CommentRoomInfoResponse(boolean isProposer) {
+        this(DELETED,
+                ViewMapper.toImage(DELETED),
+                ViewMapper.toButton(DELETED),
+                ViewMapper.toMessage(DELETED),
+                "삭제된 공동구매입니다.",
+                isProposer,
+                true);
     }
 
     private enum ViewMapper {
 
+        DELETED_VIEW(DELETED, imageUrl("DELETED"), "삭제된 공고", "삭제된 공동구매입니다."),
         GROUPING_VIEW(GROUPING, imageUrl("GROUPING"), "인원확정", "공동구매에 참여할 인원이\n모이면 인원을 확정하세요."),
         BUYING_VIEW(BUYING, imageUrl("BUYING"), "구매확정", "총대가 물품 구매를 완료하면 확정하세요."),
         TRADING_VIEW(TRADING, imageUrl("TRADING"), "거래확정", "총대가 참여자들과\n거래를 완료하면 확정하세요."),

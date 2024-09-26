@@ -20,6 +20,7 @@ import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class CommentService {
         }
     }
 
-    public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
+    public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) { // TODO: 쿼리 분리해서 없을 땐 별도 처리
         List<OfferingEntity> commentRooms = offeringRepository.findCommentRoomsByMember(member);
         List<CommentRoomAllResponseItem> responseItems = commentRooms.stream()
                 .map(commentsRoom -> toCommentRoomAllResponseItem(commentsRoom, member))
@@ -64,12 +65,26 @@ public class CommentService {
                 .orElseGet(() -> new CommentLatestResponse(null, null));
         return new CommentRoomAllResponseItem(offering, member, commentLatestResponse);
     }
-
+    
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
+        if (offeringRepository.existsById(offeringId)) {
+            return getExistedCommentRoomInfo(offeringId, member);
+        }
+        return getDeletedCommentRoomInfo(offeringId, member);
+    }
+
+    private CommentRoomInfoResponse getExistedCommentRoomInfo(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
         return new CommentRoomInfoResponse(offering, member);
+    }
+
+    private CommentRoomInfoResponse getDeletedCommentRoomInfo(Long offeringId, MemberEntity member) {
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        boolean isProposer = offeringMember.isProposer(); // TODO : 도메인으로 정리
+        return new CommentRoomInfoResponse(isProposer);
     }
 
     @Transactional

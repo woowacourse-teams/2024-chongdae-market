@@ -14,4 +14,6 @@ public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEn
     List<OfferingMemberEntity> findAllByOffering(OfferingEntity offering);
 
     Optional<OfferingMemberEntity> findByOfferingAndMember(OfferingEntity offering, MemberEntity member);
+
+    Optional<OfferingMemberEntity> findByOfferingIdAndMember(Long offeringId, MemberEntity member);
 }
