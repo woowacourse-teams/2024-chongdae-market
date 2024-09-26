@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentCommentRoomsBinding
 import com.zzang.chongdae.presentation.view.comment.adapter.CommentRoomsAdapter
 import com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
     private var _binding: FragmentCommentRoomsBinding? = null
     private val binding get() = _binding!!
@@ -30,12 +31,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
         CommentRoomsAdapter(this)
     }
 
-    private val viewModel by viewModels<CommentRoomsViewModel> {
-        CommentRoomsViewModel.getFactory(
-            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
-            commentRoomsRepository = (requireActivity().application as ChongdaeApp).commentRoomsRepository,
-        )
-    }
+    private val viewModel by viewModels<CommentRoomsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

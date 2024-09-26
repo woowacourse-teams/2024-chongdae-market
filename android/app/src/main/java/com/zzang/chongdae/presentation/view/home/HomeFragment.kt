@@ -22,10 +22,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
-import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.R
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
@@ -34,21 +31,17 @@ import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var toast: Toast? = null
 
     private lateinit var offeringAdapter: OfferingAdapter
-    private val viewModel: OfferingViewModel by viewModels {
-        OfferingViewModel.getFactory(
-            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
-            authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
-            userPreferencesDataStore = UserPreferencesDataStore(requireActivity().applicationContext.dataStore),
-        )
-    }
+    private val viewModel: OfferingViewModel by viewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())

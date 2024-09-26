@@ -16,14 +16,16 @@ import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private var _binding: ActivityCommentDetailBinding? = null
     private val binding get() = _binding!!
@@ -32,13 +34,13 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private val participantAdapter: ParticipantAdapter by lazy { ParticipantAdapter() }
     private val dialog: Dialog by lazy { Dialog(this) }
 
+    @Inject
+    lateinit var commentDetailAssistedFactory: CommentDetailViewModel.CommentDetailAssistedFactory
+
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
+            assistedFactory = commentDetailAssistedFactory,
             offeringId = offeringId,
-            authRepository = (application as ChongdaeApp).authRepository,
-            offeringRepository = (application as ChongdaeApp).offeringRepository,
-            participantRepository = (application as ChongdaeApp).participantRepository,
-            commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,
         )
     }
 
