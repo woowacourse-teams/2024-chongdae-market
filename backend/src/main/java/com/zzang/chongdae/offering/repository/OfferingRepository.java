@@ -23,7 +23,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             SELECT o
             FROM OfferingEntity o
             WHERE o.id < :lastId
-                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+                AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
             ORDER BY o.id DESC
             """)
     List<OfferingEntity> findRecentOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
@@ -33,7 +33,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             FROM OfferingEntity o
             WHERE (o.offeringStatus = 'IMMINENT')
                 AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
-                AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+                AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
     List<OfferingEntity> findImminentOfferingsWithKeyword(
@@ -45,7 +45,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             WHERE (o.offeringStatus != 'CONFIRMED')
                AND (o.discountRate IS NOT NULL)
                AND (o.discountRate < :lastDiscountRate OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
-               AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+               AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
@@ -54,9 +54,9 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.offeringStatus = 'AVAILABLE' OR o.offeringStatus = 'IMMINENT')
+            WHERE (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
                AND (o.id < :lastId)
-               AND (:keyword IS NULL OR o.title LIKE %:keyword% OR o.meetingAddress LIKE %:keyword%)
+               AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
             ORDER BY o.id DESC
             """)
     List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
