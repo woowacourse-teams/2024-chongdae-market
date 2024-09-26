@@ -23,7 +23,7 @@ object NetworkManager {
 
     private fun getRetrofit(): Retrofit {
         val userDataStore =
-            UserPreferencesDataStore(ChongdaeApp.chongdaeApplicationContext.dataStore)
+            UserPreferencesDataStore(ChongdaeApp.chongdaeAppContext.dataStore)
         if (instance == null) {
             val contentType = "application/json".toMediaType()
             instance =

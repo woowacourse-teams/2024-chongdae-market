@@ -9,19 +9,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentMyPageBinding
 import com.zzang.chongdae.presentation.view.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MyPageViewModel by viewModels {
-        MyPageViewModel.getFactory(UserPreferencesDataStore(requireContext().dataStore))
-    }
+    private val viewModel: MyPageViewModel by viewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
