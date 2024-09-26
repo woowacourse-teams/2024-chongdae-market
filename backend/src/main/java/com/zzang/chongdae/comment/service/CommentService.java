@@ -50,22 +50,31 @@ public class CommentService {
         }
     }
 
-    public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) { // TODO: 쿼리 분리해서 없을 땐 별도 처리
-        List<OfferingEntity> commentRooms = offeringRepository.findCommentRoomsByMember(member);
-        List<CommentRoomAllResponseItem> responseItems = commentRooms.stream()
-                .map(commentsRoom -> toCommentRoomAllResponseItem(commentsRoom, member))
+    @Transactional(readOnly = true)
+    public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
+        List<Long> offeringIds = offeringMemberRepository.findOfferingIdsByMember(member.getId());
+        List<CommentRoomAllResponseItem> responseItems = offeringIds.stream()
+                .map(offeringId -> getCommentRoom(offeringId, member))
                 .toList();
         return new CommentRoomAllResponse(responseItems);
     }
 
-    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingEntity offering, MemberEntity member) {
-        Optional<CommentEntity> comment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
-        CommentLatestResponse commentLatestResponse = comment
-                .map(CommentLatestResponse::new)
-                .orElseGet(() -> new CommentLatestResponse(null, null));
-        return new CommentRoomAllResponseItem(offering, member, commentLatestResponse);
+    private CommentRoomAllResponseItem getCommentRoom(Long offeringId, MemberEntity member) {
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        CommentLatestResponse latestComment = getLatestComment(offeringId);
+        if (offeringRepository.existsById(offeringId)) {
+            return new CommentRoomAllResponseItem(offeringMember, latestComment);
+        }
+        return new CommentRoomAllResponseItem(offeringId, offeringMember, latestComment);
     }
-    
+
+    private CommentLatestResponse getLatestComment(Long offeringId) {
+        Optional<CommentEntity> comment = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(offeringId);
+        return comment.map(CommentLatestResponse::new)
+                .orElseGet(() -> new CommentLatestResponse(null, null));
+    }
+
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
         if (offeringRepository.existsById(offeringId)) {
             return getExistedCommentRoomInfo(offeringId, member);
