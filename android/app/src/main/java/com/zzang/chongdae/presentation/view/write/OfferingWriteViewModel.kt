@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
@@ -406,21 +404,5 @@ class OfferingWriteViewModel
             private const val INPUT_DATE_FORMAT = "yyyy년 M월 d일"
             private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
             const val HTTPS = "https:"
-
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(
-                offeringRepository: OfferingRepository,
-                authRepository: AuthRepository,
-            ) = object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return OfferingWriteViewModel(
-                        offeringRepository,
-                        authRepository,
-                    ) as T
-                }
-            }
         }
     }

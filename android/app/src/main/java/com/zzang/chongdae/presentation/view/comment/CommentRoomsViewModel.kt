@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.auth.repository.AuthRepository
@@ -50,18 +49,6 @@ class CommentRoomsViewModel
                         }
                     }
                     is Result.Success -> _commentRooms.value = result.data
-                }
-            }
-        }
-
-        companion object {
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(
-                authRepository: AuthRepository,
-                commentRoomsRepository: CommentRoomsRepository,
-            ) = object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return CommentRoomsViewModel(authRepository, commentRoomsRepository) as T
                 }
             }
         }

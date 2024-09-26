@@ -2,10 +2,8 @@ package com.zzang.chongdae.presentation.view.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -50,18 +48,5 @@ class MyPageViewModel
 
         fun onClickWithdrawal() {
             _openUrlInBrowserEvent.setValue(withdrawalUrl)
-        }
-
-        companion object {
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(userPreferencesDataStore: UserPreferencesDataStore) =
-                object : ViewModelProvider.Factory {
-                    override fun <T : ViewModel> create(
-                        modelClass: Class<T>,
-                        extras: CreationExtras,
-                    ): T {
-                        return MyPageViewModel(userPreferencesDataStore) as T
-                    }
-                }
         }
     }

@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -235,23 +233,5 @@ class OfferingViewModel
 
         companion object {
             private const val PAGE_SIZE = 10
-
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(
-                offeringRepository: OfferingRepository,
-                authRepository: AuthRepository,
-                userPreferencesDataStore: UserPreferencesDataStore,
-            ) = object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return OfferingViewModel(
-                        offeringRepository,
-                        authRepository,
-                        userPreferencesDataStore,
-                    ) as T
-                }
-            }
         }
     }

@@ -2,9 +2,7 @@ package com.zzang.chongdae.presentation.view.login
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.Result
@@ -53,21 +51,6 @@ class LoginViewModel
                     is Result.Error -> {
                         Log.e("error", "postLogin: ${result.error}")
                     }
-                }
-            }
-        }
-
-        companion object {
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(
-                authRepository: AuthRepository,
-                userPreferencesDataStore: UserPreferencesDataStore,
-            ) = object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return LoginViewModel(authRepository, userPreferencesDataStore) as T
                 }
             }
         }
