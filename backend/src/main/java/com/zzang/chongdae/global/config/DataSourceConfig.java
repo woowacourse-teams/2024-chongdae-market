@@ -51,6 +51,6 @@ public class DataSourceConfig {
     @Primary
     @DependsOn({"routeDataSource"})
     public DataSource dataSource() {
-        return new LazyConnectionDataSourceProxy(readDataSource());
+        return new LazyConnectionDataSourceProxy(routeDataSource());
     }
 }
