@@ -14,8 +14,6 @@ public class DataSourceRouter extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
-        Object object = contextHolder.get();
-        log.info("datasourceRounter에서 look up key로 사용할 datasource를 결정한다: {}", object);
-        return object;
+        return contextHolder.get();
     }
 }
