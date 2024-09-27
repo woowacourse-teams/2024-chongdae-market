@@ -16,13 +16,13 @@ public class DataSourceAspect {
 
     @Before("@annotation(writerDatabase)")
     public void setWriterDataSource(WriterDatabase writerDatabase) {
-        log.info("AOP 시작: Router를 write로 세팅");
+        log.debug("DataSourceAspect - Before advice: Switching to 'write' data source");
         DataSourceRouter.setDataSourceKey("write");
     }
 
     @After("@annotation(writerDatabase)")
     public void setReaderDataSource(WriterDatabase writerDatabase) {
-        log.info("AOP 마무리: Router를 read로 세팅");
+        log.debug("DataSourceAspect - After advice: Switching back to 'read' data source");
         DataSourceRouter.setDataSourceKey("read");
     }
 }
