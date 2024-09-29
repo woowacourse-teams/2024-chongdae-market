@@ -20,79 +20,79 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class OfferingRepositoryImpl
-@Inject
-constructor(
-    @OfferingLocalDataSourceQualifier private val offeringLocalDataSource: OfferingLocalDataSource,
-    @OfferingRemoteDataSourceQualifier private val offeringRemoteDataSource: OfferingRemoteDataSource,
-) : OfferingRepository {
-    override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> =
-        offeringRemoteDataSource.fetchOffering(offeringId = offeringId).map {
-            it.toDomain()
+    @Inject
+    constructor(
+        @OfferingLocalDataSourceQualifier private val offeringLocalDataSource: OfferingLocalDataSource,
+        @OfferingRemoteDataSourceQualifier private val offeringRemoteDataSource: OfferingRemoteDataSource,
+    ) : OfferingRepository {
+        override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> =
+            offeringRemoteDataSource.fetchOffering(offeringId = offeringId).map {
+                it.toDomain()
+            }
+
+        override suspend fun fetchOfferings(
+            filter: String?,
+            search: String?,
+            lastOfferingId: Long?,
+            pageSize: Int?,
+        ): Result<List<Offering>, DataError.Network> {
+            return offeringRemoteDataSource.fetchOfferings(filter, search, lastOfferingId, pageSize)
+                .map {
+                    it.offerings.map { it.toDomain() }
+                }
         }
 
-    override suspend fun fetchOfferings(
-        filter: String?,
-        search: String?,
-        lastOfferingId: Long?,
-        pageSize: Int?,
-    ): Result<List<Offering>, DataError.Network> {
-        return offeringRemoteDataSource.fetchOfferings(filter, search, lastOfferingId, pageSize)
-            .map {
-                it.offerings.map { it.toDomain() }
+        override suspend fun saveOffering(offeringWrite: OfferingWrite): Result<Unit, DataError.Network> {
+            return offeringRemoteDataSource.saveOffering(
+                offeringWriteRequest =
+                    OfferingWriteRequest(
+                        title = offeringWrite.title,
+                        productUrl = offeringWrite.productUrl,
+                        thumbnailUrl = offeringWrite.thumbnailUrl,
+                        totalCount = offeringWrite.totalCount,
+                        totalPrice = offeringWrite.totalPrice,
+                        originPrice = offeringWrite.originPrice,
+                        meetingAddress = offeringWrite.meetingAddress,
+                        meetingAddressDong = offeringWrite.meetingAddressDong,
+                        meetingAddressDetail = offeringWrite.meetingAddressDetail,
+                        meetingDate = offeringWrite.meetingDate,
+                        description = offeringWrite.description,
+                    ),
+            )
+        }
+
+        override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl, DataError.Network> {
+            return offeringRemoteDataSource.saveProductImageOg(productUrl).map {
+                it.toDomain()
+            }
+        }
+
+        override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
+            return offeringRemoteDataSource.saveProductImageS3(image).map {
+                it.toDomain()
+            }
+        }
+
+        override suspend fun fetchFilters(): Result<List<Filter>, DataError.Network> {
+            return offeringRemoteDataSource.fetchFilters().map {
+                it.filters.map { it.toDomain() }
+            }
+        }
+
+        override suspend fun fetchMeetings(offeringId: Long): Result<Meetings, DataError.Network> {
+            return offeringRemoteDataSource.fetchMeetings(offeringId).map {
+                it.toDomain()
+            }
+        }
+
+        override suspend fun patchOffering(
+            offeringId: Long,
+            offeringModifyRequest: OfferingModifyRequest,
+        ): Result<OfferingDetail, DataError.Network> =
+            offeringRemoteDataSource.patchOffering(
+                offeringId,
+                offeringModifyRequest,
+            ).map {
+                it.toDomain()
             }
     }
-
-    override suspend fun saveOffering(offeringWrite: OfferingWrite): Result<Unit, DataError.Network> {
-        return offeringRemoteDataSource.saveOffering(
-            offeringWriteRequest =
-            OfferingWriteRequest(
-                title = offeringWrite.title,
-                productUrl = offeringWrite.productUrl,
-                thumbnailUrl = offeringWrite.thumbnailUrl,
-                totalCount = offeringWrite.totalCount,
-                totalPrice = offeringWrite.totalPrice,
-                originPrice = offeringWrite.originPrice,
-                meetingAddress = offeringWrite.meetingAddress,
-                meetingAddressDong = offeringWrite.meetingAddressDong,
-                meetingAddressDetail = offeringWrite.meetingAddressDetail,
-                meetingDate = offeringWrite.meetingDate,
-                description = offeringWrite.description,
-            ),
-        )
-    }
-
-    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl, DataError.Network> {
-        return offeringRemoteDataSource.saveProductImageOg(productUrl).map {
-            it.toDomain()
-        }
-    }
-
-    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
-        return offeringRemoteDataSource.saveProductImageS3(image).map {
-            it.toDomain()
-        }
-    }
-
-    override suspend fun fetchFilters(): Result<List<Filter>, DataError.Network> {
-        return offeringRemoteDataSource.fetchFilters().map {
-            it.filters.map { it.toDomain() }
-        }
-    }
-
-    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings, DataError.Network> {
-        return offeringRemoteDataSource.fetchMeetings(offeringId).map {
-            it.toDomain()
-        }
-    }
-
-    override suspend fun patchOffering(
-        offeringId: Long,
-        offeringModifyRequest: OfferingModifyRequest,
-    ): Result<OfferingDetail, DataError.Network> =
-        offeringRemoteDataSource.patchOffering(
-            offeringId,
-            offeringModifyRequest,
-        ).map {
-            it.toDomain()
-        }
-}
