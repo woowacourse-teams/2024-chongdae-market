@@ -33,7 +33,8 @@ class OfferingDetailViewModel
         OnParticipationClickListener,
         OnOfferingReportClickListener,
         OnMoveCommentDetailClickListener,
-        OnProductLinkClickListener {
+        OnProductLinkClickListener,
+        OnOfferingModifyClickListener {
         @AssistedFactory
         interface OfferingDetailAssistedFactory {
             fun create(offeringId: Long): OfferingDetailViewModel
@@ -71,6 +72,9 @@ class OfferingDetailViewModel
 
         private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
         val error: SingleLiveData<Int> get() = _error
+
+        private val _modifyOfferingEvent: MutableSingleLiveData<Long> = MutableSingleLiveData()
+        val modifyOfferingEvent: SingleLiveData<Long> get() = _modifyOfferingEvent
 
         init {
             loadOffering()
@@ -150,6 +154,10 @@ class OfferingDetailViewModel
 
         override fun onClickProductRedirectText(productUrl: String) {
             _productLinkRedirectEvent.setValue(productUrl)
+        }
+
+        override fun onClickOfferingModify() {
+            _modifyOfferingEvent.setValue(offeringId)
         }
 
         private fun isParticipationEnabled(

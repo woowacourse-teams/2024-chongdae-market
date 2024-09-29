@@ -2,6 +2,7 @@ package com.zzang.chongdae.data.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.OfferingDetailDataSource
@@ -26,4 +27,15 @@ class OfferingDetailRepositoryImpl
             offeringDetailDataSource.saveParticipation(
                 participationRequest = ParticipationRequest(offeringId),
             )
+
+        override suspend fun patchOffering(
+            offeringId: Long,
+            offeringModifyRequest: OfferingModifyRequest,
+        ): Result<OfferingDetail, DataError.Network> =
+            offeringDetailDataSource.patchOffering(
+                offeringId,
+                offeringModifyRequest,
+            ).map {
+                it.toDomain()
+            }
     }

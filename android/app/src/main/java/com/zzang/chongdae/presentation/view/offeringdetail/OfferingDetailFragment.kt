@@ -85,6 +85,10 @@ class OfferingDetailFragment : Fragment() {
         viewModel.productLinkRedirectEvent.observe(viewLifecycleOwner) { productURL ->
             openUrlInBrowser(productURL)
         }
+
+        viewModel.modifyOfferingEvent.observe(viewLifecycleOwner) {
+            it
+        }
     }
 
     private fun openUrlInBrowser(url: String) {
