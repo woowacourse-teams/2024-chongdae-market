@@ -9,9 +9,4 @@ interface OfferingDetailRepository {
     suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetail, DataError.Network>
 
     suspend fun saveParticipation(offeringId: Long): Result<Unit, DataError.Network>
-
-    suspend fun patchOffering(
-        offeringId: Long,
-        offeringModifyRequest: OfferingModifyRequest,
-    ): Result<OfferingDetail, DataError.Network>
 }

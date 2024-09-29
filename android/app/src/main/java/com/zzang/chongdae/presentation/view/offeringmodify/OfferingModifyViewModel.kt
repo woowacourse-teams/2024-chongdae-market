@@ -259,7 +259,7 @@ class OfferingModifyViewModel
             meetingDate.value = dateTime
         }
 
-        fun postOffering() {
+        fun postOfferingModify() {
             val title = title.value ?: return
             val totalCount = totalCount.value ?: return
             val totalPrice = totalPrice.value ?: return
@@ -308,7 +308,7 @@ class OfferingModifyViewModel
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
-                                    is Result.Success -> postOffering()
+                                    is Result.Success -> postOfferingModify()
                                     is Result.Error -> return@launch
                                 }
                             }

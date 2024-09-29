@@ -28,14 +28,5 @@ class OfferingDetailRepositoryImpl
                 participationRequest = ParticipationRequest(offeringId),
             )
 
-        override suspend fun patchOffering(
-            offeringId: Long,
-            offeringModifyRequest: OfferingModifyRequest,
-        ): Result<OfferingDetail, DataError.Network> =
-            offeringDetailDataSource.patchOffering(
-                offeringId,
-                offeringModifyRequest,
-            ).map {
-                it.toDomain()
-            }
+
     }
