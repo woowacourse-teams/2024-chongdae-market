@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.write
+package com.zzang.chongdae.presentation.view.offeringmodify
 
 import android.net.Uri
 import android.os.Bundle
@@ -18,14 +18,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
-import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
+import com.zzang.chongdae.databinding.FragmentOfferingModifyOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.PermissionManager
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class OfferingWriteOptionalFragment : Fragment() {
-    private var _fragmentBinding: FragmentOfferingWriteOptionalBinding? = null
+class OfferingModifyOptionalFragment : Fragment() {
+    private var _fragmentBinding: FragmentOfferingModifyOptionalBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
     private var toast: Toast? = null
@@ -33,7 +31,7 @@ class OfferingWriteOptionalFragment : Fragment() {
     private lateinit var permissionManager: PermissionManager
     private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val viewModel: OfferingWriteViewModel by activityViewModels()
+    private val viewModel: OfferingModifyViewModel by activityViewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
@@ -70,7 +68,7 @@ class OfferingWriteOptionalFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
     ) {
-        _fragmentBinding = FragmentOfferingWriteOptionalBinding.inflate(inflater, container, false)
+        _fragmentBinding = FragmentOfferingModifyOptionalBinding.inflate(inflater, container, false)
         fragmentBinding.vm = viewModel
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
     }
@@ -83,7 +81,7 @@ class OfferingWriteOptionalFragment : Fragment() {
                 contentType = "button",
             )
             showToast(R.string.write_success_writing)
-            findNavController().popBackStack(R.id.offering_write_essential_fragment, true)
+            findNavController().popBackStack(R.id.offering_modify_essential_fragment, true)
             viewModel.initOfferingWriteInputs()
 
             setFragmentResult(
@@ -154,17 +152,17 @@ class OfferingWriteOptionalFragment : Fragment() {
     }
 
     private fun observeUIState() {
-        viewModel.writeUIState.observe(viewLifecycleOwner) { state ->
+        viewModel.modifyUIState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is WriteUIState.Error -> {
+                is ModifyUIState.Error -> {
                     showToast(state.message)
                 }
 
-                is WriteUIState.Empty -> {
+                is ModifyUIState.Empty -> {
                     showToast(state.message)
                 }
 
-                is WriteUIState.InvalidInput -> {
+                is ModifyUIState.InvalidInput -> {
                     showToast(state.message)
                 }
 

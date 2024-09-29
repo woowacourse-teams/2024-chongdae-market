@@ -14,6 +14,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -87,7 +88,7 @@ class OfferingDetailFragment : Fragment() {
         }
 
         viewModel.modifyOfferingEvent.observe(viewLifecycleOwner) {
-            it
+            findNavController().navigate(R.id.action_offering_detail_fragment_to_offering_modify_essential_fragment)
         }
     }
 

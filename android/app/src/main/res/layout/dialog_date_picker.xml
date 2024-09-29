@@ -2,14 +2,9 @@
 <layout>
 
     <data>
-
-        <variable
-            name="vm"
-            type="com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel" />
-
         <variable
             name="onClickListener"
-            type="com.zzang.chongdae.presentation.view.write.OnOfferingWriteClickListener" />
+            type="com.zzang.chongdae.presentation.view.write.OnDateTimeButtonsClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
