@@ -2,11 +2,11 @@ package com.zzang.chongdae.domain.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.model.OfferingModify
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import okhttp3.MultipartBody
@@ -33,6 +33,6 @@ interface OfferingRepository {
 
     suspend fun patchOffering(
         offeringId: Long,
-        offeringModifyRequest: OfferingModifyRequest,
+        offeringModify: OfferingModify,
     ): Result<OfferingDetail, DataError.Network>
 }
