@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
@@ -20,6 +21,9 @@ import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -27,13 +31,18 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
-@HiltViewModel
 class OfferingModifyViewModel
-@Inject
+@AssistedInject
 constructor(
+    @Assisted private val offeringId: Long,
     @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
     @AuthRepositoryQualifier private val authRepository: AuthRepository,
 ) : ViewModel() {
+    @AssistedFactory
+    interface OfferingModifyAssistedFactory {
+        fun create(offeringId: Long): OfferingModifyViewModel
+    }
+
     val title: MutableLiveData<String> = MutableLiveData("")
 
     val productUrl: MutableLiveData<String?> = MutableLiveData(null)
@@ -291,8 +300,7 @@ constructor(
         viewModelScope.launch {
             when (val result =
                 offeringRepository.patchOffering(
-                    // offeringId 임시값
-                    offeringId = 1,
+                    offeringId = offeringId,
                     offeringModify =
                     OfferingModify(
                         title = title,
@@ -413,5 +421,15 @@ constructor(
         private const val INPUT_DATE_FORMAT = "yyyy년 M월 d일"
         private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
         const val HTTPS = "https:"
+
+        @Suppress("UNCHECKED_CAST")
+        fun getFactory(
+            assistedFactory: OfferingModifyAssistedFactory,
+            offeringId: Long,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(offeringId) as T
+            }
+        }
     }
 }

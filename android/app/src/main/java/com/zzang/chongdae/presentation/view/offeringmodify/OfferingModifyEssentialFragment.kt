@@ -11,6 +11,8 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
@@ -19,9 +21,13 @@ import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingModifyEssentialBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
+import com.zzang.chongdae.presentation.view.home.HomeFragment
+import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailViewModel
 import com.zzang.chongdae.presentation.view.write.OnDateTimeButtonsClickListener
+import dagger.assisted.AssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListener {
@@ -34,7 +40,19 @@ class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListen
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
 
-    private val viewModel: OfferingModifyViewModel by activityViewModels()
+    private val offeringId by lazy {
+        arguments?.getLong(HomeFragment.OFFERING_ID) ?: throw IllegalArgumentException()
+    }
+
+    @Inject
+    lateinit var offeringModifyAssistedFactory: OfferingModifyViewModel.OfferingModifyAssistedFactory
+
+    private val viewModel: OfferingModifyViewModel by activityViewModels {
+        OfferingModifyViewModel.getFactory(
+            assistedFactory = offeringModifyAssistedFactory,
+            offeringId = offeringId,
+        )
+    }
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
