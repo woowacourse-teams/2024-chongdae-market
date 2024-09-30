@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="com.zzang.chongdae.domain.model.Comment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_4">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/size_120" />
+
+        <ImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="@dimen/size_30"
+            android:layout_height="@dimen/size_30"
+            android:layout_marginStart="@dimen/margin_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImageProposer="@{comment.isProposer}" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_10"
+            android:fontFamily="@font/suit_medium"
+            android:text="@{comment.nickname}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_10"
+            app:layout_constraintStart_toEndOf="@id/iv_profile"
+            app:layout_constraintTop_toTopOf="@id/iv_profile"
+            tools:text="닉네임1 " />
+
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_10"
+            android:layout_marginTop="@dimen/size_3"
+            android:background="@drawable/bg_comment_gray_color"
+            android:ellipsize="end"
+            android:fontFamily="@font/suit_medium"
+            android:gravity="left"
+            android:maxLines="10"
+            android:paddingStart="@dimen/size_10"
+            android:paddingTop="@dimen/size_7"
+            android:paddingEnd="@dimen/size_10"
+            android:paddingBottom="@dimen/size_7"
+            android:text="@{comment.content}"
+            android:textColor="@color/gray_font"
+            android:textSize="@dimen/size_14"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/iv_profile"
+            app:layout_constraintTop_toBottomOf="@id/tv_nickname"
+            tools:text="내용\n내용이야 채팅 내용이야 내용이야 채팅 내용이야 내용이야 채팅 내용이" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:fontFamily="@font/suit_medium"
+            android:textSize="@dimen/size_10"
+            app:formattedCommentTime="@{comment.commentCreatedAt.time}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_comment"
+            app:layout_constraintStart_toEndOf="@id/tv_comment"
+            tools:text="오전 10:30" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".ChongdaeApp"
@@ -16,19 +21,43 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chongdae"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="33">
+
         <activity
-            android:name=".presentation.view.detail.ArticleDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.view.MainActivity"
-            android:exported="true">
+            android:name=".presentation.view.login.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Chongdae">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.view.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+        <activity
+            android:name=".presentation.view.commentdetail.CommentDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao${native_app_key}" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

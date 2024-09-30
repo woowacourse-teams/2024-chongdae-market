@@ -1,32 +1,59 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("de.mannodermaus.android-junit5") version "1.10.0.0"
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "2.0.0"
+    id("com.google.firebase.crashlytics")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.zzang.chongdae"
     compileSdk = 34
-    
+
+    val properties =
+        Properties().apply {
+            try {
+                load(FileInputStream(rootProject.file("local.properties")))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
     defaultConfig {
         applicationId = "com.zzang.chongdae"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-        
+        versionCode = 4
+        versionName = "1.1.2"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val baseUrl = properties.getProperty("base_url")
+        val token = properties.getProperty("token")
+        val nativeAppKey = properties.getProperty("native_app_key")
+
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+        buildConfigField("String", "TOKEN", "\"$token\"")
+        buildConfigField("String", "NATIVE_APP_KEY", "\"$nativeAppKey\"")
+        manifestPlaceholders["native_app_key"] = nativeAppKey
     }
-    
+
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -47,56 +74,102 @@ android {
         }
     }
     buildFeatures {
-        dataBinding = true
+        buildConfig = true
     }
-    
+
     dataBinding {
         enable = true
     }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.test.ext:junit-ktx:1.1.5")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-    testImplementation("org.assertj:assertj-core:3.25.3")
-    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test:runner:1.4.0")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-    androidTestImplementation("org.assertj:assertj-core:3.25.3")
-    androidTestImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.3.0")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.3.0")
-    
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("com.google.code.gson:gson:2.8.8")
-    
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    kapt("com.github.bumptech.glide:compiler:4.12.0")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    implementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    
-    implementation("androidx.room:room-ktx:2.6.1")
-    
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    
-    kapt("com.github.bumptech.glide:compiler:4.13.2")
-    
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.activity:activity-ktx:1.9.0")
-    implementation("androidx.fragment:fragment-ktx:1.7.0")
-    implementation("androidx.core:core-ktx:1.10.1")
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.constraintlayout)
+
+    // Test
+    implementation(libs.androidx.junit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.core.testing)
+
+    // Android Test
+    androidTestImplementation(libs.junit.jupiter)
+    androidTestImplementation(libs.assertj.core)
+    androidTestImplementation(libs.kotest.runner.junit5)
+    androidTestImplementation(libs.mannodermaus.test.core)
+    androidTestImplementation(libs.mannodermaus.test.runner)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+
+    // Espresso 및 관련
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.contrib)
+
+    // UI Test: Fragment Scenario
+    debugImplementation(libs.androidx.fragment.testing)
+    androidTestImplementation(libs.androidx.fragment.testing)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
+    // Lifecycle
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // json
+    implementation(libs.kotlinx.serialization.json)
+
+    // Glide
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.kotlinx.serialization)
+
+    // Navigation
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    androidTestImplementation(libs.androidx.navigation.testing)
+
+    // Pagination
+    implementation(libs.androidx.paging.runtime)
+
+    // WebView
+    implementation(libs.androidx.webkit)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+
+    // 카카오 로그인
+    implementation(libs.kakao.sdk)
+
+    // Mockk
+    implementation(libs.mockwebserver)
+    testImplementation(libs.mockk)
+
+    // Swipe Refresh Layout
+    implementation(libs.androidx.swiperefreshlayout)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }
