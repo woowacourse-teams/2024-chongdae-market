@@ -6,8 +6,6 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
-import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
-import com.zzang.chongdae.data.remote.dto.response.offering.OfferingModifyResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
@@ -36,5 +34,5 @@ interface OfferingRemoteDataSource {
     suspend fun patchOffering(
         offeringId: Long,
         offeringModifyRequest: OfferingModifyRequest,
-    ): Result<OfferingModifyResponse, DataError.Network>
+    ): Result<Unit, DataError.Network>
 }

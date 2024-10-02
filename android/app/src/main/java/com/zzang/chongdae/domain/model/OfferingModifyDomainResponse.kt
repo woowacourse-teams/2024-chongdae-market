@@ -1,6 +1,5 @@
 package com.zzang.chongdae.domain.model
 
-import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOfferingStatus
 import java.time.LocalDateTime
 
 data class OfferingModifyDomainResponse(

@@ -6,7 +6,6 @@ import com.zzang.chongdae.data.remote.dto.request.ProductUrlRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
-import com.zzang.chongdae.data.remote.dto.response.offering.OfferingModifyResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
@@ -64,9 +63,9 @@ interface OfferingApiService {
         @Part image: MultipartBody.Part,
     ): Response<ProductUrlResponse>
 
-    @PATCH("/offerings/{offering-id}/meetings")
+    @PATCH("/offerings/{offering-id}")
     suspend fun patchOffering(
         @Path("offering-id") offeringId: Long,
         @Body offeringModifyRequest: OfferingModifyRequest,
-    ): Response<OfferingModifyResponse>
+    ): Response<Unit>
 }
