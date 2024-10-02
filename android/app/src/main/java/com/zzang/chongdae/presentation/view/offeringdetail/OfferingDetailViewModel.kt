@@ -80,7 +80,7 @@ class OfferingDetailViewModel
             loadOffering()
         }
 
-        private fun loadOffering() {
+        fun loadOffering() {
             viewModelScope.launch {
                 when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
                     is Result.Error ->

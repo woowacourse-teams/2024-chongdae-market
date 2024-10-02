@@ -69,6 +69,11 @@ class OfferingDetailFragment : Fragment() {
         setUpObserve()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadOffering()
+    }
+
     private fun setUpObserve() {
         viewModel.updatedOfferingId.observe(viewLifecycleOwner) {
             setFragmentResult(OFFERING_DETAIL_BUNDLE_KEY, bundleOf(UPDATED_OFFERING_ID_KEY to it))
