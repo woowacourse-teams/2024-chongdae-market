@@ -1,6 +1,6 @@
 package com.zzang.chongdae.domain.model
 
-data class OfferingModify(
+data class OfferingModifyDomainRequest(
     val title: String,
     val productUrl: String?,
     val thumbnailUrl: String?,

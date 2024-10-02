@@ -8,6 +8,7 @@ import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
+import com.zzang.chongdae.data.remote.dto.response.offering.OfferingModifyResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
@@ -50,7 +51,7 @@ class OfferingRemoteDataSourceImpl
         override suspend fun patchOffering(
             offeringId: Long,
             offeringModifyRequest: OfferingModifyRequest,
-        ): Result<OfferingDetailResponse, DataError.Network> = safeApiCall { service.patchOffering(offeringId, offeringModifyRequest) }
+        ): Result<OfferingModifyResponse, DataError.Network> = safeApiCall { service.patchOffering(offeringId, offeringModifyRequest) }
 
         companion object {
             private const val ERROR_PREFIX = "에러 발생: "

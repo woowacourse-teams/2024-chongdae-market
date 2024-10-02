@@ -16,7 +16,7 @@ import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
-import com.zzang.chongdae.domain.model.OfferingModify
+import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
@@ -24,12 +24,10 @@ import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Locale
-import javax.inject.Inject
 
 class OfferingModifyViewModel
 @AssistedInject
@@ -94,8 +92,8 @@ constructor(
     private val _navigateToOptionalEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
     val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _navigateToOptionalEvent
 
-    private val _submitOfferingEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val submitOfferingEvent: SingleLiveData<Unit> get() = _submitOfferingEvent
+    private val _submitOfferingModifyEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val submitOfferingModifyEvent: SingleLiveData<Unit> get() = _submitOfferingModifyEvent
 
     private val _imageUploadEvent = MutableLiveData<Unit>()
     val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
@@ -301,8 +299,8 @@ constructor(
             when (val result =
                 offeringRepository.patchOffering(
                     offeringId = offeringId,
-                    offeringModify =
-                    OfferingModify(
+                    offeringModifyDomainRequest =
+                    OfferingModifyDomainRequest(
                         title = title,
                         productUrl = productUrl.value,
                         thumbnailUrl = thumbnailUrl.value,
@@ -317,10 +315,14 @@ constructor(
                     ),
                 )
             ) {
-                is Result.Success -> makeSubmitOfferingEvent()
+                is Result.Success -> {
+                    Log.d("alsong", "aaa: ${result.data}")
+                    makeSubmitOfferingModifyEvent()
+                }
 
                 is Result.Error -> {
                     Log.e("error", "postOffering: ${result.error}")
+                    Log.e("error", "postOffering: ${result.msg}")
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             when (authRepository.saveRefresh()) {
@@ -394,8 +396,8 @@ constructor(
         _navigateToOptionalEvent.setValue(true)
     }
 
-    private fun makeSubmitOfferingEvent() {
-        _submitOfferingEvent.setValue(Unit)
+    private fun makeSubmitOfferingModifyEvent() {
+        _submitOfferingModifyEvent.setValue(Unit)
     }
 
     fun initOfferingWriteInputs() {

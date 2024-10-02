@@ -12,7 +12,8 @@ import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.model.OfferingModify
+import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
+import com.zzang.chongdae.domain.model.OfferingModifyDomainResponse
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -74,11 +75,11 @@ constructor(
 
     override suspend fun patchOffering(
         offeringId: Long,
-        offeringModify: OfferingModify,
-    ): Result<OfferingDetail, DataError.Network> =
+        offeringModifyDomainRequest: OfferingModifyDomainRequest,
+    ): Result<OfferingModifyDomainResponse, DataError.Network> =
         offeringRemoteDataSource.patchOffering(
             offeringId,
-            offeringModify.toRequest(),
+            offeringModifyDomainRequest.toRequest(),
         ).map {
             it.toDomain()
         }

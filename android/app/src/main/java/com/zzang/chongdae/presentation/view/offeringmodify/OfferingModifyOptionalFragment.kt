@@ -74,7 +74,7 @@ class OfferingModifyOptionalFragment : Fragment() {
     }
 
     private fun observeSubmitOfferingEvent() {
-        viewModel.submitOfferingEvent.observe(viewLifecycleOwner) {
+        viewModel.submitOfferingModifyEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "submit_offering_event",
                 name = "submit_offering_event",
