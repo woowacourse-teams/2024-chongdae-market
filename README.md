@@ -153,7 +153,7 @@ https://play.google.com/store/apps/details?id=com.zzang.chongdae
 
 ### 기술 선정 이유와 과정
 
-[안드로이드 기술 스택]([https://silent-apparatus-578.notion.site/a98fafe408204ffbac5f6f0c6ab83d08](https://www.notion.so/a98fafe408204ffbac5f6f0c6ab83d08?pvs=21))
+[📱 안드로이드 기술 스택](https://www.notion.so/a98fafe408204ffbac5f6f0c6ab83d08?pvs=21)
 
 
 # Backend Tech Stack
