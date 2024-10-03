@@ -143,8 +143,8 @@
     <!--    offering_modify-->
     <string name="modify_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n수정해 주세요.</string>
     <string name="modify_information_message_optional">추가 정보를 입력해서\n<font color="#F15642">공동구매 성공률</font>을 높여보세요!</string>
-    <string name="modify_start_offering">공동구매 수정하기</string>
-    <string name="modify_success_writing">공모가 수정되었어요!</string>
-    <string name="modify_error_writing">공모 수정에 실패했어요🥲</string>
+    <string name="modify_submit">공모 정보 수정하기</string>
+    <string name="modify_success_modifing">공모가 수정되었어요!</string>
+    <string name="modify_error_modifing">공모 수정에 실패했어요🥲</string>
     <string name="error_modify_invalid">모집 마감 이후에는 공모글을 수정할 수\n없어요!</string>
 </resources>

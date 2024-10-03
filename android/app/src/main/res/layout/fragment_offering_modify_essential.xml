@@ -283,7 +283,7 @@
                 android:enabled="@{vm.essentialSubmitButtonEnabled}"
                 android:fontFamily="@font/suit_medium"
                 android:onClick="@{() -> vm.makeNavigateToOptionalEvent()}"
-                android:text="@{vm.essentialSubmitButtonEnabled ? @string/modify_start_offering : @string/write_start_offering_button_disabled}"
+                android:text="@{vm.essentialSubmitButtonEnabled ? @string/modify_submit : @string/write_start_offering_button_disabled}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:layout_constraintBottom_toBottomOf="parent"

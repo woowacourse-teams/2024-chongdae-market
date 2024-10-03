@@ -267,14 +267,14 @@
                 android:background="@drawable/btn_background_selector"
                 android:fontFamily="@font/suit_medium"
                 android:onClick="@{() -> vm.postOfferingModify()}"
-                android:text="@string/write_start_offering"
+                android:text="@string/modify_submit"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="공동구매 시작하기!" />
+                tools:text="임시텍스트" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

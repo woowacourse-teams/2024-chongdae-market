@@ -80,7 +80,7 @@ class OfferingModifyOptionalFragment : Fragment() {
                 name = "submit_offering_event",
                 contentType = "button",
             )
-            showToast(R.string.modify_success_writing)
+            showToast(R.string.modify_success_modifing)
             findNavController().popBackStack(R.id.offering_modify_essential_fragment, true)
             viewModel.initOfferingWriteInputs()
 
