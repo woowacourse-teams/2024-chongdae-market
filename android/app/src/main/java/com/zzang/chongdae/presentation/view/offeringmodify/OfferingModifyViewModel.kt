@@ -356,7 +356,7 @@ class OfferingModifyViewModel
                             offeringModifyDomainRequest =
                                 OfferingModifyDomainRequest(
                                     title = title,
-                                    productUrl = productUrl.value,
+                                    productUrl = productUrlOrNull(),
                                     thumbnailUrl = thumbnailUrl.value,
                                     totalCount = totalCountConverted,
                                     totalPrice = totalPriceConverted,
@@ -391,6 +391,12 @@ class OfferingModifyViewModel
                     }
                 }
             }
+        }
+
+        private fun productUrlOrNull(): String? {
+            val productUrl = productUrl.value
+            if (productUrl == "") return null
+            return productUrl
         }
 
         private fun originPriceToPositiveIntOrNull(input: String?): Int? {
@@ -452,7 +458,7 @@ class OfferingModifyViewModel
             _submitOfferingModifyEvent.setValue(Unit)
         }
 
-        fun initOfferingWriteInputs() {
+        fun initOfferingModifyInputs() {
             title.value = ""
             productUrl.value = ""
             thumbnailUrl.value = ""

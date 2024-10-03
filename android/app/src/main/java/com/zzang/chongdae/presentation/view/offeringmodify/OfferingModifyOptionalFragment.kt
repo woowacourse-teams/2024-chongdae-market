@@ -82,7 +82,7 @@ class OfferingModifyOptionalFragment : Fragment() {
             )
             showToast(R.string.modify_success_modifing)
             findNavController().popBackStack(R.id.offering_modify_essential_fragment, true)
-            viewModel.initOfferingWriteInputs()
+            viewModel.initOfferingModifyInputs()
 
             setFragmentResult(
                 OFFERING_WRITE_BUNDLE_KEY,
