@@ -146,4 +146,5 @@
     <string name="modify_start_offering">공동구매 수정하기</string>
     <string name="modify_success_writing">공모가 수정되었어요!</string>
     <string name="modify_error_writing">공모 수정에 실패했어요🥲</string>
+    <string name="error_modify_invalid">모집 마감 이후에는 공모글을 수정할 수\n없어요!</string>
 </resources>

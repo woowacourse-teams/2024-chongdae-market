@@ -157,6 +157,10 @@ class OfferingDetailViewModel
         }
 
         override fun onClickOfferingModify() {
+            if (_offeringCondition.value == OfferingCondition.CONFIRMED) {
+                _error.setValue(R.string.error_modify_invalid)
+                return
+            }
             _modifyOfferingEvent.setValue(offeringId)
         }
 
