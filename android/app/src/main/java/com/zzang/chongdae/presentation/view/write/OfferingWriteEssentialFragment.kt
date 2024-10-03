@@ -204,5 +204,6 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
     override fun onDestroy() {
         super.onDestroy()
         _fragmentBinding = null
+        viewModel.initOfferingWriteInputs()
     }
 }
