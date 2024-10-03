@@ -64,7 +64,7 @@ public class CommentService {
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
         CommentLatestResponse latestComment = getLatestComment(offeringId);
         if (offeringRepository.existsById(offeringId)) {
-            return new CommentRoomAllResponseItem(offeringMember, latestComment);
+            return new CommentRoomAllResponseItem(offeringMember.getOffering(), offeringMember, latestComment);
         }
         return new CommentRoomAllResponseItem(offeringId, offeringMember, latestComment);
     }

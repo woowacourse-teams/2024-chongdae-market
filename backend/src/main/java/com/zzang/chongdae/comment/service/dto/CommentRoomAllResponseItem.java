@@ -1,5 +1,6 @@
 package com.zzang.chongdae.comment.service.dto;
 
+import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 
 public record CommentRoomAllResponseItem(Long offeringId,
@@ -7,10 +8,11 @@ public record CommentRoomAllResponseItem(Long offeringId,
                                          Boolean isProposer,
                                          CommentLatestResponse latestComment) {
 
-    public CommentRoomAllResponseItem(OfferingMemberEntity offeringMember,
+    public CommentRoomAllResponseItem(OfferingEntity offering,
+                                      OfferingMemberEntity offeringMember,
                                       CommentLatestResponse latestComment) {
-        this(offeringMember.getOffering().getId(),
-                offeringMember.getOffering().getTitle(),
+        this(offering.getId(),
+                offering.getTitle(),
                 offeringMember.isProposer(),
                 latestComment);
     }
