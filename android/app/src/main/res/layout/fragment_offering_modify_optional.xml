@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_44"
                     android:fontFamily="@font/suit_bold"
-                    android:text="@string/write_information_message_optional"
+                    android:text="@string/modify_information_message_optional"
                     android:textColor="@color/black_700"
                     android:textSize="@dimen/size_24"
                     app:layout_constraintStart_toStartOf="parent"

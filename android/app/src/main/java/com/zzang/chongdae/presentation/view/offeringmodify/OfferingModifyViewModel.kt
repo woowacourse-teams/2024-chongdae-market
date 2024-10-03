@@ -385,7 +385,7 @@ class OfferingModifyViewModel
 
                             else -> {
                                 _modifyUIState.value =
-                                    ModifyUIState.Error(R.string.write_error_writing, "${result.error}")
+                                    ModifyUIState.Error(R.string.modify_error_writing, "${result.error}")
                             }
                         }
                     }

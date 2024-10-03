@@ -139,4 +139,11 @@
     <string name="write_update_state_dialog_message">공동구매 <font color="#F15642">진행 상황</font>을 <font color="#F15642">변경</font>하시겠습니까?</string>
     <string name="write_current_split_price">현재 엔빵 가격: %,d원</string>
     <string name="home_empty_item_comment">검색 결과가 없습니다</string>
+
+    <!--    offering_modify-->
+    <string name="modify_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n수정해 주세요.</string>
+    <string name="modify_information_message_optional">추가 정보를 입력해서\n<font color="#F15642">공동구매 성공률</font>을 높여보세요!</string>
+    <string name="modify_start_offering">공동구매 수정하기</string>
+    <string name="modify_success_writing">공모가 수정되었어요!</string>
+    <string name="modify_error_writing">공모 수정에 실패했어요🥲</string>
 </resources>

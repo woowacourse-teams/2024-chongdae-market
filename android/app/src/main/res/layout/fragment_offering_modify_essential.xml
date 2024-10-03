@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_44"
                     android:fontFamily="@font/suit_bold"
-                    android:text="@string/write_information_message_essential"
+                    android:text="@string/modify_information_message_essential"
                     android:textColor="@color/black_700"
                     android:textSize="@dimen/size_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -283,14 +283,14 @@
                 android:enabled="@{vm.essentialSubmitButtonEnabled}"
                 android:fontFamily="@font/suit_medium"
                 android:onClick="@{() -> vm.makeNavigateToOptionalEvent()}"
-                android:text="@{vm.essentialSubmitButtonEnabled ? @string/write_start_offering : @string/write_start_offering_button_disabled}"
+                android:text="@{vm.essentialSubmitButtonEnabled ? @string/modify_start_offering : @string/write_start_offering_button_disabled}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="공동구매 시작하기!" />
+                tools:text="임시메세지" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
