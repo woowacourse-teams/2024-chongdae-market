@@ -76,24 +76,12 @@ public class CommentService {
     }
 
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
-        if (offeringRepository.existsById(offeringId)) {
-            return getExistedCommentRoomInfo(offeringId, member);
-        }
-        return getDeletedCommentRoomInfo(offeringId, member);
-    }
-
-    private CommentRoomInfoResponse getExistedCommentRoomInfo(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        validateIsJoined(member, offering);
-        return new CommentRoomInfoResponse(offering, member);
-    }
-
-    private CommentRoomInfoResponse getDeletedCommentRoomInfo(Long offeringId, MemberEntity member) {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
-        boolean isProposer = offeringMember.isProposer(); // TODO : 도메인으로 정리
-        return new CommentRoomInfoResponse(isProposer);
+        if (offeringRepository.existsById(offeringId)) {
+            return new CommentRoomInfoResponse(offeringMember.getOffering(), offeringMember.getMember());
+        }
+        return new CommentRoomInfoResponse(offeringMember);
     }
 
     @Transactional

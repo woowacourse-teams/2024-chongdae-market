@@ -11,6 +11,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.Arrays;
 
 public record CommentRoomInfoResponse(CommentRoomStatus status,
@@ -31,13 +32,13 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                 false);
     }
 
-    public CommentRoomInfoResponse(boolean isProposer) {
+    public CommentRoomInfoResponse(OfferingMemberEntity offeringMember) {
         this(DELETED,
                 ViewMapper.toImage(DELETED),
                 ViewMapper.toButton(DELETED),
                 ViewMapper.toMessage(DELETED),
                 "삭제된 공동구매입니다.",
-                isProposer,
+                offeringMember.isProposer(),
                 true);
     }
 
