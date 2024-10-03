@@ -52,7 +52,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
-        List<Long> offeringIds = offeringMemberRepository.findOfferingIdsByMember(member.getId());
+        List<Long> offeringIds = offeringMemberRepository.findOfferingIdsByMemberId(member.getId());
         List<CommentRoomAllResponseItem> responseItems = offeringIds.stream()
                 .map(offeringId -> getCommentRoom(offeringId, member))
                 .toList();

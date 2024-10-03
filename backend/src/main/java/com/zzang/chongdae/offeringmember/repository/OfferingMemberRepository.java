@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEntity, Long> {
 
@@ -19,11 +18,10 @@ public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEn
 
     Optional<OfferingMemberEntity> findByOfferingIdAndMember(Long offeringId, MemberEntity member);
 
-
     @Query(value = """
-            SELECT om.offering_id
-            FROM offering_member as om
-            WHERE om.member_id = :member_id
-            """, nativeQuery = true)
-    List<Long> findOfferingIdsByMember(@Param("member_id") Long memberId);
+            SELECT om.offering.id
+            FROM OfferingMemberEntity om
+            WHERE om.member.id = :memberId
+            """)
+    List<Long> findOfferingIdsByMemberId(Long memberId);
 }
