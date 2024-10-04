@@ -45,23 +45,23 @@ public class OfferingIntegrationTest extends IntegrationTest {
     @DisplayName("공모 상세 조회")
     @Nested
     class GetOfferingDetail {
-
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("id").description("공모 id"),
                 fieldWithPath("title").description("제목"),
-                fieldWithPath("productUrl").description("물품 링크"),
+                fieldWithPath("productUrl").description("물품 링크 (null 허용)"),
                 fieldWithPath("meetingAddress").description("모집 주소"),
-                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소 (null 허용)"),
                 fieldWithPath("description").description("내용"),
                 fieldWithPath("meetingDate").description("마감시간"),
                 fieldWithPath("currentCount").description("현재원"),
                 fieldWithPath("totalCount").description("총원"),
-                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("thumbnailUrl").description("사진 링크 (null 허용)"),
                 fieldWithPath("dividedPrice").description("n빵 가격"),
                 fieldWithPath("totalPrice").description("총가격"),
+                fieldWithPath("originPrice").description("원 가격 (null 허용)"),
                 fieldWithPath("status").description("공모 상태"
                         + getEnumValuesAsString(OfferingStatus.class)),
                 fieldWithPath("memberId").description("공모자 회원 id"),
@@ -753,7 +753,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("상품 이미지 업로드")
                 .description("""
                         상품 이미지를 받아 이미지를 S3에 업로드한다.
-                                               
+                        
                         현재 사용 플러그인이 multipart/form-data의 파라미터에 대한 문서화를 지원하지 않습니다.
                         ### Parameters
                         | Part         | Type   | Description            |
