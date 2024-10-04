@@ -49,25 +49,25 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("id").description("공모 id"),
-                fieldWithPath("title").description("제목"),
-                fieldWithPath("productUrl").description("물품 링크 (null 허용)"),
-                fieldWithPath("meetingAddress").description("모집 주소"),
-                fieldWithPath("meetingAddressDetail").description("모집 상세 주소 (null 허용)"),
-                fieldWithPath("description").description("내용"),
-                fieldWithPath("meetingDate").description("마감시간"),
-                fieldWithPath("currentCount").description("현재원"),
-                fieldWithPath("totalCount").description("총원"),
-                fieldWithPath("thumbnailUrl").description("사진 링크 (null 허용)"),
-                fieldWithPath("dividedPrice").description("n빵 가격"),
-                fieldWithPath("totalPrice").description("총가격"),
-                fieldWithPath("originPrice").description("원 가격 (null 허용)"),
-                fieldWithPath("status").description("공모 상태"
+                fieldWithPath("id").description("공모 id (필수)"),
+                fieldWithPath("title").description("제목 (필수)"),
+                fieldWithPath("productUrl").description("물품 링크"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("description").description("내용 (필수)"),
+                fieldWithPath("meetingDate").description("마감시간 (필수)"),
+                fieldWithPath("currentCount").description("현재원 (필수)"),
+                fieldWithPath("totalCount").description("총원 (필수)"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("dividedPrice").description("n빵 가격 (필수)"),
+                fieldWithPath("totalPrice").description("총가격 (필수)"),
+                fieldWithPath("originPrice").description("원 가격"),
+                fieldWithPath("status").description("공모 상태 (필수)"
                         + getEnumValuesAsString(OfferingStatus.class)),
-                fieldWithPath("memberId").description("공모자 회원 id"),
-                fieldWithPath("nickname").description("공모자 회원 닉네임"),
-                fieldWithPath("isProposer").description("공모자 여부"),
-                fieldWithPath("isParticipated").description("공모 참여 여부")
+                fieldWithPath("memberId").description("공모자 회원 id (필수)"),
+                fieldWithPath("nickname").description("공모자 회원 닉네임 (필수)"),
+                fieldWithPath("isProposer").description("공모자 여부 (필수)"),
+                fieldWithPath("isParticipated").description("공모 참여 여부 (필수)")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 상세 조회")
