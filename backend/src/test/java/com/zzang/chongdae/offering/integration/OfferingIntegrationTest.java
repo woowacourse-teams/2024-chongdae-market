@@ -753,7 +753,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("상품 이미지 업로드")
                 .description("""
                         상품 이미지를 받아 이미지를 S3에 업로드한다.
-                        
                         현재 사용 플러그인이 multipart/form-data의 파라미터에 대한 문서화를 지원하지 않습니다.
                         ### Parameters
                         | Part         | Type   | Description            |
