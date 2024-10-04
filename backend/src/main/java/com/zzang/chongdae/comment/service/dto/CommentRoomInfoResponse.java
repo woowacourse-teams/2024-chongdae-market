@@ -19,8 +19,7 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                                       String buttonText,
                                       String message,
                                       String title,
-                                      boolean isProposer,
-                                      boolean isDeleted) {
+                                      boolean isProposer) {
 
     public CommentRoomInfoResponse(OfferingEntity offering, MemberEntity member) {
         this(offering.getRoomStatus(),
@@ -28,8 +27,7 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                 ViewMapper.toButton(offering.getRoomStatus()),
                 ViewMapper.toMessage(offering.getRoomStatus()),
                 offering.getTitle(),
-                offering.isProposedBy(member),
-                false);
+                offering.isProposedBy(member));
     }
 
     public CommentRoomInfoResponse(OfferingMemberEntity offeringMember) {
@@ -38,8 +36,7 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                 ViewMapper.toButton(DELETED),
                 ViewMapper.toMessage(DELETED),
                 "삭제된 공동구매입니다.",
-                offeringMember.isProposer(),
-                true);
+                offeringMember.isProposer());
     }
 
     private enum ViewMapper {
