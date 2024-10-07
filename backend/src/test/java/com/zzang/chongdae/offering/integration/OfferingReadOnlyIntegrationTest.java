@@ -60,11 +60,9 @@ public class OfferingReadOnlyIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingReadOnlyFailResponse"))
                 .build();
 
-        MemberEntity proposer;
-
         @BeforeEach
         void setUp() {
-            proposer = memberFixture.createMember("dora");
+            MemberEntity proposer = memberFixture.createMember("dora");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
             offeringMemberFixture.createProposer(proposer, offering);
         }
@@ -125,13 +123,14 @@ public class OfferingReadOnlyIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingAllReadOnlySuccessResponse"))
                 .build();
 
-        MemberEntity member;
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember("dora");
+            MemberEntity proposer = memberFixture.createMember("dora");
+
             for (int i = 0; i < 11; i++) {
-                offeringFixture.createOffering(member);
+                OfferingEntity offering = offeringFixture.createOffering(proposer);
+                offeringMemberFixture.createProposer(proposer, offering);
             }
         }
 
@@ -168,11 +167,10 @@ public class OfferingReadOnlyIntegrationTest extends IntegrationTest {
                 .responseSchema(schema("OfferingFilterReadOnlySuccessResponse"))
                 .build();
 
-        private MemberEntity member;
 
         @BeforeEach
         void setUp() {
-            member = memberFixture.createMember("dora");
+            memberFixture.createMember("dora");
         }
 
         @DisplayName("공모 id로 공모 일정 정보를 조회할 수 있다")
