@@ -77,6 +77,7 @@ public class CommentService {
                 .orElseGet(() -> new CommentLatestResponse(null, null));
     }
 
+    @Transactional(readOnly = true)
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
@@ -105,6 +106,7 @@ public class CommentService {
         }
     }
 
+    @Transactional(readOnly = true)
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
