@@ -98,6 +98,7 @@ class OfferingDetailViewModel
 
                             else -> {
                                 Log.e("error", "loadOffering Error: ${result.error.name}")
+                                Log.e("alsong", "${result.msg}")
                             }
                         }
 
