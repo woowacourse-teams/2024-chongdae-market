@@ -184,7 +184,8 @@ public class CommentIntegrationTest extends IntegrationTest {
                 fieldWithPath("buttonText").description("버튼 text"),
                 fieldWithPath("message").description("alert 메시지"),
                 fieldWithPath("title").description("공모글 제목"),
-                fieldWithPath("isProposer").description("로그인 사용자의 총대 여부")
+                fieldWithPath("isProposer").description("로그인 사용자의 총대 여부"),
+                fieldWithPath("isDeleted").description("삭제된 공모 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 정보 조회")
@@ -225,9 +226,9 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .statusCode(200);
         }
 
-        @DisplayName("유효하지 않은 공모에 대해 댓글방 정보를 조회할 경우 예외가 발생한다.")
+        @DisplayName("존재하지 않는 공모 id로 댓글방 정보를 조회할 경우 예외가 발생한다.")
         @Test
-        void should_throwException_when_invalidOffering() {
+        void should_throwException_when_givenInvalidOffering() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member))
@@ -239,7 +240,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @DisplayName("총대 혹은 참여자가 아닌 사용자가 댓글방 정보를 조회할 경우 예외가 발생한다.")
         @Test
-        void should_throwException_when_invalidMember() {
+        void should_throwException_when_givenInvalidMember() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-member", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(invalidMember))

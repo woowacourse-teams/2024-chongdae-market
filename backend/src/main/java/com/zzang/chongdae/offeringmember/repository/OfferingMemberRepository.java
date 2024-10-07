@@ -6,6 +6,7 @@ import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEntity, Long> {
 
@@ -14,4 +15,13 @@ public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEn
     List<OfferingMemberEntity> findAllByOffering(OfferingEntity offering);
 
     Optional<OfferingMemberEntity> findByOfferingAndMember(OfferingEntity offering, MemberEntity member);
+
+    Optional<OfferingMemberEntity> findByOfferingIdAndMember(Long offeringId, MemberEntity member);
+
+    @Query(value = """
+            SELECT om.offering.id
+            FROM OfferingMemberEntity om
+            WHERE om.member.id = :memberId
+            """)
+    List<Long> findOfferingIdsByMemberId(Long memberId);
 }

@@ -20,6 +20,7 @@ import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -49,27 +50,38 @@ public class CommentService {
         }
     }
 
+    @Transactional(readOnly = true)
     public CommentRoomAllResponse getAllCommentRoom(MemberEntity member) {
-        List<OfferingEntity> commentRooms = offeringRepository.findCommentRoomsByMember(member);
-        List<CommentRoomAllResponseItem> responseItems = commentRooms.stream()
-                .map(commentsRoom -> toCommentRoomAllResponseItem(commentsRoom, member))
+        List<Long> offeringIds = offeringMemberRepository.findOfferingIdsByMemberId(member.getId());
+        List<CommentRoomAllResponseItem> responseItems = offeringIds.stream()
+                .map(offeringId -> getCommentRoom(offeringId, member))
                 .toList();
         return new CommentRoomAllResponse(responseItems);
     }
 
-    private CommentRoomAllResponseItem toCommentRoomAllResponseItem(OfferingEntity offering, MemberEntity member) {
-        Optional<CommentEntity> comment = commentRepository.findTopByOfferingOrderByCreatedAtDesc(offering);
-        CommentLatestResponse commentLatestResponse = comment
-                .map(CommentLatestResponse::new)
+    private CommentRoomAllResponseItem getCommentRoom(Long offeringId, MemberEntity member) {
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        CommentLatestResponse latestComment = getLatestComment(offeringId);
+        if (offeringRepository.existsById(offeringId)) {
+            return new CommentRoomAllResponseItem(offeringMember.getOffering(), offeringMember, latestComment);
+        }
+        return new CommentRoomAllResponseItem(offeringId, offeringMember, latestComment);
+    }
+
+    private CommentLatestResponse getLatestComment(Long offeringId) {
+        Optional<CommentEntity> comment = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(offeringId);
+        return comment.map(CommentLatestResponse::new)
                 .orElseGet(() -> new CommentLatestResponse(null, null));
-        return new CommentRoomAllResponseItem(offering, member, commentLatestResponse);
     }
 
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
-                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        validateIsJoined(member, offering);
-        return new CommentRoomInfoResponse(offering, member);
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        if (offeringRepository.existsById(offeringId)) {
+            return new CommentRoomInfoResponse(offeringMember.getOffering(), offeringMember.getMember());
+        }
+        return new CommentRoomInfoResponse(offeringMember);
     }
 
     @Transactional
