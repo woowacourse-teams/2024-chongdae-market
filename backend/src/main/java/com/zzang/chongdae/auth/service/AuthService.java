@@ -4,6 +4,7 @@ import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
+import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.domain.AuthProvider;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
@@ -24,6 +25,7 @@ public class AuthService {
     private final NicknameGenerator nickNameGenerator;
     private final AuthClient authClient;
 
+    @WriterDatabase
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
         String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
