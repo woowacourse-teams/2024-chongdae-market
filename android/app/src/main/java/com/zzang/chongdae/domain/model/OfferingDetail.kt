@@ -11,6 +11,7 @@ data class OfferingDetail(
     val thumbnailUrl: String?,
     val dividedPrice: Int,
     val totalPrice: Int,
+    val originPrice: Int,
     val meetingDate: LocalDateTime,
     val currentCount: CurrentCount,
     val totalCount: Int,

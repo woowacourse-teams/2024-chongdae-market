@@ -13,6 +13,7 @@ fun OfferingDetailResponse.toDomain() =
         dividedPrice = this.dividedPrice,
         thumbnailUrl = this.thumbnailUrl,
         totalPrice = this.totalPrice,
+        originPrice = this.originPrice,
         meetingDate = this.meetingDate.toLocalDateTime(),
         currentCount = this.currentCount.toCurrentCount(),
         totalCount = this.totalCount,
