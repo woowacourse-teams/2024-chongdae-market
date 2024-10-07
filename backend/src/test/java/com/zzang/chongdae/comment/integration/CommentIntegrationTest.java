@@ -184,8 +184,7 @@ public class CommentIntegrationTest extends IntegrationTest {
                 fieldWithPath("buttonText").description("버튼 text"),
                 fieldWithPath("message").description("alert 메시지"),
                 fieldWithPath("title").description("공모글 제목"),
-                fieldWithPath("isProposer").description("로그인 사용자의 총대 여부"),
-                fieldWithPath("isDeleted").description("삭제된 공모 여부")
+                fieldWithPath("isProposer").description("로그인 사용자의 총대 여부")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 정보 조회")
