@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offering.service;
 
+import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
@@ -97,6 +98,7 @@ public class OfferingService {
         }
     }
 
+    @WriterDatabase
     @Transactional
     public OfferingMeetingResponse updateOfferingMeeting(
             Long offeringId, OfferingMeetingUpdateRequest request, MemberEntity member) {
@@ -114,6 +116,7 @@ public class OfferingService {
         }
     }
 
+    @WriterDatabase
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
         validateMeetingDate(offering);
@@ -142,6 +145,7 @@ public class OfferingService {
         return new OfferingProductImageResponse(imageUrl);
     }
 
+    @WriterDatabase
     @Transactional
     public OfferingUpdateResponse updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -159,6 +163,7 @@ public class OfferingService {
         }
     }
 
+    @WriterDatabase
     public void deleteOffering(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));

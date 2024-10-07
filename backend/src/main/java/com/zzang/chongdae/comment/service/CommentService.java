@@ -11,6 +11,7 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
+import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
@@ -35,6 +36,7 @@ public class CommentService {
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
 
+    @WriterDatabase
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
@@ -84,6 +86,7 @@ public class CommentService {
         return new CommentRoomInfoResponse(offeringMember);
     }
 
+    @WriterDatabase
     @Transactional
     public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
