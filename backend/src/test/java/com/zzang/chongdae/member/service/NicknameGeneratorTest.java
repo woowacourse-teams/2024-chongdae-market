@@ -18,7 +18,7 @@ public class NicknameGeneratorTest {
     @Test
     void should_returnNickname_when_generateNickName() {
         // given
-        String expected = "춤추는도라";
+        String expected = "춤추는장성";
 
         // when
         String actual = nickNameGenerator.generate();
