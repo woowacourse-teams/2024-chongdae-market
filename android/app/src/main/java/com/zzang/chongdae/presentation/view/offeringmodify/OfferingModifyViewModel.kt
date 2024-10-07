@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
@@ -24,28 +23,24 @@ import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import javax.inject.Inject
 
+@HiltViewModel
 class OfferingModifyViewModel
-    @AssistedInject
+    @Inject
     constructor(
-        @Assisted private val offeringId: Long,
         @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
         @OfferingDetailRepositoryQualifier private val offeringDetailRepository: OfferingDetailRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
     ) : ViewModel() {
-        @AssistedFactory
-        interface OfferingModifyAssistedFactory {
-            fun create(offeringId: Long): OfferingModifyViewModel
-        }
+        private var offeringId: Long = DEFAULT_OFFERING_ID
 
         val title: MutableLiveData<String> = MutableLiveData("")
 
@@ -132,6 +127,10 @@ class OfferingModifyViewModel
             _extractButtonEnabled.apply {
                 addSource(productUrl) { value = !productUrl.value.isNullOrBlank() }
             }
+        }
+
+        fun initOfferingId(id: Long) {
+            offeringId = id
         }
 
         private fun safeUpdateSplitPrice() {
@@ -319,7 +318,7 @@ class OfferingModifyViewModel
             thumbnailUrl.value = offeringDetail.thumbnailUrl
             totalCount.value = offeringDetail.totalCount.toString()
             totalPrice.value = offeringDetail.totalPrice.toString()
-            originPrice.value = offeringDetail.dividedPrice.toString()
+            originPrice.value = offeringDetail.originPrice.toString()
             meetingAddress.value = offeringDetail.meetingAddress
             meetingAddressDetail.value = offeringDetail.meetingAddressDetail
             initDateTimeWhenModify(offeringDetail.meetingDate.toString())
@@ -385,7 +384,10 @@ class OfferingModifyViewModel
 
                             else -> {
                                 _modifyUIState.value =
-                                    ModifyUIState.Error(R.string.modify_error_modifing, "${result.error}")
+                                    ModifyUIState.Error(
+                                        R.string.modify_error_modifing,
+                                        "${result.error}",
+                                    )
                             }
                         }
                     }
@@ -473,6 +475,7 @@ class OfferingModifyViewModel
         }
 
         companion object {
+            private const val DEFAULT_OFFERING_ID = 0L
             private const val ERROR_INTEGER_FORMAT = -1
             private const val ERROR_FLOAT_FORMAT = -1f
             private const val MINIMUM_TOTAL_COUNT = 2
@@ -482,15 +485,5 @@ class OfferingModifyViewModel
             private const val DATE_TIME_FORMAT_REMOTE = "yyyy-MM-dd'T'HH:mm"
             private const val DATE_TIME_FORMAT_REMOTE_WITH_SEC = "yyyy-MM-dd'T'HH:mm:ss"
             const val HTTPS = "https:"
-
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(
-                assistedFactory: OfferingModifyAssistedFactory,
-                offeringId: Long,
-            ) = object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return assistedFactory.create(offeringId) as T
-                }
-            }
         }
     }

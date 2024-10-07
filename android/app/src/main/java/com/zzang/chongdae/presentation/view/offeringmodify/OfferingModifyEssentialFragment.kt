@@ -23,7 +23,6 @@ import com.zzang.chongdae.presentation.view.home.HomeFragment
 import com.zzang.chongdae.presentation.view.write.OnDateTimeButtonsClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListener {
@@ -40,15 +39,7 @@ class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListen
         arguments?.getLong(HomeFragment.OFFERING_ID) ?: throw IllegalArgumentException()
     }
 
-    @Inject
-    lateinit var offeringModifyAssistedFactory: OfferingModifyViewModel.OfferingModifyAssistedFactory
-
-    private val viewModel: OfferingModifyViewModel by activityViewModels {
-        OfferingModifyViewModel.getFactory(
-            assistedFactory = offeringModifyAssistedFactory,
-            offeringId = offeringId,
-        )
-    }
+    private val viewModel: OfferingModifyViewModel by activityViewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
@@ -60,6 +51,7 @@ class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.initOfferingId(offeringId)
         viewModel.fetchOfferingDetail()
     }
 
