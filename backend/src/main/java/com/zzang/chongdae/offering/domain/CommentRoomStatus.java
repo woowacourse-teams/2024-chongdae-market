@@ -5,12 +5,14 @@ import lombok.Getter;
 @Getter
 public enum CommentRoomStatus {
 
+    DELETED,
     GROUPING,
     BUYING,
     TRADING,
     DONE;
 
     static {
+        DELETED.nextStatus = DELETED;
         GROUPING.nextStatus = BUYING;
         BUYING.nextStatus = TRADING;
         TRADING.nextStatus = DONE;

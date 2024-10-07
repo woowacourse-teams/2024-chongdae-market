@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    open-in-view: false
   servlet:
     multipart:
       enabled: true
@@ -19,7 +20,11 @@ spring:
       max-request-size: 20MB
   jackson:
     time-zone: Asia/Seoul
-
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      
 springdoc:
   swagger-ui:
     path: swagger-ui.html
