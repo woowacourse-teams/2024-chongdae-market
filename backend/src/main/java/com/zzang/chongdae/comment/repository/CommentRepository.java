@@ -10,5 +10,5 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
     List<CommentEntity> findAllByOfferingOrderByCreatedAt(OfferingEntity offering);
 
-    Optional<CommentEntity> findTopByOfferingOrderByCreatedAtDesc(OfferingEntity offering);
+    Optional<CommentEntity> findTopByOfferingIdOrderByCreatedAtDesc(Long offeringId);
 }
