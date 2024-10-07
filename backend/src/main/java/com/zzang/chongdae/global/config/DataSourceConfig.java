@@ -18,15 +18,10 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 public class DataSourceConfig {
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.hikari.write")
-    public DataSource writeDataSource() {
-        return DataSourceBuilder.create().type(HikariDataSource.class).build();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.hikari.read")
-    public DataSource readDataSource() {
-        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    @Primary
+    @DependsOn({"routeDataSource"})
+    public DataSource dataSource() {
+        return new LazyConnectionDataSourceProxy(routeDataSource());
     }
 
     @Bean
@@ -46,9 +41,14 @@ public class DataSourceConfig {
     }
 
     @Bean
-    @Primary
-    @DependsOn({"routeDataSource"})
-    public DataSource dataSource() {
-        return new LazyConnectionDataSourceProxy(routeDataSource());
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.write")
+    public DataSource writeDataSource() {
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.read")
+    public DataSource readDataSource() {
+        return DataSourceBuilder.create().build();
     }
 }
