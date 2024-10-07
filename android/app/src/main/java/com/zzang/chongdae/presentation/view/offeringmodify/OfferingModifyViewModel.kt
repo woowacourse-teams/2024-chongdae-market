@@ -318,7 +318,7 @@ class OfferingModifyViewModel
             thumbnailUrl.value = offeringDetail.thumbnailUrl
             totalCount.value = offeringDetail.totalCount.toString()
             totalPrice.value = offeringDetail.totalPrice.toString()
-            originPrice.value = offeringDetail.originPrice.toString()
+            originPrice.value = offeringDetail.originPrice?.toString() ?: ""
             meetingAddress.value = offeringDetail.meetingAddress
             meetingAddressDetail.value = offeringDetail.meetingAddressDetail
             initDateTimeWhenModify(offeringDetail.meetingDate.toString())
