@@ -120,6 +120,18 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             viewModel.fetchUpdatedOffering(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
         }
 
+        setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
+            viewModel.refreshOfferings(bundle.getBoolean(OfferingDetailFragment.DELETED_OFFERING_ID_KEY))
+        }
+
+        setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
+            viewModel.refreshOfferings(
+                bundle.getBoolean(
+                    OfferingWriteOptionalFragment.NEW_OFFERING_EVENT_KEY,
+                ),
+            )
+        }
+
         setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
             viewModel.refreshOfferings(
                 bundle.getBoolean(

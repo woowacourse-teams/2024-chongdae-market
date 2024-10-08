@@ -72,6 +72,7 @@
     <string name="offering_detail_participation_error">참여할 수 없는 공모입니다.</string>
     <string name="offering_detail_participant_already">이미 참여중이에요!</string>
     <string name="offering_detail_participant_end">마감되었어요!</string>
+    <string name="offering_detail_delete_error">모집 마감 이후에는 공모글을 삭제할 수\n없어요!</string>
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
