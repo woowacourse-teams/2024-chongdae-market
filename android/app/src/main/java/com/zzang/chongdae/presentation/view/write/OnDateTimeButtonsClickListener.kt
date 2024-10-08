@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.write
 
-interface OnOfferingWriteClickListener {
+interface OnDateTimeButtonsClickListener {
     fun onDateTimeSubmitButtonClick()
 
     fun onDateTimeCancelButtonClick()

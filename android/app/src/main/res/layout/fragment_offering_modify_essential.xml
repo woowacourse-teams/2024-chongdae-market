@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.offeringmodify.OfferingModifyViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:id="@+id/sv_main_write_essential"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/layout_submit_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/size_26">
+
+                <TextView
+                    android:id="@+id/tv_information_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_44"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="@string/modify_information_message_essential"
+                    android:textColor="@color/black_700"
+                    android:textSize="@dimen/size_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/Theme.AppCompat.TextView.Write.Subject"
+                    android:layout_marginTop="@dimen/size_33"
+                    android:text="@string/all_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_information_message" />
+
+                <TextView
+                    android:id="@+id/tv_title_asterisk"
+                    style="@style/Theme.AppCompat.TextView.Write.Asterisk"
+                    app:layout_constraintStart_toEndOf="@id/tv_title"
+                    app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+                <EditText
+                    android:id="@+id/et_title"
+                    style="@style/Theme.AppCompat.TextView.Write.EditText"
+                    android:hint="@string/write_enter_offering_title"
+                    android:text="@={vm.title}"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+                <TextView
+                    android:id="@+id/tv_total_personnel"
+                    style="@style/Theme.AppCompat.TextView.Write.Subject"
+                    android:text="@string/write_total_personnel"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/et_title" />
+
+                <TextView
+                    android:id="@+id/tv_total_count_asterisk"
+                    style="@style/Theme.AppCompat.TextView.Write.Asterisk"
+                    app:layout_constraintStart_toEndOf="@id/tv_total_personnel"
+                    app:layout_constraintTop_toTopOf="@id/tv_total_personnel" />
+
+                <Button
+                    android:id="@+id/btn_minus_total_personnel"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="@dimen/size_19"
+                    android:background="@drawable/btn_offering_write_minus_total_personnel"
+                    android:fontFamily="@font/suit_bold"
+                    android:gravity="center"
+                    android:onClick="@{() -> vm.decreaseTotalCount()}"
+                    android:text="@string/all_minus"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_20"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_total_personnel" />
+
+
+                <EditText
+                    android:id="@+id/et_total_personnel"
+                    android:layout_width="100dp"
+                    android:layout_height="@dimen/size_40"
+                    android:layout_marginStart="@dimen/size_7"
+                    android:layout_marginTop="-1dp"
+                    android:background="@drawable/et_border_main_color"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1"
+                    android:text="@={vm.totalCount}"
+                    android:textColor="@color/gray_900"
+                    android:textSize="20dp"
+                    app:layout_constraintStart_toEndOf="@id/btn_minus_total_personnel"
+                    app:layout_constraintTop_toTopOf="@id/btn_minus_total_personnel"
+                    tools:text="2" />
+
+                <Button
+                    android:id="@+id/btn_plus_total_personnel"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="@dimen/size_7"
+                    android:background="@drawable/btn_offering_write_minus_total_personnel"
+                    android:fontFamily="@font/suit_bold"
+                    android:gravity="center"
+                    android:onClick="@{() -> vm.increaseTotalCount()}"
+                    android:text="@string/all_plus"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_20"
+                    app:layout_constraintStart_toEndOf="@id/et_total_personnel"
+                    app:layout_constraintTop_toTopOf="@id/btn_minus_total_personnel" />
+
+                <TextView
+                    android:id="@+id/tv_total_price"
+                    style="@style/Theme.AppCompat.TextView.Write.Subject"
+                    android:text="@string/write_total_price"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/btn_minus_total_personnel" />
+
+                <TextView
+                    android:id="@+id/tv_total_price_asterisk"
+                    style="@style/Theme.AppCompat.TextView.Write.Asterisk"
+                    app:layout_constraintStart_toEndOf="@id/tv_total_price"
+                    app:layout_constraintTop_toTopOf="@id/tv_total_price" />
+
+                <EditText
+                    android:id="@+id/et_total_price"
+                    style="@style/Theme.AppCompat.TextView.Write.EditTextPrice"
+                    android:hint="@string/write_information_total_price"
+                    android:maxLength="7"
+                    android:maxLines="1"
+                    android:text="@={vm.totalPrice}"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_total_price" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="@string/all_won"
+                    android:textColor="@color/black_900"
+                    android:textSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="@id/et_total_price"
+                    app:layout_constraintStart_toEndOf="@id/et_total_price"
+                    app:layout_constraintTop_toTopOf="@id/et_total_price" />
+
+                <TextView
+                    android:id="@+id/tv_per_n_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="@string/write_per_n_price"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/size_15"
+                    app:layout_constraintStart_toStartOf="@id/et_total_price"
+                    app:layout_constraintTop_toBottomOf="@id/et_total_price" />
+
+                <TextView
+                    android:id="@+id/tv_per_n_price_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_bold"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/size_15"
+                    app:layout_constraintStart_toEndOf="@id/tv_per_n_price"
+                    app:layout_constraintTop_toTopOf="@id/tv_per_n_price"
+                    app:splitPrice="@{vm.splitPrice}"
+                    app:splitPriceValidity="@{vm.splitPriceValidity}"
+                    tools:text="10,000" />
+
+                <TextView
+                    android:id="@+id/tv_per_n_price_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="@string/all_won"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/size_15"
+                    app:layout_constraintStart_toEndOf="@id/tv_per_n_price_value"
+                    app:layout_constraintTop_toTopOf="@id/tv_per_n_price" />
+
+                <TextView
+                    android:id="@+id/tv_place"
+                    style="@style/Theme.AppCompat.TextView.Write.Subject"
+                    android:text="@string/all_place"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_per_n_price" />
+
+                <TextView
+                    android:id="@+id/tv_meeting_Address_asterisk"
+                    style="@style/Theme.AppCompat.TextView.Write.Asterisk"
+                    app:layout_constraintStart_toEndOf="@id/tv_place"
+                    app:layout_constraintTop_toTopOf="@id/tv_place" />
+
+                <TextView
+                    android:id="@+id/tv_place_value"
+                    style="@style/Theme.AppCompat.TextView.Write.EditText"
+                    android:gravity="center_vertical"
+                    android:hint="@string/write_search_place"
+                    android:text="@={vm.meetingAddress}"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_place" />
+
+                <EditText
+                    android:id="@+id/et_place_detail"
+                    style="@style/Theme.AppCompat.TextView.Write.EditText"
+                    android:layout_marginTop="8dp"
+                    android:hint="@string/write_enter_place_detail"
+                    android:text="@={vm.meetingAddressDetail}"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_place_value" />
+
+                <TextView
+                    android:id="@+id/tv_meeting_date"
+                    style="@style/Theme.AppCompat.TextView.Write.Subject"
+                    android:text="@string/write_deadline"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/et_place_detail" />
+
+                <TextView
+                    android:id="@+id/tv_meeting_date_asterisk"
+                    style="@style/Theme.AppCompat.TextView.Write.Asterisk"
+                    app:layout_constraintStart_toEndOf="@id/tv_meeting_date"
+                    app:layout_constraintTop_toTopOf="@id/tv_meeting_date" />
+
+                <TextView
+                    android:id="@+id/tv_deadline_value"
+                    style="@style/Theme.AppCompat.TextView.Write.EditText"
+                    android:fontFamily="@font/suit_medium"
+                    android:gravity="center_vertical"
+                    android:hint="@string/write_deadline_description"
+                    android:onClick="@{() -> vm.makeMeetingDateChoiceEvent()}"
+                    android:text="@{vm.meetingDate}"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_meeting_date" />
+
+                <ImageView
+                    android:id="@+id/iv_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/size_8"
+                    android:src="@drawable/ic_calendar2"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_deadline_value"
+                    app:layout_constraintEnd_toEndOf="@id/tv_deadline_value"
+                    app:layout_constraintTop_toTopOf="@id/tv_deadline_value" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/size_26"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_main_write_essential">
+
+            <Button
+                android:id="@+id/btn_submit_offering_write"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="@dimen/size_34"
+                android:background="@drawable/btn_background_selector"
+                android:enabled="@{vm.essentialSubmitButtonEnabled}"
+                android:fontFamily="@font/suit_medium"
+                android:onClick="@{() -> vm.makeNavigateToOptionalEvent()}"
+                android:text="@{vm.essentialSubmitButtonEnabled ? @string/modify_submit : @string/write_start_offering_button_disabled}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="임시메세지" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

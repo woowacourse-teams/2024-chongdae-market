@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class OfferingDetailResponse(
+data class OfferingModifyResponse(
     @SerialName("id") val id: Long,
     @SerialName("title") val title: String,
     @SerialName("productUrl") val productUrl: String?,
@@ -17,9 +17,6 @@ data class OfferingDetailResponse(
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
-    @SerialName("originPrice") val originPrice: Int?,
     @SerialName("status") val condition: RemoteOfferingStatus,
-    @SerialName("isProposer") val isProposer: Boolean,
     @SerialName("nickname") val nickname: String,
-    @SerialName("isParticipated") val isParticipated: Boolean,
 )
