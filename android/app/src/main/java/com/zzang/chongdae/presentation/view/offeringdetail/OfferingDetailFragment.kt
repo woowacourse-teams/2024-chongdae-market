@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -27,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OfferingDetailFragment : Fragment(), OnOfferingDeleteClickListener {
+class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     private var _binding: FragmentOfferingDetailBinding? = null
     private val binding get() = _binding!!
     private var toast: Toast? = null
