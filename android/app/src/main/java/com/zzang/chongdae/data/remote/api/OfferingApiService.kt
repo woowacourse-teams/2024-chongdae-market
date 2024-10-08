@@ -12,6 +12,7 @@ import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -67,5 +68,10 @@ interface OfferingApiService {
     suspend fun patchOffering(
         @Path("offering-id") offeringId: Long,
         @Body offeringModifyRequest: OfferingModifyRequest,
+    ): Response<Unit>
+
+    @DELETE("/offerings/{offering-id}")
+    suspend fun deleteOffering(
+        @Path("offering-id") offeringId: Long,
     ): Response<Unit>
 }

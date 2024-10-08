@@ -23,4 +23,8 @@ class OfferingDetailDataSourceImpl
 
         override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Unit, DataError.Network> =
             safeApiCall { participationApiService.postParticipations(participationRequest) }
+
+        override suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network> {
+            return safeApiCall { offeringApiService.deleteOffering(offeringId) }
+        }
     }
