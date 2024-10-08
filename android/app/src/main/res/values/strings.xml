@@ -72,7 +72,7 @@
     <string name="offering_detail_participation_error">참여할 수 없는 공모입니다.</string>
     <string name="offering_detail_participant_already">이미 참여중이에요!</string>
     <string name="offering_detail_participant_end">마감되었어요!</string>
-    <string name="offering_detail_delete_error">모집 마감 이후에는 공모글을 삭제할 수\n없어요!</string>
+    <string name="offering_detail_delete_error">모집 마감 전과 거래 완료 후에만 \n공모글을 삭제할 수 있어요!</string>
     <string name="offering_detail_dialog_description">게시물을 삭제하시겠습니까?</string>
     <string name="offering_detail_dialog_cancel_text">취소</string>
     <string name="offering_detail_dialog_confirm_text">확인</string>
