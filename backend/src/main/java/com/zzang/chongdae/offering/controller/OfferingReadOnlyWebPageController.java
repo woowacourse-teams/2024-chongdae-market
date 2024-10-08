@@ -11,4 +11,9 @@ public class OfferingReadOnlyWebPageController {
     String renderOfferingDetail(@PathVariable("offering-id") Long offeringId) {
         return "detail";
     }
+
+    @GetMapping("/read-only/web/offerings")
+    String renderOffering() {
+        return "index";
+    }
 }
