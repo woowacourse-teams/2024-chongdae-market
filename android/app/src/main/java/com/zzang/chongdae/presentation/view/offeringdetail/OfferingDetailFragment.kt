@@ -109,6 +109,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             dialog.dismiss()
             findNavController().popBackStack()
             setFragmentResult(OFFERING_DETAIL_BUNDLE_KEY, bundleOf(DELETED_OFFERING_ID_KEY to true))
+            showToast(R.string.offering_detail_delete_complete_message)
         }
     }
 
