@@ -14,6 +14,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -28,8 +29,7 @@ class OfferingDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private var toast: Toast? = null
     private val offeringId by lazy {
-        arguments?.getLong(HomeFragment.OFFERING_ID)
-            ?: throw IllegalArgumentException()
+        arguments?.getLong(HomeFragment.OFFERING_ID) ?: throw IllegalArgumentException()
     }
 
     @Inject
@@ -69,6 +69,11 @@ class OfferingDetailFragment : Fragment() {
         setUpObserve()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadOffering()
+    }
+
     private fun setUpObserve() {
         viewModel.updatedOfferingId.observe(viewLifecycleOwner) {
             setFragmentResult(OFFERING_DETAIL_BUNDLE_KEY, bundleOf(UPDATED_OFFERING_ID_KEY to it))
@@ -84,6 +89,13 @@ class OfferingDetailFragment : Fragment() {
 
         viewModel.productLinkRedirectEvent.observe(viewLifecycleOwner) { productURL ->
             openUrlInBrowser(productURL)
+        }
+
+        viewModel.modifyOfferingEvent.observe(viewLifecycleOwner) {
+            findNavController().navigate(
+                R.id.action_offering_detail_fragment_to_offering_modify_essential_fragment,
+                bundleOf(HomeFragment.OFFERING_ID to offeringId),
+            )
         }
     }
 
@@ -137,5 +149,6 @@ class OfferingDetailFragment : Fragment() {
     companion object {
         const val OFFERING_DETAIL_BUNDLE_KEY = "offering_detail_bundle_key"
         const val UPDATED_OFFERING_ID_KEY = "updated_offering_id"
+        const val OFFERING_ID_KEY = "offering_id"
     }
 }

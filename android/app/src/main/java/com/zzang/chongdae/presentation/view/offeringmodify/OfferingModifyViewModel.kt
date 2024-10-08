@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.write
+package com.zzang.chongdae.presentation.view.offeringmodify
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -12,11 +12,14 @@ import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.di.annotations.OfferingDetailRepositoryQualifier
 import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
-import com.zzang.chongdae.domain.model.OfferingWrite
+import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.Price
+import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -24,16 +27,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class OfferingWriteViewModel
+class OfferingModifyViewModel
     @Inject
     constructor(
         @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
+        @OfferingDetailRepositoryQualifier private val offeringDetailRepository: OfferingDetailRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
     ) : ViewModel() {
+        private var offeringId: Long = DEFAULT_OFFERING_ID
+
         val title: MutableLiveData<String> = MutableLiveData("")
 
         val productUrl: MutableLiveData<String?> = MutableLiveData(null)
@@ -85,18 +93,19 @@ class OfferingWriteViewModel
         private val _navigateToOptionalEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
         val navigateToOptionalEvent: SingleLiveData<Boolean> get() = _navigateToOptionalEvent
 
-        private val _submitOfferingEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-        val submitOfferingEvent: SingleLiveData<Unit> get() = _submitOfferingEvent
+        private val _submitOfferingModifyEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val submitOfferingModifyEvent: SingleLiveData<Unit> get() = _submitOfferingModifyEvent
 
         private val _imageUploadEvent = MutableLiveData<Unit>()
         val imageUploadEvent: LiveData<Unit> get() = _imageUploadEvent
 
-        private val _writeUIState = MutableLiveData<WriteUIState>(WriteUIState.Initial)
-        val writeUIState: LiveData<WriteUIState> get() = _writeUIState
+        private val _modifyUIState = MutableLiveData<ModifyUIState>(ModifyUIState.Initial)
+        val modifyUIState: LiveData<ModifyUIState> get() = _modifyUIState
 
-        val isLoading: LiveData<Boolean> = _writeUIState.map { it is WriteUIState.Loading }
+        val isLoading: LiveData<Boolean> = _modifyUIState.map { it is ModifyUIState.Loading }
 
         init {
+
             _essentialSubmitButtonEnabled.apply {
                 addSource(title) { updateSubmitButtonEnabled() }
                 addSource(totalCount) { updateSubmitButtonEnabled() }
@@ -120,6 +129,10 @@ class OfferingWriteViewModel
             }
         }
 
+        fun initOfferingId(id: Long) {
+            offeringId = id
+        }
+
         private fun safeUpdateSplitPrice() {
             runCatching {
                 updateSplitPrice()
@@ -138,10 +151,10 @@ class OfferingWriteViewModel
 
         fun uploadImageFile(multipartBody: MultipartBody.Part) {
             viewModelScope.launch {
-                _writeUIState.value = WriteUIState.Loading
+                _modifyUIState.value = ModifyUIState.Loading
                 when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
                     is Result.Success -> {
-                        _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
+                        _modifyUIState.value = ModifyUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = result.data.imageUrl
                     }
 
@@ -156,8 +169,8 @@ class OfferingWriteViewModel
                             }
 
                             else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(
+                                _modifyUIState.value =
+                                    ModifyUIState.Error(
                                         R.string.all_error_image_upload,
                                         "${result.error}",
                                     )
@@ -170,14 +183,14 @@ class OfferingWriteViewModel
 
         fun postProductImageOg() {
             viewModelScope.launch {
-                _writeUIState.value = WriteUIState.Loading
+                _modifyUIState.value = ModifyUIState.Loading
                 when (val result = offeringRepository.saveProductImageOg(productUrl.value ?: "")) {
                     is Result.Success -> {
                         if (result.data.imageUrl.isBlank()) {
-                            _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
+                            _modifyUIState.value = ModifyUIState.Empty(R.string.error_empty_product_url)
                             return@launch
                         }
-                        _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
+                        _modifyUIState.value = ModifyUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = HTTPS + result.data.imageUrl
                     }
 
@@ -192,8 +205,8 @@ class OfferingWriteViewModel
                             }
 
                             else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(
+                                _modifyUIState.value =
+                                    ModifyUIState.Error(
                                         R.string.error_invalid_product_url,
                                         "${result.error}",
                                     )
@@ -258,15 +271,61 @@ class OfferingWriteViewModel
 
         fun updateMeetingDate(date: String) {
             val dateTime = "$date"
-            val inputFormat = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.KOREAN)
-            val outputFormat = SimpleDateFormat(OUTPUT_DATE_TIME_FORMAT, Locale.getDefault())
+            val inputFormat = SimpleDateFormat(DATE_FORMAT_DOMAIN, Locale.KOREAN)
+            val outputFormat = SimpleDateFormat(DATE_TIME_FORMAT_REMOTE_WITH_SEC, Locale.getDefault())
 
             val parsedDateTime = inputFormat.parse(dateTime)
             meetingDateValue.value = parsedDateTime?.let { outputFormat.format(it) }
             meetingDate.value = dateTime
         }
 
-        fun postOffering() {
+        private fun initDateTimeWhenModify(dateTimeString: String) {
+            val inputFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_REMOTE)
+            val outputFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT_DOMAIN)
+            val inputFormatterWithSec = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_REMOTE_WITH_SEC)
+            val dateTime = LocalDateTime.parse(dateTimeString, inputFormatter)
+            meetingDate.value = dateTime.format(outputFormatter)
+            meetingDateValue.value = dateTime.format(inputFormatterWithSec)
+        }
+
+        fun fetchOfferingDetail() {
+            viewModelScope.launch {
+                when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
+                    is Result.Success -> {
+                        initExistingOffering(result.data)
+                    }
+
+                    is Result.Error ->
+                        when (result.error) {
+                            DataError.Network.UNAUTHORIZED -> {
+                                when (authRepository.saveRefresh()) {
+                                    is Result.Success -> fetchOfferingDetail()
+                                    is Result.Error -> return@launch
+                                }
+                            }
+
+                            else -> {
+                                Log.e("error", "loadOffering Error: ${result.error.name}")
+                            }
+                        }
+                }
+            }
+        }
+
+        private fun initExistingOffering(offeringDetail: OfferingDetail) {
+            title.value = offeringDetail.title
+            productUrl.value = offeringDetail.productUrl
+            thumbnailUrl.value = offeringDetail.thumbnailUrl
+            totalCount.value = offeringDetail.totalCount.toString()
+            totalPrice.value = offeringDetail.totalPrice.toString()
+            originPrice.value = offeringDetail.originPrice?.toString() ?: ""
+            meetingAddress.value = offeringDetail.meetingAddress
+            meetingAddressDetail.value = offeringDetail.meetingAddressDetail
+            initDateTimeWhenModify(offeringDetail.meetingDate.toString())
+            description.value = offeringDetail.description
+        }
+
+        fun postOfferingModify() {
             val title = title.value ?: return
             val totalCount = totalCount.value ?: return
             val totalPrice = totalPrice.value ?: return
@@ -291,9 +350,10 @@ class OfferingWriteViewModel
             viewModelScope.launch {
                 when (
                     val result =
-                        offeringRepository.saveOffering(
-                            offeringWrite =
-                                OfferingWrite(
+                        offeringRepository.patchOffering(
+                            offeringId = offeringId,
+                            offeringModifyDomainRequest =
+                                OfferingModifyDomainRequest(
                                     title = title,
                                     productUrl = productUrlOrNull(),
                                     thumbnailUrl = thumbnailUrl.value,
@@ -308,21 +368,26 @@ class OfferingWriteViewModel
                                 ),
                         )
                 ) {
-                    is Result.Success -> makeSubmitOfferingEvent()
+                    is Result.Success -> {
+                        makeSubmitOfferingModifyEvent()
+                    }
 
                     is Result.Error -> {
                         Log.e("error", "postOffering: ${result.error}")
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
-                                    is Result.Success -> postOffering()
+                                    is Result.Success -> postOfferingModify()
                                     is Result.Error -> return@launch
                                 }
                             }
 
                             else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(R.string.write_error_writing, "${result.error}")
+                                _modifyUIState.value =
+                                    ModifyUIState.Error(
+                                        R.string.modify_error_modifing,
+                                        "${result.error}",
+                                    )
                             }
                         }
                     }
@@ -357,7 +422,7 @@ class OfferingWriteViewModel
         private fun makeTotalCountInvalidEvent(totalCount: String): Int? {
             val totalCountValue = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
             if (totalCountValue < MINIMUM_TOTAL_COUNT || totalCountValue > MAXIMUM_TOTAL_COUNT) {
-                _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_count)
+                _modifyUIState.value = ModifyUIState.InvalidInput(R.string.write_invalid_total_count)
                 return null
             }
             return totalCountValue
@@ -366,22 +431,22 @@ class OfferingWriteViewModel
         private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
             val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
             if (totalPriceConverted < 0) {
-                _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_total_price)
+                _modifyUIState.value = ModifyUIState.InvalidInput(R.string.write_invalid_total_price)
                 return null
             }
             return totalPriceConverted
         }
 
         private fun makeOriginPriceInvalidEvent() {
-            _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_origin_price)
+            _modifyUIState.value = ModifyUIState.InvalidInput(R.string.write_invalid_origin_price)
         }
 
         private fun isOriginPriceCheaperThanSplitPriceEvent(): Boolean {
             if (originPrice.value.isNullOrBlank()) return false
             val discountRateValue = discountRate.value ?: ERROR_FLOAT_FORMAT
             if (discountRateValue <= 0f) {
-                _writeUIState.value =
-                    WriteUIState.InvalidInput(R.string.write_origin_price_cheaper_than_total_price)
+                _modifyUIState.value =
+                    ModifyUIState.InvalidInput(R.string.write_origin_price_cheaper_than_total_price)
                 return true
             }
             return false
@@ -391,11 +456,11 @@ class OfferingWriteViewModel
             _navigateToOptionalEvent.setValue(true)
         }
 
-        private fun makeSubmitOfferingEvent() {
-            _submitOfferingEvent.setValue(Unit)
+        private fun makeSubmitOfferingModifyEvent() {
+            _submitOfferingModifyEvent.setValue(Unit)
         }
 
-        fun initOfferingWriteInputs() {
+        fun initOfferingModifyInputs() {
             title.value = ""
             productUrl.value = ""
             thumbnailUrl.value = ""
@@ -410,13 +475,15 @@ class OfferingWriteViewModel
         }
 
         companion object {
+            private const val DEFAULT_OFFERING_ID = 0L
             private const val ERROR_INTEGER_FORMAT = -1
             private const val ERROR_FLOAT_FORMAT = -1f
             private const val MINIMUM_TOTAL_COUNT = 2
             private const val MAXIMUM_TOTAL_COUNT = 10_000
             private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
-            private const val INPUT_DATE_FORMAT = "yyyy년 M월 d일"
-            private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
+            private const val DATE_FORMAT_DOMAIN = "yyyy년 M월 d일"
+            private const val DATE_TIME_FORMAT_REMOTE = "yyyy-MM-dd'T'HH:mm"
+            private const val DATE_TIME_FORMAT_REMOTE_WITH_SEC = "yyyy-MM-dd'T'HH:mm:ss"
             const val HTTPS = "https:"
         }
     }

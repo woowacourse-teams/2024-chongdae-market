@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.write
+package com.zzang.chongdae.presentation.view.offeringmodify
 
 import android.app.Dialog
 import android.os.Bundle
@@ -16,15 +16,17 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogDatePickerBinding
-import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
+import com.zzang.chongdae.databinding.FragmentOfferingModifyEssentialBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
+import com.zzang.chongdae.presentation.view.home.HomeFragment
+import com.zzang.chongdae.presentation.view.write.OnDateTimeButtonsClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
 @AndroidEntryPoint
-class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListener {
-    private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
+class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListener {
+    private var _fragmentBinding: FragmentOfferingModifyEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
     private var _dateTimePickerBinding: DialogDatePickerBinding? = null
@@ -33,7 +35,11 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
 
-    private val viewModel: OfferingWriteViewModel by activityViewModels()
+    private val offeringId by lazy {
+        arguments?.getLong(HomeFragment.OFFERING_ID) ?: throw IllegalArgumentException()
+    }
+
+    private val viewModel: OfferingModifyViewModel by activityViewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
@@ -41,6 +47,12 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
 
     private val firebaseAnalyticsManager: FirebaseAnalyticsManager by lazy {
         FirebaseAnalyticsManager(firebaseAnalytics)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.initOfferingId(offeringId)
+        viewModel.fetchOfferingDetail()
     }
 
     override fun onCreateView(
@@ -69,17 +81,20 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
     }
 
     private fun observeUIState() {
-        viewModel.writeUIState.observe(viewLifecycleOwner) { state ->
+        viewModel.modifyUIState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is WriteUIState.Error -> {
+                is ModifyUIState.Error -> {
                     showToast(state.message)
                 }
-                is WriteUIState.Empty -> {
+
+                is ModifyUIState.Empty -> {
                     showToast(state.message)
                 }
-                is WriteUIState.InvalidInput -> {
+
+                is ModifyUIState.InvalidInput -> {
                     showToast(state.message)
                 }
+
                 else -> {}
             }
         }
@@ -161,7 +176,8 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
         inflater: LayoutInflater,
         container: ViewGroup?,
     ) {
-        _fragmentBinding = FragmentOfferingWriteEssentialBinding.inflate(inflater, container, false)
+        _fragmentBinding =
+            FragmentOfferingModifyEssentialBinding.inflate(inflater, container, false)
         fragmentBinding.vm = viewModel
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
 
@@ -176,7 +192,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
                 name = "submit_offering_write_essential_event",
                 contentType = "button",
             )
-            findNavController().navigate(R.id.action_offering_write_fragment_essential_to_offering_write_fragment_optional)
+            findNavController().navigate(R.id.action_offering_modify_essential_fragment_to_offering_modify_optional_fragment)
         }
     }
 
@@ -204,6 +220,5 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
     override fun onDestroy() {
         super.onDestroy()
         _fragmentBinding = null
-        viewModel.initOfferingWriteInputs()
     }
 }

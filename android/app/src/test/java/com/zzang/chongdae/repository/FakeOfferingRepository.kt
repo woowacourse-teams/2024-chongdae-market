@@ -6,6 +6,7 @@ import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -74,4 +75,11 @@ class FakeOfferingRepository : OfferingRepository {
         Result.Success(
             TestFixture.meetings,
         )
+
+    override suspend fun patchOffering(
+        offeringId: Long,
+        offeringModifyDomainRequest: OfferingModifyDomainRequest,
+    ): Result<Unit, DataError.Network> {
+        TODO("Not yet implemented")
+    }
 }
