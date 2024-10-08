@@ -132,13 +132,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteClickListener {
     }
 
     private fun showUpdateStatusDialog() {
-        val dialogBinding =
-            DataBindingUtil.inflate<DialogDeleteOfferingBinding>(
-                layoutInflater,
-                R.layout.dialog_delete_offering,
-                null,
-                false,
-            )
+        val dialogBinding = DialogDeleteOfferingBinding.inflate(layoutInflater, null, false)
 
         dialogBinding.listener = this
 
