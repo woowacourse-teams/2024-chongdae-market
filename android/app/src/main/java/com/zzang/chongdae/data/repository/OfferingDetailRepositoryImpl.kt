@@ -26,4 +26,8 @@ class OfferingDetailRepositoryImpl
             offeringDetailDataSource.saveParticipation(
                 participationRequest = ParticipationRequest(offeringId),
             )
+
+        override suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network> {
+            return offeringDetailDataSource.deleteOffering(offeringId)
+        }
     }

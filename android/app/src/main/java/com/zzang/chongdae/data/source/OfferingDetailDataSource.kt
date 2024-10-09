@@ -9,4 +9,6 @@ interface OfferingDetailDataSource {
     suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetailResponse, DataError.Network>
 
     suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Unit, DataError.Network>
+
+    suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network>
 }

@@ -76,6 +76,12 @@ class OfferingDetailViewModel
         private val _modifyOfferingEvent: MutableSingleLiveData<Long> = MutableSingleLiveData()
         val modifyOfferingEvent: SingleLiveData<Long> get() = _modifyOfferingEvent
 
+        private val _deleteOfferingEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val deleteOfferingEvent: SingleLiveData<Unit> get() = _deleteOfferingEvent
+
+        private val _deleteOfferingSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val deleteOfferingSuccessEvent: SingleLiveData<Unit> get() = _deleteOfferingSuccessEvent
+
         init {
             loadOffering()
         }
@@ -98,7 +104,6 @@ class OfferingDetailViewModel
 
                             else -> {
                                 Log.e("error", "loadOffering Error: ${result.error.name}")
-                                Log.e("alsong", "${result.msg}")
                             }
                         }
 
@@ -163,6 +168,42 @@ class OfferingDetailViewModel
                 return
             }
             _modifyOfferingEvent.setValue(offeringId)
+        }
+
+        fun onClickDeleteButton() {
+            _deleteOfferingEvent.setValue(Unit)
+        }
+
+        fun deleteOffering(offeringId: Long) {
+            viewModelScope.launch {
+                when (val result = offeringDetailRepository.deleteOffering(offeringId)) {
+                    is Result.Error ->
+                        when (result.error) {
+                            DataError.Network.UNAUTHORIZED -> {
+                                when (authRepository.saveRefresh()) {
+                                    is Result.Success -> deleteOffering(offeringId)
+                                    is Result.Error -> return@launch
+                                }
+                            }
+
+                            DataError.Network.NULL -> {
+                                _deleteOfferingSuccessEvent.setValue(Unit)
+                            }
+
+                            DataError.Network.BAD_REQUEST -> {
+                                _error.setValue(R.string.offering_detail_delete_error)
+                            }
+
+                            else -> {
+                                Log.e("error", "onClickOfferingDelete Error: ${result.error.name}")
+                            }
+                        }
+
+                    is Result.Success -> {
+                        _deleteOfferingSuccessEvent.setValue(Unit)
+                    }
+                }
+            }
         }
 
         private fun isParticipationEnabled(

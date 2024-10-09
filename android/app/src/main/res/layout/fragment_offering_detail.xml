@@ -119,12 +119,12 @@
                         tools:text="가나다라마바사아자차" />
 
                     <ImageView
-                        android:onClick="@{() -> vm.onClickOfferingModify()}"
                         android:id="@+id/iv_modify"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="60dp"
+                        android:onClick="@{() -> vm.onClickOfferingModify()}"
                         android:src="@drawable/ic_detail_modify"
                         app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -145,6 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:onClick="@{() -> vm.onClickDeleteButton()}"
                         android:src="@drawable/ic_detail_remove"
                         app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintStart_toEndOf="@id/view_divide_line"
@@ -164,8 +165,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
-                        android:text="@string/offering_detail_product_url_text"
                         android:onClick="@{() -> vm.onClickProductRedirectText(vm.offeringDetail.productUrl)}"
+                        android:text="@string/offering_detail_product_url_text"
                         android:textColor="@color/main_color"
                         android:textSize="16sp"
                         app:isVisible="@{vm.offeringDetail.productUrl != null}"
