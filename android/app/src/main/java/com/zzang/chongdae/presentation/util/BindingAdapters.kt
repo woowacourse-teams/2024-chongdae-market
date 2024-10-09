@@ -2,6 +2,7 @@ package com.zzang.chongdae.presentation.util
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.os.SystemClock
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
@@ -335,4 +336,18 @@ private fun TextView.setDiscountRate(
 @BindingAdapter("originPrice")
 fun EditText.setOriginPriceHint(originPrice: Int) {
     this.hint = context.getString(R.string.write_current_split_price).format(originPrice)
+}
+
+@BindingAdapter("debouncedOnClick")
+fun View.setDebouncedOnClick(clickListener: View.OnClickListener?) {
+    val debounceTime = 500L
+    var lastClickTime = 0L
+
+    setOnClickListener {
+        val currentTime = SystemClock.elapsedRealtime()
+        if (currentTime - lastClickTime >= debounceTime) {
+            lastClickTime = currentTime
+            clickListener?.onClick(this)
+        }
+    }
 }

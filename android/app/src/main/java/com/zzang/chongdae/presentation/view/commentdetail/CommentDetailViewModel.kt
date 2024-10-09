@@ -179,7 +179,6 @@ class CommentDetailViewModel
             if (content.isNullOrEmpty()) {
                 return
             }
-
             viewModelScope.launch {
                 when (val result = commentDetailRepository.saveComment(offeringId, content)) {
                     is Result.Success -> {

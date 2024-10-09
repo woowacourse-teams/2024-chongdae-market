@@ -12,15 +12,11 @@
             type="com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:onClick="@{() -> onCommentRoomClickListener.onClick(commentRoom.id, commentRoom.title)}">
-
-
-
+        app:debouncedOnClick="@{() -> onCommentRoomClickListener.onClick(commentRoom.id, commentRoom.title)}">
 
         <ImageView
             android:id="@+id/iv_profile"
