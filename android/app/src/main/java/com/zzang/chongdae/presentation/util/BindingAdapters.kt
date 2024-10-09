@@ -338,14 +338,17 @@ fun EditText.setOriginPriceHint(originPrice: Int) {
     this.hint = context.getString(R.string.write_current_split_price).format(originPrice)
 }
 
-@BindingAdapter("debouncedOnClick")
-fun View.setDebouncedOnClick(clickListener: View.OnClickListener?) {
-    val debounceTime = 500L
+@BindingAdapter(value = ["debouncedOnClick", "debounceTime"], requireAll = false)
+fun View.setDebouncedOnClick(
+    clickListener: View.OnClickListener?,
+    debounceTime: Long?,
+) {
+    val safeDebounceTime = debounceTime ?: 500L
     var lastClickTime = 0L
 
     setOnClickListener {
         val currentTime = SystemClock.elapsedRealtime()
-        if (currentTime - lastClickTime >= debounceTime) {
+        if (currentTime - lastClickTime >= safeDebounceTime) {
             lastClickTime = currentTime
             clickListener?.onClick(this)
         }
