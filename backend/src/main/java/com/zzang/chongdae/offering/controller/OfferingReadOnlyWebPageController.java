@@ -16,4 +16,9 @@ public class OfferingReadOnlyWebPageController {
     String renderOffering() {
         return "index";
     }
+
+    @GetMapping("/read-only/web/deeplink/offerings/{offering-id}")
+    String renderDeeplink(@PathVariable("offering-id") Long offeringId) {
+        return "detail";
+    }
 }
