@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.mypage
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,6 +24,8 @@ class MyPageFragment : Fragment() {
 
     private var _alertBinding: DialogAlertBinding? = null
     private val alertBinding get() = _alertBinding!!
+
+    private val alert: Dialog by lazy { Dialog(requireContext()) }
 
     private val viewModel: MyPageViewModel by viewModels()
 
@@ -51,7 +54,8 @@ class MyPageFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         _alertBinding = DialogAlertBinding.inflate(inflater, container, false)
-        alertBinding.tvDialogMessage.text = getString(R.string.my_page_logout_text)
+        alertBinding.listener = viewModel
+        alertBinding.tvDialogMessage.text = getString(R.string.my_page_logout_dialog_description)
     }
 
     override fun onViewCreated(
@@ -65,6 +69,13 @@ class MyPageFragment : Fragment() {
     private fun setUpObserve() {
         viewModel.openUrlInBrowserEvent.observe(viewLifecycleOwner) {
             openUrlInBrowser(it)
+        }
+        viewModel.showAlertEvent.observe(viewLifecycleOwner) {
+            alert.setContentView(alertBinding.root)
+            alert.show()
+        }
+        viewModel.alertCancelEvent.observe(viewLifecycleOwner) {
+            alert.dismiss()
         }
         viewModel.logoutEvent.observe(viewLifecycleOwner) {
             clearDataAndLogout()
