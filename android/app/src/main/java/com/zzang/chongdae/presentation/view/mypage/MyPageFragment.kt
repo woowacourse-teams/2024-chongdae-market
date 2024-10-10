@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
+import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.FragmentMyPageBinding
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
+
+    private var _alertBinding: DialogAlertBinding? = null
+    private val alertBinding get() = _alertBinding!!
 
     private val viewModel: MyPageViewModel by viewModels()
 
@@ -44,6 +49,9 @@ class MyPageFragment : Fragment() {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        _alertBinding = DialogAlertBinding.inflate(inflater, container, false)
+        alertBinding.tvDialogMessage.text = getString(R.string.my_page_logout_text)
     }
 
     override fun onViewCreated(
