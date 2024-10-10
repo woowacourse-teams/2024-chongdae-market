@@ -31,15 +31,13 @@ public class SchedulerService {
     }
 
     private void updateStatusConfirmedDaily(LocalDateTime meetingDate) {
-        List<OfferingEntity> offerings
-                = offeringRepository.findByMeetingDateAndOfferingStatusNot(meetingDate, OfferingStatus.CONFIRMED);
+        List<OfferingEntity> offerings = offeringRepository.findByMeetingDateAndOfferingStatusNotConfirmed(meetingDate);
         offerings.forEach(offering -> offering.updateOfferingStatus(OfferingStatus.CONFIRMED));
         offerings.forEach(offering -> offering.updateRoomStatus(CommentRoomStatus.BUYING));
     }
 
     private void updateStatusImminentDaily(LocalDateTime meetingDate) {
-        List<OfferingEntity> offerings
-                = offeringRepository.findByMeetingDateAndOfferingStatusNot(meetingDate, OfferingStatus.CONFIRMED);
+        List<OfferingEntity> offerings = offeringRepository.findByMeetingDateAndOfferingStatusNotConfirmed(meetingDate);
         offerings.forEach(offering -> offering.updateOfferingStatus(OfferingStatus.IMMINENT));
     }
 }

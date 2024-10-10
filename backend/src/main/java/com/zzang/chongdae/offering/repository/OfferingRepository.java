@@ -1,7 +1,6 @@
 package com.zzang.chongdae.offering.repository;
 
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -130,7 +129,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
 //    @Query("""
 //            SELECT o
 //            FROM OfferingEntity o
-//            WHERE (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+//            WHERE (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
 //               AND (o.discountRate < :lastDiscountRate OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
 //               AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
 //            ORDER BY o.discountRate DESC, o.id DESC
@@ -142,7 +141,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             SELECT o
             FROM OfferingEntity o
             WHERE (o.discountRate < :lastDiscountRate)
-                AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithoutKeywordLessThanDiscountRate(
@@ -152,7 +151,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             SELECT o
             FROM OfferingEntity o
             WHERE (o.discountRate = :lastDiscountRate AND o.id < :lastId)
-                AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithoutKeywordEqualDiscountRate(
@@ -163,7 +162,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             FROM OfferingEntity o
             WHERE (o.discountRate < :lastDiscountRate)
                AND (o.title LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithTitleKeywordLessThanDiscountRate(
@@ -174,7 +173,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             FROM OfferingEntity o
             WHERE (o.discountRate = :lastDiscountRate AND o.id < :lastId)
                AND (o.title LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithTitleKeywordEqualDiscountRate(
@@ -185,7 +184,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             FROM OfferingEntity o
             WHERE (o.discountRate < :lastDiscountRate)
                AND (o.meetingAddress LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeywordLessThanDiscountRate(
@@ -196,7 +195,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             FROM OfferingEntity o
             WHERE (o.discountRate = :lastDiscountRate AND o.id < :lastId)
                AND (o.meetingAddress LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
+               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeywordEqualDiscountRate(
@@ -250,8 +249,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             SELECT o
             FROM OfferingEntity o
             WHERE o.meetingDate = :meetingDate
-                AND o.offeringStatus != :offeringStatus
+                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             """)
-    List<OfferingEntity> findByMeetingDateAndOfferingStatusNot(LocalDateTime meetingDate,
-                                                               OfferingStatus offeringStatus);
+    List<OfferingEntity> findByMeetingDateAndOfferingStatusNotConfirmed(LocalDateTime meetingDate);
 }
