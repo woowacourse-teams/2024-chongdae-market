@@ -203,15 +203,45 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 
     // ============================================================
+//    @Query("""
+//            SELECT o
+//            FROM OfferingEntity o
+//            WHERE (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
+//               AND (o.id < :lastId)
+//               AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
+//            ORDER BY o.id DESC
+//            """)
+//    List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
+
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
-               AND (o.id < :lastId)
-               AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
+            WHERE (o.id < :lastId)
+                AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
             ORDER BY o.id DESC
             """)
-    List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
+    List<OfferingEntity> findJoinableOfferingsWithoutKeyword(Long lastId, Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.id < :lastId)
+               AND (o.title LIKE :keyword%)
+               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
+            ORDER BY o.id DESC
+            """)
+    List<OfferingEntity> findJoinableOfferingsWithTitleKeyword(Long lastId, String keyword, Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.id < :lastId)
+               AND (o.meetingAddress LIKE :keyword%)
+               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
+            ORDER BY o.id DESC
+            """)
+    List<OfferingEntity> findJoinableOfferingsWithMeetingAddressKeyword(Long lastId, String keyword, Pageable pageable);
+    // ============================================================
 
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();
