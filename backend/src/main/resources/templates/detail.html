@@ -152,9 +152,8 @@
             let userAgent = navigator.userAgent || navigator.vendor || window.opera;
             if (/android/i.test(userAgent)) {
                 return `intent://offerings/${offering.id}#Intent;scheme=chongdaeapp;package=com.zzang.chongdae;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.zzang.chongdae;end`;
-            } else {
-                return playStoreUrl;
             }
+                return playStoreUrl;
         }
 
         function getOfferingIdFromPath() {
