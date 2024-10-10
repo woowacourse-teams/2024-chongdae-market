@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
@@ -29,6 +30,7 @@ class OfferingDetailViewModel
         @Assisted private val offeringId: Long,
         @OfferingDetailRepositoryQualifier val offeringDetailRepository: OfferingDetailRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        private val userPreferencesDataStore: UserPreferencesDataStore,
     ) : ViewModel(),
         OnParticipationClickListener,
         OnOfferingReportClickListener,
@@ -82,6 +84,9 @@ class OfferingDetailViewModel
         private val _deleteOfferingSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
         val deleteOfferingSuccessEvent: SingleLiveData<Unit> get() = _deleteOfferingSuccessEvent
 
+        private val _refreshTokenExpiredEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val refreshTokenExpiredEvent: SingleLiveData<Unit> get() = _refreshTokenExpiredEvent
+
         init {
             loadOffering()
         }
@@ -94,7 +99,11 @@ class OfferingDetailViewModel
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
                                     is Result.Success -> loadOffering()
-                                    is Result.Error -> return@launch
+                                    is Result.Error -> {
+                                        userPreferencesDataStore.removeAllData()
+                                        _refreshTokenExpiredEvent.setValue(Unit)
+                                        return@launch
+                                    }
                                 }
                             }
 
@@ -128,7 +137,11 @@ class OfferingDetailViewModel
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
                                     is Result.Success -> onClickParticipation()
-                                    is Result.Error -> return@launch
+                                    is Result.Error -> {
+                                        userPreferencesDataStore.removeAllData()
+                                        _refreshTokenExpiredEvent.setValue(Unit)
+                                        return@launch
+                                    }
                                 }
                             }
 

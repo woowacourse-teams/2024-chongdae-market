@@ -36,8 +36,20 @@
 
         <activity
             android:name=".presentation.view.MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+            android:exported="true"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="offerings"
+                    android:pathPattern="/.*"
+                    android:scheme="chongdaeapp" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".presentation.view.commentdetail.CommentDetailActivity"
