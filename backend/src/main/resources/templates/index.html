@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>총대마켓 ⛳️</title>
+    <style>
+        * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: Inter, sans-serif;
+        }
+
+        body {
+         background-color: #f5f5f5;
+         display: flex;
+         justify-content: center;
+         padding: 20px;
+        }
+
+        .container {
+         width: 100%;
+         max-width: 500px;
+         margin: 0 auto;
+         display: flex;
+         flex-direction: column;
+        }
+
+        #search-input {
+         width: 100%;
+         padding: 10px;
+         border: 1px solid #ddd;
+         border-radius: 5px;
+         margin-bottom: 10px;
+        }
+
+        #search-button {
+         width: 100%;
+         padding: 10px;
+         background-color: #ff5a5a;
+         color: white;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         margin-bottom: 10px;
+        }
+
+        #filter-container {
+           width: 100%;
+           display: flex;
+           flex-direction: column;
+           margin-bottom: 20px;
+           position: sticky;
+           top: 0;
+           background-color: #f5f5f5;
+           z-index: 1000;
+           padding: 10px 0;
+           border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        #filters {
+           display: flex;
+           gap: 10px;
+           overflow-x: auto;
+           white-space: nowrap;
+           padding-bottom: 10px;
+        }
+
+        #filters button {
+           flex-shrink: 0;
+           padding: 8px;
+           border: 1px solid #ddd;
+           border-radius: 20px;
+           cursor: pointer;
+           background-color: white;
+           font-size: 14px;
+           display: inline-block;
+        }
+
+        #filters button.active {
+           background-color: #ff5a5a;
+           color: white;
+        }
+
+        #offerings-container {
+         display: flex;
+         flex-direction: column;
+         gap: 15px;
+        }
+
+        .offering-card {
+         display: flex;
+         align-items: center;
+         padding: 15px;
+         background-color: white;
+         border: 1px solid #ddd;
+         border-radius: 10px;
+        }
+
+        .offering-card a {
+           display: flex;
+           align-items: center;
+           width: 100%;
+           text-decoration: none;
+           color: inherit;
+        }
+
+        .offering-card img {
+         width: 7rem;
+         height: 7rem;
+         border-radius: 17%;
+         margin-right: 15px;
+         object-fit: cover;
+         background-color: #f0f0f0;
+        }
+
+        .offering-card h3 {
+         font-size: 16px;
+         font-weight: bold;
+         margin-bottom: 5px;
+        }
+
+        .offering-card p {
+         font-size: 14px;
+         color: #555;
+        }
+
+        .offering-card p:last-child {
+         font-size: 14px;
+         color: #e74c3c;
+         font-weight: bold;
+        }
+
+
+        .status-badge {
+         display: inline-block;
+         padding: 2px 8px;
+         font-size: 12px;
+         border-radius: 12px;
+         color: white;
+         margin-bottom: 5px;
+        }
+
+        .status-available {
+         background-color: #2ecc71;
+        }
+
+        .status-imminent {
+         background-color: #f39c12;
+        }
+
+        .status-closed {
+         background-color: #e74c3c;
+        }
+
+        .status-full {
+        background-color: #49619D;
+        }
+
+        .title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .price {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .discount-rate {
+            font-size: 16px;
+            color: #e74c3c;
+            text-align: right;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .discounted-price {
+                    font-size: 24px;
+                    color: #e74c3c;
+                    font-weight: bold;
+                    text-align: right;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .content {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+           <div id="filter-container">
+               <input type="text" id="search-input" placeholder="검색할 내용을 입력해주세요." />
+               <button id="search-button">검색</button>
+               <div id="filters">
+                   <!-- filter list -->
+               </div>
+           </div>
+           <div id="offerings-container">
+               <!-- offering list -->
+           </div>
+       </div>
+    <script>
+        let currentFilter = '';
+        let lastId = -1;
+        let isLoading = false;
+        let search = '';
+
+        async function fetchOfferings(filter = '', lastId = -1, search = '') {
+            const response = await fetch(`/read-only/offerings?filter=${filter}${lastId !== -1 ? '&last-id=' + lastId : ''}${search !== '' ? '&search=' + encodeURIComponent(search) : ''}`);
+            const data = await response.json();
+            return data.offerings;
+        }
+
+        async function fetchFilters() {
+            const response = await fetch('/read-only/offerings/filters');
+            const data = await response.json();
+            return data.filters;
+        }
+
+        function renderFilters(filters) {
+            const filterContainer = document.getElementById('filters');
+            filters.forEach(filter => {
+                const button = document.createElement('button');
+                button.textContent = filter.value;
+                button.setAttribute('data-filter', filter.name);
+                button.addEventListener('click', async () => {
+                    currentFilter = filter.name;
+                    lastId = -1;
+                    isLoading = false;
+                    document.querySelectorAll('#filters button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const offerings = await fetchOfferings(currentFilter, lastId, search);
+                    renderOfferings(offerings, true);
+                });
+                filterContainer.appendChild(button);
+            });
+        }
+
+        function renderOfferings(offerings, clear = false) {
+            const offeringsContainer = document.getElementById('offerings-container');
+            if (clear) {
+                offeringsContainer.innerHTML = '';
+            }
+
+            offerings.forEach(offering => {
+                const offeringCard = document.createElement('div');
+                offeringCard.className = 'offering-card';
+                statusName = '모집중';
+
+                // Determine the status badge color
+                let statusClass = 'status-available';
+                if (offering.status === 'IMMINENT') {
+                    statusClass = 'status-imminent';
+                    statusName = '마감임박';
+                } else if (offering.status === 'CLOSED') {
+                    statusClass = 'status-closed';
+                    statusName = '모집마감';
+                } else if (offering.status === 'FULL') {
+                    statusClass = 'status-full';
+                    statusName = '인원만석';
+                }
+
+                offeringCard.innerHTML = `
+                        <a href="/read-only/web/offerings/${offering.id}">
+                            <img src="${offering.thumbnailUrl}" alt="${offering.title}" />
+                            <div class="content">
+                                <span class="status-badge ${statusClass}">${statusName}</span>
+                                <div class="title">${offering.title}</div>
+                                <div class="location">${offering.meetingAddressDong}</div>
+                                <div class="price">
+                                    <div class="original-price">${offering.originPrice}원</div>
+                                    <div class="price-info">
+                                        <div class="discount-rate">${offering.discountRate}% ↓</div>
+                                        <div class="discounted-price">${offering.dividedPrice}원</div>
+                                    </div>
+                               </div>
+                            </div>
+                        </a>
+                `;
+                offeringsContainer.appendChild(offeringCard);
+            });
+            lastId = offerings[offerings.length - 1].id;
+        }
+
+        async function loadMoreOfferings() {
+            if (isLoading) return;
+            isLoading = true;
+
+            const newOfferings = await fetchOfferings(currentFilter, lastId, search);
+            if (newOfferings.length > 0) {
+                renderOfferings(newOfferings);
+            }
+
+            isLoading = false; // Reset the loading flag
+        }
+
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+                loadMoreOfferings();
+            }
+        });
+
+        async function initializePage() {
+            const filters = await fetchFilters();
+            renderFilters(filters);
+
+            const initialOfferings = await fetchOfferings(currentFilter, lastId, search);
+            renderOfferings(initialOfferings);
+        }
+
+        document.getElementById('search-button').addEventListener('click', async () => {
+            const searchInput = document.getElementById('search-input').value.trim();
+            search = searchInput;
+            currentPage = -1;
+            isLoading = false;
+            const offerings = await fetchOfferings(currentFilter, currentPage, search);
+            renderOfferings(offerings, true);
+        });
+
+        document.addEventListener('DOMContentLoaded', initializePage)
+    </script>
+</body>
+</html>
