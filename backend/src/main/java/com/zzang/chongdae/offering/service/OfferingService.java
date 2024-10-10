@@ -27,12 +27,10 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpHeaders;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -178,17 +176,5 @@ public class OfferingService {
         if (offering.getRoomStatus().isInProgress()) {
             throw new MarketException(OfferingErrorCode.CANNOT_DELETE_STATUS);
         }
-    }
-
-    public String decideRedirectUrl(Long offeringId, HttpServletRequest request) {
-        String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
-        if (isMobileDevice(userAgent)) {
-            return "redirect:chongdaeapp://offerings/%d".formatted(offeringId);
-        }
-        return "redirect:/read-only/web/offerings/%d".formatted(offeringId);
-    }
-
-    private boolean isMobileDevice(String userAgent) {
-        return userAgent != null && userAgent.contains("Android");
     }
 }
