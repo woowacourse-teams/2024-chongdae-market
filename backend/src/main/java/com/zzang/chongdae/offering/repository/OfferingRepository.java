@@ -22,11 +22,27 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE o.id < :lastId
-                AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
+            WHERE o.id < :lastId AND o.title LIKE :keyword%
             ORDER BY o.id DESC
             """)
-    List<OfferingEntity> findRecentOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
+    List<OfferingEntity> findRecentOfferingsWithTitleKeyword(Long lastId, String keyword, Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE o.id < :lastId AND o.meetingAddress LIKE :keyword%
+            ORDER BY o.id DESC
+            """)
+    List<OfferingEntity> findRecentOfferingsWithMeetingAddressKeyword(Long lastId, String keyword,
+                                                                      Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE o.id < :lastId
+            ORDER BY o.id DESC
+            """)
+    List<OfferingEntity> findRecentOfferingsWithoutKeyword(Long lastId, Pageable pageable);
 
     @Query("""
             SELECT o
