@@ -87,7 +87,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
     }
 
     private fun searchPlace() {
-        fragmentBinding.tvPlaceValue.setDebouncedOnClickListener {
+        fragmentBinding.tvPlaceValue.setDebouncedOnClickListener(800L) {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
         setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
