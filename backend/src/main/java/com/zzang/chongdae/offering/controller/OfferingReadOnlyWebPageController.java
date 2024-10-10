@@ -30,7 +30,7 @@ public class OfferingReadOnlyWebPageController {
             // 모바일 기기인 경우 앱으로 리다이렉트
             return "redirect:chongdaeapp://offerings/%d".formatted(offeringId);
         } else {
-            return "redirect:read-only/web/offerings/%d".formatted(offeringId);
+            return "redirect:/read-only/web/offerings/%d".formatted(offeringId);
         }
     }
 
