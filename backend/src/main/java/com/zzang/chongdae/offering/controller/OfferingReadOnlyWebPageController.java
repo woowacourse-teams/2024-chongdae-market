@@ -20,7 +20,7 @@ public class OfferingReadOnlyWebPageController {
     }
 
 
-    @GetMapping("/read-only/web/deeplink/offerings/{offeringId}")
+    @GetMapping("/read-only/deeplink/offerings/{offeringId}")
     public String handleDeepLink(@PathVariable Long offeringId,
                                  HttpServletRequest request) throws IOException {
 

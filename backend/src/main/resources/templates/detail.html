@@ -133,16 +133,17 @@
             updateButton(offering);
         }
 
-        function updateButton(data) {
+        function updateButton(offering) {
             const ctaButton = document.getElementById('cta-button');
-            const isAvailable = data.isOpen;
+            const isAvailable = offering.isOpen;
 
             ctaButton.textContent = isAvailable
-                ? `총대마켓⛳ 설치하고 참여하기 (${data.currentCount}/${data.totalCount})`
+                ? `총대마켓⛳ 설치하고 참여하기 (${offering.currentCount}/${offering.totalCount})`
                 : '아쉽지만, 공모에 참여할 수 없어요 😥';
 
             ctaButton.style.backgroundColor = isAvailable ? '#e74c3c' : '#999';
             ctaButton.style.color = 'white';
+            ctaButton.href = isAvailable ? `/read-only/deeplink/offerings/${offering.id}` : '#';
         }
 
         function getOfferingIdFromPath() {
