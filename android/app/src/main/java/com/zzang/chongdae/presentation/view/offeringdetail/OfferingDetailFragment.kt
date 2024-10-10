@@ -22,6 +22,7 @@ import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
+import com.zzang.chongdae.presentation.view.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -163,7 +164,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     }
 
     private fun setUpMoveCommentDetailEventObserve() {
-        viewModel.commentDetailEvent.observe(this) {
+        viewModel.commentDetailEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "Offering_Item_ID: $offeringId",
                 name = "participate_offering_event",
@@ -171,6 +172,10 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             )
             findNavController().popBackStack()
             CommentDetailActivity.startActivity(requireContext(), offeringId)
+        }
+
+        viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {
+            LoginActivity.startActivity(requireContext())
         }
     }
 
