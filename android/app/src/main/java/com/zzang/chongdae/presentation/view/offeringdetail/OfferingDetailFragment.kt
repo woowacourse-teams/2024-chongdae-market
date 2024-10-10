@@ -163,7 +163,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     }
 
     private fun setUpMoveCommentDetailEventObserve() {
-        viewModel.commentDetailEvent.observe(this) {
+        viewModel.commentDetailEvent.observe(viewLifecycleOwner) {
             firebaseAnalyticsManager.logSelectContentEvent(
                 id = "Offering_Item_ID: $offeringId",
                 name = "participate_offering_event",
