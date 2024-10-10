@@ -22,6 +22,7 @@ import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
+import com.zzang.chongdae.presentation.view.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -171,6 +172,10 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             )
             findNavController().popBackStack()
             CommentDetailActivity.startActivity(requireContext(), offeringId)
+        }
+
+        viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {
+            LoginActivity.startActivity(requireContext())
         }
     }
 
