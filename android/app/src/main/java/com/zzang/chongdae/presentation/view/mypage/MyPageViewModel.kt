@@ -49,10 +49,6 @@ constructor(
     }
 
     fun onClickLogout() {
-//        viewModelScope.launch {
-//            userPreferencesDataStore.removeAllData()
-//        }
-//        _logoutEvent.setValue(Unit)
         _showAlertEvent.setValue(Unit)
     }
 
@@ -61,7 +57,6 @@ constructor(
     }
 
     override fun onClickConfirm() {
-        Log.d("alsong", "onClickConfirm")
         viewModelScope.launch {
             userPreferencesDataStore.removeAllData()
         }
@@ -69,7 +64,6 @@ constructor(
     }
 
     override fun onClickCancel() {
-        Log.d("alsong", "onClickCancel")
         _alertCancelEvent.setValue(Unit)
     }
 }

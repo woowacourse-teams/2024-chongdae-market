@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
+import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.DialogDeleteOfferingBinding
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
@@ -112,6 +114,19 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             setFragmentResult(OFFERING_DETAIL_BUNDLE_KEY, bundleOf(DELETED_OFFERING_ID_KEY to true))
             showToast(R.string.offering_detail_delete_complete_message)
         }
+
+        viewModel.showAlertEvent.observe(viewLifecycleOwner) {
+            val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
+            alertBinding.tvDialogMessage.text = getString(R.string.offering_detail_participate_alert)
+            alertBinding.listener = viewModel
+
+            dialog.setContentView(alertBinding.root)
+            dialog.show()
+        }
+
+        viewModel.alertCancelEvent.observe(viewLifecycleOwner) {
+            dialog.dismiss()
+        }
     }
 
     override fun onClickConfirm() {
@@ -172,6 +187,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             )
             findNavController().popBackStack()
             CommentDetailActivity.startActivity(requireContext(), offeringId)
+            dialog.dismiss()
         }
 
         viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {

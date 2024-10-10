@@ -354,7 +354,7 @@
             android:background="@drawable/btn_participation_enabled"
             android:enabled="@{vm.isParticipationAvailable}"
             android:fontFamily="@font/suit_medium"
-            app:debouncedOnClick="@{() -> vm.onClickParticipation()}"
+            app:debouncedOnClick="@{() -> vm.onParticipateClick()}"
             android:textColor="@color/white"
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"

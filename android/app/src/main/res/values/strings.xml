@@ -78,6 +78,7 @@
     <string name="offering_detail_dialog_cancel_text">취소</string>
     <string name="offering_detail_dialog_confirm_text">확인</string>
     <string name="offering_detail_delete_complete_message">게시물이 삭제되었어요!</string>
+    <string name="offering_detail_participate_alert">참여하시겠습니까?</string>
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
