@@ -25,6 +25,7 @@ import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.Meetings
 import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel.Companion.toUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel.Companion.toUiModel
+import com.zzang.chongdae.presentation.view.common.OnAlertClickListener
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -41,7 +42,8 @@ class CommentDetailViewModel
         @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
         @ParticipantRepositoryQualifier private val participantRepository: ParticipantRepository,
         @CommentDetailRepositoryQualifier private val commentDetailRepository: CommentDetailRepository,
-    ) : ViewModel() {
+    ) : ViewModel(),
+        OnAlertClickListener {
         @AssistedFactory
         interface CommentDetailAssistedFactory {
             fun create(offeringId: Long): CommentDetailViewModel
@@ -80,6 +82,12 @@ class CommentDetailViewModel
 
         private val _errorEvent = MutableLiveData<String>()
         val errorEvent: MutableLiveData<String> get() = _errorEvent
+
+        private val _showAlertEvent = MutableSingleLiveData<Unit>()
+        val showAlertEvent: SingleLiveData<Unit> get() = _showAlertEvent
+
+        private val _alertCancelEvent = MutableSingleLiveData<Unit>()
+        val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
 
         init {
             startPolling()
@@ -308,5 +316,17 @@ class CommentDetailViewModel
                     return assistedFactory.create(offeringId) as T
                 }
             }
+        }
+
+        fun onExitClick() {
+            _showAlertEvent.setValue(Unit)
+        }
+
+        override fun onClickConfirm() {
+            exitOffering()
+        }
+
+        override fun onClickCancel() {
+            _alertCancelEvent.setValue(Unit)
         }
     }

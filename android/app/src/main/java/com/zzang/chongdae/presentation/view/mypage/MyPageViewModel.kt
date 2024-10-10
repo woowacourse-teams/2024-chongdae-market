@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import com.zzang.chongdae.presentation.view.common.OnAlertClickListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,8 @@ class MyPageViewModel
     @Inject
     constructor(
         private val userPreferencesDataStore: UserPreferencesDataStore,
-    ) : ViewModel() {
+    ) : ViewModel(),
+        OnAlertClickListener {
         val nickName: LiveData<String?> = userPreferencesDataStore.nickNameFlow.asLiveData()
 
         private val _openUrlInBrowserEvent = MutableSingleLiveData<String>()
@@ -24,6 +26,12 @@ class MyPageViewModel
 
         private val _logoutEvent = MutableSingleLiveData<Unit>()
         val logoutEvent: SingleLiveData<Unit> get() = _logoutEvent
+
+        private val _showAlertEvent = MutableSingleLiveData<Unit>()
+        val showAlertEvent: SingleLiveData<Unit> get() = _showAlertEvent
+
+        private val _alertCancelEvent = MutableSingleLiveData<Unit>()
+        val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
 
         private val termsOfUseUrl =
             "https://silent-apparatus-578.notion.site/f1f5cd1609d4469dba3ab7d0f95c183c?pvs=4"
@@ -40,13 +48,21 @@ class MyPageViewModel
         }
 
         fun onClickLogout() {
+            _showAlertEvent.setValue(Unit)
+        }
+
+        fun onClickWithdrawal() {
+            _openUrlInBrowserEvent.setValue(withdrawalUrl)
+        }
+
+        override fun onClickConfirm() {
             viewModelScope.launch {
                 userPreferencesDataStore.removeAllData()
             }
             _logoutEvent.setValue(Unit)
         }
 
-        fun onClickWithdrawal() {
-            _openUrlInBrowserEvent.setValue(withdrawalUrl)
+        override fun onClickCancel() {
+            _alertCancelEvent.setValue(Unit)
         }
     }
