@@ -20,8 +20,7 @@ public class OfferingReadOnlyWebPageController {
     String renderOffering() {
         return "index";
     }
-
-
+    
     @GetMapping("/read-only/deeplink/offerings/{offeringId}")
     public String handleDeepLink(@PathVariable Long offeringId,
                                  HttpServletRequest request) {
