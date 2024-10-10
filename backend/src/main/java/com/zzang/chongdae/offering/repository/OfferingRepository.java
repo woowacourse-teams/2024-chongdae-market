@@ -43,22 +43,95 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             ORDER BY o.id DESC
             """)
     List<OfferingEntity> findRecentOfferingsWithoutKeyword(Long lastId, Pageable pageable);
+    // ============================================================
+//    TODO 확인1 (전)
+//    @Query("""
+//            SELECT o
+//            FROM OfferingEntity o
+//            WHERE (o.offeringStatus = 'IMMINENT')
+//                AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
+//                AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
+//            ORDER BY o.meetingDate ASC, o.id DESC
+//            """)
+//    List<OfferingEntity> findImminentOfferingsWithKeyword(
+//            LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.offeringStatus = 'IMMINENT')
-                AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
-                AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
+            WHERE (o.meetingDate > :lastMeetingDate)
+                AND (o.offeringStatus = 'IMMINENT')
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
-    List<OfferingEntity> findImminentOfferingsWithKeyword(
-            LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
+    List<OfferingEntity> findImminentOfferingsWithoutKeywordMoreThanMeetingDate(LocalDateTime lastMeetingDate,
+                                                                                Pageable pageable);
 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.offeringStatus != 'CONFIRMED')
+            WHERE (o.meetingDate = :lastMeetingDate AND o.id < :lastId)
+                AND (o.offeringStatus = 'IMMINENT')
+            ORDER BY o.meetingDate ASC, o.id DESC
+            """)
+    List<OfferingEntity> findImminentOfferingsWithoutKeywordEqualMeetingDate(LocalDateTime lastMeetingDate,
+                                                                             Long lastId,
+                                                                             Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.meetingDate > :lastMeetingDate)
+                AND (o.title LIKE :keyword%)
+                AND (o.offeringStatus = 'IMMINENT')
+            ORDER BY o.meetingDate ASC, o.id DESC
+            """)
+    List<OfferingEntity> findImminentOfferingsWithTitleKeywordMoreThanMeetingDate(LocalDateTime lastMeetingDate,
+                                                                                  String keyword,
+                                                                                  Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.meetingDate = :lastMeetingDate AND o.id < :lastId)
+                AND (o.title LIKE :keyword%)
+                AND (o.offeringStatus = 'IMMINENT')
+            ORDER BY o.meetingDate ASC, o.id DESC
+            """)
+    List<OfferingEntity> findImminentOfferingsWithTitleKeywordEqualMeetingDate(LocalDateTime lastMeetingDate,
+                                                                               Long lastId,
+                                                                               String keyword,
+                                                                               Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.meetingDate > :lastMeetingDate)
+                AND (o.meetingAddress LIKE :keyword%)
+                AND (o.offeringStatus = 'IMMINENT')
+            ORDER BY o.meetingDate ASC, o.id DESC
+            """)
+    List<OfferingEntity> findImminentOfferingsWithMeetingAddressKeywordMoreMeetingDate(LocalDateTime lastMeetingDate,
+                                                                                       String keyword,
+                                                                                       Pageable pageable);
+
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.meetingDate = :lastMeetingDate AND o.id < :lastId)
+                AND (o.meetingAddress LIKE :keyword%)
+                AND (o.offeringStatus = 'IMMINENT')
+            ORDER BY o.meetingDate ASC, o.id DESC
+            """)
+    List<OfferingEntity> findImminentOfferingsWithMeetingAddressKeywordEqualMeetingDate(LocalDateTime lastMeetingDate,
+                                                                                        Long lastId,
+                                                                                        String keyword,
+                                                                                        Pageable pageable);
+
+    // ============================================================
+    @Query("""
+            SELECT o
+            FROM OfferingEntity o
+            WHERE (o.offeringStatus IN ('AVAILABLE', 'IMMINENT', 'FULL'))
                AND (o.discountRate IS NOT NULL)
                AND (o.discountRate < :lastDiscountRate OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
                AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
