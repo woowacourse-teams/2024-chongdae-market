@@ -109,6 +109,7 @@
     </div>
 
     <script>
+        const playStoreUrl = "https://play.google.com/store/apps/details?id=com.zzang.chongdae";
         async function fetchOfferingDetails(offeringId) {
             try {
                 const response = await fetch(`/read-only/offerings/${offeringId}`);
@@ -134,6 +135,7 @@
         }
 
         function updateButton(offering) {
+            const deepLinkUrl = buildDeeplinkUrl(offering);
             const ctaButton = document.getElementById('cta-button');
             const isAvailable = offering.isOpen;
 
@@ -143,7 +145,16 @@
 
             ctaButton.style.backgroundColor = isAvailable ? '#e74c3c' : '#999';
             ctaButton.style.color = 'white';
-            ctaButton.href = isAvailable ? `intent://offerings/${offering.id}#Intent;scheme=chongdaeapp;package=com.zzang.chongdae;end` : '#';
+            ctaButton.href = isAvailable ? deepLinkUrl : '#';
+        }
+
+        function buildDeeplinkUrl(offering) {
+            let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/android/i.test(userAgent)) {
+                return `intent://offerings/${offering.id}#Intent;scheme=chongdaeapp;package=com.zzang.chongdae;end`;
+            } else {
+                return playStoreUrl;
+            }
         }
 
         function getOfferingIdFromPath() {
