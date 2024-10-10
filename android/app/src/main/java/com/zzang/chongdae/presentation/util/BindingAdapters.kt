@@ -343,10 +343,10 @@ fun View.setDebouncedOnClick(
     clickListener: View.OnClickListener?,
     debounceTime: Long?,
 ) {
-    val safeDebounceTime = debounceTime ?: 500L
+    val safeDebounceTime = debounceTime ?: DEFAULT_DEBOUNCED_TIME
     var lastClickTime = 0L
 
-    setOnClickListener {
+    setDebouncedOnClickListener {
         val currentTime = SystemClock.elapsedRealtime()
         if (currentTime - lastClickTime >= safeDebounceTime) {
             lastClickTime = currentTime

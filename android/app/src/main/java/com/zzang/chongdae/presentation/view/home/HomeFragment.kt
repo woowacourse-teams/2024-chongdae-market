@@ -26,6 +26,7 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
+import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.login.LoginActivity
@@ -81,15 +82,15 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun setOnCheckboxListener() {
-        binding.cbJoinable.setOnClickListener {
+        binding.cbJoinable.setDebouncedOnClickListener {
             handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
         }
 
-        binding.cbImminent.setOnClickListener {
+        binding.cbImminent.setDebouncedOnClickListener {
             handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
         }
 
-        binding.cbHighDiscount.setOnClickListener {
+        binding.cbHighDiscount.setDebouncedOnClickListener {
             handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
         }
 
@@ -243,7 +244,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun navigateToOfferingWriteFragment() {
-        binding.fabCreateOffering.setOnClickListener {
+        binding.fabCreateOffering.setDebouncedOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
         }
     }
