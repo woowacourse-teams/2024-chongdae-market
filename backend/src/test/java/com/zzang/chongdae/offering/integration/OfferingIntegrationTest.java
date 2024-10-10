@@ -513,7 +513,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    LocalDateTime.parse("2030-10-11T10:00:00"),
                     "내용입니다."
             );
 
@@ -540,7 +540,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    LocalDateTime.parse("2030-10-11T10:00:00"),
                     "내용입니다."
             );
 
