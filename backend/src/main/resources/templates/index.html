@@ -226,6 +226,7 @@
         let lastId = -1;
         let isLoading = false;
         let search = '';
+        const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
 
         async function fetchOfferings(filter = '', lastId = -1, search = '') {
             const response = await fetch(`/read-only/offerings?filter=${filter}${lastId !== -1 ? '&last-id=' + lastId : ''}${search !== '' ? '&search=' + encodeURIComponent(search) : ''}`);
@@ -281,19 +282,18 @@
                     statusClass = 'status-full';
                     statusName = '인원만석';
                 }
-
                 offeringCard.innerHTML = `
                         <a href="/read-only/web/offerings/${offering.id}">
-                            <img src="${offering.thumbnailUrl}" alt="${offering.title}" />
+                            <img src="${offering.thumbnailUrl || defaultThumbnailUrl}" alt="${offering.title}" />
                             <div class="content">
                                 <span class="status-badge ${statusClass}">${statusName}</span>
                                 <div class="title">${offering.title}</div>
-                                <div class="location">${offering.meetingAddressDong}</div>
+                                <div class="location">${offering.meetingAddressDong || ''}</div>
                                 <div class="price">
-                                    <div class="original-price">${offering.originPrice}원</div>
+                                    <div class="original-price">${offering.originPrice ? offering.originPrice.toLocaleString() + '원' : '' }</div>
                                     <div class="price-info">
-                                        <div class="discount-rate">${offering.discountRate}% ↓</div>
-                                        <div class="discounted-price">${offering.dividedPrice}원</div>
+                                        <div class="discount-rate">${offering.discountRate ? offering.discountRate + '% ↓' : '' }</div>
+                                        <div class="discounted-price">${offering.dividedPrice ? offering.dividedPrice.toLocaleString() + '원' : '' }</div>
                                     </div>
                                </div>
                             </div>
