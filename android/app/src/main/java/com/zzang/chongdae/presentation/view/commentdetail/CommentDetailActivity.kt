@@ -20,6 +20,7 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
+import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,10 +74,10 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
 
     private fun setupDrawerToggle() {
-        binding.ivMoreOptions.setOnClickListener {
+        binding.ivMoreOptions.setDebouncedOnClickListener {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
-                return@setOnClickListener
+                return@setDebouncedOnClickListener
             }
             binding.drawerLayout.openDrawer(GravityCompat.END)
             firebaseAnalyticsManager.logSelectContentEvent(

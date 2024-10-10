@@ -17,6 +17,7 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
+import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,7 +87,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
     }
 
     private fun searchPlace() {
-        fragmentBinding.tvPlaceValue.setOnClickListener {
+        fragmentBinding.tvPlaceValue.setDebouncedOnClickListener(800L) {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
         setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
