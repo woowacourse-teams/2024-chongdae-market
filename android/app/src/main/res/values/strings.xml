@@ -102,6 +102,7 @@
     <string name="deal_confirm">거래확정</string>
     <string name="offering_members">참여자 목록 (%d명/%d명)</string>
     <string name="comment_detail_expected_price">예상 공동구매 엔빵 가격</string>
+    <string name="comment_detail_exit_alert">공동구매에서 퇴장하시겠습니까?</string>
 
     <!--    offering_write-->
     <string name="write_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
