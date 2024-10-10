@@ -82,15 +82,15 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun setOnCheckboxListener() {
-        binding.cbJoinable.setDebouncedOnClickListener {
+        binding.cbJoinable.setOnClickListener {
             handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
         }
 
-        binding.cbImminent.setDebouncedOnClickListener {
+        binding.cbImminent.setOnClickListener {
             handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
         }
 
-        binding.cbHighDiscount.setDebouncedOnClickListener {
+        binding.cbHighDiscount.setOnClickListener {
             handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
         }
 
