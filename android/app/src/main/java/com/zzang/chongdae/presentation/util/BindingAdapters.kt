@@ -2,7 +2,6 @@ package com.zzang.chongdae.presentation.util
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.os.SystemClock
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
@@ -343,14 +342,8 @@ fun View.setDebouncedOnClick(
     clickListener: View.OnClickListener?,
     debounceTime: Long?,
 ) {
-    val safeDebounceTime = debounceTime ?: DEFAULT_DEBOUNCED_TIME
-    var lastClickTime = 0L
-
-    setDebouncedOnClickListener {
-        val currentTime = SystemClock.elapsedRealtime()
-        if (currentTime - lastClickTime >= safeDebounceTime) {
-            lastClickTime = currentTime
-            clickListener?.onClick(this)
-        }
+    val safeDebounceTime = debounceTime ?: DEFAULT_DEBOUNCE_TIME
+    setDebouncedOnClickListener(safeDebounceTime) {
+        clickListener?.onClick(this)
     }
 }

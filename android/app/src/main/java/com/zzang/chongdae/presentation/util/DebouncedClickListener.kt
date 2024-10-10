@@ -4,12 +4,12 @@ import android.os.SystemClock
 import android.view.View
 
 fun View.setDebouncedOnClickListener(
-    debounceTime: Long = DEFAULT_DEBOUNCED_TIME,
+    debounceTime: Long = DEFAULT_DEBOUNCE_TIME,
     action: (View) -> Unit,
 ) {
     var lastClickTime = 0L
 
-    this.setDebouncedOnClickListener {
+    this.setOnClickListener {
         val currentTime = SystemClock.elapsedRealtime()
         if (currentTime - lastClickTime >= debounceTime) {
             lastClickTime = currentTime
@@ -18,4 +18,4 @@ fun View.setDebouncedOnClickListener(
     }
 }
 
-const val DEFAULT_DEBOUNCED_TIME = 200L
+const val DEFAULT_DEBOUNCE_TIME = 200L
