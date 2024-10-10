@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offerings List</title>
     <style>
-        /* Basic resets */
         * {
          margin: 0;
          padding: 0;
@@ -22,17 +21,10 @@
 
         .container {
          width: 100%;
-         max-width: 500px; /* Limit the max width for better centering */
+         max-width: 500px;
          margin: 0 auto;
          display: flex;
          flex-direction: column;
-        }
-
-        /* Container styles */
-        #filter-container {
-         display: flex;
-         flex-direction: column;
-         margin-bottom: 20px;
         }
 
         #search-input {
@@ -54,45 +46,43 @@
          margin-bottom: 10px;
         }
 
-         #filter-container {
+        #filter-container {
            width: 100%;
            display: flex;
            flex-direction: column;
            margin-bottom: 20px;
         }
 
-         #filters {
+        #filters {
            display: flex;
            gap: 10px;
-           overflow-x: auto; /* Enables horizontal scrolling */
-           white-space: nowrap; /* Prevents line breaks */
+           overflow-x: auto;
+           white-space: nowrap;
            padding-bottom: 10px;
         }
 
-         #filters button {
-           flex-shrink: 0; /* Prevents buttons from shrinking */
+        #filters button {
+           flex-shrink: 0;
            padding: 8px;
            border: 1px solid #ddd;
            border-radius: 20px;
            cursor: pointer;
            background-color: white;
            font-size: 14px;
-           display: inline-block; /* Makes the buttons align in a row */
+           display: inline-block;
         }
 
-         #filters button.active {
+        #filters button.active {
            background-color: #ff5a5a;
            color: white;
         }
 
-        /* Offerings container */
         #offerings-container {
          display: flex;
          flex-direction: column;
          gap: 15px;
         }
 
-        /* Offering card styles */
         .offering-card {
          display: flex;
          align-items: center;
@@ -137,7 +127,7 @@
          font-weight: bold;
         }
 
-        /* Status badges */
+
         .status-badge {
          display: inline-block;
          padding: 2px 8px;
@@ -211,8 +201,6 @@
         .content {
             width: 100%;
         }
-
-
     </style>
 </head>
 <body>
@@ -221,17 +209,17 @@
                <input type="text" id="search-input" placeholder="검색할 내용을 입력해주세요." />
                <button id="search-button">검색</button>
                <div id="filters">
-                   <!-- Filters will be dynamically inserted here -->
+                   <!-- filter list -->
                </div>
            </div>
            <div id="offerings-container">
-               <!-- Offerings will be dynamically inserted here -->
+               <!-- offering list -->
            </div>
        </div>
     <script>
         let currentFilter = '';
         let lastId = -1;
-        let isLoading = false;  // Flag to prevent multiple requests during scrolling
+        let isLoading = false;
         let search = '';
 
         async function fetchOfferings(filter = '', lastId = -1, search = '') {
@@ -254,7 +242,7 @@
                 button.setAttribute('data-filter', filter.name);
                 button.addEventListener('click', async () => {
                     currentFilter = filter.name;
-                    lastId = -1; // Reset to the first page
+                    lastId = -1;
                     isLoading = false;
                     document.querySelectorAll('#filters button').forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
@@ -268,7 +256,7 @@
         function renderOfferings(offerings, clear = false) {
             const offeringsContainer = document.getElementById('offerings-container');
             if (clear) {
-                offeringsContainer.innerHTML = ''; // Clear previous content if 'clear' is true
+                offeringsContainer.innerHTML = '';
             }
 
             offerings.forEach(offering => {
@@ -311,9 +299,8 @@
             lastId = offerings[offerings.length - 1].id;
         }
 
-        // Function to load more offerings when the user scrolls to the bottom
         async function loadMoreOfferings() {
-            if (isLoading) return; // Prevent multiple requests at the same time
+            if (isLoading) return;
             isLoading = true;
 
             const newOfferings = await fetchOfferings(currentFilter, lastId, search);
@@ -324,28 +311,24 @@
             isLoading = false; // Reset the loading flag
         }
 
-        // Event listener for infinite scroll
         window.addEventListener('scroll', () => {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-                // If user is near the bottom of the page, load more offerings
                 loadMoreOfferings();
             }
         });
 
-        // Initial rendering function
         async function initializePage() {
             const filters = await fetchFilters();
             renderFilters(filters);
 
-            // Fetch and render the initial list of offerings
             const initialOfferings = await fetchOfferings(currentFilter, lastId, search);
             renderOfferings(initialOfferings);
         }
 
         document.getElementById('search-button').addEventListener('click', async () => {
             const searchInput = document.getElementById('search-input').value.trim();
-            search = searchInput; // Store the search term
-            currentPage = -1; // Reset to the first page
+            search = searchInput;
+            currentPage = -1;
             isLoading = false;
             const offerings = await fetchOfferings(currentFilter, currentPage, search);
             renderOfferings(offerings, true);
