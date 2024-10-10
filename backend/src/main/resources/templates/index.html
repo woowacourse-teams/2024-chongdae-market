@@ -256,7 +256,6 @@
                     currentFilter = filter.name;
                     lastId = -1; // Reset to the first page
                     isLoading = false;
-                    search = '';
                     document.querySelectorAll('#filters button').forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     const offerings = await fetchOfferings(currentFilter, lastId, search);
