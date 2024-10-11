@@ -3,7 +3,7 @@ name: Android CI CD
 on:
   pull_request:
     branches:
-      - "develop-AN"
+      - "develop"
       - "release*"
 
 defaults:
