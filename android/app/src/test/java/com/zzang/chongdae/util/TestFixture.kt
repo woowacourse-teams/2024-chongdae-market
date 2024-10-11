@@ -138,5 +138,6 @@ object TestFixture {
             description = "TEST",
             condition = OfferingCondition.CONFIRMED,
             isParticipated = false,
+            originPrice = 1000,
         )
 }
