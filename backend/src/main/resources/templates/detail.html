@@ -125,8 +125,8 @@
         function updatePageContent(offering) {
             document.querySelector('meta[property="og:title"]').setAttribute('content', offering.title);
             document.getElementById('title').textContent = offering.title;
-            document.getElementById('original-price').textContent = `${offering.originPrice.toLocaleString()}원`;
-            document.getElementById('discount-rate').textContent = `${offering.discountRate}% ↓`;
+            document.getElementById('original-price').textContent = `${offering.originPrice ? offering.originPrice.toLocaleString() + '원' : '' }`;
+            document.getElementById('discount-rate').textContent = `${offering.discountRate ? offering.discountRate + '% ↓': ''}`;
             document.getElementById('discounted-price').textContent = `${offering.dividedPrice.toLocaleString()}원`;
             document.getElementById('meeting-address').textContent = offering.meetingAddressDong;
             document.getElementById('thumbnail').src = offering.thumbnailUrl || defaultThumbnailUrl;
