@@ -81,7 +81,7 @@ public class CommentService {
     public CommentRoomInfoResponse getCommentRoomInfo(Long offeringId, MemberEntity member) {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
-        if (offeringRepository.existsByIdWithDeleted(offeringId)) {
+        if (offeringRepository.existsById(offeringId)) {
             return new CommentRoomInfoResponse(offeringMember.getOffering(), offeringMember.getMember());
         }
         return new CommentRoomInfoResponse(offeringMember);

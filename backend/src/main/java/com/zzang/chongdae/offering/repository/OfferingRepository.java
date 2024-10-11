@@ -20,16 +20,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             """, nativeQuery = true)
     Optional<OfferingEntity> findByIdWithDeleted(Long offeringId);
 
-    @Query(value = """
-            SELECT EXISTS(
-                SELECT 1
-                FROM offering as o
-                WHERE o.id = :offeringId
-                LIMIT 1
-            );
-            """, nativeQuery = true)
-    boolean existsByIdWithDeleted(Long offeringId);
-
     @Query("""
             SELECT o
             FROM OfferingEntity as o JOIN OfferingMemberEntity as om
