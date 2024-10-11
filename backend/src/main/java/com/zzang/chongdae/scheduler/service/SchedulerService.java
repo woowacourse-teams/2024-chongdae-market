@@ -1,5 +1,6 @@
 package com.zzang.chongdae.scheduler.service;
 
+import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
@@ -18,6 +19,7 @@ public class SchedulerService {
 
     private final OfferingRepository offeringRepository;
 
+    @WriterDatabase
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
     public void run() {

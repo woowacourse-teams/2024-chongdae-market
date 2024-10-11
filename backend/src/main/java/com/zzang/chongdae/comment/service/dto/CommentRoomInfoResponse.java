@@ -1,6 +1,7 @@
 package com.zzang.chongdae.comment.service.dto;
 
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.BUYING;
+import static com.zzang.chongdae.offering.domain.CommentRoomStatus.DELETED;
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.DONE;
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.GROUPING;
 import static com.zzang.chongdae.offering.domain.CommentRoomStatus.TRADING;
@@ -10,6 +11,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.Arrays;
 
 public record CommentRoomInfoResponse(CommentRoomStatus status,
@@ -28,8 +30,18 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                 offering.isProposedBy(member));
     }
 
+    public CommentRoomInfoResponse(OfferingMemberEntity offeringMember) {
+        this(DELETED,
+                ViewMapper.toImage(DELETED),
+                ViewMapper.toButton(DELETED),
+                ViewMapper.toMessage(DELETED),
+                "삭제된 공동구매입니다.",
+                offeringMember.isProposer());
+    }
+
     private enum ViewMapper {
 
+        DELETED_VIEW(DELETED, imageUrl("DELETED"), "삭제된 공고", "삭제된 공동구매입니다."),
         GROUPING_VIEW(GROUPING, imageUrl("GROUPING"), "인원확정", "공동구매에 참여할 인원이\n모이면 인원을 확정하세요."),
         BUYING_VIEW(BUYING, imageUrl("BUYING"), "구매확정", "총대가 물품 구매를 완료하면 확정하세요."),
         TRADING_VIEW(TRADING, imageUrl("TRADING"), "거래확정", "총대가 참여자들과\n거래를 완료하면 확정하세요."),

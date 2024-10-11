@@ -5,12 +5,14 @@ import lombok.Getter;
 @Getter
 public enum CommentRoomStatus {
 
+    DELETED,
     GROUPING,
     BUYING,
     TRADING,
     DONE;
 
     static {
+        DELETED.nextStatus = DELETED;
         GROUPING.nextStatus = BUYING;
         BUYING.nextStatus = TRADING;
         TRADING.nextStatus = DONE;
@@ -31,7 +33,11 @@ public enum CommentRoomStatus {
         return this == BUYING;
     }
 
-    public boolean isInProgress() {
+    public boolean isGrouped() {
         return this != GROUPING;
+    }
+
+    public boolean isInProgress() {
+        return this == BUYING || this == TRADING;
     }
 }

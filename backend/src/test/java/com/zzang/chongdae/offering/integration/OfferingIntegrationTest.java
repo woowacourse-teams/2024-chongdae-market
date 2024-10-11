@@ -13,6 +13,7 @@ import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingFilterType;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
@@ -20,6 +21,7 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
 import com.zzang.chongdae.storage.service.StorageService;
 import io.restassured.http.ContentType;
 import java.io.File;
@@ -48,24 +50,25 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 parameterWithName("offering-id").description("공모 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
-                fieldWithPath("id").description("공모 id"),
-                fieldWithPath("title").description("제목"),
+                fieldWithPath("id").description("공모 id (필수)"),
+                fieldWithPath("title").description("제목 (필수)"),
                 fieldWithPath("productUrl").description("물품 링크"),
-                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
-                fieldWithPath("description").description("내용"),
-                fieldWithPath("meetingDate").description("마감시간"),
-                fieldWithPath("currentCount").description("현재원"),
-                fieldWithPath("totalCount").description("총원"),
+                fieldWithPath("description").description("내용 (필수)"),
+                fieldWithPath("meetingDate").description("마감시간 (필수)"),
+                fieldWithPath("currentCount").description("현재원 (필수)"),
+                fieldWithPath("totalCount").description("총원 (필수)"),
                 fieldWithPath("thumbnailUrl").description("사진 링크"),
-                fieldWithPath("dividedPrice").description("n빵 가격"),
-                fieldWithPath("totalPrice").description("총가격"),
-                fieldWithPath("status").description("공모 상태"
+                fieldWithPath("dividedPrice").description("n빵 가격 (필수)"),
+                fieldWithPath("totalPrice").description("총가격 (필수)"),
+                fieldWithPath("originPrice").description("원 가격"),
+                fieldWithPath("status").description("공모 상태 (필수)"
                         + getEnumValuesAsString(OfferingStatus.class)),
-                fieldWithPath("memberId").description("공모자 회원 id"),
-                fieldWithPath("nickname").description("공모자 회원 닉네임"),
-                fieldWithPath("isProposer").description("공모자 여부"),
-                fieldWithPath("isParticipated").description("공모 참여 여부")
+                fieldWithPath("memberId").description("공모자 회원 id (필수)"),
+                fieldWithPath("nickname").description("공모자 회원 닉네임 (필수)"),
+                fieldWithPath("isProposer").description("공모자 여부 (필수)"),
+                fieldWithPath("isParticipated").description("공모 참여 여부 (필수)")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 상세 조회")
@@ -510,7 +513,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    LocalDateTime.now().plusDays(1),
                     "내용입니다."
             );
 
@@ -537,7 +540,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.parse("2024-10-11T10:00:00"),
+                    LocalDateTime.now().plusDays(1),
                     "내용입니다."
             );
 
@@ -624,6 +627,33 @@ public class OfferingIntegrationTest extends IntegrationTest {
 
             given(spec).log().all()
                     .filter(document("create-offering-fail-with-invalid-totalCount", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래 날짜를 내일보다 과거로 설정하는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_meetingDateBeforeTomorrow() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    10,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.now(),
+                    "내용입니다."
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-fail-with-invalid-meeting-date", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member))
                     .contentType(ContentType.JSON)
                     .body(request)
@@ -724,7 +754,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 .summary("상품 이미지 업로드")
                 .description("""
                         상품 이미지를 받아 이미지를 S3에 업로드한다.
-                                               
                         현재 사용 플러그인이 multipart/form-data의 파라미터에 대한 문서화를 지원하지 않습니다.
                         ### Parameters
                         | Part         | Type   | Description            |
@@ -758,6 +787,331 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().post("/offerings/product-images/s3")
                     .then().log().all()
                     .statusCode(200);
+        }
+    }
+
+    @DisplayName("공모 수정")
+    @Nested
+    class UpdateOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("title").description("제목 (필수)"),
+                fieldWithPath("productUrl").description("물품 구매 링크"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("totalCount").description("총원 (필수)"),
+                fieldWithPath("totalPrice").description("총가격 (필수)"),
+                fieldWithPath("originPrice").description("원 가격"),
+                fieldWithPath("meetingAddress").description("모집 주소 (필수)"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("meetingAddressDong").description("모집 동 주소"),
+                fieldWithPath("meetingDate").description("모집 종료 시간 (필수)"),
+                fieldWithPath("description").description("내용 (필수)")
+        );
+
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("id").description("공모 id"),
+                fieldWithPath("title").description("제목"),
+                fieldWithPath("productUrl").description("물품 링크"),
+                fieldWithPath("meetingAddress").description("모집 주소"),
+                fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
+                fieldWithPath("description").description("내용"),
+                fieldWithPath("meetingDate").description("마감시간"),
+                fieldWithPath("currentCount").description("현재원"),
+                fieldWithPath("totalCount").description("총원"),
+                fieldWithPath("thumbnailUrl").description("사진 링크"),
+                fieldWithPath("dividedPrice").description("n빵 가격"),
+                fieldWithPath("totalPrice").description("총가격"),
+                fieldWithPath("status").description("공모 상태"
+                        + getEnumValuesAsString(OfferingStatus.class)),
+                fieldWithPath("memberId").description("공모자 회원 id"),
+                fieldWithPath("nickname").description("공모자 회원 닉네임")
+        );
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 수정")
+                .description("공모 정보를 받아 공모를 수정합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .requestFields(requestDescriptors)
+                .responseFields(successResponseDescriptors)
+                .requestSchema(schema("OfferingUpdateRequest"))
+                .build();
+
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 수정")
+                .description("공모 정보를 받아 공모를 수정합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("OfferingUpdateRequest"))
+                .responseSchema(schema("OfferingUpdateFailResponse"))
+                .build();
+
+        MemberEntity proposer;
+        MemberEntity otherMember;
+
+        @BeforeEach
+        void setUp() {
+            proposer = memberFixture.createMember("poke");
+            otherMember = memberFixture.createMember("other");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+            List<MemberEntity> participants = memberFixture.createMembers(9);
+            participants.forEach(participant -> offeringMemberFixture.createParticipant(participant, offering));
+        }
+
+        @DisplayName("공모를 수정할 수 있다.")
+        @Test
+        void should_updateOffering_when_givenOfferingId() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("제안자가 아닌 사용자가 공모를 수정할 수 없다.")
+        @Test
+        void should_throwException_when_updateOtherMember() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-fail-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(otherMember))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여 인원 이하 인원으로 공모를 수정할 수 없다.")
+        @Test
+        void should_throwException_when_updateTotalCountLessEqualThanCurrentCount() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    9,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-fail-less-than-current-count", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("모집 날짜가 현재와 같거나 지날 경우 수정할 수 없다.")
+        @Test
+        void should_throwException_when_modifyMeetingDateBeforeNowToday() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    5000,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.now(),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("update-offering-fail-before-now-today", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("수정 할 원가격이 N빵 가격보다 작을경우 수정할 수 없다.")
+        @Test
+        void should_throwException_when_originPriceLessThanDividePrice() {
+            OfferingUpdateRequest request = new OfferingUpdateRequest(
+                    "수정할 제목",
+                    "https://to.be.updated/productUrl",
+                    "https://to.be.updated/thumbnail/url",
+                    20,
+                    20000,
+                    500,
+                    "수정할 모집 장소 주소",
+                    "수정할 모집 상세 주소",
+                    "수정된동",
+                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    "수정할 공모 상세 내용"
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-offering-fail-less-than-divide-price", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .pathParam("offering-id", 1)
+                    .body(request)
+                    .when().patch("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 삭제")
+    @Nested
+    class DeleteOffering {
+
+        List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 삭제")
+                .description("공모 id를 통해 공모를 삭제합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseSchema(schema("OfferingDeleteSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 삭제")
+                .description("공모 id를 통해 공모를 삭제합니다.")
+                .pathParameters(pathParameterDescriptors)
+                .responseFields(failResponseDescriptors)
+                .responseSchema(schema("OfferingDeleteFailResponse"))
+                .build();
+
+        MemberEntity proposer;
+        MemberEntity notProposer;
+        MemberEntity participant;
+        OfferingEntity offering;
+        OfferingEntity offeringInProgress;
+        OfferingEntity offeringDone;
+
+        @BeforeEach
+        void setUp() {
+            notProposer = memberFixture.createMember("never");
+            proposer = memberFixture.createMember("ever");
+            offering = offeringFixture.createOffering(proposer);
+            participant = memberFixture.createMember("naver");
+            offeringMemberFixture.createParticipant(participant, offering);
+            offeringInProgress = offeringFixture.createOffering(proposer, CommentRoomStatus.TRADING);
+            offeringDone = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
+        }
+
+        @DisplayName("공모 id로 공모를 삭제할 수 있다")
+        @Test
+        void should_deleteOffering_when_givenOfferingId() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(204);
+        }
+
+        @DisplayName("유효하지 않은 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_invalidOffering() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offering.getId() + 9999)
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("총대가 아닌 사용자가 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_notProposer() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(notProposer))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여자가 공모 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_participant() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-participant", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .pathParam("offering-id", offering.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래 진행 중 삭제를 시도할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_unavailableStatus() {
+            given(spec).log().all()
+                    .filter(document("delete-offering-fail-in-progress", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offeringInProgress.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("거래가 완료된 공모를 삭제할 수 있다.")
+        @Test
+        void should_deleteOffering_when_givenDoneOffering() {
+            given().log().all()
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .pathParam("offering-id", offeringDone.getId())
+                    .when().delete("/offerings/{offering-id}")
+                    .then().log().all()
+                    .statusCode(204);
         }
     }
 }
