@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매 - 총대마켓 ⛳️</title>
-    <meta property="og:title" content="더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매 - 총대마켓 ⛳️">
-    <meta property="og:image" content="https://github.com/user-attachments/assets/c764d653-fb57-4840-9571-6324d6fb4c25">
+    <meta property="og:title" th:content="${offeringTitle}">
+    <meta property="og:image" th:content="${thumbnailUrl}">
     <meta property="og:description"
-      content="지금 플레이스토어에서 다운로드 하세요 ⛳" />
+      content="공동구매는 총대마켓 지금 플레이스토어에서 다운로드 하세요 ⛳" />
     <style>
         body {
             font-family: Arial, sans-serif;

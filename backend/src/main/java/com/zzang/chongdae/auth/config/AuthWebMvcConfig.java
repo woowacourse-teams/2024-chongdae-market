@@ -34,7 +34,8 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
                         "/v3/api-docs/swagger-config",
                         "/static/swagger-ui/openapi3.yaml",
                         "/health-check",
-                        "/read-only/**"
+                        "/read-only/**",
+                        "/favicon.ico"
                 );
     }
 }
