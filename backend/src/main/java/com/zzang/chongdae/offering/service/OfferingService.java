@@ -18,6 +18,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingMetaResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
@@ -176,5 +177,11 @@ public class OfferingService {
         if (offering.getRoomStatus().isInProgress()) {
             throw new MarketException(OfferingErrorCode.CANNOT_DELETE_STATUS);
         }
+    }
+
+    public OfferingMetaResponse getOfferingMetaInfo(Long offeringId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return new OfferingMetaResponse(offering);
     }
 }
