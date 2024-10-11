@@ -2,13 +2,13 @@ name: Backend Dev CI/CD Workflow
 
 on:
   push:
-    branches: [ "develop-BE" ]
+    branches: [ "develop" ]
     paths:
       - "backend/**"
       - ".github/workflows/backend-dev-ci-cd.yml"
       - "Dockerfile"
   # pull_request:
-  #  branches: [ "develop-BE" ]
+  #  branches: [ "develop" ]
   #  paths:
   #     - "backend/**"
   #     - ".github/workflows/backend-dev-ci-cd.yml"
