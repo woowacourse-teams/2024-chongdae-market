@@ -17,6 +17,7 @@ data class OfferingDetailResponse(
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
+    @SerialName("originPrice") val originPrice: Int?,
     @SerialName("status") val condition: RemoteOfferingStatus,
     @SerialName("isProposer") val isProposer: Boolean,
     @SerialName("nickname") val nickname: String,

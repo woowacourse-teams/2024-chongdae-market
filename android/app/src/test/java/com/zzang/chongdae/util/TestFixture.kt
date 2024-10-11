@@ -1,8 +1,8 @@
 package com.zzang.chongdae.util
 
-import com.zzang.chongdae.data.mapper.toLocalDate
-import com.zzang.chongdae.data.mapper.toLocalDateTime
-import com.zzang.chongdae.data.mapper.toLocalTime
+import com.zzang.chongdae.data.remote.mapper.toLocalDate
+import com.zzang.chongdae.data.remote.mapper.toLocalDateTime
+import com.zzang.chongdae.data.remote.mapper.toLocalTime
 import com.zzang.chongdae.domain.model.Comment
 import com.zzang.chongdae.domain.model.CommentCreatedAt
 import com.zzang.chongdae.domain.model.CommentOfferingInfo
@@ -138,5 +138,6 @@ object TestFixture {
             description = "TEST",
             condition = OfferingCondition.CONFIRMED,
             isParticipated = false,
+            originPrice = 1000,
         )
 }
