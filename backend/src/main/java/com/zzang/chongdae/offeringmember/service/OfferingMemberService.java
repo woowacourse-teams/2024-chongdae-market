@@ -98,7 +98,7 @@ public class OfferingMemberService {
     }
 
     public ParticipantResponse getAllParticipant(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipants(offering, member);
 
