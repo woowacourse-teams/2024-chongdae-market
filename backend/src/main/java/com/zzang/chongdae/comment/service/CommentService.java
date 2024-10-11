@@ -38,7 +38,7 @@ public class CommentService {
 
     @WriterDatabase
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(request.offeringId())
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
         CommentEntity comment = new CommentEntity(member, offering, request.content());
@@ -108,7 +108,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
         List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
