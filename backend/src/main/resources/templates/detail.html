@@ -109,6 +109,7 @@
     </div>
 
     <script>
+        const playStoreUrl = "https://play.google.com/store/apps/details?id=com.zzang.chongdae";
         async function fetchOfferingDetails(offeringId) {
             try {
                 const response = await fetch(`/read-only/offerings/${offeringId}`);
@@ -133,16 +134,26 @@
             updateButton(offering);
         }
 
-        function updateButton(data) {
+        function updateButton(offering) {
+            const deepLinkUrl = buildDeeplinkUrl(offering);
             const ctaButton = document.getElementById('cta-button');
-            const isAvailable = data.isOpen;
+            const isAvailable = offering.isOpen;
 
             ctaButton.textContent = isAvailable
-                ? `총대마켓⛳ 설치하고 참여하기 (${data.currentCount}/${data.totalCount})`
+                ? `총대마켓⛳ 설치하고 참여하기 (${offering.currentCount}/${offering.totalCount})`
                 : '아쉽지만, 공모에 참여할 수 없어요 😥';
 
             ctaButton.style.backgroundColor = isAvailable ? '#e74c3c' : '#999';
             ctaButton.style.color = 'white';
+            ctaButton.href = isAvailable ? deepLinkUrl : '#';
+        }
+
+        function buildDeeplinkUrl(offering) {
+            let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/android/i.test(userAgent)) {
+                return `intent://offerings/${offering.id}#Intent;scheme=chongdaeapp;package=com.zzang.chongdae;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.zzang.chongdae;end`;
+            }
+                return playStoreUrl;
         }
 
         function getOfferingIdFromPath() {
