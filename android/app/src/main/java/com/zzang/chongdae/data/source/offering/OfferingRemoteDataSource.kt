@@ -1,13 +1,14 @@
 package com.zzang.chongdae.data.source.offering
 
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 import okhttp3.MultipartBody
 
 interface OfferingRemoteDataSource {
@@ -29,4 +30,9 @@ interface OfferingRemoteDataSource {
     suspend fun fetchFilters(): Result<FiltersResponse, DataError.Network>
 
     suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse, DataError.Network>
+
+    suspend fun patchOffering(
+        offeringId: Long,
+        offeringModifyRequest: OfferingModifyRequest,
+    ): Result<Unit, DataError.Network>
 }

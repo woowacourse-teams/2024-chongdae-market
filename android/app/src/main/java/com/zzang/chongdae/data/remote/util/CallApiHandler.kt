@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.util
 
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
