@@ -8,7 +8,7 @@ on:
       - ".github/workflows/backend-prod-ci-cd.yml"
       - "Dockerfile"
   # pull_request:
-  #   branches: [ "develop-BE" ]
+  #   branches: [ "develop" ]
   #   paths:
   #     - "backend/**"
   #     - ".github/workflows/backend-prod-ci-cd.yml"
