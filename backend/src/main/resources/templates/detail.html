@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매 - 총대마켓 ⛳️</title>
+    <meta property="og:title" th:content="${offeringTitle}">
+    <meta property="og:image" th:content="${thumbnailUrl}">
+    <meta property="og:description"
+      content="공동구매는 총대마켓 지금 플레이스토어에서 다운로드 하세요 ⛳" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .image-container img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .content {
+            padding: 15px;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .price {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        .discount-rate {
+            font-size: 16px;
+            color: #e74c3c;
+            text-align: right;
+            font-weight: bold;
+            width: 100%;
+        }
+        .discounted-price {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+            text-align: right;
+        }
+        .location {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .location-icon {
+            margin-right: 5px;
+        }
+        .cta-button {
+            display: block;
+            text-align: center;
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 0;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="" alt="총대마켓 이미지" id="thumbnail">
+        </div>
+        <div class="content">
+            <div class="title" id="title">로딩 중...</div>
+            <div class="price">
+                <div class="original-price" id="original-price"></div>
+                <div class="price-info">
+                    <div class="discount-rate" id="discount-rate"></div>
+                    <div class="discounted-price" id="discounted-price"></div>
+                </div>
+            </div>
+            <div class="location">
+                <span class="location-icon">📍</span>
+                <span id="meeting-address">로딩 중</span>
+            </div>
+            <a href="#" class="cta-button" id="cta-button">지금 바로 참여하세요~~</a>
+        </div>
+    </div>
+
+    <script>
+        const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
+        const playStoreUrl = "https://play.google.com/store/apps/details?id=com.zzang.chongdae";
+        async function fetchOfferingDetails(offeringId) {
+            try {
+                const response = await fetch(`/read-only/offerings/${offeringId}`);
+                if (!response.ok) throw new Error('데이터를 가져오는 중 오류가 발생했어요..');
+                const data = await response.json();
+                updatePageContent(data);
+            } catch (error) {
+                console.error('데이터를 가져오는 중 오류가 발생했어요..', error);
+            }
+        }
+
+        function updatePageContent(offering) {
+            document.querySelector('meta[property="og:title"]').setAttribute('content', offering.title);
+            document.getElementById('title').textContent = offering.title;
+            document.getElementById('original-price').textContent = `${offering.originPrice ? offering.originPrice.toLocaleString() + '원' : '' }`;
+            document.getElementById('discount-rate').textContent = `${offering.discountRate ? offering.discountRate + '% ↓': ''}`;
+            document.getElementById('discounted-price').textContent = `${offering.dividedPrice.toLocaleString()}원`;
+            document.getElementById('meeting-address').textContent = offering.meetingAddressDong;
+            document.getElementById('thumbnail').src = offering.thumbnailUrl || defaultThumbnailUrl;
+            updateButton(offering);
+        }
+
+        function updateButton(offering) {
+            const ctaButton = document.getElementById('cta-button');
+            const isAvailable = offering.isOpen;
+
+            ctaButton.textContent = isAvailable
+                ? `총대마켓⛳ 설치하고 참여하기 (${offering.currentCount}/${offering.totalCount})`
+                : '아쉽지만, 공모에 참여할 수 없어요 😥';
+
+            ctaButton.style.backgroundColor = isAvailable ? '#e74c3c' : '#999';
+            ctaButton.style.color = 'white';
+            ctaButton.href = isAvailable ? buildDeeplinkUrl(offering) : '#';
+        }
+
+        function buildDeeplinkUrl(offering) {
+            let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/android/i.test(userAgent)) {
+                return `intent://offerings/${offering.id}#Intent;scheme=chongdaeapp;package=com.zzang.chongdae;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.zzang.chongdae;end`;
+            }
+                return playStoreUrl;
+        }
+
+        function getOfferingIdFromPath() {
+            const pathParts = window.location.pathname.split('/');
+            return pathParts[pathParts.length - 1];
+        }
+
+        window.onload = () => {
+            const offeringId = getOfferingIdFromPath();
+            fetchOfferingDetails(offeringId);
+        };
+    </script>
+</body>
+</html>

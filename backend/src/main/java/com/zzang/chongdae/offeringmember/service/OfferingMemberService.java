@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offeringmember.service;
 
+import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
@@ -29,6 +30,7 @@ public class OfferingMemberService {
     private final OfferingMemberRepository offeringMemberRepository;
     private final OfferingRepository offeringRepository;
 
+    @WriterDatabase
     @Transactional
     public Long participate(ParticipationRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
@@ -62,6 +64,7 @@ public class OfferingMemberService {
         }
     }
 
+    @WriterDatabase
     @Transactional
     public void cancelParticipate(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -89,13 +92,13 @@ public class OfferingMemberService {
     private void validateInProgress(OfferingMemberEntity offeringMember) {
         OfferingEntity offering = offeringMember.getOffering();
         CommentRoomStatus roomStatus = offering.getRoomStatus();
-        if (roomStatus.isInProgress()) {
+        if (roomStatus.isGrouped()) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_IN_PROGRESS);
         }
     }
 
     public ParticipantResponse getAllParticipant(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipants(offering, member);
 

@@ -1,11 +1,13 @@
 package com.zzang.chongdae.offering.service;
 
+import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.UpdatedOffering;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -16,13 +18,17 @@ import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingFilterAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingMetaResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
+import com.zzang.chongdae.offering.service.dto.OfferingUpdateResponse;
 import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +87,7 @@ public class OfferingService {
     }
 
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsParticipant(member, offering);
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
@@ -93,6 +99,7 @@ public class OfferingService {
         }
     }
 
+    @WriterDatabase
     @Transactional
     public OfferingMeetingResponse updateOfferingMeeting(
             Long offeringId, OfferingMeetingUpdateRequest request, MemberEntity member) {
@@ -110,14 +117,23 @@ public class OfferingService {
         }
     }
 
+    @WriterDatabase
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
+        validateMeetingDate(offering);
         OfferingEntity savedOffering = offeringRepository.save(offering);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
         offeringMemberRepository.save(offeringMember);
 
         return savedOffering.getId();
+    }
+
+    private void validateMeetingDate(OfferingEntity offering) {
+        LocalDate thresholdDate = LocalDate.now().plusDays(1);
+        if (offering.getMeetingDate().toLocalDate().isBefore(thresholdDate)) {
+            throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
+        }
     }
 
     public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {
@@ -128,5 +144,44 @@ public class OfferingService {
     public OfferingProductImageResponse extractProductImageFromOg(OfferingProductImageRequest request) {
         String imageUrl = imageExtractor.extract(request.productUrl());
         return new OfferingProductImageResponse(imageUrl);
+    }
+
+    @WriterDatabase
+    @Transactional
+    public OfferingUpdateResponse updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        UpdatedOffering updatedOffering = request.toUpdatedOffering();
+        validateIsProposer(offering, member);
+        validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getOfferingPrice().getTotalCount());
+        offering.update(updatedOffering);
+        return new OfferingUpdateResponse(offering, offering.toOfferingPrice(), offering.toOfferingJoinedCount());
+    }
+
+    private void validateUpdatedTotalCount(Integer currentCount, Integer updatedTotalCount) {
+        if (updatedTotalCount < currentCount) {
+            throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT);
+        }
+    }
+
+    @WriterDatabase
+    public void deleteOffering(Long offeringId, MemberEntity member) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        validateIsProposer(offering, member);
+        validateInProgress(offering);
+        offeringRepository.delete(offering);
+    }
+
+    private void validateInProgress(OfferingEntity offering) {
+        if (offering.getRoomStatus().isInProgress()) {
+            throw new MarketException(OfferingErrorCode.CANNOT_DELETE_STATUS);
+        }
+    }
+
+    public OfferingMetaResponse getOfferingMetaInfo(Long offeringId) {
+        OfferingEntity offering = offeringRepository.findById(offeringId)
+                .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        return new OfferingMetaResponse(offering);
     }
 }

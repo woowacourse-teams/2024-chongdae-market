@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundGravity="center_vertical"
-        android:onClick="@{() -> onOfferingClickListener.onClick(offering.id)}"
+        app:debouncedOnClick="@{() -> onOfferingClickListener.onClick(offering.id)}"
         android:paddingTop="15dp"
         android:paddingBottom="15dp">
 
@@ -62,8 +62,9 @@
 
         <TextView
             android:id="@+id/tv_offering_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="15dp"
             android:layout_marginTop="6dp"
             android:ellipsize="end"
@@ -103,12 +104,13 @@
         <TextView
             android:id="@+id/tv_origin_price"
             style="@style/Theme.AppCompat.TextView.Normal.Gray700.Size12"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@id/tv_divided_price"
             android:layout_marginBottom="17dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text='@{offering.originPrice != null ? @string/all_money_amount_text(offering.originPrice) : ""}'
             app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
             app:layout_constraintStart_toStartOf="@id/tv_meeting_address"
