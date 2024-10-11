@@ -86,7 +86,7 @@ public class OfferingService {
     }
 
     public OfferingMeetingResponse getOfferingMeeting(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsParticipant(member, offering);
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
