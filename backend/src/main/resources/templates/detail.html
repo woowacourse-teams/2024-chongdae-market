@@ -110,7 +110,6 @@
 
     <script>
         const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
-
         const playStoreUrl = "https://play.google.com/store/apps/details?id=com.zzang.chongdae";
         async function fetchOfferingDetails(offeringId) {
             try {
@@ -125,28 +124,26 @@
 
         function updatePageContent(offering) {
             document.querySelector('meta[property="og:title"]').setAttribute('content', offering.title);
-
             document.getElementById('title').textContent = offering.title;
             document.getElementById('original-price').textContent = `${offering.originPrice.toLocaleString()}원`;
             document.getElementById('discount-rate').textContent = `${offering.discountRate}% ↓`;
             document.getElementById('discounted-price').textContent = `${offering.dividedPrice.toLocaleString()}원`;
             document.getElementById('meeting-address').textContent = offering.meetingAddressDong;
-            document.getElementById('thumbnail').src = offering.thumbnailUrl;
-
+            document.getElementById('thumbnail').src = offering.thumbnailUrl || defaultThumbnailUrl;
             updateButton(offering);
         }
 
-        function updateButton(data) {
+        function updateButton(offering) {
             const ctaButton = document.getElementById('cta-button');
-            const isAvailable = data.isOpen;
+            const isAvailable = offering.isOpen;
 
             ctaButton.textContent = isAvailable
-                ? `총대마켓⛳ 설치하고 참여하기 (${data.currentCount}/${data.totalCount})`
+                ? `총대마켓⛳ 설치하고 참여하기 (${offering.currentCount}/${offering.totalCount})`
                 : '아쉽지만, 공모에 참여할 수 없어요 😥';
 
             ctaButton.style.backgroundColor = isAvailable ? '#e74c3c' : '#999';
             ctaButton.style.color = 'white';
-            ctaButton.href = isAvailable ? deepLinkUrl : '#';
+            ctaButton.href = isAvailable ? buildDeeplinkUrl(offering) : '#';
         }
 
         function buildDeeplinkUrl(offering) {
