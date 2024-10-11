@@ -3,6 +3,7 @@ package com.zzang.chongdae.presentation.view.offeringdetail
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeDataStore
@@ -26,14 +27,15 @@ class OfferingDetailViewModelTest {
     private lateinit var offeringDetailRepository: OfferingDetailRepository
     private lateinit var authRepository: AuthRepository
     private val offeringId = 1L
+    private lateinit var userPreferencesDataStore: UserPreferencesDataStore
 
     @BeforeEach
     fun setUp() {
         dataStore = FakeDataStore()
         offeringDetailRepository = FakeOfferingDetailRepository()
         authRepository = FakeAuthRepository()
-
-        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, authRepository)
+        userPreferencesDataStore = UserPreferencesDataStore(FakeDataStore())
+        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, authRepository, userPreferencesDataStore)
     }
 
     @DisplayName("공구에 참여한다")
