@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_fragment_to_offering_write_fragment"
-            app:destination="@id/offering_write_fragment_essential" />
+            app:destination="@id/offering_write_essential_fragment" />
         <action
             android:id="@+id/action_home_fragment_to_offering_detail_fragment"
             app:destination="@id/offering_detail_fragment" />
@@ -28,10 +28,10 @@
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" />
     <fragment
-        android:id="@+id/offering_write_fragment_essential"
+        android:id="@+id/offering_write_essential_fragment"
         android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteEssentialFragment"
         android:label="fragment_write_fragment"
-        tools:layout="@layout/fragment_offering_write_essential" >
+        tools:layout="@layout/fragment_offering_write_essential">
         <action
             android:id="@+id/action_offering_write_fragment_essential_to_offering_write_fragment_optional"
             app:destination="@id/offering_write_optional_fragment" />
@@ -46,6 +46,24 @@
         android:id="@+id/offering_detail_fragment"
         android:name="com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment"
         android:label="fragment_detail_fragment"
-        tools:layout="@layout/fragment_offering_detail" />
+        tools:layout="@layout/fragment_offering_detail">
+        <action
+            android:id="@+id/action_offering_detail_fragment_to_offering_modify_essential_fragment"
+            app:destination="@id/offering_modify_essential_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/offering_modify_essential_fragment"
+        android:name="com.zzang.chongdae.presentation.view.offeringmodify.OfferingModifyEssentialFragment"
+        tools:layout="@layout/fragment_offering_modify_essential">
+        <action
+            android:id="@+id/action_offering_modify_essential_fragment_to_offering_modify_optional_fragment"
+            app:destination="@id/offering_modify_optional_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/offering_modify_optional_fragment"
+        android:name="com.zzang.chongdae.presentation.view.offeringmodify.OfferingModifyOptionalFragment"
+        tools:layout="@layout/fragment_offering_modify_essential" />
 
 </navigation>

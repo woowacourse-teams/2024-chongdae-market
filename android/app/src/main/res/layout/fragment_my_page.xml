@@ -135,7 +135,7 @@
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_terms_of_use_text"
-            android:onClick="@{() -> vm.onClickTermsOfUse()}"
+            app:debouncedOnClick="@{() -> vm.onClickTermsOfUse()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_terms_of_use"
             app:layout_constraintStart_toEndOf="@id/iv_terms_of_use"
             app:layout_constraintTop_toTopOf="@id/iv_terms_of_use"/>
@@ -154,7 +154,7 @@
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_privacy_text"
-            android:onClick="@{() -> vm.onClickPrivacy()}"
+            app:debouncedOnClick="@{() -> vm.onClickPrivacy()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_privacy"
             app:layout_constraintStart_toEndOf="@id/iv_privacy"
             app:layout_constraintTop_toTopOf="@id/iv_privacy"/>
@@ -173,7 +173,7 @@
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_logout_text"
-            android:onClick="@{() -> vm.onClickLogout()}"
+            app:debouncedOnClick="@{() -> vm.onClickLogout()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_logout"
             app:layout_constraintStart_toEndOf="@id/iv_logout"
             app:layout_constraintTop_toTopOf="@id/iv_logout" />
@@ -192,7 +192,7 @@
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_withdrawal_text"
-            android:onClick="@{() -> vm.onClickWithdrawal()}"
+            app:debouncedOnClick="@{() -> vm.onClickWithdrawal()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_withdrawal"
             app:layout_constraintStart_toEndOf="@id/iv_withdrawal"
             app:layout_constraintTop_toTopOf="@id/iv_withdrawal" />
