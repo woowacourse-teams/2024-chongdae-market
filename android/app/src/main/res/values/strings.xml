@@ -37,7 +37,7 @@
     <string name="bottom_my_page">마이페이지</string>
 
     <!--    home-->
-    <string name="home_search_hint_text">검색할 내용을 입력해주세요.</string>
+    <string name="home_search_hint_text">검색할 제목이나 지역을 입력하세요.</string>
     <string name="home_offering_continue">모집중</string>
     <string name="home_offering_closed">모집마감</string>
     <string name="home_offering_imminent">마감임박</string>
@@ -59,6 +59,7 @@
     <string name="my_page_withdrawal_text">회원 탈퇴</string>
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
+    <string name="my_page_logout_dialog_description">로그아웃 하시겠습니까?</string>
 
     <!--    offering_detail-->
     <string name="offering_detail_product_url_title">물품 링크:&#160;</string>
@@ -72,6 +73,12 @@
     <string name="offering_detail_participation_error">참여할 수 없는 공모입니다.</string>
     <string name="offering_detail_participant_already">이미 참여중이에요!</string>
     <string name="offering_detail_participant_end">마감되었어요!</string>
+    <string name="offering_detail_delete_error">모집 마감 전과 거래 완료 후에만 \n공모글을 삭제할 수 있어요!</string>
+    <string name="offering_detail_dialog_description">게시물을 삭제하시겠습니까?</string>
+    <string name="offering_detail_dialog_cancel_text">취소</string>
+    <string name="offering_detail_dialog_confirm_text">확인</string>
+    <string name="offering_detail_delete_complete_message">게시물이 삭제되었어요!</string>
+    <string name="offering_detail_participate_alert">참여하시겠습니까?</string>
 
     <!--    comment_room-->
     <string name="comment_text">채팅</string>
@@ -95,6 +102,7 @@
     <string name="deal_confirm">거래확정</string>
     <string name="offering_members">참여자 목록 (%d명/%d명)</string>
     <string name="comment_detail_expected_price">예상 공동구매 엔빵 가격</string>
+    <string name="comment_detail_exit_alert">공동구매에서 퇴장하시겠습니까?</string>
 
     <!--    offering_write-->
     <string name="write_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
@@ -138,4 +146,13 @@
     <string name="write_error_writing">공모 게시에 실패했어요🥲</string>
     <string name="write_update_state_dialog_message">공동구매 <font color="#F15642">진행 상황</font>을 <font color="#F15642">변경</font>하시겠습니까?</string>
     <string name="write_current_split_price">현재 엔빵 가격: %,d원</string>
+    <string name="home_empty_item_comment">검색 결과가 없습니다</string>
+
+    <!--    offering_modify-->
+    <string name="modify_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n수정해 주세요.</string>
+    <string name="modify_information_message_optional">추가 정보를 입력해서\n<font color="#F15642">공동구매 성공률</font>을 높여보세요!</string>
+    <string name="modify_submit">공모 정보 수정하기</string>
+    <string name="modify_success_modifing">공모가 수정되었어요!</string>
+    <string name="modify_error_modifing">공모 수정에 실패했어요🥲</string>
+    <string name="error_modify_invalid">모집 마감 이후에는 공모글을 수정할 수\n없어요!</string>
 </resources>

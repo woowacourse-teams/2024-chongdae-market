@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.comment
 
-import com.zzang.chongdae.domain.repository.AuthRepository
+import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeCommentRoomsRepository

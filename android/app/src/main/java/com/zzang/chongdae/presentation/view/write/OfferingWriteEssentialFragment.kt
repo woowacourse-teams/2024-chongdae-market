@@ -13,16 +13,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
+import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
-import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
+import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
-class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener {
+@AndroidEntryPoint
+class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListener {
     private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
@@ -32,12 +34,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     private var toast: Toast? = null
     private val dialog: Dialog by lazy { Dialog(requireActivity()) }
 
-    private val viewModel: OfferingWriteViewModel by activityViewModels {
-        OfferingWriteViewModel.getFactory(
-            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
-            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
-        )
-    }
+    private val viewModel: OfferingWriteViewModel by activityViewModels()
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
@@ -90,7 +87,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     }
 
     private fun searchPlace() {
-        fragmentBinding.tvPlaceValue.setOnClickListener {
+        fragmentBinding.tvPlaceValue.setDebouncedOnClickListener(800L) {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
         setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
@@ -120,6 +117,7 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         updateDateTextView(dateTimeBinding.tvDate, year, month, day)
+        dateTimeBinding.pickerDate.minDate = System.currentTimeMillis()
         dateTimeBinding.pickerDate.setOnDateChangedListener { _, year, monthOfYear, dayOfMonth ->
             updateDateTextView(dateTimeBinding.tvDate, year, monthOfYear, dayOfMonth)
         }
@@ -169,7 +167,6 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
 
         _dateTimePickerBinding = DialogDatePickerBinding.inflate(inflater, container, false)
-        dateTimePickerBinding.vm = viewModel
         dateTimePickerBinding.onClickListener = this
     }
 
@@ -208,5 +205,6 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     override fun onDestroy() {
         super.onDestroy()
         _fragmentBinding = null
+        viewModel.initOfferingWriteInputs()
     }
 }
