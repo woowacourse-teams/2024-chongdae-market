@@ -35,8 +35,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             """)
     List<OfferingEntity> findRecentOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
 
-    // ============================================================
-
     @Query("""
             SELECT o
             FROM OfferingEntity o
@@ -56,7 +54,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                 AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
-    List<OfferingEntity> findImminentOfferingsWithTitleKeyword(
+    List<OfferingEntity> findImminentOfferingsWithMeetingAddressKeyword(
             LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
@@ -67,10 +65,8 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                 AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
-    List<OfferingEntity> findImminentOfferingsWithAddressKeyword(
+    List<OfferingEntity> findImminentOfferingsWithTitleKeyword(
             LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
-
-    // ============================================================
 
     @Query("""
             SELECT o
@@ -90,7 +86,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                AND ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
-    List<OfferingEntity> findHighDiscountOfferingsWithTitleKeywordLessThanDiscountRate(
+    List<OfferingEntity> findHighDiscountOfferingsWithTitleKeyword(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
@@ -101,10 +97,9 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                AND ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
-    List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeywordLessThanDiscountRate(
+    List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeyword(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 
-    // ============================================================
     @Query("""
             SELECT o
             FROM OfferingEntity o
@@ -122,9 +117,7 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
             ORDER BY o.id DESC
             """)
-    List<OfferingEntity> findJoinableOfferingsWithTitleKeyword(Long lastId, String keyword, Pageable pageable);
-
-    // ============================================================
+    List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
 
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();

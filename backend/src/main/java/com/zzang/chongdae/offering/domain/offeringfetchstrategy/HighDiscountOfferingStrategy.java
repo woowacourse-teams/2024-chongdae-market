@@ -35,9 +35,9 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
                     outOfRangeDiscountRate, outOfRangeId, pageable);
         }
         return Stream.concat(
-                        offeringRepository.findHighDiscountOfferingsWithTitleKeywordLessThanDiscountRate(outOfRangeDiscountRate,
+                        offeringRepository.findHighDiscountOfferingsWithTitleKeyword(outOfRangeDiscountRate,
                                 outOfRangeId, searchKeyword, pageable).stream(),
-                        offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeywordLessThanDiscountRate(
+                        offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeyword(
                                 outOfRangeDiscountRate, outOfRangeId, searchKeyword, pageable).stream())
                 .sorted(Comparator.comparing(OfferingEntity::getDiscountRate)
                         .thenComparing(OfferingEntity::getId, Comparator.reverseOrder()))

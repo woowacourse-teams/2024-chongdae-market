@@ -28,6 +28,6 @@ public class JoinableOfferingStrategy extends OfferingFetchStrategy {
         if (searchKeyword == null) {
             return offeringRepository.findJoinableOfferingsWithoutKeyword(outOfRangeId, pageable);
         }
-        return offeringRepository.findJoinableOfferingsWithTitleKeyword(outOfRangeId, searchKeyword, pageable);
+        return offeringRepository.findJoinableOfferingsWithKeyword(outOfRangeId, searchKeyword, pageable);
     }
 }

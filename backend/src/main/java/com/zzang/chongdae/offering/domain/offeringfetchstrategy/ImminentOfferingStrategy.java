@@ -35,9 +35,10 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy { // TODO: t
             return offeringRepository.findImminentOfferingsWithoutKeyword(lastMeetingDate, lastId, pageable);
         }
         return Stream.concat(
-                        offeringRepository.findImminentOfferingsWithTitleKeyword(lastMeetingDate, lastId, searchKeyword,
+                        offeringRepository.findImminentOfferingsWithMeetingAddressKeyword(lastMeetingDate, lastId,
+                                searchKeyword,
                                 pageable).stream(),
-                        offeringRepository.findImminentOfferingsWithAddressKeyword(lastMeetingDate, lastId, searchKeyword,
+                        offeringRepository.findImminentOfferingsWithTitleKeyword(lastMeetingDate, lastId, searchKeyword,
                                 pageable).stream()
                 ).sorted(Comparator.comparing(OfferingEntity::getMeetingDate)
                         .thenComparing(OfferingEntity::getId, Comparator.reverseOrder()))
