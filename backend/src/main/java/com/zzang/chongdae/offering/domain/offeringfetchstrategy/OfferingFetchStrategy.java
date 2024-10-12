@@ -19,18 +19,21 @@ public abstract class OfferingFetchStrategy {
 
     protected final OfferingRepository offeringRepository;
 
-    protected Long findOutOfRangeId() {
-        return Optional.ofNullable(offeringRepository.findMaxId())
-                .orElse(0L) + OUT_OF_RANGE_ID_OFFSET;
-    }
-
     public List<OfferingEntity> fetch(String searchKeyword, Long lastId, Pageable pageable) {
         if (lastId == null) {
-            return fetchWithoutLast(searchKeyword, pageable);
+            return fetchWithoutLast(outOfRangeId(), searchKeyword, pageable);
         }
-        OfferingEntity lastOffering = offeringRepository.findById(lastId)
+        return fetchWithLast(lastOffering(lastId), searchKeyword, pageable);
+    }
+
+    private Long outOfRangeId() {
+        Long maxId = offeringRepository.findMaxId();
+        return Optional.ofNullable(maxId).orElse(0L) + OUT_OF_RANGE_ID_OFFSET;
+    }
+
+    private OfferingEntity lastOffering(Long lastId) {
+        return offeringRepository.findById(lastId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        return fetchWithLast(lastOffering, searchKeyword, pageable);
     }
 
     protected List<OfferingEntity> concat(Pageable pageable,
@@ -43,7 +46,9 @@ public abstract class OfferingFetchStrategy {
                 .toList();
     }
 
-    protected abstract List<OfferingEntity> fetchWithoutLast(String searchKeyword, Pageable pageable);
+    protected abstract List<OfferingEntity> fetchWithoutLast(Long outOfRangeId,
+                                                             String searchKeyword,
+                                                             Pageable pageable);
 
     protected abstract List<OfferingEntity> fetchWithLast(OfferingEntity lastOffering,
                                                           String searchKeyword,

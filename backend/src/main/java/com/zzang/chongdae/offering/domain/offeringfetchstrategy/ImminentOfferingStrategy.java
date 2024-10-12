@@ -14,38 +14,36 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
     }
 
     @Override
-    protected List<OfferingEntity> fetchWithoutLast(String searchKeyword, Pageable pageable) {
+    protected List<OfferingEntity> fetchWithoutLast(Long outOfRangeId, String searchKeyword, Pageable pageable) {
         LocalDateTime outOfRangeMeetingDate = LocalDateTime.now();
-        Long outOfRangeId = findOutOfRangeId();
-        return fetchOfferings(searchKeyword, pageable, outOfRangeMeetingDate, outOfRangeId);
+        return fetchOfferings(outOfRangeId, outOfRangeMeetingDate, searchKeyword, pageable);
     }
 
     @Override
-    protected List<OfferingEntity> fetchWithLast(
-            OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
-        LocalDateTime lastMeetingDate = lastOffering.getMeetingDate();
+    protected List<OfferingEntity> fetchWithLast(OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
         Long lastId = lastOffering.getId();
-        return fetchOfferings(searchKeyword, pageable, lastMeetingDate, lastId);
+        LocalDateTime lastMeetingDate = lastOffering.getMeetingDate();
+        return fetchOfferings(lastId, lastMeetingDate, searchKeyword, pageable);
     }
 
-    private List<OfferingEntity> fetchOfferings(String searchKeyword, Pageable pageable,
-                                                LocalDateTime lastMeetingDate, Long lastId) {
+    private List<OfferingEntity> fetchOfferings(Long lastId, LocalDateTime lastMeetingDate,
+                                                String searchKeyword, Pageable pageable) {
         if (searchKeyword == null) {
             return offeringRepository.findImminentOfferingsWithoutKeyword(lastMeetingDate, lastId, pageable);
         }
         Comparator<OfferingEntity> sortCondition = Comparator
                 .comparing(OfferingEntity::getMeetingDate)
                 .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
-        return concat(pageable, sortCondition,
-                offeringRepository.findImminentOfferingsWithMeetingAddressKeyword(
-                        lastMeetingDate,
-                        lastId,
-                        searchKeyword,
-                        pageable),
-                offeringRepository.findImminentOfferingsWithTitleKeyword(
-                        lastMeetingDate,
-                        lastId,
-                        searchKeyword,
-                        pageable));
+        List<OfferingEntity> offeringsSearchedByTitle = offeringRepository.findImminentOfferingsWithTitleKeyword(
+                lastMeetingDate,
+                lastId,
+                searchKeyword,
+                pageable);
+        List<OfferingEntity> offeringsSearchedByMeetingAddress = offeringRepository.findImminentOfferingsWithMeetingAddressKeyword(
+                lastMeetingDate,
+                lastId,
+                searchKeyword,
+                pageable);
+        return concat(pageable, sortCondition, offeringsSearchedByTitle, offeringsSearchedByMeetingAddress);
     }
 }
