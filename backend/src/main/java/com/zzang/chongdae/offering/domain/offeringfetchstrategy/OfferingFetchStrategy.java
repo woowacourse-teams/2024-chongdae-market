@@ -4,8 +4,11 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
@@ -30,6 +33,17 @@ public abstract class OfferingFetchStrategy {
         return fetchOfferingsWithLastOffering(lastOffering, searchKeyword, pageable);
     }
 
+    protected List<OfferingEntity> concatOfferings(Pageable pageable,
+                                                   Comparator<OfferingEntity> sortCondition,
+                                                   List<OfferingEntity>... offerings) {
+        return Stream.of(offerings)
+                .flatMap(Collection::stream)
+                .sorted(sortCondition)
+                .limit(pageable.getPageSize())
+                .toList();
+    }
+
+    // todo: 합치기
     protected abstract List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable);
 
     protected abstract List<OfferingEntity> fetchOfferingsWithLastOffering(

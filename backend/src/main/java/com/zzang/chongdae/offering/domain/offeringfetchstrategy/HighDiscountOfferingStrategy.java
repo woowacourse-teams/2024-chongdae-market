@@ -4,7 +4,6 @@ import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
 
 public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
@@ -29,19 +28,24 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
     }
 
     private List<OfferingEntity> fetchOfferings(String searchKeyword, Pageable pageable,
-                                                double outOfRangeDiscountRate, Long outOfRangeId) {
+                                                double lastDiscountRate, Long lastId) {
         if (searchKeyword == null) {
             return offeringRepository.findHighDiscountOfferingsWithoutKeyword(
-                    outOfRangeDiscountRate, outOfRangeId, pageable);
+                    lastDiscountRate, lastId, pageable);
         }
-        return Stream.concat(
-                        offeringRepository.findHighDiscountOfferingsWithTitleKeyword(outOfRangeDiscountRate,
-                                outOfRangeId, searchKeyword, pageable).stream(),
-                        offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeyword(
-                                outOfRangeDiscountRate, outOfRangeId, searchKeyword, pageable).stream())
-                .sorted(Comparator.comparing(OfferingEntity::getDiscountRate)
-                        .thenComparing(OfferingEntity::getId, Comparator.reverseOrder()))
-                .limit(pageable.getPageSize())
-                .toList();
+        Comparator<OfferingEntity> sortCondition = Comparator
+                .comparing(OfferingEntity::getDiscountRate)
+                .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
+        return concatOfferings(pageable, sortCondition,
+                offeringRepository.findHighDiscountOfferingsWithTitleKeyword(
+                        lastDiscountRate,
+                        lastId,
+                        searchKeyword,
+                        pageable),
+                offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeyword(
+                        lastDiscountRate,
+                        lastId,
+                        searchKeyword,
+                        pageable));
     }
 }
