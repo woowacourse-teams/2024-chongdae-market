@@ -42,9 +42,8 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                 AND (o.offeringStatus = 'IMMINENT')
             ORDER BY o.meetingDate ASC, o.id DESC
             """)
-    List<OfferingEntity> findImminentOfferingsWithoutKeyword(LocalDateTime lastMeetingDate,
-                                                             Long lastId,
-                                                             Pageable pageable);
+    List<OfferingEntity> findImminentOfferingsWithoutKeyword(
+            LocalDateTime lastMeetingDate, Long lastId, Pageable pageable);
 
     @Query("""
             SELECT o
