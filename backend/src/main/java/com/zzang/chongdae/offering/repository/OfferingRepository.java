@@ -71,79 +71,37 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
 
     // ============================================================
-//    @Query("""
-//            SELECT o
-//            FROM OfferingEntity o
-//            WHERE (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-//               AND (o.discountRate < :lastDiscountRate OR (o.discountRate = :lastDiscountRate AND o.id < :lastId))
-//               AND (:keyword IS NULL OR o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
-//            ORDER BY o.discountRate DESC, o.id DESC
-//            """)
-//    List<OfferingEntity> findHighDiscountOfferingsWithKeyword(
-//            double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.discountRate < :lastDiscountRate)
+            WHERE ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
                 AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
-    List<OfferingEntity> findHighDiscountOfferingsWithoutKeywordLessThanDiscountRate(
-            double lastDiscountRate, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.discountRate = :lastDiscountRate AND o.id < :lastId)
-                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-            ORDER BY o.discountRate DESC, o.id DESC
-            """)
-    List<OfferingEntity> findHighDiscountOfferingsWithoutKeywordEqualDiscountRate(
+    List<OfferingEntity> findHighDiscountOfferingsWithoutKeyword(
             double lastDiscountRate, Long lastId, Pageable pageable);
 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.discountRate < :lastDiscountRate)
-               AND (o.title LIKE :keyword%)
+            WHERE (o.title LIKE :keyword%)
                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
+               AND ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithTitleKeywordLessThanDiscountRate(
-            double lastDiscountRate, String keyword, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.discountRate = :lastDiscountRate AND o.id < :lastId)
-               AND (o.title LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-            ORDER BY o.discountRate DESC, o.id DESC
-            """)
-    List<OfferingEntity> findHighDiscountOfferingsWithTitleKeywordEqualDiscountRate(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.discountRate < :lastDiscountRate)
-               AND (o.meetingAddress LIKE :keyword%)
+            WHERE (o.meetingAddress LIKE :keyword%)
                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
+               AND ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
             ORDER BY o.discountRate DESC, o.id DESC
             """)
     List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeywordLessThanDiscountRate(
-            double lastDiscountRate, String keyword, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.discountRate = :lastDiscountRate AND o.id < :lastId)
-               AND (o.meetingAddress LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-            ORDER BY o.discountRate DESC, o.id DESC
-            """)
-    List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeywordEqualDiscountRate(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 
     // ============================================================

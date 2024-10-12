@@ -2,8 +2,9 @@ package com.zzang.chongdae.offering.domain.offeringfetchstrategy;
 
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
 
 public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
@@ -30,28 +31,17 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
     private List<OfferingEntity> fetchOfferings(String searchKeyword, Pageable pageable,
                                                 double outOfRangeDiscountRate, Long outOfRangeId) {
         if (searchKeyword == null) {
-            return of(offeringRepository.findHighDiscountOfferingsWithoutKeywordLessThanDiscountRate(
-                            outOfRangeDiscountRate, pageable),
-                    offeringRepository.findHighDiscountOfferingsWithoutKeywordEqualDiscountRate(outOfRangeDiscountRate,
-                            outOfRangeId, pageable));
+            return offeringRepository.findHighDiscountOfferingsWithoutKeyword(
+                    outOfRangeDiscountRate, outOfRangeId, pageable);
         }
-        return of(
-                offeringRepository.findHighDiscountOfferingsWithTitleKeywordLessThanDiscountRate(outOfRangeDiscountRate,
-                        searchKeyword, pageable),
-                offeringRepository.findHighDiscountOfferingsWithTitleKeywordEqualDiscountRate(outOfRangeDiscountRate,
-                        outOfRangeId, searchKeyword, pageable),
-                offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeywordEqualDiscountRate(
-                        outOfRangeDiscountRate, outOfRangeId, searchKeyword, pageable),
-                offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeywordLessThanDiscountRate(
-                        outOfRangeDiscountRate, searchKeyword, pageable)
-        );
-    }
-
-    private List<OfferingEntity> of(List<OfferingEntity>... offerings) {
-        List<OfferingEntity> result = new ArrayList<>();
-        for (List<OfferingEntity> offering : offerings) {
-            result.addAll(offering);
-        } // todo: 정렬 로직 추가
-        return result;
+        return Stream.concat(
+                        offeringRepository.findHighDiscountOfferingsWithTitleKeywordLessThanDiscountRate(outOfRangeDiscountRate,
+                                outOfRangeId, searchKeyword, pageable).stream(),
+                        offeringRepository.findHighDiscountOfferingsWithMeetingAddressKeywordLessThanDiscountRate(
+                                outOfRangeDiscountRate, outOfRangeId, searchKeyword, pageable).stream())
+                .sorted(Comparator.comparing(OfferingEntity::getDiscountRate)
+                        .thenComparing(OfferingEntity::getId, Comparator.reverseOrder()))
+                .limit(pageable.getPageSize())
+                .toList();
     }
 }
