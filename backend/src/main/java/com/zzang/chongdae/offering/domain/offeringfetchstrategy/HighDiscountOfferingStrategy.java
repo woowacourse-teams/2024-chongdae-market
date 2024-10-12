@@ -13,14 +13,14 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
     }
 
     @Override
-    protected List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable) {
+    protected List<OfferingEntity> fetchWithoutLast(String searchKeyword, Pageable pageable) {
         double outOfRangeDiscountRate = 100;
         Long outOfRangeId = findOutOfRangeId();
         return fetchOfferings(searchKeyword, pageable, outOfRangeDiscountRate, outOfRangeId);
     }
 
     @Override
-    protected List<OfferingEntity> fetchOfferingsWithLastOffering(
+    protected List<OfferingEntity> fetchWithLast(
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
         Double lastDiscountRate = lastOffering.getDiscountRate();
         Long lastId = lastOffering.getId();
@@ -36,7 +36,7 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
         Comparator<OfferingEntity> sortCondition = Comparator
                 .comparing(OfferingEntity::getDiscountRate)
                 .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
-        return concatOfferings(pageable, sortCondition,
+        return concat(pageable, sortCondition,
                 offeringRepository.findHighDiscountOfferingsWithTitleKeyword(
                         lastDiscountRate,
                         lastId,

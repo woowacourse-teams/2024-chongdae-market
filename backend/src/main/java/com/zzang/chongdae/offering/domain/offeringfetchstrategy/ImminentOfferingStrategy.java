@@ -14,14 +14,14 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
     }
 
     @Override
-    protected List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable) {
+    protected List<OfferingEntity> fetchWithoutLast(String searchKeyword, Pageable pageable) {
         LocalDateTime outOfRangeMeetingDate = LocalDateTime.now();
         Long outOfRangeId = findOutOfRangeId();
         return fetchOfferings(searchKeyword, pageable, outOfRangeMeetingDate, outOfRangeId);
     }
 
     @Override
-    protected List<OfferingEntity> fetchOfferingsWithLastOffering(
+    protected List<OfferingEntity> fetchWithLast(
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
         LocalDateTime lastMeetingDate = lastOffering.getMeetingDate();
         Long lastId = lastOffering.getId();
@@ -36,7 +36,7 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
         Comparator<OfferingEntity> sortCondition = Comparator
                 .comparing(OfferingEntity::getMeetingDate)
                 .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
-        return concatOfferings(pageable, sortCondition,
+        return concat(pageable, sortCondition,
                 offeringRepository.findImminentOfferingsWithMeetingAddressKeyword(
                         lastMeetingDate,
                         lastId,

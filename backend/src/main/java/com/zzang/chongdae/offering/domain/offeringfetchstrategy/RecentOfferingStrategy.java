@@ -12,13 +12,13 @@ public class RecentOfferingStrategy extends OfferingFetchStrategy {
     }
 
     @Override
-    protected List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable) {
+    protected List<OfferingEntity> fetchWithoutLast(String searchKeyword, Pageable pageable) {
         Long outOfRangeId = findOutOfRangeId();
         return fetchOfferings(searchKeyword, pageable, outOfRangeId);
     }
 
     @Override
-    protected List<OfferingEntity> fetchOfferingsWithLastOffering(
+    protected List<OfferingEntity> fetchWithLast(
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
         Long lastOfferingId = lastOffering.getId();
         return fetchOfferings(searchKeyword, pageable, lastOfferingId);

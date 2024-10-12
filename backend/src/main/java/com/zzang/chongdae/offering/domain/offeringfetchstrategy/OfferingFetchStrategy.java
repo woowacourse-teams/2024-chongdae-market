@@ -24,18 +24,18 @@ public abstract class OfferingFetchStrategy {
                 .orElse(0L) + OUT_OF_RANGE_ID_OFFSET;
     }
 
-    public List<OfferingEntity> fetchOfferings(String searchKeyword, Long lastId, Pageable pageable) {
+    public List<OfferingEntity> fetch(String searchKeyword, Long lastId, Pageable pageable) {
         if (lastId == null) {
-            return fetchOfferingsWithoutLastId(searchKeyword, pageable);
+            return fetchWithoutLast(searchKeyword, pageable);
         }
         OfferingEntity lastOffering = offeringRepository.findById(lastId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        return fetchOfferingsWithLastOffering(lastOffering, searchKeyword, pageable);
+        return fetchWithLast(lastOffering, searchKeyword, pageable);
     }
 
-    protected List<OfferingEntity> concatOfferings(Pageable pageable,
-                                                   Comparator<OfferingEntity> sortCondition,
-                                                   List<OfferingEntity>... offerings) {
+    protected List<OfferingEntity> concat(Pageable pageable,
+                                          Comparator<OfferingEntity> sortCondition,
+                                          List<OfferingEntity>... offerings) {
         return Stream.of(offerings)
                 .flatMap(Collection::stream)
                 .sorted(sortCondition)
@@ -43,9 +43,9 @@ public abstract class OfferingFetchStrategy {
                 .toList();
     }
 
-    // todo: 합치기
-    protected abstract List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable);
+    protected abstract List<OfferingEntity> fetchWithoutLast(String searchKeyword, Pageable pageable);
 
-    protected abstract List<OfferingEntity> fetchOfferingsWithLastOffering(
-            OfferingEntity lastOffering, String searchKeyword, Pageable pageable);
+    protected abstract List<OfferingEntity> fetchWithLast(OfferingEntity lastOffering,
+                                                          String searchKeyword,
+                                                          Pageable pageable);
 }
