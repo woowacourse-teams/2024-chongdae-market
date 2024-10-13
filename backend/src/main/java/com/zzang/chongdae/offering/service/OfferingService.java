@@ -28,6 +28,7 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +48,7 @@ public class OfferingService {
     private final StorageService storageService;
     private final ProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
+    private final Clock clock;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -130,7 +132,7 @@ public class OfferingService {
     }
 
     private void validateMeetingDate(OfferingEntity offering) {
-        LocalDate thresholdDate = LocalDate.now().plusDays(1);
+        LocalDate thresholdDate = LocalDate.now(clock).plusDays(1);
         if (offering.getMeetingDate().toLocalDate().isBefore(thresholdDate)) {
             throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
         }
