@@ -6,9 +6,8 @@ on:
       - "develop"
       - "release*"
 
-defaults:
-  run:
-    working-directory: ./android
+    paths:
+      - "android/**"
 
 jobs:
   ktlint_check:
