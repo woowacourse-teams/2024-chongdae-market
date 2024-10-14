@@ -11,6 +11,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 
 import com.epages.restdocs.apispec.HeaderDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.zzang.chongdae.auth.domain.KakaoMemberInfo;
 import com.zzang.chongdae.auth.service.AuthClient;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.global.integration.IntegrationTest;
@@ -68,8 +69,8 @@ class AuthIntegrationTest extends IntegrationTest {
         @BeforeEach
         void setUp() {
             member = memberFixture.createMember("dora");
-            BDDMockito.given(authClient.getKakaoUserInfo(any()))
-                    .willReturn(member.getLoginId());
+            BDDMockito.given(authClient.getKakaoMemberInfo(any()))
+                    .willReturn(new KakaoMemberInfo(member.getLoginId()));
         }
 
         @DisplayName("카카오 인증 토큰으로 로그인한다.")

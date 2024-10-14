@@ -1,12 +1,13 @@
 package com.zzang.chongdae.auth.service;
 
+import com.zzang.chongdae.auth.domain.AuthToken;
+import com.zzang.chongdae.auth.domain.KakaoMemberInfo;
+import com.zzang.chongdae.auth.domain.LoginMember;
+import com.zzang.chongdae.auth.domain.SignupMember;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
-import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
-import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.domain.AuthProvider;
 import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -27,26 +28,26 @@ public class AuthService {
 
     @WriterDatabase
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
-        String loginId = authClient.getKakaoUserInfo(request.accessToken());
-        AuthProvider provider = AuthProvider.KAKAO;
-        MemberEntity member = memberRepository.findByLoginId(loginId)
-                .orElseGet(() -> signup(provider, loginId));
-        return login(member);
+        KakaoMemberInfo kakaoMemberInfo = authClient.getKakaoMemberInfo(request.accessToken());
+        MemberEntity member = memberRepository.findByLoginId(kakaoMemberInfo.getLoginId())
+                .orElseGet(() -> signup(kakaoMemberInfo)); // adaptor로 이동
+        return login(member.toLoginMember()); // adaptor로 이동
     }
 
-    private MemberEntity signup(AuthProvider provider, String loginId) {
+    private MemberEntity signup(KakaoMemberInfo kakaoMemberInfo) {
+        String nickname = nickNameGenerator.generate();
         String password = passwordEncoder.encode(UUID.randomUUID().toString());
-        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId, password);
-        return memberRepository.save(member);
+        SignupMember signupMember = new SignupMember(nickname, password, kakaoMemberInfo);
+        MemberEntity member = new MemberEntity(signupMember); // adaptor로 이동
+        return memberRepository.save(member); // adaptor로 이동
     }
 
-    private AuthInfoDto login(MemberEntity member) {
-        AuthMemberDto authMember = new AuthMemberDto(member);
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
-        return new AuthInfoDto(authMember, authToken);
+    private AuthInfoDto login(LoginMember loginMember) {
+        AuthToken authToken = jwtTokenProvider.createAuthToken(loginMember.getId().toString());
+        return new AuthInfoDto(loginMember, authToken);
     }
 
-    public AuthTokenDto refresh(String refreshToken) {
+    public AuthToken refresh(String refreshToken) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
         return jwtTokenProvider.createAuthToken(memberId.toString());
     }
@@ -54,6 +55,6 @@ public class AuthService {
     public MemberEntity findMemberByAccessToken(String token) {
         Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND)); // TODO: 전부 도메인으로 교체
     }
 }

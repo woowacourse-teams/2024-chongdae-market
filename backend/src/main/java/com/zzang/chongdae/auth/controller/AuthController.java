@@ -1,8 +1,8 @@
 package com.zzang.chongdae.auth.controller;
 
+import com.zzang.chongdae.auth.domain.AuthToken;
 import com.zzang.chongdae.auth.service.AuthService;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
-import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.auth.service.dto.LoginResponse;
 import com.zzang.chongdae.logging.config.LoggingMasked;
@@ -31,7 +31,7 @@ public class AuthController {
             @RequestBody @Valid KakaoLoginRequest request, HttpServletResponse servletResponse) {
         AuthInfoDto authInfo = authService.kakaoLogin(request);
         addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
-        LoginResponse response = new LoginResponse(authInfo.authMember());
+        LoginResponse response = new LoginResponse(authInfo.loginMember());
         return ResponseEntity.ok(response);
     }
 
@@ -39,12 +39,12 @@ public class AuthController {
     public ResponseEntity<Void> refresh(
             HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         String refreshToken = cookieConsumer.getRefreshToken(servletRequest.getCookies());
-        AuthTokenDto authToken = authService.refresh(refreshToken);
+        AuthToken authToken = authService.refresh(refreshToken);
         addTokenToHttpServletResponse(authToken, servletResponse);
         return ResponseEntity.ok().build();
     }
 
-    private void addTokenToHttpServletResponse(AuthTokenDto authToken, HttpServletResponse servletResponse) {
+    private void addTokenToHttpServletResponse(AuthToken authToken, HttpServletResponse servletResponse) {
         List<Cookie> cookies = cookieExtractor.extractAuthCookies(authToken);
         cookieConsumer.addCookies(servletResponse, cookies);
     }

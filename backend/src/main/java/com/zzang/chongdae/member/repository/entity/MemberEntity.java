@@ -1,5 +1,7 @@
 package com.zzang.chongdae.member.repository.entity;
 
+import com.zzang.chongdae.auth.domain.LoginMember;
+import com.zzang.chongdae.auth.domain.SignupMember;
 import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.domain.AuthProvider;
 import jakarta.persistence.Column;
@@ -42,9 +44,17 @@ public class MemberEntity extends BaseTimeEntity {
 
     @NotNull
     private String password; // TODO: 일반 로그인 들어올 시 salt 추가
-    
+
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
         this(null, nickname, provider, loginId, password);
+    }
+
+    public MemberEntity(SignupMember member) {
+        this(member.getNickname(), member.getProvider(), member.getLoginId(), member.getPassword());
+    }
+
+    public LoginMember toLoginMember() {
+        return new LoginMember(id, nickname);
     }
 
     public boolean isSame(MemberEntity other) {
