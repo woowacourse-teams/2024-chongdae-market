@@ -90,10 +90,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openOfferingDetailFragment(offeringId: Long) {
-        Log.d("alsong", "의미없는로그")
         val navController = navHostFragment.navController
         val bundle = bundleOf(OfferingDetailFragment.OFFERING_ID_KEY to offeringId)
-
         navController.navigate(R.id.action_home_fragment_to_offering_detail_fragment, bundle)
     }
 
