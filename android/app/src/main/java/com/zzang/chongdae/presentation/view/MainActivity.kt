@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    //안드코드 수정
     private fun openOfferingDetailFragment(offeringId: Long) {
         val navController = navHostFragment.navController
         val bundle = bundleOf(OfferingDetailFragment.OFFERING_ID_KEY to offeringId)

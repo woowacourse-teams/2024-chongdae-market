@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class StorageConfig {
-// 백엔드코드 수정
+// 백엔드코드 수정2
     @Bean
     public AmazonS3 amazonS3() {
         return AmazonS3ClientBuilder.standard()
