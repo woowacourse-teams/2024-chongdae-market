@@ -31,9 +31,6 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
         if (searchKeyword == null) {
             return offeringRepository.findImminentOfferingsWithoutKeyword(lastMeetingDate, lastId, pageable);
         }
-        Comparator<OfferingEntity> sortCondition = Comparator
-                .comparing(OfferingEntity::getMeetingDate)
-                .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
         List<OfferingEntity> offeringsSearchedByTitle = offeringRepository.findImminentOfferingsWithTitleKeyword(
                 lastMeetingDate,
                 lastId,
@@ -44,6 +41,12 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
                 lastId,
                 searchKeyword,
                 pageable);
-        return concat(pageable, sortCondition, offeringsSearchedByTitle, offeringsSearchedByMeetingAddress);
+        return concat(pageable, sortCondition(), offeringsSearchedByTitle, offeringsSearchedByMeetingAddress);
+    }
+
+    private Comparator<OfferingEntity> sortCondition() {
+        return Comparator
+                .comparing(OfferingEntity::getMeetingDate)
+                .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
     }
 }
