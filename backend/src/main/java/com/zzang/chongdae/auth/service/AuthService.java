@@ -7,11 +7,7 @@ import com.zzang.chongdae.auth.domain.SignupMember;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.global.config.WriterDatabase;
-import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberPersistenceAdaptor;
-import com.zzang.chongdae.member.repository.MemberRepository;
-import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final MemberPersistenceAdaptor memberStorage; // TODO: 인터페이스화해서 persistence 영향 없게 변경 필요
-    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
@@ -51,11 +46,5 @@ public class AuthService {
     public AuthToken refresh(String refreshToken) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
         return jwtTokenProvider.createAuthToken(memberId.toString());
-    }
-
-    public MemberEntity findMemberByAccessToken(String token) {
-        Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND)); // TODO: 전부 도메인으로 교체
     }
 }
