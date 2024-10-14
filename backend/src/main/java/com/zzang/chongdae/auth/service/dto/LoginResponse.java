@@ -5,6 +5,6 @@ import com.zzang.chongdae.auth.domain.LoginMember;
 public record LoginResponse(Long memberId, String nickname) {
 
     public LoginResponse(LoginMember loginMember) {
-        this(loginMember.id(), loginMember.nickname());
+        this(loginMember.getId(), loginMember.getNickname());
     }
 }

@@ -13,7 +13,7 @@ public class SignupMember {
     private final String loginId;
     private final String password;
 
-    public SignupMember(String nickname, String password, KakaoMemberInfo info) {
+    public SignupMember(String nickname, String password, KakaoMember info) {
         this(nickname, info.getProvider(), info.getLoginId(), password);
     }
 }

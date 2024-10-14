@@ -6,12 +6,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class KakaoMemberInfo {
+public class KakaoMember {
 
     private final AuthProvider provider = AuthProvider.KAKAO;
     private final String loginId;
 
-    public KakaoMemberInfo(Long kakaoId) {
+    public KakaoMember(Long kakaoId) {
         this.loginId = AuthProvider.KAKAO.buildLoginId(kakaoId.toString());
     }
 }
