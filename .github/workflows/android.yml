@@ -50,7 +50,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Ktlint check
-        run: ./gradlew ktlintCheck
+        run: ./android/gradlew ktlintCheck
 
   build_and_test:
     runs-on: ubuntu-latest
@@ -91,7 +91,7 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./android/gradlew
 
       - name: Gradle Clean check
         run: ./android/gradlew clean
@@ -149,7 +149,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build release AAB
-        run: ./gradlew bundleRelease
+        run: ./android/gradlew bundleRelease
 
       - name: Sign AAB
         id: sign
