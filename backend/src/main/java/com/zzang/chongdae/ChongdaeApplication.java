@@ -8,4 +8,5 @@ public class ChongdaeApplication {
     public static void main(String[] args) {
         SpringApplication.run(ChongdaeApplication.class, args);
     }
+
 }
