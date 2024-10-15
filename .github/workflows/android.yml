@@ -6,11 +6,8 @@ on:
       - "develop"
       - "release*"
 
-    paths:
-      - "android/**"
+    paths: ["android/**"]
 
-    paths-ignore:
-      - "!android/**"
 
 jobs:
   ktlint_check:
