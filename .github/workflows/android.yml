@@ -26,7 +26,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Create google-services
-        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > ./app/google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > ./android/app/google-services.json
 
       - name: Create local.properties
         env:
