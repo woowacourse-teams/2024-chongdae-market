@@ -19,6 +19,7 @@ class CommentDetailActivityTest {
     fun setUp() {
         scenario = ActivityScenario.launch(CommentDetailActivity::class.java)
     }
+
 // 안드코드 수정
     @Test
     @DisplayName("댓글 상세 화면이 보여야 한다")
