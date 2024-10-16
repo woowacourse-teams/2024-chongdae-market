@@ -157,7 +157,9 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build release AAB
-        run: ./android/gradlew bundleRelease
+        run: |
+          cd ./android
+          ./gradlew bundleRelease
 
       - name: Sign AAB
         id: sign
