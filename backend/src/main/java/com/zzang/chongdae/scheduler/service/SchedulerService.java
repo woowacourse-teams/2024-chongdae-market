@@ -25,8 +25,9 @@ public class SchedulerService {
     public void run() {
         LocalDateTime today = LocalDate.now().atStartOfDay();
         LocalDateTime tomorrow = today.plusDays(1);
+        LocalDateTime yesterday = today.minusDays(1);
 
-        updateStatusConfirmedDaily(today);
+        updateStatusConfirmedDaily(yesterday);
         updateStatusImminentDaily(tomorrow);
     }
 
