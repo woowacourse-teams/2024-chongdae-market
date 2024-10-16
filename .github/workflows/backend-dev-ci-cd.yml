@@ -1,7 +1,7 @@
 name: Backend Dev CI/CD Workflow
 
 on:
-  push:
+  pull_request:
     branches: [ "develop" ]
     paths:
       - "backend/**"
