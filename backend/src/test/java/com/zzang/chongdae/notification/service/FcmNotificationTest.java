@@ -5,12 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class FirebaseAlarmServiceTest extends ServiceTest {
+class FcmNotificationTest extends ServiceTest {
 
     @Autowired
     private FcmNotificationService alarmService;
@@ -26,10 +27,10 @@ class FirebaseAlarmServiceTest extends ServiceTest {
         MemberEntity participant = memberFixture.createMember("ever", participantFcmToken);
         OfferingEntity offering = offeringFixture.createOffering(proposer);
         offeringMemberFixture.createProposer(proposer, offering);
-        offeringMemberFixture.createParticipant(participant, offering);
+        OfferingMemberEntity offeringMember = offeringMemberFixture.createParticipant(participant, offering);
 
         // when
-        String messageId = alarmService.sendParticipation(offering, participant);
+        String messageId = alarmService.sendParticipation(offeringMember);
 
         // then
         assertThat(messageId).contains("messages");

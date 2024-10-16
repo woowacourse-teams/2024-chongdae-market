@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OfferingMemberService {
 
-    private final FcmNotificationService alarmService;
+    private final FcmNotificationService notificationService;
     private final OfferingMemberRepository offeringMemberRepository;
     private final OfferingRepository offeringRepository;
 
@@ -41,12 +41,12 @@ public class OfferingMemberService {
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
-        offeringMemberRepository.save(offeringMember);
+        OfferingMemberEntity saved = offeringMemberRepository.save(offeringMember);
 
         offering.participate();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        alarmService.sendParticipation(offering, member);
+        notificationService.sendParticipation(saved);
         return offeringMember.getId();
     }
 
@@ -76,9 +76,11 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
         validateCancel(offeringMember);
         offeringMemberRepository.delete(offeringMember);
+
         offering.leave();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
+        notificationService.sendCancelParticipation(offeringMember);
     }
 
     private void validateCancel(OfferingMemberEntity offeringMember) {
