@@ -7,6 +7,8 @@ sealed class CommentViewType {
 
     data class OtherComment(val comment: Comment) : CommentViewType()
 
+    data class DateSeparator(val comment: Comment) : CommentViewType()
+
     companion object {
         fun fromComment(comment: Comment): CommentViewType {
             return if (comment.isMine) {
