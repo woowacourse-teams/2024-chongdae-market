@@ -6,7 +6,10 @@ on:
       - "develop"
       - "release*"
 
-    paths: ["android/**"]
+defaults:
+  run:
+    working-directory: ./android
+#    paths: ["android/**"]
 
 
 jobs:
