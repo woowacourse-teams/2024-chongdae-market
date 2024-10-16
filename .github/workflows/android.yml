@@ -57,7 +57,9 @@ jobs:
         run: chmod +x ./android/gradlew
 
       - name: Ktlint check
-        run: ./gradlew ktlintCheck
+        run: |
+          cd ./android
+          ./gradlew ktlintCheck
 
   build_and_test:
     runs-on: ubuntu-latest
