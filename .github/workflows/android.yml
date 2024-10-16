@@ -6,8 +6,6 @@ on:
       - "develop"
       - "release*"
 
-    paths: ["android/**"]
-
 defaults:
   run:
     working-directory: ./android
@@ -50,12 +48,10 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x gradlew
 
       - name: Ktlint check
-        run: |
-          cd ./android
-          ./gradlew ktlintCheck
+        run: ./gradlew ktlintCheck
 
   build_and_test:
     runs-on: ubuntu-latest
@@ -75,7 +71,7 @@ jobs:
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
       - name: Create local.properties
         env:
@@ -83,7 +79,7 @@ jobs:
           TOKEN: ${{ secrets.TOKEN }}
           NATIVE_APP_KEY: ${{ secrets.NATIVE_APP_KEY }}
         run: |
-          echo "sdk.dir=/Users/chaehyun/Library/sdk" > ./local.properties
+          echo "sdk.dir=/Users/chaehyun/Library/Android/sdk" > ./local.properties
           echo "base_url=$BASE_URL" >> ./local.properties
           echo "token=$TOKEN" >> ./local.properties
           echo "native_app_key=$NATIVE_APP_KEY" >> ./local.properties
@@ -96,22 +92,16 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x gradlew
 
       - name: Gradle Clean check
-        run: |
-          cd ./android
-          ./gradlew clean
+        run: ./gradlew clean
 
       - name: Build with Gradle
-        run: |
-          cd ./android
-          ./gradlew build
+        run: ./gradlew build
 
       - name: Run Unit Test
-        run: |
-          cd ./android
-          ./gradlew test
+        run: ./gradlew test
 
   deploy:
     runs-on: ubuntu-latest
@@ -127,17 +117,17 @@ jobs:
           distribution: 'temurin'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x gradlew
 
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
+          echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
       - name: Create service_account.json
         id: createServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ./app/service_account.json
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > app/service_account.json
 
       - name: Set up environment variable for BuildConfig
         env:
@@ -160,16 +150,14 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build release AAB
-        run: |
-          cd ./android
-          ./gradlew bundleRelease
+        run: ./gradlew bundleRelease
 
       - name: Sign AAB
         id: sign
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: ./app/build/outputs/bundle/release
-          output: ./build/release/signed
+          releaseDirectory: ./android/app/build/outputs/bundle/release
+          output: ./android/build/release/signed
           signingKeyBase64: ${{ secrets.ENCODED_KEYSTORE }}
           alias: ${{ secrets.AN_ALIAS }}
           keyStorePassword: ${{ secrets.AN_KEYSTORE_PASSWORD }}
@@ -180,5 +168,5 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.zzang.chongdae
-          releaseFiles: ./app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
           track: "총대마켓 - 비공개 테스트"
