@@ -98,17 +98,17 @@ jobs:
       - name: Gradle Clean check
         run: |
           cd ./android
-          ./android/gradlew clean
+          ./gradlew clean
 
       - name: Build with Gradle
         run: |
           cd ./android
-          ./android/gradlew build
+          ./gradlew build
 
       - name: Run Unit Test
         run: |
           cd ./android
-          ./android/gradlew test
+          ./gradlew test
 
   deploy:
     runs-on: ubuntu-latest
