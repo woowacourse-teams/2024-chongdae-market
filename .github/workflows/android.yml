@@ -26,7 +26,11 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Move to a android directory
-        run: pwd
+        run: |
+          pwd
+          ls
+          cd ./android
+          ls
 
       - name: Create google-services
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > ./android/app/google-services.json
