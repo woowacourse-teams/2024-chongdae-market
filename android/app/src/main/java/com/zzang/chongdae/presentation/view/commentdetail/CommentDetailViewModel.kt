@@ -90,7 +90,7 @@ class CommentDetailViewModel
                 }
         }
 
-        private fun handleRepositoryError(
+        private fun handleNetworkError(
             error: DataError.Network,
             retryAction: suspend () -> Unit,
         ) {
@@ -115,7 +115,7 @@ class CommentDetailViewModel
                 when (val result = commentDetailRepository.fetchCommentOfferingInfo(offeringId)) {
                     is Result.Success -> _commentOfferingInfo.value = result.data.toUiModel()
                     is Result.Error ->
-                        handleRepositoryError(result.error) {
+                        handleNetworkError(result.error) {
                             updateCommentInfo()
                         }
                 }
@@ -131,7 +131,7 @@ class CommentDetailViewModel
                 when (val result = commentDetailRepository.updateOfferingStatus(offeringId)) {
                     is Result.Success -> updateCommentInfo()
                     is Result.Error ->
-                        handleRepositoryError(result.error) {
+                        handleNetworkError(result.error) {
                             updateOfferingStatus()
                         }
                 }
@@ -150,7 +150,7 @@ class CommentDetailViewModel
                     }
 
                     is Result.Error ->
-                        handleRepositoryError(result.error) {
+                        handleNetworkError(result.error) {
                             loadComments()
                         }
                 }
@@ -165,7 +165,7 @@ class CommentDetailViewModel
                 when (val result = commentDetailRepository.saveComment(offeringId, content)) {
                     is Result.Success -> commentContent.value = ""
                     is Result.Error ->
-                        handleRepositoryError(result.error) {
+                        handleNetworkError(result.error) {
                             postComment()
                         }
                 }
@@ -184,7 +184,7 @@ class CommentDetailViewModel
                 when (val result = participantRepository.fetchParticipants(offeringId)) {
                     is Result.Success -> _participants.value = result.data.toUiModel()
                     is Result.Error ->
-                        handleRepositoryError(result.error) {
+                        handleNetworkError(result.error) {
                             loadParticipants()
                         }
                 }
@@ -196,7 +196,7 @@ class CommentDetailViewModel
                 when (val result = offeringRepository.fetchMeetings(offeringId)) {
                     is Result.Success -> _meetings.value = result.data.toUiModel()
                     is Result.Error ->
-                        handleRepositoryError(result.error) {
+                        handleNetworkError(result.error) {
                             loadMeetings()
                         }
                 }
