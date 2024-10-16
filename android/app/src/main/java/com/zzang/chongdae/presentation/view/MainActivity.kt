@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    // 안드코드 수정
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var navHostFragment: NavHostFragment
