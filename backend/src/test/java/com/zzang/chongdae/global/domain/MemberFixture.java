@@ -20,7 +20,8 @@ public class MemberFixture {
                 nickname,
                 AuthProvider.KAKAO,
                 AuthProvider.KAKAO.buildLoginId(nickname),
-                "1234");
+                "1234",
+                "fcmToken_" + nickname);
         return memberRepository.save(member);
     }
 
