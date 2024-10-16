@@ -3,6 +3,7 @@ package com.zzang.chongdae.offeringmember.service;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.service.FcmNotificationService;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OfferingMemberService {
 
+    private final FcmNotificationService alarmService;
     private final OfferingMemberRepository offeringMemberRepository;
     private final OfferingRepository offeringRepository;
 
@@ -44,6 +46,7 @@ public class OfferingMemberService {
         offering.participate();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
+        alarmService.sendParticipation(offering, member);
         return offeringMember.getId();
     }
 

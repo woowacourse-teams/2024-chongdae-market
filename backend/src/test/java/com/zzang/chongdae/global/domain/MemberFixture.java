@@ -16,12 +16,16 @@ public class MemberFixture {
     private MemberRepository memberRepository;
 
     public MemberEntity createMember(String nickname) {
+        return createMember(nickname, "fcmToken_" + nickname);
+    }
+    
+    public MemberEntity createMember(String nickname, String fcmToken) {
         MemberEntity member = new MemberEntity(
                 nickname,
                 AuthProvider.KAKAO,
                 AuthProvider.KAKAO.buildLoginId(nickname),
                 "1234",
-                "fcmToken_" + nickname);
+                fcmToken);
         return memberRepository.save(member);
     }
 
