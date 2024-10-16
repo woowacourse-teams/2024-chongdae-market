@@ -10,6 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class ChongdaeApp : Application() {
+
     override fun onCreate() {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
