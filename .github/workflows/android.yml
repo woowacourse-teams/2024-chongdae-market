@@ -51,7 +51,7 @@ jobs:
 
       - name: Ktlint check
         run: |
-          working-directory: ./android
+          cd ./android
           ./gradlew ktlintCheck
 
   build_and_test:
@@ -96,13 +96,19 @@ jobs:
         run: chmod +x ./android/gradlew
 
       - name: Gradle Clean check
-        run: ./android/gradlew clean
+        run: |
+          cd ./android
+          ./android/gradlew clean
 
       - name: Build with Gradle
-        run: ./android/gradlew build
+        run: |
+          cd ./android
+          ./android/gradlew build
 
       - name: Run Unit Test
-        run: ./android/gradlew test
+        run: |
+          cd ./android
+          ./android/gradlew test
 
   deploy:
     runs-on: ubuntu-latest
