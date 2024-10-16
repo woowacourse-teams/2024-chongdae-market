@@ -29,6 +29,7 @@ import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -120,7 +121,7 @@ public class OfferingService {
     @WriterDatabase
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
-        validateMeetingDate(offering);
+        validateMeetingDate(offering.getMeetingDate());
         OfferingEntity savedOffering = offeringRepository.save(offering);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
@@ -129,9 +130,9 @@ public class OfferingService {
         return savedOffering.getId();
     }
 
-    private void validateMeetingDate(OfferingEntity offering) {
+    private void validateMeetingDate(LocalDateTime offeringDateTime) {
         LocalDate thresholdDate = LocalDate.now();
-        LocalDate targetDate = offering.getMeetingDate().toLocalDate();
+        LocalDate targetDate = offeringDateTime.toLocalDate();
         if (targetDate.isBefore(thresholdDate)) {
             throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
         }
