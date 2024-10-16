@@ -51,7 +51,7 @@ jobs:
 
       - name: Ktlint check
         run: |
-          cd ./android
+          working-directory: ./android
           ./gradlew ktlintCheck
 
   build_and_test:
