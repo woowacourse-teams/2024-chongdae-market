@@ -11,7 +11,7 @@
 
         <variable
             name="listener"
-            type="com.zzang.chongdae.presentation.view.commentdetail.OnUpdateStatusClickListener" />
+            type="com.zzang.chongdae.presentation.view.commentdetail.event.OnUpdateStatusClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
