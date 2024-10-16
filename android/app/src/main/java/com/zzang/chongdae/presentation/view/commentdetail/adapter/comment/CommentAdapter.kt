@@ -18,7 +18,7 @@ class CommentAdapter : ListAdapter<CommentViewType, RecyclerView.ViewHolder>(DIF
             val currentComment = comments[i]
             val previousComment = if (i > 0) comments[i - 1] else null
 
-            if (previousComment == null || currentComment.commentCreatedAt.date != previousComment.commentCreatedAt.date) {
+            if (previousComment == null || isDifferentDates(currentComment, previousComment)) {
                 newItems.add(CommentViewType.DateSeparator(currentComment))
             }
 
@@ -27,6 +27,11 @@ class CommentAdapter : ListAdapter<CommentViewType, RecyclerView.ViewHolder>(DIF
 
         submitList(newItems)
     }
+
+    private fun isDifferentDates(
+        currentComment: Comment,
+        previousComment: Comment,
+    ) = currentComment.commentCreatedAt.date != previousComment.commentCreatedAt.date
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
