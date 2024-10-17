@@ -1,8 +1,10 @@
 package com.zzang.chongdae.comment.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -24,13 +26,24 @@ public class CommentServiceTest extends ServiceTest {
     class GetAllCommentRoom {
 
         MemberEntity member;
-        OfferingEntity offering;
+        OfferingEntity firstOffering;
+        OfferingEntity secondOffering;
+        OfferingEntity thirdOffering;
+        OfferingEntity fourthOffering;
 
         @BeforeEach
         void setUp() {
             member = memberFixture.createMember("dora");
-            offering = offeringFixture.createOffering(member);
-            offeringMemberFixture.createProposer(member, offering);
+            firstOffering = offeringFixture.createOffering(member);
+            secondOffering = offeringFixture.createOffering(member);
+            thirdOffering = offeringFixture.createOffering(member);
+            fourthOffering = offeringFixture.createOffering(member);
+            offeringMemberFixture.createProposer(member, firstOffering);
+            offeringMemberFixture.createProposer(member, secondOffering);
+            offeringMemberFixture.createProposer(member, thirdOffering);
+            offeringMemberFixture.createProposer(member, fourthOffering);
+            commentFixture.createComment(member, firstOffering);
+            commentFixture.createComment(member, secondOffering);
         }
 
         @DisplayName("로그인한 유저가 참여한 댓글방 목록을 조회할 수 있다")
@@ -40,14 +53,26 @@ public class CommentServiceTest extends ServiceTest {
             CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
 
             // then
-            assertEquals(response.offerings().size(), 1);
+            assertEquals(response.offerings().size(), 3);
+        }
+
+        @DisplayName("최근 댓글이 작성된 순으로 정렬해 댓글방 목록을 조회할 수 있다")
+        @Test
+        void should_getAllCommentRoomWithOrder_when_givenLoginMember() {
+            // when
+            CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
+
+            // then
+            assertThat(response.offerings())
+                    .extracting(CommentRoomAllResponseItem::offeringId)
+                    .containsExactly(2L, 1L, 3L, 4L);
         }
 
         @DisplayName("댓글방 목록 조회 시 삭제된 공모에 대한 댓글방은 제목에 삭제되었다고 명시되어 있다")
         @Test
         void should_getAllCommentRoomWithDeletedCommentRoom_when_giveLoginMember() {
             // given
-            offeringFixture.deleteOffering(offering);
+            offeringFixture.deleteOffering(firstOffering);
 
             // when
             CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
