@@ -74,8 +74,6 @@ jobs:
     runs-on: [ self-hosted, dev ]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
       - name: Switch from old to new container
         run: |
           bash switch_blue_green_container.sh
