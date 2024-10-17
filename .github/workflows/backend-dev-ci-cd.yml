@@ -63,8 +63,10 @@ jobs:
     steps:
       - name: Deploy new container
         run: |
+          pwd
+          ls
           bash launch_next_container.sh ${GITHUB_SHA::7} dev ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}
-        working-directory: backend/deploy
+        working-directory: ./backend/deploy
 
 
   switch-new-container:
