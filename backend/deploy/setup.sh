@@ -56,7 +56,6 @@ docker run -d \
 # 5. setup proxy in nginx container
 docker cp ${NGINX_NEW_CONF_PATH} nginx:/etc/nginx/conf.d/${NGINX_NEW_CONF_PATH}
 docker exec nginx mv /etc/nginx/conf.d/${NGINX_NEW_CONF_PATH} /etc/nginx/conf.d/default.conf
-docker exec nginx rm /etc/nginx/conf.d/${NGINX_NEW_CONF_PATH}
 docker exec nginx nginx -s reload
 
 # 6. clean up
