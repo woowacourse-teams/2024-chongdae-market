@@ -513,7 +513,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now().plusDays(1),
+                    LocalDateTime.now(clock).plusDays(1),
                     "내용입니다."
             );
 
@@ -540,7 +540,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now().plusDays(1),
+                    LocalDateTime.now(clock).plusDays(1),
                     "내용입니다."
             );
 
@@ -648,7 +648,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now(clock).minusDays(1),
                     "내용입니다."
             );
 
