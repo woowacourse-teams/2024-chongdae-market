@@ -60,4 +60,3 @@ docker exec nginx nginx -s reload
 
 # 6. clean up
 rm -rf ${NGINX_NEW_CONF_PATH}
-
