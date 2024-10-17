@@ -34,7 +34,7 @@
                 android:paddingStart="15dp"
                 android:paddingEnd="30dp"
                 android:text="@={vm.search}"
-                android:textSize="12sp"
+                android:textSize="@dimen/size_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -46,6 +46,8 @@
                 android:layout_marginEnd="@dimen/size_3"
                 android:layout_marginBottom="5dp"
                 android:padding="@dimen/size_3"
+                app:isVisible="@{vm.isSearchKeywordExist}"
+                android:layout_marginTop="@dimen/size_6"
                 android:src="@drawable/btn_offering_write_clear"
                 app:debouncedOnClick="@{() -> vm.refreshOfferings(true)}"
                 app:layout_constraintBottom_toBottomOf="@id/et_search"
