@@ -63,10 +63,7 @@ jobs:
     steps:
       - name: Deploy new container
         run: |
-          echo $(pwd)
-          echo $(ls)
-          bash launch_next_container.sh ${GITHUB_SHA::7} dev ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}
-        working-directory: ./backend/deploy
+          bash backend/deploy/launch_next_container.sh ${GITHUB_SHA::7} dev ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}
 
 
   switch-new-container:
@@ -77,4 +74,4 @@ jobs:
       - name: Switch from old to new container
         run: |
           bash switch_blue_green_container.sh
-        working-directory: backend/deploy
+        working-directory: ./backend/deploy
