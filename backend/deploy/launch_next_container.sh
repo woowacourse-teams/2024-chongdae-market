@@ -49,7 +49,7 @@ health_check() {
         echo "[INFO] Attempt $i: Checking health of $next_container"
         local status=$(docker exec ${next_container} curl -H "Host: localhost" -o /dev/null -s -w "%{http_code}\n" http://$next_container:8080/health-check)
 
-        if [ "$status" -eq 200 ]; then
+	      if [[ "$status" -eq "200" ]]; then
             echo "[INFO] Health check successful."
             return 0
         fi

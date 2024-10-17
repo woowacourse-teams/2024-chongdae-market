@@ -49,7 +49,7 @@ change_blue_green_container() {
 
 health_check() {
 	local status=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost/health-check)
-	if [ "$status" -eq 200 ]; then
+	if [[ "$status" -eq "200" ]]; then
 		return 0
 	fi	
 	return 1	
