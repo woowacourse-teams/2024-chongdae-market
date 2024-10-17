@@ -60,7 +60,6 @@ remove_container() {
 	local removed_container_name=$1
 	
 	docker rm -f $removed_container_name
-	
 	if [ $? -eq 0 ]; then
 		echo "[-] stop $removed_container_name"
 		return 0
@@ -81,3 +80,5 @@ if [ $? -eq 0 ]; then
    remove_container $ACTIVE_CONTAINER
 fi
 
+echo "[-] clean docker image"
+docker image prune -a -f
