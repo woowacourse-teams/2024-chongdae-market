@@ -132,8 +132,9 @@ public class OfferingService {
     }
 
     private void validateMeetingDate(OfferingEntity offering) {
-        LocalDate thresholdDate = LocalDate.now(clock).plusDays(1);
-        if (offering.getMeetingDate().toLocalDate().isBefore(thresholdDate)) {
+        LocalDate thresholdDate = LocalDate.now(clock);
+        LocalDate targetDate = offering.getMeetingDate().toLocalDate();
+        if (targetDate.isBefore(thresholdDate)) {
             throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
         }
     }
