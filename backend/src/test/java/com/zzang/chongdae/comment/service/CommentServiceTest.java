@@ -1,8 +1,10 @@
 package com.zzang.chongdae.comment.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
+import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -61,10 +63,9 @@ public class CommentServiceTest extends ServiceTest {
             CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
 
             // then
-            assertEquals(response.offerings().get(0).offeringId(), 2L);
-            assertEquals(response.offerings().get(1).offeringId(), 1L);
-            assertEquals(response.offerings().get(2).offeringId(), 3L);
-            assertEquals(response.offerings().get(3).offeringId(), 4L);
+            assertThat(response.offerings())
+                    .extracting(CommentRoomAllResponseItem::offeringId)
+                    .containsExactly(2L, 1L, 3L, 4L);
         }
 
         @DisplayName("댓글방 목록 조회 시 삭제된 공모에 대한 댓글방은 제목에 삭제되었다고 명시되어 있다")
