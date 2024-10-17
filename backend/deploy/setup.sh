@@ -22,12 +22,11 @@ if ! docker network ls | grep -q ${INITIAL_BLUE_GREEN_NETWORK_NAME}; then
 	docker network create --driver bridge "${INITIAL_BLUE_GREEN_NETWORK_NAME}"
 fi
 
-echo "[+] stop and remove intial container"
-
 # 2. RUN INITIAL_CONTAINER
-echo "[+] add chongdae_backend container"
+echo "[+] stop and remove intial container"
 docker rm -f ${INITIAL_INSTANCE_NAME} >/dev/null 2>&1
 
+echo "[+] add chongdae_backend container"
 docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
        	--name ${INITIAL_INSTANCE_NAME} \
@@ -46,15 +45,20 @@ if grep -q "server chongdae_backend:" "${NGINX_NEW_CONF_PATH}"; then
 	sed -i "s/server chongdae_backend:/server ${INITIAL_INSTANCE_NAME}:/" "${NGINX_NEW_CONF_PATH}"
 fi
 
-# 4. RUN DOCKER COMPOSE NGINX
+# 4. RUN DOCKER NGINX
 echo "[+] RUN nginx server"
 docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
 	--name nginx \
-       	-p 80:80 \
-     	-v ./${NGINX_NEW_CONF_PATH}:/etc/nginx/conf.d/default.conf \
+  -p 80:80 \
 	nginx:latest
 
-# 5. clean up
+# 5. setup proxy in nginx container
+docker cp ${NGINX_NEW_CONF_PATH} nginx:/etc/nginx/conf.d/${NGINX_NEW_CONF_PATH}
+docker exec nginx mv /etc/nginx/conf.d/${NGINX_NEW_CONF_PATH} /etc/nginx/conf.d/default.conf
+docker exec nginx rm /etc/nginx/conf.d/${NGINX_NEW_CONF_PATH}
+docker exec nginx nginx -s reload
+
+# 6. clean up
 rm -rf ${NGINX_NEW_CONF_PATH}
 
