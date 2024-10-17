@@ -30,7 +30,7 @@ class FcmNotificationTest extends ServiceTest {
         OfferingMemberEntity offeringMember = offeringMemberFixture.createParticipant(participant, offering);
 
         // when
-        String messageId = alarmService.sendParticipation(offeringMember);
+        String messageId = alarmService.participate(offeringMember);
 
         // then
         assertThat(messageId).contains("messages");

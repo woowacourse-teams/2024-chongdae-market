@@ -3,6 +3,7 @@ package com.zzang.chongdae.offering.service;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.service.FcmNotificationService;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
@@ -42,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class OfferingService {
 
+    private final FcmNotificationService notificationService;
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final StorageService storageService;
@@ -126,6 +128,8 @@ public class OfferingService {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
         offeringMemberRepository.save(offeringMember);
 
+        notificationService.saveOffering(savedOffering);
+
         return savedOffering.getId();
     }
 
@@ -172,6 +176,7 @@ public class OfferingService {
         validateIsProposer(offering, member);
         validateInProgress(offering);
         offeringRepository.delete(offering);
+        notificationService.deleteOffering(offering);
     }
 
     private void validateInProgress(OfferingEntity offering) {

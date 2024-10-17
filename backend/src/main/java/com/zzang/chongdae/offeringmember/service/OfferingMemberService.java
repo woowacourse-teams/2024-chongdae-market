@@ -46,7 +46,7 @@ public class OfferingMemberService {
         offering.participate();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        notificationService.sendParticipation(saved);
+        notificationService.participate(saved);
         return offeringMember.getId();
     }
 
@@ -80,7 +80,7 @@ public class OfferingMemberService {
         offering.leave();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        notificationService.sendCancelParticipation(offeringMember);
+        notificationService.cancelParticipation(offeringMember);
     }
 
     private void validateCancel(OfferingMemberEntity offeringMember) {
