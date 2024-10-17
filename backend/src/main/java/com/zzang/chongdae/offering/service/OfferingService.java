@@ -175,7 +175,7 @@ public class OfferingService {
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         LocalDate tomorrow = LocalDate.now(clock).plusDays(1);
         LocalDate meetingDate = offering.getMeetingDate().toLocalDate();
-        if (meetingDate.isBefore(tomorrow)) {
+        if (meetingDate.isBefore(tomorrow) || meetingDate.isEqual(tomorrow)) {
             offeringStatus = OfferingStatus.IMMINENT;
         }
         offering.updateOfferingStatus(offeringStatus);
