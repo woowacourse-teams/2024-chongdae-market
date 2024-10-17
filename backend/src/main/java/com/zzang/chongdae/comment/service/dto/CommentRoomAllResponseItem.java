@@ -28,6 +28,6 @@ public record CommentRoomAllResponseItem(Long offeringId,
 
     @Override
     public int compareTo(CommentRoomAllResponseItem other) {
-        return this.latestComment.createdAt().compareTo(other.latestComment().createdAt());
+        return this.latestComment.compareTo(other.latestComment);
     }
 }
