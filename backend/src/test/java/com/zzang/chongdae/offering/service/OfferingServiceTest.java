@@ -336,7 +336,7 @@ public class OfferingServiceTest extends ServiceTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now().plusDays(1),
+                    LocalDateTime.now(clock).plusDays(1),
                     "내용입니다."
             );
             Long expected = 1L;
