@@ -29,6 +29,7 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -49,6 +50,7 @@ public class OfferingService {
     private final StorageService storageService;
     private final ProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
+    private final Clock clock;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -133,7 +135,7 @@ public class OfferingService {
     }
 
     private void validateMeetingDate(LocalDateTime offeringMeetingDateTime) {
-        LocalDate thresholdDate = LocalDate.now();
+        LocalDate thresholdDate = LocalDate.now(clock);
         LocalDate targetDate = offeringMeetingDateTime.toLocalDate();
         if (targetDate.isBefore(thresholdDate)) {
             throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
@@ -172,7 +174,7 @@ public class OfferingService {
     private void updateStatusByDateAndCount(OfferingEntity offering) {
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        LocalDate tomorrow = LocalDate.now(clock).plusDays(1);
         LocalDate meetingDate = offering.getMeetingDate().toLocalDate();
         if (meetingDate.isBefore(tomorrow)) {
             offering.updateOfferingStatus(OfferingStatus.IMMINENT);
