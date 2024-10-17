@@ -53,7 +53,7 @@ public class CommentServiceTest extends ServiceTest {
             CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
 
             // then
-            assertEquals(response.offerings().size(), 3);
+            assertEquals(response.offerings().size(), 4);
         }
 
         @DisplayName("최근 댓글이 작성된 순으로 정렬해 댓글방 목록을 조회할 수 있다")
@@ -78,7 +78,7 @@ public class CommentServiceTest extends ServiceTest {
             CommentRoomAllResponse response = commentService.getAllCommentRoom(member);
 
             // then
-            assertEquals(response.offerings().get(0).offeringTitle(), "삭제된 공동구매입니다.");
+            assertEquals(response.offerings().get(1).offeringTitle(), "삭제된 공동구매입니다.");
         }
     }
 
