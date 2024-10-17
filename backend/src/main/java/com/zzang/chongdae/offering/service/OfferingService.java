@@ -161,7 +161,7 @@ public class OfferingService {
         UpdatedOffering updatedOffering = request.toUpdatedOffering();
         validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getOfferingPrice().getTotalCount());
         offering.update(updatedOffering);
-        updateStatusByDateAndCount(offering);
+        updateStatus(offering);
         return new OfferingUpdateResponse(offering, offering.toOfferingPrice(), offering.toOfferingJoinedCount());
     }
 
@@ -171,14 +171,14 @@ public class OfferingService {
         }
     }
 
-    private void updateStatusByDateAndCount(OfferingEntity offering) {
+    private void updateStatus(OfferingEntity offering) { // TODO : 도메인 분리 필요
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
-        offering.updateOfferingStatus(offeringStatus);
         LocalDate tomorrow = LocalDate.now(clock).plusDays(1);
         LocalDate meetingDate = offering.getMeetingDate().toLocalDate();
         if (meetingDate.isBefore(tomorrow)) {
-            offering.updateOfferingStatus(OfferingStatus.IMMINENT);
+            offeringStatus = OfferingStatus.IMMINENT;
         }
+        offering.updateOfferingStatus(offeringStatus);
     }
 
     @WriterDatabase
