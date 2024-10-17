@@ -61,9 +61,12 @@ jobs:
     needs: build-and-test
     runs-on: [ self-hosted, dev ]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Deploy new container
         run: |
-          bash backend/deploy/launch_next_container.sh ${GITHUB_SHA::7} dev ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}
+          bash launch_next_container.sh ${GITHUB_SHA::7} dev ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}
         working-directory: backend/deploy
 
   switch-new-container:
@@ -71,7 +74,9 @@ jobs:
     runs-on: [ self-hosted, dev ]
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Switch from old to new container
         run: |
           bash switch_blue_green_container.sh
-        working-directory: ./backend/deploy
+        working-directory: backend/deploy
