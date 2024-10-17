@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RoomStatusNotification {
 
-    public static final String TOPIC_FORMAT_OFFERING = "/topics/%d";
+    public static final String TOPIC_FORMAT_OFFERING = "/topics/%d"; // todo: topic 도메인 추출
     public static final String TOPIC_FORMAT_OFFERING_PROPOSER = "/topics/%d/proposer";
 
     private static final String CONDITION_FORMAT = "'%s' in topics && !('%s' in topics)"; // todo: 부정문 가능한지 안드 테스트

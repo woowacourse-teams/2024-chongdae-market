@@ -3,11 +3,17 @@ package com.zzang.chongdae.notification.service;
 import static com.zzang.chongdae.notification.domain.RoomStatusNotification.TOPIC_FORMAT_OFFERING;
 import static com.zzang.chongdae.notification.domain.RoomStatusNotification.TOPIC_FORMAT_OFFERING_PROPOSER;
 
+import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.MulticastMessage;
+import com.zzang.chongdae.comment.repository.entity.CommentEntity;
+import com.zzang.chongdae.notification.domain.CommentNotification;
 import com.zzang.chongdae.notification.domain.ParticipationNotification;
 import com.zzang.chongdae.notification.domain.RoomStatusNotification;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import java.util.List;
+import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class FcmNotificationService {
 
     private final NotificationSender notificationSender;
-    private final FcmNotificationSubscriber notificationSubscriber;
+    private final NotificationSubscriber notificationSubscriber;
 
     public String participate(OfferingMemberEntity offeringMember) { // todo: naming
         ParticipationNotification participationNotification = new ParticipationNotification(offeringMember);
@@ -50,5 +56,16 @@ public class FcmNotificationService {
     public void deleteOffering(OfferingEntity offering) {
         notificationSubscriber.unsubscribe(offering.getMember(),
                 TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId()));
+    }
+
+    @Nullable
+    public BatchResponse saveComment(CommentEntity comment,
+                                     List<OfferingMemberEntity> offeringMembers) { // todo: 참여자 도메인 추출
+        CommentNotification notification = new CommentNotification(comment, offeringMembers);
+        MulticastMessage message = notification.messageWhenSaveComment();
+        if (message == null) {
+            return null;
+        }
+        return notificationSender.send(message);
     }
 }

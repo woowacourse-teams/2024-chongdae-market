@@ -45,6 +45,9 @@ public class CommentService {
         validateIsJoined(member, offering);
         CommentEntity comment = new CommentEntity(member, offering, request.content());
         CommentEntity savedComment = commentRepository.save(comment);
+
+        List<OfferingMemberEntity> members = offeringMemberRepository.findAllByOffering(offering);
+        notificationService.saveComment(savedComment, members);
         return savedComment.getId();
     }
 

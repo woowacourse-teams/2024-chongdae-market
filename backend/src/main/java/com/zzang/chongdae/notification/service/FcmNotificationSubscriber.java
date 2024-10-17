@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class FcmNotificationSubscriber {
+public class FcmNotificationSubscriber implements NotificationSubscriber {
 
+    @Override
     public TopicManagementResponse subscribe(MemberEntity member, String topic) {
         try {
             TopicManagementResponse response = FirebaseMessaging.getInstance()
@@ -24,6 +25,7 @@ public class FcmNotificationSubscriber {
         }
     }
 
+    @Override
     public TopicManagementResponse unsubscribe(MemberEntity member, String topic) {
         try {
             TopicManagementResponse response = FirebaseMessaging.getInstance()
