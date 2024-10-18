@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -114,9 +115,24 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             if (error != null) {
                 Log.d("error", "사용자 정보 요청 실패 $error")
             } else if (user != null) {
-                viewModel.postLogin(accessToken)
+                viewModel.postLogin(accessToken, loadFcmToken())
             }
         }
+    }
+
+    private fun loadFcmToken(): String {
+        var fcmToken: String? = null
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.e("error", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+
+            // FCM 토큰
+            fcmToken = task.result
+            Log.d("MyFirebaseMsgService", "FCM Token: $fcmToken")
+        }
+        return fcmToken ?: error("FCM 토큰을 로드하지 못함")
     }
 
     private fun navigateToNextActivity() {

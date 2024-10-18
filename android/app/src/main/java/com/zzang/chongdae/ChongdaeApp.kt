@@ -17,27 +17,6 @@ class ChongdaeApp : Application() {
         KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
         FirebaseApp.initializeApp(this)
         _chongdaeAppContext = this
-
-
-        // FCM
-
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(
-                    "MyFirebaseMsgService",
-                    "Fetching FCM registration token failed",
-                    task.exception
-                )
-                return@addOnCompleteListener
-            }
-
-            // FCM 토큰
-            val token = task.result
-            Log.d("MyFirebaseMsgService", "FCM Token: $token")
-
-            // 서버에 토큰 전송 로직 추가
-        }
     }
 
     companion object {
