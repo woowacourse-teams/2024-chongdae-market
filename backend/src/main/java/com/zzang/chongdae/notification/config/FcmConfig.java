@@ -29,7 +29,7 @@ public class FcmConfig {
             return;
         }
         try {
-            URL url = this.getClass().getResource(secretKeyPath);
+            URL url = this.getClass().getResource("/" + secretKeyPath); // todo: path 정리
             if (url == null) {
                 throw new MarketException(NotificationErrorCode.CANNOT_FIND_URL);
             }
