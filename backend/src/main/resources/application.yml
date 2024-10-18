@@ -24,7 +24,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
-      
+
 springdoc:
   swagger-ui:
     path: swagger-ui.html
@@ -76,3 +76,6 @@ management:
       path-mapping:
         health: health-check
       base-path: /
+
+fcm:
+  secret-key: testFcmSecretKeytestFcmSecretKeytestFcmSecretKeytestFcmSecretKeytestFcmSecretKeytestFcmSecretKey
