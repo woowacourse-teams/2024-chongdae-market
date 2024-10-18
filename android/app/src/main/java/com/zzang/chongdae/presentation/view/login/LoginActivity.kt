@@ -127,7 +127,6 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 Log.e("error", "Fetching FCM registration token failed", task.exception)
                 return@addOnCompleteListener
             }
-
             fcmToken = task.result
             Log.d("MyFirebaseMsgService", "FCM Token: $fcmToken")
         }
