@@ -7,12 +7,12 @@ on:
       - "backend/**"
       - ".github/workflows/backend-dev-ci-cd.yml"
       - "Dockerfile"
-  # pull_request:
-  #  branches: [ "develop" ]
-  #  paths:
-  #     - "backend/**"
-  #     - ".github/workflows/backend-dev-ci-cd.yml"
-  #     - "Dockerfile"
+#  pull_request:
+#    branches: [ "develop" ]
+#    paths:
+#     - "backend/**"
+#     - ".github/workflows/backend-dev-ci-cd.yml"
+#     - "Dockerfile"
 
 jobs:
 
@@ -57,16 +57,24 @@ jobs:
           docker tag ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }} ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}:${GITHUB_SHA::7}
           docker push ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}:${GITHUB_SHA::7}
 
-  deploy:
+  deploy-new-container:
     needs: build-and-test
+    runs-on: [ self-hosted, dev ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy new container
+        run: |
+          bash launch_next_container.sh ${GITHUB_SHA::7} dev ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}
+        working-directory: backend/deploy
+
+  switch-new-container:
+    needs: deploy-new-container
     runs-on: [ self-hosted, dev ]
 
     steps:
-      - name: Pull Image And Restart Container
+      - name: Switch from old to new container
         run: |
-          docker login -u ${{ secrets.BE_DOCKERHUB_USERNAME }} -p ${{ secrets.BE_DOCKERHUB_PASSWORD }}
-          docker stop ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
-          docker rm ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
-          docker image prune -a -f
-          docker pull ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}:${GITHUB_SHA::7}
-          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -p 80:8080 -v /logs:/logs -e SPRING_PROFILES_ACTIVE=dev ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_DEV }}:${GITHUB_SHA::7}
+          bash switch_blue_green_container.sh
+        working-directory: backend/deploy
