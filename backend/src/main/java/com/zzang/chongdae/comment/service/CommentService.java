@@ -57,6 +57,7 @@ public class CommentService {
         List<Long> offeringIds = offeringMemberRepository.findOfferingIdsByMemberId(member.getId());
         List<CommentRoomAllResponseItem> responseItems = offeringIds.stream()
                 .map(offeringId -> getCommentRoom(offeringId, member))
+                .sorted()
                 .toList();
         return new CommentRoomAllResponse(responseItems);
     }
