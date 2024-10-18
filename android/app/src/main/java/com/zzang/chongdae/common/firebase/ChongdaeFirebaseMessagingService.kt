@@ -11,7 +11,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.zzang.chongdae.R
 import com.zzang.chongdae.presentation.view.MainActivity
 
-class FirebaseMessagingService : FirebaseMessagingService() {
+class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         sendNotification(remoteMessage)
@@ -19,13 +19,16 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendNotification(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.apply {
-            val intent = Intent(this@FirebaseMessagingService, MainActivity::class.java)
+            val intent = Intent(this@ChongdaeFirebaseMessagingService, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             val pendingIntent =
-                PendingIntent.getActivity(this@FirebaseMessagingService, REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
-
+                PendingIntent.getActivity(
+                    this@ChongdaeFirebaseMessagingService,
+                    REQUEST_CODE,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE,
+                )
             val notificationBuilder = buildNotification(title, body, pendingIntent)
-
             val notificationManager =
                 getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             createNotificationChannel(notificationManager)
