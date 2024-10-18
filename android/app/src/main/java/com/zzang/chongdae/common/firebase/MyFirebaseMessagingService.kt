@@ -16,18 +16,9 @@ import com.zzang.chongdae.presentation.view.MainActivity
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        
-//        // 메시지 처리
-//        Log.d(TAG, "From: ${remoteMessage.from}")
-//
-
-        // 메시지가 알림 페이로드를 포함하는 경우
         remoteMessage.notification?.apply {
-            Log.d(TAG, "Message Notification Body: ${body}")
             sendNotification(title, body)
         }
-
-        Log.d(TAG, "onMessageReceived: $remoteMessage")
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
@@ -37,7 +28,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val channelId = "default_channel"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_check) // 알림 아이콘
+            .setSmallIcon(R.drawable.ic_chongdae_sub) // 알림 아이콘
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
@@ -58,16 +49,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d(TAG, "new token: $token")
-        // 서버로 새 토큰 전송
-        sendRegistrationToServer(token)
-    }
-
-    private fun sendRegistrationToServer(token: String?) {
-        // 서버에 FCM 토큰을 전송하는 로직
-    }
-
-    companion object {
-        private const val TAG = "MyFirebaseMsgService"
+        Log.e("error", "FCM토큰 만료. 재로그인 필요. new token: $token")
     }
 }

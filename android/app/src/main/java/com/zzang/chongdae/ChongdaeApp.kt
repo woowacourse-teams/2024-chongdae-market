@@ -2,10 +2,8 @@ package com.zzang.chongdae
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
-import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
 import com.zzang.chongdae.data.local.database.AppDatabase
 import dagger.hilt.android.HiltAndroidApp

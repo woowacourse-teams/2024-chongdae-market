@@ -128,7 +128,6 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 return@addOnCompleteListener
             }
 
-            // FCM 토큰
             fcmToken = task.result
             Log.d("MyFirebaseMsgService", "FCM Token: $fcmToken")
         }
