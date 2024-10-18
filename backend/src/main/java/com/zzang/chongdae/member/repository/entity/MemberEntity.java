@@ -42,9 +42,13 @@ public class MemberEntity extends BaseTimeEntity {
 
     @NotNull
     private String password; // TODO: 일반 로그인 들어올 시 salt 추가
-    
-    public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
-        this(null, nickname, provider, loginId, password);
+
+    @NotNull
+    @Column(unique = true)
+    private String fcmToken;
+
+    public MemberEntity(String nickname, AuthProvider provider, String loginId, String password, String fcmToken) {
+        this(null, nickname, provider, loginId, password, fcmToken);
     }
 
     public boolean isSame(MemberEntity other) {
