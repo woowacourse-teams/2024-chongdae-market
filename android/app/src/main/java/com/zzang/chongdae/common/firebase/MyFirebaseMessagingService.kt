@@ -15,38 +15,43 @@ import com.zzang.chongdae.presentation.view.MainActivity
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        sendNotification(remoteMessage)
+    }
+
+    private fun sendNotification(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.apply {
-            sendNotification(title, body)
+            val intent = Intent(this@MyFirebaseMessagingService, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val pendingIntent =
+                PendingIntent.getActivity(this@MyFirebaseMessagingService, REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
+
+            val notificationBuilder = buildNotification(title, body, pendingIntent)
+
+            val notificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            createNotificationChannel(notificationManager)
+
+            notificationManager.notify(REQUEST_CODE, notificationBuilder.build())
         }
     }
 
-    private fun sendNotification(title: String?, messageBody: String?) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent =
-            PendingIntent.getActivity(this, 1001, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        val channelId = "default_channel"
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_chongdae_sub) // 알림 아이콘
+    private fun buildNotification(
+        title: String?,
+        messageBody: String?,
+        pendingIntent: PendingIntent?,
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_chongdae_sub)
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createNotificationChannel(channelId, notificationManager)
-
-        notificationManager.notify(1001, notificationBuilder.build())
     }
 
-    private fun createNotificationChannel(
-        channelId: String,
-        notificationManager: NotificationManager
-    ) {
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
-            channelId,
-            "Default Channel",
+            CHANNEL_ID,
+            CHANNEL_NAME,
             NotificationManager.IMPORTANCE_DEFAULT
         )
         notificationManager.createNotificationChannel(channel)
@@ -54,6 +59,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.e("error", "FCM토큰 만료. 재로그인 필요. new token: $token")
+        Log.e("error", "FCM토큰 갱신됨. new token: $token")
+    }
+
+    companion object {
+        private const val REQUEST_CODE = 1001
+        private const val CHANNEL_ID = "default_channel"
+        private const val CHANNEL_NAME = "Default Channel"
     }
 }
