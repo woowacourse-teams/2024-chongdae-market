@@ -44,7 +44,8 @@ jobs:
       - name: Set Application yml for dev
         run: |
           echo "${{ secrets.APPLICATION_PROPERTIES_DEV }}" > src/main/resources/application.properties
-          echo "${{ secrets.FCM_SECRET_KEY }}" > src/main/resources/fcm/chongdaemarket-fcm-key.json
+          mkdir -p src/main/resources/fcm
+          echo ${{ secrets.FCM_SECRET_KEY }} > src/main/resources/fcm/chongdaemarket-fcm-key.json
         working-directory: ./backend
 
       - name: Check test log
