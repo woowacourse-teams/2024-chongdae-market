@@ -46,6 +46,8 @@ jobs:
           echo "${{ secrets.APPLICATION_PROPERTIES_DEV }}" > src/main/resources/application.properties
           mkdir -p src/main/resources/fcm
           echo '${{ secrets.FCM_SECRET_KEY }}' > src/main/resources/fcm/chongdaemarket-fcm-key.json
+          mkdir -p src/test/resources/fcm
+          echo '${{ secrets.FCM_SECRET_KEY }}' > src/test/resources/fcm/chongdaemarket-fcm-key.json
         working-directory: ./backend
 
       - name: Check test log
