@@ -42,7 +42,7 @@ class LoginViewModel
 
         fun postLogin(
             accessToken: String,
-            fcmToken: String,
+            fcmToken: String?,
         ) {
             viewModelScope.launch {
                 when (val result = authRepository.saveLogin(accessToken = accessToken, fcmToken = fcmToken)) {

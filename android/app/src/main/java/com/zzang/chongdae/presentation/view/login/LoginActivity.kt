@@ -115,22 +115,24 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             if (error != null) {
                 Log.d("error", "사용자 정보 요청 실패 $error")
             } else if (user != null) {
-                viewModel.postLogin(accessToken, loadFcmToken())
+                loadFcmToken { token ->
+                    Log.d("콜백으로 받은 토큰", "FCM Token: $token")
+                    viewModel.postLogin(accessToken, token)
+                }
             }
         }
     }
 
-    private fun loadFcmToken(): String {
-        var fcmToken: String? = null
+    private fun loadFcmToken(callback: (String?) -> Unit) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.e("error", "Fetching FCM registration token failed", task.exception)
+                callback(null)
                 return@addOnCompleteListener
             }
-            fcmToken = task.result
-            Log.d("MyFirebaseMsgService", "FCM Token: $fcmToken")
+            val fcmToken = task.result
+            callback(fcmToken)
         }
-        return fcmToken ?: error("FCM 토큰을 로드하지 못함")
     }
 
     private fun navigateToNextActivity() {
