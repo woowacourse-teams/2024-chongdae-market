@@ -16,42 +16,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel
-@Inject
-constructor(
-    @AuthRepositoryQualifier private val authRepository: AuthRepository,
-    private val userPreferencesDataStore: UserPreferencesDataStore,
-) : ViewModel() {
-    private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val loginSuccessEvent: SingleLiveData<Unit> get() = _loginSuccessEvent
+    @Inject
+    constructor(
+        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        private val userPreferencesDataStore: UserPreferencesDataStore,
+    ) : ViewModel() {
+        private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val loginSuccessEvent: SingleLiveData<Unit> get() = _loginSuccessEvent
 
-    private val _alreadyLoggedInEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val alreadyLoggedInEvent: SingleLiveData<Unit> get() = _alreadyLoggedInEvent
+        private val _alreadyLoggedInEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val alreadyLoggedInEvent: SingleLiveData<Unit> get() = _alreadyLoggedInEvent
 
-    init {
-        makeAlreadyLoggedInEvent()
-    }
-
-    private fun makeAlreadyLoggedInEvent() {
-        viewModelScope.launch {
-            val accessToken = userPreferencesDataStore.accessTokenFlow.first()
-            if (accessToken != null) {
-                _alreadyLoggedInEvent.setValue(Unit)
-            }
+        init {
+            makeAlreadyLoggedInEvent()
         }
-    }
 
-    fun postLogin(accessToken: String, fcmToken: String) {
-        viewModelScope.launch {
-            when (val result = authRepository.saveLogin(accessToken = accessToken, fcmToken = fcmToken)) {
-                is Result.Success -> {
-                    userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
-                    _loginSuccessEvent.setValue(Unit)
-                }
-
-                is Result.Error -> {
-                    Log.e("error", "postLogin: ${result.error}")
+        private fun makeAlreadyLoggedInEvent() {
+            viewModelScope.launch {
+                val accessToken = userPreferencesDataStore.accessTokenFlow.first()
+                if (accessToken != null) {
+                    _alreadyLoggedInEvent.setValue(Unit)
                 }
             }
         }
+
+        fun postLogin(
+            accessToken: String,
+            fcmToken: String,
+        ) {
+            viewModelScope.launch {
+                when (val result = authRepository.saveLogin(accessToken = accessToken, fcmToken = fcmToken)) {
+                    is Result.Success -> {
+                        userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
+                        _loginSuccessEvent.setValue(Unit)
+                    }
+
+                    is Result.Error -> {
+                        Log.e("error", "postLogin: ${result.error}")
+                    }
+                }
+            }
+        }
     }
-}
