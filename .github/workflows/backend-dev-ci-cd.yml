@@ -44,6 +44,7 @@ jobs:
       - name: Set Application yml for dev
         run: |
           echo "${{ secrets.APPLICATION_PROPERTIES_DEV }}" > src/main/resources/application.properties
+          echo "${{ secrets.FCM_SECRET_KEY }}" > src/main/resources${{ secrets.FCM_SECRET_KEY_PATH }}
         working-directory: ./backend
 
       - name: Build with Gradle Wrapper
