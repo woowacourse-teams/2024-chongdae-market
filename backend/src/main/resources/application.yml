@@ -78,4 +78,5 @@ management:
       base-path: /
 
 fcm:
-  secret-key: testFcmSecretKeytestFcmSecretKeytestFcmSecretKeytestFcmSecretKeytestFcmSecretKeytestFcmSecretKey
+  secret-key:
+    path: ${FCM_SECRET_KEY_PATH}
