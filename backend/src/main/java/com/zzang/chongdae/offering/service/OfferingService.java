@@ -8,6 +8,7 @@ import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.domain.UpdatedOffering;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
@@ -29,7 +30,9 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,7 @@ public class OfferingService {
     private final StorageService storageService;
     private final ProductImageExtractor imageExtractor;
     private final OfferingFetcher offeringFetcher;
+    private final Clock clock;
 
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -108,6 +112,7 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsProposer(offering, member);
+        validateMeetingDate(request.meetingDate());
         OfferingMeeting offeringMeeting = request.toOfferingMeeting();
         offering.updateMeeting(offeringMeeting);
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
@@ -122,7 +127,7 @@ public class OfferingService {
     @WriterDatabase
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
-        validateMeetingDate(offering);
+        validateMeetingDate(offering.getMeetingDate());
         OfferingEntity savedOffering = offeringRepository.save(offering);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
@@ -133,9 +138,9 @@ public class OfferingService {
         return savedOffering.getId();
     }
 
-    private void validateMeetingDate(OfferingEntity offering) {
-        LocalDate thresholdDate = LocalDate.now();
-        LocalDate targetDate = offering.getMeetingDate().toLocalDate();
+    private void validateMeetingDate(LocalDateTime offeringMeetingDateTime) {
+        LocalDate thresholdDate = LocalDate.now(clock);
+        LocalDate targetDate = offeringMeetingDateTime.toLocalDate();
         if (targetDate.isBefore(thresholdDate)) {
             throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
         }
@@ -156,10 +161,11 @@ public class OfferingService {
     public OfferingUpdateResponse updateOffering(Long offeringId, OfferingUpdateRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        UpdatedOffering updatedOffering = request.toUpdatedOffering();
         validateIsProposer(offering, member);
+        UpdatedOffering updatedOffering = request.toUpdatedOffering();
         validateUpdatedTotalCount(offering.getCurrentCount(), updatedOffering.getOfferingPrice().getTotalCount());
         offering.update(updatedOffering);
+        updateStatus(offering);
         return new OfferingUpdateResponse(offering, offering.toOfferingPrice(), offering.toOfferingJoinedCount());
     }
 
@@ -167,6 +173,16 @@ public class OfferingService {
         if (updatedTotalCount < currentCount) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT);
         }
+    }
+
+    private void updateStatus(OfferingEntity offering) { // TODO : 도메인 분리 필요
+        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
+        LocalDate tomorrow = LocalDate.now(clock).plusDays(1);
+        LocalDate meetingDate = offering.getMeetingDate().toLocalDate();
+        if (meetingDate.isBefore(tomorrow) || meetingDate.isEqual(tomorrow)) {
+            offeringStatus = OfferingStatus.IMMINENT;
+        }
+        offering.updateOfferingStatus(offeringStatus);
     }
 
     @WriterDatabase

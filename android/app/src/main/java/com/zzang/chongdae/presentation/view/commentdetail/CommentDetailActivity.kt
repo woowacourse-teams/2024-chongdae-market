@@ -24,6 +24,8 @@ import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
 import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
+import com.zzang.chongdae.presentation.view.commentdetail.event.CommentDetailEvent
+import com.zzang.chongdae.presentation.view.commentdetail.event.OnUpdateStatusClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -103,19 +105,14 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private fun setUpObserve() {
         observeComments()
         observeParticipants()
-        observeUpdateOfferingEvent()
-        observeReportEvent()
-        observeExitOfferingEvent()
-        observeBackEvent()
-        observeErrorEvent()
+        observeEvent()
     }
 
     private fun observeComments() {
         viewModel.comments.observe(this) { comments ->
-            commentAdapter.submitList(comments) {
-                binding.rvComments.doOnPreDraw {
-                    binding.rvComments.scrollToPosition(comments.size - 1)
-                }
+            commentAdapter.submitComments(comments)
+            binding.rvComments.doOnPreDraw {
+                binding.rvComments.scrollToPosition(comments.size - 1)
             }
         }
     }
@@ -128,10 +125,37 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         }
     }
 
-    private fun observeReportEvent() {
-        viewModel.reportEvent.observe(this) { reportUrlId ->
-            openUrlInBrowser(getString(reportUrlId))
+    private fun observeEvent() {
+        viewModel.event.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { handleEvent(it) }
         }
+    }
+
+    private fun handleEvent(event: CommentDetailEvent) {
+        when (event) {
+            is CommentDetailEvent.BackPressed -> finish()
+            is CommentDetailEvent.ShowError -> showError(event.message)
+            is CommentDetailEvent.ShowReport -> reportEvent(event.reportUrlId)
+            is CommentDetailEvent.ShowUpdateStatusDialog -> showUpdateStatusDialog()
+            is CommentDetailEvent.ShowAlert -> showExitDialog()
+            is CommentDetailEvent.ExitOffering -> exitOfferingEvent()
+            is CommentDetailEvent.AlertCancelled -> cancelDialog()
+        }
+    }
+
+    private fun showError(message: String) {
+        toast?.cancel()
+        toast =
+            Toast.makeText(
+                this,
+                message,
+                Toast.LENGTH_SHORT,
+            )
+        toast?.show()
+    }
+
+    private fun reportEvent(reportUrlId: Int) {
+        openUrlInBrowser(getString(reportUrlId))
     }
 
     private fun openUrlInBrowser(url: String) {
@@ -142,52 +166,26 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         startActivity(intent)
     }
 
-    private fun observeUpdateOfferingEvent() {
-        viewModel.showStatusDialogEvent.observe(this) {
-            showUpdateStatusDialog()
-        }
+    private fun exitOfferingEvent() {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "exit_offering_event",
+            name = "exit_offering_event",
+            contentType = "button",
+        )
+        finish()
+        dialog.dismiss()
     }
 
-    private fun observeExitOfferingEvent() {
-        viewModel.onExitOfferingEvent.observe(this) {
-            firebaseAnalyticsManager.logSelectContentEvent(
-                id = "exit_offering_event",
-                name = "exit_offering_event",
-                contentType = "button",
-            )
-            finish()
-            dialog.dismiss()
-        }
-        viewModel.showAlertEvent.observe(this) {
-            val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
-            alertBinding.tvDialogMessage.text = getString(R.string.comment_detail_exit_alert)
-            alertBinding.listener = viewModel
-
-            dialog.setContentView(alertBinding.root)
-            dialog.show()
-        }
-        viewModel.alertCancelEvent.observe(this) {
-            dialog.dismiss()
-        }
+    private fun showExitDialog() {
+        val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
+        alertBinding.tvDialogMessage.text = getString(R.string.comment_detail_exit_alert)
+        alertBinding.listener = viewModel
+        dialog.setContentView(alertBinding.root)
+        dialog.show()
     }
 
-    private fun observeBackEvent() {
-        viewModel.onBackPressedEvent.observe(this) {
-            finish()
-        }
-    }
-
-    private fun observeErrorEvent() {
-        viewModel.errorEvent.observe(this) {
-            toast?.cancel()
-            toast =
-                Toast.makeText(
-                    this,
-                    it,
-                    Toast.LENGTH_SHORT,
-                )
-            toast?.show()
-        }
+    private fun cancelDialog() {
+        dialog.dismiss()
     }
 
     private fun showUpdateStatusDialog() {

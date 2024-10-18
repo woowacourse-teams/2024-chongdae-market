@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.commentdetail
+package com.zzang.chongdae.presentation.view.commentdetail.event
 
 interface OnUpdateStatusClickListener {
     fun onSubmitClick()
