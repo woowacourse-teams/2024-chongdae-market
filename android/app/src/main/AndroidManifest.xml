@@ -23,6 +23,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
 
+        <service
+            android:name="com.zzang.chongdae.common.firebase.MyFirebaseMessagingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".presentation.view.login.LoginActivity"
             android:exported="true"
