@@ -79,5 +79,4 @@ management:
 
 fcm:
   secret-key:
-    path: ${FCM_SECRET_KEY_PATH}
-
+    path: /fcm/chongdaemarket-fcm-key.json
