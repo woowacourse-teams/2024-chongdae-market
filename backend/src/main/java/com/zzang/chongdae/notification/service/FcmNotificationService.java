@@ -23,11 +23,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class FcmNotificationService {
 
+    private final FcmMessageManager messageManager;
     private final NotificationSender notificationSender;
     private final NotificationSubscriber notificationSubscriber;
 
     public String participate(OfferingMemberEntity offeringMember) { // todo: naming
-        ParticipationNotification participationNotification = new ParticipationNotification(offeringMember);
+        ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
+                offeringMember);
         Message message = participationNotification.messageWhenParticipate();
         notificationSubscriber.subscribe(offeringMember.getMember(),
                 TOPIC_FORMAT_OFFERING.formatted(offeringMember.getOffering().getId()));
@@ -35,7 +37,8 @@ public class FcmNotificationService {
     }
 
     public String cancelParticipation(OfferingMemberEntity offeringMember) {
-        ParticipationNotification participationNotification = new ParticipationNotification(offeringMember);
+        ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
+                offeringMember);
         Message message = participationNotification.messageWhenCancelParticipate();
         notificationSubscriber.unsubscribe(offeringMember.getMember(),
                 TOPIC_FORMAT_OFFERING.formatted(offeringMember.getOffering().getId()));
@@ -43,7 +46,7 @@ public class FcmNotificationService {
     }
 
     public String updateStatus(OfferingEntity offering) {
-        RoomStatusNotification notification = new RoomStatusNotification(offering);
+        RoomStatusNotification notification = new RoomStatusNotification(messageManager, offering);
         Message message = notification.messageWhenUpdateStatus();
         return notificationSender.send(message);
     }
@@ -61,7 +64,7 @@ public class FcmNotificationService {
     @Nullable
     public BatchResponse saveComment(CommentEntity comment,
                                      List<OfferingMemberEntity> offeringMembers) { // todo: 참여자 도메인 추출
-        CommentNotification notification = new CommentNotification(comment, offeringMembers);
+        CommentNotification notification = new CommentNotification(messageManager, comment, offeringMembers);
         MulticastMessage message = notification.messageWhenSaveComment();
         if (message == null) {
             return null;

@@ -3,7 +3,7 @@ package com.zzang.chongdae.notification.service;
 import com.google.firebase.messaging.TopicManagementResponse;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 
-public interface NotificationSubscriber { // todo: return data 제거
+public interface NotificationSubscriber {
 
     TopicManagementResponse subscribe(MemberEntity member, String topic);
 
