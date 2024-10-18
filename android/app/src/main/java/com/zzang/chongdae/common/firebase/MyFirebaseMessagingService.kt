@@ -39,7 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         pendingIntent: PendingIntent?,
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_chongdae_sub)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
