@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/offering_detail_background"
         tools:context=".presentation.view.offeringdetail.OfferingDetailFragment">
 
         <ScrollView
@@ -34,12 +34,13 @@
 
                 <ImageView
                     android:id="@+id/iv_product"
-                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     app:detailProductImageUrl="@{vm.offeringDetail.thumbnailUrl}"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/img_detail_product_default" />
@@ -77,8 +78,10 @@
                     android:background="@drawable/bg_white_radius_16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0">
 
                     <TextView
                         android:id="@+id/tv_title"
@@ -90,7 +93,7 @@
                         android:paddingEnd="23dp"
                         android:paddingBottom="12dp"
                         android:text="@{vm.offeringDetail.title}"
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray_900"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toTopOf="@id/iv_user_emoticon"
                         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +115,7 @@
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/suit_medium"
                         android:text="@{vm.offeringDetail.nickname}"
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray_900"
                         android:textSize="14sp"
                         app:layout_constraintStart_toEndOf="@id/iv_user_emoticon"
                         app:layout_constraintTop_toBottomOf="@id/tv_title"
