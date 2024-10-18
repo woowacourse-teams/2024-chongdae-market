@@ -5,6 +5,8 @@ on:
     branches:
       - "develop"
       - "release*"
+    paths:
+      - 'android/**'
 
 defaults:
   run:

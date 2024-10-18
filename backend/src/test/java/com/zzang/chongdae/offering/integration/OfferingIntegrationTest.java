@@ -513,7 +513,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now().plusDays(1),
+                    LocalDateTime.now(clock).plusDays(1),
                     "내용입니다."
             );
 
@@ -540,7 +540,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now().plusDays(1),
+                    LocalDateTime.now(clock).plusDays(1),
                     "내용입니다."
             );
 
@@ -635,7 +635,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(400);
         }
 
-        @DisplayName("거래 날짜를 내일보다 과거로 설정하는 경우 예외가 발생한다.")
+        @DisplayName("거래 날짜를 오늘보다 과거로 설정하는 경우 예외가 발생한다.")
         @Test
         void should_throwException_when_meetingDateBeforeTomorrow() {
             OfferingSaveRequest request = new OfferingSaveRequest(
@@ -648,7 +648,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "서울특별시 광진구 구의강변로 3길 11",
                     "상세주소아파트",
                     "구의동",
-                    LocalDateTime.now(),
+                    LocalDateTime.now(clock).minusDays(1),
                     "내용입니다."
             );
 
@@ -946,7 +946,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(400);
         }
 
-        @DisplayName("모집 날짜가 현재와 같거나 지날 경우 수정할 수 없다.")
+        @DisplayName("모집 날짜가 지날 경우 수정할 수 없다.")
         @Test
         void should_throwException_when_modifyMeetingDateBeforeNowToday() {
             OfferingUpdateRequest request = new OfferingUpdateRequest(
@@ -959,7 +959,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "수정할 모집 장소 주소",
                     "수정할 모집 상세 주소",
                     "수정된동",
-                    LocalDateTime.now(),
+                    LocalDateTime.now().minusDays(1),
                     "수정할 공모 상세 내용"
             );
 

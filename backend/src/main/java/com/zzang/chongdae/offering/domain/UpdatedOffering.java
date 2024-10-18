@@ -35,7 +35,7 @@ public class UpdatedOffering {
 
     private void validateMeetingDate() {
         LocalDateTime today = LocalDateTime.now();
-        if (meetingDate.isBefore(today) || meetingDate.isEqual(today)) {
+        if (meetingDate.isBefore(today)) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_BEFORE_NOW_MEETING_DATE);
         }
     }
