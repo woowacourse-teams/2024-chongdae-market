@@ -14,26 +14,29 @@ import com.zzang.chongdae.presentation.view.MainActivity
 class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        sendNotification(remoteMessage)
+        sendNotificationAtForeground(remoteMessage)
     }
 
-    private fun sendNotification(remoteMessage: RemoteMessage) {
+    private fun sendNotificationAtForeground(remoteMessage: RemoteMessage) {
         remoteMessage.notification?.apply {
-            val intent = Intent(this@ChongdaeFirebaseMessagingService, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val pendingIntent =
-                PendingIntent.getActivity(
-                    this@ChongdaeFirebaseMessagingService,
-                    REQUEST_CODE,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE,
-                )
-            val notificationBuilder = buildNotification(title, body, pendingIntent)
-            val notificationManager =
-                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val pendingIntent = generatePendingIntent()
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             createNotificationChannel(notificationManager)
-            notificationManager.notify(REQUEST_CODE, notificationBuilder.build())
+            val uniqueNotificationId = System.currentTimeMillis().toInt()
+            val notificationBuilder = buildNotification(title, body, pendingIntent)
+            notificationManager.notify(uniqueNotificationId, notificationBuilder.build())
         }
+    }
+
+    private fun generatePendingIntent(): PendingIntent? {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return PendingIntent.getActivity(
+            this,
+            REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE,
+        )
     }
 
     private fun buildNotification(
@@ -42,7 +45,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         pendingIntent: PendingIntent?,
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
@@ -51,11 +54,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel =
-            NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH,
-            )
+            NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
         notificationManager.createNotificationChannel(channel)
     }
 
