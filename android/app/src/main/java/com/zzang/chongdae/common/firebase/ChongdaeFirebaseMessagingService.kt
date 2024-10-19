@@ -54,7 +54,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
             NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT,
+                NotificationManager.IMPORTANCE_HIGH,
             )
         notificationManager.createNotificationChannel(channel)
     }
