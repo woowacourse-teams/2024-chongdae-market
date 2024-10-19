@@ -116,7 +116,6 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 Log.d("error", "사용자 정보 요청 실패 $error")
             } else if (user != null) {
                 loadFcmToken { token ->
-                    Log.d("콜백으로 받은 토큰", "FCM Token: $token")
                     viewModel.postLogin(accessToken, token)
                 }
             }
