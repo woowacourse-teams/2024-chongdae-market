@@ -1,4 +1,9 @@
 package com.zzang.chongdae.auth.service.dto;
 
-public record KakaoLoginRequest(String accessToken) {
+import javax.annotation.Nullable;
+
+public record KakaoLoginRequest(String accessToken,
+
+                                @Nullable
+                                String fcmToken) {
 }
