@@ -33,7 +33,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         return PendingIntent.getActivity(
             this,
-            REQUEST_CODE,
+            MainActivity.PENDING_INTENT_REQUEST_CODE,
             intent,
             PendingIntent.FLAG_IMMUTABLE,
         )
@@ -64,7 +64,6 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private const val REQUEST_CODE = 1001
         private const val CHANNEL_ID = "default_channel"
         private const val CHANNEL_NAME = "Default Channel"
     }

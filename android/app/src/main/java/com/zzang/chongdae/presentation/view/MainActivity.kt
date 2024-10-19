@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigation()
         handleDeepLink(intent)
 
-        // 권한 요청
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this, Manifest.permission.POST_NOTIFICATIONS,
@@ -47,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    1001,
+                    PENDING_INTENT_REQUEST_CODE,
                 )
             }
         }
@@ -121,6 +120,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val SCHEME = "chongdaeapp"
         private const val HOST = "offerings"
+        const val PENDING_INTENT_REQUEST_CODE = 1001
 
         fun startActivity(context: Context) =
             Intent(context, MainActivity::class.java).run {
