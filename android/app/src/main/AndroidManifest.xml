@@ -24,7 +24,7 @@
         tools:targetApi="33">
 
         <service
-            android:name="com.zzang.chongdae.common.firebase.ChongdaeFirebaseMessagingService"
+            android:name="com.zzang.chongdae.common.firebase.fcm.ChongdaeFirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

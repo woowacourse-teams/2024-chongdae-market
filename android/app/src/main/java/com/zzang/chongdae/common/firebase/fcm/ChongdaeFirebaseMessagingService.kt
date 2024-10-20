@@ -1,4 +1,4 @@
-package com.zzang.chongdae.common.firebase
+package com.zzang.chongdae.common.firebase.fcm
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,9 +9,20 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.zzang.chongdae.R
+import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.view.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
+    @Inject
+    lateinit var userPreferencesDataStore: UserPreferencesDataStore
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         sendNotificationAtBackground(remoteMessage)
@@ -69,9 +80,24 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
-        val channel =
-            NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
-        notificationManager.createNotificationChannel(channel)
+        var channel: NotificationChannel
+        CoroutineScope(Dispatchers.IO).launch {
+            val notificationImportance =
+                NotificationImportance.of(
+                    userPreferencesDataStore.notificationImportanceFlow.first(),
+                )
+            Log.d("alsong", "${notificationImportance}")
+            channel = when (notificationImportance) {
+                NotificationImportance.DEFAULT -> setImportance(NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationImportance.HIGH -> setImportance(NotificationManager.IMPORTANCE_HIGH)
+            }
+            Log.d("alsong", "${channel.importance}")
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun setImportance(importance: Int): NotificationChannel {
+        return NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
     }
 
     override fun onNewToken(token: String) {
