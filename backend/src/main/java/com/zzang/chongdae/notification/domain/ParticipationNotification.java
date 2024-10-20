@@ -21,16 +21,18 @@ public class ParticipationNotification {
     }
 
     public Message messageWhenParticipate() {
-        return messageManager.createMessage(
-                new FcmToken(proposer.getFcmToken()),
-                offering.getTitle(),
-                participant.getNickname() + "이(가) 참여했습니다.");
+        FcmToken token = new FcmToken(proposer);
+        FcmData data = new FcmData();
+        data.addData("title", offering.getTitle());
+        data.addData("body", participant.getNickname() + "님이 참여했습니다.");
+        return messageManager.createMessage(token, data);
     }
 
     public Message messageWhenCancelParticipate() {
-        return messageManager.createMessage(
-                new FcmToken(proposer.getFcmToken()),
-                offering.getTitle(),
-                participant.getNickname() + "이(가) 참여를 취소하였습니다.");
+        FcmToken token = new FcmToken(proposer);
+        FcmData data = new FcmData();
+        data.addData("title", offering.getTitle());
+        data.addData("body", participant.getNickname() + "님이 참여를 취소했습니다.");
+        return messageManager.createMessage(token, data);
     }
 }

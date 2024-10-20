@@ -31,10 +31,10 @@ public class CommentNotification {
         if (tokens.isEmpty()) {
             return null;
         }
-        return messageManager.createMessages(
-                tokens,
-                comment.getOffering().getTitle(),
-                "%s: %s".formatted(comment.getMember().getNickname(), comment.getContent()));
+        FcmData data = new FcmData();
+        data.addData("title", comment.getOffering().getTitle());
+        data.addData("body", "%s: %s".formatted(comment.getMember().getNickname(), comment.getContent()));
+        return messageManager.createMessages(tokens, data);
     }
 
     private List<MemberEntity> membersNotWriter() {
