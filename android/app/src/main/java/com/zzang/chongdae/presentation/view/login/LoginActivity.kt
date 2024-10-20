@@ -115,8 +115,9 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             if (error != null) {
                 Log.d("error", "사용자 정보 요청 실패 $error")
             } else if (user != null) {
-                loadFcmToken { token ->
-                    viewModel.postLogin(accessToken, token)
+                loadFcmToken { fcmToken ->
+                    Log.i("fcm", "$fcmToken")
+                    viewModel.postLogin(accessToken, fcmToken)
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
@@ -49,6 +50,7 @@ class MyPageViewModel
 
         fun onClickLogout() {
             _showAlertEvent.setValue(Unit)
+            FirebaseMessaging.getInstance().deleteToken()
         }
 
         fun onClickWithdrawal() {
