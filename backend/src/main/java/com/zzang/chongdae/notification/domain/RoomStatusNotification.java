@@ -23,6 +23,7 @@ public class RoomStatusNotification {
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", "거래 상태가 %s로 변경되었습니다.".formatted(offering.getRoomStatus()));
+        data.addData("offering_id", offering.getId());
         return messageManager.createMessage(condition, data);
     }
 

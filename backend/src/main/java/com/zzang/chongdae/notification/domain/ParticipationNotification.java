@@ -25,6 +25,7 @@ public class ParticipationNotification {
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여했습니다.");
+        data.addData("offering_id", offering.getId());
         return messageManager.createMessage(token, data);
     }
 
@@ -33,6 +34,7 @@ public class ParticipationNotification {
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여를 취소했습니다.");
+        data.addData("offering_id", offering.getId());
         return messageManager.createMessage(token, data);
     }
 }

@@ -34,6 +34,7 @@ public class CommentNotification {
         FcmData data = new FcmData();
         data.addData("title", comment.getOffering().getTitle());
         data.addData("body", "%s: %s".formatted(comment.getMember().getNickname(), comment.getContent()));
+        data.addData("offering_id", comment.getOffering().getId());
         return messageManager.createMessages(tokens, data);
     }
 

@@ -8,8 +8,8 @@ public class FcmData {
 
     private final Map<String, String> data = new HashMap<>();
 
-    public void addData(String key, String value) {
-        this.data.put(key, value);
+    public void addData(String key, Object value) {
+        data.put(key, value.toString());
     }
 
     public Map<String, String> getData() {
