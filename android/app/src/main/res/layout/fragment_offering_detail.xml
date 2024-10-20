@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/offering_detail_background"
         tools:context=".presentation.view.offeringdetail.OfferingDetailFragment">
 
         <ScrollView
@@ -35,11 +35,12 @@
                 <ImageView
                     android:id="@+id/iv_product"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="250dp"
+                    android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     app:detailProductImageUrl="@{vm.offeringDetail.thumbnailUrl}"
-                    app:layout_constraintDimensionRatio="360:260"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/img_detail_product_default" />
@@ -50,10 +51,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
                     android:fontFamily="@font/suit_medium"
-                    app:debouncedOnClick="@{() -> vm.onClickReport()}"
                     android:text="@string/all_report_text"
                     android:textColor="@color/gray_font"
                     android:textSize="15sp"
+                    app:debouncedOnClick="@{() -> vm.onClickReport()}"
                     app:isVisible="@{!vm.isRepresentative}"
                     app:layout_constraintEnd_toStartOf="@id/iv_report"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -63,8 +64,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/size_10"
-                    app:debouncedOnClick="@{() -> vm.onClickReport()}"
                     android:src="@drawable/ic_detail_report"
+                    app:debouncedOnClick="@{() -> vm.onClickReport()}"
                     app:layout_constraintBottom_toBottomOf="@id/tv_report_comment"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -77,8 +78,10 @@
                     android:background="@drawable/bg_white_radius_16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0">
 
                     <TextView
                         android:id="@+id/tv_title"
@@ -90,7 +93,7 @@
                         android:paddingEnd="23dp"
                         android:paddingBottom="12dp"
                         android:text="@{vm.offeringDetail.title}"
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray_900"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toTopOf="@id/iv_user_emoticon"
                         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +115,7 @@
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/suit_medium"
                         android:text="@{vm.offeringDetail.nickname}"
-                        android:textColor="@color/black"
+                        android:textColor="@color/gray_900"
                         android:textSize="14sp"
                         app:layout_constraintStart_toEndOf="@id/iv_user_emoticon"
                         app:layout_constraintTop_toBottomOf="@id/tv_title"
@@ -124,8 +127,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="60dp"
-                        app:debouncedOnClick="@{() -> vm.onClickOfferingModify()}"
                         android:src="@drawable/ic_detail_modify"
+                        app:debouncedOnClick="@{() -> vm.onClickOfferingModify()}"
                         app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -145,8 +148,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        app:debouncedOnClick="@{() -> vm.onClickDeleteButton()}"
                         android:src="@drawable/ic_detail_remove"
+                        app:debouncedOnClick="@{() -> vm.onClickDeleteButton()}"
                         app:isVisible="@{vm.isRepresentative}"
                         app:layout_constraintStart_toEndOf="@id/view_divide_line"
                         app:layout_constraintTop_toTopOf="@id/view_divide_line" />
@@ -165,10 +168,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
-                        app:debouncedOnClick="@{() -> vm.onClickProductRedirectText(vm.offeringDetail.productUrl)}"
                         android:text="@string/offering_detail_product_url_text"
                         android:textColor="@color/main_color"
                         android:textSize="16sp"
+                        app:debouncedOnClick="@{() -> vm.onClickProductRedirectText(vm.offeringDetail.productUrl)}"
                         app:isVisible="@{vm.offeringDetail.productUrl != null}"
                         app:layout_constraintBottom_toBottomOf="@id/tv_product_link_comment"
                         app:layout_constraintStart_toEndOf="@id/tv_product_link_comment"
@@ -330,6 +333,7 @@
                         android:layout_width="0dp"
                         android:layout_marginTop="18dp"
                         android:layout_marginEnd="18dp"
+                        android:paddingBottom="@dimen/size_50"
                         android:text="@{vm.offeringDetail.description}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -354,10 +358,10 @@
             android:background="@drawable/btn_participation_enabled"
             android:enabled="@{vm.isParticipationAvailable}"
             android:fontFamily="@font/suit_medium"
-            app:debouncedOnClick="@{() -> vm.onParticipateClick()}"
             android:textColor="@color/white"
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"
+            app:debouncedOnClick="@{() -> vm.onParticipateClick()}"
             app:isVisible="@{!vm.isParticipated}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -375,9 +379,9 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/btn_participation_opened"
             android:fontFamily="@font/suit_medium"
-            app:debouncedOnClick="@{() -> vm.onClickMoveCommentDetail()}"
             android:text="@string/offering_detail_move_comment_detail"
             android:textColor="@color/white"
+            app:debouncedOnClick="@{() -> vm.onClickMoveCommentDetail()}"
             app:isVisible="@{vm.isParticipated}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
