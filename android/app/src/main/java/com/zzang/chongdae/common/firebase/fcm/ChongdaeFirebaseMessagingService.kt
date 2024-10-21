@@ -28,7 +28,6 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var notificationImportance: NotificationImportance
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d("alsong", "onMessageReceived")
         super.onMessageReceived(remoteMessage)
         CoroutineScope(Dispatchers.IO).launch {
             if (isLoggedOut()) return@launch
@@ -53,7 +52,6 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun notifyFromRemoteMessage(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d("alsong", "${remoteMessage.data}")
             val title = remoteMessage.data[TITLE_KEY]
             val messageBody = remoteMessage.data[BODY_KEY]
             val notificationType = remoteMessage.data[NOTIFICATION_TYPE_KEY]
@@ -82,10 +80,11 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     ): PendingIntent? {
         val intent: Intent
         val notificationType = NotificationType.of(type)
+        val parsedOfferingId = offeringId?.toLong() ?: error("알림 데이터에 offeringId가 없음")
         when (notificationType) {
             NotificationType.COMMENT_DETAIL -> {
                 intent = Intent(this, CommentDetailActivity::class.java)
-                intent.putExtra(EXTRA_OFFERING_ID_KEY, offeringId?.toLong())
+                intent.putExtra(EXTRA_OFFERING_ID_KEY, parsedOfferingId)
             }
             NotificationType.OFFERING_DETAIL -> {
                 intent = Intent(this, MainActivity::class.java)
@@ -123,7 +122,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.i("FCM", "FCM토큰 갱신됨. ${token}")
+        Log.i("FCM", "FCM토큰 갱신됨")
     }
 
     companion object {

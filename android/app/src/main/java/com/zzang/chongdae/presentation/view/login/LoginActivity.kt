@@ -117,8 +117,6 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             } else if (user != null) {
                 loadFcmToken { fcmToken ->
                     viewModel.postLogin(accessToken, fcmToken)
-                    Log.d("fcm", "FCM: ${fcmToken}")
-                    Log.d("alsong", "${accessToken}")
                 }
             }
         }
