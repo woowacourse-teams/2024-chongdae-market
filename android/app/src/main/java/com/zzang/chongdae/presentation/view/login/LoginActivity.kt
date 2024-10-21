@@ -118,6 +118,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
                 loadFcmToken { fcmToken ->
                     Log.i("fcm", "$fcmToken")
                     viewModel.postLogin(accessToken, fcmToken)
+                    Log.d("alsong", "${accessToken}")
                 }
             }
         }

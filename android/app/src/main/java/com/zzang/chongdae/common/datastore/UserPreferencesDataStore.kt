@@ -61,6 +61,12 @@ constructor(
         }
     }
 
+    suspend fun setNotificationImportance(importance: Int) {
+        dataStore.edit { preferences ->
+            preferences[NOTIFICATION_IMPORTANCE_KEY] = importance
+        }
+    }
+
     suspend fun removeAllData() {
         dataStore.edit { preferences ->
             preferences.clear()
@@ -73,6 +79,6 @@ constructor(
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token_key")
         private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token_key")
         private val NOTIFICATION_IMPORTANCE_KEY = intPreferencesKey("notification_importance_key")
-        private const val DEFAULT_NOTIFICATION_IMPORTANCE = 3
+        private const val DEFAULT_NOTIFICATION_IMPORTANCE = 4
     }
 }

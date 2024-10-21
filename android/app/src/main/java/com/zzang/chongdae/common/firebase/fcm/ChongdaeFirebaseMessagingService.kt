@@ -45,6 +45,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun notifyFromRemoteMessage(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
+            Log.d("alsong", "${remoteMessage.data}")
             val title = remoteMessage.data[TITLE_KEY]
             val messageBody = remoteMessage.data[BODY_KEY]
             val offeringId = remoteMessage.data[OFFERING_ID_KEY]
@@ -87,6 +88,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         notificationImportance.apply {
             val channel = NotificationChannel(channelId, channelName, importance)
             notificationManager.createNotificationChannel(channel)
+            Log.d("alsong", "${importance}")
         }
     }
 
