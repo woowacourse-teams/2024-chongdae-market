@@ -22,10 +22,13 @@ public class ParticipationNotification {
 
     public Message messageWhenParticipate() {
         FcmToken token = new FcmToken(proposer);
+        System.out.println("토큰: " + token.getValue());
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여했습니다.");
         data.addData("offering_id", offering.getId());
+        System.out.println("데이터 키: " + data.getData().keySet());
+        System.out.println("데이터 값: " + data.getData().values());
         return messageManager.createMessage(token, data);
     }
 

@@ -27,6 +27,7 @@ public class AuthService {
 
     @WriterDatabase
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
+        System.out.println("테스트: " + request.fcmToken());
         String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
         MemberEntity member = memberRepository.findByLoginId(loginId)
