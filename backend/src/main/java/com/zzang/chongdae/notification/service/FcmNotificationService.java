@@ -33,7 +33,7 @@ public class FcmNotificationService {
         ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
                 offeringMember);
         Message message = participationNotification.messageWhenParticipate();
-        FcmTopic topic = FcmTopic.offeringTopic(offeringMember.getOffering());
+        FcmTopic topic = FcmTopic.offeringMemberTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }
@@ -42,7 +42,7 @@ public class FcmNotificationService {
         ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
                 offeringMember);
         Message message = participationNotification.messageWhenCancelParticipate();
-        FcmTopic topic = FcmTopic.offeringTopic(offeringMember.getOffering());
+        FcmTopic topic = FcmTopic.offeringMemberTopic(offeringMember.getOffering());
         notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }

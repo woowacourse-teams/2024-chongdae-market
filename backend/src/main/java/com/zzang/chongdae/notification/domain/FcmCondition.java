@@ -15,7 +15,7 @@ public class FcmCondition {
     private final String value;
 
     public static FcmCondition roomStatusCondition(OfferingEntity offering) {
-        FcmTopic offeringTopic = FcmTopic.offeringTopic(offering);
+        FcmTopic offeringTopic = FcmTopic.offeringMemberTopic(offering);
         FcmTopic proposerTopic = FcmTopic.proposerTopic(offering);
         String value = CONDITION_FORMAT_TRUE_AND_FALSE.formatted(offeringTopic.getValue(), proposerTopic.getValue());
         return new FcmCondition(value);
