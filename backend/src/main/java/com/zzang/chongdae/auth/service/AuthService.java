@@ -13,8 +13,11 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
@@ -26,6 +29,7 @@ public class AuthService {
     private final AuthClient authClient;
 
     @WriterDatabase
+    @Transactional
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
         String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
@@ -49,6 +53,7 @@ public class AuthService {
 
     private void checkFcmToken(MemberEntity member, String fcmToken) {
         if (!memberRepository.existsByIdAndFcmToken(member.getId(), fcmToken)) {
+            log.info("토큰 갱신 사용자 id: {}", member.getId());
             member.updateFcmToken(fcmToken);
         }
     }
