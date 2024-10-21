@@ -110,7 +110,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
 
     private fun observeComments() {
         viewModel.comments.observe(this) { comments ->
-            commentAdapter.submitComments(comments)
+            commentAdapter.submitList(comments)
             binding.rvComments.doOnPreDraw {
                 binding.rvComments.scrollToPosition(comments.size - 1)
             }
