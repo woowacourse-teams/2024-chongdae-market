@@ -20,11 +20,8 @@ import com.zzang.chongdae.domain.model.participant.Participant
 import com.zzang.chongdae.domain.model.participant.ParticipantCount
 import com.zzang.chongdae.domain.model.participant.Participants
 import com.zzang.chongdae.domain.model.participant.Proposer
-import com.zzang.chongdae.presentation.util.toStringFormat
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentViewType
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
-import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.createDateSeparator
-import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModelListWithSeparators
 import okhttp3.MultipartBody
 import java.time.LocalDateTime

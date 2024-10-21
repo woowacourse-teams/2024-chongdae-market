@@ -18,7 +18,6 @@ import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.presentation.util.Event
-import com.zzang.chongdae.presentation.util.toStringFormat
 import com.zzang.chongdae.presentation.view.commentdetail.event.CommentDetailEvent
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModel
