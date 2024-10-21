@@ -14,29 +14,31 @@ import com.zzang.chongdae.presentation.view.MainActivity
 class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        sendNotificationAtBackground(remoteMessage)
-        sendNotificationAtForeground(remoteMessage)
+        notifyFromRemoteMessage(remoteMessage)
     }
 
-    private fun sendNotificationAtBackground(remoteMessage: RemoteMessage) {
+    private fun notifyFromRemoteMessage(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
             val title = remoteMessage.data[TITLE_KEY]
             val messageBody = remoteMessage.data[BODY_KEY]
-            sendNotification(title, messageBody)
+            val offeringId = remoteMessage.data[OFFERING_ID_KEY]
+            displayNotification(title, messageBody, offeringId)
         }
     }
 
-    private fun sendNotificationAtForeground(remoteMessage: RemoteMessage) {
-        remoteMessage.notification?.apply {
-            sendNotification(title, body)
-        }
-    }
+//    private fun sendNotificationAtForeground(remoteMessage: RemoteMessage) {
+//        Log.d("alsong", "Foreground")
+//        remoteMessage.notification?.apply {
+//            sendNotification(title, body)
+//        }
+//    }
 
-    private fun sendNotification(
+    private fun displayNotification(
         title: String?,
         body: String?,
+        offeringId: String?
     ) {
-        val pendingIntent = generatePendingIntent()
+        val pendingIntent = generatePendingIntent(offeringId)
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel(notificationManager)
         val uniqueNotificationId = System.currentTimeMillis().toInt()
@@ -44,7 +46,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.notify(uniqueNotificationId, notificationBuilder.build())
     }
 
-    private fun generatePendingIntent(): PendingIntent? {
+    private fun generatePendingIntent(offeringId: String?): PendingIntent? {
         val intent = Intent(this, MainActivity::class.java)
         // TODO(댓글방으로 가야 할 경우 offeringID를 넘겨주어야 함)
         return PendingIntent.getActivity(
@@ -84,5 +86,6 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         private const val CHANNEL_NAME = "Default Channel"
         private const val TITLE_KEY = "title"
         private const val BODY_KEY = "body"
+        private const val OFFERING_ID_KEY = "offering_id"
     }
 }
