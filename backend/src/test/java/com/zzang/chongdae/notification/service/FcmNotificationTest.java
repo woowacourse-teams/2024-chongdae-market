@@ -8,6 +8,7 @@ import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,8 @@ class FcmNotificationTest extends ServiceTest {
         CommentEntity comment = commentFixture.createComment(proposer, offering);
 
         // when
-        BatchResponse batchResponse = notificationService.saveComment(comment, offering);
+        BatchResponse batchResponse = notificationService.saveComment(comment,
+                List.of(participant1OfferingMember, participant2OfferingMember));
 
         // then
         assertThat(batchResponse).isNotNull();
@@ -78,7 +80,7 @@ class FcmNotificationTest extends ServiceTest {
         CommentEntity comment = commentFixture.createComment(proposer, offering);
 
         // when
-        BatchResponse batchResponse = notificationService.saveComment(comment, offering);
+        BatchResponse batchResponse = notificationService.saveComment(comment, List.of());
 
         // then
         assertThat(batchResponse).isNull();

@@ -11,7 +11,6 @@ import com.zzang.chongdae.notification.domain.notification.OfferingNotification;
 import com.zzang.chongdae.notification.domain.notification.ParticipationNotification;
 import com.zzang.chongdae.notification.domain.notification.RoomStatusNotification;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
-import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -27,21 +26,18 @@ public class FcmNotificationService {
     private final FcmMessageManager messageManager;
     private final NotificationSender notificationSender;
     private final NotificationSubscriber notificationSubscriber;
-    private final OfferingMemberRepository offeringMemberRepository;
 
     public String participate(OfferingMemberEntity offeringMember) {
-        ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
-                offeringMember);
-        Message message = participationNotification.messageWhenParticipate();
+        ParticipationNotification notification = new ParticipationNotification(messageManager, offeringMember);
+        Message message = notification.messageWhenParticipate();
         FcmTopic topic = FcmTopic.offeringMemberTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }
 
     public String cancelParticipation(OfferingMemberEntity offeringMember) {
-        ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
-                offeringMember);
-        Message message = participationNotification.messageWhenCancelParticipate();
+        ParticipationNotification notification = new ParticipationNotification(messageManager, offeringMember);
+        Message message = notification.messageWhenCancelParticipate();
         FcmTopic topic = FcmTopic.offeringMemberTopic(offeringMember.getOffering());
         notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
@@ -67,8 +63,8 @@ public class FcmNotificationService {
     }
 
     @Nullable
-    public BatchResponse saveComment(CommentEntity comment, OfferingEntity offering) { // todo: 참여자 도메인 추출
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+    public BatchResponse saveComment(CommentEntity comment,
+                                     List<OfferingMemberEntity> offeringMembers) { // todo: 참여자 도메인 추출
         CommentNotification notification = new CommentNotification(messageManager, comment, offeringMembers);
         MulticastMessage message = notification.messageWhenSaveComment();
         if (message == null) {
