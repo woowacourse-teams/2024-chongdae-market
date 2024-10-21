@@ -11,6 +11,11 @@ class FakeCommentDetailRepository : CommentDetailRepository {
     private val comments: MutableList<Comment> = TestFixture.comments
     private var commentOfferingInfo: CommentOfferingInfo = TestFixture.commentOfferingInfo
 
+    init {
+        comments.clear()
+        comments.add(TestFixture.comment)
+    }
+
     override suspend fun saveComment(
         offeringId: Long,
         comment: String,

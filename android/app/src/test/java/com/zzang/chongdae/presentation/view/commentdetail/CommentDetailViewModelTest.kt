@@ -70,7 +70,7 @@ class CommentDetailViewModelTest {
         // when
         // then
         val result = viewModel.comments.getOrAwaitValue()
-        assertThat(result).isEqualTo(TestFixture.comments)
+        assertThat(result).isEqualTo(TestFixture.commentsUiModels)
     }
 
     @DisplayName("댓글을 작성하면 댓글 목록에 추가된다")
@@ -78,7 +78,6 @@ class CommentDetailViewModelTest {
     fun addComment() {
         // given
         val before = viewModel.comments.getOrAwaitValue()
-        assertThat(before.size).isEqualTo(1)
 
         // when
         viewModel.commentContent.value = "new comment"
@@ -87,7 +86,7 @@ class CommentDetailViewModelTest {
 
         // then
         val result = viewModel.comments.getOrAwaitValue()
-        assertThat(result.size).isEqualTo(2)
+        assertThat(result.size).isEqualTo(before.size + 1)
     }
 
     @DisplayName("약속 장소(도로명주소)를 불러온다")
