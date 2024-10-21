@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RoomStatusNotification {
 
+    private static final String MESSAGE_TYPE = "comment_detail";
+
     private final FcmMessageManager messageManager;
     private final OfferingEntity offering;
 
@@ -25,7 +27,7 @@ public class RoomStatusNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", CommentRoomStatusMapper.getView(offering.getRoomStatus()));
         data.addData("offering_id", offering.getId());
-        data.addData("type", "comment_detail");
+        data.addData("type", MESSAGE_TYPE);
         return messageManager.createMessage(condition, data);
     }
 
