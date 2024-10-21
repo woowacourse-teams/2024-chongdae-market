@@ -31,4 +31,6 @@
     <color name="my_page_title">#FF606060</color>
     <color name="search_keyword">#FF4978D6</color>
     <color name="kakao_yellow">#FFFEE500</color>
+    <color name="offering_detail_background">#FFFFFFFF</color>
+    <color name="default_icon_color">#FF000000</color>
 </resources>
