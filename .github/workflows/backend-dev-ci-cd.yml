@@ -50,10 +50,6 @@ jobs:
           echo '${{ secrets.FCM_SECRET_KEY }}' > src/test/resources/fcm/chongdaemarket-fcm-key.json
         working-directory: ./backend
 
-      # - name: Check test log
-        # run: ./gradlew test -i
-        # working-directory: ./backend
-
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build
         working-directory: ./backend
