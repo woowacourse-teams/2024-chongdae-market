@@ -11,6 +11,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.MainActivity.Companion.NOTIFICATION_FLAG_KEY
+import com.zzang.chongdae.presentation.view.MainActivity.Companion.NOTIFICATION_OFFERING_ID_KEY
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity.Companion.EXTRA_OFFERING_ID_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -103,7 +105,8 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
             NotificationType.OFFERING_DETAIL -> {
                 intent = Intent(this, MainActivity::class.java)
-    //                intent.putExtra(OFFERING_ID_KEY, offeringId)
+                intent.putExtra(NOTIFICATION_OFFERING_ID_KEY, parsedOfferingId)
+                intent.putExtra(NOTIFICATION_FLAG_KEY, true)
             }
         }
         return intent

@@ -31,6 +31,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
 
+    private val offeringIdFromNotification by lazy {
+        intent.getLongExtra(NOTIFICATION_OFFERING_ID_KEY, OFFERING_ID_ERROR)
+    }
+    private val isNotificationTriggered by lazy {
+        intent.getBooleanExtra(NOTIFICATION_FLAG_KEY, DEFAULT_NOTIFICATION_FLAG)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationPermission()
@@ -38,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         initNavController()
         setupBottomNavigation()
         handleDeepLink(intent)
+        handleNotificationTrigger()
     }
 
     private fun requestNotificationPermission() {
@@ -115,6 +123,12 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.action_home_fragment_to_offering_detail_fragment, bundle)
     }
 
+    private fun handleNotificationTrigger() {
+        if (isNotificationTriggered) {
+            openOfferingDetailFragment(offeringIdFromNotification)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -123,7 +137,11 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val SCHEME = "chongdaeapp"
         private const val HOST = "offerings"
-        const val PENDING_INTENT_REQUEST_CODE = 1001
+        const val NOTIFICATION_OFFERING_ID_KEY = "notification_offering_id_key"
+        const val NOTIFICATION_FLAG_KEY = "notification_flag_key"
+        private const val OFFERING_ID_ERROR = -1L
+        private const val DEFAULT_NOTIFICATION_FLAG = false
+        private const val PENDING_INTENT_REQUEST_CODE = 1001
 
         fun startActivity(context: Context) =
             Intent(context, MainActivity::class.java).run {
