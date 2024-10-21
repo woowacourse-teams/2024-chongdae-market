@@ -1,8 +1,10 @@
-package com.zzang.chongdae.notification.domain;
+package com.zzang.chongdae.notification.domain.notification;
 
 import com.google.firebase.messaging.MulticastMessage;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.domain.FcmData;
+import com.zzang.chongdae.notification.domain.FcmTokens;
 import com.zzang.chongdae.notification.service.FcmMessageManager;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
@@ -35,7 +37,7 @@ public class CommentNotification {
         data.addData("title", comment.getOffering().getTitle());
         data.addData("body", "%s: %s".formatted(comment.getMember().getNickname(), comment.getContent()));
         data.addData("offering_id", comment.getOffering().getId());
-        data.addData("type", "comment_room");
+        data.addData("type", "comment_detail");
         return messageManager.createMessages(tokens, data);
     }
 

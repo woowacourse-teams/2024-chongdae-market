@@ -1,7 +1,9 @@
-package com.zzang.chongdae.notification.domain;
+package com.zzang.chongdae.notification.domain.notification;
 
 import com.google.firebase.messaging.Message;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.domain.FcmData;
+import com.zzang.chongdae.notification.domain.FcmToken;
 import com.zzang.chongdae.notification.service.FcmMessageManager;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
@@ -26,7 +28,7 @@ public class ParticipationNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여했습니다.");
         data.addData("offering_id", offering.getId());
-        data.addData("type", "comment_room");
+        data.addData("type", "comment_detail");
         return messageManager.createMessage(token, data);
     }
 
@@ -36,7 +38,7 @@ public class ParticipationNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여를 취소했습니다.");
         data.addData("offering_id", offering.getId());
-        data.addData("type", "comment_room");
+        data.addData("type", "comment_detail");
         return messageManager.createMessage(token, data);
     }
 }

@@ -1,7 +1,9 @@
-package com.zzang.chongdae.notification.domain;
+package com.zzang.chongdae.notification.domain.notification;
 
 import com.google.firebase.messaging.Message;
 import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.notification.domain.FcmCondition;
+import com.zzang.chongdae.notification.domain.FcmData;
 import com.zzang.chongdae.notification.exception.NotificationErrorCode;
 import com.zzang.chongdae.notification.service.FcmMessageManager;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
@@ -28,7 +30,7 @@ public class RoomStatusNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", CommentRoomStatusMapper.getView(offering.getRoomStatus()));
         data.addData("offering_id", offering.getId());
-        data.addData("type", "comment_room");
+        data.addData("type", "comment_detail");
         return messageManager.createMessage(condition, data);
     }
 
@@ -40,7 +42,7 @@ public class RoomStatusNotification {
         return new FcmCondition(condition);
     }
 
-    enum CommentRoomStatusMapper {
+    private enum CommentRoomStatusMapper {
 
         DELETED(CommentRoomStatus.DELETED, ""),
         GROUPING(CommentRoomStatus.GROUPING, ""),

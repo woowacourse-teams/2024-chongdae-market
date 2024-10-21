@@ -1,15 +1,15 @@
 package com.zzang.chongdae.notification.service;
 
-import static com.zzang.chongdae.notification.domain.RoomStatusNotification.TOPIC_FORMAT_OFFERING;
-import static com.zzang.chongdae.notification.domain.RoomStatusNotification.TOPIC_FORMAT_OFFERING_PROPOSER;
+import static com.zzang.chongdae.notification.domain.notification.RoomStatusNotification.TOPIC_FORMAT_OFFERING;
+import static com.zzang.chongdae.notification.domain.notification.RoomStatusNotification.TOPIC_FORMAT_OFFERING_PROPOSER;
 
 import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
-import com.zzang.chongdae.notification.domain.CommentNotification;
-import com.zzang.chongdae.notification.domain.ParticipationNotification;
-import com.zzang.chongdae.notification.domain.RoomStatusNotification;
+import com.zzang.chongdae.notification.domain.notification.CommentNotification;
+import com.zzang.chongdae.notification.domain.notification.ParticipationNotification;
+import com.zzang.chongdae.notification.domain.notification.RoomStatusNotification;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;

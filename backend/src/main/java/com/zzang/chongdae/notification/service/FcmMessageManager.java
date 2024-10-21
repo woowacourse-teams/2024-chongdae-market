@@ -6,6 +6,7 @@ import com.zzang.chongdae.notification.domain.FcmCondition;
 import com.zzang.chongdae.notification.domain.FcmData;
 import com.zzang.chongdae.notification.domain.FcmToken;
 import com.zzang.chongdae.notification.domain.FcmTokens;
+import com.zzang.chongdae.notification.domain.FcmTopic;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,13 @@ public class FcmMessageManager {
     public Message createMessage(FcmCondition condition, FcmData data) {
         return Message.builder()
                 .setCondition(condition.getValue())
+                .putAllData(data.getData())
+                .build();
+    }
+
+    public Message createMessage(FcmTopic topic, FcmData data) {
+        return Message.builder()
+                .setTopic(topic.getValue())
                 .putAllData(data.getData())
                 .build();
     }
