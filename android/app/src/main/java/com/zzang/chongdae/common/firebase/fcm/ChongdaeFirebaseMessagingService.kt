@@ -78,26 +78,35 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         type: String?,
         offeringId: String?,
     ): PendingIntent? {
-        val intent: Intent
         val notificationType = NotificationType.of(type)
         val parsedOfferingId = offeringId?.toLong() ?: error("알림 데이터에 offeringId가 없음")
+        val intent = intentOf(notificationType, parsedOfferingId)
+        val uniqueRequestCode = System.currentTimeMillis().toInt()
+        return PendingIntent.getActivity(
+            this,
+            uniqueRequestCode,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE,
+        )
+    }
+
+    private fun intentOf(
+        notificationType: NotificationType,
+        parsedOfferingId: Long
+    ): Intent {
+        val intent: Intent
         when (notificationType) {
             NotificationType.COMMENT_DETAIL -> {
                 intent = Intent(this, CommentDetailActivity::class.java)
                 intent.putExtra(EXTRA_OFFERING_ID_KEY, parsedOfferingId)
             }
+
             NotificationType.OFFERING_DETAIL -> {
                 intent = Intent(this, MainActivity::class.java)
-//                intent.putExtra(OFFERING_ID_KEY, offeringId)
+    //                intent.putExtra(OFFERING_ID_KEY, offeringId)
             }
         }
-
-        return PendingIntent.getActivity(
-            this,
-            MainActivity.PENDING_INTENT_REQUEST_CODE,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE,
-        )
+        return intent
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
