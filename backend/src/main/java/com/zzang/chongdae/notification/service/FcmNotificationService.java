@@ -7,7 +7,6 @@ import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.notification.domain.notification.CommentNotification;
 import com.zzang.chongdae.notification.domain.notification.OfferingNotification;
@@ -30,7 +29,6 @@ public class FcmNotificationService {
     private final FcmMessageManager messageManager;
     private final NotificationSender notificationSender;
     private final NotificationSubscriber notificationSubscriber;
-    private final MemberRepository memberRepository;
     private final OfferingMemberRepository offeringMemberRepository;
 
     public String participate(OfferingMemberEntity offeringMember) { // todo: naming
@@ -57,16 +55,11 @@ public class FcmNotificationService {
         return notificationSender.send(message);
     }
 
-    @Nullable
-    public BatchResponse saveOffering(OfferingEntity offering) {
+    public String saveOffering(OfferingEntity offering) {
         notificationSubscriber.subscribe(offering.getMember(),
                 TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId()));
-        List<MemberEntity> allMembers = memberRepository.findAll();
-        OfferingNotification notification = new OfferingNotification(messageManager, offering, allMembers);
-        MulticastMessage message = notification.messageWhenSaveOffering();
-        if (message == null) {
-            return null;
-        }
+        OfferingNotification notification = new OfferingNotification(messageManager, offering);
+        Message message = notification.messageWhenSaveOffering();
         return notificationSender.send(message);
     }
 
@@ -84,5 +77,9 @@ public class FcmNotificationService {
             return null;
         }
         return notificationSender.send(message);
+    }
+
+    public void login(MemberEntity member) {
+        notificationSubscriber.subscribe(member, OfferingNotification.TOPIC_FORMAT_MEMBER);
     }
 }

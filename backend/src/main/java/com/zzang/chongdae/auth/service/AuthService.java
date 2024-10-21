@@ -11,6 +11,7 @@ import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
+import com.zzang.chongdae.notification.service.FcmNotificationService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
+    private final FcmNotificationService notificationService;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -48,6 +50,7 @@ public class AuthService {
         AuthMemberDto authMember = new AuthMemberDto(member);
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
         checkFcmToken(member, fcmToken);
+        notificationService.login(member);
         return new AuthInfoDto(authMember, authToken);
     }
 
