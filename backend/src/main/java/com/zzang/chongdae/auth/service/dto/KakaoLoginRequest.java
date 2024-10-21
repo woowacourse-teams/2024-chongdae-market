@@ -1,9 +1,9 @@
 package com.zzang.chongdae.auth.service.dto;
 
-import javax.annotation.Nullable;
+import jakarta.validation.constraints.NotEmpty;
 
 public record KakaoLoginRequest(String accessToken,
 
-                                @Nullable
+                                @NotEmpty
                                 String fcmToken) {
 }

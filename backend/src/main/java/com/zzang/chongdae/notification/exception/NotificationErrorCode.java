@@ -12,6 +12,7 @@ public enum NotificationErrorCode implements ErrorResponse {
 
     CANNOT_SEND_ALARM(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 알림 전송에 실패하였습니다."),
     CANNOT_FIND_URL(HttpStatus.INTERNAL_SERVER_ERROR, "해당 URL을 찾을 수 없습니다."),
+    INVALID_COMMENT_ROOM_STATUS(HttpStatus.INTERNAL_SERVER_ERROR, "존재하지 않는 거래 상태입니다."),
     ;
 
     private final HttpStatus status;
@@ -19,6 +20,6 @@ public enum NotificationErrorCode implements ErrorResponse {
 
     @Override
     public ErrorMessage getErrorMessage() {
-        return null;
+        return new ErrorMessage(this.message);
     }
 }

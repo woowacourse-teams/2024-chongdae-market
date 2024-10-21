@@ -54,4 +54,8 @@ public class MemberEntity extends BaseTimeEntity {
     public boolean isSame(MemberEntity other) {
         return this.equals(other);
     }
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
 }

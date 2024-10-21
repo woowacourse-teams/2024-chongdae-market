@@ -61,7 +61,7 @@ class FcmNotificationTest extends ServiceTest {
 
         // when
         BatchResponse batchResponse = notificationService.saveComment(comment,
-                List.of(proposerOfferingMember, participant1OfferingMember, participant2OfferingMember));
+                List.of(participant1OfferingMember, participant2OfferingMember));
 
         // then
         assertThat(batchResponse).isNotNull();
@@ -80,7 +80,7 @@ class FcmNotificationTest extends ServiceTest {
         CommentEntity comment = commentFixture.createComment(proposer, offering);
 
         // when
-        BatchResponse batchResponse = notificationService.saveComment(comment, List.of(proposerOfferingMember));
+        BatchResponse batchResponse = notificationService.saveComment(comment, List.of());
 
         // then
         assertThat(batchResponse).isNull();

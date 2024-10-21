@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.google.firebase.messaging.TopicManagementResponse;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.domain.FcmTopic;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,11 @@ class FcmNotificationSubscriberTest extends ServiceTest {
     @Test
     void should_getCount_when_successToSubscribe() {
         // given
-        MemberEntity member = memberFixture.createMember("ever", "invalidToken");
+        MemberEntity member = memberFixture.createMember("ever", "invalidFcmToken");
         FcmNotificationSubscriber subscriber = new FcmNotificationSubscriber();
 
         // when
-        TopicManagementResponse response = subscriber.subscribe(member, "ever-topic");
+        TopicManagementResponse response = subscriber.subscribe(member, FcmTopic.memberTopic());
 
         // then
         assertThat(response.getSuccessCount()).isEqualTo(0);
@@ -35,7 +36,7 @@ class FcmNotificationSubscriberTest extends ServiceTest {
         FcmNotificationSubscriber subscriber = new FcmNotificationSubscriber();
 
         // when
-        TopicManagementResponse response = subscriber.subscribe(member, "ever-topic");
+        TopicManagementResponse response = subscriber.subscribe(member, FcmTopic.memberTopic());
 
         // then
         assertThat(response.getSuccessCount()).isEqualTo(1);
