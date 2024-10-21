@@ -28,6 +28,7 @@ public class RoomStatusNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", CommentRoomStatusMapper.getView(offering.getRoomStatus()));
         data.addData("offering_id", offering.getId());
+        data.addData("type", "comment_room");
         return messageManager.createMessage(condition, data);
     }
 

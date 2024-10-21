@@ -26,6 +26,7 @@ public class ParticipationNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여했습니다.");
         data.addData("offering_id", offering.getId());
+        data.addData("type", "comment_room");
         return messageManager.createMessage(token, data);
     }
 
@@ -35,6 +36,7 @@ public class ParticipationNotification {
         data.addData("title", offering.getTitle());
         data.addData("body", participant.getNickname() + "님이 참여를 취소했습니다.");
         data.addData("offering_id", offering.getId());
+        data.addData("type", "comment_room");
         return messageManager.createMessage(token, data);
     }
 }

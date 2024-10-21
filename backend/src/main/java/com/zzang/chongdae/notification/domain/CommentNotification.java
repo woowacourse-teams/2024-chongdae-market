@@ -26,7 +26,7 @@ public class CommentNotification {
     }
 
     @Nullable
-    public MulticastMessage messageWhenSaveComment() {
+    public MulticastMessage messageWhenSaveComment() { // TODO: 토픽 방식으로 바꾸기
         FcmTokens tokens = FcmTokens.from(membersNotWriter());
         if (tokens.isEmpty()) {
             return null;
@@ -35,6 +35,7 @@ public class CommentNotification {
         data.addData("title", comment.getOffering().getTitle());
         data.addData("body", "%s: %s".formatted(comment.getMember().getNickname(), comment.getContent()));
         data.addData("offering_id", comment.getOffering().getId());
+        data.addData("type", "comment_room");
         return messageManager.createMessages(tokens, data);
     }
 
