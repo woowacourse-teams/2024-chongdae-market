@@ -23,7 +23,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var dataStore: UserPreferencesDataStore
 
-    private lateinit var notificationImportance: NotificationImportanceStrategy
+    private lateinit var notificationImportance: NotificationImportance
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
@@ -36,10 +36,10 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     private suspend fun setNotificationImportance() {
         when (dataStore.notificationImportanceFlow.first()) {
             NotificationManager.IMPORTANCE_DEFAULT -> notificationImportance =
-                NotificationImportanceStrategy.Default()
+                NotificationImportance.Default()
 
             NotificationManager.IMPORTANCE_HIGH -> notificationImportance =
-                NotificationImportanceStrategy.High()
+                NotificationImportance.High()
         }
     }
 
