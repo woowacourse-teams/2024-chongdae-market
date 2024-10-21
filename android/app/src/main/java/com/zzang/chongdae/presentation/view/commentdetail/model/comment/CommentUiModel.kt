@@ -1,8 +1,8 @@
 package com.zzang.chongdae.presentation.view.commentdetail.model.comment
 
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.presentation.util.toFormattedTime
 import com.zzang.chongdae.presentation.util.toFormattedDate
+import com.zzang.chongdae.presentation.util.toFormattedTime
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentViewType
 
 data class CommentUiModel(
