@@ -168,9 +168,7 @@
     </style>
 
     <style name="NotificationImportanceSwitchTheme" parent="Theme.AppCompat.Light">
-        <item name="thumbTint">@color/main_color</item>
-        <item name="trackTint">#DDDDDD</item>
-        <item name="colorControlActivated">#DDDDDD</item>
+        <item name="colorControlActivated">@color/main_color</item>
     </style>
 
 </resources>

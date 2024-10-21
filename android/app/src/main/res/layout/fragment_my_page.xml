@@ -213,6 +213,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="@={vm.isSwitchChecked}"
+            tools:checked="true"
             android:theme="@style/NotificationImportanceSwitchTheme"
             android:onCheckedChanged="@{(button, isChecked) -> vm.onSwitchChanged(isChecked)}"
             app:layout_constraintBottom_toBottomOf="@id/toggle_notification_importance"

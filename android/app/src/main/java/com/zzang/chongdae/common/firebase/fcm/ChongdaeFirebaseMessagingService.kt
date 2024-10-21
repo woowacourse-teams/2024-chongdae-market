@@ -106,7 +106,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.i("fcm", "FCM토큰 갱신됨. new token: $token")
+        Log.i("fcm", "FCM토큰 갱신됨.")
     }
 
     companion object {
