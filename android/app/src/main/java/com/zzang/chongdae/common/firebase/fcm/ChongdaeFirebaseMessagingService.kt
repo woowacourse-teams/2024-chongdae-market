@@ -44,11 +44,13 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private suspend fun setNotificationImportance() {
         when (dataStore.notificationImportanceFlow.first()) {
-            NotificationManager.IMPORTANCE_DEFAULT -> notificationImportance =
-                NotificationImportance.Default()
+            NotificationManager.IMPORTANCE_DEFAULT ->
+                notificationImportance =
+                    NotificationImportance.Default()
 
-            NotificationManager.IMPORTANCE_HIGH -> notificationImportance =
-                NotificationImportance.High()
+            NotificationManager.IMPORTANCE_HIGH ->
+                notificationImportance =
+                    NotificationImportance.High()
         }
     }
 
@@ -94,7 +96,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun intentOf(
         notificationType: NotificationType,
-        parsedOfferingId: Long
+        parsedOfferingId: Long,
     ): Intent {
         val intent: Intent
         when (notificationType) {
