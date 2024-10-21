@@ -1,13 +1,11 @@
 package com.zzang.chongdae.notification.service;
 
-import static com.zzang.chongdae.notification.domain.notification.RoomStatusNotification.TOPIC_FORMAT_OFFERING;
-import static com.zzang.chongdae.notification.domain.notification.RoomStatusNotification.TOPIC_FORMAT_OFFERING_PROPOSER;
-
 import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.domain.FcmTopic;
 import com.zzang.chongdae.notification.domain.notification.CommentNotification;
 import com.zzang.chongdae.notification.domain.notification.OfferingNotification;
 import com.zzang.chongdae.notification.domain.notification.ParticipationNotification;
@@ -31,12 +29,12 @@ public class FcmNotificationService {
     private final NotificationSubscriber notificationSubscriber;
     private final OfferingMemberRepository offeringMemberRepository;
 
-    public String participate(OfferingMemberEntity offeringMember) { // todo: naming
+    public String participate(OfferingMemberEntity offeringMember) {
         ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
                 offeringMember);
         Message message = participationNotification.messageWhenParticipate();
-        notificationSubscriber.subscribe(offeringMember.getMember(),
-                TOPIC_FORMAT_OFFERING.formatted(offeringMember.getOffering().getId()));
+        FcmTopic topic = FcmTopic.offeringTopic(offeringMember.getOffering());
+        notificationSubscriber.subscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }
 
@@ -44,8 +42,8 @@ public class FcmNotificationService {
         ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
                 offeringMember);
         Message message = participationNotification.messageWhenCancelParticipate();
-        notificationSubscriber.unsubscribe(offeringMember.getMember(),
-                TOPIC_FORMAT_OFFERING.formatted(offeringMember.getOffering().getId()));
+        FcmTopic topic = FcmTopic.offeringTopic(offeringMember.getOffering());
+        notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }
 
@@ -56,16 +54,16 @@ public class FcmNotificationService {
     }
 
     public String saveOffering(OfferingEntity offering) {
-        notificationSubscriber.subscribe(offering.getMember(),
-                TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId()));
+        FcmTopic topic = FcmTopic.proposerTopic(offering);
+        notificationSubscriber.subscribe(offering.getMember(), topic);
         OfferingNotification notification = new OfferingNotification(messageManager, offering);
         Message message = notification.messageWhenSaveOffering();
         return notificationSender.send(message);
     }
 
     public void deleteOffering(OfferingEntity offering) {
-        notificationSubscriber.unsubscribe(offering.getMember(),
-                TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId()));
+        FcmTopic topic = FcmTopic.proposerTopic(offering);
+        notificationSubscriber.unsubscribe(offering.getMember(), topic);
     }
 
     @Nullable
@@ -80,6 +78,7 @@ public class FcmNotificationService {
     }
 
     public void login(MemberEntity member) {
-        notificationSubscriber.subscribe(member, OfferingNotification.TOPIC_FORMAT_MEMBER);
+        FcmTopic topic = FcmTopic.memberTopic();
+        notificationSubscriber.subscribe(member, topic);
     }
 }
