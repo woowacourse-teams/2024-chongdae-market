@@ -27,12 +27,11 @@ public class AuthService {
 
     @WriterDatabase
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
-        System.out.println("테스트: " + request.fcmToken());
         String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
         MemberEntity member = memberRepository.findByLoginId(loginId)
                 .orElseGet(() -> signup(provider, loginId, request.fcmToken()));
-        return login(member);
+        return login(member, request.fcmToken());
     }
 
     private MemberEntity signup(AuthProvider provider, String loginId, String fcmToken) {
@@ -41,10 +40,17 @@ public class AuthService {
         return memberRepository.save(member);
     }
 
-    private AuthInfoDto login(MemberEntity member) {
+    private AuthInfoDto login(MemberEntity member, String fcmToken) {
         AuthMemberDto authMember = new AuthMemberDto(member);
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
+        checkFcmToken(member, fcmToken);
         return new AuthInfoDto(authMember, authToken);
+    }
+
+    private void checkFcmToken(MemberEntity member, String fcmToken) {
+        if (!memberRepository.existsByIdAndFcmToken(member.getId(), fcmToken)) {
+            member.updateFcmToken(fcmToken);
+        }
     }
 
     public AuthTokenDto refresh(String refreshToken) {
