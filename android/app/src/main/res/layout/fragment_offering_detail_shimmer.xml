@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_product"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:adjustViewBounds="true"
+            android:background="@color/gray_300"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="@dimen/size_200"
+            android:layout_height="@dimen/size_44"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/gray_300"
+            android:paddingBottom="12dp"
+            app:layout_constraintBottom_toTopOf="@id/iv_user_emoticon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_product" />
+
+        <ImageView
+            android:id="@+id/iv_user_emoticon"
+            android:layout_width="15dp"
+            android:layout_height="11dp"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="@dimen/size_80"
+            android:layout_height="@dimen/size_20"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/suit_medium"
+            android:textColor="@color/gray_900"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/iv_user_emoticon"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <TextView
+            android:id="@+id/tv_product_link_comment"
+            android:layout_width="@dimen/size_60"
+            android:layout_height="@dimen/size_20"
+            android:layout_marginTop="18dp"
+            app:layout_constraintBottom_toTopOf="@id/horizon_line"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
+
+
+        <View
+            android:id="@+id/horizon_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/horizon_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_link_comment" />
+
+        <ImageView
+            android:id="@+id/iv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+
+        <TextView
+            android:id="@+id/tv_moeny_comment"
+            android:layout_width="@dimen/size_50"
+            android:layout_height="@dimen/size_18"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_money"
+            app:layout_constraintStart_toEndOf="@id/iv_money"
+            app:layout_constraintTop_toBottomOf="@id/horizon_line" />
+
+        <TextView
+            android:id="@+id/tv_divided_price"
+            android:layout_width="@dimen/size_70"
+            android:layout_height="@dimen/size_24"
+            android:layout_marginTop="8dp"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/iv_money" />
+
+        <TextView
+            android:id="@+id/tv_total_price"
+            android:layout_width="@dimen/size_80"
+            android:layout_height="@dimen/size_15"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_divided_price"
+            app:layout_constraintStart_toEndOf="@id/tv_divided_price"
+            app:layout_constraintTop_toBottomOf="@id/iv_money" />
+
+        <ImageView
+            android:id="@+id/iv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+        <TextView
+            android:id="@+id/tv_meeting_date_comment"
+            android:layout_width="@dimen/size_60"
+            android:layout_height="@dimen/size_20"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="23dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_time"
+            app:layout_constraintStart_toEndOf="@id/iv_time"
+            app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+        <TextView
+            android:id="@+id/tv_meeting_date"
+            android:layout_width="90dp"
+            android:layout_height="@dimen/size_18"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/iv_time" />
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="23dp"
+            app:layout_constraintStart_toEndOf="@id/tv_meeting_date_comment"
+            app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+        <TextView
+            android:id="@+id/tv_recruit_location_comment"
+            android:layout_width="90dp"
+            android:layout_height="@dimen/size_18"
+            android:layout_marginTop="23dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_location"
+            app:layout_constraintStart_toEndOf="@id/iv_location"
+            app:layout_constraintTop_toBottomOf="@id/tv_divided_price" />
+
+        <TextView
+            android:id="@+id/tv_meeting_address"
+            android:layout_width="@dimen/size_70"
+            android:layout_height="@dimen/size_18"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingEnd="@dimen/size_5"
+            app:layout_constraintStart_toStartOf="@id/iv_location"
+            app:layout_constraintTop_toBottomOf="@id/iv_location" />
+
+        <TextView
+            android:id="@+id/tv_content_comment"
+            android:layout_width="@dimen/size_40"
+            android:layout_height="@dimen/size_20"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="@id/tv_meeting_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_meeting_date" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_150"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:background="@color/gray_300"
+            android:paddingBottom="@dimen/size_50"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_content_comment" />
+
+        <Button
+            android:id="@+id/btn_participate"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_60"
+            android:layout_marginHorizontal="19dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

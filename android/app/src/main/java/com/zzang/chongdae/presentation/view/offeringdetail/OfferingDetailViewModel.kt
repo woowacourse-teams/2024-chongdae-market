@@ -95,19 +95,27 @@ class OfferingDetailViewModel
         private val _alertCancelEvent = MutableSingleLiveData<Unit>()
         val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
 
+        private val _loading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val loading: LiveData<Boolean> get() = _loading
+
         init {
             loadOffering()
         }
 
         fun loadOffering() {
             viewModelScope.launch {
+                _loading.value = true
                 when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
-                                    is Result.Success -> loadOffering()
+                                    is Result.Success -> {
+                                        loadOffering()
+                                    }
+
                                     is Result.Error -> {
+                                        _loading.value = false
                                         userPreferencesDataStore.removeAllData()
                                         _refreshTokenExpiredEvent.setValue(Unit)
                                         return@launch
@@ -125,6 +133,7 @@ class OfferingDetailViewModel
                         }
 
                     is Result.Success -> {
+                        _loading.value = false
                         _offeringDetail.value = result.data
                         _currentCount.value = result.data.currentCount.value
                         _offeringCondition.value = result.data.condition
