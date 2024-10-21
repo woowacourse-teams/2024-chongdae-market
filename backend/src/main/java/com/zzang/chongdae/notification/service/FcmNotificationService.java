@@ -7,10 +7,14 @@ import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
+import com.zzang.chongdae.member.repository.MemberRepository;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.notification.domain.notification.CommentNotification;
+import com.zzang.chongdae.notification.domain.notification.OfferingNotification;
 import com.zzang.chongdae.notification.domain.notification.ParticipationNotification;
 import com.zzang.chongdae.notification.domain.notification.RoomStatusNotification;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -26,6 +30,8 @@ public class FcmNotificationService {
     private final FcmMessageManager messageManager;
     private final NotificationSender notificationSender;
     private final NotificationSubscriber notificationSubscriber;
+    private final MemberRepository memberRepository;
+    private final OfferingMemberRepository offeringMemberRepository;
 
     public String participate(OfferingMemberEntity offeringMember) { // todo: naming
         ParticipationNotification participationNotification = new ParticipationNotification(messageManager,
@@ -51,9 +57,17 @@ public class FcmNotificationService {
         return notificationSender.send(message);
     }
 
-    public void saveOffering(OfferingEntity offering) {
+    @Nullable
+    public BatchResponse saveOffering(OfferingEntity offering) {
         notificationSubscriber.subscribe(offering.getMember(),
                 TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId()));
+        List<MemberEntity> allMembers = memberRepository.findAll();
+        OfferingNotification notification = new OfferingNotification(messageManager, offering, allMembers);
+        MulticastMessage message = notification.messageWhenSaveOffering();
+        if (message == null) {
+            return null;
+        }
+        return notificationSender.send(message);
     }
 
     public void deleteOffering(OfferingEntity offering) {
@@ -62,8 +76,8 @@ public class FcmNotificationService {
     }
 
     @Nullable
-    public BatchResponse saveComment(CommentEntity comment,
-                                     List<OfferingMemberEntity> offeringMembers) { // todo: 참여자 도메인 추출
+    public BatchResponse saveComment(CommentEntity comment, OfferingEntity offering) { // todo: 참여자 도메인 추출
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
         CommentNotification notification = new CommentNotification(messageManager, comment, offeringMembers);
         MulticastMessage message = notification.messageWhenSaveComment();
         if (message == null) {
