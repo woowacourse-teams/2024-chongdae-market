@@ -16,7 +16,7 @@ class AuthRepositoryImpl
     ) : AuthRepository {
         override suspend fun saveLogin(
             accessToken: String,
-            fcmToken: String?,
+            fcmToken: String,
         ): Result<Member, DataError.Network> {
             return authRemoteDataSource.saveLogin(
                 tokenRequest = TokenRequest(accessToken, fcmToken),

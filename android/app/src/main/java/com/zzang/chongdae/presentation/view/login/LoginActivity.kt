@@ -122,15 +122,14 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         }
     }
 
-    private fun loadFcmToken(callback: (String?) -> Unit) {
+    private fun loadFcmToken(onFcmTokenReceived: (String) -> Unit) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.e("error", "Fetching FCM registration token failed", task.exception)
-                callback(null)
                 return@addOnCompleteListener
             }
             val fcmToken = task.result
-            callback(fcmToken)
+            onFcmTokenReceived(fcmToken)
         }
     }
 
