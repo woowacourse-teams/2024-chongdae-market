@@ -1,4 +1,4 @@
-package com.zzang.chongdae.notification.service;
+package com.zzang.chongdae.notification.service.message;
 
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
@@ -7,10 +7,22 @@ import com.zzang.chongdae.notification.domain.FcmData;
 import com.zzang.chongdae.notification.domain.FcmToken;
 import com.zzang.chongdae.notification.domain.FcmTokens;
 import com.zzang.chongdae.notification.domain.FcmTopic;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
-public class FcmMessageManager {
+public class FcmMessageCreator {
+
+    private static FcmMessageCreator INSTANCE;
+
+    public static FcmMessageCreator getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new FcmMessageCreator();
+        }
+        return INSTANCE;
+    }
 
     public Message createMessage(FcmToken token, FcmData data) {
         return Message.builder()

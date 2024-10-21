@@ -1,34 +1,36 @@
-package com.zzang.chongdae.notification.domain.notification;
+package com.zzang.chongdae.notification.service.message;
 
 import com.google.firebase.messaging.Message;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.notification.domain.FcmCondition;
 import com.zzang.chongdae.notification.domain.FcmData;
 import com.zzang.chongdae.notification.exception.NotificationErrorCode;
-import com.zzang.chongdae.notification.service.FcmMessageManager;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.util.Arrays;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@RequiredArgsConstructor
-public class RoomStatusNotification {
+@Component
+public class RoomStatusMessageManager {
 
     private static final String MESSAGE_TYPE = "comment_detail";
 
-    private final FcmMessageManager messageManager;
-    private final OfferingEntity offering;
+    private final FcmMessageCreator messageCreator;
 
-    public Message messageWhenUpdateStatus() {
+    public RoomStatusMessageManager() {
+        this.messageCreator = FcmMessageCreator.getInstance();
+    }
+
+    public Message messageWhenUpdateStatus(OfferingEntity offering) {
         FcmCondition condition = FcmCondition.roomStatusCondition(offering);
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", CommentRoomStatusMapper.getView(offering.getRoomStatus()));
         data.addData("offering_id", offering.getId());
         data.addData("type", MESSAGE_TYPE);
-        return messageManager.createMessage(condition, data);
+        return messageCreator.createMessage(condition, data);
     }
 
     private enum CommentRoomStatusMapper {
