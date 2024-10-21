@@ -1,7 +1,8 @@
 package com.zzang.chongdae.presentation.view.commentdetail.model.comment
 
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.presentation.util.toStringFormat
+import com.zzang.chongdae.presentation.util.toFormattedTime
+import com.zzang.chongdae.presentation.util.toFormattedDate
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentViewType
 
 data class CommentUiModel(
@@ -18,8 +19,8 @@ data class CommentUiModel(
             val viewType = if (this.isMine) CommentViewType.MyComment else CommentViewType.OtherComment
             return CommentUiModel(
                 content = this.content,
-                date = this.commentCreatedAt.date.toStringFormat(),
-                time = this.commentCreatedAt.time.toStringFormat(),
+                date = this.commentCreatedAt.date.toFormattedDate(),
+                time = this.commentCreatedAt.time.toFormattedTime(),
                 isMine = this.isMine,
                 isProposer = this.isProposer,
                 nickname = this.nickname,
@@ -44,7 +45,7 @@ data class CommentUiModel(
             var currentDate: String? = null
 
             for (comment in this) {
-                val commentDate = comment.commentCreatedAt.date.toStringFormat()
+                val commentDate = comment.commentCreatedAt.date.toFormattedDate()
                 if (commentDate != currentDate) {
                     uiModels.add(CommentUiModel.createDateSeparator(commentDate))
                     currentDate = commentDate
