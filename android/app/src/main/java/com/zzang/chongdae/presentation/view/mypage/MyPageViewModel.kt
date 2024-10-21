@@ -69,7 +69,6 @@ constructor(
 
     fun onClickLogout() {
         _showAlertEvent.setValue(Unit)
-        FirebaseMessaging.getInstance().deleteToken()
     }
 
     fun onClickWithdrawal() {

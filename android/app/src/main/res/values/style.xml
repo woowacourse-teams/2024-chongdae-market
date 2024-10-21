@@ -167,11 +167,10 @@
         <item name="android:textSize">16dp</item>
     </style>
 
-    <!--    Notification Importance Switch   -->
-    <style name="NotificationImportanceSwitchTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:thumbTint">@color/main_color</item>
-        <item name="android:trackTint">@color/main_color</item>
-
+    <style name="NotificationImportanceSwitchTheme" parent="Theme.AppCompat.Light">
+        <item name="thumbTint">@color/main_color</item>
+        <item name="trackTint">#DDDDDD</item>
+        <item name="colorControlActivated">#DDDDDD</item>
     </style>
 
 </resources>

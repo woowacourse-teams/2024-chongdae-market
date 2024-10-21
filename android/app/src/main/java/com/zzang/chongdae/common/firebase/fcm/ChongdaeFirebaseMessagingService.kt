@@ -88,7 +88,6 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         notificationImportance.apply {
             val channel = NotificationChannel(channelId, channelName, importance)
             notificationManager.createNotificationChannel(channel)
-            Log.d("alsong", "${importance}")
         }
     }
 

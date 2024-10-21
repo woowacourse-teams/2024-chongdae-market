@@ -210,13 +210,11 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_notification_importance"
-            android:theme="@style/NotificationImportanceSwitchTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="@={vm.isSwitchChecked}"
+            android:theme="@style/NotificationImportanceSwitchTheme"
             android:onCheckedChanged="@{(button, isChecked) -> vm.onSwitchChanged(isChecked)}"
-            android:thumbTint="@color/main_color"
-            android:trackTint="@color/main_color"
             app:layout_constraintBottom_toBottomOf="@id/toggle_notification_importance"
             app:layout_constraintStart_toEndOf="@+id/toggle_notification_importance"
             app:layout_constraintTop_toTopOf="@+id/toggle_notification_importance" />
