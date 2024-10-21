@@ -22,6 +22,8 @@ public class FcmNotificationSubscriber implements NotificationSubscriber {
             log.info("구독 실패 개수: {}", response.getFailureCount());
             return response;
         } catch (FirebaseMessagingException e) {
+            log.error("토픽 구독 실패: {}", e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -35,6 +37,8 @@ public class FcmNotificationSubscriber implements NotificationSubscriber {
             log.info("구독 취소 실패 개수: {}", response.getFailureCount());
             return response;
         } catch (FirebaseMessagingException e) {
+            log.error("토픽 구독 실패: {}", e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
