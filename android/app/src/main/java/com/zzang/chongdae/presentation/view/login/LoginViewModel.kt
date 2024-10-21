@@ -40,9 +40,12 @@ class LoginViewModel
             }
         }
 
-        fun postLogin(accessToken: String) {
+        fun postLogin(
+            accessToken: String,
+            fcmToken: String,
+        ) {
             viewModelScope.launch {
-                when (val result = authRepository.saveLogin(accessToken = accessToken)) {
+                when (val result = authRepository.saveLogin(accessToken = accessToken, fcmToken = fcmToken)) {
                     is Result.Success -> {
                         userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
                         _loginSuccessEvent.setValue(Unit)

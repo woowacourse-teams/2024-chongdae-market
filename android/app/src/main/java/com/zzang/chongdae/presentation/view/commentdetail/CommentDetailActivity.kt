@@ -248,7 +248,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
 
     companion object {
         private const val EXTRA_DEFAULT_VALUE = 1L
-        private const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
+        const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
 
         fun startActivity(
             context: Context,

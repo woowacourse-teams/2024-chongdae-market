@@ -154,6 +154,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
     // 카카오 로그인
     implementation(libs.kakao.sdk)
