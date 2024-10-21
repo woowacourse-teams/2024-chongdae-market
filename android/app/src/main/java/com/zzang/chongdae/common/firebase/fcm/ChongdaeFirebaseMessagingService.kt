@@ -11,6 +11,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
+import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity.Companion.EXTRA_OFFERING_ID_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,11 +28,17 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var notificationImportance: NotificationImportance
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d("alsong", "onMessageReceived")
         super.onMessageReceived(remoteMessage)
         CoroutineScope(Dispatchers.IO).launch {
+            if (isLoggedOut()) return@launch
             setNotificationImportance()
             notifyFromRemoteMessage(remoteMessage)
         }
+    }
+
+    private suspend fun isLoggedOut(): Boolean {
+        return dataStore.accessTokenFlow.first() == null
     }
 
     private suspend fun setNotificationImportance() {
@@ -48,24 +56,19 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
             Log.d("alsong", "${remoteMessage.data}")
             val title = remoteMessage.data[TITLE_KEY]
             val messageBody = remoteMessage.data[BODY_KEY]
+            val notificationType = remoteMessage.data[NOTIFICATION_TYPE_KEY]
             val offeringId = remoteMessage.data[OFFERING_ID_KEY]
-            displayNotification(title, messageBody, offeringId)
+            displayNotification(title, messageBody, notificationType, offeringId)
         }
     }
-
-//    private fun sendNotificationAtForeground(remoteMessage: RemoteMessage) {
-//        Log.d("alsong", "Foreground")
-//        remoteMessage.notification?.apply {
-//            sendNotification(title, body)
-//        }
-//    }
 
     private fun displayNotification(
         title: String?,
         body: String?,
-        offeringId: String?
+        notificationType: String?,
+        offeringId: String?,
     ) {
-        val pendingIntent = generatePendingIntent(offeringId)
+        val pendingIntent = generatePendingIntent(notificationType, offeringId)
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel(notificationManager)
         val uniqueNotificationId = System.currentTimeMillis().toInt()
@@ -73,9 +76,23 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.notify(uniqueNotificationId, notificationBuilder.build())
     }
 
-    private fun generatePendingIntent(offeringId: String?): PendingIntent? {
-        val intent = Intent(this, MainActivity::class.java)
-        // TODO(댓글방으로 가야 할 경우 offeringID를 넘겨주어야 함)
+    private fun generatePendingIntent(
+        type: String?,
+        offeringId: String?,
+    ): PendingIntent? {
+        val intent: Intent
+        val notificationType = NotificationType.of(type)
+        when (notificationType) {
+            NotificationType.COMMENT_DETAIL -> {
+                intent = Intent(this, CommentDetailActivity::class.java)
+                intent.putExtra(EXTRA_OFFERING_ID_KEY, offeringId?.toLong())
+            }
+            NotificationType.OFFERING_DETAIL -> {
+                intent = Intent(this, MainActivity::class.java)
+//                intent.putExtra(OFFERING_ID_KEY, offeringId)
+            }
+        }
+
         return PendingIntent.getActivity(
             this,
             MainActivity.PENDING_INTENT_REQUEST_CODE,
@@ -106,12 +123,13 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.i("fcm", "FCM토큰 갱신됨.")
+        Log.i("FCM", "FCM토큰 갱신됨. ${token}")
     }
 
     companion object {
         private const val TITLE_KEY = "title"
         private const val BODY_KEY = "body"
+        private const val NOTIFICATION_TYPE_KEY = "type"
         private const val OFFERING_ID_KEY = "offering_id"
     }
 }
