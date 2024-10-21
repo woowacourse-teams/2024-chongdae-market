@@ -41,7 +41,8 @@ class AuthIntegrationTest extends IntegrationTest {
     class KakaoLogin {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("accessToken").description("카카오 인증 토큰")
+                fieldWithPath("accessToken").description("카카오 인증 토큰"),
+                fieldWithPath("fcmToken").description("FCM 토큰")
         );
         List<FieldDescriptor> responseDescriptors = List.of(
                 fieldWithPath("memberId").description("회원 id"),
@@ -76,7 +77,8 @@ class AuthIntegrationTest extends IntegrationTest {
         @Test
         void should_loginSuccess_when_givenMemberCI() {
             KakaoLoginRequest request = new KakaoLoginRequest(
-                    "whatever"
+                    "whateverAccessToken",
+                    "whateverFcmToken"
             );
 
             given(spec).log().all()
