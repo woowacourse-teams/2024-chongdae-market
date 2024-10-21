@@ -7,15 +7,15 @@ sealed interface NotificationImportance {
     val channelId: String
     val channelName: String
 
-    data class Default(
-        override val importance: Int = NotificationManager.IMPORTANCE_DEFAULT,
-        override val channelId: String = "channel_importance_default",
-        override val channelName: String = "Default Channel",
-    ) : NotificationImportance
+    data object Default : NotificationImportance {
+        override val importance: Int = NotificationManager.IMPORTANCE_DEFAULT
+        override val channelId: String = "channel_importance_default"
+        override val channelName: String = "Default Channel"
+    }
 
-    data class High(
-        override val importance: Int = NotificationManager.IMPORTANCE_HIGH,
-        override val channelId: String = "channel_importance_high",
-        override val channelName: String = "High Channel",
-    ) : NotificationImportance
+    data object High : NotificationImportance {
+        override val importance: Int = NotificationManager.IMPORTANCE_HIGH
+        override val channelId: String = "channel_importance_high"
+        override val channelName: String = "High Channel"
+    }
 }

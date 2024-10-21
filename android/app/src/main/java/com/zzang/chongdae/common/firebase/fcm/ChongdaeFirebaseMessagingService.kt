@@ -44,13 +44,8 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private suspend fun setNotificationImportance() {
         when (dataStore.notificationImportanceFlow.first()) {
-            NotificationManager.IMPORTANCE_DEFAULT ->
-                notificationImportance =
-                    NotificationImportance.Default()
-
-            NotificationManager.IMPORTANCE_HIGH ->
-                notificationImportance =
-                    NotificationImportance.High()
+            NotificationManager.IMPORTANCE_DEFAULT -> notificationImportance = NotificationImportance.Default
+            NotificationManager.IMPORTANCE_HIGH -> notificationImportance = NotificationImportance.High
         }
     }
 
