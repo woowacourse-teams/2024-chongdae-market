@@ -77,6 +77,9 @@ health_check
 
 if [ $? -eq 0 ]; then
    remove_container $ACTIVE_CONTAINER
+else
+   echo "[-] health check fail"
+   exit 1
 fi
 
 echo "[-] clean docker image"
