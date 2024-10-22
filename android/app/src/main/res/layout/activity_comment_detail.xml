@@ -38,9 +38,9 @@
                 android:layout_marginStart="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
-                app:debouncedOnClick="@{() -> vm.onBackClick()}"
                 android:padding="@dimen/margin_10"
                 android:src="@drawable/btn_left_vector"
+                app:debouncedOnClick="@{() -> vm.onBackClick()}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toTopOf="@id/tv_title_text" />
 
             <View
-                android:id="@+id/white_round_view"
+                android:id="@+id/view_white_round"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_130"
                 android:layout_marginTop="@dimen/margin_20"
@@ -92,7 +92,7 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/white_round_view"
+                app:layout_constraintTop_toTopOf="@id/view_white_round"
                 app:offeringsStatusImageUrl="@{vm.commentOfferingInfo.imageUrl}" />
 
             <View
@@ -101,8 +101,8 @@
                 android:layout_height="@dimen/size_1"
                 android:background="@color/gray_100"
                 android:translationZ="1dp"
-                app:layout_constraintStart_toStartOf="@+id/white_round_view"
-                app:layout_constraintTop_toBottomOf="@id/white_round_view" />
+                app:layout_constraintStart_toStartOf="@+id/view_white_round"
+                app:layout_constraintTop_toBottomOf="@id/view_white_round" />
 
             <TextView
                 android:id="@+id/tv_update_status"
@@ -112,14 +112,14 @@
                 android:elevation="5dp"
                 android:fontFamily="@font/suit_semibold"
                 android:gravity="center"
-                app:debouncedOnClick="@{() -> vm.updateOfferingEvent()}"
                 android:text="@{vm.commentOfferingInfo.buttonText}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_15"
+                app:debouncedOnClick="@{() -> vm.updateOfferingEvent()}"
                 app:isVisible="@{vm.commentOfferingInfo.isProposer}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/white_round_view"
+                app:layout_constraintTop_toBottomOf="@+id/view_white_round"
                 app:layout_constraintWidth_percent="0.5"
                 tools:text="인원확정" />
 
@@ -128,8 +128,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_36"
                 android:background="@color/gray_100"
-                app:debouncedOnClick="@{() -> vm.toggleCollapsibleView()}"
                 android:translationZ="1dp"
+                app:debouncedOnClick="@{() -> vm.toggleCollapsibleView()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_update_status"
@@ -281,9 +281,9 @@
                 android:id="@+id/iv_send_comment"
                 android:layout_width="@dimen/size_50"
                 android:layout_height="@dimen/size_44"
-                app:debouncedOnClick="@{() -> vm.postComment()}"
                 android:padding="@dimen/margin_10"
                 android:src="@drawable/btn_comment_detail_send"
+                app:debouncedOnClick="@{() -> vm.postComment()}"
                 app:layout_constraintBottom_toBottomOf="@id/et_comment"
                 app:layout_constraintEnd_toEndOf="@id/et_comment"
                 app:layout_constraintTop_toTopOf="@id/et_comment" />
@@ -309,8 +309,8 @@
                 android:layout_width="@dimen/icon_size_24"
                 android:layout_height="@dimen/icon_size_24"
                 android:layout_marginEnd="@dimen/margin_20"
-                app:debouncedOnClick="@{() -> vm.onClickReport()}"
                 android:src="@drawable/ic_detail_report"
+                app:debouncedOnClick="@{() -> vm.onClickReport()}"
                 app:layout_constraintBottom_toBottomOf="@id/tv_offering_members"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_offering_members" />
@@ -391,8 +391,8 @@
                 android:layout_width="@dimen/icon_size_24"
                 android:layout_height="@dimen/icon_size_24"
                 android:layout_marginStart="@dimen/margin_20"
-                app:debouncedOnClick="@{() -> vm.onExitClick()}"
                 android:src="@drawable/btn_exit"
+                app:debouncedOnClick="@{() -> vm.onExitClick()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/horizon_line" />
