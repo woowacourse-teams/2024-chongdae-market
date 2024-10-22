@@ -1,6 +1,6 @@
 package com.zzang.chongdae.auth.repository
 
-import com.zzang.chongdae.auth.dto.request.TokenRequest
+import com.zzang.chongdae.auth.dto.request.TokensRequest
 import com.zzang.chongdae.auth.mapper.toDomain
 import com.zzang.chongdae.auth.model.Member
 import com.zzang.chongdae.auth.source.AuthRemoteDataSource
@@ -19,7 +19,7 @@ class AuthRepositoryImpl
             fcmToken: String,
         ): Result<Member, DataError.Network> {
             return authRemoteDataSource.saveLogin(
-                tokenRequest = TokenRequest(accessToken, fcmToken),
+                tokensRequest = TokensRequest(accessToken, fcmToken),
             ).map { it.toDomain() }
         }
 
