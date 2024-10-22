@@ -81,7 +81,7 @@
                     app:layout_constraintTop_toTopOf="@id/tv_title_text" />
 
                 <View
-                    android:id="@+id/white_round_view"
+                    android:id="@+id/view_white_round"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_130"
                     android:layout_marginTop="@dimen/margin_20"
@@ -99,7 +99,7 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/white_round_view"
+                    app:layout_constraintTop_toTopOf="@id/view_white_round"
                     app:offeringsStatusImageUrl="@{vm.commentOfferingInfo.imageUrl}" />
 
                 <View
@@ -108,8 +108,8 @@
                     android:layout_height="@dimen/size_1"
                     android:background="@color/gray_100"
                     android:translationZ="1dp"
-                    app:layout_constraintStart_toStartOf="@+id/white_round_view"
-                    app:layout_constraintTop_toBottomOf="@id/white_round_view" />
+                    app:layout_constraintStart_toStartOf="@+id/view_white_round"
+                    app:layout_constraintTop_toBottomOf="@id/view_white_round" />
 
                 <TextView
                     android:id="@+id/tv_update_status"
@@ -126,7 +126,7 @@
                     app:isVisible="@{vm.commentOfferingInfo.isProposer}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/white_round_view"
+                    app:layout_constraintTop_toBottomOf="@+id/view_white_round"
                     app:layout_constraintWidth_percent="0.5"
                     tools:text="인원확정" />
 
