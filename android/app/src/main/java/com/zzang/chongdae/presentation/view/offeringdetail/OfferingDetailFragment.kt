@@ -116,7 +116,8 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
 
         viewModel.showAlertEvent.observe(viewLifecycleOwner) {
             val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
-            alertBinding.tvDialogMessage.text = getString(R.string.offering_detail_participate_alert)
+            alertBinding.tvDialogMessage.text =
+                getString(R.string.offering_detail_participate_alert)
             alertBinding.listener = viewModel
 
             dialog.setContentView(alertBinding.root)
@@ -125,6 +126,10 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
 
         viewModel.alertCancelEvent.observe(viewLifecycleOwner) {
             dialog.dismiss()
+        }
+
+        viewModel.loading.observe(viewLifecycleOwner) {
+            startShimmer(it)
         }
     }
 
@@ -205,6 +210,14 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
                 Toast.LENGTH_SHORT,
             )
         toast?.show()
+    }
+
+    private fun startShimmer(isLoading: Boolean) {
+        if (isLoading) {
+            binding.sflOfferingDetail.startShimmer()
+            return
+        }
+        binding.sflOfferingDetail.stopShimmer()
     }
 
     companion object {
