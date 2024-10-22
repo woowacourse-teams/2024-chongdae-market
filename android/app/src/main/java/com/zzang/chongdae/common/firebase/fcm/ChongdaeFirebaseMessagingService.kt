@@ -134,11 +134,6 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
     }
 
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Log.i("FCM", "FCM토큰 갱신됨")
-    }
-
     companion object {
         private const val TITLE_KEY = "title"
         private const val BODY_KEY = "body"
