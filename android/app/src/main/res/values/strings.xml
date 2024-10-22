@@ -57,6 +57,7 @@
     <string name="my_page_privacy_text">개인정보처리 방침</string>
     <string name="my_page_logout_text">로그아웃</string>
     <string name="my_page_withdrawal_text">회원 탈퇴</string>
+    <string name="my_page_notification_available_text">푸시 알림 받기</string>
     <string name="my_page_notification_setting_text">푸시 알림 수신 시 팝업 띄우기</string>
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>

@@ -33,6 +33,7 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
         CoroutineScope(Dispatchers.IO).launch {
             if (isLoggedOut()) return@launch
+            if (isNotificationInactivate()) return@launch
             setNotificationImportance()
             notifyFromRemoteMessage(remoteMessage)
         }
@@ -40,6 +41,10 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
 
     private suspend fun isLoggedOut(): Boolean {
         return dataStore.accessTokenFlow.first() == null
+    }
+
+    private suspend fun isNotificationInactivate(): Boolean {
+        return !dataStore.notificationActivateFlow.first()
     }
 
     private suspend fun setNotificationImportance() {

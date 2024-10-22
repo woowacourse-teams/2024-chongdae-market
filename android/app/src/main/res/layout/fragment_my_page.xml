@@ -198,27 +198,54 @@
             app:layout_constraintTop_toTopOf="@id/iv_withdrawal" />
 
         <TextView
-            android:id="@+id/toggle_notification_importance"
+            android:id="@+id/switch_notification_activate_label"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:padding="@dimen/size_12"
+            android:text="@string/my_page_notification_available_text"
+            android:textSize="@dimen/size_16"
+            app:debouncedOnClick="@{() -> vm.onClickWithdrawal()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/size_100"
+            app:layout_constraintStart_toStartOf="@id/tv_withdrawal" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_notification_activate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@={vm.isNotificationActivate}"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationActivateSwitchChanged(isChecked)}"
+            android:theme="@style/NotificationImportanceSwitchTheme"
+            app:layout_constraintBottom_toBottomOf="@id/switch_notification_activate_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/size_100"
+            app:layout_constraintTop_toTopOf="@+id/switch_notification_activate_label"
+            tools:checked="true" />
+
+        <TextView
+            android:id="@+id/switch_notification_importance_label"
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
             android:layout_marginBottom="@dimen/size_20"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_notification_setting_text"
             android:textSize="@dimen/size_16"
+            app:isVisible="@{vm.isNotificationActivate}"
+            android:layout_marginTop="@dimen/size_30"
             app:debouncedOnClick="@{() -> vm.onClickWithdrawal()}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/switch_notification_activate_label"
             app:layout_constraintStart_toStartOf="@id/tv_withdrawal" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_notification_importance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@={vm.isSwitchChecked}"
-            tools:checked="true"
+            android:checked="@={vm.isNotificationImportanceHigh}"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationImportanceSwitchChanged(isChecked)}"
             android:theme="@style/NotificationImportanceSwitchTheme"
-            android:onCheckedChanged="@{(button, isChecked) -> vm.onSwitchChanged(isChecked)}"
-            app:layout_constraintBottom_toBottomOf="@id/toggle_notification_importance"
-            app:layout_constraintStart_toEndOf="@+id/toggle_notification_importance"
-            app:layout_constraintTop_toTopOf="@+id/toggle_notification_importance" />
+            app:isVisible="@{vm.isNotificationActivate}"
+            app:layout_constraintBottom_toBottomOf="@id/switch_notification_importance_label"
+            app:layout_constraintStart_toStartOf="@id/switch_notification_activate"
+            app:layout_constraintTop_toTopOf="@id/switch_notification_importance_label"
+            tools:checked="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

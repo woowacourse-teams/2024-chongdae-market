@@ -2,6 +2,7 @@ package com.zzang.chongdae.common.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -36,6 +37,11 @@ class UserPreferencesDataStore
                 preferences[REFRESH_TOKEN_KEY]
             }
 
+        val notificationActivateFlow: Flow<Boolean> =
+            dataStore.data.map { preferences ->
+                preferences[NOTIFICATION_ACTIVATE_KEY] ?: DEFAULT_NOTIFICATION_ACTIVATE
+            }
+
         val notificationImportanceFlow: Flow<Int> =
             dataStore.data.map { preferences ->
                 preferences[NOTIFICATION_IMPORTANCE_KEY] ?: DEFAULT_NOTIFICATION_IMPORTANCE
@@ -61,6 +67,12 @@ class UserPreferencesDataStore
             }
         }
 
+        suspend fun setNotificationActivate(activate: Boolean) {
+            dataStore.edit { preferences ->
+                preferences[NOTIFICATION_ACTIVATE_KEY] = activate
+            }
+        }
+
         suspend fun setNotificationImportance(importance: Int) {
             dataStore.edit { preferences ->
                 preferences[NOTIFICATION_IMPORTANCE_KEY] = importance
@@ -78,7 +90,9 @@ class UserPreferencesDataStore
             private val NICKNAME_KEY = stringPreferencesKey("nickname_key")
             private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token_key")
             private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token_key")
+            private val NOTIFICATION_ACTIVATE_KEY = booleanPreferencesKey("notification_activate_key")
             private val NOTIFICATION_IMPORTANCE_KEY = intPreferencesKey("notification_importance_key")
+            private const val DEFAULT_NOTIFICATION_ACTIVATE = true
             private const val DEFAULT_NOTIFICATION_IMPORTANCE = 4
         }
     }
