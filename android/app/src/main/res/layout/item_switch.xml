@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.mypage.MyPageViewModel" />
+
+        <variable
+            name="label"
+            type="String" />
+
+        <variable
+            name="checked"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_notification_activate"
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:layout_marginBottom="@dimen/size_100"
+            android:padding="@dimen/size_12"
+            android:text="@{label}"
+            tools:text="하하하"
+            android:layout_marginStart="@dimen/size_10"
+            android:textSize="@dimen/size_16"
+            app:debouncedOnClick="@{() -> vm.onClickWithdrawal()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_notification_activate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:checked="@{vm.isNotificationActivate}"
+            android:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationActivateSwitchChanged(isChecked)}"
+            android:padding="10dp"
+            android:theme="@style/NotificationImportanceSwitchTheme"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:checked="true" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:background="@color/gray_300"
+            android:translationZ="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_notification_activate" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

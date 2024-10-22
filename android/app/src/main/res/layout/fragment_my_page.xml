@@ -15,6 +15,16 @@
         android:layout_height="match_parent"
         tools:context=".presentation.view.mypage.MyPageFragment">
 
+        <include
+            layout="@layout/item_switch"
+            app:vm="@{vm}"
+            app:label="@{@string/my_page_notification_available_text}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="200dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/tv_my_page_title"
             android:layout_width="wrap_content"
