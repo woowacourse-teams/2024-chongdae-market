@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -24,6 +25,7 @@
             android:layout_marginTop="@dimen/size_50"
             android:layout_marginEnd="@dimen/size_50"
             android:fontFamily="@font/suit_bold"
+            tools:text="다이얼로그 메세지"
             android:text="@string/my_page_logout_dialog_description"
             android:textColor="@color/gray_500"
             android:textSize="@dimen/size_15"
@@ -38,10 +40,10 @@
             android:layout_marginTop="@dimen/size_50"
             android:background="@color/red_100"
             android:fontFamily="@font/suit_medium"
+            app:debouncedOnClick="@{() -> listener.onClickCancel()}"
             android:text="@string/offering_detail_dialog_cancel_text"
             android:textColor="@color/main_color"
             android:textSize="@dimen/size_15"
-            app:debouncedOnClick="@{() -> listener.onClickCancel()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_confirm"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,9 +59,10 @@
             android:background="@color/main_color"
             android:fontFamily="@font/suit_semibold"
             android:text="@string/offering_detail_dialog_confirm_text"
+            app:debouncedOnClick="@{() -> listener.onClickConfirm()}"
+            app:debounceTime="@{1200L}"
             android:textColor="@color/white"
             android:textSize="@dimen/size_15"
-            app:debouncedOnClick="@{() -> listener.onClickConfirm()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_cancel"
