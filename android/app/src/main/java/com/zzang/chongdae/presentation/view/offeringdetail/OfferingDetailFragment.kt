@@ -215,15 +215,9 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     private fun startShimmer(isLoading: Boolean) {
         if (isLoading) {
             binding.sflOfferingDetail.startShimmer()
-            binding.sflOfferingDetail.visibility = View.VISIBLE
-            binding.svLayout.visibility = View.GONE
-            binding.btnParticipate.visibility = View.GONE
-            binding.btnMoveCommentDetail.visibility = View.GONE
-        } else {
-            binding.sflOfferingDetail.stopShimmer()
-            binding.sflOfferingDetail.visibility = View.GONE
-            binding.svLayout.visibility = View.VISIBLE
+            return
         }
+        binding.sflOfferingDetail.stopShimmer()
     }
 
     companion object {
