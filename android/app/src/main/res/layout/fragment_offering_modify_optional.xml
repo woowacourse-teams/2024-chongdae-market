@@ -272,7 +272,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
                 app:debouncedOnClick="@{() -> vm.postOfferingModify()}"
-                app:debounceTime="@{800L}"
+                app:debounceTime="@{1200L}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
