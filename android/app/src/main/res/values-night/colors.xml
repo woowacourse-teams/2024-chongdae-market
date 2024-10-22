@@ -6,6 +6,7 @@
     <color name="offering_detail_background">#FF303030</color>
     <color name="default_icon_color">#FFFFFFFF</color>
     <color name="my_page_title">#FFFFFFFF</color>
+    <color name="black_700">#FFFFFFFF</color>
     <color name="black_1000">#FFFFFFFF</color>
     <color name="black_1100">#FFFFFFFF</color>
 </resources>
