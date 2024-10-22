@@ -89,6 +89,7 @@ glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", versi
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-message = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 
 # mockk
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
