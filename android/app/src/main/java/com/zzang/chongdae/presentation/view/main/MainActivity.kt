@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view
+package com.zzang.chongdae.presentation.view.main
 
 import android.Manifest
 import android.content.Context
@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityMainBinding
+import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +30,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel by viewModels<MainViewModel>()
+
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
 
@@ -38,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         intent.getBooleanExtra(NOTIFICATION_FLAG_KEY, DEFAULT_NOTIFICATION_FLAG)
     }
 
+    private var toast: Toast? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationPermission()
@@ -46,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigation()
         handleDeepLink(intent)
         handleNotificationTrigger()
+        setupObserve()
     }
 
     private fun requestNotificationPermission() {
@@ -108,10 +116,10 @@ class MainActivity : AppCompatActivity() {
                 if (offeringId != null) {
                     openOfferingDetailFragment(offeringId)
                 } else {
-                    Toast.makeText(this, "공모 ID가 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
+                    showToast(getString(R.string.main_invalid_offering_id))
                 }
             } else {
-                Toast.makeText(this, "Deeplink가 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
+                showToast(getString(R.string.main_invalid_deeplink))
             }
         }
     }
@@ -127,6 +135,19 @@ class MainActivity : AppCompatActivity() {
         if (isNotificationTriggered) {
             openOfferingDetailFragment(offeringIdFromNotification)
         }
+    }
+
+    private fun setupObserve() {
+        viewModel.fcmTokenEmptyEvent.observe(this) {
+            LoginActivity.startActivity(this)
+            showToast(getString(R.string.main_require_re_login))
+        }
+    }
+
+    private fun showToast(message: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT,)
+        toast?.show()
     }
 
     override fun onDestroy() {

@@ -31,6 +31,11 @@
     <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
     <string name="login_with_kakao_button">카카오 로그인</string>
 
+    <!--    main-->
+    <string name="main_require_re_login">재로그인이 필요합니다. 다시 로그인해주세요!</string>
+    <string name="main_invalid_offering_id">공모 ID가 올바르지 않습니다.</string>
+    <string name="main_invalid_deeplink">Deeplink가 올바르지 않습니다.</string>
+
     <!--    menu-->
     <string name="bottom_home">홈</string>
     <string name="bottom_chat">채팅방</string>

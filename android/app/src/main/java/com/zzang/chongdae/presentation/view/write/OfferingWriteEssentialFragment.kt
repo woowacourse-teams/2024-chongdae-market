@@ -18,7 +18,7 @@ import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
 import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
-import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.main.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar

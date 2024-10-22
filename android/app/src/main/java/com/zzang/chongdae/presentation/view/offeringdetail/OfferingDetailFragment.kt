@@ -20,7 +20,7 @@ import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.DialogDeleteOfferingBinding
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
-import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.main.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
 import com.zzang.chongdae.presentation.view.login.LoginActivity

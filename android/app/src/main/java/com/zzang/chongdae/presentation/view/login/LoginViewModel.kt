@@ -48,6 +48,7 @@ class LoginViewModel
                 when (val result = authRepository.saveLogin(accessToken = accessToken, fcmToken = fcmToken)) {
                     is Result.Success -> {
                         userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
+                        userPreferencesDataStore.saveFcmToken(fcmToken)
                         _loginSuccessEvent.setValue(Unit)
                     }
 

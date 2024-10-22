@@ -37,6 +37,11 @@ class UserPreferencesDataStore
                 preferences[REFRESH_TOKEN_KEY]
             }
 
+        val fcmTokenFlow: Flow<String?> =
+            dataStore.data.map { preferences ->
+                preferences[FCM_TOKEN_KEY]
+            }
+
         val notificationActivateFlow: Flow<Boolean> =
             dataStore.data.map { preferences ->
                 preferences[NOTIFICATION_ACTIVATE_KEY] ?: DEFAULT_NOTIFICATION_ACTIVATE
@@ -57,13 +62,19 @@ class UserPreferencesDataStore
             }
         }
 
-        suspend fun saveTokens(
+        suspend fun saveAccountTokens(
             accessToken: String,
             refreshToken: String,
         ) {
             dataStore.edit { preferences ->
                 preferences[ACCESS_TOKEN_KEY] = accessToken
                 preferences[REFRESH_TOKEN_KEY] = refreshToken
+            }
+        }
+
+        suspend fun saveFcmToken(fcmToken: String) {
+            dataStore.edit { preferences ->
+                preferences[FCM_TOKEN_KEY] = fcmToken
             }
         }
 
@@ -90,6 +101,7 @@ class UserPreferencesDataStore
             private val NICKNAME_KEY = stringPreferencesKey("nickname_key")
             private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token_key")
             private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token_key")
+            private val FCM_TOKEN_KEY = stringPreferencesKey("fcm_token_key")
             private val NOTIFICATION_ACTIVATE_KEY = booleanPreferencesKey("notification_activate_key")
             private val NOTIFICATION_IMPORTANCE_KEY = intPreferencesKey("notification_importance_key")
             private const val DEFAULT_NOTIFICATION_ACTIVATE = true
