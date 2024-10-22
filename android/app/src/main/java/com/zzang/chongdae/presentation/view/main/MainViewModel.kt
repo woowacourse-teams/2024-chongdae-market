@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
@@ -12,21 +11,23 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val userPreferencesDataStore: UserPreferencesDataStore,
-) : ViewModel() {
-    private val _fcmTokenEmptyEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val fcmTokenEmptyEvent: SingleLiveData<Unit> get() = _fcmTokenEmptyEvent
+class MainViewModel
+    @Inject
+    constructor(
+        private val userPreferencesDataStore: UserPreferencesDataStore,
+    ) : ViewModel() {
+        private val _fcmTokenEmptyEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val fcmTokenEmptyEvent: SingleLiveData<Unit> get() = _fcmTokenEmptyEvent
 
-    init {
-        makeFcmTokenEmptyEvent()
-    }
+        init {
+            makeFcmTokenEmptyEvent()
+        }
 
-    private fun makeFcmTokenEmptyEvent() {
-        viewModelScope.launch {
-            if (userPreferencesDataStore.fcmTokenFlow.first() != null) return@launch
-            userPreferencesDataStore.removeAllData()
-            _fcmTokenEmptyEvent.setValue(Unit)
+        private fun makeFcmTokenEmptyEvent() {
+            viewModelScope.launch {
+                if (userPreferencesDataStore.fcmTokenFlow.first() != null) return@launch
+                userPreferencesDataStore.removeAllData()
+                _fcmTokenEmptyEvent.setValue(Unit)
+            }
         }
     }
-}

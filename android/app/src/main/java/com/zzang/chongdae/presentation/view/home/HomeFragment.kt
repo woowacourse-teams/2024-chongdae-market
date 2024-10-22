@@ -27,9 +27,9 @@ import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
-import com.zzang.chongdae.presentation.view.main.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.login.LoginActivity
+import com.zzang.chongdae.presentation.view.main.MainActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
 import dagger.hilt.android.AndroidEntryPoint

@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         toast?.cancel()
-        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT,)
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         toast?.show()
     }
 
