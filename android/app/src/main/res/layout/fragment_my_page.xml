@@ -96,6 +96,7 @@
             android:layout_height="@dimen/size_1"
             android:layout_marginTop="@dimen/margin_30"
             android:background="@color/gray_300"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_nickname_title" />
 
@@ -117,9 +118,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:checked="@={vm.isNotificationImportanceHigh}"
+            app:isVisible="@{vm.isNotificationActivate}"
             app:label="@{@string/my_page_notification_setting_text}"
             app:layout_constraintStart_toStartOf="parent"
-            app:isVisible="@{vm.isNotificationActivate}"
             app:layout_constraintTop_toBottomOf="@id/switch_notification_activate"
             app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationImportanceSwitchChanged(isChecked)}"
             app:vm="@{vm}" />

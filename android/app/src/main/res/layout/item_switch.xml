@@ -30,7 +30,7 @@
         <TextView
             android:id="@+id/tv_notification_activate"
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
-            android:layout_marginStart="@dimen/size_10"
+            android:layout_marginStart="@dimen/size_40"
             android:padding="@dimen/size_12"
             android:layout_marginVertical="10dp"
             android:text="@{label}"
@@ -45,7 +45,7 @@
             android:id="@+id/switch_notification_activate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/size_40"
             android:checked="@{checked}"
             android:onCheckedChanged="@{onCheckedChanged}"
             android:padding="16dp"
@@ -54,15 +54,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:checked="true" />
-
-        <View
-            android:id="@+id/view_divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1"
-            android:background="@color/gray_300"
-            android:translationZ="1dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
