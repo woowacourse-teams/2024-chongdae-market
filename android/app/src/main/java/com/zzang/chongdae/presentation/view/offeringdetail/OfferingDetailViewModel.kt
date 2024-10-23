@@ -95,8 +95,8 @@ class OfferingDetailViewModel
         private val _alertCancelEvent = MutableSingleLiveData<Unit>()
         val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
 
-        private val _loading: MutableLiveData<Boolean> = MutableLiveData(false)
-        val loading: LiveData<Boolean> get() = _loading
+        private val _isOfferingDetailLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isOfferingDetailLoading: LiveData<Boolean> get() = _isOfferingDetailLoading
 
         init {
             loadOffering()
@@ -104,7 +104,7 @@ class OfferingDetailViewModel
 
         fun loadOffering() {
             viewModelScope.launch {
-                _loading.value = true
+                _isOfferingDetailLoading.value = true
                 when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
@@ -115,7 +115,7 @@ class OfferingDetailViewModel
                                     }
 
                                     is Result.Error -> {
-                                        _loading.value = false
+                                        _isOfferingDetailLoading.value = false
                                         userPreferencesDataStore.removeAllData()
                                         _refreshTokenExpiredEvent.setValue(Unit)
                                         return@launch
@@ -133,7 +133,7 @@ class OfferingDetailViewModel
                         }
 
                     is Result.Success -> {
-                        _loading.value = false
+                        _isOfferingDetailLoading.value = false
                         _offeringDetail.value = result.data
                         _currentCount.value = result.data.currentCount.value
                         _offeringCondition.value = result.data.condition

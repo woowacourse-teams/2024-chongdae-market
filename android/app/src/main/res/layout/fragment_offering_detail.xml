@@ -23,7 +23,7 @@
             android:layout_height="0dp"
             android:overScrollMode="never"
             android:scrollbars="none"
-            app:isVisible="@{!vm.loading}"
+            app:isVisible="@{!vm.isOfferingDetailLoading}"
             app:layout_constraintBottom_toTopOf="@id/btn_participate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -363,7 +363,7 @@
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"
             app:debouncedOnClick="@{() -> vm.onParticipateClick()}"
-            app:isVisible="@{!vm.isParticipated &amp;&amp; !vm.loading}"
+            app:isVisible="@{!vm.isParticipated &amp;&amp; !vm.isOfferingDetailLoading}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -383,7 +383,7 @@
             android:text="@string/offering_detail_move_comment_detail"
             android:textColor="@color/white"
             app:debouncedOnClick="@{() -> vm.onClickMoveCommentDetail()}"
-            app:isVisible="@{vm.isParticipated &amp;&amp; !vm.loading}"
+            app:isVisible="@{vm.isParticipated &amp;&amp; !vm.isOfferingDetailLoading}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -393,13 +393,23 @@
             android:id="@+id/sfl_offering_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:isVisible="@{vm.loading}"
+            app:isVisible="@{vm.isOfferingDetailLoading}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <include layout="@layout/fragment_offering_detail_shimmer" />
 
         </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/main_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
