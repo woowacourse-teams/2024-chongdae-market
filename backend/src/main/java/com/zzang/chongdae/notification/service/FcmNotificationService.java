@@ -31,16 +31,16 @@ public class FcmNotificationService {
     private final RoomStatusMessageManager roomStatusMessageManager; // TODO: 의존성 리팩터링
 
     public String participate(OfferingMemberEntity offeringMember) {
-        Message message = participationMessageManager.messageWhenParticipate(offeringMember);
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
+        Message message = participationMessageManager.messageWhenParticipate(offeringMember);
         return notificationSender.send(message);
     }
 
     public String cancelParticipation(OfferingMemberEntity offeringMember) {
-        Message message = participationMessageManager.messageWhenCancelParticipate(offeringMember);
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
+        Message message = participationMessageManager.messageWhenCancelParticipate(offeringMember);
         return notificationSender.send(message);
     }
 
@@ -50,9 +50,9 @@ public class FcmNotificationService {
     }
 
     public String saveOffering(OfferingEntity offering) {
+        Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         FcmTopic topic = FcmTopic.proposerTopic(offering);
         notificationSubscriber.subscribe(offering.getMember(), topic);
-        Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         return notificationSender.send(message);
     }
 
