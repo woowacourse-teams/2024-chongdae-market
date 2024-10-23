@@ -142,7 +142,7 @@ public class OfferingService {
         LocalDate thresholdDate = LocalDate.now(clock);
         LocalDate targetDate = offeringMeetingDateTime.toLocalDate();
         if (targetDate.isBefore(thresholdDate)) {
-            throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW);
+            throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TODAY);
         }
     }
 
