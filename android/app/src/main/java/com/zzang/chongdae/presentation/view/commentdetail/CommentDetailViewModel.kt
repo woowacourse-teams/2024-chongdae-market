@@ -75,6 +75,9 @@ class CommentDetailViewModel
         private val _event = MutableLiveData<Event<CommentDetailEvent>>()
         val event: LiveData<Event<CommentDetailEvent>> get() = _event
 
+        private val _exitLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val exitLoading: LiveData<Boolean> get() = _exitLoading
+
         init {
             startPolling()
             updateCommentInfo()
@@ -207,6 +210,7 @@ class CommentDetailViewModel
         }
 
         private fun exitOffering() {
+            _exitLoading.value = true
             viewModelScope.launch {
                 when (val result = participantRepository.deleteParticipations(offeringId)) {
                     is Result.Success -> {
@@ -237,6 +241,7 @@ class CommentDetailViewModel
                             }
                         }
                 }
+                _exitLoading.value = false
             }
         }
 
@@ -249,6 +254,7 @@ class CommentDetailViewModel
         }
 
         override fun onClickConfirm() {
+            _event.value = Event(CommentDetailEvent.AlertCancelled)
             exitOffering()
         }
 
