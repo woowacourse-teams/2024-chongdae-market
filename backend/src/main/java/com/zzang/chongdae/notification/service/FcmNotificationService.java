@@ -30,30 +30,30 @@ public class FcmNotificationService {
     private final ParticipationMessageManager participationMessageManager;
     private final RoomStatusMessageManager roomStatusMessageManager; // TODO: 의존성 리팩터링
 
-    public String participate(OfferingMemberEntity offeringMember) {
+    public void participate(OfferingMemberEntity offeringMember) {
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
         Message message = participationMessageManager.messageWhenParticipate(offeringMember);
-        return notificationSender.send(message);
+        notificationSender.send(message);
     }
 
-    public String cancelParticipation(OfferingMemberEntity offeringMember) {
+    public void cancelParticipation(OfferingMemberEntity offeringMember) {
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
         Message message = participationMessageManager.messageWhenCancelParticipate(offeringMember);
-        return notificationSender.send(message);
+        notificationSender.send(message);
     }
 
-    public String updateStatus(OfferingEntity offering) {
+    public void updateStatus(OfferingEntity offering) {
         Message message = roomStatusMessageManager.messageWhenUpdateStatus(offering);
-        return notificationSender.send(message);
+        notificationSender.send(message);
     }
 
-    public String saveOffering(OfferingEntity offering) {
+    public void saveOffering(OfferingEntity offering) {
         Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         FcmTopic topic = FcmTopic.proposerTopic(offering);
         notificationSubscriber.subscribe(offering.getMember(), topic);
-        return notificationSender.send(message);
+        notificationSender.send(message);
     }
 
     public void deleteOffering(OfferingEntity offering) {
