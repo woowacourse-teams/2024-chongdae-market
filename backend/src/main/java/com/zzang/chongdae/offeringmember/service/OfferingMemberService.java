@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offeringmember.service;
 
+import com.zzang.chongdae.event.domain.ParticipateEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -21,6 +22,7 @@ import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import com.zzang.chongdae.offeringmember.service.dto.ProposerResponseItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class OfferingMemberService {
     private final FcmNotificationService notificationService;
     private final OfferingMemberRepository offeringMemberRepository;
     private final OfferingRepository offeringRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @WriterDatabase
     @Transactional
@@ -46,7 +49,8 @@ public class OfferingMemberService {
         offering.participate();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        notificationService.participate(saved);
+
+        eventPublisher.publishEvent(new ParticipateEvent(this, saved));
         return offeringMember.getId();
     }
 

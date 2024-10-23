@@ -33,7 +33,7 @@ public class AuthService {
     @WriterDatabase
     @Transactional
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
-        String loginId = authClient.getKakaoUserInfo(request.accessToken());
+        String loginId = request.accessToken(); // authClient.getKakaoUserInfo(request.accessToken()); TODO: 원복
         AuthProvider provider = AuthProvider.KAKAO;
         MemberEntity member = memberRepository.findByLoginId(loginId)
                 .orElseGet(() -> signup(provider, loginId, request.fcmToken()));

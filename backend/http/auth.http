@@ -3,7 +3,7 @@ POST {{base-url}}/auth/login/kakao
 Content-Type: application/json
 
 {
-  "accessToken": "ffff"
+  "accessToken": "ffff2"
 }
 
 ### 토큰 재발급 API
