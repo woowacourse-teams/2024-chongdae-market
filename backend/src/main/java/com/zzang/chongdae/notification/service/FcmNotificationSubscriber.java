@@ -28,7 +28,7 @@ public class FcmNotificationSubscriber implements NotificationSubscriber {
             log.info("구독 성공 개수: {}", response.getSuccessCount());
             log.info("구독 실패 개수: {}", response.getFailureCount());
             return response;
-        } catch (FirebaseMessagingException e) {
+        } catch (FirebaseMessagingException | IllegalArgumentException e) {
             return subscribeWhenFail(e);
         }
     }
@@ -41,12 +41,12 @@ public class FcmNotificationSubscriber implements NotificationSubscriber {
             log.info("구독 취소 성공 개수: {}", response.getSuccessCount());
             log.info("구독 취소 실패 개수: {}", response.getFailureCount());
             return response;
-        } catch (FirebaseMessagingException e) {
+        } catch (FirebaseMessagingException | IllegalArgumentException e) {
             return subscribeWhenFail(e);
         }
     }
 
-    private TopicManagementResponse subscribeWhenFail(FirebaseMessagingException e) {
+    private TopicManagementResponse subscribeWhenFail(Exception e) {
         if (isInvalidToken(e)) {
             log.error("토픽 구독 실패: {}", "유효하지 않은 토큰");
             return null;
@@ -56,7 +56,7 @@ public class FcmNotificationSubscriber implements NotificationSubscriber {
         throw new MarketException(NotificationErrorCode.CANNOT_SEND_ALARM);
     }
 
-    private boolean isInvalidToken(FirebaseMessagingException e) {
+    private boolean isInvalidToken(Exception e) {
         return e.getMessage().contains(ERROR_MESSAGE_WHEN_INVALID_TOKEN)
                 || e.getMessage().contains(ERROR_MESSAGE_WHEN_OLD_TOKEN)
                 || e.getMessage().contains(ERROR_MESSAGE_WHEN_TOKEN_EMPTY)
