@@ -6,8 +6,10 @@ import com.zzang.chongdae.notification.domain.FcmData;
 import com.zzang.chongdae.notification.domain.FcmToken;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class ParticipationMessageManager {
 
@@ -16,10 +18,6 @@ public class ParticipationMessageManager {
     private static final String MESSAGE_TYPE = "comment_detail";
 
     private final FcmMessageCreator messageCreator;
-
-    public ParticipationMessageManager() {
-        this.messageCreator = FcmMessageCreator.getInstance();
-    }
 
     public Message messageWhenParticipate(OfferingMemberEntity offeringMember) {
         OfferingEntity offering = offeringMember.getOffering();

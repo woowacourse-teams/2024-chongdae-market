@@ -8,20 +8,16 @@ import com.zzang.chongdae.notification.exception.NotificationErrorCode;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.util.Arrays;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+@RequiredArgsConstructor
 @Component
 public class RoomStatusMessageManager {
 
     private static final String MESSAGE_TYPE = "comment_detail";
 
     private final FcmMessageCreator messageCreator;
-
-    public RoomStatusMessageManager() {
-        this.messageCreator = FcmMessageCreator.getInstance();
-    }
 
     public Message messageWhenUpdateStatus(OfferingEntity offering) {
         FcmTopic topic = FcmTopic.participantTopic(offering);

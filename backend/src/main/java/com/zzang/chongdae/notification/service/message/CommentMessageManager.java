@@ -8,10 +8,10 @@ import com.zzang.chongdae.notification.domain.FcmTokens;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import javax.annotation.Nullable;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+@RequiredArgsConstructor
 @Component
 public class CommentMessageManager {
 
@@ -19,10 +19,6 @@ public class CommentMessageManager {
     private static final String MESSAGE_TYPE = "comment_detail";
 
     private final FcmMessageCreator messageCreator;
-
-    public CommentMessageManager() {
-        this.messageCreator = FcmMessageCreator.getInstance();
-    }
 
     @Nullable
     public MulticastMessage messageWhenSaveComment(CommentEntity comment, List<OfferingMemberEntity> offeringMembers) {
