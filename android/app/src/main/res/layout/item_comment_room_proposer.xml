@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,59 +14,69 @@
             type="com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         app:debouncedOnClick="@{() -> onCommentRoomClickListener.onClick(commentRoom.id, commentRoom.title)}">
 
         <ImageView
             android:id="@+id/iv_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="18dp"
+            android:layout_width="@dimen/size_48"
+            android:layout_height="@dimen/size_48"
+            android:layout_marginStart="@dimen/size_25"
+            android:layout_marginTop="@dimen/size_18"
             android:src="@drawable/ic_comment_room_proposer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_offering_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/size_13"
+            android:layout_marginTop="@dimen/size_3"
+            android:ellipsize="end"
             android:fontFamily="@font/suit_medium"
+            android:maxLines="1"
             android:text="@{commentRoom.title}"
             android:textColor="@color/black_900"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/iv_profile"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="공구 제목 이름이 들어가요" />
-
-        <TextView
-            android:id="@+id/tv_offering_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3.25dp"
-            android:fontFamily="@font/suit_medium"
-            android:text="@{commentRoom.latestComment}"
-            android:textColor="@color/gray_500"
-            android:textSize="14dp"
-            app:layout_constraintStart_toStartOf="@id/tv_offering_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
-            tools:text="물품에 대해 설명 드릴게요." />
+            android:textSize="@dimen/size_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_last_comment_time"
+            app:layout_constraintStart_toEndOf="@+id/iv_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_profile"
+            tools:text="엄청나게 긴 제목이 들어가는 것을 표현하는 중 입니다" />
 
         <TextView
             android:id="@+id/tv_last_comment_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="18dp"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/gray_900"
             app:formattedAmPmTime="@{commentRoom.latestCommentTime}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_offering_title"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_offering_title"
             app:layout_constraintTop_toTopOf="@id/tv_offering_title"
             tools:text="오전 10:33" />
+
+        <TextView
+            android:id="@+id/tv_offering_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3.25dp"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:ellipsize="end"
+            android:fontFamily="@font/suit_medium"
+            android:maxLines="1"
+            android:text="@{commentRoom.latestComment}"
+            android:textColor="@color/gray_500"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_offering_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
+            tools:text="물품에 대해 설명 드릴게요. 물품에 대해 설명 드릴게요. 물품에 대해 설명 드릴게요. " />
 
         <View
             android:id="@+id/view_divide_line"

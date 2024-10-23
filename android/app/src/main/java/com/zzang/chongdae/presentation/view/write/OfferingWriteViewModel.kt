@@ -94,7 +94,10 @@ class OfferingWriteViewModel
         private val _writeUIState = MutableLiveData<WriteUIState>(WriteUIState.Initial)
         val writeUIState: LiveData<WriteUIState> get() = _writeUIState
 
-        val isLoading: LiveData<Boolean> = _writeUIState.map { it is WriteUIState.Loading }
+        val isImageUpLoading: LiveData<Boolean> = _writeUIState.map { it is WriteUIState.Loading }
+
+        private val _isSubmitLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isSubmitLoading: LiveData<Boolean> get() = _isSubmitLoading
 
         init {
             _essentialSubmitButtonEnabled.apply {
@@ -267,6 +270,7 @@ class OfferingWriteViewModel
         }
 
         fun postOffering() {
+            _isSubmitLoading.value = true
             val title = title.value ?: return
             val totalCount = totalCount.value ?: return
             val totalPrice = totalPrice.value ?: return
@@ -308,7 +312,10 @@ class OfferingWriteViewModel
                                 ),
                         )
                 ) {
-                    is Result.Success -> makeSubmitOfferingEvent()
+                    is Result.Success -> {
+                        makeSubmitOfferingEvent()
+                        _isSubmitLoading.value = false
+                    }
 
                     is Result.Error -> {
                         Log.e("error", "postOffering: ${result.error}")
@@ -325,6 +332,7 @@ class OfferingWriteViewModel
                                     WriteUIState.Error(R.string.write_error_writing, "${result.error}")
                             }
                         }
+                        _isSubmitLoading.value = false
                     }
                 }
             }

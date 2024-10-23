@@ -1,14 +1,20 @@
-package com.zzang.chongdae.presentation.view
+package com.zzang.chongdae.presentation.view.main
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.zzang.chongdae.R
 import com.zzang.chongdae.databinding.ActivityMainBinding
+import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,15 +30,45 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel by viewModels<MainViewModel>()
+
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
 
+    private val offeringIdFromNotification by lazy {
+        intent.getLongExtra(NOTIFICATION_OFFERING_ID_KEY, OFFERING_ID_ERROR)
+    }
+    private val isNotificationTriggered by lazy {
+        intent.getBooleanExtra(NOTIFICATION_FLAG_KEY, DEFAULT_NOTIFICATION_FLAG)
+    }
+
+    private var toast: Toast? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestNotificationPermission()
         initBinding()
         initNavController()
         setupBottomNavigation()
         handleDeepLink(intent)
+        handleNotificationTrigger()
+        setupObserve()
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.POST_NOTIFICATIONS,
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    PENDING_INTENT_REQUEST_CODE,
+                )
+            }
+        }
     }
 
     private fun initBinding() {
@@ -79,10 +116,10 @@ class MainActivity : AppCompatActivity() {
                 if (offeringId != null) {
                     openOfferingDetailFragment(offeringId)
                 } else {
-                    Toast.makeText(this, "공모 ID가 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
+                    showToast(getString(R.string.main_invalid_offering_id))
                 }
             } else {
-                Toast.makeText(this, "Deeplink가 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
+                showToast(getString(R.string.main_invalid_deeplink))
             }
         }
     }
@@ -94,6 +131,25 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.action_home_fragment_to_offering_detail_fragment, bundle)
     }
 
+    private fun handleNotificationTrigger() {
+        if (isNotificationTriggered) {
+            openOfferingDetailFragment(offeringIdFromNotification)
+        }
+    }
+
+    private fun setupObserve() {
+        viewModel.fcmTokenEmptyEvent.observe(this) {
+            LoginActivity.startActivity(this)
+            showToast(getString(R.string.main_require_re_login))
+        }
+    }
+
+    private fun showToast(message: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast?.show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -102,6 +158,11 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val SCHEME = "chongdaeapp"
         private const val HOST = "offerings"
+        const val NOTIFICATION_OFFERING_ID_KEY = "notification_offering_id_key"
+        const val NOTIFICATION_FLAG_KEY = "notification_flag_key"
+        private const val OFFERING_ID_ERROR = -1L
+        private const val DEFAULT_NOTIFICATION_FLAG = false
+        private const val PENDING_INTENT_REQUEST_CODE = 1001
 
         fun startActivity(context: Context) =
             Intent(context, MainActivity::class.java).run {

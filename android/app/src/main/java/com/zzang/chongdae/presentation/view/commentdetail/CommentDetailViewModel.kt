@@ -19,6 +19,9 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.presentation.util.Event
 import com.zzang.chongdae.presentation.view.commentdetail.event.CommentDetailEvent
+import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModelListWithSeparators
 import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel.Companion.toUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel
@@ -53,8 +56,8 @@ class CommentDetailViewModel
 
         val commentContent = MutableLiveData("")
 
-        private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
-        val comments: LiveData<List<Comment>> get() = _comments
+        private val _comments: MutableLiveData<List<CommentUiModel>> = MutableLiveData()
+        val comments: LiveData<List<CommentUiModel>> get() = _comments
         private var cachedComments: List<Comment> = emptyList()
 
         private val _commentOfferingInfo = MutableLiveData<CommentOfferingInfoUiModel>()
@@ -71,6 +74,9 @@ class CommentDetailViewModel
 
         private val _event = MutableLiveData<Event<CommentDetailEvent>>()
         val event: LiveData<Event<CommentDetailEvent>> get() = _event
+
+        private val _exitLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val exitLoading: LiveData<Boolean> get() = _exitLoading
 
         init {
             startPolling()
@@ -144,15 +150,11 @@ class CommentDetailViewModel
                     is Result.Success -> {
                         val newComments = result.data
                         if (cachedComments != newComments) {
-                            _comments.value = newComments
+                            _comments.value = newComments.toUiModelListWithSeparators()
                             cachedComments = newComments
                         }
                     }
-
-                    is Result.Error ->
-                        handleNetworkError(result.error) {
-                            loadComments()
-                        }
+                    is Result.Error -> handleNetworkError(result.error) { loadComments() }
                 }
             }
         }
@@ -208,6 +210,7 @@ class CommentDetailViewModel
         }
 
         private fun exitOffering() {
+            _exitLoading.value = true
             viewModelScope.launch {
                 when (val result = participantRepository.deleteParticipations(offeringId)) {
                     is Result.Success -> {
@@ -231,11 +234,14 @@ class CommentDetailViewModel
                                 }
                             }
 
+                            DataError.Network.CONNECTION_ERROR -> {}
+
                             else -> {
                                 return@launch
                             }
                         }
                 }
+                _exitLoading.value = false
             }
         }
 
@@ -248,6 +254,7 @@ class CommentDetailViewModel
         }
 
         override fun onClickConfirm() {
+            _event.value = Event(CommentDetailEvent.AlertCancelled)
             exitOffering()
         }
 

@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AccessTokenRequest(
+data class TokensRequest(
     @SerialName("accessToken") val accessToken: String,
+    @SerialName("fcmToken") val fcmToken: String,
 )

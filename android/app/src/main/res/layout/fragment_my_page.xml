@@ -90,6 +90,41 @@
             app:layout_constraintStart_toEndOf="@id/tv_nickname"
             app:layout_constraintTop_toTopOf="@id/tv_nickname" />
 
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_marginTop="@dimen/margin_30"
+            android:background="@color/gray_300"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_nickname_title" />
+
+        <include
+            android:id="@+id/switch_notification_activate"
+            layout="@layout/item_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:checked="@={vm.isNotificationActivate}"
+            app:label="@{@string/my_page_notification_available_text}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_divider"
+            app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationActivateSwitchChanged(isChecked)}"
+            app:vm="@{vm}" />
+
+        <include
+            android:id="@+id/switch_notification_popup"
+            layout="@layout/item_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:checked="@={vm.isNotificationImportanceHigh}"
+            app:isVisible="@{vm.isNotificationActivate}"
+            app:label="@{@string/my_page_notification_setting_text}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/switch_notification_activate"
+            app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationImportanceSwitchChanged(isChecked)}"
+            app:vm="@{vm}" />
+
         <ImageView
             android:id="@+id/iv_nickname_modification"
             android:layout_width="wrap_content"
@@ -125,20 +160,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="42dp"
-            android:layout_marginTop="55dp"
             android:src="@drawable/ic_my_page_terms_of_use"
+            app:layout_constraintBottom_toBottomOf="@id/tv_terms_of_use"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_profile" />
+            app:layout_constraintTop_toTopOf="@id/tv_terms_of_use" />
 
         <TextView
             android:id="@+id/tv_terms_of_use"
             style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:layout_marginTop="@dimen/margin_10"
             android:padding="@dimen/size_12"
             android:text="@string/my_page_terms_of_use_text"
             app:debouncedOnClick="@{() -> vm.onClickTermsOfUse()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_terms_of_use"
             app:layout_constraintStart_toEndOf="@id/iv_terms_of_use"
-            app:layout_constraintTop_toTopOf="@id/iv_terms_of_use"/>
+            app:layout_constraintTop_toBottomOf="@id/switch_notification_popup" />
 
         <ImageView
             android:id="@+id/iv_privacy"
@@ -157,7 +193,7 @@
             app:debouncedOnClick="@{() -> vm.onClickPrivacy()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_privacy"
             app:layout_constraintStart_toEndOf="@id/iv_privacy"
-            app:layout_constraintTop_toTopOf="@id/iv_privacy"/>
+            app:layout_constraintTop_toTopOf="@id/iv_privacy" />
 
         <ImageView
             android:id="@+id/iv_logout"
@@ -196,5 +232,6 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_withdrawal"
             app:layout_constraintStart_toEndOf="@id/iv_withdrawal"
             app:layout_constraintTop_toTopOf="@id/iv_withdrawal" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,7 +7,7 @@
 
         <variable
             name="comment"
-            type="com.zzang.chongdae.domain.model.Comment" />
+            type="com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
             android:gravity="center"
             android:textColor="@color/gray_font"
             android:textSize="@dimen/size_12"
-            app:formattedOnlyDate="@{comment.commentCreatedAt.date}"
+            android:text="@{comment.date}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
