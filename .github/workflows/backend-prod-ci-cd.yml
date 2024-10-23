@@ -1,18 +1,18 @@
 name: Backend Prod CI/CD Workflow
 
 on:
-  push:
-    branches: [ "main" ]
+  # push:
+    # branches: [ "main" ]
+    # paths:
+    #   - "backend/**"
+    #   - ".github/workflows/backend-prod-ci-cd.yml"
+    #   - "Dockerfile"
+  pull_request:
+    branches: [ "chongdae" ]
     paths:
       - "backend/**"
       - ".github/workflows/backend-prod-ci-cd.yml"
       - "Dockerfile"
-  # pull_request:
-  #   branches: [ "develop" ]
-  #   paths:
-  #     - "backend/**"
-  #     - ".github/workflows/backend-prod-ci-cd.yml"
-  #     - "Dockerfile"
 
 jobs:
 
