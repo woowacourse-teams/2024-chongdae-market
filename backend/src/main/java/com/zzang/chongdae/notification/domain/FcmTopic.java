@@ -10,18 +10,18 @@ import lombok.RequiredArgsConstructor;
 public class FcmTopic {
 
     private static final String TOPIC_FORMAT_MEMBER = "member";
-    private static final String TOPIC_FORMAT_OFFERING_MEMBER = "member_of_offering_%d";
     private static final String TOPIC_FORMAT_OFFERING_PROPOSER = "proposer_of_offering_%d";
+    private static final String TOPIC_FORMAT_OFFERING_PARTICIPANT = "participant_of_offering_%d";
 
     private final String value;
 
-    public static FcmTopic offeringMemberTopic(OfferingEntity offering) {
-        String value = TOPIC_FORMAT_OFFERING_MEMBER.formatted(offering.getId());
+    public static FcmTopic proposerTopic(OfferingEntity offering) {
+        String value = TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId());
         return new FcmTopic(value);
     }
 
-    public static FcmTopic proposerTopic(OfferingEntity offering) {
-        String value = TOPIC_FORMAT_OFFERING_PROPOSER.formatted(offering.getId());
+    public static FcmTopic participantTopic(OfferingEntity offering) {
+        String value = TOPIC_FORMAT_OFFERING_PARTICIPANT.formatted(offering.getId());
         return new FcmTopic(value);
     }
 

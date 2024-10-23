@@ -32,14 +32,14 @@ public class FcmNotificationService {
 
     public String participate(OfferingMemberEntity offeringMember) {
         Message message = participationMessageManager.messageWhenParticipate(offeringMember);
-        FcmTopic topic = FcmTopic.offeringMemberTopic(offeringMember.getOffering());
+        FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }
 
     public String cancelParticipation(OfferingMemberEntity offeringMember) {
         Message message = participationMessageManager.messageWhenCancelParticipate(offeringMember);
-        FcmTopic topic = FcmTopic.offeringMemberTopic(offeringMember.getOffering());
+        FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
         return notificationSender.send(message);
     }

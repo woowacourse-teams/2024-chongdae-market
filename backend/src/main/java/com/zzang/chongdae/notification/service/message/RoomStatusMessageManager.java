@@ -2,8 +2,8 @@ package com.zzang.chongdae.notification.service.message;
 
 import com.google.firebase.messaging.Message;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.notification.domain.FcmCondition;
 import com.zzang.chongdae.notification.domain.FcmData;
+import com.zzang.chongdae.notification.domain.FcmTopic;
 import com.zzang.chongdae.notification.exception.NotificationErrorCode;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -24,13 +24,13 @@ public class RoomStatusMessageManager {
     }
 
     public Message messageWhenUpdateStatus(OfferingEntity offering) {
-        FcmCondition condition = FcmCondition.roomStatusCondition(offering);
+        FcmTopic topic = FcmTopic.participantTopic(offering);
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", CommentRoomStatusMapper.getView(offering.getRoomStatus()));
         data.addData("offering_id", offering.getId());
         data.addData("type", MESSAGE_TYPE);
-        return messageCreator.createMessage(condition, data);
+        return messageCreator.createMessage(topic, data);
     }
 
     private enum CommentRoomStatusMapper {
