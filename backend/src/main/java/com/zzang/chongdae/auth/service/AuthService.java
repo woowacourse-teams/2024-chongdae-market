@@ -4,6 +4,7 @@ import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
+import com.zzang.chongdae.event.domain.LoginEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.domain.AuthProvider;
@@ -11,10 +12,10 @@ import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
-import com.zzang.chongdae.notification.service.FcmNotificationService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final FcmNotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -33,7 +34,7 @@ public class AuthService {
     @WriterDatabase
     @Transactional
     public AuthInfoDto kakaoLogin(KakaoLoginRequest request) {
-        String loginId = request.accessToken(); // authClient.getKakaoUserInfo(request.accessToken()); TODO: 원복
+        String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
         MemberEntity member = memberRepository.findByLoginId(loginId)
                 .orElseGet(() -> signup(provider, loginId, request.fcmToken()));
@@ -57,7 +58,7 @@ public class AuthService {
         AuthMemberDto authMember = new AuthMemberDto(member);
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
         checkFcmToken(member, fcmToken);
-        notificationService.login(member);
+        eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);
     }
 

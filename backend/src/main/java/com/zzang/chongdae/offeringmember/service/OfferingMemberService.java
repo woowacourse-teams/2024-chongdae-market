@@ -1,5 +1,6 @@
 package com.zzang.chongdae.offeringmember.service;
 
+import com.zzang.chongdae.event.domain.ParticipateCancelEvent;
 import com.zzang.chongdae.event.domain.ParticipateEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
@@ -84,7 +85,7 @@ public class OfferingMemberService {
         offering.leave();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        notificationService.cancelParticipation(offeringMember);
+        eventPublisher.publishEvent(new ParticipateCancelEvent(this, offeringMember));
     }
 
     private void validateCancel(OfferingMemberEntity offeringMember) {
