@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 public class FcmNotificationSender implements NotificationSender {
 
     private static final String ERROR_MESSAGE_WHEN_INVALID_TOKEN = "The registration token is not a valid FCM registration token";
-    private static final String ERROR_MESSAGE_WHEN_OLD_TOKEN = "Requested entity was not found.";
+    private static final String ERROR_MESSAGE_WHEN_OLD_TOKEN = "Requested entity was not found";
+    private static final String ERROR_MESSAGE_WHEN_TOKEN_EMPTY = "Exactly one of token, topic or condition must be specified";
+    private static final String ERROR_MESSAGE_WHEN_NULL_TOKEN = "registration tokens list must not contain null or empty strings";
 
     @Override
     public String send(Message message) {
@@ -25,6 +27,18 @@ public class FcmNotificationSender implements NotificationSender {
             return response;
         } catch (FirebaseMessagingException e) {
             return sendWhenFail(e);
+        }
+    }
+
+    @Override
+    public BatchResponse send(MulticastMessage message) {
+        try {
+            BatchResponse response = FirebaseMessaging.getInstance().sendEachForMulticast(message);
+            log.info("알림 메시지 전송 성공 개수: {}", response.getSuccessCount());
+            log.info("알림 메시지 전송 실패 개수: {}", response.getFailureCount());
+            return response;
+        } catch (FirebaseMessagingException e) {
+            return sendWhenFailWithBatch(e);
         }
     }
 
@@ -38,22 +52,20 @@ public class FcmNotificationSender implements NotificationSender {
         throw new MarketException(NotificationErrorCode.CANNOT_SEND_ALARM);
     }
 
-    private boolean isInvalidToken(FirebaseMessagingException e) {
-        return e.getMessage().contains(ERROR_MESSAGE_WHEN_INVALID_TOKEN)
-                || e.getMessage().contains(ERROR_MESSAGE_WHEN_OLD_TOKEN);
+    private BatchResponse sendWhenFailWithBatch(FirebaseMessagingException e) {
+        if (isInvalidToken(e)) {
+            log.error("알림 메시지 전송 실패: {}", "유효하지 않은 토큰");
+            return null;
+        }
+        log.error("알림 메시지 전송 실패: {}", e.getMessage());
+        e.printStackTrace();
+        throw new MarketException(NotificationErrorCode.CANNOT_SEND_ALARM);
     }
 
-    @Override
-    public BatchResponse send(MulticastMessage message) {
-        try {
-            BatchResponse response = FirebaseMessaging.getInstance().sendEachForMulticast(message);
-            log.info("알림 메시지 전송 성공 개수: {}", response.getSuccessCount());
-            log.info("알림 메시지 전송 실패 개수: {}", response.getFailureCount());
-            return response;
-        } catch (FirebaseMessagingException e) {
-            log.error("알림 메시지 전송 실패: {}", e.getMessage());
-            e.printStackTrace();
-            throw new MarketException(NotificationErrorCode.CANNOT_SEND_ALARM);
-        }
+    private boolean isInvalidToken(FirebaseMessagingException e) {
+        return e.getMessage().contains(ERROR_MESSAGE_WHEN_INVALID_TOKEN)
+                || e.getMessage().contains(ERROR_MESSAGE_WHEN_OLD_TOKEN)
+                || e.getMessage().contains(ERROR_MESSAGE_WHEN_TOKEN_EMPTY)
+                || e.getMessage().contains(ERROR_MESSAGE_WHEN_NULL_TOKEN);
     }
 }
