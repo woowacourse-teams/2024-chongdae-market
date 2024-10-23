@@ -118,11 +118,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     private fun initFragmentResultListener() {
         setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
-            viewModel.fetchUpdatedOffering(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
-        }
+            if (bundle.containsKey(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY)) {
+                viewModel.fetchUpdatedOffering(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
+            }
 
-        setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
-            viewModel.refreshOfferings(bundle.getBoolean(OfferingDetailFragment.DELETED_OFFERING_ID_KEY))
+            if (bundle.containsKey(OfferingDetailFragment.DELETED_OFFERING_ID_KEY)) {
+                viewModel.refreshOfferings(bundle.getBoolean(OfferingDetailFragment.DELETED_OFFERING_ID_KEY))
+            }
         }
 
         setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
@@ -221,7 +223,8 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         viewModel.updatedOffering.observe(viewLifecycleOwner) {
             offeringAdapter.addUpdatedItem(it.toList())
         }
-        viewModel.updatedOffering.getValue()?.toList()?.let { offeringAdapter.addUpdatedItem(it) }
+        viewModel.updatedOffering.getValue()?.toList()
+            ?.let { offeringAdapter.addUpdatedItem(it) }
 
         viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {
             LoginActivity.startActivity(requireContext())
