@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     private MemberEntity createMember(AuthProvider provider, String loginId, String fcmToken, String password) {
-        if (fcmToken == null) {
+        if (fcmToken == null || fcmToken.isEmpty()) {
             return new MemberEntity(nickNameGenerator.generate(), provider, loginId, password);
         }
         return new MemberEntity(nickNameGenerator.generate(), provider, loginId, password, fcmToken);
@@ -62,7 +62,7 @@ public class AuthService {
     }
 
     private void checkFcmToken(MemberEntity member, String fcmToken) {
-        if (fcmToken == null) {
+        if (fcmToken == null || fcmToken.isEmpty()) {
             member.updateFcmTokenDefault();
             return;
         }
