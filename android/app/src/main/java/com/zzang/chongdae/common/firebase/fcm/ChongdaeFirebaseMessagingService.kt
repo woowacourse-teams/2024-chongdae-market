@@ -101,11 +101,13 @@ class ChongdaeFirebaseMessagingService : FirebaseMessagingService() {
         when (notificationType) {
             NotificationType.COMMENT_DETAIL -> {
                 intent = Intent(this, CommentDetailActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 intent.putExtra(EXTRA_OFFERING_ID_KEY, parsedOfferingId)
             }
 
             NotificationType.OFFERING_DETAIL -> {
                 intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 intent.putExtra(NOTIFICATION_OFFERING_ID_KEY, parsedOfferingId)
                 intent.putExtra(NOTIFICATION_FLAG_KEY, true)
             }
