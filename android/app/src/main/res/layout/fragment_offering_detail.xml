@@ -363,7 +363,7 @@
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"
             app:debouncedOnClick="@{() -> vm.onParticipateClick()}"
-            app:isVisible="@{vm.isParticipated &amp;&amp; !vm.loading}"
+            app:isVisible="@{!vm.isParticipated &amp;&amp; !vm.loading}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
