@@ -98,6 +98,9 @@ class OfferingDetailViewModel
         private val _isOfferingDetailLoading: MutableLiveData<Boolean> = MutableLiveData(false)
         val isOfferingDetailLoading: LiveData<Boolean> get() = _isOfferingDetailLoading
 
+        private val _isParticipationLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isParticipationLoading: LiveData<Boolean> get() = _isParticipationLoading
+
         init {
             loadOffering()
         }
@@ -148,6 +151,7 @@ class OfferingDetailViewModel
 
         override fun participate() {
             viewModelScope.launch {
+                _isParticipationLoading.value = true
                 when (val result = offeringDetailRepository.saveParticipation(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
@@ -172,6 +176,7 @@ class OfferingDetailViewModel
                         }
 
                     is Result.Success -> {
+                        _isParticipationLoading.value = false
                         _isParticipated.value = true
                         _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
                         _updatedOfferingId.value = offeringId
@@ -260,6 +265,7 @@ class OfferingDetailViewModel
         }
 
         override fun onClickConfirm() {
+            _alertCancelEvent.setValue(Unit)
             participate()
         }
 
