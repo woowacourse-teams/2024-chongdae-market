@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class FcmNotificationSender implements NotificationSender {
 
     private static final String ERROR_MESSAGE_WHEN_INVALID_TOKEN = "The registration token is not a valid FCM registration token";
+    private static final String ERROR_MESSAGE_WHEN_OLD_TOKEN = "Requested entity was not found.";
 
     @Override
     public String send(Message message) {
@@ -23,21 +24,23 @@ public class FcmNotificationSender implements NotificationSender {
             log.info("알림 메시지 전송 성공: {}", response);
             return response;
         } catch (FirebaseMessagingException e) {
-            log.error("알림 메시지 전송 실패: {}", e.getMessage());
             return sendWhenFail(e);
         }
     }
 
     private String sendWhenFail(FirebaseMessagingException e) {
         if (isInvalidToken(e)) {
+            log.error("알림 메시지 전송 실패: {}", "유효하지 않은 토큰");
             return "";
         }
+        log.error("알림 메시지 전송 실패: {}", e.getMessage());
         e.printStackTrace();
         throw new MarketException(NotificationErrorCode.CANNOT_SEND_ALARM);
     }
 
     private boolean isInvalidToken(FirebaseMessagingException e) {
-        return e.getMessage().equals(ERROR_MESSAGE_WHEN_INVALID_TOKEN);
+        return e.getMessage().contains(ERROR_MESSAGE_WHEN_INVALID_TOKEN)
+                || e.getMessage().contains(ERROR_MESSAGE_WHEN_OLD_TOKEN);
     }
 
     @Override
