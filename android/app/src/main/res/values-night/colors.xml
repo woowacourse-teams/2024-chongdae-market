@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray_900">#FFFFFFFF</color>
+    <color name="gray_500">#FFD9D9D9</color>
+    <color name="black_900">#FFFFFFFF</color>
+    <color name="offering_detail_background">#FF303030</color>
+    <color name="default_icon_color">#FFFFFFFF</color>
+    <color name="my_page_title">#FFFFFFFF</color>
+    <color name="black_700">#FFFFFFFF</color>
+    <color name="black_1000">#FFFFFFFF</color>
+    <color name="black_1100">#FFFFFFFF</color>
+</resources>

@@ -31,6 +31,11 @@
     <string name="login_with_kakao">카카오톡으로 \n간편하게 <font color="#F15642">공동구매</font> 시작하기</string>
     <string name="login_with_kakao_button">카카오 로그인</string>
 
+    <!--    main-->
+    <string name="main_require_re_login">재로그인이 필요합니다. 다시 로그인해주세요!</string>
+    <string name="main_invalid_offering_id">공모 ID가 올바르지 않습니다.</string>
+    <string name="main_invalid_deeplink">Deeplink가 올바르지 않습니다.</string>
+
     <!--    menu-->
     <string name="bottom_home">홈</string>
     <string name="bottom_chat">채팅방</string>
@@ -57,6 +62,8 @@
     <string name="my_page_privacy_text">개인정보처리 방침</string>
     <string name="my_page_logout_text">로그아웃</string>
     <string name="my_page_withdrawal_text">회원 탈퇴</string>
+    <string name="my_page_notification_available_text">푸시 알림 받기</string>
+    <string name="my_page_notification_setting_text">푸시 알림 수신 시 팝업 띄우기</string>
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
     <string name="my_page_logout_dialog_description">로그아웃 하시겠습니까?</string>

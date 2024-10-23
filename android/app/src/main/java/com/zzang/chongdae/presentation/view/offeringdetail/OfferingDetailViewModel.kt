@@ -95,19 +95,30 @@ class OfferingDetailViewModel
         private val _alertCancelEvent = MutableSingleLiveData<Unit>()
         val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
 
+        private val _isOfferingDetailLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isOfferingDetailLoading: LiveData<Boolean> get() = _isOfferingDetailLoading
+
+        private val _isParticipationLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isParticipationLoading: LiveData<Boolean> get() = _isParticipationLoading
+
         init {
             loadOffering()
         }
 
         fun loadOffering() {
             viewModelScope.launch {
+                _isOfferingDetailLoading.value = true
                 when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
-                                    is Result.Success -> loadOffering()
+                                    is Result.Success -> {
+                                        loadOffering()
+                                    }
+
                                     is Result.Error -> {
+                                        _isOfferingDetailLoading.value = false
                                         userPreferencesDataStore.removeAllData()
                                         _refreshTokenExpiredEvent.setValue(Unit)
                                         return@launch
@@ -125,6 +136,7 @@ class OfferingDetailViewModel
                         }
 
                     is Result.Success -> {
+                        _isOfferingDetailLoading.value = false
                         _offeringDetail.value = result.data
                         _currentCount.value = result.data.currentCount.value
                         _offeringCondition.value = result.data.condition
@@ -139,6 +151,7 @@ class OfferingDetailViewModel
 
         override fun participate() {
             viewModelScope.launch {
+                _isParticipationLoading.value = true
                 when (val result = offeringDetailRepository.saveParticipation(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
@@ -163,6 +176,7 @@ class OfferingDetailViewModel
                         }
 
                     is Result.Success -> {
+                        _isParticipationLoading.value = false
                         _isParticipated.value = true
                         _commentDetailEvent.setValue(offeringDetail.value?.title ?: DEFAULT_TITLE)
                         _updatedOfferingId.value = offeringId
@@ -251,6 +265,7 @@ class OfferingDetailViewModel
         }
 
         override fun onClickConfirm() {
+            _alertCancelEvent.setValue(Unit)
             participate()
         }
 

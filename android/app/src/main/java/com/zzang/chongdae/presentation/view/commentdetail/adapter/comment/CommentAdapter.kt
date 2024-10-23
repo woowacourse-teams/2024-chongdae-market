@@ -8,48 +8,37 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zzang.chongdae.databinding.ItemDateSeparatorBinding
 import com.zzang.chongdae.databinding.ItemMyCommentBinding
 import com.zzang.chongdae.databinding.ItemOtherCommentBinding
-import com.zzang.chongdae.domain.model.Comment
+import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
 
-class CommentAdapter : ListAdapter<CommentViewType, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
-    fun submitComments(comments: List<Comment>) {
-        val newItems = mutableListOf<CommentViewType>()
-
-        for (i in comments.indices) {
-            val currentComment = comments[i]
-            val previousComment = if (i > 0) comments[i - 1] else null
-
-            if (previousComment == null || isDifferentDates(currentComment, previousComment)) {
-                newItems.add(CommentViewType.DateSeparator(currentComment))
-            }
-
-            newItems.add(CommentViewType.fromComment(currentComment))
-        }
-
-        submitList(newItems)
-    }
-
-    private fun isDifferentDates(
-        currentComment: Comment,
-        previousComment: Comment,
-    ) = currentComment.commentCreatedAt.date != previousComment.commentCreatedAt.date
-
+class CommentAdapter : ListAdapter<CommentUiModel, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_MY_COMMENT -> {
-                val binding = ItemMyCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding =
+                    ItemMyCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 MyCommentViewHolder(binding)
             }
 
             VIEW_TYPE_OTHER_COMMENT -> {
-                val binding = ItemOtherCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding =
+                    ItemOtherCommentBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    )
                 OtherCommentViewHolder(binding)
             }
 
             VIEW_TYPE_DATE_SEPARATOR -> {
-                val binding = ItemDateSeparatorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding =
+                    ItemDateSeparatorBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    )
                 DateSeparatorViewHolder(binding)
             }
 
@@ -61,18 +50,18 @@ class CommentAdapter : ListAdapter<CommentViewType, RecyclerView.ViewHolder>(DIF
         holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        when (val item = getItem(position)) {
-            is CommentViewType.MyComment -> (holder as MyCommentViewHolder).bind(item.comment)
-            is CommentViewType.OtherComment -> (holder as OtherCommentViewHolder).bind(item.comment)
-            is CommentViewType.DateSeparator -> (holder as DateSeparatorViewHolder).bind(item.comment)
+        when (holder) {
+            is MyCommentViewHolder -> holder.bind(getItem(position))
+            is OtherCommentViewHolder -> holder.bind(getItem(position))
+            is DateSeparatorViewHolder -> holder.bind(getItem(position))
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is CommentViewType.MyComment -> VIEW_TYPE_MY_COMMENT
-            is CommentViewType.OtherComment -> VIEW_TYPE_OTHER_COMMENT
-            is CommentViewType.DateSeparator -> VIEW_TYPE_DATE_SEPARATOR
+        return when (getItem(position).commentViewType) {
+            CommentViewType.MyComment -> VIEW_TYPE_MY_COMMENT
+            CommentViewType.OtherComment -> VIEW_TYPE_OTHER_COMMENT
+            CommentViewType.DateSeparator -> VIEW_TYPE_DATE_SEPARATOR
         }
     }
 
@@ -82,28 +71,18 @@ class CommentAdapter : ListAdapter<CommentViewType, RecyclerView.ViewHolder>(DIF
         private const val VIEW_TYPE_DATE_SEPARATOR = 3
 
         private val DIFF_CALLBACK =
-            object : DiffUtil.ItemCallback<CommentViewType>() {
+            object : DiffUtil.ItemCallback<CommentUiModel>() {
                 override fun areItemsTheSame(
-                    oldItem: CommentViewType,
-                    newItem: CommentViewType,
+                    oldItem: CommentUiModel,
+                    newItem: CommentUiModel,
                 ): Boolean {
-                    return when {
-                        oldItem is CommentViewType.MyComment && newItem is CommentViewType.MyComment ->
-                            oldItem.comment == newItem.comment
-
-                        oldItem is CommentViewType.OtherComment && newItem is CommentViewType.OtherComment ->
-                            oldItem.comment == newItem.comment
-
-                        oldItem is CommentViewType.DateSeparator && newItem is CommentViewType.DateSeparator ->
-                            oldItem.comment == newItem.comment
-
-                        else -> false
-                    }
+                    return oldItem.commentViewType == newItem.commentViewType &&
+                        oldItem.date == newItem.date && oldItem.time == newItem.time
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: CommentViewType,
-                    newItem: CommentViewType,
+                    oldItem: CommentUiModel,
+                    newItem: CommentUiModel,
                 ): Boolean {
                     return oldItem == newItem
                 }

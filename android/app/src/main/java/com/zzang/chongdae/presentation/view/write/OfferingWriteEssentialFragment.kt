@@ -18,8 +18,8 @@ import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingWriteEssentialBinding
 import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
-import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
+import com.zzang.chongdae.presentation.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
@@ -123,14 +123,14 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
         }
     }
 
-    override fun onDateTimeSubmitButtonClick() {
+    override fun onConfirmButtonClick() {
         viewModel.updateMeetingDate(
             dateTimePickerBinding.tvDate.text.toString(),
         )
         dialog.dismiss()
     }
 
-    override fun onDateTimeCancelButtonClick() {
+    override fun onCancelButtonClick() {
         dialog.dismiss()
     }
 

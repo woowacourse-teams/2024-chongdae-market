@@ -20,10 +20,10 @@ import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.DialogDeleteOfferingBinding
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
-import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
 import com.zzang.chongdae.presentation.view.login.LoginActivity
+import com.zzang.chongdae.presentation.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -116,7 +116,8 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
 
         viewModel.showAlertEvent.observe(viewLifecycleOwner) {
             val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
-            alertBinding.tvDialogMessage.text = getString(R.string.offering_detail_participate_alert)
+            alertBinding.tvDialogMessage.text =
+                getString(R.string.offering_detail_participate_alert)
             alertBinding.listener = viewModel
 
             dialog.setContentView(alertBinding.root)
@@ -125,6 +126,10 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
 
         viewModel.alertCancelEvent.observe(viewLifecycleOwner) {
             dialog.dismiss()
+        }
+
+        viewModel.isOfferingDetailLoading.observe(viewLifecycleOwner) {
+            startShimmer(it)
         }
     }
 
@@ -205,6 +210,14 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
                 Toast.LENGTH_SHORT,
             )
         toast?.show()
+    }
+
+    private fun startShimmer(isLoading: Boolean) {
+        if (isLoading) {
+            binding.sflOfferingDetail.startShimmer()
+            return
+        }
+        binding.sflOfferingDetail.stopShimmer()
     }
 
     companion object {

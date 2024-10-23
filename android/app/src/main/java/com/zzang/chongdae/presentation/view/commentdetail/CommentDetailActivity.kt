@@ -110,7 +110,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
 
     private fun observeComments() {
         viewModel.comments.observe(this) { comments ->
-            commentAdapter.submitComments(comments)
+            commentAdapter.submitList(comments)
             binding.rvComments.doOnPreDraw {
                 binding.rvComments.scrollToPosition(comments.size - 1)
             }
@@ -145,12 +145,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
 
     private fun showError(message: String) {
         toast?.cancel()
-        toast =
-            Toast.makeText(
-                this,
-                message,
-                Toast.LENGTH_SHORT,
-            )
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         toast?.show()
     }
 
@@ -248,7 +243,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
 
     companion object {
         private const val EXTRA_DEFAULT_VALUE = 1L
-        private const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
+        const val EXTRA_OFFERING_ID_KEY = "offering_id_key"
 
         fun startActivity(
             context: Context,

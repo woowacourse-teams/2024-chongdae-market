@@ -20,6 +20,9 @@ import com.zzang.chongdae.domain.model.participant.Participant
 import com.zzang.chongdae.domain.model.participant.ParticipantCount
 import com.zzang.chongdae.domain.model.participant.Participants
 import com.zzang.chongdae.domain.model.participant.Proposer
+import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentViewType
+import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModelListWithSeparators
 import okhttp3.MultipartBody
 import java.time.LocalDateTime
 
@@ -49,6 +52,22 @@ object TestFixture {
         mutableListOf(
             comment,
         )
+
+    val commentUiModel: CommentUiModel =
+        CommentUiModel(
+            content = "content1",
+            date = "2021-10-10",
+            time = "10:10:10",
+            isMine = true,
+            isProposer = true,
+            nickname = "nickname",
+            commentViewType = CommentViewType.MyComment,
+        )
+
+    val commentsUiModels: List<CommentUiModel> =
+        mutableListOf(
+            comment,
+        ).toUiModelListWithSeparators()
 
     val commentOfferingInfo: CommentOfferingInfo =
         CommentOfferingInfo(

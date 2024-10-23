@@ -14,6 +14,7 @@ import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.service.FcmNotificationService;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentService {
 
+    private final FcmNotificationService notificationService;
     private final CommentRepository commentRepository;
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
@@ -43,6 +45,9 @@ public class CommentService {
         validateIsJoined(member, offering);
         CommentEntity comment = new CommentEntity(member, offering, request.content());
         CommentEntity savedComment = commentRepository.save(comment);
+
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+        notificationService.saveComment(savedComment, offeringMembers);
         return savedComment.getId();
     }
 
@@ -98,6 +103,7 @@ public class CommentService {
         if (updatedStatus.isBuying()) { // TODO : 도메인으로 정리
             offering.updateOfferingStatus(OfferingStatus.CONFIRMED);
         }
+        notificationService.updateStatus(offering);
         return new CommentRoomStatusResponse(updatedStatus);
     }
 
