@@ -42,8 +42,15 @@ public class AuthService {
 
     private MemberEntity signup(AuthProvider provider, String loginId, String fcmToken) {
         String password = passwordEncoder.encode(UUID.randomUUID().toString());
-        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId, password, fcmToken);
+        MemberEntity member = createMember(provider, loginId, fcmToken, password);
         return memberRepository.save(member);
+    }
+
+    private MemberEntity createMember(AuthProvider provider, String loginId, String fcmToken, String password) {
+        if (fcmToken == null) {
+            return new MemberEntity(nickNameGenerator.generate(), provider, loginId, password);
+        }
+        return new MemberEntity(nickNameGenerator.generate(), provider, loginId, password, fcmToken);
     }
 
     private AuthInfoDto login(MemberEntity member, String fcmToken) {
@@ -55,6 +62,10 @@ public class AuthService {
     }
 
     private void checkFcmToken(MemberEntity member, String fcmToken) {
+        if (fcmToken == null) {
+            member.updateFcmTokenDefault();
+            return;
+        }
         if (!memberRepository.existsByIdAndFcmToken(member.getId(), fcmToken)) {
             log.info("토큰 갱신 사용자 id: {}", member.getId());
             member.updateFcmToken(fcmToken);

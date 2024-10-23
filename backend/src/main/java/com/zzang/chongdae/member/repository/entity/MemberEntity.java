@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class MemberEntity extends BaseTimeEntity {
 
+    private static final String DEFAULT_FCM_TOKEN = "invalid";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,11 +54,19 @@ public class MemberEntity extends BaseTimeEntity {
         this(null, nickname, provider, loginId, password, fcmToken);
     }
 
+    public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
+        this(null, nickname, provider, loginId, password, DEFAULT_FCM_TOKEN + UUID.randomUUID());
+    }
+
     public boolean isSame(MemberEntity other) {
         return this.equals(other);
     }
 
     public void updateFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
+    }
+
+    public void updateFcmTokenDefault() {
+        this.fcmToken = DEFAULT_FCM_TOKEN + UUID.randomUUID();
     }
 }
