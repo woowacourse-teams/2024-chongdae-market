@@ -230,6 +230,8 @@ class CommentDetailViewModel
                                 }
                             }
 
+                            DataError.Network.CONNECTION_ERROR -> {}
+
                             else -> {
                                 return@launch
                             }
