@@ -7,12 +7,12 @@ on:
       - "backend/**"
       - ".github/workflows/backend-dev-ci-cd.yml"
       - "Dockerfile"
-#  pull_request:
-#    branches: [ "develop" ]
-#    paths:
-#     - "backend/**"
-#     - ".github/workflows/backend-dev-ci-cd.yml"
-#     - "Dockerfile"
+  # pull_request:
+  #  branches: [ "develop" ]
+  #  paths:
+  #     - "backend/**"
+  #     - ".github/workflows/backend-dev-ci-cd.yml"
+  #     - "Dockerfile"
 
 jobs:
 
@@ -44,6 +44,10 @@ jobs:
       - name: Set Application yml for dev
         run: |
           echo "${{ secrets.APPLICATION_PROPERTIES_DEV }}" > src/main/resources/application.properties
+          mkdir -p src/main/resources/fcm
+          echo '${{ secrets.FCM_SECRET_KEY }}' > src/main/resources/fcm/chongdaemarket-fcm-key.json
+          mkdir -p src/test/resources/fcm
+          echo '${{ secrets.FCM_SECRET_KEY }}' > src/test/resources/fcm/chongdaemarket-fcm-key.json
         working-directory: ./backend
 
       - name: Build with Gradle Wrapper

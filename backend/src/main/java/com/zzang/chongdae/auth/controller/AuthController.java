@@ -9,7 +9,6 @@ import com.zzang.chongdae.logging.config.LoggingMasked;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class AuthController {
     @LoggingMasked
     @PostMapping("/auth/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(
-            @RequestBody @Valid KakaoLoginRequest request, HttpServletResponse servletResponse) {
+            @RequestBody KakaoLoginRequest request, HttpServletResponse servletResponse) {
         AuthInfoDto authInfo = authService.kakaoLogin(request);
         addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
         LoginResponse response = new LoginResponse(authInfo.authMember());

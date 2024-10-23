@@ -18,3 +18,7 @@ security:
       refresh-secret-key: refreshSecretKey
       access-token-expired: 30m
       refresh-token-expired: 14d
+
+fcm:
+  secret-key:
+    path: /fcm/chongdaemarket-fcm-key.json
