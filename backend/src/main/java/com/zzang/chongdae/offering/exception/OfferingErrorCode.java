@@ -24,7 +24,7 @@ public enum OfferingErrorCode implements ErrorResponse {
     CANNOT_ORIGIN_PRICE_LESS_THAN_DIVIDED_PRICE(BAD_REQUEST, "원가 가격이 n빵 가격보다 작을 수 없습니다."),
     CANNOT_UPDATE_LESS_THAN_CURRENT_COUNT(BAD_REQUEST, "총 인원은 참여 인원수 미만으로 수정할 수 없습니다."),
     CANNOT_UPDATE_BEFORE_NOW_MEETING_DATE(BAD_REQUEST, "거래 날짜는 오늘보다 이전일 수 없습니다."),
-    CANNOT_MEETING_DATE_BEFORE_THAN_TOMORROW(BAD_REQUEST, "거래 날짜는 오늘부터 설정할 수 있습니다."),
+    CANNOT_MEETING_DATE_BEFORE_THAN_TODAY(BAD_REQUEST, "거래 날짜는 오늘부터 설정할 수 있습니다."),
     ;
 
     private final HttpStatus status;
