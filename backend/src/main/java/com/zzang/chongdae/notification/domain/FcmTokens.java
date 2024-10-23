@@ -13,7 +13,7 @@ public class FcmTokens {
 
     public static FcmTokens from(List<MemberEntity> members) {
         List<FcmToken> tokens = members.stream()
-                .map(member -> new FcmToken(member.getFcmToken()))
+                .map(FcmToken::new)
                 .toList();
         return new FcmTokens(tokens);
     }

@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.TopicManagementResponse;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.domain.FcmTopic;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,27 +14,31 @@ import org.springframework.stereotype.Service;
 public class FcmNotificationSubscriber implements NotificationSubscriber {
 
     @Override
-    public TopicManagementResponse subscribe(MemberEntity member, String topic) {
+    public TopicManagementResponse subscribe(MemberEntity member, FcmTopic topic) {
         try {
             TopicManagementResponse response = FirebaseMessaging.getInstance()
-                    .subscribeToTopic(List.of(member.getFcmToken()), topic);
+                    .subscribeToTopic(List.of(member.getFcmToken()), topic.getValue());
             log.info("구독 성공 개수: {}", response.getSuccessCount());
             log.info("구독 실패 개수: {}", response.getFailureCount());
             return response;
         } catch (FirebaseMessagingException e) {
+            log.error("토픽 구독 실패: {}", e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public TopicManagementResponse unsubscribe(MemberEntity member, String topic) {
+    public TopicManagementResponse unsubscribe(MemberEntity member, FcmTopic topic) {
         try {
             TopicManagementResponse response = FirebaseMessaging.getInstance()
-                    .unsubscribeFromTopic(List.of(member.getFcmToken()), topic);
+                    .unsubscribeFromTopic(List.of(member.getFcmToken()), topic.getValue());
             log.info("구독 취소 성공 개수: {}", response.getSuccessCount());
             log.info("구독 취소 실패 개수: {}", response.getFailureCount());
             return response;
         } catch (FirebaseMessagingException e) {
+            log.error("토픽 구독 실패: {}", e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
