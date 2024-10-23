@@ -15,7 +15,13 @@ public class FcmData {
     }
 
     public Map<String, String> getData() {
-        data.forEach((key, value) -> log.info("{} : {}", key, value));
+        data.forEach(this::logWithoutBody);
         return Collections.unmodifiableMap(data);
+    }
+
+    private void logWithoutBody(String key, String value) {
+        if (!key.equals("body")) {
+            log.info("{} : {}", key, value);
+        }
     }
 }
