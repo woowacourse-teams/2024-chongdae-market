@@ -128,7 +128,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             dialog.dismiss()
         }
 
-        viewModel.loading.observe(viewLifecycleOwner) {
+        viewModel.isOfferingDetailLoading.observe(viewLifecycleOwner) {
             startShimmer(it)
         }
     }

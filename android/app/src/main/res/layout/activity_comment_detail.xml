@@ -271,6 +271,7 @@
                 android:paddingEnd="@dimen/margin_30"
                 android:paddingBottom="@dimen/size_14"
                 android:text="@={vm.commentContent}"
+                android:textColor="@color/black"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/size_15"
                 app:layout_constraintBottom_toBottomOf="parent"
