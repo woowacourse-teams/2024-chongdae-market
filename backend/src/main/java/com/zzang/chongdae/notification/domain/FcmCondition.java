@@ -3,9 +3,7 @@ package com.zzang.chongdae.notification.domain;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Getter
 @RequiredArgsConstructor
 public class FcmCondition {
@@ -14,7 +12,7 @@ public class FcmCondition {
 
     private final String value;
 
-    public static FcmCondition roomStatusCondition(OfferingEntity offering) {
+    public static FcmCondition roomStatusCondition(OfferingEntity offering) { // TODO: 참여자만 구독하도록
         FcmTopic offeringTopic = FcmTopic.offeringMemberTopic(offering);
         FcmTopic proposerTopic = FcmTopic.proposerTopic(offering);
         String value = CONDITION_FORMAT_TRUE_AND_FALSE.formatted(offeringTopic.getValue(), proposerTopic.getValue());
