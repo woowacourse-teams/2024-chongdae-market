@@ -123,14 +123,14 @@ class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListene
         }
     }
 
-    override fun onDateTimeSubmitButtonClick() {
+    override fun onConfirmButtonClick() {
         viewModel.updateMeetingDate(
             dateTimePickerBinding.tvDate.text.toString(),
         )
         dialog.dismiss()
     }
 
-    override fun onDateTimeCancelButtonClick() {
+    override fun onCancelButtonClick() {
         dialog.dismiss()
     }
 
