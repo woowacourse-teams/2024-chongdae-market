@@ -1,18 +1,18 @@
 name: Backend Dev CI/CD Workflow
 
 on:
-  push:
-    branches: [ "develop" ]
-    paths:
-      - "backend/**"
-      - ".github/workflows/backend-dev-ci-cd.yml"
-      - "Dockerfile"
-  # pull_request:
-  #  branches: [ "develop" ]
-  #  paths:
+  # push:
+  #   branches: [ "develop" ]
+  #   paths:
   #     - "backend/**"
   #     - ".github/workflows/backend-dev-ci-cd.yml"
   #     - "Dockerfile"
+  pull_request:
+   branches: [ "develop" ]
+   paths:
+      - "backend/**"
+      - ".github/workflows/backend-dev-ci-cd.yml"
+      - "Dockerfile"
 
 jobs:
 
