@@ -73,6 +73,7 @@ public class OfferingService {
         return new OfferingAllResponseItem(offering, offeringPrice);
     }
 
+    @Transactional(readOnly = true)
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
         Pageable pageable = PageRequest.ofSize(pageSize);
         OfferingFilter filter = OfferingFilter.findByName(filterName);
