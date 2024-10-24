@@ -1,8 +1,17 @@
+server:
+  tomcat:
+    threads:
+      max: 35
+    max-connections: 1024
+    accept-count: 242
+
 spring:
   application:
     name: chongdae
   datasource:
     url: jdbc:h2:mem:database
+    hikari:
+      maximum-pool-size: 8
   jpa:
     show-sql: true
     defer-datasource-initialization: true
@@ -79,6 +88,7 @@ management:
   metrics:
     enable:
       all: true
+
 fcm:
   secret-key:
     path: /fcm/chongdaemarket-fcm-key.json
