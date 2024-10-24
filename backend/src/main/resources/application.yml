@@ -72,11 +72,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, metrics
       path-mapping:
         health: health-check
       base-path: /
-
+  metrics:
+    enable:
+      all: true
 fcm:
   secret-key:
     path: /fcm/chongdaemarket-fcm-key.json
