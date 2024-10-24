@@ -18,4 +18,7 @@ security:
       access-secret-key: ${JWT_ACCESS_SECRET_KEY}
       refresh-secret-key: ${JWT_REFRESH_SECRET_KEY}
 
-
+server:
+  tomcat:
+    threads:
+      max: 3
