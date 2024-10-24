@@ -63,7 +63,10 @@ jobs:
 
   deploy-new-container:
     needs: build-and-test
-    runs-on: [ self-hosted, prod-a, prod-b ]
+    strategy:
+    matrix:
+      runner: [prod-a, prod-b]  # 두 서버 환경에서 병렬로 배포
+    runs-on: [self-hosted, ${{ matrix.runner }}]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -75,8 +78,10 @@ jobs:
 
   switch-new-container:
     needs: deploy-new-container
-    runs-on: [ self-hosted, prod-a, prod-b ]
-
+    strategy:
+    matrix:
+      runner: [prod-a, prod-b]  # 두 서버 환경에서 병렬로 배포
+    runs-on: [self-hosted, ${{ matrix.runner }}]
     steps:
       - name: Switch from old to new container
         run: |
