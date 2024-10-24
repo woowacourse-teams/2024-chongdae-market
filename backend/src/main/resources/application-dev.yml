@@ -21,4 +21,4 @@ security:
 server:
   tomcat:
     threads:
-      max: 3
+      max: 100
