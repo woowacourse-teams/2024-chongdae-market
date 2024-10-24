@@ -135,7 +135,7 @@ public class OfferingService {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
         offeringMemberRepository.save(offeringMember);
 
-        notificationService.saveOffering(savedOffering);
+        //notificationService.saveOffering(savedOffering);
 
         return savedOffering.getId();
     }
