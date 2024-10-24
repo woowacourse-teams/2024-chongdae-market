@@ -58,32 +58,27 @@ jobs:
         run: |
           docker login -u ${{ secrets.BE_DOCKERHUB_USERNAME }} -p ${{ secrets.BE_DOCKERHUB_PASSWORD }}
           docker build -t ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }} .
-          docker tag ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }} ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${{ github.sha::7 }}
-          docker push ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${{ github.sha::7 }}
+          docker tag ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }} ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
+          docker push ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
 
   deploy-new-container:
     needs: build-and-test
-    strategy:
-      matrix:
-        runner: [prod-a, prod-b]
-    runs-on: [ self-hosted, ${{ matrix.runner }} ]
+    runs-on: [ self-hosted, prod-a, prod-b ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy new container on ${{ matrix.runner }}
+      - name: Deploy new container
         run: |
           bash launch_next_container.sh ${GITHUB_SHA::7} prod ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}
         working-directory: backend/deploy
 
   switch-new-container:
     needs: deploy-new-container
-    strategy:
-      matrix:
-        runner: [prod-a, prod-b]
-    runs-on: [ self-hosted, ${{ matrix.runner }} ]
+    runs-on: [ self-hosted, prod-a, prod-b ]
+
     steps:
-      - name: Switch from old to new container on ${{ matrix.runner }}
+      - name: Switch from old to new container
         run: |
           bash switch_blue_green_container.sh
         working-directory: backend/deploy
