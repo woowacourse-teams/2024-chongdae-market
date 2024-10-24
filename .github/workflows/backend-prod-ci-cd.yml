@@ -65,8 +65,8 @@ jobs:
     needs: build-and-test
     strategy:
       matrix:
-        environment: ["prod-a", "prod-b"]
-    runs-on: ${{ matrix.runner }}
+        environment: [ "prod-a", "prod-b" ]
+    runs-on: ${{ matrix.environment }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -80,8 +80,8 @@ jobs:
     needs: deploy-new-container
     strategy:
       matrix:
-        environment: ["prod-a", "prod-b"]
-    runs-on: ${{ matrix.runner }}
+        environment: [ "prod-a", "prod-b" ]
+    runs-on: ${{ matrix.environment }}
     steps:
       - name: Switch from old to new container
         run: |
