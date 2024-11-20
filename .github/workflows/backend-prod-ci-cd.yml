@@ -40,7 +40,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
       - name: Set Application yml for prod
         run: |
           echo "${{ secrets.APPLICATION_PROPERTIES_PROD }}" > src/main/resources/application.properties
@@ -60,31 +59,29 @@ jobs:
           docker build -t ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }} .
           docker tag ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }} ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
           docker push ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-
-  deploy-a:
+  deploy-new-container:
     needs: build-and-test
-    runs-on: prod-a
-
+    strategy:
+      matrix:
+        environment: [ "prod-a", "prod-b" ]
+    runs-on: ${{ matrix.environment }}
     steps:
-      - name: Pull Image And Restart Container on Production A
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy new container
         run: |
-          docker login -u ${{ secrets.BE_DOCKERHUB_USERNAME }} -p ${{ secrets.BE_DOCKERHUB_PASSWORD }}
-          docker stop ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
-          docker rm ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
-          docker image prune -a -f
-          docker pull ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -v /logs:/logs -p 80:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
+          bash launch_next_container.sh ${GITHUB_SHA::7} prod ${{ secrets.BE_DOCKERHUB_USERNAME }} ${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}
+        working-directory: backend/deploy
 
-  deploy-b:
-    needs: deploy-a
-    runs-on: prod-b
-
+  switch-new-container:
+    needs: deploy-new-container
+    strategy:
+      matrix:
+        environment: [ "prod-a", "prod-b" ]
+    runs-on: ${{ matrix.environment }}
     steps:
-      - name: Pull Image And Restart Container on Production B
+      - name: Switch from old to new container
         run: |
-          docker login -u ${{ secrets.BE_DOCKERHUB_USERNAME }} -p ${{ secrets.BE_DOCKERHUB_PASSWORD }}
-          docker stop ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
-          docker rm ${{ secrets.BE_DOCKER_CONTAINER_NAME }} | true
-          docker image prune -a -f
-          docker pull ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
-          docker run --name ${{ secrets.BE_DOCKER_CONTAINER_NAME }} -d -v /logs:/logs -p 80:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.BE_DOCKERHUB_USERNAME }}/${{ secrets.BE_DOCKER_IMAGE_NAME_PROD }}:${GITHUB_SHA::7}
+          bash switch_blue_green_container.sh
+        working-directory: backend/deploy
