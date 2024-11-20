@@ -1,3 +1,10 @@
+server:
+  tomcat:
+    threads:
+      max: 35
+    max-connections: 1024
+    accept-count: 242
+
 spring:
   application:
     name: chongdae
