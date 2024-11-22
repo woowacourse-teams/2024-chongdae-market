@@ -2,7 +2,7 @@ name: Backend Dev CI/CD Workflow
 
 on:
   push:
-    branches: [ "chongdae" ]
+    branches: [ "feature/642-async-push-alarm" ]
     paths:
       - "backend/**"
       - ".github/workflows/backend-dev-ci-cd.yml"
