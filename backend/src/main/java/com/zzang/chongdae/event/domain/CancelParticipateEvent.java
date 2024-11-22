@@ -5,11 +5,11 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class ParticipateCancelEvent extends ApplicationEvent {
+public class CancelParticipateEvent extends ApplicationEvent {
 
     private final OfferingMemberEntity offeringMember;
 
-    public ParticipateCancelEvent(Object source, OfferingMemberEntity offeringMember) {
+    public CancelParticipateEvent(Object source, OfferingMemberEntity offeringMember) {
         super(source);
         this.offeringMember = offeringMember;
     }

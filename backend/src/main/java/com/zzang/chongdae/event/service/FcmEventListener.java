@@ -1,8 +1,8 @@
 package com.zzang.chongdae.event.service;
 
+import com.zzang.chongdae.event.domain.CancelParticipateEvent;
 import com.zzang.chongdae.event.domain.DeleteOfferingEvent;
 import com.zzang.chongdae.event.domain.LoginEvent;
-import com.zzang.chongdae.event.domain.ParticipateCancelEvent;
 import com.zzang.chongdae.event.domain.ParticipateEvent;
 import com.zzang.chongdae.event.domain.SaveCommentEvent;
 import com.zzang.chongdae.event.domain.SaveOfferingEvent;
@@ -27,7 +27,7 @@ public class FcmEventListener {
 
     @EventListener
     @Async
-    public void handleParticipateCancelEvent(ParticipateCancelEvent event) {
+    public void handleCancelParticipateEvent(CancelParticipateEvent event) {
         notificationService.cancelParticipation(event.getOfferingMember());
     }
 
@@ -57,7 +57,7 @@ public class FcmEventListener {
 
     @EventListener
     @Async
-    public void handleUpdateStatusEvent(LoginEvent event) {
+    public void handleLoginEvent(LoginEvent event) {
         notificationService.login(event.getMember());
     }
 }
