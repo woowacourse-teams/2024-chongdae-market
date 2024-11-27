@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,9 +18,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AmazonS3StorageService implements StorageService {
 
     private final AmazonS3 s3Client;
-    private final String bucketName;
-    private final String redirectUrl;
-    private final String storagePath;
+    
+    @Value("${amazon.s3.bucket}")
+    private String bucketName;
+
+    @Value("${amazon.cloudfront.redirectUrl}")
+    private String redirectUrl;
+
+    @Value("${amazon.cloudfront.storagePath}")
+    private String storagePath;
 
     @Override
     public String uploadFile(MultipartFile file) {

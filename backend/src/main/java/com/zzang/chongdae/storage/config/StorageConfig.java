@@ -5,25 +5,16 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.zzang.chongdae.storage.service.AmazonS3StorageService;
-import org.springframework.beans.factory.annotation.Value;
+import com.zzang.chongdae.storage.service.StorageService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class StorageConfig {
 
-    @Value("${amazon.s3.bucket}")
-    private String bucketName;
-
-    @Value("${amazon.cloudfront.redirectUrl}")
-    private String redirectUrl;
-
-    @Value("${amazon.cloudfront.storagePath}")
-    private String storagePath;
-
     @Bean
-    public AmazonS3StorageService storageService() {
-        return new AmazonS3StorageService(amazonS3(), bucketName, redirectUrl, storagePath);
+    public StorageService storageService() {
+        return new AmazonS3StorageService(amazonS3());
     }
 
     private AmazonS3 amazonS3() {
