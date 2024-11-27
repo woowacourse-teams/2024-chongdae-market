@@ -147,7 +147,7 @@ public class OfferingService {
     }
 
     public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {
-        String imageUrl = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
+        String imageUrl = storageService.uploadFile(image);
         return new OfferingProductImageResponse(imageUrl);
     }
 

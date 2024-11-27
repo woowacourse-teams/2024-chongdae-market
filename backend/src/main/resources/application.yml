@@ -35,6 +35,7 @@ amazon:
     bucket: techcourse-project-2024
   cloudfront:
     redirectUrl: d3a5rfnjdz82qu.cloudfront.net
+    storagePath: chongdae-market/images/offerings/product/
 
 security:
   jwt:

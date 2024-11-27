@@ -18,9 +18,12 @@ public class StorageConfig {
     @Value("${amazon.cloudfront.redirectUrl}")
     private String redirectUrl;
 
+    @Value("${amazon.cloudfront.storagePath}")
+    private String storagePath;
+
     @Bean
     public AmazonS3StorageService storageService() {
-        return new AmazonS3StorageService(amazonS3(), bucketName, redirectUrl);
+        return new AmazonS3StorageService(amazonS3(), bucketName, redirectUrl, storagePath);
     }
 
     private AmazonS3 amazonS3() {

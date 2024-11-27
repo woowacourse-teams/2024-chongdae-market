@@ -19,11 +19,12 @@ public class AmazonS3StorageService implements StorageService {
     private final AmazonS3 s3Client;
     private final String bucketName;
     private final String redirectUrl;
+    private final String storagePath;
 
     @Override
-    public String uploadFile(MultipartFile file, String path) {
+    public String uploadFile(MultipartFile file) {
         try {
-            String objectKey = path + UUID.randomUUID();
+            String objectKey = storagePath + UUID.randomUUID();
             InputStream inputStream = file.getInputStream();
             ObjectMetadata metadata = createMetadata(file);
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectKey, inputStream, metadata);

@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FakeStorageService implements StorageService {
 
     @Override
-    public String uploadFile(MultipartFile file, String path) {
+    public String uploadFile(MultipartFile file) {
         return "https://upload-image-url.com/";
     }
 }
