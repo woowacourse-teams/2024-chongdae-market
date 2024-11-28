@@ -83,9 +83,7 @@ class OfferingWriteOptionalFragment : Fragment() {
                 contentType = "button",
             )
             showToast(R.string.write_success_writing)
-            findNavController().popBackStack(R.id.offering_write_fragment_essential, true)
-            viewModel.initOfferingWriteInputs()
-
+            findNavController().popBackStack(R.id.offering_write_essential_fragment, true)
             setFragmentResult(
                 OFFERING_WRITE_BUNDLE_KEY,
                 bundleOf(NEW_OFFERING_EVENT_KEY to true),

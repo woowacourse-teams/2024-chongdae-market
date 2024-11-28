@@ -3,6 +3,7 @@ package com.zzang.chongdae.data.remote.source
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.api.OfferingApiService
+import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
@@ -44,6 +45,13 @@ class OfferingRemoteDataSourceImpl
 
         override suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse, DataError.Network> =
             safeApiCall { service.getMeetings(offeringId) }
+
+        override suspend fun patchOffering(
+            offeringId: Long,
+            offeringModifyRequest: OfferingModifyRequest,
+        ): Result<Unit, DataError.Network> {
+            return safeApiCall { service.patchOffering(offeringId, offeringModifyRequest) }
+        }
 
         companion object {
             private const val ERROR_PREFIX = "에러 발생: "

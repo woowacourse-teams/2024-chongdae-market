@@ -17,10 +17,9 @@ import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.DialogDatePickerBinding
 import com.zzang.chongdae.databinding.FragmentOfferingModifyEssentialBinding
-import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
+import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.address.AddressFinderDialog
 import com.zzang.chongdae.presentation.view.home.HomeFragment
-import com.zzang.chongdae.presentation.view.main.MainActivity
 import com.zzang.chongdae.presentation.view.write.OnDateTimeButtonsClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -102,7 +101,7 @@ class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListen
     }
 
     private fun searchPlace() {
-        fragmentBinding.tvPlaceValue.setDebouncedOnClickListener(800L) {
+        fragmentBinding.tvPlaceValue.setOnClickListener {
             AddressFinderDialog().show(parentFragmentManager, this.tag)
         }
         setFragmentResultListener(AddressFinderDialog.ADDRESS_KEY) { _, bundle ->
@@ -138,14 +137,14 @@ class OfferingModifyEssentialFragment : Fragment(), OnDateTimeButtonsClickListen
         }
     }
 
-    override fun onConfirmButtonClick() {
+    override fun onDateTimeSubmitButtonClick() {
         viewModel.updateMeetingDate(
             dateTimePickerBinding.tvDate.text.toString(),
         )
         dialog.dismiss()
     }
 
-    override fun onCancelButtonClick() {
+    override fun onDateTimeCancelButtonClick() {
         dialog.dismiss()
     }
 

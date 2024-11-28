@@ -2,8 +2,8 @@ package com.zzang.chongdae.data.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
+import com.zzang.chongdae.data.remote.mapper.toRequest
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.di.annotations.OfferingLocalDataSourceQualifier
@@ -11,6 +11,7 @@ import com.zzang.chongdae.di.annotations.OfferingRemoteDataSourceQualifier
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
@@ -42,20 +43,7 @@ class OfferingRepositoryImpl
 
         override suspend fun saveOffering(offeringWrite: OfferingWrite): Result<Unit, DataError.Network> {
             return offeringRemoteDataSource.saveOffering(
-                offeringWriteRequest =
-                    OfferingWriteRequest(
-                        title = offeringWrite.title,
-                        productUrl = offeringWrite.productUrl,
-                        thumbnailUrl = offeringWrite.thumbnailUrl,
-                        totalCount = offeringWrite.totalCount,
-                        totalPrice = offeringWrite.totalPrice,
-                        originPrice = offeringWrite.originPrice,
-                        meetingAddress = offeringWrite.meetingAddress,
-                        meetingAddressDong = offeringWrite.meetingAddressDong,
-                        meetingAddressDetail = offeringWrite.meetingAddressDetail,
-                        meetingDate = offeringWrite.meetingDate,
-                        description = offeringWrite.description,
-                    ),
+                offeringWriteRequest = offeringWrite.toRequest(),
             )
         }
 
@@ -82,4 +70,15 @@ class OfferingRepositoryImpl
                 it.toDomain()
             }
         }
+
+        override suspend fun patchOffering(
+            offeringId: Long,
+            offeringModifyDomainRequest: OfferingModifyDomainRequest,
+        ): Result<Unit, DataError.Network> =
+            offeringRemoteDataSource.patchOffering(
+                offeringId,
+                offeringModifyDomainRequest.toRequest(),
+            ).map {
+                it // .toDomain()
+            }
     }

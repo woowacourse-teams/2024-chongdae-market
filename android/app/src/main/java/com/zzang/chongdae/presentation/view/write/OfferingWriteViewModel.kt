@@ -154,9 +154,13 @@ class OfferingWriteViewModel
                                     is Result.Error -> return@launch
                                 }
                             }
+
                             else -> {
                                 _writeUIState.value =
-                                    WriteUIState.Error(R.string.all_error_image_upload, "${result.error}")
+                                    WriteUIState.Error(
+                                        R.string.all_error_image_upload,
+                                        "${result.error}",
+                                    )
                             }
                         }
                     }
@@ -189,7 +193,10 @@ class OfferingWriteViewModel
 
                             else -> {
                                 _writeUIState.value =
-                                    WriteUIState.Error(R.string.error_invalid_product_url, "${result.error}")
+                                    WriteUIState.Error(
+                                        R.string.error_invalid_product_url,
+                                        "${result.error}",
+                                    )
                             }
                         }
                     }
@@ -288,7 +295,7 @@ class OfferingWriteViewModel
                             offeringWrite =
                                 OfferingWrite(
                                     title = title,
-                                    productUrl = productUrl.value,
+                                    productUrl = productUrlOrNull(),
                                     thumbnailUrl = thumbnailUrl.value,
                                     totalCount = totalCountConverted,
                                     totalPrice = totalPriceConverted,
@@ -312,6 +319,7 @@ class OfferingWriteViewModel
                                     is Result.Error -> return@launch
                                 }
                             }
+
                             else -> {
                                 _writeUIState.value =
                                     WriteUIState.Error(R.string.write_error_writing, "${result.error}")
@@ -320,6 +328,12 @@ class OfferingWriteViewModel
                     }
                 }
             }
+        }
+
+        private fun productUrlOrNull(): String? {
+            val productUrl = productUrl.value
+            if (productUrl == "") return null
+            return productUrl
         }
 
         private fun originPriceToPositiveIntOrNull(input: String?): Int? {

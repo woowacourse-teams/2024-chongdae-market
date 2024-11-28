@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
 @AndroidEntryPoint
-class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener {
+class OfferingWriteEssentialFragment : Fragment(), OnDateTimeButtonsClickListener {
     private var _fragmentBinding: FragmentOfferingWriteEssentialBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
 
@@ -166,7 +166,6 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
         fragmentBinding.lifecycleOwner = viewLifecycleOwner
 
         _dateTimePickerBinding = DialogDatePickerBinding.inflate(inflater, container, false)
-        dateTimePickerBinding.vm = viewModel
         dateTimePickerBinding.onClickListener = this
     }
 
@@ -205,5 +204,6 @@ class OfferingWriteEssentialFragment : Fragment(), OnOfferingWriteClickListener 
     override fun onDestroy() {
         super.onDestroy()
         _fragmentBinding = null
+        viewModel.initOfferingWriteInputs()
     }
 }
