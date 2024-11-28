@@ -4,6 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CommentRoomListResponse(
+data class CommentRoomsResponse(
     @SerialName("offerings") val commentRoom: List<CommentRoomResponse>,
 )

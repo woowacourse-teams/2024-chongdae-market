@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.zzang.chongdae.databinding.ItemCommentRoomParticipantBinding
+import com.zzang.chongdae.databinding.ItemCommentRoomBinding
 import com.zzang.chongdae.databinding.ItemCommentRoomProposerBinding
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.CommentRoomType
@@ -37,7 +37,7 @@ class CommentRoomsAdapter(
 
             CommentRoomType.NOT_PROPOSER.separator -> {
                 val binding =
-                    ItemCommentRoomParticipantBinding.inflate(
+                    ItemCommentRoomBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false,

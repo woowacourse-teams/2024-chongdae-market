@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/comment_room_fragment"
-        android:name="com.zzang.chongdae.presentation.view.comment.CommentRoomFragment"
+        android:name="com.zzang.chongdae.presentation.view.comment.CommentRoomsFragment"
         android:label="fragment_comment_room"
-        tools:layout="@layout/fragment_comment_room" />
+        tools:layout="@layout/fragment_comment_rooms" />
     <fragment
         android:id="@+id/my_page_fragment"
         android:name="com.zzang.chongdae.presentation.view.MyPageFragment"
