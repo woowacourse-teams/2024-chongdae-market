@@ -13,7 +13,7 @@ interface OfferingRepository {
         search: String?,
         lastOfferingId: Long?,
         pageSize: Int?,
-    ): List<Offering>
+    ): Result<List<Offering>>
 
     suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit>
 
