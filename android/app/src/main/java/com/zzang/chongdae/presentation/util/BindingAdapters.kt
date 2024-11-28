@@ -138,6 +138,11 @@ fun setLayoutHeightWithAnimation(
     animator.start()
 }
 
+@BindingAdapter("formattedAmPmTime")
+fun TextView.setTime(localDateTime: LocalDateTime) {
+    this.text = localDateTime.format(DateTimeFormatter.ofPattern(context.getString(R.string.amPmTime), Locale.KOREAN))
+}
+
 private fun Int.toPx(context: Context): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,

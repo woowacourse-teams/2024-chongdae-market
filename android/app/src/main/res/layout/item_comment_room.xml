@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
 
         <variable
             name="commentRoom"
             type="com.zzang.chongdae.domain.model.CommentRoom" />
+
+        <variable
+            name="onCommentRoomClickListener"
+            type="com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener" />
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="80dp"
+        android:onClick="@{() -> onCommentRoomClickListener.onClick(commentRoom.id, commentRoom.title)}">
 
         <View
             android:layout_width="match_parent"
@@ -63,6 +68,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginEnd="4dp"
             android:textColor="@color/gray_900"
+            app:formattedAmPmTime="@{commentRoom.latestCommentTime}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="오전 10:33" />
