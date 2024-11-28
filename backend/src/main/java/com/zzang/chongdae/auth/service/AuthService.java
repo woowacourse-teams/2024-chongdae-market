@@ -30,13 +30,13 @@ public class AuthService {
         String loginId = authClient.getKakaoUserInfo(request.accessToken());
         AuthProvider provider = AuthProvider.KAKAO;
         MemberEntity member = memberRepository.findByLoginId(loginId)
-                .orElseGet(() -> signup(provider, loginId));
+                .orElseGet(() -> signup(provider, loginId, request.fcmToken()));
         return login(member);
     }
 
-    private MemberEntity signup(AuthProvider provider, String loginId) {
+    private MemberEntity signup(AuthProvider provider, String loginId, String fcmToken) {
         String password = passwordEncoder.encode(UUID.randomUUID().toString());
-        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId, password);
+        MemberEntity member = new MemberEntity(nickNameGenerator.generate(), provider, loginId, password, fcmToken);
         return memberRepository.save(member);
     }
 
