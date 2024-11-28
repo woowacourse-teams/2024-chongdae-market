@@ -7,54 +7,53 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.Meetings
-import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.repository.ParticipantRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
-import com.zzang.chongdae.presentation.util.handleAccessTokenExpiration
+import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel.Companion.toUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel.Companion.toUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel.Companion.toUiModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class CommentDetailViewModel(
-    private val authRepository: AuthRepository,
     private val offeringId: Long,
-    val offeringTitle: String,
     private val offeringRepository: OfferingRepository,
+    private val participantRepository: ParticipantRepository,
     private val commentDetailRepository: CommentDetailRepository,
 ) : ViewModel() {
     private var cachedComments: List<Comment> = emptyList()
-    private val cachedMeetings: Meetings? = null
     private var pollJob: Job? = null
     val commentContent = MutableLiveData("")
-
-    private val _isCollapsibleViewVisible = MutableLiveData(false)
-    val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
-
-    private val _deadline = MutableLiveData<LocalDateTime>()
-    val deadline: LiveData<LocalDateTime> get() = _deadline
-
-    private val _location = MutableLiveData<String>()
-    val location: LiveData<String> get() = _location
-
-    private val _locationDetail = MutableLiveData<String>()
-    val locationDetail: LiveData<String> get() = _locationDetail
 
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>> get() = _comments
 
-    private val _offeringStatusButtonText = MutableLiveData<String>()
-    val offeringStatusButtonText: LiveData<String> get() = _offeringStatusButtonText
+    private val _commentOfferingInfo = MutableLiveData<CommentOfferingInfoUiModel>()
+    val commentOfferingInfo: LiveData<CommentOfferingInfoUiModel> get() = _commentOfferingInfo
 
-    private val _offeringStatusImageUrl = MutableLiveData<String>()
-    val offeringStatusImageUrl: LiveData<String> get() = _offeringStatusImageUrl
+    private val _meetings = MutableLiveData<MeetingsUiModel>()
+    val meetings: LiveData<MeetingsUiModel> get() = _meetings
+
+    private val _isCollapsibleViewVisible = MutableLiveData(false)
+    val isCollapsibleViewVisible: LiveData<Boolean> get() = _isCollapsibleViewVisible
+
+    private val _participants = MutableLiveData<ParticipantsUiModel>()
+    val participants: LiveData<ParticipantsUiModel> get() = _participants
 
     private val _showStatusDialogEvent = MutableLiveData<Unit>()
     val showStatusDialogEvent: LiveData<Unit> get() = _showStatusDialogEvent
+
+    private val _reportEvent: MutableSingleLiveData<Int> = MutableSingleLiveData()
+    val reportEvent: SingleLiveData<Int> get() = _reportEvent
 
     private val _onExitOfferingEvent = MutableSingleLiveData<Unit>()
     val onExitOfferingEvent: SingleLiveData<Unit> get() = _onExitOfferingEvent
@@ -64,33 +63,42 @@ class CommentDetailViewModel(
 
     init {
         startPolling()
-        updateStatusInfo()
+        updateCommentInfo()
         loadMeetings()
+        loadParticipants()
     }
 
-    private fun updateStatusInfo() {
+    private fun startPolling() {
+        pollJob?.cancel()
+        pollJob =
+            viewModelScope.launch {
+                while (true) {
+                    loadComments()
+                    delay(1000)
+                }
+            }
+    }
+
+    private fun updateCommentInfo() {
         viewModelScope.launch {
             commentDetailRepository.fetchCommentOfferingInfo(offeringId).onSuccess {
-                _offeringStatusButtonText.value = it.buttonText
-                _offeringStatusImageUrl.value = it.imageUrl
+                _commentOfferingInfo.value = it.toUiModel()
             }.onFailure {
                 Log.e("error", "updateStatusInfo: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { updateStatusInfo() }
             }
         }
     }
 
-    fun updateOffering() {
+    fun updateOfferingEvent() {
         _showStatusDialogEvent.value = Unit
     }
 
     fun updateOfferingStatus() {
         viewModelScope.launch {
             commentDetailRepository.updateOfferingStatus(offeringId).onSuccess {
-                updateStatusInfo()
+                updateCommentInfo()
             }.onFailure {
                 Log.e("error", "updateOfferingStatus: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { updateOfferingStatus() }
             }
         }
     }
@@ -106,30 +114,7 @@ class CommentDetailViewModel(
                 }
             }.onFailure {
                 Log.e("error", "loadComments: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { loadComments() }
             }
-        }
-    }
-
-    private fun startPolling() {
-        pollJob?.cancel()
-        pollJob =
-            viewModelScope.launch {
-                while (true) {
-                    loadComments()
-                    delay(1000)
-                }
-            }
-    }
-
-    private fun stopPolling() {
-        pollJob?.cancel()
-    }
-
-    fun toggleCollapsibleView() {
-        _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
-        if (_isCollapsibleViewVisible.value == true) {
-            loadMeetings()
         }
     }
 
@@ -147,24 +132,39 @@ class CommentDetailViewModel(
                 commentContent.value = ""
             }.onFailure {
                 Log.e("error", "postComment: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { postComment() }
+            }
+        }
+    }
+
+    fun toggleCollapsibleView() {
+        _isCollapsibleViewVisible.value = _isCollapsibleViewVisible.value?.not()
+        if (_isCollapsibleViewVisible.value == true) {
+            loadMeetings()
+        }
+    }
+
+    private fun loadParticipants() {
+        viewModelScope.launch {
+            participantRepository.fetchParticipants(offeringId).onSuccess { participantsResponse ->
+                _participants.value = participantsResponse.toUiModel()
+            }.onFailure {
+                Log.e("error", "loadParticipants: ${it.message}")
             }
         }
     }
 
     private fun loadMeetings() {
         viewModelScope.launch {
-            offeringRepository.fetchMeetings(offeringId).onSuccess {
-                if (it != cachedMeetings) {
-                    _deadline.value = it.meetingDate
-                    _location.value = it.meetingAddress
-                    _locationDetail.value = it.meetingAddressDetail
-                }
+            offeringRepository.fetchMeetings(offeringId).onSuccess { meetings ->
+                _meetings.value = meetings.toUiModel()
             }.onFailure {
                 Log.e("error", "loadMeetings: ${it.message}")
-                handleAccessTokenExpiration(authRepository, it) { loadMeetings() }
             }
         }
+    }
+
+    fun onClickReport() {
+        _reportEvent.setValue(R.string.report_url)
     }
 
     fun exitOffering() {
@@ -180,25 +180,27 @@ class CommentDetailViewModel(
         stopPolling()
     }
 
+    private fun stopPolling() {
+        pollJob?.cancel()
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
-            authRepository: AuthRepository,
             offeringId: Long,
-            offeringTitle: String,
             offeringRepository: OfferingRepository,
+            participantRepository: ParticipantRepository,
             commentDetailRepository: CommentDetailRepository,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return CommentDetailViewModel(
-                    authRepository,
-                    offeringId,
-                    offeringTitle,
-                    offeringRepository,
-                    commentDetailRepository,
+                return com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel(
+                    offeringId = offeringId,
+                    offeringRepository = offeringRepository,
+                    participantRepository = participantRepository,
+                    commentDetailRepository = commentDetailRepository,
                 ) as T
             }
         }

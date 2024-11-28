@@ -89,6 +89,6 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
         id: Long,
         title: String,
     ) {
-        CommentDetailActivity.startActivity(activity as Context, id, title)
+        CommentDetailActivity.startActivity(activity as Context, id)
     }
 }

@@ -22,7 +22,7 @@
     <string name="all_error_file_conversion">파일을 찾을 수 없습니다.</string>
     <string name="all_error_image_upload">이미지 업로드에 실패했습니다.</string>
     <string name="all_cancel">취소하기</string>
-    <string name="all_change">변경하기</string>
+    <string name="all_confirm">확정하기</string>
     <string name="report_url">https://docs.google.com/forms/d/e/1FAIpQLSdyHhWqwY0-iJsa6MrbD2f3rdES4dhXekkRbQ2T3HmnIgV1TA/viewform</string>
 
     <!--    login-->
@@ -89,7 +89,8 @@
     <string name="schedule_confirm">일정확정</string>
     <string name="purchase_confirm">구매확정</string>
     <string name="deal_confirm">거래확정</string>
-    <string name="offering_members">참여자 목록</string>
+    <string name="offering_members">참여자 목록 (%d명/%d명)</string>
+    <string name="comment_detail_expected_price">예상 공동구매 엔빵 가격</string>
 
     <!--    offering_write-->
     <string name="write_information_message_essential"><font color="#F15642">공동구매</font> 물품의 필수 정보를\n입력해 주세요.</string>
