@@ -24,18 +24,14 @@ public class CookieConsumer {
         return getTokenByCookieName(ACCESS_TOKEN_COOKIE_NAME, cookies);
     }
 
-    public String getRefreshToken(Cookie[] cookies) {
-        return getTokenByCookieName(REFRESH_TOKEN_COOKIE_NAME, cookies);
-    }
-
     private String getTokenByCookieName(String cookieName, Cookie[] cookies) {
         if (cookies == null) {
-            throw new MarketException(AuthErrorCode.COOKIE_NOT_EXIST);
+            throw new MarketException(AuthErrorCode.INVALID_TOKEN);
         }
         return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals(cookieName))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_COOKIE));
+                .orElseThrow(() -> new MarketException(AuthErrorCode.INVALID_TOKEN));
     }
 }

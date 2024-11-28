@@ -29,7 +29,6 @@ public class CommentIntegrationTest extends IntegrationTest {
     class SaveComment {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("memberId").description("회원 id (필수)"),
                 fieldWithPath("offeringId").description("공모 id (필수)"),
                 fieldWithPath("content").description("내용 (필수)")
         );
@@ -40,12 +39,8 @@ public class CommentIntegrationTest extends IntegrationTest {
                 .requestSchema(schema("CommentSaveRequest"))
                 .build();
         ResourceSnippetParameters failSnippets = builder()
-                .summary("댓글 작성")
-                .description("댓글을 작성합니다.")
-                .requestFields(requestDescriptors)
                 .responseFields(failResponseDescriptors)
-                .requestSchema(schema("CommentSaveRequest"))
-                .responseSchema(schema("CommentSaveFailResponse"))
+                .responseSchema(schema("CommentSaveFailResponse")) // TODO: 중복되는 값 제거
                 .build();
 
         MemberEntity member;
@@ -61,13 +56,13 @@ public class CommentIntegrationTest extends IntegrationTest {
         @Test
         void should_saveCommentSuccess_when_givenCommentSaveRequest() {
             CommentSaveRequest request = new CommentSaveRequest(
-                    member.getId(),
                     offering.getId(),
                     "댓글 내용"
             );
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -80,12 +75,12 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_emptyValue() {
             CommentSaveRequest request = new CommentSaveRequest(
                     null,
-                    null,
                     ""
             );
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-fail-request-with-null", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -97,31 +92,13 @@ public class CommentIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_longContent() {
             CommentSaveRequest request = new CommentSaveRequest(
-                    member.getId(),
                     offering.getId(),
                     "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
             );
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-fail-request-with-long-content", resource(failSnippets)))
-                    .contentType(ContentType.JSON)
-                    .body(request)
-                    .when().post("/comments")
-                    .then().log().all()
-                    .statusCode(400);
-        }
-
-        @DisplayName("유효하지 않은 사용자에 대해 작성을 시도하는 경우 예외가 발생한다.")
-        @Test
-        void should_throwException_when_invalidMember() {
-            CommentSaveRequest request = new CommentSaveRequest(
-                    member.getId() + 100,
-                    offering.getId(),
-                    "댓글 내용"
-            );
-
-            RestAssured.given(spec).log().all()
-                    .filter(document("save-comment-fail-invalid_member", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -133,13 +110,13 @@ public class CommentIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_invalidOffering() {
             CommentSaveRequest request = new CommentSaveRequest(
-                    member.getId(),
                     offering.getId() + 100,
                     "댓글 내용"
             );
 
             RestAssured.given(spec).log().all()
                     .filter(document("save-comment-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .contentType(ContentType.JSON)
                     .body(request)
                     .when().post("/comments")
@@ -152,9 +129,6 @@ public class CommentIntegrationTest extends IntegrationTest {
     @Nested
     class GetAllCommentRoom {
 
-        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id (필수)")
-        );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("offerings[].offeringId").description("공모 id"),
                 fieldWithPath("offerings[].offeringTitle").description("공모 제목"),
@@ -165,16 +139,8 @@ public class CommentIntegrationTest extends IntegrationTest {
         ResourceSnippetParameters successSnippets = builder()
                 .summary("댓글방 목록 조회")
                 .description("댓글방 목록을 조회합니다.")
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("CommentRoomAllSuccessResponse"))
-                .build();
-        ResourceSnippetParameters failSnippets = builder()
-                .summary("댓글 목록 조회")
-                .description("댓글 목록을 조회합니다.")
-                .queryParameters(queryParameterDescriptors)
-                .responseFields(failResponseDescriptors)
-                .responseSchema(schema("CommentRoomAllFailResponse"))
                 .build();
 
         MemberEntity member;
@@ -195,21 +161,10 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_responseAllCommentRoom_when_givenMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-room-success", resource(successSnippets)))
-                    .queryParam("member-id", member.getId())
+                    .cookies(cookieProvider.createCookies())
                     .when().get("/comments")
                     .then().log().all()
                     .statusCode(200);
-        }
-
-        @DisplayName("유효하지 않는 사용자가 댓글방을 조회 할 경우 예외가 발생한다.")
-        @Test
-        void should_throwException_when_invalidMember() {
-            RestAssured.given(spec).log().all()
-                    .filter(document("get-all-comment-room-fail-invalid-member", resource(failSnippets)))
-                    .queryParam("member-id", member.getId() + 100)
-                    .when().get("/comments")
-                    .then().log().all()
-                    .statusCode(400);
         }
     }
 
@@ -219,9 +174,6 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         List<ParameterDescriptorWithType> pathParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)")
-        );
-        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("member-id").description("회원 id (필수)")
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("comments[].commentId").description("댓글 id"),
@@ -236,7 +188,6 @@ public class CommentIntegrationTest extends IntegrationTest {
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(successResponseDescriptors)
                 .responseSchema(schema("CommentAllSuccessResponse"))
                 .build();
@@ -244,7 +195,6 @@ public class CommentIntegrationTest extends IntegrationTest {
                 .summary("댓글 목록 조회")
                 .description("댓글 목록을 조회합니다.")
                 .pathParameters(pathParameterDescriptors)
-                .queryParameters(queryParameterDescriptors)
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("CommentAllFailResponse"))
                 .build();
@@ -264,8 +214,8 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_responseAllComment_when_givenOfferingIdAndMemberId() {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", offering.getId())
-                    .queryParam("member-id", member.getId())
                     .when().get("/comments/{offering-id}")
                     .then().log().all()
                     .statusCode(200);
@@ -276,8 +226,8 @@ public class CommentIntegrationTest extends IntegrationTest {
         void should_throwException_when_invalidOffering() {
             RestAssured.given(spec).log().all()
                     .filter(document("get-all-comment-fail-invalid-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookies())
                     .pathParam("offering-id", offering.getId() + 100)
-                    .queryParam("member-id", member.getId())
                     .when().get("/comments/{offering-id}")
                     .then().log().all()
                     .statusCode(400);

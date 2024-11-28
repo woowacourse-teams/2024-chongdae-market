@@ -1,13 +1,12 @@
 package com.zzang.chongdae.auth.controller;
 
 import com.zzang.chongdae.auth.service.AuthService;
-import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
-import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
-import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
-import com.zzang.chongdae.auth.service.dto.LoginResponse;
-import com.zzang.chongdae.logging.config.LoggingMasked;
+import com.zzang.chongdae.auth.service.dto.LoginRequest;
+import com.zzang.chongdae.auth.service.dto.RefreshRequest;
+import com.zzang.chongdae.auth.service.dto.SignupRequest;
+import com.zzang.chongdae.auth.service.dto.SignupResponse;
+import com.zzang.chongdae.auth.service.dto.TokenDto;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -25,27 +24,28 @@ public class AuthController {
     private final CookieProducer cookieExtractor;
     private final CookieConsumer cookieConsumer;
 
-    @LoggingMasked
-    @PostMapping("/auth/login/kakao")
-    public ResponseEntity<LoginResponse> kakaoLogin(
-            @RequestBody @Valid KakaoLoginRequest request, HttpServletResponse servletResponse) {
-        AuthInfoDto authInfo = authService.kakaoLogin(request);
-        addTokenToHttpServletResponse(authInfo.authToken(), servletResponse);
-        LoginResponse response = new LoginResponse(authInfo.authMember());
+    @PostMapping("/auth/login")
+    public ResponseEntity<Void> login(
+            @RequestBody @Valid LoginRequest request, HttpServletResponse servletResponse) {
+        TokenDto tokenDto = authService.login(request);
+        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
+        cookieConsumer.addCookies(servletResponse, cookies);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/auth/signup")
+    public ResponseEntity<SignupResponse> signup(
+            @RequestBody SignupRequest request) {
+        SignupResponse response = authService.signup(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/auth/refresh")
     public ResponseEntity<Void> refresh(
-            HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
-        String refreshToken = cookieConsumer.getRefreshToken(servletRequest.getCookies());
-        AuthTokenDto authToken = authService.refresh(refreshToken);
-        addTokenToHttpServletResponse(authToken, servletResponse);
-        return ResponseEntity.ok().build();
-    }
-
-    private void addTokenToHttpServletResponse(AuthTokenDto authToken, HttpServletResponse servletResponse) {
-        List<Cookie> cookies = cookieExtractor.extractAuthCookies(authToken);
+            @RequestBody RefreshRequest request, HttpServletResponse servletResponse) {
+        TokenDto tokenDto = authService.refresh(request);
+        List<Cookie> cookies = cookieExtractor.extractAuthCookies(tokenDto);
         cookieConsumer.addCookies(servletResponse, cookies);
+        return ResponseEntity.ok().build();
     }
 }

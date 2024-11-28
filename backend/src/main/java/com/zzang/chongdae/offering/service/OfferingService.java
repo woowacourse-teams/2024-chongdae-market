@@ -2,8 +2,6 @@ package com.zzang.chongdae.offering.service;
 
 import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
-import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
@@ -39,20 +37,17 @@ public class OfferingService {
 
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
-    private final MemberRepository memberRepository;
     private final StorageService storageService;
     private final ProductImageExtractor extractor;
     private final OfferingFetcher offeringFetcher;
 
-    public OfferingDetailResponse getOfferingDetail(Long offeringId, Long memberId) {
+    public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
 
         OfferingPrice offeringPrice = offering.toOfferingPrice();
         OfferingStatus offeringStatus = offering.toOfferingStatus();
 
-        MemberEntity member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         Boolean isParticipated = offeringMemberRepository.existsByOfferingAndMember(offering, member);
 
         return new OfferingDetailResponse(offering, offeringPrice, offeringStatus, isParticipated);
@@ -79,15 +74,16 @@ public class OfferingService {
         return new OfferingFilterAllResponse(filters);
     }
 
-    public OfferingMeetingResponse getOfferingMeeting(Long offeringId) {
+    public OfferingMeetingResponse getOfferingMeeting(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
+        if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
+            throw new MarketException(OfferingErrorCode.NOT_PARTICIPATE_MEMBER);
+        }
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
     }
 
-    public Long saveOffering(OfferingSaveRequest request) {
-        MemberEntity member = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+    public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
         OfferingEntity savedOffering = offeringRepository.save(offering);
         return savedOffering.getId();
@@ -103,7 +99,7 @@ public class OfferingService {
     }
 
     @Transactional
-    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, Long loginMemberId) {
+    public CommentRoomStatusResponse updateCommentRoomStatus(Long offeringId, MemberEntity member) {
         // TODO: loginMember 가 총대 권한을 가지고 있는지 확인
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
