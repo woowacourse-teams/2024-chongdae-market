@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
 
         <variable
@@ -12,19 +13,13 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:onClick="@{() -> onCommentRoomClickListener.onClick(commentRoom.id, commentRoom.title)}">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray_300"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
 
         <ImageView
@@ -42,10 +37,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
-            android:layout_marginTop="14.25dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/suit_medium"
             android:text="@{commentRoom.title}"
             android:textColor="@color/black_900"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/iv_profile"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="공구 제목 이름이 들어가요" />
@@ -55,8 +51,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3.25dp"
+            android:fontFamily="@font/suit_medium"
             android:text="@{commentRoom.latestComment}"
             android:textColor="@color/gray_500"
+            android:textSize="14dp"
             app:layout_constraintStart_toStartOf="@id/tv_offering_title"
             app:layout_constraintTop_toBottomOf="@id/tv_offering_title"
             tools:text="물품에 대해 설명 드릴게요." />
@@ -65,13 +63,20 @@
             android:id="@+id/tv_last_comment_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="18dp"
             android:textColor="@color/gray_900"
+            app:formattedAmPmTime="@{commentRoom.latestCommentTime}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="오전 10:33"
-            app:formattedAmPmTime="@{commentRoom.latestCommentTime}"/>
+            app:layout_constraintTop_toTopOf="@id/tv_offering_title"
+            tools:text="오전 10:33" />
+
+        <View
+            android:id="@+id/view_divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_300"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
