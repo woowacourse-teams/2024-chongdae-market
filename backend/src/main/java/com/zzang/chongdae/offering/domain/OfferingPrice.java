@@ -27,7 +27,7 @@ public class OfferingPrice {
 
     public void validateOriginPrice() {
         int dividedPrice = totalPrice / totalCount;
-        if (originPrice < dividedPrice) {
+        if (originPrice != null && originPrice < dividedPrice) {
             throw new MarketException(OfferingErrorCode.CANNOT_ORIGIN_PRICE_LESS_THEN_DIVIDED_PRICE);
         }
     }
