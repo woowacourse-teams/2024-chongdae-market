@@ -24,6 +24,7 @@ import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailActivit
 class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var offeringAdapter: OfferingAdapter
     private val viewModel: OfferingViewModel by viewModels {
         OfferingViewModel.getFactory(
@@ -79,6 +80,10 @@ class HomeFragment : Fragment(), OnOfferingClickListener, OnUpsideClickListener 
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).showBottomNavigation()
+        firebaseAnalyticsManager.logScreenView(
+            screenName = "HomeFragment",
+            screenClass = this::class.java.simpleName,
+        )
     }
 
     override fun onDestroyView() {
