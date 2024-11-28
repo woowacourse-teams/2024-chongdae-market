@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.util
 
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -12,9 +12,7 @@ import okhttp3.HttpUrl
 
 class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataStore) : CookieJar {
     private val cookies: MutableMap<String, List<Cookie>> = mutableMapOf()
-    private val urlHost =
-        BuildConfig.BASE_URL.removePrefix(URL_PREFIX_HTTP).removePrefix(URL_PREFIX_HTTPS)
-            .substringBefore("/")
+    private val urlHost = BuildConfig.BASE_URL.removePrefix(URL_PREFIX)
 
     init {
         loadTokensFromDataStore()
@@ -36,7 +34,7 @@ class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataS
         val accessToken = cookies.first { it.name == ACCESS_TOKEN_NAME }.value
         val refreshToken = cookies.first { it.name == REFRESH_TOKEN_NAME }.value
         CoroutineScope(Dispatchers.IO).launch {
-            userPreferencesDataStore.saveAccountTokens(accessToken, refreshToken)
+            userPreferencesDataStore.saveTokens(accessToken, refreshToken)
         }
     }
 
@@ -65,7 +63,6 @@ class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataS
     companion object {
         private const val ACCESS_TOKEN_NAME = "access_token"
         private const val REFRESH_TOKEN_NAME = "refresh_token"
-        private const val URL_PREFIX_HTTP = "http://"
-        private const val URL_PREFIX_HTTPS = "https://"
+        private const val URL_PREFIX = "http://"
     }
 }

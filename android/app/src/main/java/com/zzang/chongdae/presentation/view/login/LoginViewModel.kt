@@ -5,27 +5,44 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.zzang.chongdae.data.local.source.MemberDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.domain.model.HttpStatusCode
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val memberDataStore: MemberDataStore,
+    private val userPreferencesDataStore: UserPreferencesDataStore,
 ) : ViewModel() {
-    private val _navigateEvent: MutableSingleLiveData<Boolean> = MutableSingleLiveData()
-    val navigateEvent: SingleLiveData<Boolean> get() = _navigateEvent
+    private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val loginSuccessEvent: SingleLiveData<Unit> get() = _loginSuccessEvent
+
+    private val _alreadyLoggedInEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+    val alreadyLoggedInEvent: SingleLiveData<Unit> get() = _alreadyLoggedInEvent
+
+    init {
+        makeAlreadyLoggedInEvent()
+    }
+
+    private fun makeAlreadyLoggedInEvent() {
+        viewModelScope.launch {
+            val accessToken = userPreferencesDataStore.accessTokenFlow.first()
+            if (accessToken != null) {
+                _alreadyLoggedInEvent.setValue(Unit)
+            }
+        }
+    }
 
     fun postLogin(ci: String) {
         viewModelScope.launch {
             authRepository.saveLogin(
                 ci = ci,
             ).onSuccess {
-                memberDataStore.saveMember(it.memberId, it.nickName)
-                _navigateEvent.setValue(true)
+                userPreferencesDataStore.saveMember(it.memberId, it.nickName)
+                _loginSuccessEvent.setValue(Unit)
             }.onFailure {
                 Log.e("error", "postLogin: ${it.message}")
                 when (it.message) {
@@ -41,7 +58,7 @@ class LoginViewModel(
             authRepository.saveSignup(
                 ci = ci,
             ).onSuccess {
-                memberDataStore.saveMember(it.memberId, it.nickName)
+                userPreferencesDataStore.saveMember(it.memberId, it.nickName)
                 postLogin(ci)
             }.onFailure {
                 Log.e("error", "postSignup: ${it.message}")
@@ -69,13 +86,13 @@ class LoginViewModel(
         @Suppress("UNCHECKED_CAST")
         fun getFactory(
             authRepository: AuthRepository,
-            memberDataStore: MemberDataStore,
+            userPreferencesDataStore: UserPreferencesDataStore,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(
                 modelClass: Class<T>,
                 extras: CreationExtras,
             ): T {
-                return LoginViewModel(authRepository, memberDataStore) as T
+                return LoginViewModel(authRepository, userPreferencesDataStore) as T
             }
         }
     }
