@@ -55,42 +55,28 @@ public class JwtTokenProvider {
     }
 
     public void validateAccessToken(String token) {
-        getClaimsAccessToken(token, accessSecretKey).getSubject();
+        getClaims(token, accessSecretKey).getSubject();
     }
 
     public Long getMemberIdByAccessToken(String token) {
-        String memberId = getClaimsAccessToken(token, accessSecretKey).getSubject();
+        String memberId = getClaims(token, accessSecretKey).getSubject();
         return Long.valueOf(memberId);
-    }
-
-    private Claims getClaimsAccessToken(String token, String accessSecretKey) {
-        try {
-            return getClaims(token, accessSecretKey);
-        } catch (ExpiredJwtException e) {
-            throw new MarketException(AuthErrorCode.EXPIRED_ACCESS_TOKEN);
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new MarketException(AuthErrorCode.INVALID_TOKEN);
-        }
-    }
-
-    private Claims getClaims(String token, String key) {
-        return Jwts.parser()
-                .setSigningKey(key)
-                .setClock(() -> Date.from(clock.instant()))
-                .parseClaimsJws(token)
-                .getBody();
     }
 
     public Long getMemberIdByRefreshToken(String token) {
-        String memberId = getClaimsRefreshToken(token, refreshSecretKey).getSubject();
+        String memberId = getClaims(token, refreshSecretKey).getSubject();
         return Long.valueOf(memberId);
     }
 
-    private Claims getClaimsRefreshToken(String token, String refreshSecretKey) {
+    private Claims getClaims(String token, String key) {
         try {
-            return getClaims(token, refreshSecretKey);
+            return Jwts.parser()
+                    .setSigningKey(key)
+                    .setClock(() -> Date.from(clock.instant()))
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
-            throw new MarketException(AuthErrorCode.EXPIRED_REFRESH_TOKEN);
+            throw new MarketException(AuthErrorCode.EXPIRED_TOKEN);
         } catch (JwtException | IllegalArgumentException e) {
             throw new MarketException(AuthErrorCode.INVALID_TOKEN);
         }

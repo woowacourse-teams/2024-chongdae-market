@@ -11,15 +11,12 @@ import com.zzang.chongdae.offering.service.dto.OfferingMeetingUpdateRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageRequest;
 import com.zzang.chongdae.offering.service.dto.OfferingProductImageResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUpdateRequest;
-import com.zzang.chongdae.offering.service.dto.OfferingUpdateResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,15 +92,6 @@ public class OfferingController {
         return ResponseEntity.created(URI.create("/offerings/" + offeringId)).build();
     }
 
-    @PatchMapping("/offerings/{offering-id}")
-    public ResponseEntity<OfferingUpdateResponse> updateOffering(
-            @PathVariable(value = "offering-id") Long offeringId,
-            @RequestBody @Valid OfferingUpdateRequest request,
-            MemberEntity member) {
-        OfferingUpdateResponse response = offeringService.updateOffering(offeringId, request, member);
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("/offerings/product-images/s3")
     public ResponseEntity<OfferingProductImageResponse> uploadProductImageToS3(
             @RequestParam MultipartFile image) {
@@ -116,13 +104,5 @@ public class OfferingController {
             @RequestBody @Valid OfferingProductImageRequest request) {
         OfferingProductImageResponse response = offeringService.extractProductImageFromOg(request);
         return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/offerings/{offering-id}")
-    public ResponseEntity<Void> deleteOffering(
-            @PathVariable(value = "offering-id") Long offeringId,
-            MemberEntity member) { // TODO: 머지 후 위치 조정
-        offeringService.deleteOffering(offeringId, member);
-        return ResponseEntity.noContent().build();
     }
 }

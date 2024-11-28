@@ -1,5 +1,2 @@
 ### 댓글방 목록 조회 API
 GET {{base-url}}/comments
-
-### 댓글방 상세 조회 API
-GET {{base-url}}/comments/info?offering-id=1

@@ -46,5 +46,6 @@ public record OfferingSaveRequest(@NotBlank
         return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, 1,
                 totalPrice, originPrice, discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+        // TODO : 각자 맡은 팀에서 계산하는 로직 생각하기, 객체로 빼서 만드셈~
     }
 }

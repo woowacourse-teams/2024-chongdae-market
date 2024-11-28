@@ -39,6 +39,6 @@ public class OfferingFetcher {
         if (strategy == null) {
             throw new MarketException(OfferingErrorCode.NOT_SUPPORTED_FILTER);
         }
-        return strategy.fetch(searchKeyword, lastId, pageable);
+        return strategy.fetchOfferings(searchKeyword, lastId, pageable);
     }
 }

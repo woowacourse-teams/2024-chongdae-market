@@ -12,20 +12,14 @@ public class JoinableOfferingStrategy extends OfferingFetchStrategy {
     }
 
     @Override
-    protected List<OfferingEntity> fetchWithoutLast(Long outOfRangeId, String searchKeyword, Pageable pageable) {
-        return fetchOfferings(outOfRangeId, searchKeyword, pageable);
+    protected List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable) {
+        Long outOfRangeId = findOutOfRangeId();
+        return offeringRepository.findJoinableOfferingsWithKeyword(outOfRangeId, searchKeyword, pageable);
     }
 
     @Override
-    protected List<OfferingEntity> fetchWithLast(OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
-        Long lastId = lastOffering.getId();
-        return fetchOfferings(lastId, searchKeyword, pageable);
-    }
-
-    private List<OfferingEntity> fetchOfferings(Long outOfRangeId, String searchKeyword, Pageable pageable) {
-        if (searchKeyword == null) {
-            return offeringRepository.findJoinableOfferingsWithoutKeyword(outOfRangeId, pageable);
-        }
-        return offeringRepository.findJoinableOfferingsWithKeyword(outOfRangeId, searchKeyword, pageable);
+    protected List<OfferingEntity> fetchOfferingsWithLastOffering(OfferingEntity lastOffering, String searchKeyword,
+                                                                  Pageable pageable) {
+        return offeringRepository.findJoinableOfferingsWithKeyword(lastOffering.getId(), searchKeyword, pageable);
     }
 }

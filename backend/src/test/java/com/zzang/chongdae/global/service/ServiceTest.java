@@ -4,7 +4,6 @@ import com.zzang.chongdae.global.config.TestConfig;
 import com.zzang.chongdae.global.domain.DomainSupplier;
 import com.zzang.chongdae.global.helper.CookieProvider;
 import com.zzang.chongdae.global.helper.DatabaseCleaner;
-import java.time.Clock;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +19,6 @@ public abstract class ServiceTest extends DomainSupplier {
 
     @Autowired
     protected CookieProvider cookieProvider;
-
-    @Autowired
-    protected Clock clock;
 
     @BeforeEach
     protected void setUp() {

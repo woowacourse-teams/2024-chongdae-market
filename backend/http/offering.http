@@ -24,6 +24,3 @@ Content-Type: application/json
   "meetingDate": "2024-10-11T10:00:00",
   "description": "내용입니다."
 }
-
-### 공모 삭제 API
-DELETE {{base-url}}/offerings/1

@@ -7,12 +7,10 @@ import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
-import com.zzang.chongdae.offering.domain.UpdatedOffering;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,16 +25,11 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@SQLDelete(sql = "UPDATE offering SET is_deleted = true WHERE id = ?")
-@SQLRestriction("is_deleted = false")
 @Table(name = "offering")
 @Entity
 public class OfferingEntity extends BaseTimeEntity {
@@ -49,7 +42,7 @@ public class OfferingEntity extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private MemberEntity member;
 
     @NotNull
@@ -103,10 +96,6 @@ public class OfferingEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private CommentRoomStatus roomStatus;
 
-    @NotNull
-    @ColumnDefault("false")
-    private Boolean isDeleted;
-
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime meetingDate, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
@@ -115,7 +104,7 @@ public class OfferingEntity extends BaseTimeEntity {
                           OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, totalPrice,
-                originPrice, discountRate, offeringStatus, roomStatus, false);
+                originPrice, discountRate, offeringStatus, roomStatus);
     }
 
     public void participate() {
@@ -164,19 +153,5 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public void updateRoomStatus(CommentRoomStatus roomStatus) {
         this.roomStatus = roomStatus;
-    }
-
-    public void update(UpdatedOffering updatedOffering) {
-        this.title = updatedOffering.getTitle();
-        this.productUrl = updatedOffering.getProductUrl();
-        this.thumbnailUrl = updatedOffering.getThumbnailUrl();
-        this.totalCount = updatedOffering.getOfferingPrice().getTotalCount();
-        this.totalPrice = updatedOffering.getOfferingPrice().getTotalPrice();
-        this.originPrice = updatedOffering.getOfferingPrice().getOriginPrice();
-        this.meetingAddress = updatedOffering.getMeetingAddress();
-        this.meetingAddressDetail = updatedOffering.getMeetingAddressDetail();
-        this.meetingAddressDong = updatedOffering.getMeetingAddressDong();
-        this.meetingDate = updatedOffering.getMeetingDate();
-        this.description = updatedOffering.getDescription();
     }
 }

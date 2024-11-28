@@ -1,9 +1,7 @@
 package com.zzang.chongdae.offeringmember.service;
 
-import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.notification.service.FcmNotificationService;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -28,11 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OfferingMemberService {
 
-    private final FcmNotificationService notificationService;
     private final OfferingMemberRepository offeringMemberRepository;
     private final OfferingRepository offeringRepository;
 
-    @WriterDatabase
     @Transactional
     public Long participate(ParticipationRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(request.offeringId())
@@ -41,12 +37,11 @@ public class OfferingMemberService {
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
-        OfferingMemberEntity saved = offeringMemberRepository.save(offeringMember);
+        offeringMemberRepository.save(offeringMember);
 
         offering.participate();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        notificationService.participate(saved);
         return offeringMember.getId();
     }
 
@@ -67,7 +62,6 @@ public class OfferingMemberService {
         }
     }
 
-    @WriterDatabase
     @Transactional
     public void cancelParticipate(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
@@ -76,11 +70,9 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
         validateCancel(offeringMember);
         offeringMemberRepository.delete(offeringMember);
-
         offering.leave();
         OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
         offering.updateOfferingStatus(offeringStatus);
-        notificationService.cancelParticipation(offeringMember);
     }
 
     private void validateCancel(OfferingMemberEntity offeringMember) {
@@ -97,13 +89,13 @@ public class OfferingMemberService {
     private void validateInProgress(OfferingMemberEntity offeringMember) {
         OfferingEntity offering = offeringMember.getOffering();
         CommentRoomStatus roomStatus = offering.getRoomStatus();
-        if (roomStatus.isGrouped()) {
+        if (roomStatus.isInProgress()) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_IN_PROGRESS);
         }
     }
 
     public ParticipantResponse getAllParticipant(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
+        OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipants(offering, member);
 

@@ -225,9 +225,9 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .statusCode(200);
         }
 
-        @DisplayName("존재하지 않는 공모 id로 댓글방 정보를 조회할 경우 예외가 발생한다.")
+        @DisplayName("유효하지 않은 공모에 대해 댓글방 정보를 조회할 경우 예외가 발생한다.")
         @Test
-        void should_throwException_when_givenInvalidOffering() {
+        void should_throwException_when_invalidOffering() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-offering", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member))
@@ -239,7 +239,7 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         @DisplayName("총대 혹은 참여자가 아닌 사용자가 댓글방 정보를 조회할 경우 예외가 발생한다.")
         @Test
-        void should_throwException_when_givenInvalidMember() {
+        void should_throwException_when_invalidMember() {
             given(spec).log().all()
                     .filter(document("get-comment-room-info-fail-invalid-member", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(invalidMember))

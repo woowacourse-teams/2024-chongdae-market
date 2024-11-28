@@ -7,7 +7,6 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMemberRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,7 +36,7 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     private MemberEntity member;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private OfferingEntity offering;
 
     @Enumerated(EnumType.STRING)

@@ -41,9 +41,3 @@ out/
 
 ### RestDocs ###
 openapi3.yaml
-
-### Intellij IDEA ###
-.idea
-
-### FCM ###
-/src/main/resources/fcm
