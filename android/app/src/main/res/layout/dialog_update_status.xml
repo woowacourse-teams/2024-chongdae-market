@@ -6,19 +6,20 @@
     <data>
 
         <variable
-            name="vm"
+            name="viewModel"
             type="com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel" />
 
         <variable
             name="listener"
-            type="com.zzang.chongdae.presentation.view.commentdetail.event.OnUpdateStatusClickListener" />
+            type="com.zzang.chongdae.presentation.view.commentdetail.OnUpdateStatusClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_200"
         android:layout_marginStart="@dimen/margin_30"
-        android:layout_marginEnd="@dimen/margin_30">
+        android:layout_marginEnd="@dimen/margin_30"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/tv_dialog_message"
@@ -28,13 +29,11 @@
             android:layout_marginTop="@dimen/size_50"
             android:layout_marginEnd="@dimen/size_50"
             android:fontFamily="@font/suit_bold"
-            android:text="@{vm.commentOfferingInfo.message}"
-            android:textColor="@color/gray_500"
+            android:text="@string/update_state_dialog_message"
             android:textSize="@dimen/size_15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="텍스트" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_cancel"
@@ -42,11 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_50"
             android:background="@color/red_100"
-            android:fontFamily="@font/suit_medium"
+            android:fontFamily="@font/suit_semibold"
+            android:onClick="@{() -> listener.onCancelClick()}"
             android:text="@string/all_cancel"
             android:textColor="@color/main_color"
             android:textSize="@dimen/size_15"
-            app:debouncedOnClick="@{() -> listener.onCancelClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_confirm"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,10 +60,10 @@
             android:layout_marginTop="@dimen/size_40"
             android:background="@color/main_color"
             android:fontFamily="@font/suit_semibold"
-            android:text="@string/all_confirm"
+            android:onClick="@{() -> listener.onSubmitClick()}"
+            android:text="@string/all_change"
             android:textColor="@color/white"
             android:textSize="@dimen/size_15"
-            app:debouncedOnClick="@{() -> listener.onSubmitClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_cancel"
