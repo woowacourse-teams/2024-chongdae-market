@@ -2,4 +2,7 @@
 GET {{base-url}}/offerings/1?member-id=1
 
 ### 공모 목록 조회 API
-GET {{base-url}}/offerings?last-id=0&page-size=10
+GET {{base-url}}/offerings?filter=RECENT&search=&last-id=99&page-size=2
+
+### 공모 필터 목록 조회 API
+GET {{base-url}}/offerings/filters

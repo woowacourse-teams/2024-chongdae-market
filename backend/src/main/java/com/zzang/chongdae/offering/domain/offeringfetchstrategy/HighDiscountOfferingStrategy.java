@@ -13,7 +13,7 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
 
     @Override
     protected List<OfferingEntity> fetchOfferingsWithoutLastId(String searchKeyword, Pageable pageable) {
-        double outOfRangeDiscountRate = 100;
+        double outOfRangeDiscountRate = 1;
         Long outOfRangeId = findOutOfRangeId();
         return offeringRepository.findHighDiscountOfferingsWithKeyword(
                 outOfRangeDiscountRate, outOfRangeId, searchKeyword, pageable);
@@ -22,8 +22,10 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
     @Override
     protected List<OfferingEntity> fetchOfferingsWithLastOffering(
             OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
-        Double lastDiscountRate = lastOffering.getDiscountRate();
-        return offeringRepository.findHighDiscountOfferingsWithKeyword(
-                lastDiscountRate, lastOffering.getId(), searchKeyword, pageable);
+        double discountRate = (double) (lastOffering.getEachPrice()
+                - lastOffering.getTotalPrice() / lastOffering.getTotalCount())
+                / lastOffering.getEachPrice(); // TODO: 도메인으로 분리
+        return offeringRepository.findHighDiscountOfferingsWithKeyword(discountRate, lastOffering.getId(),
+                searchKeyword, pageable);
     }
 }
