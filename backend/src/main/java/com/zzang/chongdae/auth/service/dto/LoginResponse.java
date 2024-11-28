@@ -1,8 +1,8 @@
 package com.zzang.chongdae.auth.service.dto;
 
-public record LoginResponse(Long memberId, String nickname) {
+public record LoginResponse(String accessToken, String refreshToken) {
 
-    public LoginResponse(AuthMemberDto authMember) {
-        this(authMember.id(), authMember.nickname());
+    public LoginResponse(TokenDto tokenDto) {
+        this(tokenDto.accessToken(), tokenDto.refreshToken());
     }
 }
