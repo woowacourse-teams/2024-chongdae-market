@@ -1,5 +1,6 @@
 package com.zzang.chongdae.presentation.view.offeringdetail
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
+import com.zzang.chongdae.databinding.DialogDeleteOfferingBinding
 import com.zzang.chongdae.databinding.FragmentOfferingDetailBinding
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
@@ -24,13 +26,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OfferingDetailFragment : Fragment() {
+class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     private var _binding: FragmentOfferingDetailBinding? = null
     private val binding get() = _binding!!
     private var toast: Toast? = null
     private val offeringId by lazy {
         arguments?.getLong(HomeFragment.OFFERING_ID) ?: throw IllegalArgumentException()
     }
+    private val dialog: Dialog by lazy { Dialog(requireContext()) }
 
     @Inject
     lateinit var offeringDetailAssistedFactory: OfferingDetailViewModel.OfferingDetailAssistedFactory
@@ -97,6 +100,44 @@ class OfferingDetailFragment : Fragment() {
                 bundleOf(HomeFragment.OFFERING_ID to offeringId),
             )
         }
+
+        viewModel.deleteOfferingEvent.observe(viewLifecycleOwner) {
+            showUpdateStatusDialog()
+        }
+
+        viewModel.deleteOfferingSuccessEvent.observe(viewLifecycleOwner) {
+            dialog.dismiss()
+            findNavController().popBackStack()
+            setFragmentResult(OFFERING_DETAIL_BUNDLE_KEY, bundleOf(DELETED_OFFERING_ID_KEY to true))
+            showToast(R.string.offering_detail_delete_complete_message)
+        }
+    }
+
+    override fun onClickConfirm() {
+        viewModel.deleteOffering(offeringId)
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "delete_offering_event",
+            name = "delete_offering_event",
+            contentType = "button",
+        )
+    }
+
+    override fun onClickCancel() {
+        firebaseAnalyticsManager.logSelectContentEvent(
+            id = "cancel_delete_offering_event",
+            name = "cancel_delete_offering_event",
+            contentType = "button",
+        )
+        dialog.dismiss()
+    }
+
+    private fun showUpdateStatusDialog() {
+        val dialogBinding = DialogDeleteOfferingBinding.inflate(layoutInflater, null, false)
+
+        dialogBinding.listener = this
+
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
     }
 
     private fun openUrlInBrowser(url: String) {
@@ -149,6 +190,7 @@ class OfferingDetailFragment : Fragment() {
     companion object {
         const val OFFERING_DETAIL_BUNDLE_KEY = "offering_detail_bundle_key"
         const val UPDATED_OFFERING_ID_KEY = "updated_offering_id"
+        const val DELETED_OFFERING_ID_KEY = "deleted_offering_id"
         const val OFFERING_ID_KEY = "offering_id"
     }
 }
