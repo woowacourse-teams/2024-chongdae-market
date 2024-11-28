@@ -35,4 +35,7 @@
     <string name="my_page_logout_text">로그아웃</string>
     <string name="my_page_withdrawal_text">회원 탈퇴</string>
 
+    <!--    comment_room-->
+    <string name="comment_text">채팅</string>
+
 </resources>
