@@ -1,85 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
         <variable
             name="vm"
             type="com.zzang.chongdae.presentation.view.login.LoginViewModel" />
 
         <variable
             name="onAuthClickListener"
-            type="com.zzang.chongdae.presentation.view.login.OnAuthClickListener" />
+            type="com.zzang.chongdae.presentation.view.login.OnAuthClickListener"/>
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/tv_start_chongdae_with_kakao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_120"
+            android:layout_marginStart="@dimen/size_50"
+            android:layout_marginTop="165dp"
             android:fontFamily="@font/suit_bold"
             android:text="@string/login_with_kakao"
             android:textColor="@color/black_900"
             android:textSize="@dimen/size_25"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="@dimen/size_150"
-            android:layout_height="@dimen/size_100"
-            android:src="@drawable/ic_chongdae_main_color"
-            app:layout_constraintBottom_toTopOf="@id/iv_login"
-            app:layout_constraintEnd_toEndOf="@id/tv_start_chongdae_with_kakao"
-            app:layout_constraintHorizontal_bias="0.5"
+        <TextView
+            android:id="@+id/tv_easily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_bold"
+            android:text="@string/login_easily"
+            android:textColor="@color/black_900"
+            android:textSize="@dimen/size_25"
             app:layout_constraintStart_toStartOf="@id/tv_start_chongdae_with_kakao"
-            app:layout_constraintTop_toBottomOf="@id/tv_start_chongdae_with_kakao"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintTop_toBottomOf="@id/tv_start_chongdae_with_kakao" />
+
+        <TextView
+            android:id="@+id/tv_group_purchase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_bold"
+            android:text="@string/login_group_purchase"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/size_25"
+            app:layout_constraintStart_toEndOf="@id/tv_easily"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_chongdae_with_kakao" />
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_bold"
+            android:text="@string/login_start"
+            android:textColor="@color/black_900"
+            android:textSize="@dimen/size_25"
+            app:layout_constraintStart_toEndOf="@id/tv_group_purchase"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_chongdae_with_kakao" />
 
         <ImageView
-            android:id="@+id/iv_login"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_50"
-            android:layout_marginStart="@dimen/margin_30"
-            android:layout_marginEnd="@dimen/margin_30"
-            android:layout_marginBottom="@dimen/size_120"
-            android:background="@drawable/bg_yellow_radius_12dp"
-            app:debouncedOnClick="@{() -> onAuthClickListener.onLoginButtonClick()}"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="120dp"
+            android:src="@drawable/ic_chongdae_sub"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_easily" />
+
+
+        <Button
+            android:id="@+id/btn_login"
+            android:onClick="@{() -> onAuthClickListener.onLoginButtonClick()}"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="152dp"
+            android:background="@drawable/kakao_login_large_wide"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_kakao_symbol"
-            android:layout_width="@dimen/icon_size_24"
-            android:layout_height="@dimen/icon_size_24"
-            android:layout_marginStart="@dimen/size_20"
-            android:scaleType="fitXY"
-            android:src="@drawable/login_kakao_symbol"
-            app:layout_constraintBottom_toBottomOf="@id/iv_login"
-            app:layout_constraintStart_toStartOf="@id/iv_login"
-            app:layout_constraintTop_toTopOf="@id/iv_login" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/suit_medium"
-            android:text="@string/login_with_kakao_button"
-            android:textColor="@color/black"
-            android:textSize="@dimen/size_16"
-            app:layout_constraintBottom_toBottomOf="@id/iv_login"
-            app:layout_constraintEnd_toEndOf="@id/iv_login"
-            app:layout_constraintStart_toStartOf="@id/iv_kakao_symbol"
-            app:layout_constraintTop_toTopOf="@id/iv_login" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
