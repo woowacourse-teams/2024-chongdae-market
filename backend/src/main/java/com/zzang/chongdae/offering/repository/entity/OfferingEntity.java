@@ -2,10 +2,10 @@ package com.zzang.chongdae.offering.repository.entity;
 
 import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
-import com.zzang.chongdae.offering.domain.status.CommentRoomStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
