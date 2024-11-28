@@ -45,8 +45,7 @@ class ChongdaeApp : Application() {
             commentLocalDataSource = CommentLocalDataSourceImpl(commentDao),
             commentRemoteDataSource =
                 CommentRemoteDataSourceImpl(
-                    networkManager.offeringService(),
-                    networkManager.commentService(),
+                    service = networkManager.commentService(),
                 ),
         )
     }
