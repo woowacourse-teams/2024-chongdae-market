@@ -11,7 +11,7 @@
             type="com.zzang.chongdae.domain.model.Offering" />
 
         <variable
-            name="onArticleClickListener"
+            name="onOfferingClickListener"
             type="com.zzang.chongdae.presentation.view.home.OnOfferingClickListener" />
 
     </data>
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundGravity="center_vertical"
-        android:onClick="@{() -> onArticleClickListener.onClick(offering.id)}"
+        android:onClick="@{() -> onOfferingClickListener.onClick(offering.id)}"
         android:paddingTop="15dp"
         android:paddingBottom="15dp">
 

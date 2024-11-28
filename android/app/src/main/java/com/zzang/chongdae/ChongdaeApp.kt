@@ -1,29 +1,66 @@
 package com.zzang.chongdae
 
 import android.app.Application
-import android.content.Context
-import androidx.datastore.preferences.preferencesDataStore
-import com.google.firebase.FirebaseApp
-import com.kakao.sdk.common.KakaoSdk
 import com.zzang.chongdae.data.local.database.AppDatabase
-import dagger.hilt.android.HiltAndroidApp
+import com.zzang.chongdae.data.local.source.CommentLocalDataSourceImpl
+import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
+import com.zzang.chongdae.data.remote.api.NetworkManager
+import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
+import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
+import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
+import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
+import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
+import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl
+import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
+import com.zzang.chongdae.data.repository.OfferingsRepositoryImpl
+import com.zzang.chongdae.domain.repository.CommentDetailRepository
+import com.zzang.chongdae.domain.repository.CommentRoomsRepository
+import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import com.zzang.chongdae.domain.repository.OfferingsRepository
 
-@HiltAndroidApp
 class ChongdaeApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
-        FirebaseApp.initializeApp(this)
-        _chongdaeAppContext = this
+    private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(this) }
+    private val networkManager: NetworkManager by lazy { NetworkManager }
+
+    private val offeringDao by lazy { appDatabase.offeringDao() }
+    private val commentDao by lazy { appDatabase.commentDao() }
+
+    val offeringRepository: OfferingsRepository by lazy {
+        OfferingsRepositoryImpl(
+            offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
+            offeringRemoteDataSource = OfferingRemoteDataSourceImpl(networkManager.offeringService()),
+        )
     }
 
-    companion object {
-        val Context.dataStore by preferencesDataStore(name = "member_preferences")
+    val commentDetailRepository: CommentDetailRepository by lazy {
+        CommentDetailRepositoryImpl(
+            offeringLocalDataSource = OfferingLocalDataSourceImpl(offeringDao),
+            commentLocalDataSource = CommentLocalDataSourceImpl(commentDao),
+            commentRemoteDataSource =
+                CommentRemoteDataSourceImpl(
+                    networkManager.offeringService(),
+                    networkManager.commentService(),
+                ),
+        )
+    }
 
-        private lateinit var _chongdaeAppContext: Context
-        val chongdaeAppContext get() = _chongdaeAppContext
+    val commentRoomsRepository: CommentRoomsRepository by lazy {
+        CommentRoomsRepositoryImpl(
+            commentRoomsDataSource = CommentRoomsDataSourceImpl(networkManager.commentService()),
+        )
+    }
 
-        private val appDatabase: AppDatabase by lazy { AppDatabase.getInstance(chongdaeAppContext) }
-        val offeringDao by lazy { appDatabase.offeringDao() }
+    val offeringDetailRepository: OfferingDetailRepository by lazy {
+        OfferingDetailRepositoryImpl(
+            offeringDetailDataSource =
+                OfferingDetailDataSourceImpl(
+                    networkManager.offeringService(),
+                    networkManager.participationService(),
+                ),
+        )
+    }
+
+    override fun onCreate() {
+        super.onCreate()
     }
 }
