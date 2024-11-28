@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매 - 총대마켓 ⛳">
-    <meta property="og:image" content="https://github.com/user-attachments/assets/c764d653-fb57-4840-9571-6324d6fb4c25">
-    <meta property="og:description" content="공동구매는 총대마켓 지금 플레이스토어에서 다운로드 하세요 ⛳" />
     <title>총대마켓 ⛳️</title>
     <style>
         * {
@@ -79,7 +76,6 @@
            background-color: white;
            font-size: 14px;
            display: inline-block;
-           color: black;
         }
 
         #filters button.active {
@@ -230,7 +226,6 @@
         let lastId = -1;
         let isLoading = false;
         let search = '';
-        const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
 
         async function fetchOfferings(filter = '', lastId = -1, search = '') {
             const response = await fetch(`/read-only/offerings?filter=${filter}${lastId !== -1 ? '&last-id=' + lastId : ''}${search !== '' ? '&search=' + encodeURIComponent(search) : ''}`);
@@ -279,25 +274,26 @@
                 if (offering.status === 'IMMINENT') {
                     statusClass = 'status-imminent';
                     statusName = '마감임박';
-                } else if (offering.status === 'CONFIRMED') {
+                } else if (offering.status === 'CLOSED') {
                     statusClass = 'status-closed';
                     statusName = '모집마감';
                 } else if (offering.status === 'FULL') {
                     statusClass = 'status-full';
                     statusName = '인원만석';
                 }
+
                 offeringCard.innerHTML = `
                         <a href="/read-only/web/offerings/${offering.id}">
-                            <img src="${offering.thumbnailUrl || defaultThumbnailUrl}" alt="${offering.title}" />
+                            <img src="${offering.thumbnailUrl}" alt="${offering.title}" />
                             <div class="content">
                                 <span class="status-badge ${statusClass}">${statusName}</span>
                                 <div class="title">${offering.title}</div>
-                                <div class="location">${offering.meetingAddressDong || ''}</div>
+                                <div class="location">${offering.meetingAddressDong}</div>
                                 <div class="price">
-                                    <div class="original-price">${offering.originPrice ? offering.originPrice.toLocaleString() + '원' : '' }</div>
+                                    <div class="original-price">${offering.originPrice}원</div>
                                     <div class="price-info">
-                                        <div class="discount-rate">${offering.discountRate ? offering.discountRate + '% ↓' : '' }</div>
-                                        <div class="discounted-price">${offering.dividedPrice ? offering.dividedPrice.toLocaleString() + '원' : '' }</div>
+                                        <div class="discount-rate">${offering.discountRate}% ↓</div>
+                                        <div class="discounted-price">${offering.dividedPrice}원</div>
                                     </div>
                                </div>
                             </div>

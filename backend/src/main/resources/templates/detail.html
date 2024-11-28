@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매 - 총대마켓 ⛳️</title>
-    <meta property="og:title" th:content="${offeringTitle}">
-    <meta property="og:image" th:content="${thumbnailUrl}">
+    <meta property="og:title" content="더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매 - 총대마켓 ⛳️">
+    <meta property="og:image" content="https://github.com/user-attachments/assets/c764d653-fb57-4840-9571-6324d6fb4c25">
     <meta property="og:description"
-      content="공동구매는 총대마켓 지금 플레이스토어에서 다운로드 하세요 ⛳" />
+      content="지금 플레이스토어에서 다운로드 하세요 ⛳" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -109,8 +109,6 @@
     </div>
 
     <script>
-        const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
-        const playStoreUrl = "https://play.google.com/store/apps/details?id=com.zzang.chongdae";
         async function fetchOfferingDetails(offeringId) {
             try {
                 const response = await fetch(`/read-only/offerings/${offeringId}`);
@@ -124,34 +122,27 @@
 
         function updatePageContent(offering) {
             document.querySelector('meta[property="og:title"]').setAttribute('content', offering.title);
+
             document.getElementById('title').textContent = offering.title;
-            document.getElementById('original-price').textContent = `${offering.originPrice ? offering.originPrice.toLocaleString() + '원' : '' }`;
-            document.getElementById('discount-rate').textContent = `${offering.discountRate ? offering.discountRate + '% ↓': ''}`;
+            document.getElementById('original-price').textContent = `${offering.originPrice.toLocaleString()}원`;
+            document.getElementById('discount-rate').textContent = `${offering.discountRate}% ↓`;
             document.getElementById('discounted-price').textContent = `${offering.dividedPrice.toLocaleString()}원`;
             document.getElementById('meeting-address').textContent = offering.meetingAddressDong;
-            document.getElementById('thumbnail').src = offering.thumbnailUrl || defaultThumbnailUrl;
+            document.getElementById('thumbnail').src = offering.thumbnailUrl;
+
             updateButton(offering);
         }
 
-        function updateButton(offering) {
+        function updateButton(data) {
             const ctaButton = document.getElementById('cta-button');
-            const isAvailable = offering.isOpen;
+            const isAvailable = data.isOpen;
 
             ctaButton.textContent = isAvailable
-                ? `총대마켓⛳ 설치하고 참여하기 (${offering.currentCount}/${offering.totalCount})`
+                ? `총대마켓⛳ 설치하고 참여하기 (${data.currentCount}/${data.totalCount})`
                 : '아쉽지만, 공모에 참여할 수 없어요 😥';
 
             ctaButton.style.backgroundColor = isAvailable ? '#e74c3c' : '#999';
             ctaButton.style.color = 'white';
-            ctaButton.href = isAvailable ? buildDeeplinkUrl(offering) : '#';
-        }
-
-        function buildDeeplinkUrl(offering) {
-            let userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            if (/android/i.test(userAgent)) {
-                return `intent://offerings/${offering.id}#Intent;scheme=chongdaeapp;package=com.zzang.chongdae;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.zzang.chongdae;end`;
-            }
-                return playStoreUrl;
         }
 
         function getOfferingIdFromPath() {
