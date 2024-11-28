@@ -6,7 +6,7 @@ data class Price(val amount: Int) {
     }
 
     companion object {
-        private const val ERROR_INTEGER_FORMAT = -1
+        const val ERROR_INTEGER_FORMAT = -1
 
         fun fromString(value: String?): Price {
             val intValue = value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT

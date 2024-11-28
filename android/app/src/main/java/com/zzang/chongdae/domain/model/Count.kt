@@ -7,17 +7,16 @@ value class Count private constructor(val number: Int) {
     }
 
     fun decrease(): Count {
-        if (number == MINIMUM_COUNT) return Count(number)
+        if (number == 2) return Count(number)
         return Count(number - 1)
     }
 
     companion object {
         private const val ERROR_INTEGER_FORMAT = -1
-        private const val MINIMUM_COUNT = 2
 
         fun fromString(value: String?): Count {
             val intValue = value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
-            if (intValue < MINIMUM_COUNT) {
+            if (intValue < 2) {
                 return Count(ERROR_INTEGER_FORMAT)
             }
             return Count(intValue)
