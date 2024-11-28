@@ -165,4 +165,7 @@ dependencies {
 
     // data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // mockk
+    testImplementation("io.mockk:mockk:1.13.10")
 }
