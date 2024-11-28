@@ -2,7 +2,6 @@ package com.zzang.chongdae.offering.domain;
 
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
@@ -35,8 +34,8 @@ public class UpdatedOffering {
     }
 
     private void validateMeetingDate() {
-        LocalDate today = LocalDate.now();
-        if (meetingDate.toLocalDate().isBefore(today)) {
+        LocalDateTime today = LocalDateTime.now();
+        if (meetingDate.isBefore(today) || meetingDate.isEqual(today)) {
             throw new MarketException(OfferingErrorCode.CANNOT_UPDATE_BEFORE_NOW_MEETING_DATE);
         }
     }
