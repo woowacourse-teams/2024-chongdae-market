@@ -107,7 +107,7 @@ public class OfferingController {
     @PostMapping("/offerings/product-images/s3")
     public ResponseEntity<OfferingProductImageResponse> uploadProductImageToS3(
             @RequestParam MultipartFile image) {
-        OfferingProductImageResponse response = offeringService.uploadProductImageToS3(image);
+        OfferingProductImageResponse response = offeringService.uploadProductImage(image);
         return ResponseEntity.ok(response);
     }
 
