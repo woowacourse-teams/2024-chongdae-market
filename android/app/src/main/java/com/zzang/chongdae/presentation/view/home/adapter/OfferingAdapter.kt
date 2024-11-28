@@ -2,18 +2,15 @@ package com.zzang.chongdae.presentation.view.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.zzang.chongdae.databinding.ItemOfferingBinding
 import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
+import com.zzang.chongdae.presentation.view.home.OnArticleClickListener
 
 class OfferingAdapter(
-    private val onOfferingClickListener: OnOfferingClickListener,
-) : PagingDataAdapter<Offering, OfferingViewHolder>(productComparator) {
-    private var searchKeyword: String? = null
-    private var updatedOfferings: List<Offering> = emptyList()
-
+    private val onArticleClickListener: OnArticleClickListener,
+) : ListAdapter<Offering, OfferingViewHolder>(productComparator) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -27,31 +24,8 @@ class OfferingAdapter(
         holder: OfferingViewHolder,
         position: Int,
     ) {
-        getItem(position)?.let { offering ->
-            val updatedOffering = updatedOfferings.firstOrNull { offering.id == it.id }
-            if (updatedOffering != null) {
-                holder.bind(updatedOffering, onOfferingClickListener, searchKeyword)
-                return
-            }
-            holder.bind(offering, onOfferingClickListener, searchKeyword)
-        }
+        holder.bind(getItem(position), onArticleClickListener)
     }
-
-    fun setSearchKeyword(keyword: String?) {
-        searchKeyword = keyword
-    }
-
-    fun addUpdatedItem(updatedOfferings: List<Offering>) {
-        this.updatedOfferings = updatedOfferings
-        updatedOfferings.forEach { offering ->
-            val position = findPositionByOfferingID(offering)
-            if (position != -1) {
-                notifyItemChanged(position)
-            }
-        }
-    }
-
-    private fun findPositionByOfferingID(offering: Offering) = snapshot().items.indexOfFirst { it.id == offering.id }
 
     companion object {
         private val productComparator =

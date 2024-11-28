@@ -8,7 +8,7 @@ data class OfferingDetail(
     val nickname: String,
     val memberId: String,
     val productUrl: String,
-    val thumbnailUrl: String,
+    val thumbnailUrl: String?,
     val dividedPrice: Int,
     val totalPrice: Int,
     val deadline: LocalDateTime,

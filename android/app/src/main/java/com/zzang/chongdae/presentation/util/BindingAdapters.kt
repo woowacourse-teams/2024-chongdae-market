@@ -25,6 +25,45 @@ fun ImageView.setImageResource(imageUrl: String?) {
     }
 }
 
+@BindingAdapter("offeringsProductImageUrl")
+fun ImageView.setOfferingsProductImageResource(imageUrl: String?) {
+    imageUrl.let {
+        Glide.with(context)
+            .load(it)
+            .error(R.drawable.img_main_product_default)
+            .fallback(R.drawable.img_main_product_default)
+            .into(this)
+    }
+}
+
+@BindingAdapter("offeringCondition")
+fun TextView.bindConditionText(offeringCondition: OfferingCondition?) {
+    offeringCondition?.toStyle()?.let {
+        this.setTextAppearance(it)
+    }
+
+    offeringCondition?.let {
+        this.text = it.toComment(context)
+        this.setTextAppearance(it.toStyle())
+    }
+}
+
+private fun OfferingCondition.toComment(context: Context) =
+    when (this) {
+        OfferingCondition.FULL -> context.getString(R.string.main_offering_full) // 인원 만석
+        OfferingCondition.TIME_OUT -> context.getString(R.string.main_offering_closed) // 공구마감
+        OfferingCondition.CONFIRMED -> context.getString(R.string.main_offering_closed) // 공구마감
+        OfferingCondition.AVAILABLE -> context.getString(R.string.main_offering_continue) // 모집중
+    }
+
+private fun OfferingCondition.toStyle() =
+    when (this) {
+        OfferingCondition.FULL -> R.style.Theme_AppCompat_TextView_Offering_Full // 인원 만석
+        OfferingCondition.TIME_OUT -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
+        OfferingCondition.CONFIRMED -> R.style.Theme_AppCompat_TextView_Offering_Closed // 공구마감
+        OfferingCondition.AVAILABLE -> R.style.Theme_AppCompat_TextView_Offering_Continue // 모집중
+    }
+
 @BindingAdapter("isVisible")
 fun View.setIsVisible(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE

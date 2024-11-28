@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.view.HomeFragment">
+        tools:context=".presentation.view.home.HomeFragment">
 
         <EditText
             android:id="@+id/et_search"
@@ -19,6 +19,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/suit_medium"
             android:hint="@string/main_search_hint_text"
             android:inputType="text"
             android:paddingStart="15dp"
@@ -39,15 +40,17 @@
             app:layout_constraintTop_toTopOf="@id/et_search" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_offerings"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="34dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_search"
-            tools:listitem="@layout/item_offering"/>
+            tools:listitem="@layout/item_offering" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_create_offering"
@@ -56,8 +59,8 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="30dp"
             android:backgroundTint="@color/main_color"
-            app:backgroundTint="@color/main_color"
             android:src="@drawable/btn_main_create_offering"
+            app:backgroundTint="@color/main_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
