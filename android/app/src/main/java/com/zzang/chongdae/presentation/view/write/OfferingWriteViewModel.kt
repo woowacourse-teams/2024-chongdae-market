@@ -326,7 +326,7 @@ class OfferingWriteViewModel(
         private const val MAXIMUM_TOTAL_COUNT = 10_000
         private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
         private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
-        private const val HTTPS = "https:"
+        const val HTTPS = "https:"
 
         @Suppress("UNCHECKED_CAST")
         fun getFactory(offeringRepository: OfferingRepository) =
