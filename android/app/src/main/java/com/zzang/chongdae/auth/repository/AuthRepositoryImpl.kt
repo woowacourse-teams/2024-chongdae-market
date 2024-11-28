@@ -1,6 +1,6 @@
 package com.zzang.chongdae.auth.repository
 
-import com.zzang.chongdae.auth.dto.request.AccessTokenRequest
+import com.zzang.chongdae.auth.dto.request.TokensRequest
 import com.zzang.chongdae.auth.mapper.toDomain
 import com.zzang.chongdae.auth.model.Member
 import com.zzang.chongdae.auth.source.AuthRemoteDataSource
@@ -14,9 +14,12 @@ class AuthRepositoryImpl
     constructor(
         @AuthDataSourceQualifier private val authRemoteDataSource: AuthRemoteDataSource,
     ) : AuthRepository {
-        override suspend fun saveLogin(accessToken: String): Result<Member, DataError.Network> {
+        override suspend fun saveLogin(
+            accessToken: String,
+            fcmToken: String,
+        ): Result<Member, DataError.Network> {
             return authRemoteDataSource.saveLogin(
-                accessTokenRequest = AccessTokenRequest(accessToken),
+                tokensRequest = TokensRequest(accessToken, fcmToken),
             ).map { it.toDomain() }
         }
 

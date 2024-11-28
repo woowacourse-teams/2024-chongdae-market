@@ -7,13 +7,14 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityLoginBinding
-import com.zzang.chongdae.presentation.view.MainActivity
+import com.zzang.chongdae.presentation.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -114,8 +115,21 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
             if (error != null) {
                 Log.d("error", "사용자 정보 요청 실패 $error")
             } else if (user != null) {
-                viewModel.postLogin(accessToken)
+                loadFcmToken { fcmToken ->
+                    viewModel.postLogin(accessToken, fcmToken)
+                }
             }
+        }
+    }
+
+    private fun loadFcmToken(onFcmTokenReceived: (String) -> Unit) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.e("error", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+            val fcmToken = task.result
+            onFcmTokenReceived(fcmToken)
         }
     }
 

@@ -36,7 +36,7 @@ class TokensCookieJar(private val userPreferencesDataStore: UserPreferencesDataS
         val accessToken = cookies.first { it.name == ACCESS_TOKEN_NAME }.value
         val refreshToken = cookies.first { it.name == REFRESH_TOKEN_NAME }.value
         CoroutineScope(Dispatchers.IO).launch {
-            userPreferencesDataStore.saveTokens(accessToken, refreshToken)
+            userPreferencesDataStore.saveAccountTokens(accessToken, refreshToken)
         }
     }
 
