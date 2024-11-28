@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:conditionText="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -54,7 +53,7 @@
             android:paddingVertical="2dp"
             app:layout_constraintStart_toStartOf="@id/iv_product"
             app:layout_constraintTop_toTopOf="@id/iv_product"
-            conditionText:offeringCondition="@{offering.condition}"
+            app:offeringCondition="@{offering.condition}"
             tools:text="@string/main_offering_closed" />
 
         <TextView

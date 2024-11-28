@@ -81,7 +81,7 @@
     <string name="offering_members">참여자 목록</string>
 
     <!--    offering_write-->
-    <string name="write_information_message">공동 구매할 물품에 대한 정보를 \n입력해 주세요.</string>
+    <string name="write_information_message">공동 구매할 물품의 정보를\n입력해 주세요.</string>
     <string name="write_enter_offering_title">게시글의 제목을 입력해 주세요.</string>
     <string name="write_upload_photo">최대 50MB까지 업로드 가능합니다.</string>
     <string name="write_purchase_link">물품 구매 링크</string>
@@ -110,8 +110,10 @@
     <string name="write_invalid_total_price">총 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_invalid_each_price">낱개 가격은 0이상의 정수를 입력해 주세요.</string>
     <string name="write_discount_rate_value">%.1f</string>
+    <string name="error_invalid_product_url">대표 이미지가 유효하지 않습니다.</string>
+    <string name="error_empty_product_url">대표 이미지가 존재하지 않습니다.</string>
+    <string name="write_extract_image">사진 추출</string>
     <string name="write_selected_date">%d년 %d월 %d일</string>
     <string name="write_selected_time">%s %d시 %d분</string>
     <string name="write_success_writing">공모가 게시되었어요!</string>
-
 </resources>
