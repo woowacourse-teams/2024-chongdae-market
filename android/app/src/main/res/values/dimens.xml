@@ -8,6 +8,15 @@
     <dimen name="design_fab_size_normal" tools:override="true">60dp</dimen>
     <dimen name="design_fab_image_size" tools:override="true">60dp</dimen>
 
+    <!--    comment_detail-->
+    <dimen name="icon_size_15">15dp</dimen>
+    <dimen name="icon_size_24">24dp</dimen>
+    <dimen name="icon_size_20">20dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="comment_radius">16dp</dimen>
+
     <!-- size -->
     <dimen name="size_0">0dp</dimen>
     <dimen name="size_1">1dp</dimen>
@@ -72,6 +81,8 @@
     <dimen name="size_88">88dp</dimen>
     <dimen name="size_91">91dp</dimen>
     <dimen name="size_100">100dp</dimen>
+    <dimen name="size_120">120dp</dimen>
+    <dimen name="size_150">150dp</dimen>
 
     <!-- font size -->
     <dimen name="font_size_72">72sp</dimen>

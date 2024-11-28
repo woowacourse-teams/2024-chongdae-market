@@ -5,412 +5,197 @@
 
     <data>
 
-        <variable
-            name="vm"
-            type="com.zzang.chongdae.presentation.view.commentdetail.CommentDetailViewModel" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context=".presentation.view.commentdetail.CommentDetailActivity">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_150"
+            android:background="@color/main_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/icon_size_24"
+            android:layout_height="@dimen/icon_size_24"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_30"
+            android:contentDescription="@string/comment_detail"
+            android:src="@drawable/btn_left_vector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_6"
+            android:ellipsize="end"
+            android:fontFamily="@font/suit_medium"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_20"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            app:layout_constraintEnd_toStartOf="@id/iv_more"
+            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintTop_toTopOf="@+id/iv_back"
+            tools:text="엄청나게 긴 제목이 들어가는 것을 표현하는 중 입니다" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/icon_size_24"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:contentDescription="@string/comment_detail"
+            android:src="@drawable/btn_more"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_text" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_offering_condition"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".presentation.view.commentdetail.CommentDetailActivity">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/bg_white_radius_16dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_text">
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_120"
-                android:background="@color/main_color"
+            <ImageView
+                android:id="@+id/ic_offering_status"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/margin_20"
+                android:contentDescription="@string/comment_detail"
+                android:src="@drawable/ic_recruiting"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="@dimen/size_40"
-                android:layout_height="@dimen/size_40"
-                android:layout_marginStart="@dimen/margin_10"
-                android:layout_marginTop="@dimen/margin_20"
-                android:contentDescription="@string/comment_detail"
-                android:padding="@dimen/margin_10"
-                android:src="@drawable/btn_left_vector"
-                app:debouncedOnClick="@{() -> vm.onBackClick()}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_title_text"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_6"
-                android:ellipsize="end"
-                android:fontFamily="@font/suit_medium"
-                android:maxLines="1"
-                android:text="@{vm.commentOfferingInfo.title}"
-                android:textColor="@color/white"
-                android:textSize="@dimen/size_20"
-                app:layout_constraintBottom_toBottomOf="@id/iv_back"
-                app:layout_constraintEnd_toStartOf="@id/iv_more_options"
-                app:layout_constraintStart_toEndOf="@id/iv_back"
-                app:layout_constraintTop_toTopOf="@id/iv_back"
-                tools:text="엄청나게 긴 제목이 들어가는 것을 표현하는 중 입니다" />
-
-            <ImageView
-                android:id="@+id/iv_more_options"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/icon_size_24"
-                android:layout_marginEnd="@dimen/margin_20"
-                android:contentDescription="@string/comment_detail"
-                android:paddingStart="@dimen/size_5"
-                android:src="@drawable/btn_more"
-                app:layout_constraintBottom_toBottomOf="@id/tv_title_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_title_text" />
-
-            <View
-                android:id="@+id/view_white_round"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_130"
                 android:layout_marginTop="@dimen/margin_20"
-                android:background="@drawable/bg_white_radius_16dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_confirm"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_text" />
+                app:layout_constraintTop_toBottomOf="@+id/ic_offering_status"
+                app:layout_constraintWidth_percent="0.5"
+                tools:text="수정" />
 
-            <ImageView
-                android:id="@+id/iv_offering_status"
-                android:layout_width="285dp"
-                android:layout_height="@dimen/size_100"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20"
-                android:contentDescription="@string/comment_detail"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/view_white_round"
-                app:offeringsStatusImageUrl="@{vm.commentOfferingInfo.imageUrl}" />
-
-            <View
-                android:id="@+id/view_divider"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_1"
-                android:background="@color/gray_100"
-                android:translationZ="1dp"
-                app:layout_constraintStart_toStartOf="@+id/view_white_round"
-                app:layout_constraintTop_toBottomOf="@id/view_white_round" />
-
-            <TextView
-                android:id="@+id/tv_update_status"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_50"
                 android:background="@color/main_color"
-                android:elevation="5dp"
-                android:fontFamily="@font/suit_semibold"
-                android:gravity="center"
-                android:text="@{vm.commentOfferingInfo.buttonText}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/size_15"
-                app:debouncedOnClick="@{() -> vm.updateOfferingEvent()}"
-                app:isVisible="@{vm.commentOfferingInfo.isProposer}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_white_round"
+                app:layout_constraintStart_toEndOf="@id/btn_edit"
+                app:layout_constraintTop_toBottomOf="@id/ic_offering_status"
                 app:layout_constraintWidth_percent="0.5"
                 tools:text="인원확정" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_foldable_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_36"
-                android:background="@color/gray_100"
-                android:translationZ="1dp"
-                app:debouncedOnClick="@{() -> vm.toggleCollapsibleView()}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_update_status"
-                app:layout_heightWithAnimation="@{vm.isCollapsibleViewVisible ? 80 : 36}">
-
-                <ImageView
-                    android:id="@+id/iv_foldable_open"
-                    android:layout_width="@dimen/icon_size_15"
-                    android:layout_height="@dimen/icon_size_15"
-                    android:layout_marginTop="@dimen/size_10"
-                    android:layout_marginEnd="@dimen/margin_20"
-                    android:src="@drawable/btn_under_vector"
-                    app:isVisible="@{!vm.isCollapsibleViewVisible}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_foldable_close"
-                    android:layout_width="@dimen/icon_size_15"
-                    android:layout_height="@dimen/icon_size_15"
-                    android:layout_marginTop="@dimen/size_10"
-                    android:layout_marginEnd="@dimen/margin_20"
-                    android:src="@drawable/btn_up_vector"
-                    app:isVisible="@{vm.isCollapsibleViewVisible}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_location"
-                    android:layout_width="@dimen/icon_size_15"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:contentDescription="@string/comment_detail"
-                    android:src="@drawable/ic_comment_detail_location"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_default_location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@string/comment_detail_place_time_title"
-                    android:textColor="@color/gray_font"
-                    android:textSize="@dimen/size_11"
-                    app:isVisible="@{!vm.isCollapsibleViewVisible}"
-                    app:layout_constraintStart_toEndOf="@id/iv_location"
-                    app:layout_constraintTop_toTopOf="@id/iv_location"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="@{vm.meetings.meetingAddress}"
-                    android:textColor="@color/gray_font"
-                    android:textSize="@dimen/size_11"
-                    app:isVisible="@{vm.isCollapsibleViewVisible}"
-                    app:layout_constraintStart_toEndOf="@id/iv_location"
-                    app:layout_constraintTop_toTopOf="@id/iv_location"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/tv_location_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="@{vm.meetings.meetingAddressDetail}"
-                    android:textColor="@color/gray_font"
-                    android:textSize="@dimen/size_11"
-                    app:isVisible="@{vm.isCollapsibleViewVisible}"
-                    app:layout_constraintStart_toStartOf="@+id/tv_location"
-                    app:layout_constraintTop_toBottomOf="@id/tv_location" />
-
-                <ImageView
-                    android:id="@+id/iv_calendar"
-                    android:layout_width="@dimen/icon_size_15"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:contentDescription="@string/comment_detail"
-                    android:src="@drawable/ic_comment_detail_calendar"
-                    app:isVisible="@{vm.isCollapsibleViewVisible}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_location_detail" />
-
-                <TextView
-                    android:id="@+id/tv_calendar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/gray_font"
-                    android:textSize="@dimen/size_11"
-                    app:formattedDeadline="@{vm.meetings.meetingDate}"
-                    app:isVisible="@{vm.isCollapsibleViewVisible}"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_calendar"
-                    app:layout_constraintStart_toEndOf="@id/iv_calendar"
-                    app:layout_constraintTop_toTopOf="@id/iv_calendar"
-                    tools:text="@string/comment_detail_place_time_title" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_comments"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/size_36"
-                android:layout_marginBottom="@dimen/size_5"
-                app:layout_constraintBottom_toTopOf="@+id/et_comment"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_update_status"
-                tools:itemCount="5"
-                tools:listitem="@layout/item_other_comment" />
-
-            <EditText
-                android:id="@+id/et_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginEnd="@dimen/size_23"
-                android:layout_marginBottom="@dimen/margin_30"
-                android:background="@drawable/bg_gray100_radius_16dp"
-                android:fontFamily="@font/suit_medium"
-                android:hint="@string/comment_detail_message_hint"
-                android:maxLength="80"
-                android:maxLines="5"
-                android:paddingStart="@dimen/size_14"
-                android:paddingTop="@dimen/size_14"
-                android:paddingEnd="@dimen/margin_30"
-                android:paddingBottom="@dimen/size_14"
-                android:text="@={vm.commentContent}"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_500"
-                android:textSize="@dimen/size_15"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_send_comment"
-                android:layout_width="@dimen/size_50"
-                android:layout_height="@dimen/size_44"
-                android:padding="@dimen/margin_10"
-                android:src="@drawable/btn_comment_detail_send"
-                app:debouncedOnClick="@{() -> vm.postComment()}"
-                app:layout_constraintBottom_toBottomOf="@id/et_comment"
-                app:layout_constraintEnd_toEndOf="@id/et_comment"
-                app:layout_constraintTop_toTopOf="@id/et_comment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="@dimen/size_300"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:background="@color/white">
+            android:id="@+id/foldable_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_36"
+            android:background="@color/gray_100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_offering_condition">
 
-            <TextView
-                android:id="@+id/tv_offering_members"
-                style="@style/Theme.AppCompat.TextView.Normal.Gray900.Size17"
-                android:layout_marginStart="@dimen/size_25"
-                android:layout_marginTop="@dimen/size_25"
-                android:text="@{String.format(@string/offering_members, vm.participants.currentCount, vm.participants.totalCount)}"
-                app:layout_constraintStart_toStartOf="parent"
+            <ImageView
+                android:layout_width="@dimen/icon_size_15"
+                android:layout_height="@dimen/icon_size_15"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:src="@drawable/btn_under_vector"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_report"
-                android:layout_width="@dimen/icon_size_24"
-                android:layout_height="@dimen/icon_size_24"
-                android:layout_marginEnd="@dimen/margin_20"
-                android:src="@drawable/ic_detail_report"
-                app:debouncedOnClick="@{() -> vm.onClickReport()}"
-                app:layout_constraintBottom_toBottomOf="@id/tv_offering_members"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_offering_members" />
-
-            <ImageView
-                android:id="@+id/iv_proposer"
-                android:layout_width="@dimen/size_30"
-                android:layout_height="@dimen/size_30"
-                android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginTop="@dimen/size_20"
-                android:src="@drawable/ic_proposer"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_offering_members" />
-
-            <TextView
-                android:id="@+id/tv_proposer"
-                android:layout_width="wrap_content"
+                android:id="@+id/iv_location"
+                android:layout_width="@dimen/icon_size_15"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_15"
-                android:fontFamily="@font/suit_medium"
-                android:text="@{vm.participants.proposer.nickname}"
-                android:textColor="@color/gray_600"
-                android:textSize="@dimen/size_14"
-                app:layout_constraintBottom_toBottomOf="@id/iv_proposer"
-                app:layout_constraintStart_toEndOf="@id/iv_proposer"
-                app:layout_constraintTop_toTopOf="@id/iv_proposer"
-                app:layout_constraintVertical_bias="0.4"
-                tools:text="총대 닉네임" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_offering_members"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_10"
-                android:layout_marginBottom="@dimen/size_50"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@+id/horizon_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_proposer"
-                tools:itemCount="15"
-                tools:listitem="@layout/item_offering_member" />
-
-            <TextView
-                android:id="@+id/tv_comment_detail_expected_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/suit_semibold"
-                android:text="@string/comment_detail_expected_price"
-                android:textColor="@color/gray_500"
-                app:layout_constraintBottom_toTopOf="@id/horizon_line"
-                app:layout_constraintStart_toStartOf="@id/tv_offering_members"
-                app:layout_constraintTop_toBottomOf="@id/rv_offering_members" />
-
-            <TextView
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_20"
-                android:fontFamily="@font/suit_semibold"
-                android:text='@{String.format(@string/all_money_amount_text, vm.participants.price)}'
-                android:textColor="@color/main_color"
-                app:layout_constraintBottom_toTopOf="@id/horizon_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_offering_members" />
-
-            <View
-                android:id="@+id/horizon_line"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_50"
-                android:background="@color/horizon_line"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_exit"
-                android:layout_width="@dimen/icon_size_24"
-                android:layout_height="@dimen/icon_size_24"
-                android:layout_marginStart="@dimen/margin_20"
-                android:src="@drawable/btn_exit"
-                app:debouncedOnClick="@{() -> vm.onExitClick()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/horizon_line" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminateTint="@color/main_color"
-                app:isVisible="@{vm.exitLoading}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/comment_detail"
+                android:src="@drawable/ic_comment_detail_location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/comment_detail_place_time_title"
+                android:textColor="@color/gray_font"
+                android:textSize="@dimen/size_11"
+                app:layout_constraintBottom_toBottomOf="@id/iv_location"
+                app:layout_constraintStart_toEndOf="@id/iv_location"
+                app:layout_constraintTop_toTopOf="@id/iv_location" />
+
+            <ImageView
+                android:id="@+id/iv_calendar"
+                android:layout_width="@dimen/icon_size_15"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:contentDescription="@string/comment_detail"
+                android:src="@drawable/ic_comment_detail_calendar"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_location" />
+
+            <TextView
+                android:id="@+id/tv_calendar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/comment_detail_place_time_title"
+                android:textColor="@color/gray_font"
+                android:textSize="@dimen/size_11"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_calendar"
+                app:layout_constraintStart_toEndOf="@id/iv_calendar"
+                app:layout_constraintTop_toTopOf="@id/iv_calendar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_50"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_30"
+            android:background="@drawable/bg_gray100_radius_16dp"
+            android:drawableRight="@drawable/btn_comment_detail_send"
+            android:fontFamily="@font/suit_medium"
+            android:hint="@string/comment_detail_message_hint"
+            android:padding="@dimen/size_10"
+            android:textColorHint="@color/gray_500"
+            android:textSize="@dimen/size_15"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
 
