@@ -56,6 +56,7 @@ public class OfferingService {
     private final OfferingFetcher offeringFetcher;
     private final Clock clock;
 
+    @Transactional(readOnly = true)
     public OfferingDetailResponse getOfferingDetail(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
@@ -74,6 +75,7 @@ public class OfferingService {
         return new OfferingAllResponseItem(offering, offeringPrice);
     }
 
+    @Transactional(readOnly = true)
     public OfferingAllResponse getAllOffering(String filterName, String searchKeyword, Long lastId, Integer pageSize) {
         Pageable pageable = PageRequest.ofSize(pageSize);
         OfferingFilter filter = OfferingFilter.findByName(filterName);
@@ -187,6 +189,7 @@ public class OfferingService {
     }
 
     @WriterDatabase
+    @Transactional
     public void deleteOffering(Long offeringId, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
