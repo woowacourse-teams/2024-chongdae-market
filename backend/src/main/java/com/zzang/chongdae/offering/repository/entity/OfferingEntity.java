@@ -3,6 +3,7 @@ package com.zzang.chongdae.offering.repository.entity;
 import com.zzang.chongdae.common.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.OfferingPrice;
+import com.zzang.chongdae.offering.domain.OfferingProposer;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -71,5 +72,9 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public OfferingStatus toOfferingStatus(int currentCount) {
         return new OfferingStatus(deadline, totalCount, isManualConfirmed, currentCount);
+    }
+
+    public OfferingProposer toOfferingProposer() {
+        return new OfferingProposer(member);
     }
 }

@@ -1,47 +1,27 @@
 package com.zzang.chongdae.offeringmember.controller;
 
-import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offeringmember.service.OfferingMemberService;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
-import jakarta.validation.Valid;
-import java.net.URI;
+import com.zzang.chongdae.offeringmember.service.dto.ParticipationResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "OfferingMember(공모인원)")
 @RequiredArgsConstructor
-@RestController
+@Controller
 public class OfferingMemberController {
 
     private final OfferingMemberService offeringMemberService;
 
+    @Operation(summary = "공모 참여", description = "게시된 공모에 참여합니다.")
     @PostMapping("/participations")
-    public ResponseEntity<Void> participate(
-            @RequestBody @Valid ParticipationRequest request,
-            MemberEntity member) {
-        Long id = offeringMemberService.participate(request, member);
-        return ResponseEntity.created(URI.create("/participations/" + id)).build();
-    }
-
-    @DeleteMapping("/participations")
-    public ResponseEntity<Void> cancelParticipate(
-            @RequestParam(value = "offering-id") Long offeringId,
-            MemberEntity member) {
-        offeringMemberService.cancelParticipate(offeringId, member);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/participants")
-    public ResponseEntity<ParticipantResponse> getAllParticipant(
-            @RequestParam(value = "offering-id") Long offeringId,
-            MemberEntity member) {
-        ParticipantResponse response = offeringMemberService.getAllParticipant(offeringId, member);
+    ResponseEntity<ParticipationResponse> participate(@RequestBody ParticipationRequest participationRequest) {
+        ParticipationResponse response = offeringMemberService.participate(participationRequest);
         return ResponseEntity.ok(response);
     }
 }
