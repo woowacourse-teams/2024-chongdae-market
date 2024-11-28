@@ -2,13 +2,13 @@ package com.zzang.chongdae.domain.model
 
 enum class OfferingCondition {
     FULL,
-    IMMINENT,
+    TIME_OUT,
     CONFIRMED,
     AVAILABLE, ;
 
     companion object {
         fun OfferingCondition.isAvailable(): Boolean {
-            return this == AVAILABLE || this == IMMINENT
+            return this == AVAILABLE
         }
     }
 }

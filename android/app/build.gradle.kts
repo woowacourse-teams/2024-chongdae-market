@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -9,6 +12,11 @@ plugins {
 android {
     namespace = "com.zzang.chongdae"
     compileSdk = 34
+
+    val properties =
+        Properties().apply {
+            load(FileInputStream(rootProject.file("local.properties")))
+        }
 
     defaultConfig {
         applicationId = "com.zzang.chongdae"
@@ -22,6 +30,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "BASE_URL", properties["base_url"] as String)
+        buildConfigField("String", "TOKEN", properties["token"] as String)
     }
 
     buildTypes {
@@ -47,7 +58,7 @@ android {
         }
     }
     buildFeatures {
-        dataBinding = true
+        buildConfig = true
     }
 
     dataBinding {

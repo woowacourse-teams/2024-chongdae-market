@@ -1,13 +1,16 @@
 package com.zzang.chongdae.domain.repository
 
-import com.zzang.chongdae.common.handler.DataError
-import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.model.Participation
 
 interface OfferingDetailRepository {
-    suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetail, DataError.Network>
+    suspend fun fetchOfferingDetail(
+        memberId: Long,
+        offeringId: Long,
+    ): Result<OfferingDetail>
 
-    suspend fun saveParticipation(offeringId: Long): Result<Unit, DataError.Network>
-
-    suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network>
+    suspend fun saveParticipation(
+        memberId: Long,
+        offeringId: Long,
+    ): Result<Participation>
 }
