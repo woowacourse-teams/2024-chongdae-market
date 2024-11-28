@@ -9,6 +9,8 @@ import com.zzang.chongdae.domain.model.Meetings
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import okhttp3.MultipartBody
 
@@ -16,8 +18,8 @@ class OfferingRepositoryImpl(
     private val offeringLocalDataSource: OfferingLocalDataSource,
     private val offeringRemoteDataSource: OfferingRemoteDataSource,
 ) : OfferingRepository {
-    override suspend fun fetchOffering(offeringId: Long): Result<Offering> =
-        offeringRemoteDataSource.fetchOffering(offeringId = offeringId).mapCatching {
+    override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> =
+        offeringRemoteDataSource.fetchOffering(offeringId = offeringId).map {
             it.toDomain()
         }
 
@@ -26,14 +28,14 @@ class OfferingRepositoryImpl(
         search: String?,
         lastOfferingId: Long?,
         pageSize: Int?,
-    ): Result<List<Offering>> {
+    ): Result<List<Offering>, DataError.Network> {
         return offeringRemoteDataSource.fetchOfferings(filter, search, lastOfferingId, pageSize)
-            .mapCatching {
+            .map {
                 it.offerings.map { it.toDomain() }
             }
     }
 
-    override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
+    override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit, DataError.Network> {
         return offeringRemoteDataSource.saveOffering(
             offeringWriteRequest =
                 OfferingWriteRequest(
@@ -52,26 +54,26 @@ class OfferingRepositoryImpl(
         )
     }
 
-    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
-        return offeringRemoteDataSource.saveProductImageOg(productUrl).mapCatching {
+    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl, DataError.Network> {
+        return offeringRemoteDataSource.saveProductImageOg(productUrl).map {
             it.toDomain()
         }
     }
 
-    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
-        return offeringRemoteDataSource.saveProductImageS3(image).mapCatching {
+    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
+        return offeringRemoteDataSource.saveProductImageS3(image).map {
             it.toDomain()
         }
     }
 
-    override suspend fun fetchFilters(): Result<List<Filter>> {
-        return offeringRemoteDataSource.fetchFilters().mapCatching {
+    override suspend fun fetchFilters(): Result<List<Filter>, DataError.Network> {
+        return offeringRemoteDataSource.fetchFilters().map {
             it.filters.map { it.toDomain() }
         }
     }
 
-    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> {
-        return offeringRemoteDataSource.fetchMeetings(offeringId).mapCatching {
+    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings, DataError.Network> {
+        return offeringRemoteDataSource.fetchMeetings(offeringId).map {
             it.toDomain()
         }
     }

@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.util
 
-import com.zzang.chongdae.common.handler.DataError
-import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
@@ -12,16 +12,16 @@ inline fun <T> safeApiCall(call: () -> Response<T>): Result<T, DataError.Network
         if (response.isSuccessful) {
             response.body()?.let {
                 Result.Success(it)
-            } ?: Result.Error(response.message(), DataError.Network.NULL)
+            } ?: Result.Error(DataError.Network.NULL)
         } else {
-            Result.Error(response.message(), handleHttpError(response.code()))
+            Result.Error(handleHttpError(response.code()))
         }
     } catch (e: IOException) {
-        Result.Error(e.message ?: "Unknown IO error", DataError.Network.CONNECTION_ERROR)
+        Result.Error(DataError.Network.CONNECTION_ERROR)
     } catch (e: HttpException) {
-        Result.Error(e.message ?: "Unknown HTTP error", handleHttpError(e.code()))
+        Result.Error(handleHttpError(e.code()))
     } catch (e: Exception) {
-        Result.Error(e.message ?: "Unknown error", DataError.Network.UNKNOWN)
+        Result.Error(DataError.Network.UNKNOWN)
     }
 }
 

@@ -6,13 +6,15 @@ import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.util.DataError
+import com.zzang.chongdae.domain.util.Result
 import com.zzang.chongdae.presentation.view.write.OfferingWriteUiModel
 import com.zzang.chongdae.util.TestFixture
 import okhttp3.MultipartBody
 
 class FakeOfferingRepository : OfferingRepository {
-    override suspend fun fetchOffering(offeringId: Long): Result<Offering> {
-        return Result.success(
+    override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> {
+        return Result.Success(
             Offering(
                 id = 0,
                 title = "",
@@ -33,8 +35,8 @@ class FakeOfferingRepository : OfferingRepository {
         search: String?,
         lastOfferingId: Long?,
         pageSize: Int?,
-    ): Result<List<Offering>> {
-        return Result.success(
+    ): Result<List<Offering>, DataError.Network> {
+        return Result.Success(
             listOf(
                 Offering(
                     id = 0,
@@ -52,24 +54,24 @@ class FakeOfferingRepository : OfferingRepository {
         )
     }
 
-    override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun saveOffering(uiModel: OfferingWriteUiModel): Result<Unit, DataError.Network> {
+        return Result.Success(Unit)
     }
 
-    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl> {
-        return Result.success(TestFixture.productUrl)
+    override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl, DataError.Network> {
+        return Result.Success(TestFixture.productUrl)
     }
 
-    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl> {
-        return Result.success(TestFixture.productUrl)
+    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
+        return Result.Success(TestFixture.productUrl)
     }
 
-    override suspend fun fetchFilters(): Result<List<Filter>> {
-        TODO("Not yet implemented")
+    override suspend fun fetchFilters(): Result<List<Filter>, DataError.Network> {
+        return Result.Success(TestFixture.FILTERS_STUB)
     }
 
-    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings> =
-        Result.success(
+    override suspend fun fetchMeetings(offeringId: Long): Result<Meetings, DataError.Network> =
+        Result.Success(
             TestFixture.meetings,
         )
 }

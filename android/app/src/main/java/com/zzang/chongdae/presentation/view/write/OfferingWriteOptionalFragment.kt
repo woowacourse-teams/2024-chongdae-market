@@ -35,6 +35,7 @@ class OfferingWriteOptionalFragment : Fragment() {
     private val viewModel: OfferingWriteViewModel by activityViewModels {
         OfferingWriteViewModel.getFactory(
             offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
         )
     }
 

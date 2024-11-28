@@ -2,12 +2,11 @@ package com.zzang.chongdae.presentation.view.comment
 
 import com.zzang.chongdae.domain.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
+import com.zzang.chongdae.repository.FakeAuthRepository
+import com.zzang.chongdae.repository.FakeCommentRoomsRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
-import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.getOrAwaitValue
-import io.mockk.coEvery
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -22,23 +21,18 @@ import java.time.LocalDateTime
 class CommentRoomsViewModelTest {
     private lateinit var viewModel: CommentRoomsViewModel
     private lateinit var authRepository: AuthRepository
-    private lateinit var offeringRepository: CommentRoomsRepository
+    private lateinit var commentRoomsRepository: CommentRoomsRepository
 
     @BeforeEach
     fun setUp() {
-        authRepository = mockk<AuthRepository>()
-        offeringRepository = mockk<CommentRoomsRepository>()
-        viewModel = CommentRoomsViewModel(authRepository, offeringRepository)
+        authRepository = FakeAuthRepository()
+        commentRoomsRepository = FakeCommentRoomsRepository()
+        viewModel = CommentRoomsViewModel(authRepository, commentRoomsRepository)
     }
 
     @DisplayName("댓글방 목록을 확인할 수 있어야 한다")
     @Test
     fun loadCommentRooms() {
-        // given
-        coEvery {
-            offeringRepository.fetchCommentRooms().getOrThrow()
-        } returns TestFixture.COMMENT_ROOMS_STUB
-
         // when
         viewModel.updateCommentRooms()
 

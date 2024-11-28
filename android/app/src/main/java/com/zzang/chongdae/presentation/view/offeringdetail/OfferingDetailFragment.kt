@@ -29,6 +29,7 @@ class OfferingDetailFragment : Fragment() {
         OfferingDetailViewModel.getFactory(
             offeringId = offeringId,
             offeringDetailRepository = (requireActivity().application as ChongdaeApp).offeringDetailRepository,
+            authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
         )
     }
 
