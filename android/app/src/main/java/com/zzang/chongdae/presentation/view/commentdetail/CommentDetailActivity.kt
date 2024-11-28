@@ -25,6 +25,7 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private val dialog: Dialog by lazy { Dialog(this) }
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
+            authRepository = (application as ChongdaeApp).authRepository,
             offeringId = offeringId,
             offeringTitle = offeringTitle,
             offeringRepository = (application as ChongdaeApp).offeringRepository,

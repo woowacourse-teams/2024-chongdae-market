@@ -15,7 +15,6 @@ class FakeCommentDetailRepository : CommentDetailRepository {
     }
 
     override suspend fun saveComment(
-        memberId: Long,
         offeringId: Long,
         comment: String,
     ): Result<Unit> {
@@ -23,19 +22,13 @@ class FakeCommentDetailRepository : CommentDetailRepository {
         return Result.success(Unit)
     }
 
-    override suspend fun fetchComments(
-        offeringId: Long,
-        memberId: Long,
-    ): Result<List<Comment>> {
+    override suspend fun fetchComments(offeringId: Long): Result<List<Comment>> {
         return Result.success(
             comments.toList(),
         )
     }
 
-    override suspend fun fetchCommentsWithRoom(
-        offeringId: Long,
-        memberId: Long,
-    ): Result<List<Comment>> {
+    override suspend fun fetchCommentsWithRoom(offeringId: Long): Result<List<Comment>> {
         return Result.success(
             comments.toList(),
         )

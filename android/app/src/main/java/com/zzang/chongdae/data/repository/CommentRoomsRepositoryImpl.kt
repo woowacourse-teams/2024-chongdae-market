@@ -8,8 +8,8 @@ import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 class CommentRoomsRepositoryImpl(
     private val commentRoomsDataSource: CommentRoomsDataSource,
 ) : CommentRoomsRepository {
-    override suspend fun fetchCommentRooms(memberId: Long): Result<List<CommentRoom>> {
-        return commentRoomsDataSource.fetchCommentRooms(memberId).mapCatching {
+    override suspend fun fetchCommentRooms(): Result<List<CommentRoom>> {
+        return commentRoomsDataSource.fetchCommentRooms().mapCatching {
             it.commentRoom.map { it.toDomain() }
         }
     }

@@ -23,6 +23,7 @@ class CommentRoomsFragment : Fragment(), OnCommentRoomClickListener {
 
     private val viewModel by viewModels<CommentRoomsViewModel> {
         CommentRoomsViewModel.getFactory(
+            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
             commentRoomsRepository = (requireActivity().application as ChongdaeApp).commentRoomsRepository,
         )
     }
