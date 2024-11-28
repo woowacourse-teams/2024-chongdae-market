@@ -14,17 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="@dimen/size_80"
-            android:layout_height="@dimen/size_80"
-            android:indeterminateTint="@color/main_color"
-            app:isVisible="@{vm.isSubmitLoading}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ScrollView
             android:id="@+id/sv_main_write_optional"
             android:layout_width="match_parent"
@@ -75,8 +64,8 @@
                     android:layout_width="@dimen/icon_size_20"
                     android:layout_height="@dimen/icon_size_20"
                     android:layout_marginEnd="@dimen/size_5"
+                    android:onClick="@{() -> vm.clearProductUrl()}"
                     android:src="@drawable/btn_offering_write_clear"
-                    app:debouncedOnClick="@{() -> vm.clearProductUrl()}"
                     app:layout_constraintBottom_toBottomOf="@+id/et_purchase_link"
                     app:layout_constraintEnd_toEndOf="@+id/et_purchase_link"
                     app:layout_constraintTop_toTopOf="@+id/et_purchase_link" />
@@ -87,10 +76,9 @@
                     android:layout_height="@dimen/size_44"
                     android:background="@drawable/btn_background_selector"
                     android:enabled="@{vm.extractButtonEnabled}"
+                    android:onClick="@{() -> vm.postProductImageOg()}"
                     android:text="@string/write_extract_image"
                     android:textColor="@color/white"
-                    app:debounceTime="@{800L}"
-                    app:debouncedOnClick="@{() -> vm.postProductImageOg()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/et_purchase_link" />
 
@@ -108,10 +96,9 @@
                     android:layout_marginTop="@dimen/size_9"
                     android:background="@drawable/bg_radius_10dp"
                     android:clipToOutline="true"
+                    android:onClick="@{() -> vm.onUploadPhotoClick()}"
                     android:scaleType="centerCrop"
                     android:src="@drawable/btn_upload_photo"
-                    app:debounceTime="@{800L}"
-                    app:debouncedOnClick="@{() -> vm.onUploadPhotoClick()}"
                     app:importProductImageUrl="@{vm.thumbnailUrl}"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
                     app:layout_constraintTop_toBottomOf="@id/tv_photo" />
@@ -120,7 +107,7 @@
                     android:id="@+id/progressBar"
                     android:layout_width="@dimen/size_20"
                     android:layout_height="@dimen/size_20"
-                    app:isVisible="@{vm.isImageUpLoading}"
+                    app:isVisible="@{vm.isLoading}"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_upload_photo"
                     app:layout_constraintEnd_toEndOf="@+id/iv_upload_photo"
                     app:layout_constraintStart_toStartOf="@+id/iv_upload_photo"
@@ -130,8 +117,8 @@
                     android:id="@+id/iv_delete_image"
                     android:layout_width="@dimen/icon_size_30"
                     android:layout_height="@dimen/icon_size_30"
+                    android:onClick="@{() -> vm.clearProductImage()}"
                     android:src="@drawable/btn_offering_write_delete_image"
-                    app:debouncedOnClick="@{() -> vm.clearProductImage()}"
                     app:isVisible="@{vm.deleteImageVisible}"
                     app:layout_constraintBottom_toTopOf="@+id/iv_upload_photo"
                     app:layout_constraintEnd_toEndOf="@+id/iv_upload_photo"
@@ -224,13 +211,11 @@
                     android:id="@+id/et_contents"
                     style="@style/Theme.AppCompat.TextView.Write.EditText"
                     android:layout_height="278dp"
-                    android:layout_marginTop="20dp"
                     android:gravity="top"
                     android:hint="@string/write_deadline_contents_description"
                     android:maxLength="1000"
                     android:padding="12dp"
                     android:text="@={vm.description}"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@id/tv_information_message_optional"
                     app:layout_constraintTop_toBottomOf="@+id/tv_contents" />
 
@@ -242,8 +227,8 @@
                     android:text="@{@string/write_current_description_count(vm.descriptionLength)}"
                     android:textColor="@color/main_color"
                     android:textSize="@dimen/font_size_12"
-                    app:layout_constraintEnd_toStartOf="@id/tv_total_description_count"
                     app:layout_constraintTop_toTopOf="@id/tv_total_description_count"
+                    app:layout_constraintEnd_toStartOf="@id/tv_total_description_count"
                     tools:text="10자" />
 
                 <TextView
@@ -281,17 +266,15 @@
                 android:layout_marginBottom="@dimen/size_34"
                 android:background="@drawable/btn_background_selector"
                 android:fontFamily="@font/suit_medium"
+                android:onClick="@{() -> vm.postOffering()}"
                 android:text="@string/write_start_offering"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
-                app:debounceTime="@{1200L}"
-                app:debouncedOnClick="@{() -> vm.postOffering()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="공동구매 시작하기!" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

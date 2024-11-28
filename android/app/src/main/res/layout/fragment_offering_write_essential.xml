@@ -84,11 +84,10 @@
                     android:background="@drawable/btn_offering_write_minus_total_personnel"
                     android:fontFamily="@font/suit_bold"
                     android:gravity="center"
+                    android:onClick="@{() -> vm.decreaseTotalCount()}"
                     android:text="@string/all_minus"
                     android:textColor="@color/white"
                     android:textSize="@dimen/size_20"
-                    app:debounceTime="@{0L}"
-                    app:debouncedOnClick="@{() -> vm.decreaseTotalCount()}"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_total_personnel" />
 
@@ -119,11 +118,10 @@
                     android:background="@drawable/btn_offering_write_minus_total_personnel"
                     android:fontFamily="@font/suit_bold"
                     android:gravity="center"
+                    android:onClick="@{() -> vm.increaseTotalCount()}"
                     android:text="@string/all_plus"
                     android:textColor="@color/white"
                     android:textSize="@dimen/size_20"
-                    app:debounceTime="@{0L}"
-                    app:debouncedOnClick="@{() -> vm.increaseTotalCount()}"
                     app:layout_constraintStart_toEndOf="@id/et_total_personnel"
                     app:layout_constraintTop_toTopOf="@id/btn_minus_total_personnel" />
 
@@ -230,7 +228,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_place_value" />
 
                 <TextView
-                    android:id="@+id/tv_meeting_date"
+                    android:id="@+id/tv_deadline"
                     style="@style/Theme.AppCompat.TextView.Write.Subject"
                     android:text="@string/write_deadline"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -239,8 +237,8 @@
                 <TextView
                     android:id="@+id/tv_meeting_date_asterisk"
                     style="@style/Theme.AppCompat.TextView.Write.Asterisk"
-                    app:layout_constraintStart_toEndOf="@id/tv_meeting_date"
-                    app:layout_constraintTop_toTopOf="@id/tv_meeting_date" />
+                    app:layout_constraintStart_toEndOf="@id/tv_deadline"
+                    app:layout_constraintTop_toTopOf="@id/tv_deadline" />
 
                 <TextView
                     android:id="@+id/tv_deadline_value"
@@ -248,10 +246,10 @@
                     android:fontFamily="@font/suit_medium"
                     android:gravity="center_vertical"
                     android:hint="@string/write_deadline_description"
+                    android:onClick="@{() -> vm.makeMeetingDateChoiceEvent()}"
                     android:text="@{vm.meetingDate}"
-                    app:debouncedOnClick="@{() -> vm.makeMeetingDateChoiceEvent()}"
                     app:layout_constraintStart_toStartOf="@id/tv_title"
-                    app:layout_constraintTop_toBottomOf="@id/tv_meeting_date" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_deadline" />
 
                 <ImageView
                     android:id="@+id/iv_calendar"
@@ -284,10 +282,10 @@
                 android:background="@drawable/btn_background_selector"
                 android:enabled="@{vm.essentialSubmitButtonEnabled}"
                 android:fontFamily="@font/suit_medium"
+                android:onClick="@{() -> vm.makeNavigateToOptionalEvent()}"
                 android:text="@{vm.essentialSubmitButtonEnabled ? @string/write_start_offering : @string/write_start_offering_button_disabled}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size_16"
-                app:debouncedOnClick="@{() -> vm.makeNavigateToOptionalEvent()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

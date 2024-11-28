@@ -29,7 +29,7 @@
             android:layout_marginTop="@dimen/size_50"
             android:layout_marginEnd="@dimen/size_50"
             android:fontFamily="@font/suit_bold"
-            android:text="@string/update_state_dialog_message"
+            android:text="@string/write_update_state_dialog_message"
             android:textSize="@dimen/size_15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
