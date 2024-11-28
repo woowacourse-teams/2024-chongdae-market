@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--    bottom_navigation-->
     <dimen name="bottom_navigation_height">54dp</dimen>
     <dimen name="bottom_navigation_icon_size">20dp</dimen>
-
-    <!--    floating_button-->
-    <dimen name="design_fab_size_normal" tools:override="true">60dp</dimen>
-    <dimen name="design_fab_image_size" tools:override="true">60dp</dimen>
-
-    <!--    comment_detail-->
-    <dimen name="icon_size_15">15dp</dimen>
-    <dimen name="icon_size_20">20dp</dimen>
-    <dimen name="icon_size_24">24dp</dimen>
-    <dimen name="icon_size_30">30dp</dimen>
-    <dimen name="margin_30">30dp</dimen>
-    <dimen name="margin_20">20dp</dimen>
-    <dimen name="margin_10">10dp</dimen>
-    <dimen name="comment_radius">16dp</dimen>
 
     <!-- size -->
     <dimen name="size_0">0dp</dimen>
@@ -52,7 +38,6 @@
     <dimen name="size_30">30dp</dimen>
     <dimen name="size_31">31dp</dimen>
     <dimen name="size_32">32dp</dimen>
-    <dimen name="size_33">33dp</dimen>
     <dimen name="size_34">34dp</dimen>
     <dimen name="size_35">35dp</dimen>
     <dimen name="size_36">36dp</dimen>
@@ -78,31 +63,23 @@
     <dimen name="size_75">75dp</dimen>
     <dimen name="size_78">78dp</dimen>
     <dimen name="size_79">79dp</dimen>
-    <dimen name="size_80">80dp</dimen>
     <dimen name="size_85">85dp</dimen>
     <dimen name="size_86">86dp</dimen>
     <dimen name="size_88">88dp</dimen>
     <dimen name="size_91">91dp</dimen>
     <dimen name="size_100">100dp</dimen>
-    <dimen name="size_120">120dp</dimen>
-    <dimen name="size_130">130dp</dimen>
-    <dimen name="size_150">150dp</dimen>
-    <dimen name="size_200">200dp</dimen>
-    <dimen name="size_250">250dp</dimen>
-    <dimen name="size_300">300dp</dimen>
 
     <!-- font size -->
     <dimen name="font_size_72">72sp</dimen>
     <dimen name="font_size_36">36sp</dimen>
     <dimen name="font_size_24">24sp</dimen>
-    <dimen name="font_size_23">23sp</dimen>
     <dimen name="font_size_22">22sp</dimen>
     <dimen name="font_size_20">20sp</dimen>
     <dimen name="font_size_18">18sp</dimen>
     <dimen name="font_size_17">17sp</dimen>
     <dimen name="font_size_16">16sp</dimen>
     <dimen name="font_size_15">15sp</dimen>
-    <dimen name="font_size_14">14sp</dimen>
+    <dimen name="font_size_14">14dp</dimen>
     <dimen name="font_size_13">13sp</dimen>
     <dimen name="font_size_12">12sp</dimen>
     <dimen name="font_size_11">11sp</dimen>

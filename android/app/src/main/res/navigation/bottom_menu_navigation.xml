@@ -7,63 +7,17 @@
 
     <fragment
         android:id="@+id/home_fragment"
-        android:name="com.zzang.chongdae.presentation.view.home.HomeFragment"
+        android:name="com.zzang.chongdae.presentation.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_home_fragment_to_offering_write_fragment"
-            app:destination="@id/offering_write_essential_fragment" />
-        <action
-            android:id="@+id/action_home_fragment_to_offering_detail_fragment"
-            app:destination="@id/offering_detail_fragment" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/comment_room_fragment"
-        android:name="com.zzang.chongdae.presentation.view.comment.CommentRoomsFragment"
+        android:name="com.zzang.chongdae.presentation.view.CommentRoomFragment"
         android:label="fragment_comment_room"
-        tools:layout="@layout/fragment_comment_rooms" />
+        tools:layout="@layout/fragment_comment_room" />
     <fragment
         android:id="@+id/my_page_fragment"
-        android:name="com.zzang.chongdae.presentation.view.mypage.MyPageFragment"
+        android:name="com.zzang.chongdae.presentation.view.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" />
-    <fragment
-        android:id="@+id/offering_write_essential_fragment"
-        android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteEssentialFragment"
-        android:label="fragment_write_fragment"
-        tools:layout="@layout/fragment_offering_write_essential">
-        <action
-            android:id="@+id/action_offering_write_fragment_essential_to_offering_write_fragment_optional"
-            app:destination="@id/offering_write_optional_fragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/offering_write_optional_fragment"
-        android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment"
-        tools:layout="@layout/fragment_offering_write_optional" />
-
-    <fragment
-        android:id="@+id/offering_detail_fragment"
-        android:name="com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment"
-        android:label="fragment_detail_fragment"
-        tools:layout="@layout/fragment_offering_detail">
-        <action
-            android:id="@+id/action_offering_detail_fragment_to_offering_modify_essential_fragment"
-            app:destination="@id/offering_modify_essential_fragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/offering_modify_essential_fragment"
-        android:name="com.zzang.chongdae.presentation.view.offeringmodify.OfferingModifyEssentialFragment"
-        tools:layout="@layout/fragment_offering_modify_essential">
-        <action
-            android:id="@+id/action_offering_modify_essential_fragment_to_offering_modify_optional_fragment"
-            app:destination="@id/offering_modify_optional_fragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/offering_modify_optional_fragment"
-        android:name="com.zzang.chongdae.presentation.view.offeringmodify.OfferingModifyOptionalFragment"
-        tools:layout="@layout/fragment_offering_modify_essential" />
-
 </navigation>
