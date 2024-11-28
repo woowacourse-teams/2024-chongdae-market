@@ -19,6 +19,7 @@ import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import com.zzang.chongdae.presentation.view.common.OnAlertClickListener
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -36,7 +37,8 @@ class OfferingDetailViewModel
         OnOfferingReportClickListener,
         OnMoveCommentDetailClickListener,
         OnProductLinkClickListener,
-        OnOfferingModifyClickListener {
+        OnOfferingModifyClickListener,
+        OnAlertClickListener {
         @AssistedFactory
         interface OfferingDetailAssistedFactory {
             fun create(offeringId: Long): OfferingDetailViewModel
@@ -87,6 +89,12 @@ class OfferingDetailViewModel
         private val _refreshTokenExpiredEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
         val refreshTokenExpiredEvent: SingleLiveData<Unit> get() = _refreshTokenExpiredEvent
 
+        private val _showAlertEvent = MutableSingleLiveData<Unit>()
+        val showAlertEvent: SingleLiveData<Unit> get() = _showAlertEvent
+
+        private val _alertCancelEvent = MutableSingleLiveData<Unit>()
+        val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
+
         init {
             loadOffering()
         }
@@ -129,14 +137,14 @@ class OfferingDetailViewModel
             }
         }
 
-        override fun onClickParticipation() {
+        override fun participate() {
             viewModelScope.launch {
                 when (val result = offeringDetailRepository.saveParticipation(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
                                 when (authRepository.saveRefresh()) {
-                                    is Result.Success -> onClickParticipation()
+                                    is Result.Success -> participate()
                                     is Result.Error -> {
                                         userPreferencesDataStore.removeAllData()
                                         _refreshTokenExpiredEvent.setValue(Unit)
@@ -236,5 +244,17 @@ class OfferingDetailViewModel
                     return assistedFactory.create(offeringId) as T
                 }
             }
+        }
+
+        fun onParticipateClick() {
+            _showAlertEvent.setValue(Unit)
+        }
+
+        override fun onClickConfirm() {
+            participate()
+        }
+
+        override fun onClickCancel() {
+            _alertCancelEvent.setValue(Unit)
         }
     }

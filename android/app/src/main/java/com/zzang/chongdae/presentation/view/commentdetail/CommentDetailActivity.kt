@@ -19,6 +19,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
+import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
 import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
@@ -155,6 +156,18 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 contentType = "button",
             )
             finish()
+            dialog.dismiss()
+        }
+        viewModel.showAlertEvent.observe(this) {
+            val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
+            alertBinding.tvDialogMessage.text = getString(R.string.comment_detail_exit_alert)
+            alertBinding.listener = viewModel
+
+            dialog.setContentView(alertBinding.root)
+            dialog.show()
+        }
+        viewModel.alertCancelEvent.observe(this) {
+            dialog.dismiss()
         }
     }
 

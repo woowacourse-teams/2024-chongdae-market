@@ -42,7 +42,7 @@ class OfferingDetailViewModelTest {
         // given
 
         // when
-        viewModel.onClickParticipation()
+        viewModel.participate()
         val actual = viewModel.isParticipated.getOrAwaitValue()
 
         // then
