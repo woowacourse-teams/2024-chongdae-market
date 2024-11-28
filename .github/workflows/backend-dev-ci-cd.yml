@@ -7,12 +7,12 @@ on:
       - "backend/**"
       - ".github/workflows/backend-dev-ci-cd.yml"
       - "Dockerfile"
-  # pull_request:
-  #   branches: [ "develop-BE" ]
-  #   paths:
-  #     - "backend/**"
-  #     - ".github/workflows/backend-dev-ci-cd.yml"
-  #     - "Dockerfile"
+  pull_request:
+    branches: [ "develop-BE" ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-prod-ci-cd.yml"
+      - "Dockerfile"
 
 jobs:
 
