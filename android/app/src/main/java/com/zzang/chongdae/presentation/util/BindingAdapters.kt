@@ -18,6 +18,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -192,6 +193,12 @@ fun View.setIsVisible(isVisible: Boolean) {
 
 @BindingAdapter("formattedDate")
 fun TextView.bindFormattedDate(datetime: LocalDateTime?) {
+    this.text =
+        datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.all_due_datetime)))
+}
+
+@BindingAdapter("formattedOnlyDate")
+fun TextView.bindFormattedOnlyDate(datetime: LocalDate?) {
     this.text =
         datetime?.format(DateTimeFormatter.ofPattern(context.getString(R.string.all_due_datetime)))
 }
