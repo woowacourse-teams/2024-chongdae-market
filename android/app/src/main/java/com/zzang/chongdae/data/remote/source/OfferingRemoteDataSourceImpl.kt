@@ -1,6 +1,7 @@
 package com.zzang.chongdae.data.remote.source
 
-import com.zzang.chongdae.data.mapper.toProductUrlRequest
+import com.zzang.chongdae.common.handler.DataError
+import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse
@@ -8,10 +9,9 @@ import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
+import com.zzang.chongdae.data.remote.mapper.toProductUrlRequest
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
-import com.zzang.chongdae.domain.util.DataError
-import com.zzang.chongdae.domain.util.Result
 import okhttp3.MultipartBody
 
 class OfferingRemoteDataSourceImpl(
