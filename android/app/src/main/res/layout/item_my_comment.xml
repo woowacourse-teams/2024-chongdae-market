@@ -38,7 +38,6 @@
             android:paddingBottom="@dimen/size_7"
             android:text="@{comment.content}"
             android:textColor="@color/white"
-            android:textSize="@dimen/size_14"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

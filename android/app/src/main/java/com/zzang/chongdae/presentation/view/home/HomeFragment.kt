@@ -22,27 +22,33 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.ChongdaeApp
+import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
 import com.zzang.chongdae.R
-import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class HomeFragment : Fragment(), OnOfferingClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var toast: Toast? = null
 
     private lateinit var offeringAdapter: OfferingAdapter
-    private val viewModel: OfferingViewModel by viewModels()
+    private val viewModel: OfferingViewModel by viewModels {
+        OfferingViewModel.getFactory(
+            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            authRepository = (requireActivity().applicationContext as ChongdaeApp).authRepository,
+            userPreferencesDataStore = UserPreferencesDataStore(requireActivity().applicationContext.dataStore),
+        )
+    }
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
@@ -71,14 +77,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         navigateToOfferingWriteFragment()
         initFragmentResultListener()
         setOnCheckboxListener()
-        setOnSwipeRefreshListener()
-    }
-
-    private fun setOnSwipeRefreshListener() {
-        binding.swipeLayout.setOnRefreshListener {
-            binding.swipeLayout.isRefreshing = false
-            viewModel.swipeRefresh()
-        }
     }
 
     private fun setOnCheckboxListener() {
@@ -121,12 +119,8 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             viewModel.fetchUpdatedOffering(bundle.getLong(OfferingDetailFragment.UPDATED_OFFERING_ID_KEY))
         }
 
-        setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
-            viewModel.refreshOfferings(bundle.getBoolean(OfferingDetailFragment.DELETED_OFFERING_ID_KEY))
-        }
-
         setFragmentResultListener(OfferingWriteOptionalFragment.OFFERING_WRITE_BUNDLE_KEY) { _, bundle ->
-            viewModel.refreshOfferings(
+            viewModel.refreshOfferingsByOfferingWriteEvent(
                 bundle.getBoolean(
                     OfferingWriteOptionalFragment.NEW_OFFERING_EVENT_KEY,
                 ),
@@ -170,13 +164,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
     private fun initAdapter() {
         offeringAdapter = OfferingAdapter(this)
-        offeringAdapter.addLoadStateListener {
-            if (it.append.endOfPaginationReached) {
-                binding.tvEmptyItem.isVisible = isItemEmpty()
-            } else {
-                binding.tvEmptyItem.isVisible = false
-            }
-        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 offeringAdapter.loadStateFlow.collect { loadState ->
@@ -192,8 +179,6 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             ),
         )
     }
-
-    private fun isItemEmpty() = offeringAdapter.itemCount == 0
 
     private fun setUpOfferingsObserve() {
         viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
@@ -244,7 +229,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun navigateToOfferingWriteFragment() {
-        binding.fabCreateOffering.setDebouncedOnClickListener {
+        binding.fabCreateOffering.setOnClickListener {
             findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
         }
     }

@@ -134,13 +134,13 @@
     <style name="Widget.AppCompat.CompoundButton.CheckBox.Filter" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/size_14</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/suit_regular</item>
         <item name="android:textColor">@color/gray_900</item>
         <item name="android:background">@drawable/bg_main_filter</item>
         <item name="android:button">@null</item>
         <item name="android:drawableStart">@drawable/btn_main_filter</item>
-        <item name="android:drawablePadding">5dp</item>
+        <item name="android:drawablePadding">3dp</item>
         <item name="android:paddingVertical">6dp</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
@@ -159,9 +159,6 @@
     <!--    DateTimePicker Custom   -->
     <style name="DefaultNumberPickerTheme" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">#00000000</item>
-        <item name="android:colorAccent">@color/main_color</item>
-        <item name="android:color">@color/main_color</item>
-        <item name="colorAccent">@color/main_color</item>
         <item name="android:textStyle">bold</item>
         <item name="fontFamily">@font/suit_medium</item>
         <item name="android:textSize">16dp</item>

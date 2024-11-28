@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,18 +15,14 @@ import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
-import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
-import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private var _binding: ActivityCommentDetailBinding? = null
     private val binding get() = _binding!!
@@ -36,13 +31,13 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     private val participantAdapter: ParticipantAdapter by lazy { ParticipantAdapter() }
     private val dialog: Dialog by lazy { Dialog(this) }
 
-    @Inject
-    lateinit var commentDetailAssistedFactory: CommentDetailViewModel.CommentDetailAssistedFactory
-
     private val viewModel: CommentDetailViewModel by viewModels {
         CommentDetailViewModel.getFactory(
-            assistedFactory = commentDetailAssistedFactory,
             offeringId = offeringId,
+            authRepository = (application as ChongdaeApp).authRepository,
+            offeringRepository = (application as ChongdaeApp).offeringRepository,
+            participantRepository = (application as ChongdaeApp).participantRepository,
+            commentDetailRepository = (application as ChongdaeApp).commentDetailRepository,
         )
     }
 
@@ -75,10 +70,10 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
 
     private fun setupDrawerToggle() {
-        binding.ivMoreOptions.setDebouncedOnClickListener {
+        binding.ivMoreOptions.setOnClickListener {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
-                return@setDebouncedOnClickListener
+                return@setOnClickListener
             }
             binding.drawerLayout.openDrawer(GravityCompat.END)
             firebaseAnalyticsManager.logSelectContentEvent(
@@ -156,18 +151,6 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
                 contentType = "button",
             )
             finish()
-            dialog.dismiss()
-        }
-        viewModel.showAlertEvent.observe(this) {
-            val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
-            alertBinding.tvDialogMessage.text = getString(R.string.comment_detail_exit_alert)
-            alertBinding.listener = viewModel
-
-            dialog.setContentView(alertBinding.root)
-            dialog.show()
-        }
-        viewModel.alertCancelEvent.observe(this) {
-            dialog.dismiss()
         }
     }
 
@@ -231,19 +214,8 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
-        val view = currentFocus
-        if (view != null && (view is EditText || view.id == R.id.iv_send_comment)) {
-            val screenCoords = IntArray(2)
-            view.getLocationOnScreen(screenCoords)
-            val x = motionEvent.rawX + view.left - screenCoords[0]
-            val y = motionEvent.rawY + view.top - screenCoords[1]
-
-            if (motionEvent.action == MotionEvent.ACTION_UP &&
-                (x < view.left || x >= view.right || y < view.top || y > view.bottom)
-            ) {
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-            }
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            this.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         }
         return super.dispatchTouchEvent(motionEvent)
     }

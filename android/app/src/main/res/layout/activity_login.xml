@@ -55,7 +55,7 @@
             android:layout_marginEnd="@dimen/margin_30"
             android:layout_marginBottom="@dimen/size_120"
             android:background="@drawable/bg_yellow_radius_12dp"
-            app:debouncedOnClick="@{() -> onAuthClickListener.onLoginButtonClick()}"
+            android:onClick="@{() -> onAuthClickListener.onLoginButtonClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

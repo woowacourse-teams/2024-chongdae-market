@@ -16,14 +16,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingWriteOptionalBinding
 import com.zzang.chongdae.presentation.util.FileUtils
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.util.PermissionManager
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class OfferingWriteOptionalFragment : Fragment() {
     private var _fragmentBinding: FragmentOfferingWriteOptionalBinding? = null
     private val fragmentBinding get() = _fragmentBinding!!
@@ -33,7 +32,12 @@ class OfferingWriteOptionalFragment : Fragment() {
     private lateinit var permissionManager: PermissionManager
     private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val viewModel: OfferingWriteViewModel by activityViewModels()
+    private val viewModel: OfferingWriteViewModel by activityViewModels {
+        OfferingWriteViewModel.getFactory(
+            offeringRepository = (requireActivity().application as ChongdaeApp).offeringRepository,
+            authRepository = (requireActivity().application as ChongdaeApp).authRepository,
+        )
+    }
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(requireContext())
@@ -83,7 +87,9 @@ class OfferingWriteOptionalFragment : Fragment() {
                 contentType = "button",
             )
             showToast(R.string.write_success_writing)
-            findNavController().popBackStack(R.id.offering_write_essential_fragment, true)
+            findNavController().popBackStack(R.id.offering_write_fragment_essential, true)
+            viewModel.initOfferingWriteInputs()
+
             setFragmentResult(
                 OFFERING_WRITE_BUNDLE_KEY,
                 bundleOf(NEW_OFFERING_EVENT_KEY to true),

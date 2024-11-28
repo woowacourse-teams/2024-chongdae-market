@@ -11,17 +11,23 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
+import com.zzang.chongdae.ChongdaeApp
+import com.zzang.chongdae.ChongdaeApp.Companion.dataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import com.zzang.chongdae.databinding.ActivityLoginBinding
+import com.zzang.chongdae.presentation.util.FirebaseAnalyticsManager
 import com.zzang.chongdae.presentation.view.MainActivity
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class LoginActivity : AppCompatActivity(), OnAuthClickListener {
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels {
+        LoginViewModel.getFactory(
+            authRepository = (application as ChongdaeApp).authRepository,
+            userPreferencesDataStore = UserPreferencesDataStore(applicationContext.dataStore),
+        )
+    }
 
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
         FirebaseAnalytics.getInstance(this)

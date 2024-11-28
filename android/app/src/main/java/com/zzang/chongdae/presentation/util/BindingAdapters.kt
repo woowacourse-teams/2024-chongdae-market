@@ -336,14 +336,3 @@ private fun TextView.setDiscountRate(
 fun EditText.setOriginPriceHint(originPrice: Int) {
     this.hint = context.getString(R.string.write_current_split_price).format(originPrice)
 }
-
-@BindingAdapter(value = ["debouncedOnClick", "debounceTime"], requireAll = false)
-fun View.setDebouncedOnClick(
-    clickListener: View.OnClickListener?,
-    debounceTime: Long?,
-) {
-    val safeDebounceTime = debounceTime ?: DEFAULT_DEBOUNCE_TIME
-    setDebouncedOnClickListener(safeDebounceTime) {
-        clickListener?.onClick(this)
-    }
-}

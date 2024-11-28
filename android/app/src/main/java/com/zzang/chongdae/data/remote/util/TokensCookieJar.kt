@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.util
 
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.local.source.UserPreferencesDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
