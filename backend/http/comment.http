@@ -1,2 +1,2 @@
 ### 댓글방 목록 조회 API
-GET {{base-url}}/comments
+GET {{base-url}}/comments?member-id=1
