@@ -42,6 +42,7 @@ class OfferingViewModel
         val offerings: LiveData<PagingData<Offering>> get() = _offerings
 
         val search: MutableLiveData<String?> = MutableLiveData(null)
+        val isSearchKeywordExist = search.map { (it != null) && (it != "") }
 
         private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
         val filters: LiveData<List<Filter>> get() = _filters
