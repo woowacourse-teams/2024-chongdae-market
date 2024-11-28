@@ -6,8 +6,12 @@
     <data>
 
         <variable
-            name="participant"
-            type="com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantUiModel" />
+            name="commentRoom"
+            type="com.zzang.chongdae.domain.model.CommentRoom" />
+
+        <variable
+            name="onCommentRoomClickListener"
+            type="com.zzang.chongdae.presentation.view.comment.adapter.OnCommentRoomClickListener" />
     </data>
 
 
@@ -28,18 +32,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_participant"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_15"
-            android:fontFamily="@font/suit_medium"
-            android:textColor="@color/gray_600"
-            android:textSize="@dimen/size_14"
-            android:text="@{participant.nickname}"
+            android:id="@+id/tv_offering_title"
+            style="@style/Theme.AppCompat.TextView.Normal.Gray900.Size17"
+            android:layout_marginStart="13dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
             app:layout_constraintStart_toEndOf="@id/iv_profile"
             app:layout_constraintTop_toTopOf="@+id/iv_profile"
-            app:layout_constraintVertical_bias="0.4"
             tools:text="참여자1" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
