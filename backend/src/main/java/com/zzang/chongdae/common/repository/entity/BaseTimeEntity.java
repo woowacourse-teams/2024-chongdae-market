@@ -1,4 +1,4 @@
-package com.zzang.chongdae.common.repository;
+package com.zzang.chongdae.common.repository.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

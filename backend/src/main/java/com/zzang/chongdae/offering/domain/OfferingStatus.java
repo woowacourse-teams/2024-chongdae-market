@@ -1,27 +1,35 @@
 package com.zzang.chongdae.offering.domain;
 
-public enum OfferingStatus {
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    FULL,
-    IMMINENT,
-    CONFIRMED,
-    AVAILABLE;
+@Getter
+@AllArgsConstructor
+public class OfferingStatus {
 
-    public static OfferingStatus decideByJoinedCount(OfferingJoinedCount offeringJoinedCount) {
-        if (offeringJoinedCount.isCountFull()) {
-            return FULL;
-        }
-        if (offeringJoinedCount.isCountAlmostFull()) {
-            return IMMINENT;
-        }
-        return AVAILABLE;
+    private final LocalDateTime deadline;
+    private final int totalCount;
+    private final boolean isManualConfirmed;
+    private final int currentCount;
+
+    public OfferingCondition decideOfferingCondition() {
+        return OfferingCondition.decideBy(this);
     }
 
-    public boolean isOpen() {
-        return this == AVAILABLE || this == IMMINENT;
+    public boolean isCountFull() {
+        return this.totalCount == this.currentCount;
     }
 
-    public boolean isClosed() {
-        return this == CONFIRMED || this == FULL;
+    public boolean isDeadlineOver() {
+        return LocalDateTime.now().isAfter(this.deadline);
+    }
+
+    public boolean isAutoConfirmed() {
+        return isCountFull() && isDeadlineOver();
+    }
+
+    public boolean isManualConfirmed() {
+        return isManualConfirmed;
     }
 }

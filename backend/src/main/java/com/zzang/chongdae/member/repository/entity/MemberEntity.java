@@ -1,11 +1,8 @@
 package com.zzang.chongdae.member.repository.entity;
 
-import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
-import com.zzang.chongdae.member.domain.AuthProvider;
+import com.zzang.chongdae.common.repository.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,24 +27,6 @@ public class MemberEntity extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @Column(unique = true, length = 10)
-    private String nickname;
-
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
-
-    @NotNull
     @Column(unique = true)
-    private String loginId;
-
-    @NotNull
-    private String password; // TODO: 일반 로그인 들어올 시 salt 추가
-    
-    public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
-        this(null, nickname, provider, loginId, password);
-    }
-
-    public boolean isSame(MemberEntity other) {
-        return this.equals(other);
-    }
+    private String nickname;
 }
