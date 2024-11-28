@@ -875,7 +875,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "수정할 모집 장소 주소",
                     "수정할 모집 상세 주소",
                     "수정된동",
-                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    LocalDateTime.parse("2099-10-25T00:00:00"),
                     "수정할 공모 상세 내용"
             );
 

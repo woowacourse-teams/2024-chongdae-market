@@ -11,10 +11,11 @@ import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomStatusResponse;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
+import com.zzang.chongdae.event.domain.SaveCommentEvent;
+import com.zzang.chongdae.event.domain.UpdateStatusEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.notification.service.FcmNotificationService;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -26,6 +27,7 @@ import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentService {
 
-    private final FcmNotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
     private final CommentRepository commentRepository;
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
@@ -47,7 +49,8 @@ public class CommentService {
         CommentEntity savedComment = commentRepository.save(comment);
 
         List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
-        notificationService.saveComment(savedComment, offeringMembers);
+        eventPublisher.publishEvent(new SaveCommentEvent(this, savedComment, offeringMembers));
+
         return savedComment.getId();
     }
 
@@ -103,7 +106,7 @@ public class CommentService {
         if (updatedStatus.isBuying()) { // TODO : 도메인으로 정리
             offering.updateOfferingStatus(OfferingStatus.CONFIRMED);
         }
-        notificationService.updateStatus(offering);
+        eventPublisher.publishEvent(new UpdateStatusEvent(this, offering));
         return new CommentRoomStatusResponse(updatedStatus);
     }
 
