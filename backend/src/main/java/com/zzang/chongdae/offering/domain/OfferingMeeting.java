@@ -11,4 +11,5 @@ public class OfferingMeeting {
     private final LocalDateTime deadline;
     private final String meetingAddress;
     private final String meetingAddressDetail;
+    private final String meetingAddressDong;
 }

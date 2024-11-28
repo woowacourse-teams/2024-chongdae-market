@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public record OfferingMeetingUpdateRequest(@NotNull
                                            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-                                           LocalDateTime meetingDate,
+                                           LocalDateTime deadline,
 
                                            @NotEmpty
                                            String meetingAddress,
@@ -18,6 +18,6 @@ public record OfferingMeetingUpdateRequest(@NotNull
                                            String meetingAddressDong) {
 
     public OfferingMeeting toOfferingMeeting() {
-        return new OfferingMeeting(meetingDate, meetingAddress, meetingAddressDetail, meetingAddressDong);
+        return new OfferingMeeting(deadline, meetingAddress, meetingAddressDetail, meetingAddressDong);
     }
 }
