@@ -21,8 +21,30 @@ public class OfferingStatus {
         return this.totalCount == this.currentCount;
     }
 
+    public boolean isCountNotFull() {
+        return !isCountFull();
+    }
+
+    public boolean isCountAlmostFull() {
+        if (totalCount <= 3) {
+            return (totalCount - currentCount) < 2;
+        }
+        return (totalCount - currentCount) < 3;
+    }
+
+    public boolean isDeadlineAlmostOver() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime threshold = deadline.minusHours(6);
+        return threshold.isBefore(now) && now.isBefore(deadline); // deadline - 6 < now < deadline
+    }
+
     public boolean isDeadlineOver() {
-        return LocalDateTime.now().isAfter(this.deadline);
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(this.deadline) || now.isEqual(this.deadline);
+    }
+
+    public boolean isDeadlineNotOver() {
+        return LocalDateTime.now().isBefore(this.deadline);
     }
 
     public boolean isAutoConfirmed() {
