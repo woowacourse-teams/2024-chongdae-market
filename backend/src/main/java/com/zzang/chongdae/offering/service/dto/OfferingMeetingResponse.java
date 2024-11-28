@@ -3,16 +3,14 @@ package com.zzang.chongdae.offering.service.dto;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
 import java.time.LocalDateTime;
 
-public record OfferingMeetingResponse(LocalDateTime meetingDate,
+public record OfferingMeetingResponse(LocalDateTime deadline,
                                       String meetingAddress,
-                                      String meetingAddressDetail,
-                                      String meetingAddressDong) {
+                                      String meetingAddressDetail) {
 
     public OfferingMeetingResponse(OfferingMeeting offeringMeeting) {
-        this(offeringMeeting.getMeetingDate(),
+        this(offeringMeeting.getDeadline(),
                 offeringMeeting.getMeetingAddress(),
-                offeringMeeting.getMeetingAddressDetail(),
-                offeringMeeting.getMeetingAddressDong()
+                offeringMeeting.getMeetingAddressDetail()
         );
     }
 }
