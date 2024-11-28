@@ -13,6 +13,7 @@ import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offering.service.dto.OfferingDetailResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingMeetingResponse;
+import com.zzang.chongdae.offering.service.dto.OfferingSaveRequest;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +60,13 @@ public class OfferingService {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         return new OfferingMeetingResponse(offering.toOfferingMeeting());
+    }
+
+    public Long saveOffering(OfferingSaveRequest request) {
+        MemberEntity member = memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+        OfferingEntity offering = request.toEntity(member);
+        OfferingEntity savedOffering = offeringRepository.save(offering);
+        return savedOffering.getId();
     }
 }
