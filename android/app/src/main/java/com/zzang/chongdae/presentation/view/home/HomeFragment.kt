@@ -61,13 +61,8 @@ class HomeFragment : Fragment(), OnArticleClickListener {
 
     private fun setUpOfferingsObserve() {
         viewModel.offerings.observe(viewLifecycleOwner) {
-            offeringAdapter.submitList(it)
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.updateArticles()
     }
 
     override fun onClick(offeringId: Long) {

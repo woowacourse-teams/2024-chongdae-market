@@ -2,15 +2,15 @@ package com.zzang.chongdae.presentation.view.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import com.zzang.chongdae.databinding.ItemOfferingBinding
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.presentation.view.home.OnArticleClickListener
 
 class OfferingAdapter(
     private val onArticleClickListener: OnArticleClickListener,
-) : ListAdapter<Offering, OfferingViewHolder>(productComparator) {
+) : PagingDataAdapter<Offering, OfferingViewHolder>(productComparator) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -24,7 +24,7 @@ class OfferingAdapter(
         holder: OfferingViewHolder,
         position: Int,
     ) {
-        holder.bind(getItem(position), onArticleClickListener)
+        getItem(position)?.let { holder.bind(it, onArticleClickListener) }
     }
 
     companion object {
