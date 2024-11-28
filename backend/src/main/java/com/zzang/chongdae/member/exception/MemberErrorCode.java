@@ -1,7 +1,6 @@
 package com.zzang.chongdae.member.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.zzang.chongdae.global.exception.ErrorMessage;
 import com.zzang.chongdae.global.exception.ErrorResponse;
@@ -13,9 +12,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MemberErrorCode implements ErrorResponse {
 
-    NOT_FOUND(BAD_REQUEST, "해당 사용자가 존재하지 않습니다."),
-    MAX_TRY_EXCEEDED(INTERNAL_SERVER_ERROR, "닉네임 생성에 실패했습니다."),
-    NICK_NAME_READ_FAIL(INTERNAL_SERVER_ERROR, "닉네임 데이터 읽기를 실패했습닏.");
+    NOT_FOUND(BAD_REQUEST, "해당 사용자가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
