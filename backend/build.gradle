@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
-    id 'com.epages.restdocs-api-spec' version '0.18.2'
 }
 
 group = 'com.zzang'
@@ -29,54 +28,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.765'
-    implementation 'org.jsoup:jsoup:1.18.1'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
-    testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
-    testImplementation 'io.rest-assured:rest-assured:5.3.1'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-// test -> openapi3 -> copyOasToSwagger -> bootJar
-
-test {
+tasks.named('test') {
     useJUnitPlatform()
-}
-
-openapi3 {
-    servers = [{ url = 'http://13.124.137.6' },
-               { url = 'http://localhost:8080' }]
-    title '총대마켓 API 명세서'
-    description '총대마켓 백엔드 API 명세서'
-    version '0.1.0'
-    format 'yaml'
-}
-
-tasks.register('copyOasToSwagger', Copy) {
-    dependsOn('openapi3')
-    doFirst {
-        delete file('src/main/resources/static/swagger-ui/openapi3.yaml')
-    }
-    from file("build/api-spec/openapi3.yaml")
-    into file("src/main/resources/static/swagger-ui/.")
-}
-
-bootJar {
-    dependsOn copyOasToSwagger
-    from('src/main/resources/static/swagger-ui') {
-        include 'openapi3.yaml'
-        into 'static/swagger-ui/'
-    }
-}
-
-jar {
-    enabled = false
 }
