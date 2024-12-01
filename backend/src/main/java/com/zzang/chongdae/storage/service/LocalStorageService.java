@@ -25,16 +25,25 @@ public class LocalStorageService implements StorageService {
     @Value("${storage.path}")
     private String storagePath;
 
+    LocalStorageService(String redirectUrl, String storagePath) {
+        this.redirectUrl = redirectUrl;
+        this.storagePath = storagePath;
+    }
+
     @Override
     public String uploadFile(MultipartFile file) {
+        String extension = getFileExtension(file);
+        validateFileExtension(extension);
+        String newFilename = UUID.randomUUID().toString();
+        storeFile(file, newFilename);
+        return createUri(newFilename);
+    }
+
+    private void storeFile(MultipartFile file, String newFilename) {
         try {
-            String extension = getFileExtension(file);
-            validateFileExtension(extension);
-            String newFilename = UUID.randomUUID() + "." + extension;
             Path uploadPath = Paths.get(storagePath);
             Path filePath = uploadPath.resolve(newFilename);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return createUri(filePath.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
