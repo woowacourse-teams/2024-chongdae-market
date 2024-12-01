@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 amazoncorretto:17
+FROM --platform=linux/amd64 amazoncorretto:17
 
 ENV TZ=Asia/Seoul
 
