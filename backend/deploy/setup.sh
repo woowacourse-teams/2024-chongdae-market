@@ -31,6 +31,7 @@ docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
        	--name ${INITIAL_INSTANCE_NAME} \
 	-v /logs:/logs \
+	-v /uploads:/uploads \
 	-e SPRING_PROFILES_ACTIVE=${PROFILE_ACTIVE} \
 	${DOCKERHUB_USER_NAME}/${DOCKER_IMAGE_NAME}:${GITHUB_SHA:0:7}
 
@@ -50,7 +51,9 @@ echo "[+] RUN nginx server"
 docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
 	--name nginx \
-  -p 80:80 \
+  -p 443:443 \
+  -v /uploads:/uploads \
+  -v /certificates:/certificates \
 	nginx:latest
 
 # 5. setup proxy in nginx container

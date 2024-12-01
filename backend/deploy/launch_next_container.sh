@@ -73,6 +73,7 @@ docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
   --name ${NEXT_CONTAINER} \
 	-v /logs:/logs \
+	-v /uploads:/uploads \
 	-e SPRING_PROFILES_ACTIVE=${PROFILE_ACTIVE} \
 	${DOCKERHUB_USER_NAME}/${DOCKER_IMAGE_NAME}:${GITHUB_SHA:0:7}
 
