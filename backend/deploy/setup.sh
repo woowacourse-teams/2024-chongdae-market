@@ -52,7 +52,7 @@ docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
 	--name nginx \
   -p 443:443 \
-  -p 80:80 \
+  -p 127.0.0.1:80:80 \
   -v /uploads:/uploads \
   -v /certificates:/certificates \
 	nginx:latest
