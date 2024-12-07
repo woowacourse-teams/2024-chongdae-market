@@ -21,7 +21,6 @@ class LoginViewModel
     constructor(
         @CheckAlreadyLoggedInUseCaseQualifier private val checkIfAlreadyLoggedInUseCase: CheckIfAlreadyLoggedInUseCase,
         @PostLoginUseCaseQualifier private val postLoginUseCase: PostLoginUseCase,
-        private val userPreferencesDataStore: UserPreferencesDataStore,
     ) : ViewModel() {
         private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
         val loginSuccessEvent: SingleLiveData<Unit> get() = _loginSuccessEvent
