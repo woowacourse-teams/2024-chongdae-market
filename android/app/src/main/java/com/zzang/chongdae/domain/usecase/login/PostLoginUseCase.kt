@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.login.usecase
+package com.zzang.chongdae.domain.usecase.login
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result

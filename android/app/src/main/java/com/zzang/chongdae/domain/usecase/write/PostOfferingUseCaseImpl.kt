@@ -1,4 +1,4 @@
-package com.zzang.chongdae.presentation.view.write.usecase
+package com.zzang.chongdae.domain.usecase.write
 
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError

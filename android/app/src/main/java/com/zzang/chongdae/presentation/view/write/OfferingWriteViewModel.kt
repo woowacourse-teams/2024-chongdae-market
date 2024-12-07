@@ -21,7 +21,7 @@ import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
-import com.zzang.chongdae.presentation.view.write.usecase.PostOfferingUseCase
+import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
