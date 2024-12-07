@@ -9,3 +9,7 @@ annotation class CheckAlreadyLoggedInUseCaseQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class PostLoginUseCaseQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class PostOfferingUseCaseQualifier
