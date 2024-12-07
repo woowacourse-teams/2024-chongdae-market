@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.di.annotations.CheckAlreadyLoggedInUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostLoginUseCaseQualifier
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import com.zzang.chongdae.presentation.view.login.usecase.CheckIfAlreadyLoggedInUseCase
 import com.zzang.chongdae.presentation.view.login.usecase.PostLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class LoginViewModel
     @Inject
     constructor(
+        @CheckAlreadyLoggedInUseCaseQualifier private val checkIfAlreadyLoggedInUseCase: CheckIfAlreadyLoggedInUseCase,
         @PostLoginUseCaseQualifier private val postLoginUseCase: PostLoginUseCase,
         private val userPreferencesDataStore: UserPreferencesDataStore,
     ) : ViewModel() {
@@ -33,8 +35,8 @@ class LoginViewModel
 
         private fun makeAlreadyLoggedInEvent() {
             viewModelScope.launch {
-                val accessToken = userPreferencesDataStore.accessTokenFlow.first()
-                if (accessToken != null) {
+                val isAlreadyLoggedIn = checkIfAlreadyLoggedInUseCase()
+                if (isAlreadyLoggedIn) {
                     _alreadyLoggedInEvent.setValue(Unit)
                 }
             }

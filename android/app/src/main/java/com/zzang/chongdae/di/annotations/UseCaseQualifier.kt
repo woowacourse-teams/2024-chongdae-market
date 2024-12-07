@@ -4,4 +4,8 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
+annotation class CheckAlreadyLoggedInUseCaseQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
 annotation class PostLoginUseCaseQualifier
