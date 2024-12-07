@@ -6,7 +6,7 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 
 class FakeAuthRepository : AuthRepository {
-    override suspend fun saveLogin(
+    override suspend fun postLogin(
         accessToken: String,
         fcmToken: String,
     ): Result<Member, DataError.Network> {

@@ -14,7 +14,7 @@ class AuthRepositoryImpl
     constructor(
         @AuthDataSourceQualifier private val authRemoteDataSource: AuthRemoteDataSource,
     ) : AuthRepository {
-        override suspend fun saveLogin(
+        override suspend fun postLogin(
             accessToken: String,
             fcmToken: String,
         ): Result<Member, DataError.Network> {

@@ -3,12 +3,12 @@ package com.zzang.chongdae.presentation.view.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.di.annotations.PostLoginUseCaseQualifier
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
+import com.zzang.chongdae.presentation.view.login.usecase.PostLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class LoginViewModel
     @Inject
     constructor(
-        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        @PostLoginUseCaseQualifier private val postLoginUseCase: PostLoginUseCase,
         private val userPreferencesDataStore: UserPreferencesDataStore,
     ) : ViewModel() {
         private val _loginSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
@@ -45,10 +45,8 @@ class LoginViewModel
             fcmToken: String,
         ) {
             viewModelScope.launch {
-                when (val result = authRepository.saveLogin(accessToken = accessToken, fcmToken = fcmToken)) {
+                when (val result = postLoginUseCase(accessToken = accessToken, fcmToken = fcmToken)) {
                     is Result.Success -> {
-                        userPreferencesDataStore.saveMember(result.data.memberId, result.data.nickName)
-                        userPreferencesDataStore.saveFcmToken(fcmToken)
                         _loginSuccessEvent.setValue(Unit)
                     }
 
