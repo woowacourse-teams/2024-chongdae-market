@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         FirebaseAnalyticsManager(firebaseAnalytics)
     }
 
-    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+    private val kakaoAuthResultHandler: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             Log.e("error", "카카오계정으로 로그인 실패", error)
         } else if (token != null) {
@@ -84,7 +84,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
             loginWithKakaoTalk()
         } else {
-            UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+            UserApiClient.instance.loginWithKakaoAccount(this, callback = kakaoAuthResultHandler)
         }
     }
 
@@ -103,7 +103,7 @@ class LoginActivity : AppCompatActivity(), OnAuthClickListener {
         if (isKakaoTalkLoginCanceled(error)) {
             return
         }
-        UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+        UserApiClient.instance.loginWithKakaoAccount(this, callback = kakaoAuthResultHandler)
     }
 
     private fun isKakaoTalkLoginCanceled(error: Throwable?): Boolean {
