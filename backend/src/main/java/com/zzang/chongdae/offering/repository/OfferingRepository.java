@@ -1,6 +1,5 @@
 package com.zzang.chongdae.offering.repository;
 
-import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,14 +16,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             WHERE o.id = :offeringId
             """, nativeQuery = true)
     Optional<OfferingEntity> findByIdWithDeleted(Long offeringId);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity as o JOIN OfferingMemberEntity as om
-                ON o.id = om.offering.id
-            WHERE om.member = :member
-            """)
-    List<OfferingEntity> findCommentRoomsByMember(MemberEntity member);
 
     @Query("""
             SELECT o
