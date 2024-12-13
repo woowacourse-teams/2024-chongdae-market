@@ -6,7 +6,6 @@ import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -44,13 +43,10 @@ public class OfferingMemberService {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
         OfferingMemberEntity saved = offeringMemberRepository.save(offeringMember);
-
         offering.participate();
-        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
-        offering.updateOfferingStatus(offeringStatus);
 
         eventPublisher.publishEvent(new ParticipateEvent(this, saved));
-        return offeringMember.getId();
+        return saved.getId();
     }
 
     private void validateParticipate(OfferingEntity offering, MemberEntity member) {
@@ -78,11 +74,10 @@ public class OfferingMemberService {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingAndMember(offering, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
         validateCancel(offeringMember);
-        offeringMemberRepository.delete(offeringMember);
 
+        offeringMemberRepository.delete(offeringMember);
         offering.leave();
-        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
-        offering.updateOfferingStatus(offeringStatus);
+
         eventPublisher.publishEvent(new CancelParticipateEvent(this, offeringMember));
     }
 
