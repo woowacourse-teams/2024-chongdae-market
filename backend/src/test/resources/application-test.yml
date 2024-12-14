@@ -22,3 +22,7 @@ security:
 fcm:
   secret-key:
     path: /fcm/chongdaemarket-fcm-key.json
+
+storage:
+  path: /uploads
+  redirectUrl: fake.image.chongdae.site
