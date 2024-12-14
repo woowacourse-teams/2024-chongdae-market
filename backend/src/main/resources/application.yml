@@ -46,10 +46,6 @@ amazon:
     redirectUrl: d3a5rfnjdz82qu.cloudfront.net
     storagePath: chongdae-market/images/offerings/product/
 
-storage:
-  path: /uploads
-  redirectUrl: image.chongdae.site
-
 security:
   jwt:
     token:
