@@ -3,9 +3,11 @@ GITHUB_SHA=$1
 PROFILE_ACTIVE=$2
 DOCKERHUB_USER_NAME=$3
 DOCKER_IMAGE_NAME=$4
+NGINX_DEFAULT_CONF_NAME=$5
+
 
 # parameter check
-if [ -z "$GITHUB_SHA" ] || [ -z "$PROFILE_ACTIVE" ] || [ -z "$DOCKERHUB_USER_NAME" ] || [ -z "$DOCKER_IMAGE_NAME" ]; then
+if [ -z "$GITHUB_SHA" ] || [ -z "$PROFILE_ACTIVE" ] || [ -z "$DOCKERHUB_USER_NAME" ] || [ -z "$DOCKER_IMAGE_NAME" ] || [ -z "$NGINX_DEFAULT_CONF_NAME" ]; then
   echo "사용법: $0 <GITHUB_SHA> <PROFILE_ACTIVE> <DOCKERHUB_USER_NAME> <DOCKER_IMAGE_NAME>"
   exit 1
 fi
@@ -13,7 +15,6 @@ fi
 # intialize blue & gren
 INITIAL_INSTANCE_NAME="chongdae_backend_green"
 INITIAL_BLUE_GREEN_NETWORK_NAME="blue_green_network"
-NGINX_DEFAULT_CONF_PATH="default.conf"
 NGINX_NEW_CONF_PATH="new-default.conf"
 
 # 1. ADD DOCKER NETWORK
@@ -40,7 +41,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 3. CHANGE INITIAL UP STREAM SERVER
-cp ${NGINX_DEFAULT_CONF_PATH} ${NGINX_NEW_CONF_PATH}
+cp ${NGINX_DEFAULT_CONF_NAME} ${NGINX_NEW_CONF_PATH}
 
 if grep -q "server chongdae_backend:" "${NGINX_NEW_CONF_PATH}"; then
 	sed -i "s/server chongdae_backend:/server ${INITIAL_INSTANCE_NAME}:/" "${NGINX_NEW_CONF_PATH}"
@@ -51,10 +52,8 @@ echo "[+] RUN nginx server"
 docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
 	--name nginx \
-  -p 443:443 \
-  -p 127.0.0.1:80:80 \
+  -p 80:80 \
   -v /uploads:/uploads \
-  -v /certificates:/certificates \
 	nginx:latest
 
 # 5. setup proxy in nginx container

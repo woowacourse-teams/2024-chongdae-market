@@ -80,5 +80,5 @@ jobs:
     steps:
       - name: Switch from old to new container
         run: |
-          bash switch_blue_green_container.sh
+          bash switch_blue_green_container.sh default.conf
         working-directory: backend/deploy
