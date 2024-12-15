@@ -6,7 +6,10 @@ import com.zzang.chongdae.di.annotations.PostLoginUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostOfferingModifyUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
+import com.zzang.chongdae.di.annotations.UpdateCommentRoomsUseCaseQualifier
 import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
+import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCase
+import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCaseImpl
 import com.zzang.chongdae.domain.usecase.login.CheckIfAlreadyLoggedInUseCase
 import com.zzang.chongdae.domain.usecase.login.CheckIfAlreadyLoggedInUseCaseImpl
 import com.zzang.chongdae.domain.usecase.login.PostLoginUseCase
@@ -64,4 +67,9 @@ abstract class UseCaseDependencyModule {
     @Singleton
     @PostOfferingModifyUseCaseQualifier
     abstract fun providePostOfferingModifyUseCase(impl: PostOfferingModifyUseCaseImpl): PostOfferingModifyUseCase
+
+    @Binds
+    @Singleton
+    @UpdateCommentRoomsUseCaseQualifier
+    abstract fun provideUpdateCommentRoomsUseCase(impl: UpdateCommentRoomsUseCaseImpl): UpdateCommentRoomsUseCase
 }

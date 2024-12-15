@@ -29,3 +29,7 @@ annotation class FetchOfferingDetailUseCaseQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class PostOfferingModifyUseCaseQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class UpdateCommentRoomsUseCaseQualifier
