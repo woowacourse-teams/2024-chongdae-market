@@ -13,3 +13,7 @@ annotation class PostLoginUseCaseQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class PostOfferingUseCaseQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class UploadImageFileUseCaseQualifier

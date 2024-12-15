@@ -14,12 +14,14 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
+import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
+import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +36,7 @@ class OfferingWriteViewModel
     @Inject
     constructor(
         @PostOfferingUseCaseQualifier private val postOfferingUseCase: PostOfferingUseCase,
+        @UploadImageFileUseCaseQualifier val uploadImageFileUseCase: UploadImageFileUseCase,
         @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
     ) : ViewModel() {
@@ -145,7 +148,7 @@ class OfferingWriteViewModel
         fun uploadImageFile(multipartBody: MultipartBody.Part) {
             viewModelScope.launch {
                 _writeUIState.value = WriteUIState.Loading
-                when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
+                when (val result = uploadImageFileUseCase.invoke(multipartBody)) {
                     is Result.Success -> {
                         _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = result.data.imageUrl
@@ -153,22 +156,23 @@ class OfferingWriteViewModel
 
                     is Result.Error -> {
                         Log.e("error", "uploadImageFile: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> uploadImageFile(multipartBody)
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(
-                                        R.string.all_error_image_upload,
-                                        "${result.error}",
-                                    )
-                            }
-                        }
+                        _writeUIState.value = WriteUIState.Error(R.string.all_error_image_upload, "${result.error}")
+//                        when (result.error) {
+//                            DataError.Network.UNAUTHORIZED -> {
+//                                when (authRepository.saveRefresh()) {
+//                                    is Result.Success -> uploadImageFile(multipartBody)
+//                                    is Result.Error -> return@launch
+//                                }
+//                            }
+//
+//                            else -> {
+//                                _writeUIState.value =
+//                                    WriteUIState.Error(
+//                                        R.string.all_error_image_upload,
+//                                        "${result.error}",
+//                                    )
+//                            }
+//                        }
                     }
                 }
             }
