@@ -36,7 +36,7 @@ public class OfferingMemberService {
     @WriterDatabase
     @Transactional
     public Long participate(ParticipationRequest request, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findByIdWithLock(request.offeringId())
+        OfferingEntity offering = offeringRepository.findById(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipate(offering, member);
 

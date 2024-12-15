@@ -65,7 +65,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
         ParticipationRequest request = new ParticipationRequest(offering.getId());
         MemberEntity participant = memberFixture.createMember("whoever");
 
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
 
         int executeCount = 5;
         CountDownLatch countDownLatch = new CountDownLatch(executeCount);
