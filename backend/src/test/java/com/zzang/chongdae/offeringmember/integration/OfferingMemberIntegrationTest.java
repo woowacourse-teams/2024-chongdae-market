@@ -4,6 +4,7 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithNam
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
@@ -15,7 +16,11 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -119,6 +124,91 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .when().post("/participations")
                     .then().log().all()
                     .statusCode(400);
+        }
+
+        @DisplayName("같은 사용자가 같은 공모에 동시에 참여할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_sameMemberAndSameOffering() throws InterruptedException {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId()
+            );
+
+            int executeCount = 5;
+            ExecutorService executorService = Executors.newFixedThreadPool(executeCount);
+            CountDownLatch countDownLatch = new CountDownLatch(executeCount);
+
+            List<Integer> statusCodes = new ArrayList<>();
+            for (int i = 0; i < executeCount; i++) {
+                executorService.submit(() -> {
+                    try {
+                        int statusCode = RestAssured.given().log().all()
+                                .cookies(cookieProvider.createCookiesWithMember(participant))
+                                .contentType(ContentType.JSON)
+                                .body(request)
+                                .when().post("/participations")
+                                .statusCode();
+                        statusCodes.add(statusCode);
+                    } finally {
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+
+            countDownLatch.await();
+            executorService.shutdown();
+
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400, 400, 400, 400);
+        }
+
+        @DisplayName("다른 사용자가 같은 공모에 동시에 참여할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_differentMemberAndSameOffering() throws InterruptedException {
+            MemberEntity proposer = memberFixture.createMember("ever");
+            OfferingEntity offering = offeringFixture.createOffering(proposer, 2);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId()
+            );
+            MemberEntity participant1 = memberFixture.createMember("ever1");
+            MemberEntity participant2 = memberFixture.createMember("ever2");
+
+            int executeCount = 2;
+            ExecutorService executorService = Executors.newFixedThreadPool(executeCount);
+            CountDownLatch countDownLatch = new CountDownLatch(executeCount);
+
+            List<Integer> statusCodes = new ArrayList<>();
+            executorService.submit(() -> {
+                try {
+                    int statusCode = RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant1))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().post("/participations")
+                            .statusCode();
+                    statusCodes.add(statusCode);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+            executorService.submit(() -> {
+                try {
+                    int statusCode = RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant2))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().post("/participations")
+                            .statusCode();
+                    statusCodes.add(statusCode);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+
+            countDownLatch.await();
+            executorService.shutdown();
+
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
         }
     }
 
