@@ -1,28 +1,28 @@
-package com.zzang.chongdae.domain.usecase.write
+package com.zzang.chongdae.domain.usecase.offeringmodify
 
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
-import com.zzang.chongdae.domain.model.ProductUrl
-import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.di.annotations.OfferingDetailRepositoryQualifier
+import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import javax.inject.Inject
 
-class PostProductImageOgUseCaseImpl
+class FetchOfferingDetailUseCaseImpl
     @Inject
     constructor(
-        @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
+        @OfferingDetailRepositoryQualifier private val offeringDetailRepository: OfferingDetailRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
-    ) : PostProductImageOgUseCase {
-        override suspend fun invoke(productUrl: String): Result<ProductUrl, DataError.Network> {
-            return when (val result = offeringRepository.saveProductImageOg(productUrl)) {
+    ) : FetchOfferingDetailUseCase {
+        override suspend fun invoke(offeringId: Long): Result<OfferingDetail, DataError.Network> {
+            return when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
                 is Result.Success -> Result.Success(result.data)
                 is Result.Error -> {
                     when (result.error) {
                         DataError.Network.UNAUTHORIZED -> {
                             when (authRepository.saveRefresh()) {
-                                is Result.Success -> invoke(productUrl)
+                                is Result.Success -> invoke(offeringId)
                                 is Result.Error -> result
                             }
                         }

@@ -8,19 +8,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingDetailRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
+import com.zzang.chongdae.di.annotations.FetchOfferingDetailUseCaseQualifier
+import com.zzang.chongdae.di.annotations.PostOfferingModifyUseCaseQualifier
+import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
+import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.OfferingDetail
 import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.repository.OfferingDetailRepository
-import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.usecase.offeringmodify.FetchOfferingDetailUseCase
+import com.zzang.chongdae.domain.usecase.offeringmodify.PostOfferingModifyUseCase
+import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
+import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,9 +37,10 @@ import javax.inject.Inject
 class OfferingModifyViewModel
     @Inject
     constructor(
-        @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
-        @OfferingDetailRepositoryQualifier private val offeringDetailRepository: OfferingDetailRepository,
-        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        @UploadImageFileUseCaseQualifier private val uploadImageFileUseCase: UploadImageFileUseCase,
+        @PostProductImageOgUseCaseQualifier private val postProductImageOgUseCase: PostProductImageOgUseCase,
+        @FetchOfferingDetailUseCaseQualifier private val fetchOfferingDetailUseCase: FetchOfferingDetailUseCase,
+        @PostOfferingModifyUseCaseQualifier private val postOfferingModifyUseCase: PostOfferingModifyUseCase,
     ) : ViewModel() {
         private var offeringId: Long = DEFAULT_OFFERING_ID
 
@@ -105,7 +107,6 @@ class OfferingModifyViewModel
         val isLoading: LiveData<Boolean> = _modifyUIState.map { it is ModifyUIState.Loading }
 
         init {
-
             _essentialSubmitButtonEnabled.apply {
                 addSource(title) { updateSubmitButtonEnabled() }
                 addSource(totalCount) { updateSubmitButtonEnabled() }
@@ -152,7 +153,7 @@ class OfferingModifyViewModel
         fun uploadImageFile(multipartBody: MultipartBody.Part) {
             viewModelScope.launch {
                 _modifyUIState.value = ModifyUIState.Loading
-                when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
+                when (val result = uploadImageFileUseCase.invoke(multipartBody)) {
                     is Result.Success -> {
                         _modifyUIState.value = ModifyUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = result.data.imageUrl
@@ -160,22 +161,8 @@ class OfferingModifyViewModel
 
                     is Result.Error -> {
                         Log.e("error", "uploadImageFile: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> uploadImageFile(multipartBody)
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _modifyUIState.value =
-                                    ModifyUIState.Error(
-                                        R.string.all_error_image_upload,
-                                        "${result.error}",
-                                    )
-                            }
-                        }
+                        _modifyUIState.value =
+                            ModifyUIState.Error(R.string.all_error_image_upload, "${result.error}")
                     }
                 }
             }
@@ -184,7 +171,7 @@ class OfferingModifyViewModel
         fun postProductImageOg() {
             viewModelScope.launch {
                 _modifyUIState.value = ModifyUIState.Loading
-                when (val result = offeringRepository.saveProductImageOg(productUrl.value ?: "")) {
+                when (val result = postProductImageOgUseCase.invoke(productUrl.value ?: "")) {
                     is Result.Success -> {
                         if (result.data.imageUrl.isBlank()) {
                             _modifyUIState.value = ModifyUIState.Empty(R.string.error_empty_product_url)
@@ -196,22 +183,8 @@ class OfferingModifyViewModel
 
                     is Result.Error -> {
                         Log.e("error", "postProductImageOg: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> postProductImageOg()
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _modifyUIState.value =
-                                    ModifyUIState.Error(
-                                        R.string.error_invalid_product_url,
-                                        "${result.error}",
-                                    )
-                            }
-                        }
+                        _modifyUIState.value =
+                            ModifyUIState.Error(R.string.error_invalid_product_url, "${result.error}")
                     }
                 }
             }
@@ -290,24 +263,12 @@ class OfferingModifyViewModel
 
         fun fetchOfferingDetail() {
             viewModelScope.launch {
-                when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
+                when (val result = fetchOfferingDetailUseCase(offeringId)) {
                     is Result.Success -> {
                         initExistingOffering(result.data)
                     }
 
-                    is Result.Error ->
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> fetchOfferingDetail()
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                Log.e("error", "loadOffering Error: ${result.error.name}")
-                            }
-                        }
+                    is Result.Error -> Log.e("error", "loadOffering Error: ${result.error.name}")
                 }
             }
         }
@@ -350,7 +311,7 @@ class OfferingModifyViewModel
             viewModelScope.launch {
                 when (
                     val result =
-                        offeringRepository.patchOffering(
+                        postOfferingModifyUseCase(
                             offeringId = offeringId,
                             offeringModifyDomainRequest =
                                 OfferingModifyDomainRequest(
@@ -374,22 +335,7 @@ class OfferingModifyViewModel
 
                     is Result.Error -> {
                         Log.e("error", "postOffering: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> postOfferingModify()
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _modifyUIState.value =
-                                    ModifyUIState.Error(
-                                        R.string.modify_error_modifing,
-                                        "${result.error}",
-                                    )
-                            }
-                        }
+                        _modifyUIState.value = ModifyUIState.Error(R.string.modify_error_modifing, "${result.error}")
                     }
                 }
             }
