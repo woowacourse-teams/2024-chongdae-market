@@ -17,3 +17,7 @@ annotation class PostOfferingUseCaseQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class UploadImageFileUseCaseQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class PostProductImageOgUseCaseQualifier
