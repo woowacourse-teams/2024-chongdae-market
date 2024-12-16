@@ -8,6 +8,7 @@ import com.zzang.chongdae.util.TestFixture
 
 class FakeCommentRoomsRepository : CommentRoomsRepository {
     var isAccessTokenValid = true
+
     override suspend fun fetchCommentRooms(): Result<List<CommentRoom>, DataError.Network> {
         return when (isAccessTokenValid) {
             true -> Result.Success(TestFixture.COMMENT_ROOMS_STUB)

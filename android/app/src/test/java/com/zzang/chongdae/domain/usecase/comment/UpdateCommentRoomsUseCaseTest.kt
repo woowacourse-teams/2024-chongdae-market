@@ -23,26 +23,28 @@ class UpdateCommentRoomsUseCaseTest {
     }
 
     @Test
-    fun `댓글방 목록을 불러오는 데 성공한다`() = runTest {
-        // given
-        (commentRoomsRepository as FakeCommentRoomsRepository).isAccessTokenValid = true
+    fun `댓글방 목록을 불러오는 데 성공한다`() =
+        runTest {
+            // given
+            (commentRoomsRepository as FakeCommentRoomsRepository).isAccessTokenValid = true
 
-        // when
-        val result = updateCommentRoomsUseCase()
+            // when
+            val result = updateCommentRoomsUseCase()
 
-        // then
-        assertThat(result).isInstanceOf(Result.Success::class.java)
-    }
+            // then
+            assertThat(result).isInstanceOf(Result.Success::class.java)
+        }
 
     @Test
-    fun `AccessToken이 만료되면 토큰을 갱신하고 재시도해 댓글방 목록을 불러온다`() = runTest {
-        // given
-        (commentRoomsRepository as FakeCommentRoomsRepository).isAccessTokenValid = false
+    fun `AccessToken이 만료되면 토큰을 갱신하고 재시도해 댓글방 목록을 불러온다`() =
+        runTest {
+            // given
+            (commentRoomsRepository as FakeCommentRoomsRepository).isAccessTokenValid = false
 
-        // when
-        val result = updateCommentRoomsUseCase()
+            // when
+            val result = updateCommentRoomsUseCase()
 
-        // then
-        assertThat(result).isInstanceOf(Result.Success::class.java)
-    }
+            // then
+            assertThat(result).isInstanceOf(Result.Success::class.java)
+        }
 }
