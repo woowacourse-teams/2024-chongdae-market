@@ -7,7 +7,15 @@ import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.util.TestFixture
 
 class FakeCommentRoomsRepository : CommentRoomsRepository {
+    var isAccessTokenValid = true
+
     override suspend fun fetchCommentRooms(): Result<List<CommentRoom>, DataError.Network> {
-        return Result.Success(TestFixture.COMMENT_ROOMS_STUB)
+        return when (isAccessTokenValid) {
+            true -> Result.Success(TestFixture.COMMENT_ROOMS_STUB)
+            false -> {
+                isAccessTokenValid = true
+                Result.Error("AccessToken 만료됨", DataError.Network.UNAUTHORIZED)
+            }
+        }
     }
 }
