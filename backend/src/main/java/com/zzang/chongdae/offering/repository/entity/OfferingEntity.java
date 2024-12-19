@@ -120,10 +120,14 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public void participate() {
         currentCount++;
+        OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
+        updateOfferingStatus(offeringStatus);
     }
 
     public void leave() {
         currentCount--;
+        OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
+        updateOfferingStatus(offeringStatus);
     }
 
     public CommentRoomStatus moveCommentRoomStatus() {
