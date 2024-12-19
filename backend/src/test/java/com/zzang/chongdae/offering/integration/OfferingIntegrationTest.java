@@ -6,7 +6,6 @@ import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
 import static io.restassured.RestAssured.given;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
@@ -31,15 +30,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import org.springframework.web.multipart.MultipartFile;
 
 public class OfferingIntegrationTest extends IntegrationTest {
 
-    @MockBean
+    @Autowired
     private StorageService storageService;
 
     @DisplayName("공모 상세 조회")
@@ -771,9 +768,6 @@ public class OfferingIntegrationTest extends IntegrationTest {
         void setUp() {
             member = memberFixture.createMember("dora");
             image = new File("src/test/resources/test-image.png");
-            MultipartFile mockImage = new MockMultipartFile("emptyImageFile", new byte[0]);
-            given(storageService.uploadFile(mockImage, "path"))
-                    .willReturn("https://uploaded-image-url.com");
         }
 
         @DisplayName("상품 이미지를 받아 이미지를 S3에 업로드한다.")
@@ -875,7 +869,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "수정할 모집 장소 주소",
                     "수정할 모집 상세 주소",
                     "수정된동",
-                    LocalDateTime.parse("2024-10-25T00:00:00"),
+                    LocalDateTime.parse("2099-10-25T00:00:00"),
                     "수정할 공모 상세 내용"
             );
 

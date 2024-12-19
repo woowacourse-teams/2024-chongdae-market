@@ -1,9 +1,10 @@
 package com.zzang.chongdae.offering.service;
 
+import com.zzang.chongdae.event.domain.DeleteOfferingEvent;
+import com.zzang.chongdae.event.domain.SaveOfferingEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
-import com.zzang.chongdae.notification.service.FcmNotificationService;
 import com.zzang.chongdae.offering.domain.OfferingFilter;
 import com.zzang.chongdae.offering.domain.OfferingJoinedCount;
 import com.zzang.chongdae.offering.domain.OfferingMeeting;
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class OfferingService {
 
-    private final FcmNotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
     private final StorageService storageService;
@@ -135,8 +137,7 @@ public class OfferingService {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
         offeringMemberRepository.save(offeringMember);
 
-        notificationService.saveOffering(savedOffering);
-
+        eventPublisher.publishEvent(new SaveOfferingEvent(this, savedOffering));
         return savedOffering.getId();
     }
 
@@ -148,8 +149,8 @@ public class OfferingService {
         }
     }
 
-    public OfferingProductImageResponse uploadProductImageToS3(MultipartFile image) {
-        String imageUrl = storageService.uploadFile(image, "chongdae-market/images/offerings/product/");
+    public OfferingProductImageResponse uploadProductImage(MultipartFile image) {
+        String imageUrl = storageService.uploadFile(image);
         return new OfferingProductImageResponse(imageUrl);
     }
 
@@ -195,7 +196,7 @@ public class OfferingService {
         validateIsProposer(offering, member);
         validateInProgress(offering);
         offeringRepository.delete(offering);
-        notificationService.deleteOffering(offering);
+        eventPublisher.publishEvent(new DeleteOfferingEvent(this, offering));
     }
 
     private void validateInProgress(OfferingEntity offering) {
