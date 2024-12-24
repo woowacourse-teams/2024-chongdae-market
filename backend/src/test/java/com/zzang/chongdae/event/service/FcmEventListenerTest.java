@@ -1,5 +1,6 @@
 package com.zzang.chongdae.event.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,12 +17,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEventPublisher;
 
 class FcmEventListenerTest extends ServiceTest {
 
     @Autowired
-    ApplicationEventPublisher eventPublisher;
+    TestEventPublisher testEventPublisher;
 
     @MockBean
     FcmEventListener eventListener;
@@ -33,7 +33,7 @@ class FcmEventListenerTest extends ServiceTest {
         ParticipateEvent event = mock(ParticipateEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleParticipateEvent(event);
@@ -46,7 +46,7 @@ class FcmEventListenerTest extends ServiceTest {
         CancelParticipateEvent event = mock(CancelParticipateEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleCancelParticipateEvent(event);
@@ -59,7 +59,7 @@ class FcmEventListenerTest extends ServiceTest {
         SaveOfferingEvent event = mock(SaveOfferingEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithoutTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleSaveOfferingEvent(event);
@@ -72,7 +72,7 @@ class FcmEventListenerTest extends ServiceTest {
         DeleteOfferingEvent event = mock(DeleteOfferingEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleDeleteOfferingEvent(event);
@@ -85,7 +85,7 @@ class FcmEventListenerTest extends ServiceTest {
         SaveCommentEvent event = mock(SaveCommentEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithoutTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleSaveCommentEvent(event);
@@ -98,7 +98,7 @@ class FcmEventListenerTest extends ServiceTest {
         UpdateStatusEvent event = mock(UpdateStatusEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleUpdateStatusEvent(event);
@@ -111,9 +111,25 @@ class FcmEventListenerTest extends ServiceTest {
         LoginEvent event = mock(LoginEvent.class);
 
         // when
-        eventPublisher.publishEvent(event);
+        testEventPublisher.publishWithTransaction(event);
 
         // then
         verify(eventListener, times(1)).handleLoginEvent(event);
+    }
+
+    @DisplayName("이벤트 발행 후 예외가 발생한 경우 이벤트 로직을 실행하지 않는다.")
+    @Test
+    void should_notExecuteEvent_when_throwException() {
+        // given
+        LoginEvent event = mock(LoginEvent.class);
+
+        // when
+        try {
+            testEventPublisher.publishWithTransactionThenThrowException(event);
+        } catch (Exception ignored) {
+        }
+
+        // then
+        verify(eventListener, times(0)).handleLoginEvent(any(LoginEvent.class));
     }
 }

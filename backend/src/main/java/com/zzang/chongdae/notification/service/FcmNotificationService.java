@@ -15,10 +15,8 @@ import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
 import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FcmNotificationService {
@@ -50,9 +48,9 @@ public class FcmNotificationService {
     }
 
     public void saveOffering(OfferingEntity offering) {
-        Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         FcmTopic topic = FcmTopic.proposerTopic(offering);
         notificationSubscriber.subscribe(offering.getMember(), topic);
+        Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         notificationSender.send(message);
     }
 
