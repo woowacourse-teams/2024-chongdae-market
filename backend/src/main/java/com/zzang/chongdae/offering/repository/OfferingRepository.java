@@ -1,12 +1,13 @@
 package com.zzang.chongdae.offering.repository;
 
-import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import jakarta.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> {
@@ -17,14 +18,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             WHERE o.id = :offeringId
             """, nativeQuery = true)
     Optional<OfferingEntity> findByIdWithDeleted(Long offeringId);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity as o JOIN OfferingMemberEntity as om
-                ON o.id = om.offering.id
-            WHERE om.member = :member
-            """)
-    List<OfferingEntity> findCommentRoomsByMember(MemberEntity member);
 
     @Query("""
             SELECT o
@@ -136,4 +129,8 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
                 AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             """)
     List<OfferingEntity> findByMeetingDateAndOfferingStatusNotConfirmed(LocalDateTime meetingDate);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT o FROM OfferingEntity o WHERE o.id = :id")
+    Optional<OfferingEntity> findByIdWithLock(Long id);
 }
