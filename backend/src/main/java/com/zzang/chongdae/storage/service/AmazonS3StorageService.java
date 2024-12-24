@@ -18,15 +18,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AmazonS3StorageService implements StorageService {
 
     private final AmazonS3 s3Client;
-    
+
+    @Value("${storage.resourceHost}")
+    private String resourceHost;
+
+    @Value("${storage.path}")
+    private String storagePath;
+
     @Value("${amazon.s3.bucket}")
     private String bucketName;
-
-    @Value("${amazon.cloudfront.redirectUrl}")
-    private String redirectUrl;
-
-    @Value("${amazon.cloudfront.storagePath}")
-    private String storagePath;
 
     @Override
     public String uploadFile(MultipartFile file) {
@@ -54,9 +54,14 @@ public class AmazonS3StorageService implements StorageService {
     private String createUri(String objectKey) {
         return UriComponentsBuilder.newInstance()
                 .scheme("https")
-                .host(redirectUrl)
+                .host(resourceHost)
                 .path("/" + objectKey)
                 .build(false)
                 .toString();
+    }
+
+    @Override
+    public String getResourceHost() {
+        return resourceHost;
     }
 }

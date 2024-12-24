@@ -17,4 +17,4 @@ security:
 
 storage:
   path: ${STORAGE_PHYSICAL_PATH}
-  redirectUrl: ${STORAGE_REDIRECT_URL}
+  resourceHost: ${STORAGE_RESOURCE_HOST}

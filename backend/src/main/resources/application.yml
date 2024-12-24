@@ -93,4 +93,4 @@ fcm:
 
 storage:
   path: /uploads
-  redirectUrl: image.chongdae.site
+  resourceHost: image.chongdae.site

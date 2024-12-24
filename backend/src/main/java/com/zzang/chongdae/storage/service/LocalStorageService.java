@@ -19,14 +19,14 @@ public class LocalStorageService implements StorageService {
 
     private static final Set<String> ALLOW_IMAGE_EXTENSIONS = Set.of("jpg", "jpeg", "png", "gif", "bmp", "svg");
 
-    @Value("${storage.redirectUrl}")
-    private String redirectUrl;
+    @Value("${storage.resourceHost}")
+    private String resourceHost;
 
     @Value("${storage.path}")
     private String storagePath;
 
-    private LocalStorageService(String redirectUrl, String storagePath) {
-        this.redirectUrl = redirectUrl;
+    private LocalStorageService(String resourceHost, String storagePath) {
+        this.resourceHost = resourceHost;
         this.storagePath = storagePath;
     }
 
@@ -67,9 +67,14 @@ public class LocalStorageService implements StorageService {
     private String createUri(String objectKey) {
         return UriComponentsBuilder.newInstance()
                 .scheme("https")
-                .host(redirectUrl)
+                .host(resourceHost)
                 .path("/" + objectKey)
                 .build(false)
                 .toString();
+    }
+
+    @Override
+    public String getResourceHost() {
+        return resourceHost;
     }
 }
