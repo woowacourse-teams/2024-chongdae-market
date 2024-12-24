@@ -23,4 +23,3 @@ security:
 storage:
   path: ${STORAGE_PHYSICAL_PATH}
   resourceHost: ${STORAGE_RESOURCE_HOST}
-  
