@@ -16,5 +16,5 @@ security:
       refresh-secret-key: ${JWT_REFRESH_SECRET_KEY}
 
 storage:
-  path: /uploads
-  redirectUrl: image.dev.chongdae.site
+  path: ${STORAGE_PHYSICAL_PATH}
+  redirectUrl: ${STORAGE_REDIRECT_URL}
