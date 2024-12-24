@@ -13,6 +13,7 @@ import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.Arrays;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public record CommentRoomInfoResponse(CommentRoomStatus status,
                                       String imageUrl,
@@ -21,18 +22,18 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                                       String title,
                                       boolean isProposer) {
 
-    public CommentRoomInfoResponse(OfferingEntity offering, MemberEntity member) {
+    public CommentRoomInfoResponse(OfferingEntity offering, MemberEntity member, String resourceHost) {
         this(offering.getRoomStatus(),
-                ViewMapper.toImage(offering.getRoomStatus()),
+                ViewMapper.toImage(offering.getRoomStatus(), resourceHost),
                 ViewMapper.toButton(offering.getRoomStatus()),
                 ViewMapper.toMessage(offering.getRoomStatus()),
                 offering.getTitle(),
                 offering.isProposedBy(member));
     }
 
-    public CommentRoomInfoResponse(OfferingMemberEntity offeringMember) {
+    public CommentRoomInfoResponse(OfferingMemberEntity offeringMember, String resourceHost) {
         this(DELETED,
-                ViewMapper.toImage(DELETED),
+                ViewMapper.toImage(DELETED, resourceHost),
                 ViewMapper.toButton(DELETED),
                 ViewMapper.toMessage(DELETED),
                 "삭제된 공동구매입니다.",
@@ -59,8 +60,13 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
             this.message = message;
         }
 
-        private static String toImage(CommentRoomStatus status) {
-            return findViewMapper(status).image;
+        private static String toImage(CommentRoomStatus status, String resourceHost) {
+            return UriComponentsBuilder.newInstance()
+                    .scheme("https")
+                    .host(resourceHost)
+                    .path(findViewMapper(status).image)
+                    .build(false)
+                    .toString();
         }
 
         private static String toButton(CommentRoomStatus status) {
@@ -79,7 +85,7 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
         }
 
         private static String imageUrl(String status) {
-            String imageUrlFormat = "https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/%s.png";
+            String imageUrlFormat = "/common/%s.png";
             return String.format(imageUrlFormat, status);
         }
     }
