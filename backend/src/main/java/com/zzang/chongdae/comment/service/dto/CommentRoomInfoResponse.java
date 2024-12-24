@@ -13,7 +13,6 @@ import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.Arrays;
-import org.springframework.web.util.UriComponentsBuilder;
 
 public record CommentRoomInfoResponse(CommentRoomStatus status,
                                       String imageUrl,
@@ -42,11 +41,11 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
 
     private enum ViewMapper {
 
-        DELETED_VIEW(DELETED, imageUrl("DELETED"), "삭제된 공고", "삭제된 공동구매입니다."),
-        GROUPING_VIEW(GROUPING, imageUrl("GROUPING"), "인원확정", "공동구매에 참여할 인원이\n모이면 인원을 확정하세요."),
-        BUYING_VIEW(BUYING, imageUrl("BUYING"), "구매확정", "총대가 물품 구매를 완료하면 확정하세요."),
-        TRADING_VIEW(TRADING, imageUrl("TRADING"), "거래확정", "총대가 참여자들과\n거래를 완료하면 확정하세요."),
-        DONE_VIEW(DONE, imageUrl("DONE"), "거래완료", "거래가 완료되었어요.");
+        DELETED_VIEW(DELETED, "DELETED", "삭제된 공고", "삭제된 공동구매입니다."),
+        GROUPING_VIEW(GROUPING, "GROUPING", "인원확정", "공동구매에 참여할 인원이\n모이면 인원을 확정하세요."),
+        BUYING_VIEW(BUYING, "BUYING", "구매확정", "총대가 물품 구매를 완료하면 확정하세요."),
+        TRADING_VIEW(TRADING, "TRADING", "거래확정", "총대가 참여자들과\n거래를 완료하면 확정하세요."),
+        DONE_VIEW(DONE, "DONE", "거래완료", "거래가 완료되었어요.");
 
         private final CommentRoomStatus roomStatus;
         private final String image;
@@ -61,12 +60,7 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
         }
 
         private static String toImage(CommentRoomStatus status, String resourceHost) {
-            return UriComponentsBuilder.newInstance()
-                    .scheme("https")
-                    .host(resourceHost)
-                    .path(findViewMapper(status).image)
-                    .build(false)
-                    .toString();
+            return "https://%s/common/%s.png".formatted(resourceHost, findViewMapper(status).image);
         }
 
         private static String toButton(CommentRoomStatus status) {
@@ -82,11 +76,6 @@ public record CommentRoomInfoResponse(CommentRoomStatus status,
                     .filter(mapper -> mapper.roomStatus.equals(status))
                     .findFirst()
                     .orElseThrow(() -> new MarketException(OfferingErrorCode.INVALID_CONDITION));
-        }
-
-        private static String imageUrl(String status) {
-            String imageUrlFormat = "/common/%s.png";
-            return String.format(imageUrlFormat, status);
         }
     }
 }
