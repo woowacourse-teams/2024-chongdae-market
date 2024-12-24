@@ -25,7 +25,7 @@ public class LocalStorageService implements StorageService {
     @Value("${storage.path}")
     private String storagePath;
 
-    LocalStorageService(String redirectUrl, String storagePath) {
+    private LocalStorageService(String redirectUrl, String storagePath) {
         this.redirectUrl = redirectUrl;
         this.storagePath = storagePath;
     }
