@@ -25,11 +25,6 @@ public class LocalStorageService implements StorageService {
     @Value("${storage.path}")
     private String storagePath;
 
-    private LocalStorageService(String resourceHost, String storagePath) {
-        this.resourceHost = resourceHost;
-        this.storagePath = storagePath;
-    }
-
     @Override
     public String uploadFile(MultipartFile file) {
         String extension = getFileExtension(file);
