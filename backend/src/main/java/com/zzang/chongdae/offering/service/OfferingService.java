@@ -208,6 +208,6 @@ public class OfferingService {
     public OfferingMetaResponse getOfferingMetaInfo(Long offeringId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        return new OfferingMetaResponse(offering);
+        return new OfferingMetaResponse(offering, storageService.getResourceHost());
     }
 }

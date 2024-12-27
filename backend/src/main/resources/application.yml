@@ -90,3 +90,7 @@ management:
 fcm:
   secret-key:
     path: /fcm/chongdaemarket-fcm-key.json
+
+storage:
+  path: /uploads
+  resourceHost: image.chongdae.site
