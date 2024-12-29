@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
-public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> {
+public interface OfferingRepository extends JpaRepository<OfferingEntity, Long>, OfferingCustomRepository {
 
     @Query(value = """
             SELECT *
@@ -18,23 +18,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long> 
             WHERE o.id = :offeringId
             """, nativeQuery = true)
     Optional<OfferingEntity> findByIdWithDeleted(Long offeringId);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE o.id < :lastId
-            ORDER BY o.id DESC
-            """)
-    List<OfferingEntity> findRecentOfferingsWithoutKeyword(Long lastId, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE o.id < :lastId
-                AND (o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
-            ORDER BY o.id DESC
-            """)
-    List<OfferingEntity> findRecentOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
 
     @Query("""
             SELECT o
