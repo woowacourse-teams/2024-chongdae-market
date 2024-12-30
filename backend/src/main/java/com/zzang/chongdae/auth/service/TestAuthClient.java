@@ -1,12 +1,20 @@
 package com.zzang.chongdae.auth.service;
 
-import lombok.RequiredArgsConstructor;
+import com.zzang.chongdae.global.exception.MarketException;
+import org.springframework.web.client.RestClient;
 
-@RequiredArgsConstructor
-public class TestAuthClient implements AuthClient {
+public class TestAuthClient extends AuthClient {
+
+    public TestAuthClient(RestClient restClient) {
+        super(restClient);
+    }
 
     @Override
-    public String getUserInfo(String accessToken) {
-        return accessToken;
+    public String getKakaoUserInfo(String accessToken) {
+        try {
+            return super.getKakaoUserInfo(accessToken);
+        } catch (MarketException e) {
+            return accessToken;
+        }
     }
 }
