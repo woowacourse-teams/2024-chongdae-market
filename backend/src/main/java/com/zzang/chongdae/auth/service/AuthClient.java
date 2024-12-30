@@ -10,7 +10,6 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 public class AuthClient {
 
-
     private static final String BEARER_HEADER_FORMAT = "Bearer %s";
     private static final String GET_KAKAO_USER_INFO_URI = "https://kapi.kakao.com/v2/user/me";
 
