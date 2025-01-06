@@ -7,6 +7,7 @@ import static com.zzang.chongdae.offering.repository.entity.QOfferingEntity.offe
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +23,19 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
     public List<OfferingEntity> findRecentOfferings(Long lastId, String keyword, Pageable pageable) {
         return queryFactory.selectFrom(offeringEntity)
                 .where(offeringEntity.id.lt(lastId),
-                        likeKeyword(keyword))
+                        likeTitleOrMeetingAddress(keyword))
+                .orderBy(offeringEntity.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<OfferingEntity> findJoinableOfferings(Long lastId, String keyword, Pageable pageable) {
+        return queryFactory.selectFrom(offeringEntity)
+                .where(offeringEntity.id.lt(lastId),
+                        inOfferingStatus(AVAILABLE, IMMINENT),
+                        likeTitleOrMeetingAddress(keyword))
                 .orderBy(offeringEntity.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -44,9 +57,8 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
     private List<OfferingEntity> findImminentOfferings(
             LocalDateTime lastMeetingDate, Long lastId, Pageable pageable, BooleanExpression keywordCondition) {
         return queryFactory.selectFrom(offeringEntity)
-                .where(
-                        keywordCondition,
-                        offeringEntity.offeringStatus.eq(IMMINENT),
+                .where(keywordCondition,
+                        inOfferingStatus(IMMINENT),
                         offeringEntity.meetingDate.gt(lastMeetingDate)
                                 .or(offeringEntity.meetingDate.eq(lastMeetingDate).and(offeringEntity.id.lt(lastId))))
                 .orderBy(offeringEntity.meetingDate.asc(), offeringEntity.id.desc())
@@ -70,9 +82,8 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
     private List<OfferingEntity> findHighDiscountOfferings(
             double lastDiscountRate, Long lastId, Pageable pageable, BooleanExpression keywordCondition) {
         return queryFactory.selectFrom(offeringEntity)
-                .where(
-                        keywordCondition,
-                        offeringEntity.offeringStatus.in(AVAILABLE, FULL, IMMINENT),
+                .where(keywordCondition,
+                        inOfferingStatus(AVAILABLE, FULL, IMMINENT),
                         offeringEntity.discountRate.lt(lastDiscountRate)
                                 .or(offeringEntity.discountRate.eq(lastDiscountRate).and(offeringEntity.id.lt(lastId))))
                 .orderBy(offeringEntity.discountRate.desc(), offeringEntity.id.desc())
@@ -81,24 +92,11 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
                 .fetch();
     }
 
-    @Override
-    public List<OfferingEntity> findJoinableOfferings(Long lastId, String keyword, Pageable pageable) {
-        return queryFactory.selectFrom(offeringEntity)
-                .where(offeringEntity.id.lt(lastId),
-                        offeringEntity.offeringStatus.in(AVAILABLE, IMMINENT),
-                        likeKeyword(keyword))
-                .orderBy(offeringEntity.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-    }
-
-    private BooleanExpression likeKeyword(String keyword) {
+    private BooleanExpression likeTitleOrMeetingAddress(String keyword) {
         if (keyword == null) {
             return null;
         }
-        return offeringEntity.title.like(keyword + '%')
-                .or(offeringEntity.meetingAddress.like(keyword + '%'));
+        return likeTitle(keyword).or(likeMeetingAddress(keyword));
     }
 
     private BooleanExpression likeTitle(String keyword) {
@@ -113,5 +111,9 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
             return null;
         }
         return offeringEntity.meetingAddress.like(keyword + '%');
+    }
+
+    private BooleanExpression inOfferingStatus(OfferingStatus... offeringStatus) {
+        return offeringEntity.offeringStatus.in(offeringStatus);
     }
 }

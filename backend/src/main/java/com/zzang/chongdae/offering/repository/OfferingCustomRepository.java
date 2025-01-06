@@ -9,6 +9,8 @@ public interface OfferingCustomRepository {
 
     List<OfferingEntity> findRecentOfferings(Long lastId, String keyword, Pageable pageable);
 
+    List<OfferingEntity> findJoinableOfferings(Long lastId, String keyword, Pageable pageable);
+
     List<OfferingEntity> findImminentOfferingsWithTitleKeyword(
             LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
 
@@ -20,6 +22,4 @@ public interface OfferingCustomRepository {
 
     List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeyword(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
-
-    List<OfferingEntity> findJoinableOfferings(Long lastId, String keyword, Pageable pageable);
 }
