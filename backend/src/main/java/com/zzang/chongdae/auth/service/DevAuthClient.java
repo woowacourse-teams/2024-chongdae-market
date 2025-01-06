@@ -3,9 +3,9 @@ package com.zzang.chongdae.auth.service;
 import com.zzang.chongdae.global.exception.MarketException;
 import org.springframework.web.client.RestClient;
 
-public class TestAuthClient extends AuthClient {
+public class DevAuthClient extends AuthClient {
 
-    public TestAuthClient(RestClient restClient) {
+    public DevAuthClient(RestClient restClient) {
         super(restClient);
     }
 

@@ -1,7 +1,7 @@
 package com.zzang.chongdae.auth.config;
 
 import com.zzang.chongdae.auth.service.AuthClient;
-import com.zzang.chongdae.auth.service.TestAuthClient;
+import com.zzang.chongdae.auth.service.DevAuthClient;
 import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,15 +25,15 @@ public class AuthClientConfig {
 
     @Bean
     @Profile("prod")
-    public AuthClient realAuthClient() {
+    public AuthClient prodAuthClient() {
         return new AuthClient(createRestClient());
     }
 
     @Bean
     @Profile({"default", "dev"})
-    public AuthClient testAuthClient() {
+    public AuthClient devAuthclient() {
         log.warn("테스트 인증 환경이 설정되었습니다. 프로덕션 환경이라면 서버 중지가 필요합니다.");
-        return new TestAuthClient(createRestClient());
+        return new DevAuthClient(createRestClient());
     }
 
     private RestClient createRestClient() {
