@@ -371,7 +371,7 @@ public class OfferingServiceTest extends ServiceTest {
                     "수정할 모집 장소 주소",
                     "수정할 모집 상세 주소",
                     "수정된동",
-                    LocalDateTime.parse("2024-12-31T00:00:00"),
+                    LocalDateTime.parse("2030-01-11T00:00:00"),
                     "수정할 공모 상세 내용"
             );
 
