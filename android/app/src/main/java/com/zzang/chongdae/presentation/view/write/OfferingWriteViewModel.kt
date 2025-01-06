@@ -8,16 +8,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
+import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
+import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
+import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
 import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
+import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
+import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,8 +32,9 @@ import javax.inject.Inject
 class OfferingWriteViewModel
     @Inject
     constructor(
-        @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
-        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        @PostOfferingUseCaseQualifier private val postOfferingUseCase: PostOfferingUseCase,
+        @UploadImageFileUseCaseQualifier val uploadImageFileUseCase: UploadImageFileUseCase,
+        @PostProductImageOgUseCaseQualifier private val postProductImageOgUseCase: PostProductImageOgUseCase,
     ) : ViewModel() {
         val title: MutableLiveData<String> = MutableLiveData("")
 
@@ -142,7 +144,7 @@ class OfferingWriteViewModel
         fun uploadImageFile(multipartBody: MultipartBody.Part) {
             viewModelScope.launch {
                 _writeUIState.value = WriteUIState.Loading
-                when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
+                when (val result = uploadImageFileUseCase.invoke(multipartBody)) {
                     is Result.Success -> {
                         _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = result.data.imageUrl
@@ -150,22 +152,8 @@ class OfferingWriteViewModel
 
                     is Result.Error -> {
                         Log.e("error", "uploadImageFile: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> uploadImageFile(multipartBody)
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(
-                                        R.string.all_error_image_upload,
-                                        "${result.error}",
-                                    )
-                            }
-                        }
+                        _writeUIState.value =
+                            WriteUIState.Error(R.string.all_error_image_upload, "${result.error}")
                     }
                 }
             }
@@ -174,7 +162,7 @@ class OfferingWriteViewModel
         fun postProductImageOg() {
             viewModelScope.launch {
                 _writeUIState.value = WriteUIState.Loading
-                when (val result = offeringRepository.saveProductImageOg(productUrl.value ?: "")) {
+                when (val result = postProductImageOgUseCase.invoke(productUrl.value ?: "")) {
                     is Result.Success -> {
                         if (result.data.imageUrl.isBlank()) {
                             _writeUIState.value = WriteUIState.Empty(R.string.error_empty_product_url)
@@ -186,22 +174,8 @@ class OfferingWriteViewModel
 
                     is Result.Error -> {
                         Log.e("error", "postProductImageOg: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> postProductImageOg()
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(
-                                        R.string.error_invalid_product_url,
-                                        "${result.error}",
-                                    )
-                            }
-                        }
+                        _writeUIState.value =
+                            WriteUIState.Error(R.string.error_invalid_product_url, "${result.error}")
                     }
                 }
             }
@@ -295,21 +269,20 @@ class OfferingWriteViewModel
             viewModelScope.launch {
                 when (
                     val result =
-                        offeringRepository.saveOffering(
-                            offeringWrite =
-                                OfferingWrite(
-                                    title = title,
-                                    productUrl = productUrlOrNull(),
-                                    thumbnailUrl = thumbnailUrl.value,
-                                    totalCount = totalCountConverted,
-                                    totalPrice = totalPriceConverted,
-                                    originPrice = originPriceNotBlank,
-                                    meetingAddress = meetingAddress,
-                                    meetingAddressDong = meetingAddressDong,
-                                    meetingAddressDetail = meetingAddressDetail,
-                                    meetingDate = meetingDate,
-                                    description = description,
-                                ),
+                        postOfferingUseCase(
+                            OfferingWrite(
+                                title = title,
+                                productUrl = productUrlOrNull(),
+                                thumbnailUrl = thumbnailUrl.value,
+                                totalCount = totalCountConverted,
+                                totalPrice = totalPriceConverted,
+                                originPrice = originPriceNotBlank,
+                                meetingAddress = meetingAddress,
+                                meetingAddressDong = meetingAddressDong,
+                                meetingAddressDetail = meetingAddressDetail,
+                                meetingDate = meetingDate,
+                                description = description,
+                            ),
                         )
                 ) {
                     is Result.Success -> {
@@ -319,19 +292,8 @@ class OfferingWriteViewModel
 
                     is Result.Error -> {
                         Log.e("error", "postOffering: ${result.error}")
-                        when (result.error) {
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> postOffering()
-                                    is Result.Error -> return@launch
-                                }
-                            }
-
-                            else -> {
-                                _writeUIState.value =
-                                    WriteUIState.Error(R.string.write_error_writing, "${result.error}")
-                            }
-                        }
+                        _writeUIState.value =
+                            WriteUIState.Error(R.string.write_error_writing, "${result.error}")
                         _isSubmitLoading.value = false
                     }
                 }

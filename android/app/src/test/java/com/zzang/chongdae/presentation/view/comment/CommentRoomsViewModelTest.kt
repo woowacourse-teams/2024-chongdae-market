@@ -1,7 +1,6 @@
 package com.zzang.chongdae.presentation.view.comment
 
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.domain.repository.CommentRoomsRepository
+import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCaseImpl
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeCommentRoomsRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
@@ -20,14 +19,15 @@ import java.time.LocalDateTime
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CommentRoomsViewModelTest {
     private lateinit var viewModel: CommentRoomsViewModel
-    private lateinit var authRepository: AuthRepository
-    private lateinit var commentRoomsRepository: CommentRoomsRepository
 
     @BeforeEach
     fun setUp() {
-        authRepository = FakeAuthRepository()
-        commentRoomsRepository = FakeCommentRoomsRepository()
-        viewModel = CommentRoomsViewModel(authRepository, commentRoomsRepository)
+        val fakeAuthRepository = FakeAuthRepository()
+        val fakeCommentRoomsRepository = FakeCommentRoomsRepository()
+
+        val updateCommentRoomsUseCase = UpdateCommentRoomsUseCaseImpl(fakeAuthRepository, fakeCommentRoomsRepository)
+
+        viewModel = CommentRoomsViewModel(updateCommentRoomsUseCase)
     }
 
     @DisplayName("댓글방 목록을 확인할 수 있어야 한다")

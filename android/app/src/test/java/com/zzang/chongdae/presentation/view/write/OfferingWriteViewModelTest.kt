@@ -1,7 +1,8 @@
 package com.zzang.chongdae.presentation.view.write
 
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCaseImpl
+import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCaseImpl
+import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCaseImpl
 import com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel.Companion.HTTPS
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeOfferingRepository
@@ -22,14 +23,17 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class OfferingWriteViewModelTest {
     private lateinit var viewModel: OfferingWriteViewModel
-    private lateinit var offeringRepository: OfferingRepository
-    private lateinit var authRepository: AuthRepository
 
     @BeforeEach
     fun setUp() {
-        offeringRepository = FakeOfferingRepository()
-        authRepository = FakeAuthRepository()
-        viewModel = OfferingWriteViewModel(offeringRepository, authRepository)
+        val fakeOfferingRepository = FakeOfferingRepository()
+        val fakeAuthRepository = FakeAuthRepository()
+
+        val postOfferingUseCase = PostOfferingUseCaseImpl(fakeOfferingRepository, fakeAuthRepository)
+        val uploadImageFileUseCase = UploadImageFileUseCaseImpl(fakeOfferingRepository, fakeAuthRepository)
+        val postProductImageOgUseCase = PostProductImageOgUseCaseImpl(fakeOfferingRepository, fakeAuthRepository)
+
+        viewModel = OfferingWriteViewModel(postOfferingUseCase, uploadImageFileUseCase, postProductImageOgUseCase)
     }
 
     @DisplayName("상품 url을 통해 og 이미지 정보를 가져온다")
