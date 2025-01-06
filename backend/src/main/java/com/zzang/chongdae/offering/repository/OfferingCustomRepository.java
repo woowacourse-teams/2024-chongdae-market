@@ -14,4 +14,10 @@ public interface OfferingCustomRepository {
 
     List<OfferingEntity> findImminentOfferingsWithMeetingAddressKeyword(
             LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
+
+    List<OfferingEntity> findHighDiscountOfferingsWithTitleKeyword(
+            double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
+
+    List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeyword(
+            double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
 }

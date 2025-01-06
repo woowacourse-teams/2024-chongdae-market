@@ -1,10 +1,12 @@
 package com.zzang.chongdae.offering.repository;
 
+import static com.zzang.chongdae.offering.domain.OfferingStatus.AVAILABLE;
+import static com.zzang.chongdae.offering.domain.OfferingStatus.FULL;
+import static com.zzang.chongdae.offering.domain.OfferingStatus.IMMINENT;
 import static com.zzang.chongdae.offering.repository.entity.QOfferingEntity.offeringEntity;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,10 +45,36 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
         return queryFactory.selectFrom(offeringEntity)
                 .where(
                         keywordCondition,
-                        offeringEntity.offeringStatus.eq(OfferingStatus.IMMINENT),
+                        offeringEntity.offeringStatus.eq(IMMINENT),
                         offeringEntity.meetingDate.gt(lastMeetingDate)
                                 .or(offeringEntity.meetingDate.eq(lastMeetingDate).and(offeringEntity.id.lt(lastId))))
                 .orderBy(offeringEntity.meetingDate.asc(), offeringEntity.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<OfferingEntity> findHighDiscountOfferingsWithTitleKeyword(
+            double lastDiscountRate, Long lastId, String keyword, Pageable pageable) {
+        return findHighDiscountOfferings(lastDiscountRate, lastId, pageable, likeTitle(keyword));
+    }
+
+    @Override
+    public List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeyword(
+            double lastDiscountRate, Long lastId, String keyword, Pageable pageable) {
+        return findHighDiscountOfferings(lastDiscountRate, lastId, pageable, likeMeetingAddress(keyword));
+    }
+
+    private List<OfferingEntity> findHighDiscountOfferings(
+            double lastDiscountRate, Long lastId, Pageable pageable, BooleanExpression keywordCondition) {
+        return queryFactory.selectFrom(offeringEntity)
+                .where(
+                        keywordCondition,
+                        offeringEntity.offeringStatus.in(AVAILABLE, FULL, IMMINENT),
+                        offeringEntity.discountRate.lt(lastDiscountRate)
+                                .or(offeringEntity.discountRate.eq(lastDiscountRate).and(offeringEntity.id.lt(lastId))))
+                .orderBy(offeringEntity.discountRate.desc(), offeringEntity.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

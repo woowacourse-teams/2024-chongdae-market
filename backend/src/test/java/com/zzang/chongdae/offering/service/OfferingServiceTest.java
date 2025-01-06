@@ -218,7 +218,7 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(1, response.offerings().size());
         }
 
-        @DisplayName("최신순 공모 목록 조회: 검색어 O, 마지막페이지 X, 페이지사이즈 40")
+        @DisplayName("마감임박 공모 목록 조회: 검색어 O, 마지막페이지 X, 페이지사이즈 40")
         @Test
         void should_getImminentOfferings_when_givenSearchKeyword() {
             // given
@@ -232,7 +232,7 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(2, response.offerings().size());
         }
 
-        @DisplayName("최신순 공모 목록 조회: 검색어 O, 마지막페이지 O, 페이지사이즈 10")
+        @DisplayName("마감임박 공모 목록 조회: 검색어 O, 마지막페이지 O, 페이지사이즈 10")
         @Test
         void should_getImminentOfferings_when_givenSearchKeywordAndLastId() {
             // given
@@ -263,40 +263,6 @@ public class OfferingServiceTest extends ServiceTest {
 
             // then
             assertEquals(1, response.offerings().size());
-        }
-
-        @DisplayName("참여가능 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
-        @Test
-        void should_getJoinableOfferings() {
-            // when
-            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", null, null, 10);
-
-            // then
-            assertEquals(10, response.offerings().size());
-            assertEquals(34, response.offerings().get(0).id());
-        }
-
-        @DisplayName("참여가능 공모 목록 조회: 검색어 X, 마지막페이지 O, 페이지사이즈 10")
-        @Test
-        void should_getJoinableOfferings_when_givenLastId() {
-            // when
-            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", null, 8L, 10);
-
-            // then
-            assertEquals(7, response.offerings().size());
-        }
-
-        @DisplayName("참여가능 공모 목록 조회: 삭제한 공모는 조회되지 않는다.")
-        @Test
-        void should_notIncludeDeletedOffering_when_getJoinableOfferings() {
-            // given
-            offeringFixture.deleteOfferingById(1L);
-
-            // when
-            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", null, null, 40);
-
-            // then
-            assertEquals(33, response.offerings().size());
         }
 
         @DisplayName("높은할인율순 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
@@ -334,6 +300,69 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(33.3, response.offerings().get(1).discountRate());
         }
 
+        @DisplayName("높은할인율순 공모 목록 조회: 검색어 O, 마지막페이지 X, 페이지사이즈 40")
+        @Test
+        void should_getHighDiscountOfferings_when_givenSearchKeyword() {
+            // given
+            offeringFixture.createOffering(member, "검색어", 50.0);
+            offeringFixture.createOffering(member, "검색어", 40.0);
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("HIGH_DISCOUNT", "검색", null, 40);
+
+            // then
+            assertEquals(19, response.offerings().size());
+            assertEquals(50.0, response.offerings().get(0).discountRate());
+            assertEquals(40.0, response.offerings().get(1).discountRate());
+            assertEquals(33.3, response.offerings().get(2).discountRate());
+        }
+
+        @DisplayName("높은할인율순 공모 목록 조회: 검색어 O, 마지막페이지 O, 페이지사이즈 3")
+        @Test
+        void should_getHighDiscountOfferings_when_givenSearchKeywordAndLastId() {
+            // given
+            offeringFixture.createOffering(member, "검색어", 70.0);
+            offeringFixture.createOffering(member, "검색어", 60.0);
+            offeringFixture.createOffering(member, "검색어", 50.0);
+            offeringFixture.createOffering(member, "검색어", 40.0);
+            offeringFixture.createOffering(member, "무관한");
+            offeringFixture.createOffering(member, "검색어", 30.0);
+            Long lastId = offeringFixture.createOffering(member, "검색어", 50.0).getId();
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("HIGH_DISCOUNT", "검색", lastId, 3);
+
+            // then
+            assertEquals(3, response.offerings().size());
+            assertEquals(50.0, response.offerings().get(0).discountRate());
+            assertEquals(40.0, response.offerings().get(1).discountRate());
+            assertEquals(33.3, response.offerings().get(2).discountRate());
+        }
+
+        @DisplayName("높은할인율순 공모 목록 조회: 검색어 O, 마지막페이지 O, 페이지사이즈 5")
+        @Test
+        void should_getHighDiscountOfferings_when_givenSearchKeywordAndLastIdWith5Page() {
+            // given
+            offeringFixture.createOffering(member, "검색어", 70.0);
+            offeringFixture.createOffering(member, "검색어", 60.0);
+            offeringFixture.createOffering(member, "검색어", 50.0);
+            offeringFixture.createOffering(member, "검색어", 40.0);
+            offeringFixture.createOffering(member, "무관한");
+            offeringFixture.createOffering(member, "검색어", 30.0);
+            Long lastId = offeringFixture.createOffering(member, "검색어", 80.0).getId();
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("HIGH_DISCOUNT", "검색", lastId, 5);
+
+            // then
+            assertEquals(5, response.offerings().size());
+            assertEquals(70.0, response.offerings().get(0).discountRate());
+            assertEquals(60.0, response.offerings().get(1).discountRate());
+            assertEquals(50.0, response.offerings().get(2).discountRate());
+            assertEquals(40.0, response.offerings().get(3).discountRate());
+            assertEquals(33.3, response.offerings().get(4).discountRate());
+        }
+
         @DisplayName("높은할인율순 공모 목록 조회: 삭제한 공모는 조회되지 않는다.")
         @Test
         void should_notIncludeDeletedOffering_when_getHighDiscountOfferings() {
@@ -347,6 +376,40 @@ public class OfferingServiceTest extends ServiceTest {
 
             // then
             assertEquals(40.0, response.offerings().get(0).discountRate());
+        }
+
+        @DisplayName("참여가능 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
+        @Test
+        void should_getJoinableOfferings() {
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", null, null, 10);
+
+            // then
+            assertEquals(10, response.offerings().size());
+            assertEquals(34, response.offerings().get(0).id());
+        }
+
+        @DisplayName("참여가능 공모 목록 조회: 검색어 X, 마지막페이지 O, 페이지사이즈 10")
+        @Test
+        void should_getJoinableOfferings_when_givenLastId() {
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", null, 8L, 10);
+
+            // then
+            assertEquals(7, response.offerings().size());
+        }
+
+        @DisplayName("참여가능 공모 목록 조회: 삭제한 공모는 조회되지 않는다.")
+        @Test
+        void should_notIncludeDeletedOffering_when_getJoinableOfferings() {
+            // given
+            offeringFixture.deleteOfferingById(1L);
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", null, null, 40);
+
+            // then
+            assertEquals(33, response.offerings().size());
         }
     }
 

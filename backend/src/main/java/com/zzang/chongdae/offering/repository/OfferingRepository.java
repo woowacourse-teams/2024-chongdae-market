@@ -22,38 +22,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long>,
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
-                AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-            ORDER BY o.discountRate DESC, o.id DESC
-            """)
-    List<OfferingEntity> findHighDiscountOfferingsWithoutKeyword(
-            double lastDiscountRate, Long lastId, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.title LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-               AND ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
-            ORDER BY o.discountRate DESC, o.id DESC
-            """)
-    List<OfferingEntity> findHighDiscountOfferingsWithTitleKeyword(
-            double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.meetingAddress LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
-               AND ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
-            ORDER BY o.discountRate DESC, o.id DESC
-            """)
-    List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeyword(
-            double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
             WHERE (o.id < :lastId)
                 AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
             ORDER BY o.id DESC

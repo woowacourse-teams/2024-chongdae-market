@@ -27,9 +27,6 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
 
     private List<OfferingEntity> fetchOfferings(Long lastId, double lastDiscountRate,
                                                 String searchKeyword, Pageable pageable) {
-        if (searchKeyword == null) {
-            return offeringRepository.findHighDiscountOfferingsWithoutKeyword(lastDiscountRate, lastId, pageable);
-        }
         List<OfferingEntity> offeringsSearchedByTitle = offeringRepository.findHighDiscountOfferingsWithTitleKeyword(
                 lastDiscountRate,
                 lastId,
@@ -45,7 +42,7 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
 
     private Comparator<OfferingEntity> sortCondition() {
         return Comparator
-                .comparing(OfferingEntity::getDiscountRate)
+                .comparing(OfferingEntity::getDiscountRate, Comparator.reverseOrder())
                 .thenComparing(OfferingEntity::getId, Comparator.reverseOrder());
     }
 }

@@ -70,6 +70,10 @@ public class OfferingFixture {
         return createOffering(member, title, 5, 33.3, offeringStatus, CommentRoomStatus.GROUPING);
     }
 
+    public OfferingEntity createOffering(MemberEntity member, String title, Double discountRate) {
+        return createOffering(member, title, 5, discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+    }
+
     public void deleteOffering(OfferingEntity offering) {
         offeringRepository.delete(offering);
     }
