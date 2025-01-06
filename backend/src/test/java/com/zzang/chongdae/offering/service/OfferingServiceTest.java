@@ -399,6 +399,34 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(7, response.offerings().size());
         }
 
+        @DisplayName("참여가능 공모 목록 조회: 검색어 O, 마지막페이지 X, 페이지사이즈 10")
+        @Test
+        void should_getJoinableOfferings_when_givenSearchKeyword() {
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", "검색", null, 10);
+
+            // then
+            assertEquals(10, response.offerings().size());
+            assertEquals(34, response.offerings().get(0).id());
+            assertEquals(32, response.offerings().get(1).id());
+            assertEquals(30, response.offerings().get(2).id());
+        }
+
+        @DisplayName("참여가능 공모 목록 조회: 검색어 O, 마지막페이지 O, 페이지사이즈 5")
+        @Test
+        void should_getJoinableOfferings_when_givenSearchKeywordAndLastId() {
+            // given
+            Long excludedId = offeringFixture.createOffering(member, "무관한").getId();
+            Long lastId = offeringFixture.createOffering(member, "검색어").getId();
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("JOINABLE", "검색", lastId, 5);
+
+            // then
+            assertEquals(5, response.offerings().size());
+            assertThat(response.offerings().stream().map(OfferingAllResponseItem::id)).doesNotContain(excludedId);
+        }
+
         @DisplayName("참여가능 공모 목록 조회: 삭제한 공모는 조회되지 않는다.")
         @Test
         void should_notIncludeDeletedOffering_when_getJoinableOfferings() {

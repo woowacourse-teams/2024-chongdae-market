@@ -20,4 +20,6 @@ public interface OfferingCustomRepository {
 
     List<OfferingEntity> findHighDiscountOfferingsWithMeetingAddressKeyword(
             double lastDiscountRate, Long lastId, String keyword, Pageable pageable);
+
+    List<OfferingEntity> findJoinableOfferings(Long lastId, String keyword, Pageable pageable);
 }

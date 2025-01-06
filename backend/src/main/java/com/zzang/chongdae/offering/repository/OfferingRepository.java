@@ -5,7 +5,6 @@ import jakarta.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -18,25 +17,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long>,
             WHERE o.id = :offeringId
             """, nativeQuery = true)
     Optional<OfferingEntity> findByIdWithDeleted(Long offeringId);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.id < :lastId)
-                AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
-            ORDER BY o.id DESC
-            """)
-    List<OfferingEntity> findJoinableOfferingsWithoutKeyword(Long lastId, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.id < :lastId)
-               AND (o.title LIKE :keyword% OR o.meetingAddress LIKE :keyword%)
-               AND (o.offeringStatus IN ('AVAILABLE', 'IMMINENT'))
-            ORDER BY o.id DESC
-            """)
-    List<OfferingEntity> findJoinableOfferingsWithKeyword(Long lastId, String keyword, Pageable pageable);
 
     @Query("SELECT MAX(o.id) FROM OfferingEntity o")
     Long findMaxId();

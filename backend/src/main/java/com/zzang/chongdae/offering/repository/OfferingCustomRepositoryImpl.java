@@ -21,7 +21,8 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
     @Override
     public List<OfferingEntity> findRecentOfferings(Long lastId, String keyword, Pageable pageable) {
         return queryFactory.selectFrom(offeringEntity)
-                .where(offeringEntity.id.lt(lastId), likeKeyword(keyword))
+                .where(offeringEntity.id.lt(lastId),
+                        likeKeyword(keyword))
                 .orderBy(offeringEntity.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -75,6 +76,18 @@ public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
                         offeringEntity.discountRate.lt(lastDiscountRate)
                                 .or(offeringEntity.discountRate.eq(lastDiscountRate).and(offeringEntity.id.lt(lastId))))
                 .orderBy(offeringEntity.discountRate.desc(), offeringEntity.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<OfferingEntity> findJoinableOfferings(Long lastId, String keyword, Pageable pageable) {
+        return queryFactory.selectFrom(offeringEntity)
+                .where(offeringEntity.id.lt(lastId),
+                        offeringEntity.offeringStatus.in(AVAILABLE, IMMINENT),
+                        likeKeyword(keyword))
+                .orderBy(offeringEntity.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
