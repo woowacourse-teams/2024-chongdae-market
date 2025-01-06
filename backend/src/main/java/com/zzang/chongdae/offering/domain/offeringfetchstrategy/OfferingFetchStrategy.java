@@ -41,6 +41,7 @@ public abstract class OfferingFetchStrategy {
                                           List<OfferingEntity>... offerings) {
         return Stream.of(offerings)
                 .flatMap(Collection::stream)
+                .distinct()
                 .sorted(sortCondition)
                 .limit(pageable.getPageSize())
                 .toList();

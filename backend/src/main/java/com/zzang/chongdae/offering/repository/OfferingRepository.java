@@ -22,38 +22,6 @@ public interface OfferingRepository extends JpaRepository<OfferingEntity, Long>,
     @Query("""
             SELECT o
             FROM OfferingEntity o
-            WHERE (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
-                AND (o.offeringStatus = 'IMMINENT')
-            ORDER BY o.meetingDate ASC, o.id DESC
-            """)
-    List<OfferingEntity> findImminentOfferingsWithoutKeyword(
-            LocalDateTime lastMeetingDate, Long lastId, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.meetingAddress LIKE :keyword%)
-                AND (o.offeringStatus = 'IMMINENT')
-                AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
-            ORDER BY o.meetingDate ASC, o.id DESC
-            """)
-    List<OfferingEntity> findImminentOfferingsWithMeetingAddressKeyword(
-            LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
-            WHERE (o.title LIKE :keyword%)
-                AND (o.offeringStatus = 'IMMINENT')
-                AND (o.meetingDate > :lastMeetingDate OR (o.meetingDate = :lastMeetingDate AND o.id < :lastId))
-            ORDER BY o.meetingDate ASC, o.id DESC
-            """)
-    List<OfferingEntity> findImminentOfferingsWithTitleKeyword(
-            LocalDateTime lastMeetingDate, Long lastId, String keyword, Pageable pageable);
-
-    @Query("""
-            SELECT o
-            FROM OfferingEntity o
             WHERE ((o.discountRate < :lastDiscountRate) or (o.discountRate = :lastDiscountRate AND o.id < :lastId))
                 AND (o.offeringStatus IN ('AVAILABLE', 'FULL', 'IMMINENT'))
             ORDER BY o.discountRate DESC, o.id DESC

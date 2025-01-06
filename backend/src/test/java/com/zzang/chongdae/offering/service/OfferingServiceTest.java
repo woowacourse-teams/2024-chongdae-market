@@ -190,6 +190,81 @@ public class OfferingServiceTest extends ServiceTest {
             assertEquals(33, response.offerings().size());
         }
 
+        @DisplayName("마감임박 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
+        @Test
+        void should_getImminentOfferings() {
+            // when
+            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
+            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, null, 10);
+
+            // then
+            assertEquals(1, response.offerings().size());
+        }
+
+        @DisplayName("마감임박 공모 목록 조회: 검색어 X, 마지막페이지 O, 페이지사이즈 10")
+        @Test
+        void should_getImminentOfferings_when_givenLastId() {
+            // given
+            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
+            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
+            OfferingAllResponse lastResponse = offeringService.getAllOffering("IMMINENT", null, null, 1);
+            List<OfferingAllResponseItem> offerings = lastResponse.offerings();
+            Long lastId = offerings.get(offerings.size() - 1).id();
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, lastId, 10);
+
+            // then
+            assertEquals(1, response.offerings().size());
+        }
+
+        @DisplayName("최신순 공모 목록 조회: 검색어 O, 마지막페이지 X, 페이지사이즈 40")
+        @Test
+        void should_getImminentOfferings_when_givenSearchKeyword() {
+            // given
+            offeringFixture.createOffering(member, "검색어", OfferingStatus.IMMINENT);
+            offeringFixture.createOffering(member, "검색어", OfferingStatus.IMMINENT);
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", "검색", null, 40);
+
+            // then
+            assertEquals(2, response.offerings().size());
+        }
+
+        @DisplayName("최신순 공모 목록 조회: 검색어 O, 마지막페이지 O, 페이지사이즈 10")
+        @Test
+        void should_getImminentOfferings_when_givenSearchKeywordAndLastId() {
+            // given
+            offeringFixture.createOffering(member, "무관한", OfferingStatus.IMMINENT);
+            offeringFixture.createOffering(member, "검색어", OfferingStatus.IMMINENT);
+            offeringFixture.createOffering(member, "검색어", OfferingStatus.IMMINENT);
+            OfferingAllResponse lastResponse = offeringService.getAllOffering("IMMINENT", null, null, 1);
+            List<OfferingAllResponseItem> offerings = lastResponse.offerings();
+            Long lastId = offerings.get(offerings.size() - 1).id();
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", "검색", lastId, 10);
+
+            // then
+            assertEquals(1, response.offerings().size());
+        }
+
+        @DisplayName("마감임박 공모 목록 조회: 삭제한 공모는 조회되지 않는다.")
+        @Test
+        void should_notIncludeDeletedOffering_when_getImminentOfferings() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
+            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
+            offeringFixture.deleteOffering(offering);
+
+            // when
+            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, null, 20);
+
+            // then
+            assertEquals(1, response.offerings().size());
+        }
+
         @DisplayName("참여가능 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
         @Test
         void should_getJoinableOfferings() {
@@ -222,49 +297,6 @@ public class OfferingServiceTest extends ServiceTest {
 
             // then
             assertEquals(33, response.offerings().size());
-        }
-
-        @DisplayName("마감임박 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
-        @Test
-        void should_getImminentOfferings() {
-            // when
-            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
-            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, null, 10);
-
-            // then
-            assertEquals(1, response.offerings().size());
-        }
-
-        @DisplayName("마감임박 공모 목록 조회: 검색어 X, 마지막페이지 O, 페이지사이즈 10")
-        @Test
-        void should_getImminentOfferings_when_givenLastId() {
-            // given
-            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
-            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
-            OfferingAllResponse lastResponse = offeringService.getAllOffering("IMMINENT", null, null, 1);
-            List<OfferingAllResponseItem> offerings = lastResponse.offerings();
-            Long lastId = offerings.get(offerings.size() - 1).id();
-
-            // when
-            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, lastId, 1);
-
-            // then
-            assertEquals(1, response.offerings().size());
-        }
-
-        @DisplayName("마감임박 공모 목록 조회: 삭제한 공모는 조회되지 않는다.")
-        @Test
-        void should_notIncludeDeletedOffering_when_getImminentOfferings() {
-            // given
-            OfferingEntity offering = offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
-            offeringFixture.createOffering(member, OfferingStatus.IMMINENT);
-            offeringFixture.deleteOffering(offering);
-
-            // when
-            OfferingAllResponse response = offeringService.getAllOffering("IMMINENT", null, null, 20);
-
-            // then
-            assertEquals(1, response.offerings().size());
         }
 
         @DisplayName("높은할인율순 공모 목록 조회: 검색어 X, 마지막페이지 X, 페이지사이즈 10")
