@@ -6,9 +6,9 @@ import com.zzang.chongdae.notification.domain.FcmTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FakeNotificationSubscriber implements NotificationSubscriber {
+public class StubNotificationSubscriber implements NotificationSubscriber {
 
-    private static final Logger log = LoggerFactory.getLogger(FakeNotificationSubscriber.class);
+    private static final Logger log = LoggerFactory.getLogger(StubNotificationSubscriber.class);
 
     @Override
     public TopicManagementResponse subscribe(MemberEntity member, FcmTopic topic) {
