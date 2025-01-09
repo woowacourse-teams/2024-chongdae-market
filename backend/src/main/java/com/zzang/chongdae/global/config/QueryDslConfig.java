@@ -1,4 +1,4 @@
-package com.zzang.chongdae.global.repository.entity.config;
+package com.zzang.chongdae.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
