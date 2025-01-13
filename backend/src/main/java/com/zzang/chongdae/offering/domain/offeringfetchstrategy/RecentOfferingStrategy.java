@@ -13,19 +13,12 @@ public class RecentOfferingStrategy extends OfferingFetchStrategy {
 
     @Override
     protected List<OfferingEntity> fetchWithoutLast(Long outOfRangeId, String searchKeyword, Pageable pageable) {
-        return fetchOfferings(outOfRangeId, searchKeyword, pageable);
+        return offeringRepository.findRecentOfferings(outOfRangeId, searchKeyword, pageable);
     }
 
     @Override
     protected List<OfferingEntity> fetchWithLast(OfferingEntity lastOffering, String searchKeyword, Pageable pageable) {
         Long lastOfferingId = lastOffering.getId();
-        return fetchOfferings(lastOfferingId, searchKeyword, pageable);
-    }
-
-    private List<OfferingEntity> fetchOfferings(Long lastOfferingId, String searchKeyword, Pageable pageable) {
-        if (searchKeyword == null) {
-            return offeringRepository.findRecentOfferingsWithoutKeyword(lastOfferingId, pageable);
-        }
-        return offeringRepository.findRecentOfferingsWithKeyword(lastOfferingId, searchKeyword, pageable);
+        return offeringRepository.findRecentOfferings(lastOfferingId, searchKeyword, pageable);
     }
 }

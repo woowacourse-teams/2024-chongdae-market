@@ -47,3 +47,6 @@ openapi3.yaml
 
 ### FCM ###
 /src/main/resources/fcm
+
+### QueryDSL ###
+/src/main/generated
