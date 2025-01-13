@@ -61,8 +61,7 @@ public class FcmNotificationService {
     }
 
     @Nullable
-    public BatchResponse saveComment(CommentEntity comment,
-                                     List<OfferingMemberEntity> offeringMembers) { // todo: 참여자 도메인 추출
+    public BatchResponse saveComment(CommentEntity comment, List<OfferingMemberEntity> offeringMembers) {
         MulticastMessage message = commentMessageManager.messageWhenSaveComment(comment, offeringMembers);
         if (message == null) {
             return null;

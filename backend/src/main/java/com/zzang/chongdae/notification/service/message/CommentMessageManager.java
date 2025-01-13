@@ -22,7 +22,7 @@ public class CommentMessageManager {
 
     @Nullable
     public MulticastMessage messageWhenSaveComment(CommentEntity comment, List<OfferingMemberEntity> offeringMembers) {
-        FcmTokens tokens = FcmTokens.from(membersNotWriter(comment.getMember(), offeringMembers));
+        FcmTokens tokens = createFcmTokens(comment.getMember(), offeringMembers);
         if (tokens.isEmpty()) {
             return null;
         }
@@ -34,10 +34,11 @@ public class CommentMessageManager {
         return messageCreator.createMessages(tokens, data);
     }
 
-    private List<MemberEntity> membersNotWriter(MemberEntity writer, List<OfferingMemberEntity> offeringMembers) {
-        return offeringMembers.stream()
+    private FcmTokens createFcmTokens(MemberEntity writer, List<OfferingMemberEntity> offeringMembers) {
+        List<MemberEntity> membersNotWriter = offeringMembers.stream()
                 .map(OfferingMemberEntity::getMember)
                 .filter(member -> !member.isSame(writer))
                 .toList();
+        return FcmTokens.from(membersNotWriter);
     }
 }
