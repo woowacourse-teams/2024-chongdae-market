@@ -50,7 +50,7 @@ public class CommentService {
         CommentEntity comment = new CommentEntity(member, offering, request.content());
         CommentEntity savedComment = commentRepository.save(comment);
 
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllWithMemberByOffering(offering);
         eventPublisher.publishEvent(new SaveCommentEvent(this, savedComment, offeringMembers));
 
         return savedComment.getId();

@@ -105,7 +105,7 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipants(offering, member);
 
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllWithMemberByOffering(offering);
         OfferingMembers members = new OfferingMembers(offeringMembers);
         MemberEntity proposer = members.getProposer();
         List<MemberEntity> participants = members.getParticipants();
