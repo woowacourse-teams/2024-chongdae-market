@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
-public interface OfferingRepository extends JpaRepository<OfferingEntity, Long>, OfferingCustomRepository {
+public interface OfferingRepository extends JpaRepository<OfferingEntity, Long>, CustomizedOfferingRepository {
 
     @Query(value = """
             SELECT *

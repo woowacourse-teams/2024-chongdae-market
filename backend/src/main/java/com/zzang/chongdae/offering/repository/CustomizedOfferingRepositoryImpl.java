@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
-public class OfferingCustomRepositoryImpl implements OfferingCustomRepository {
+public class CustomizedOfferingRepositoryImpl implements CustomizedOfferingRepository {
 
     private final JPAQueryFactory queryFactory;
 

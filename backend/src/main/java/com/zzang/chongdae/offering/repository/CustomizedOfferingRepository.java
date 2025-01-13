@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
-public interface OfferingCustomRepository {
+public interface CustomizedOfferingRepository {
 
     List<OfferingEntity> findRecentOfferings(Long lastId, String keyword, Pageable pageable);
 
