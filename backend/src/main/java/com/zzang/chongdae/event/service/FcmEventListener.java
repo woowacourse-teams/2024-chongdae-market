@@ -49,7 +49,7 @@ public class FcmEventListener {
     @EventListener
     @Async
     public void handleSaveCommentEvent(SaveCommentEvent event) {
-        notificationService.saveComment(event.getComment(), event.getOfferingMembers());
+        notificationService.saveComment(event.getComment(), event.getTokens());
     }
 
     @TransactionalEventListener(phase = AFTER_COMMIT)
