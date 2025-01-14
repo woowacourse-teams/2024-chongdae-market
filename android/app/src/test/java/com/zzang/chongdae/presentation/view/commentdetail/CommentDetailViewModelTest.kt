@@ -54,8 +54,6 @@ class CommentDetailViewModelTest {
     @Test
     fun updateOffering() {
         // given
-        viewModel.updateOfferingStatus()
-
         // when
         viewModel.updateOfferingStatus()
         // then
