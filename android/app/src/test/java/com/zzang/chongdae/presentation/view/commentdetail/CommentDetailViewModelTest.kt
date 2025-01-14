@@ -156,6 +156,7 @@ class CommentDetailViewModelTest {
     fun pollingStartsAndStops() {
         // given
         // when
+        // then
         val isPolling = viewModel.isPollingActive.getOrAwaitValue()
         assertThat(isPolling).isEqualTo(true)
     }
