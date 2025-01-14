@@ -14,7 +14,6 @@ import com.zzang.chongdae.util.InstantTaskExecutorExtension
 import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.apache.commons.lang3.BooleanUtils.isFalse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -152,16 +151,24 @@ class CommentDetailViewModelTest {
         assertThat(event.peekContent()).isInstanceOf(CommentDetailEvent.ShowAlert::class.java)
     }
 
+    @DisplayName("Polling 작업이 정상적으로 시작된다")
+    @Test
+    fun pollingStartsAndStops() {
+        // given
+        // when
+        val isPolling = viewModel.isPollingActive.getOrAwaitValue()
+        assertThat(isPolling).isEqualTo(true)
+    }
+
     @DisplayName("Exit 확인 클릭 시 Polling 작업이 정상적으로 종료된다")
     @Test
     fun exitOfferingSuccessfully() {
         // given
-
         // when
         viewModel.onClickConfirm()
 
         // then
         val isPolling = viewModel.isPollingActive.getOrAwaitValue()
-        assertThat(isPolling).isFalse()
+        assertThat(isPolling).isEqualTo(false)
     }
 }
