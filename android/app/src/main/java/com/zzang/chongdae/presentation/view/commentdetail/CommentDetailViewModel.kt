@@ -54,6 +54,9 @@ class CommentDetailViewModel
 
         private var pollJob: Job? = null
 
+        private val _isPollingActive = MutableLiveData(false)
+        val isPollingActive: LiveData<Boolean> get() = _isPollingActive
+
         val commentContent = MutableLiveData("")
 
         private val _comments: MutableLiveData<List<CommentUiModel>> = MutableLiveData()
@@ -87,12 +90,14 @@ class CommentDetailViewModel
 
         private fun startPolling() {
             stopPolling()
+            _isPollingActive.value = true
             pollJob =
                 viewModelScope.launch {
                     while (this.isActive) {
                         loadComments()
                         delay(1000)
                     }
+                    _isPollingActive.value = false
                 }
         }
 
@@ -264,6 +269,7 @@ class CommentDetailViewModel
 
         private fun stopPolling() {
             pollJob?.cancel()
+            _isPollingActive.value = false
         }
 
         override fun onCleared() {
