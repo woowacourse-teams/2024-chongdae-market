@@ -39,13 +39,14 @@ class OfferingViewModelTest {
         fetchFiltersUserCase = FetchFiltersUserCase(offeringRepository)
         fetchOfferingUseCase = FetchOfferingUseCase(offeringRepository)
         userPreferencesDataStore = UserPreferencesDataStore(FakeDataStore())
-        viewModel = OfferingViewModel(
-            authRepository,
-            fetchOfferingsUseCase,
-            fetchFiltersUserCase,
-            fetchOfferingUseCase,
-            userPreferencesDataStore
-        )
+        viewModel =
+            OfferingViewModel(
+                authRepository,
+                fetchOfferingsUseCase,
+                fetchFiltersUserCase,
+                fetchOfferingUseCase,
+                userPreferencesDataStore,
+            )
     }
 
     @DisplayName("필터 정보를 불러온다")

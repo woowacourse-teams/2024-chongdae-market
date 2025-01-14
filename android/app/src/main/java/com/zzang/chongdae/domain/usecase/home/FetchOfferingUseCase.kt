@@ -5,9 +5,9 @@ import com.zzang.chongdae.domain.repository.OfferingRepository
 import javax.inject.Inject
 
 class FetchOfferingUseCase
-@Inject
-constructor(
-    @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
-) {
-    suspend operator fun invoke(offeringId: Long) = offeringRepository.fetchOffering(offeringId)
-}
+    @Inject
+    constructor(
+        @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
+    ) {
+        suspend operator fun invoke(offeringId: Long) = offeringRepository.fetchOffering(offeringId)
+    }

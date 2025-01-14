@@ -11,13 +11,14 @@ import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.util.TestFixture
+import com.zzang.chongdae.util.TestFixture.OFFERINGS_STUB
 import okhttp3.MultipartBody
 
 class FakeOfferingRepository : OfferingRepository {
     override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> {
         return Result.Success(
             Offering(
-                id = 0,
+                id = offeringId,
                 title = "",
                 meetingAddressDong = "",
                 thumbnailUrl = null,
@@ -38,20 +39,7 @@ class FakeOfferingRepository : OfferingRepository {
         pageSize: Int?,
     ): Result<List<Offering>, DataError.Network> {
         return Result.Success(
-            listOf(
-                Offering(
-                    id = 0,
-                    title = "",
-                    meetingAddressDong = "",
-                    thumbnailUrl = null,
-                    totalCount = 0,
-                    currentCount = 0,
-                    dividedPrice = 0,
-                    originPrice = null,
-                    status = OfferingCondition.CONFIRMED,
-                    isOpen = false,
-                ),
-            ),
+            OFFERINGS_STUB,
         )
     }
 
