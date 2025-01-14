@@ -4,9 +4,10 @@ import com.zzang.chongdae.di.annotations.OfferingDetailRepositoryQualifier
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import javax.inject.Inject
 
-class SaveParticipationUseCase @Inject constructor(
-    @OfferingDetailRepositoryQualifier val offeringDetailRepository: OfferingDetailRepository,
-) {
-    suspend operator fun invoke(offeringId: Long) =
-        offeringDetailRepository.saveParticipation(offeringId)
-}
+class SaveParticipationUseCase
+    @Inject
+    constructor(
+        @OfferingDetailRepositoryQualifier val offeringDetailRepository: OfferingDetailRepository,
+    ) {
+        suspend operator fun invoke(offeringId: Long) = offeringDetailRepository.saveParticipation(offeringId)
+    }

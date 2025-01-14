@@ -19,11 +19,12 @@ class FetchOfferingDetailUseCaseTest {
     }
 
     @Test
-    fun `공모 상세 정보를 가져온다`() = runTest {
-        // when
-        val actual = fetchOfferingDetailUseCase(1L).getOrThrow()
+    fun `공모 상세 정보를 가져온다`() =
+        runTest {
+            // when
+            val actual = fetchOfferingDetailUseCase(1L).getOrThrow()
 
-        // then
-        assertThat(actual).isEqualTo(OFFERING_DETAIL_STUB)
-    }
+            // then
+            assertThat(actual).isEqualTo(OFFERING_DETAIL_STUB)
+        }
 }

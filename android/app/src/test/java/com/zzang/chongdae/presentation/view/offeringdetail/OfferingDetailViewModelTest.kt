@@ -44,14 +44,15 @@ class OfferingDetailViewModelTest {
         fetchOfferingDetailUseCase = FetchOfferingDetailUseCase(offeringDetailRepository)
         saveParticipationUseCase = SaveParticipationUseCase(offeringDetailRepository)
         deleteOfferingUseCase = DeleteOfferingUseCase(offeringDetailRepository)
-        viewModel = OfferingDetailViewModel(
-            offeringId,
-            fetchOfferingDetailUseCase,
-            saveParticipationUseCase,
-            deleteOfferingUseCase,
-            authRepository,
-            userPreferencesDataStore
-        )
+        viewModel =
+            OfferingDetailViewModel(
+                offeringId,
+                fetchOfferingDetailUseCase,
+                saveParticipationUseCase,
+                deleteOfferingUseCase,
+                authRepository,
+                userPreferencesDataStore,
+            )
     }
 
     @DisplayName("공구에 참여한다")
