@@ -59,7 +59,7 @@ test {
 }
 
 openapi3 {
-    servers = [{ url = 'http://13.124.137.6' },
+    servers = [{ url = 'https://dev.chongdae.site' },
                { url = 'http://localhost:8080' }]
     title '총대마켓 API 명세서'
     description '총대마켓 백엔드 API 명세서'
