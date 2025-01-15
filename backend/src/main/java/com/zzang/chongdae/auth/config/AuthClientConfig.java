@@ -1,7 +1,8 @@
 package com.zzang.chongdae.auth.config;
 
 import com.zzang.chongdae.auth.service.AuthClient;
-import com.zzang.chongdae.auth.service.DevAuthClient;
+import com.zzang.chongdae.auth.service.client.DevAuthClient;
+import com.zzang.chongdae.auth.service.client.ProdAuthClient;
 import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class AuthClientConfig {
     @Bean
     @Profile("prod")
     public AuthClient prodAuthClient() {
-        return new AuthClient(createRestClient());
+        return new ProdAuthClient(createRestClient());
     }
 
     @Bean
