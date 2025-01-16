@@ -124,7 +124,7 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
+        List<CommentEntity> comments = commentRepository.findAllWithMemberByOfferingOrderByCreatedAt(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
