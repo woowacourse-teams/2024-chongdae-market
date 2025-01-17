@@ -1,5 +1,6 @@
 package com.zzang.chongdae.global.config;
 
+import com.zzang.chongdae.auth.config.TestAuthClientConfig;
 import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
 import com.zzang.chongdae.notification.config.TestNotificationConfig;
 import com.zzang.chongdae.offering.config.TestCrawlerConfig;
@@ -11,7 +12,8 @@ import org.springframework.context.annotation.Import;
         TestNicknameWordPickerConfig.class,
         TestClockConfig.class,
         TestNotificationConfig.class,
-        TestStorageConfig.class})
+        TestStorageConfig.class,
+        TestAuthClientConfig.class})
 @TestConfiguration
 public class TestConfig {
 }
