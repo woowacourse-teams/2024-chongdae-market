@@ -3,7 +3,6 @@ package com.zzang.chongdae.di.module
 import com.zzang.chongdae.ChongdaeApp
 import com.zzang.chongdae.data.local.dao.OfferingDao
 import com.zzang.chongdae.data.local.source.OfferingLocalDataSourceImpl
-import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
@@ -44,8 +43,8 @@ abstract class OfferingDependencyModule {
         @Provides
         @Singleton
         @OfferingApiServiceQualifier
-        fun provideOfferingService(): OfferingApiService {
-            return NetworkManager.offeringService()
+        fun provideOfferingService(apiService: OfferingApiService): OfferingApiService {
+            return apiService
         }
 
         @Provides

@@ -1,6 +1,5 @@
 package com.zzang.chongdae.di.module
 
-import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
 import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl
@@ -33,8 +32,8 @@ abstract class OfferingDetailDependencyModule {
         @Provides
         @Singleton
         @OfferingDetailApiServiceQualifier
-        fun provideOfferingDetailService(): OfferingApiService {
-            return NetworkManager.offeringService()
+        fun provideOfferingDetailService(apiService: OfferingApiService): OfferingApiService {
+            return apiService
         }
     }
 }

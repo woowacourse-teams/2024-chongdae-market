@@ -1,7 +1,6 @@
 package com.zzang.chongdae.di.module
 
 import com.zzang.chongdae.data.remote.api.CommentApiService
-import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
@@ -33,8 +32,8 @@ abstract class CommentDetailDependencyModule {
         @Provides
         @Singleton
         @CommentDetailApiServiceQualifier
-        fun provideCommentDetailApiService(): CommentApiService {
-            return NetworkManager.commentService()
+        fun provideCommentDetailApiService(apiService: CommentApiService): CommentApiService {
+            return apiService
         }
     }
 }

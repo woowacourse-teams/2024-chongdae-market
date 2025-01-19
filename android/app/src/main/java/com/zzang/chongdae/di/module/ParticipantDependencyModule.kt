@@ -1,6 +1,5 @@
 package com.zzang.chongdae.di.module
 
-import com.zzang.chongdae.data.remote.api.NetworkManager
 import com.zzang.chongdae.data.remote.api.ParticipationApiService
 import com.zzang.chongdae.data.remote.source.ParticipantRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.ParticipantRepositoryImpl
@@ -33,8 +32,8 @@ abstract class ParticipantDependencyModule {
         @Provides
         @Singleton
         @ParticipantApiServiceQualifier
-        fun provideParticipantApiService(): ParticipationApiService {
-            return NetworkManager.participationService()
+        fun provideParticipantApiService(apiService: ParticipationApiService): ParticipationApiService {
+            return apiService
         }
     }
 }
