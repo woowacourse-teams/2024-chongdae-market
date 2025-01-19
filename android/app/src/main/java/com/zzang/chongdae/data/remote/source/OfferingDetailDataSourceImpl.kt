@@ -8,15 +8,13 @@ import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.OfferingDetailDataSource
-import com.zzang.chongdae.di.annotations.OfferingApiServiceQualifier
-import com.zzang.chongdae.di.annotations.ParticipantApiServiceQualifier
 import javax.inject.Inject
 
 class OfferingDetailDataSourceImpl
     @Inject
     constructor(
-        @OfferingApiServiceQualifier private val offeringApiService: OfferingApiService,
-        @ParticipantApiServiceQualifier private val participationApiService: ParticipationApiService,
+        private val offeringApiService: OfferingApiService,
+        private val participationApiService: ParticipationApiService,
     ) : OfferingDetailDataSource {
         override suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetailResponse, DataError.Network> =
             safeApiCall { offeringApiService.getOfferingDetail(offeringId) }

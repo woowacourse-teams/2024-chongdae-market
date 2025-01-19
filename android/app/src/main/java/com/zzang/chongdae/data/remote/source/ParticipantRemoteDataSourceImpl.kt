@@ -6,13 +6,12 @@ import com.zzang.chongdae.data.remote.api.ParticipationApiService
 import com.zzang.chongdae.data.remote.dto.response.participants.ParticipantsResponse
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.ParticipantRemoteDataSource
-import com.zzang.chongdae.di.annotations.ParticipantApiServiceQualifier
 import javax.inject.Inject
 
 class ParticipantRemoteDataSourceImpl
     @Inject
     constructor(
-        @ParticipantApiServiceQualifier private val service: ParticipationApiService,
+        private val service: ParticipationApiService,
     ) : ParticipantRemoteDataSource {
         override suspend fun fetchParticipants(offeringId: Long): Result<ParticipantsResponse, DataError.Network> =
             safeApiCall {

@@ -9,7 +9,3 @@ annotation class OfferingDetailRepositoryQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class OfferingDetailDataSourceQualifier
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class OfferingDetailApiServiceQualifier
