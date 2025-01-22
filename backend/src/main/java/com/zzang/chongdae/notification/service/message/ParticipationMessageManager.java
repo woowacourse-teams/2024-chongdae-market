@@ -19,12 +19,9 @@ public class ParticipationMessageManager {
 
     private final FcmMessageCreator messageCreator;
 
-    public Message messageWhenParticipate(OfferingMemberEntity offeringMember) {
+    public Message messageWhenParticipate(OfferingMemberEntity offeringMember, FcmToken token) {
         OfferingEntity offering = offeringMember.getOffering();
-        MemberEntity proposer = offering.getMember();
         MemberEntity participant = offeringMember.getMember();
-
-        FcmToken token = new FcmToken(proposer);
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", MESSAGE_BODY_FORMAT_PARTICIPATE.formatted(participant.getNickname()));
@@ -33,12 +30,9 @@ public class ParticipationMessageManager {
         return messageCreator.createMessage(token, data);
     }
 
-    public Message messageWhenCancelParticipate(OfferingMemberEntity offeringMember) {
+    public Message messageWhenCancelParticipate(OfferingMemberEntity offeringMember, MemberEntity participant,
+                                                FcmToken token) {
         OfferingEntity offering = offeringMember.getOffering();
-        MemberEntity proposer = offering.getMember();
-        MemberEntity participant = offeringMember.getMember();
-
-        FcmToken token = new FcmToken(proposer);
         FcmData data = new FcmData();
         data.addData("title", offering.getTitle());
         data.addData("body", MESSAGE_BODY_FORMAT_CANCEL.formatted(participant.getNickname()));

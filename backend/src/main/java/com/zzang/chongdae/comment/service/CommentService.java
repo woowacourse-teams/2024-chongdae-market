@@ -48,12 +48,12 @@ public class CommentService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
         CommentEntity comment = new CommentEntity(member, offering, request.content());
-        CommentEntity savedComment = commentRepository.save(comment);
+        CommentEntity saved = commentRepository.save(comment);
 
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
-        eventPublisher.publishEvent(new SaveCommentEvent(this, savedComment, offeringMembers));
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllWithMemberByOffering(offering);
+        eventPublisher.publishEvent(new SaveCommentEvent(this, saved, offeringMembers));
 
-        return savedComment.getId();
+        return saved.getId();
     }
 
     private void validateIsJoined(MemberEntity member, OfferingEntity offering) {
@@ -124,7 +124,7 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
+        List<CommentEntity> comments = commentRepository.findAllWithMemberByOfferingOrderByCreatedAt(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
