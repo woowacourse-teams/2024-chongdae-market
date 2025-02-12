@@ -9,13 +9,12 @@ import com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse
 import com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse
 import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
-import com.zzang.chongdae.di.annotations.CommentDetailApiServiceQualifier
 import javax.inject.Inject
 
 class CommentRemoteDataSourceImpl
     @Inject
     constructor(
-        @CommentDetailApiServiceQualifier private val service: CommentApiService,
+        private val service: CommentApiService,
     ) : CommentRemoteDataSource {
         override suspend fun saveComment(commentRequest: CommentRequest): Result<Unit, DataError.Network> =
             safeApiCall {
