@@ -5,6 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import com.zzang.chongdae.domain.usecase.offeringdetail.DeleteOfferingUseCase
+import com.zzang.chongdae.domain.usecase.offeringdetail.FetchOfferingDetailUseCase
+import com.zzang.chongdae.domain.usecase.offeringdetail.SaveParticipationUseCase
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeDataStore
 import com.zzang.chongdae.repository.FakeOfferingDetailRepository
@@ -25,6 +28,9 @@ class OfferingDetailViewModelTest {
     private lateinit var viewModel: OfferingDetailViewModel
     private lateinit var dataStore: DataStore<Preferences>
     private lateinit var offeringDetailRepository: OfferingDetailRepository
+    private lateinit var fetchOfferingDetailUseCase: FetchOfferingDetailUseCase
+    private lateinit var saveParticipationUseCase: SaveParticipationUseCase
+    private lateinit var deleteOfferingUseCase: DeleteOfferingUseCase
     private lateinit var authRepository: AuthRepository
     private val offeringId = 1L
     private lateinit var userPreferencesDataStore: UserPreferencesDataStore
@@ -35,7 +41,18 @@ class OfferingDetailViewModelTest {
         offeringDetailRepository = FakeOfferingDetailRepository()
         authRepository = FakeAuthRepository()
         userPreferencesDataStore = UserPreferencesDataStore(FakeDataStore())
-        viewModel = OfferingDetailViewModel(offeringId, offeringDetailRepository, authRepository, userPreferencesDataStore)
+        fetchOfferingDetailUseCase = FetchOfferingDetailUseCase(offeringDetailRepository)
+        saveParticipationUseCase = SaveParticipationUseCase(offeringDetailRepository)
+        deleteOfferingUseCase = DeleteOfferingUseCase(offeringDetailRepository)
+        viewModel =
+            OfferingDetailViewModel(
+                offeringId,
+                fetchOfferingDetailUseCase,
+                saveParticipationUseCase,
+                deleteOfferingUseCase,
+                authRepository,
+                userPreferencesDataStore,
+            )
     }
 
     @DisplayName("공구에 참여한다")

@@ -12,11 +12,12 @@ import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingDetailRepositoryQualifier
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.repository.OfferingDetailRepository
+import com.zzang.chongdae.domain.usecase.offeringdetail.DeleteOfferingUseCase
+import com.zzang.chongdae.domain.usecase.offeringdetail.FetchOfferingDetailUseCase
+import com.zzang.chongdae.domain.usecase.offeringdetail.SaveParticipationUseCase
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import com.zzang.chongdae.presentation.view.common.OnAlertClickListener
@@ -29,7 +30,9 @@ class OfferingDetailViewModel
     @AssistedInject
     constructor(
         @Assisted private val offeringId: Long,
-        @OfferingDetailRepositoryQualifier val offeringDetailRepository: OfferingDetailRepository,
+        private val fetchOfferingDetailUseCase: FetchOfferingDetailUseCase,
+        private val saveParticipationUseCase: SaveParticipationUseCase,
+        private val deleteOfferingUseCase: DeleteOfferingUseCase,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
         private val userPreferencesDataStore: UserPreferencesDataStore,
     ) : ViewModel(),
@@ -108,7 +111,7 @@ class OfferingDetailViewModel
         fun loadOffering() {
             viewModelScope.launch {
                 _isOfferingDetailLoading.value = true
-                when (val result = offeringDetailRepository.fetchOfferingDetail(offeringId)) {
+                when (val result = fetchOfferingDetailUseCase(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
@@ -152,7 +155,7 @@ class OfferingDetailViewModel
         override fun participate() {
             viewModelScope.launch {
                 _isParticipationLoading.value = true
-                when (val result = offeringDetailRepository.saveParticipation(offeringId)) {
+                when (val result = saveParticipationUseCase(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
@@ -211,7 +214,7 @@ class OfferingDetailViewModel
 
         fun deleteOffering(offeringId: Long) {
             viewModelScope.launch {
-                when (val result = offeringDetailRepository.deleteOffering(offeringId)) {
+                when (val result = deleteOfferingUseCase(offeringId)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
