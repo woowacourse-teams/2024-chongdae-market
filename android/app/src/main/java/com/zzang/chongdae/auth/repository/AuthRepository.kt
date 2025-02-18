@@ -5,7 +5,7 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 
 interface AuthRepository {
-    suspend fun saveLogin(
+    suspend fun postLogin(
         accessToken: String,
         fcmToken: String,
     ): Result<Member, DataError.Network>

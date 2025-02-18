@@ -19,22 +19,26 @@ public class LocalStorageService implements StorageService {
 
     private static final Set<String> ALLOW_IMAGE_EXTENSIONS = Set.of("jpg", "jpeg", "png", "gif", "bmp", "svg");
 
-    @Value("${storage.redirectUrl}")
-    private String redirectUrl;
+    @Value("${storage.resourceHost}")
+    private String resourceHost;
 
     @Value("${storage.path}")
     private String storagePath;
 
     @Override
     public String uploadFile(MultipartFile file) {
+        String extension = getFileExtension(file);
+        validateFileExtension(extension);
+        String newFilename = UUID.randomUUID().toString();
+        storeFile(file, newFilename);
+        return createUri(newFilename);
+    }
+
+    private void storeFile(MultipartFile file, String newFilename) {
         try {
-            String extension = getFileExtension(file);
-            validateFileExtension(extension);
-            String newFilename = UUID.randomUUID() + "." + extension;
             Path uploadPath = Paths.get(storagePath);
             Path filePath = uploadPath.resolve(newFilename);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return createUri(filePath.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -58,9 +62,14 @@ public class LocalStorageService implements StorageService {
     private String createUri(String objectKey) {
         return UriComponentsBuilder.newInstance()
                 .scheme("https")
-                .host(redirectUrl)
+                .host(resourceHost)
                 .path("/" + objectKey)
                 .build(false)
                 .toString();
+    }
+  
+    @Override
+    public String getResourceHost() {
+        return resourceHost;
     }
 }

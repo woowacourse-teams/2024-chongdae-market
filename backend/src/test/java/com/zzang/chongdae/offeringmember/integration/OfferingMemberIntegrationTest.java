@@ -4,10 +4,12 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithNam
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.zzang.chongdae.global.helper.ConcurrencyExecutor;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
@@ -119,6 +121,56 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .when().post("/participations")
                     .then().log().all()
                     .statusCode(400);
+        }
+
+        @DisplayName("같은 사용자가 같은 공모에 동시에 참여할 경우 첫 요청 이후의 요청은 예외가 발생한다.")
+        @Test
+        void should_throwException_when_sameMemberAndSameOffering() throws InterruptedException {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId()
+            );
+
+            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
+            List<Integer> statusCodes = concurrencyExecutor.execute(5,
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().post("/participations")
+                            .statusCode());
+
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400, 400, 400, 400);
+        }
+
+        @DisplayName("다른 사용자가 같은 공모에 동시에 참여할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_differentMemberAndSameOffering() throws InterruptedException {
+            MemberEntity proposer = memberFixture.createMember("ever");
+            OfferingEntity offering = offeringFixture.createOffering(proposer, 2);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId()
+            );
+            MemberEntity participant1 = memberFixture.createMember("ever1");
+            MemberEntity participant2 = memberFixture.createMember("ever2");
+
+            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
+            List<Integer> statusCodes = concurrencyExecutor.execute(
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant1))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().post("/participations")
+                            .statusCode(),
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant2))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().post("/participations")
+                            .statusCode());
+
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
         }
     }
 

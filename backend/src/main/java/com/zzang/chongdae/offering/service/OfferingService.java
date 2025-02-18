@@ -132,13 +132,13 @@ public class OfferingService {
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
         validateMeetingDate(offering.getMeetingDate());
-        OfferingEntity savedOffering = offeringRepository.save(offering);
+        OfferingEntity saved = offeringRepository.save(offering);
 
-        OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, offering, OfferingMemberRole.PROPOSER);
+        OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, saved, OfferingMemberRole.PROPOSER);
         offeringMemberRepository.save(offeringMember);
 
-        eventPublisher.publishEvent(new SaveOfferingEvent(this, savedOffering));
-        return savedOffering.getId();
+        eventPublisher.publishEvent(new SaveOfferingEvent(this, saved));
+        return saved.getId();
     }
 
     private void validateMeetingDate(LocalDateTime offeringMeetingDateTime) {
@@ -208,6 +208,6 @@ public class OfferingService {
     public OfferingMetaResponse getOfferingMetaInfo(Long offeringId) {
         OfferingEntity offering = offeringRepository.findById(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        return new OfferingMetaResponse(offering);
+        return new OfferingMetaResponse(offering, storageService.getResourceHost());
     }
 }

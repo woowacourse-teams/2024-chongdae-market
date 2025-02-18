@@ -1,8 +1,16 @@
 #!/bin/bash
+NGINX_DEFAULT_CONF=$1
+
+# parameter check
+if [ -z "$NGINX_DEFAULT_CONF" ]; then
+  echo "사용법: $0 <default.conf 이름>"
+  exit 1
+fi
+
+
 NGINX_CONTAINER_NAME="nginx"
 BLUE_CONTAINER="chongdae_backend_blue"
 GREEN_CONTAINER="chongdae_backend_green"
-NGINX_DEFAULT_CONF="default.conf"
 NGINX_CHANGED_DEFAULT_CONF="new-default.conf"
 
 get_active_container() {

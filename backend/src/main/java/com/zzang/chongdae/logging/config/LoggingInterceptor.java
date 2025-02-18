@@ -51,7 +51,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
         String identifier = UUID.randomUUID().toString();
         MemberIdentifier memberIdentifier = new MemberIdentifier(request.getCookies());
         String httpMethod = request.getMethod();
-        String uri = request.getRequestURI();
+        String uri = parseUri(request.getRequestURI(), request.getQueryString());
         String requestBody = new String(request.getInputStream().readAllBytes());
 
         CachedHttpServletResponseWrapper cachedResponse = (CachedHttpServletResponseWrapper) response;
@@ -99,5 +99,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
     private boolean isMultipart(HttpServletRequest request) {
         String contentType = request.getContentType();
         return contentType != null && contentType.toLowerCase().startsWith("multipart/");
+    }
+
+    private String parseUri(String requestUri, String queryString) {
+        if (queryString == null) {
+            return requestUri;
+        }
+        return requestUri + "?" + queryString;
     }
 }

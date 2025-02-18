@@ -1,5 +1,6 @@
 package com.zzang.chongdae.member.service;
 
+import com.zzang.chongdae.auth.config.TestAuthClientConfig;
 import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,8 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = {TestNicknameWordPickerConfig.class})
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = {TestNicknameWordPickerConfig.class,
+        TestAuthClientConfig.class})
 public class NicknameGeneratorTest {
 
     @Autowired

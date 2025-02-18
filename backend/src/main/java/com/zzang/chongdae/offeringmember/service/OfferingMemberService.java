@@ -6,7 +6,6 @@ import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
-import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
 import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
@@ -15,11 +14,8 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMembers;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipantCountResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
-import com.zzang.chongdae.offeringmember.service.dto.ProposerResponseItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -37,20 +33,17 @@ public class OfferingMemberService {
     @WriterDatabase
     @Transactional
     public Long participate(ParticipationRequest request, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(request.offeringId())
+        OfferingEntity offering = offeringRepository.findByIdWithLock(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipate(offering, member);
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT);
         OfferingMemberEntity saved = offeringMemberRepository.save(offeringMember);
-
         offering.participate();
-        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
-        offering.updateOfferingStatus(offeringStatus);
 
         eventPublisher.publishEvent(new ParticipateEvent(this, saved));
-        return offeringMember.getId();
+        return saved.getId();
     }
 
     private void validateParticipate(OfferingEntity offering, MemberEntity member) {
@@ -78,11 +71,10 @@ public class OfferingMemberService {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingAndMember(offering, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
         validateCancel(offeringMember);
-        offeringMemberRepository.delete(offeringMember);
 
+        offeringMemberRepository.delete(offeringMember);
         offering.leave();
-        OfferingStatus offeringStatus = offering.toOfferingJoinedCount().decideOfferingStatus();
-        offering.updateOfferingStatus(offeringStatus);
+
         eventPublisher.publishEvent(new CancelParticipateEvent(this, offeringMember));
     }
 
@@ -110,19 +102,9 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipants(offering, member);
 
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllWithMemberByOffering(offering);
         OfferingMembers members = new OfferingMembers(offeringMembers);
-        MemberEntity proposer = members.getProposer();
-        List<MemberEntity> participants = members.getParticipants();
-
-        ProposerResponseItem proposerResponseItem = new ProposerResponseItem(proposer);
-        List<ParticipantResponseItem> participantsResponseItem = participants.stream()
-                .map(ParticipantResponseItem::new)
-                .toList();
-        ParticipantCountResponseItem countResponseItem = new ParticipantCountResponseItem(offering);
-        Integer estimatedPrice = offering.toOfferingPrice().calculateDividedPrice();
-        return new ParticipantResponse(
-                proposerResponseItem, participantsResponseItem, countResponseItem, estimatedPrice);
+        return ParticipantResponse.from(offering, members);
     }
 
     private void validateParticipants(OfferingEntity offering, MemberEntity member) {

@@ -17,12 +17,13 @@ import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.model.Filter
 import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
-import com.zzang.chongdae.domain.repository.OfferingRepository
+import com.zzang.chongdae.domain.usecase.home.FetchFiltersUserCase
+import com.zzang.chongdae.domain.usecase.home.FetchOfferingUseCase
+import com.zzang.chongdae.domain.usecase.home.FetchOfferingsUseCase
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,8 +35,10 @@ import javax.inject.Inject
 class OfferingViewModel
     @Inject
     constructor(
-        @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        private val fetchOfferingsUseCase: FetchOfferingsUseCase,
+        private val fetchFiltersUserCase: FetchFiltersUserCase,
+        private val fetchOfferingUseCase: FetchOfferingUseCase,
         private val userPreferencesDataStore: UserPreferencesDataStore,
     ) : ViewModel(), OnFilterClickListener, OnSearchClickListener {
         private val _offerings = MutableLiveData<PagingData<Offering>>()
@@ -95,7 +98,7 @@ class OfferingViewModel
                     config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
                     pagingSourceFactory = {
                         OfferingPagingSource(
-                            offeringRepository,
+                            fetchOfferingsUseCase,
                             authRepository,
                             search.value,
                             _selectedFilter.value,
@@ -136,7 +139,7 @@ class OfferingViewModel
 
         private fun fetchFilters() {
             viewModelScope.launch {
-                when (val result = offeringRepository.fetchFilters()) {
+                when (val result = fetchFiltersUserCase()) {
                     is Result.Error -> {
                         Log.d("error", "fetchFilters: ${result.error}")
                         when (result.error) {
@@ -189,7 +192,7 @@ class OfferingViewModel
 
         fun fetchUpdatedOffering(offeringId: Long) {
             viewModelScope.launch {
-                when (val result = offeringRepository.fetchOffering(offeringId)) {
+                when (val result = fetchOfferingUseCase(offeringId)) {
                     is Result.Error -> {
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {

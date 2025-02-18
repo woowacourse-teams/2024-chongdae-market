@@ -17,6 +17,7 @@ public class OfferingFixture {
 
     private OfferingEntity createOffering(MemberEntity member,
                                           String title,
+                                          Integer totalCount,
                                           Double discountRate,
                                           OfferingStatus offeringStatus,
                                           CommentRoomStatus commentRoomStatus) {
@@ -30,10 +31,10 @@ public class OfferingFixture {
                 "meetingAddress",
                 "meetingAddressDetail",
                 "meetingAddressDong",
-                5,
+                totalCount,
                 1,
                 5000,
-                1000,
+                10_000,
                 discountRate,
                 offeringStatus,
                 commentRoomStatus
@@ -42,23 +43,35 @@ public class OfferingFixture {
     }
 
     public OfferingEntity createOffering(MemberEntity member, Double discountRate) {
-        return createOffering(member, "title", discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+        return createOffering(member, "title", 5, discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
     }
 
     public OfferingEntity createOffering(MemberEntity member, CommentRoomStatus commentRoomStatus) {
-        return createOffering(member, "title", 33.3, OfferingStatus.AVAILABLE, commentRoomStatus);
+        return createOffering(member, "title", 5, 33.3, OfferingStatus.AVAILABLE, commentRoomStatus);
     }
 
     public OfferingEntity createOffering(MemberEntity member, OfferingStatus offeringStatus) {
-        return createOffering(member, "title", 33.3, offeringStatus, CommentRoomStatus.GROUPING);
+        return createOffering(member, "title", 5, 33.3, offeringStatus, CommentRoomStatus.GROUPING);
     }
 
     public OfferingEntity createOffering(MemberEntity member) {
-        return createOffering(member, "title", 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+        return createOffering(member, "title", 5, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
     }
 
     public OfferingEntity createOffering(MemberEntity member, String title) {
-        return createOffering(member, title, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+        return createOffering(member, title, 5, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+    }
+
+    public OfferingEntity createOffering(MemberEntity member, Integer totalCount) {
+        return createOffering(member, "title", totalCount, 33.3, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
+    }
+
+    public OfferingEntity createOffering(MemberEntity member, String title, OfferingStatus offeringStatus) {
+        return createOffering(member, title, 5, 33.3, offeringStatus, CommentRoomStatus.GROUPING);
+    }
+
+    public OfferingEntity createOffering(MemberEntity member, String title, Double discountRate) {
+        return createOffering(member, title, 5, discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
     }
 
     public void deleteOffering(OfferingEntity offering) {

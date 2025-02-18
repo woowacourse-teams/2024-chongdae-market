@@ -9,4 +9,9 @@ public class FakeStorageService implements StorageService {
     public String uploadFile(MultipartFile file) {
         return "https://upload-image-url.com/";
     }
+
+    @Override
+    public String getResourceHost() {
+        return "upload-image-url.com";
+    }
 }

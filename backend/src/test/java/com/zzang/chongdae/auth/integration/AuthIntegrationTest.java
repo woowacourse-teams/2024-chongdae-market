@@ -69,7 +69,7 @@ class AuthIntegrationTest extends IntegrationTest {
         @BeforeEach
         void setUp() {
             member = memberFixture.createMember("dora");
-            BDDMockito.given(authClient.getKakaoUserInfo(any()))
+            BDDMockito.given(authClient.getUserInfo(any()))
                     .willReturn(member.getLoginId());
         }
 

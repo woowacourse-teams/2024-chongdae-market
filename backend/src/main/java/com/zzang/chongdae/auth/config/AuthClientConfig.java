@@ -1,16 +1,21 @@
 package com.zzang.chongdae.auth.config;
 
 import com.zzang.chongdae.auth.service.AuthClient;
+import com.zzang.chongdae.auth.service.client.DevAuthClient;
+import com.zzang.chongdae.auth.service.client.ProdAuthClient;
 import java.time.Duration;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 @Configuration
+@Slf4j
 public class AuthClientConfig {
 
     @Value("${auth.connect-timeout-length}")
@@ -20,8 +25,16 @@ public class AuthClientConfig {
     private Duration readTimeoutLength;
 
     @Bean
-    public AuthClient authClient() {
-        return new AuthClient(createRestClient());
+    @Profile("prod")
+    public AuthClient prodAuthClient() {
+        return new ProdAuthClient(createRestClient());
+    }
+
+    @Bean
+    @Profile({"default", "dev"})
+    public AuthClient devAuthclient() {
+        log.warn("테스트 인증 환경이 설정되었습니다. 프로덕션 환경이라면 서버 중지가 필요합니다.");
+        return new DevAuthClient(createRestClient());
     }
 
     private RestClient createRestClient() {

@@ -24,6 +24,7 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import com.zzang.chongdae.storage.service.StorageService;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final OfferingRepository offeringRepository;
     private final OfferingMemberRepository offeringMemberRepository;
+    private final StorageService storageService;
 
     @WriterDatabase
     public Long saveComment(CommentSaveRequest request, MemberEntity member) {
@@ -46,12 +48,12 @@ public class CommentService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
         CommentEntity comment = new CommentEntity(member, offering, request.content());
-        CommentEntity savedComment = commentRepository.save(comment);
+        CommentEntity saved = commentRepository.save(comment);
 
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
-        eventPublisher.publishEvent(new SaveCommentEvent(this, savedComment, offeringMembers));
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllWithMemberByOffering(offering);
+        eventPublisher.publishEvent(new SaveCommentEvent(this, saved, offeringMembers));
 
-        return savedComment.getId();
+        return saved.getId();
     }
 
     private void validateIsJoined(MemberEntity member, OfferingEntity offering) {
@@ -91,9 +93,10 @@ public class CommentService {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
         if (offeringRepository.existsById(offeringId)) {
-            return new CommentRoomInfoResponse(offeringMember.getOffering(), offeringMember.getMember());
+            return new CommentRoomInfoResponse(offeringMember.getOffering(), offeringMember.getMember(),
+                    storageService.getResourceHost());
         }
-        return new CommentRoomInfoResponse(offeringMember);
+        return new CommentRoomInfoResponse(offeringMember, storageService.getResourceHost());
     }
 
     @WriterDatabase
@@ -121,7 +124,7 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        List<CommentEntity> comments = commentRepository.findAllByOfferingOrderByCreatedAt(offering);
+        List<CommentEntity> comments = commentRepository.findAllWithMemberByOfferingOrderByCreatedAt(offering);
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();

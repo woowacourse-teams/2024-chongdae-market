@@ -9,7 +9,3 @@ annotation class AuthRepositoryQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class AuthDataSourceQualifier
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class AuthApiServiceQualifier

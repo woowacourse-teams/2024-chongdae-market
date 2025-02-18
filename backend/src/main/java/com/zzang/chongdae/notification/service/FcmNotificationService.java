@@ -5,6 +5,8 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.notification.domain.FcmToken;
+import com.zzang.chongdae.notification.domain.FcmTokens;
 import com.zzang.chongdae.notification.domain.FcmTopic;
 import com.zzang.chongdae.notification.service.message.CommentMessageManager;
 import com.zzang.chongdae.notification.service.message.OfferingMessageManager;
@@ -12,13 +14,10 @@ import com.zzang.chongdae.notification.service.message.ParticipationMessageManag
 import com.zzang.chongdae.notification.service.message.RoomStatusMessageManager;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
-import java.util.List;
 import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FcmNotificationService {
@@ -30,17 +29,17 @@ public class FcmNotificationService {
     private final ParticipationMessageManager participationMessageManager;
     private final RoomStatusMessageManager roomStatusMessageManager; // TODO: 의존성 리팩터링
 
-    public void participate(OfferingMemberEntity offeringMember) {
+    public void participate(OfferingMemberEntity offeringMember, FcmToken token) {
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
-        Message message = participationMessageManager.messageWhenParticipate(offeringMember);
+        Message message = participationMessageManager.messageWhenParticipate(offeringMember, token);
         notificationSender.send(message);
     }
 
-    public void cancelParticipation(OfferingMemberEntity offeringMember) {
+    public void cancelParticipation(OfferingMemberEntity offeringMember, MemberEntity participant, FcmToken token) {
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.unsubscribe(offeringMember.getMember(), topic);
-        Message message = participationMessageManager.messageWhenCancelParticipate(offeringMember);
+        Message message = participationMessageManager.messageWhenCancelParticipate(offeringMember, participant, token);
         notificationSender.send(message);
     }
 
@@ -50,9 +49,9 @@ public class FcmNotificationService {
     }
 
     public void saveOffering(OfferingEntity offering) {
-        Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         FcmTopic topic = FcmTopic.proposerTopic(offering);
         notificationSubscriber.subscribe(offering.getMember(), topic);
+        Message message = offeringMessageManager.messageWhenSaveOffering(offering);
         notificationSender.send(message);
     }
 
@@ -62,12 +61,11 @@ public class FcmNotificationService {
     }
 
     @Nullable
-    public BatchResponse saveComment(CommentEntity comment,
-                                     List<OfferingMemberEntity> offeringMembers) { // todo: 참여자 도메인 추출
-        MulticastMessage message = commentMessageManager.messageWhenSaveComment(comment, offeringMembers);
-        if (message == null) {
+    public BatchResponse saveComment(CommentEntity comment, FcmTokens tokens) {
+        if (tokens.isEmpty()) {
             return null;
         }
+        MulticastMessage message = commentMessageManager.messageWhenSaveComment(comment, tokens);
         return notificationSender.send(message);
     }
 

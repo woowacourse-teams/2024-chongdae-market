@@ -4,7 +4,7 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.zzang.chongdae.storage.service.AmazonS3StorageService;
+import com.zzang.chongdae.storage.service.LocalStorageService;
 import com.zzang.chongdae.storage.service.StorageService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ public class StorageConfig {
 
     @Bean
     public StorageService storageService() {
-        return new AmazonS3StorageService(amazonS3());
+        return new LocalStorageService();
     }
 
     private AmazonS3 amazonS3() {

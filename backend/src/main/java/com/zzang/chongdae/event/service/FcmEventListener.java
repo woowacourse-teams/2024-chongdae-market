@@ -1,5 +1,7 @@
 package com.zzang.chongdae.event.service;
 
+import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
+
 import com.zzang.chongdae.event.domain.CancelParticipateEvent;
 import com.zzang.chongdae.event.domain.DeleteOfferingEvent;
 import com.zzang.chongdae.event.domain.LoginEvent;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @RequiredArgsConstructor
 @Component
@@ -19,16 +22,16 @@ public class FcmEventListener {
 
     private final FcmNotificationService notificationService;
 
-    @EventListener
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleParticipateEvent(ParticipateEvent event) {
-        notificationService.participate(event.getOfferingMember());
+        notificationService.participate(event.getOfferingMember(), event.getToken());
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleCancelParticipateEvent(CancelParticipateEvent event) {
-        notificationService.cancelParticipation(event.getOfferingMember());
+        notificationService.cancelParticipation(event.getOfferingMember(), event.getParticipant(), event.getToken());
     }
 
     @EventListener
@@ -37,7 +40,7 @@ public class FcmEventListener {
         notificationService.saveOffering(event.getOffering());
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleDeleteOfferingEvent(DeleteOfferingEvent event) {
         notificationService.deleteOffering(event.getOffering());
@@ -46,16 +49,16 @@ public class FcmEventListener {
     @EventListener
     @Async
     public void handleSaveCommentEvent(SaveCommentEvent event) {
-        notificationService.saveComment(event.getComment(), event.getOfferingMembers());
+        notificationService.saveComment(event.getComment(), event.getTokens());
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleUpdateStatusEvent(UpdateStatusEvent event) {
         notificationService.updateStatus(event.getOffering());
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleLoginEvent(LoginEvent event) {
         notificationService.login(event.getMember());

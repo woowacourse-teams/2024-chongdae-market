@@ -23,9 +23,6 @@ public class JoinableOfferingStrategy extends OfferingFetchStrategy {
     }
 
     private List<OfferingEntity> fetchOfferings(Long outOfRangeId, String searchKeyword, Pageable pageable) {
-        if (searchKeyword == null) {
-            return offeringRepository.findJoinableOfferingsWithoutKeyword(outOfRangeId, pageable);
-        }
-        return offeringRepository.findJoinableOfferingsWithKeyword(outOfRangeId, searchKeyword, pageable);
+        return offeringRepository.findJoinableOfferings(outOfRangeId, searchKeyword, pageable);
     }
 }
