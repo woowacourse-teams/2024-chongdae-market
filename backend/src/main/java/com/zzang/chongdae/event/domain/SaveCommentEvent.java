@@ -13,6 +13,7 @@ public class SaveCommentEvent extends ApplicationEvent {
 
     private final CommentEntity comment;
     private final FcmTokens tokens;
+    private final List<OfferingMemberEntity> offeringMembers;
 
     public SaveCommentEvent(Object source, CommentEntity comment, List<OfferingMemberEntity> offeringMembers) {
         super(source);

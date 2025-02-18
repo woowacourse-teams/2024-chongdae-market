@@ -67,7 +67,7 @@ public class LocalStorageService implements StorageService {
                 .build(false)
                 .toString();
     }
-
+  
     @Override
     public String getResourceHost() {
         return resourceHost;
