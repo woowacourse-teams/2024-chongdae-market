@@ -14,11 +14,8 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMembers;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipantCountResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
-import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
-import com.zzang.chongdae.offeringmember.service.dto.ProposerResponseItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -105,19 +102,9 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipants(offering, member);
 
-        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllByOffering(offering);
+        List<OfferingMemberEntity> offeringMembers = offeringMemberRepository.findAllWithMemberByOffering(offering);
         OfferingMembers members = new OfferingMembers(offeringMembers);
-        MemberEntity proposer = members.getProposer();
-        List<MemberEntity> participants = members.getParticipants();
-
-        ProposerResponseItem proposerResponseItem = new ProposerResponseItem(proposer);
-        List<ParticipantResponseItem> participantsResponseItem = participants.stream()
-                .map(ParticipantResponseItem::new)
-                .toList();
-        ParticipantCountResponseItem countResponseItem = new ParticipantCountResponseItem(offering);
-        Integer estimatedPrice = offering.toOfferingPrice().calculateDividedPrice();
-        return new ParticipantResponse(
-                proposerResponseItem, participantsResponseItem, countResponseItem, estimatedPrice);
+        return ParticipantResponse.from(offering, members);
     }
 
     private void validateParticipants(OfferingEntity offering, MemberEntity member) {

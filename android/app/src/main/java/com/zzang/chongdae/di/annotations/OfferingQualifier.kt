@@ -16,8 +16,4 @@ annotation class OfferingLocalDataSourceQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class OfferingApiServiceQualifier
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
 annotation class OfferingDaoQualifier

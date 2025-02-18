@@ -12,13 +12,19 @@ public interface OfferingMemberRepository extends JpaRepository<OfferingMemberEn
 
     Boolean existsByOfferingAndMember(OfferingEntity offering, MemberEntity member);
 
-    List<OfferingMemberEntity> findAllByOffering(OfferingEntity offering);
+    @Query("""
+            SELECT om
+            FROM OfferingMemberEntity om
+                JOIN FETCH om.member
+            WHERE om.offering = :offering
+            """)
+    List<OfferingMemberEntity> findAllWithMemberByOffering(OfferingEntity offering);
 
     Optional<OfferingMemberEntity> findByOfferingAndMember(OfferingEntity offering, MemberEntity member);
 
     Optional<OfferingMemberEntity> findByOfferingIdAndMember(Long offeringId, MemberEntity member);
 
-    @Query(value = """
+    @Query("""
             SELECT om.offering.id
             FROM OfferingMemberEntity om
             WHERE om.member.id = :memberId

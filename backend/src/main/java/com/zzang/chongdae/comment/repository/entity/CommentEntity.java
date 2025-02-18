@@ -31,7 +31,7 @@ public class CommentEntity extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MemberEntity member;
 
     @NotNull

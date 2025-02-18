@@ -25,13 +25,13 @@ public class FcmEventListener {
     @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleParticipateEvent(ParticipateEvent event) {
-        notificationService.participate(event.getOfferingMember());
+        notificationService.participate(event.getOfferingMember(), event.getToken());
     }
 
     @TransactionalEventListener(phase = AFTER_COMMIT)
     @Async
     public void handleCancelParticipateEvent(CancelParticipateEvent event) {
-        notificationService.cancelParticipation(event.getOfferingMember());
+        notificationService.cancelParticipation(event.getOfferingMember(), event.getParticipant(), event.getToken());
     }
 
     @EventListener
@@ -49,7 +49,7 @@ public class FcmEventListener {
     @EventListener
     @Async
     public void handleSaveCommentEvent(SaveCommentEvent event) {
-        notificationService.saveComment(event.getComment(), event.getOfferingMembers());
+        notificationService.saveComment(event.getComment(), event.getTokens());
     }
 
     @TransactionalEventListener(phase = AFTER_COMMIT)

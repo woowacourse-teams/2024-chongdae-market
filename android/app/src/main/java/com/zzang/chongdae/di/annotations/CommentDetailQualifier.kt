@@ -9,7 +9,3 @@ annotation class CommentDetailRepositoryQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class CommentDetailDataSourceQualifier
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CommentDetailApiServiceQualifier
