@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class MemberEntity extends BaseTimeEntity {
 
     private static final String DEFAULT_FCM_TOKEN = "invalid";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -68,5 +68,9 @@ public class MemberEntity extends BaseTimeEntity {
 
     public void updateFcmTokenDefault() {
         this.fcmToken = DEFAULT_FCM_TOKEN + UUID.randomUUID();
+    }
+
+    public void updateNickName(String nickname) {
+        this.nickname = nickname;
     }
 }
