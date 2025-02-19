@@ -90,5 +90,21 @@ public class MemberIntegrationTest extends IntegrationTest {
                     .then().log().all()
                     .statusCode(400);
         }
+
+        @DisplayName("이미 존재하는 닉네임으로 변경할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_nicknameAlreadyExist() {
+            NicknameRequest request = new NicknameRequest("poke");
+
+            RestAssured.given(spec).log().all()
+                    .filter(document("chnage-nickname-fail-request-with-exist-nickname",
+                            resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/member")
+                    .then().log().all()
+                    .statusCode(409);
+        }
     }
 }
