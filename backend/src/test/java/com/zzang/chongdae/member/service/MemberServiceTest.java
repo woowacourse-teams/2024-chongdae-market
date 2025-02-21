@@ -1,7 +1,11 @@
 package com.zzang.chongdae.member.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.zzang.chongdae.auth.config.TestAuthClientConfig;
 import com.zzang.chongdae.global.domain.MemberFixture;
+import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -40,5 +44,22 @@ public class MemberServiceTest {
 
         //then
         Assertions.assertTrue(memberRepository.existsByNickname("dokipoki"));
+    }
+
+    @DisplayName("이미 존재하는 닉네임이면 변경이 되지 않는다.")
+    @Test
+    void should_notChangeNickname_when_changeNicknameAlreadyExist() {
+        // given
+        MemberEntity member = memberFixture.createMember("pokidoki");
+        MemberEntity otherMember = memberFixture.createMember("dokipoki");
+
+        // when
+        NicknameRequest request = new NicknameRequest("dokipoki");
+        assertThatThrownBy(() -> memberService.changeNickname(member, request))
+                .isInstanceOf(MarketException.class);
+        MemberEntity actual = memberRepository.findById(member.getId()).get();
+
+        //then
+        assertThat(actual.getNickname()).isEqualTo(member.getNickname());
     }
 }
