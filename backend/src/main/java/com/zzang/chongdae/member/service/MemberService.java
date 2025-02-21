@@ -30,8 +30,7 @@ public class MemberService {
                 .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         String nickname = request.nickname();
 
-        if (targetMember.getNickname().equals(nickname) &&
-                memberRepository.existsByNickname(nickname)) {
+        if (memberRepository.existsByNickname(nickname)) {
             throw new MarketException(MemberErrorCode.NICK_NAME_ALREADY_EXIST);
         }
 
