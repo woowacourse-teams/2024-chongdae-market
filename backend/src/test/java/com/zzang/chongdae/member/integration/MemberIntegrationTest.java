@@ -4,9 +4,11 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.zzang.chongdae.global.helper.ConcurrencyExecutor;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.dto.NicknameRequest;
@@ -105,6 +107,54 @@ public class MemberIntegrationTest extends IntegrationTest {
                     .when().patch("/member")
                     .then().log().all()
                     .statusCode(409);
+        }
+
+        @DisplayName("다른 사용자가 같은 닉네임으로 동시에 변경할 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_differentMemberAndSameNickname() throws InterruptedException {
+            MemberEntity poki = memberFixture.createMember("poki");
+            MemberEntity doki = memberFixture.createMember("doki");
+
+            NicknameRequest request = new NicknameRequest("pokidoki");
+            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
+            List<Integer> statusCodes = concurrencyExecutor.execute(
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(poki))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().patch("/member")
+                            .statusCode(),
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(doki))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().patch("/member")
+                            .statusCode());
+
+            assertThat(statusCodes).containsExactlyInAnyOrder(200, 409);
+        }
+
+        @DisplayName("같은 사용자가 같은 닉네임으로 동시에 변경할 경우 중복 예외가 발생한다.")
+        @Test
+        void should_throwException_when_sameMemberAndSameNickname() throws InterruptedException {
+            MemberEntity poki = memberFixture.createMember("poki");
+
+            NicknameRequest request = new NicknameRequest("pokidoki");
+            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
+            List<Integer> statusCodes = concurrencyExecutor.execute(
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(poki))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().patch("/member")
+                            .statusCode(),
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(poki))
+                            .contentType(ContentType.JSON)
+                            .body(request)
+                            .when().patch("/member")
+                            .statusCode());
+            assertThat(statusCodes).containsExactlyInAnyOrder(200, 409);
         }
     }
 }

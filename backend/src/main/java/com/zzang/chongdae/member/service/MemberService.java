@@ -10,6 +10,7 @@ import com.zzang.chongdae.member.service.dto.NicknameResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,8 @@ public class MemberService {
     @WriterDatabase
     @Transactional
     public NicknameResponse changeNickname(MemberEntity member, NicknameRequest request) {
-        MemberEntity targetMember = entityManager.merge(member);
+        MemberEntity targetMember = memberRepository.findByIdWithLock(member.getId())
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         String nickname = request.nickname();
 
         if (targetMember.getNickname().equals(nickname) &&
@@ -33,7 +35,14 @@ public class MemberService {
             throw new MarketException(MemberErrorCode.NICK_NAME_ALREADY_EXIST);
         }
 
-        targetMember.updateNickName(nickname);
+        try {
+            targetMember.updateNickName(nickname);
+            entityManager.flush();
+        } catch (ConstraintViolationException e) {
+            throw new MarketException(MemberErrorCode.NICK_NAME_ALREADY_EXIST);
+        }
+
         return new NicknameResponse(nickname);
     }
+
 }
