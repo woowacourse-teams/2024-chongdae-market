@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -51,15 +50,12 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(unique = true)
     private String fcmToken;
 
-    @Version
-    private Long version;
-
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password, String fcmToken) {
-        this(null, nickname, provider, loginId, password, fcmToken, 0L);
+        this(null, nickname, provider, loginId, password, fcmToken);
     }
 
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
-        this(null, nickname, provider, loginId, password, DEFAULT_FCM_TOKEN + UUID.randomUUID(), 0L);
+        this(null, nickname, provider, loginId, password, DEFAULT_FCM_TOKEN + UUID.randomUUID());
     }
 
     public boolean isSame(MemberEntity other) {
