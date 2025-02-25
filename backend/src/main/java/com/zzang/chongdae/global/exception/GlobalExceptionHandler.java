@@ -17,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,8 +58,8 @@ public class GlobalExceptionHandler {
                 .body(errorMessage);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorMessage> handle(DataIntegrityViolationException e) {
+    @ExceptionHandler({DataIntegrityViolationException.class, ObjectOptimisticLockingFailureException.class})
+    public ResponseEntity<ErrorMessage> handle(Exception e) {
         ErrorMessage errorMessage = new ErrorMessage("잠시후 다시 요청해주세요.");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
     }

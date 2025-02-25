@@ -130,7 +130,6 @@ public class MemberIntegrationTest extends IntegrationTest {
                             .body(request)
                             .when().patch("/member")
                             .statusCode());
-
             assertThat(statusCodes).containsExactlyInAnyOrder(200, 409);
         }
 

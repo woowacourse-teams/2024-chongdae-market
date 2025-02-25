@@ -26,7 +26,7 @@ public class MemberService {
     @Transactional
     public NicknameResponse changeNickname(MemberEntity member, NicknameRequest request) {
         String nickname = request.nickname();
-        MemberEntity targetMember = memberRepository.findByIdWithLock(member.getId())
+        MemberEntity targetMember = memberRepository.findById(member.getId())
                 .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         if (memberRepository.existsByNickname(nickname)) {
             throw new MarketException(MemberErrorCode.NICK_NAME_ALREADY_EXIST);
