@@ -20,6 +20,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     boolean existsByIdAndFcmToken(Long id, String fcmToken);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT m FROM MemberEntity m WHERE m.id = 1 or m.nickname = :nickname")
-    Optional<MemberEntity> findByNicknameWithLock(String nickname);
+    @Query("SELECT m FROM MemberEntity m WHERE m.id = :id")
+    Optional<MemberEntity> findByIdWithLock(Long id);
 }
