@@ -7,8 +7,6 @@ import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.dto.NicknameRequest;
 import com.zzang.chongdae.member.service.dto.NicknameResponse;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private final MemberRepository memberRepository;
 
@@ -34,5 +29,4 @@ public class MemberService {
         targetMember.updateNickName(nickname);
         return new NicknameResponse(nickname);
     }
-
 }
