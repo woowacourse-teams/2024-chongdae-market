@@ -26,6 +26,7 @@ swiperefreshlayout = "1.1.0"
 datastore = "1.0.0"
 junit-jupiter = "5.10.2"
 shimmer = "0.5.0"
+composeBom = "2025.01.01"
 #assert-core = "3.25.3"
 #core-testing = "2.1.0"
 #mannodermaus = "1.3.0"
@@ -105,6 +106,14 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 # Skeleton-UI
 shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "shimmer" }
+
+# compose
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

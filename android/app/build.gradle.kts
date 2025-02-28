@@ -65,6 +65,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.2"
+    }
+
     kotlinOptions {
         jvmTarget = "17"
     }
@@ -76,6 +80,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     dataBinding {
@@ -173,6 +178,14 @@ dependencies {
 
     // Skeleton-UI
     implementation(libs.shimmer)
+
+    // compose
+    implementation(libs.androidx.material3)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.ui.tooling)
 }
 
 kapt {
