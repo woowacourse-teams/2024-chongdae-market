@@ -10,6 +10,7 @@ plugins {
     kotlin("plugin.serialization") version "2.0.0"
     id("com.google.firebase.crashlytics")
     id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
