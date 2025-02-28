@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,7 +51,7 @@ internal fun OfferingSearchBar(
         value = state.text,
         onValueChange = { state.updateText(it) },
         textStyle = TextStyle(
-            fontSize = with(density) { 15.dp.toSp()},
+            fontSize = with(density) { 15.dp.toSp() },
             fontFamily = FontFamily(
                 Font(
                     R.font.suit_medium,
@@ -61,6 +62,11 @@ internal fun OfferingSearchBar(
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Text,
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onSearchClick()
+            }
         ),
     ) { innerTextField ->
         Column {
@@ -81,7 +87,7 @@ internal fun OfferingSearchBar(
                             text = state.placeholder ?: return@Box,
                             maxLines = 1,
                             style = TextStyle(
-                                fontSize = with(density) { 15.dp.toSp()},
+                                fontSize = with(density) { 15.dp.toSp() },
                                 color = Color.Gray,
                                 fontFamily = FontFamily(
                                     Font(
