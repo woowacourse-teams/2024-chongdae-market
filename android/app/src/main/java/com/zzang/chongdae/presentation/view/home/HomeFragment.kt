@@ -1,39 +1,28 @@
 package com.zzang.chongdae.presentation.view.home
 
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
+import androidx.compose.material3.MaterialTheme
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentHomeBinding
 import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.home.adapter.OfferingAdapter
+import com.zzang.chongdae.presentation.view.home.component.HomeScreen
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.main.MainActivity
 import com.zzang.chongdae.presentation.view.offeringdetail.OfferingDetailFragment
 import com.zzang.chongdae.presentation.view.write.OfferingWriteOptionalFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnOfferingClickListener {
@@ -82,21 +71,21 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun setOnCheckboxListener() {
-        binding.cbJoinable.setOnClickListener {
-            handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
-        }
-
-        binding.cbImminent.setOnClickListener {
-            handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
-        }
-
-        binding.cbHighDiscount.setOnClickListener {
-            handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
-        }
-
-        viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
-            updateCheckBoxStates(selectedFilter)
-        }
+//        binding.cbJoinable.setOnClickListener {
+//            handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
+//        }
+//
+//        binding.cbImminent.setOnClickListener {
+//            handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
+//        }
+//
+//        binding.cbHighDiscount.setOnClickListener {
+//            handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
+//        }
+//
+//        viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
+//            updateCheckBoxStates(selectedFilter)
+//        }
 
         viewModel.error.observe(viewLifecycleOwner) { errMsgId ->
             showToast(errMsgId)
@@ -111,9 +100,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun updateCheckBoxStates(selectedFilterName: String?) {
-        binding.cbJoinable.isChecked = selectedFilterName == FilterName.JOINABLE.name
-        binding.cbImminent.isChecked = selectedFilterName == FilterName.IMMINENT.name
-        binding.cbHighDiscount.isChecked = selectedFilterName == FilterName.HIGH_DISCOUNT.name
+//        binding.cbJoinable.isChecked = selectedFilterName == FilterName.JOINABLE.name
+//        binding.cbImminent.isChecked = selectedFilterName == FilterName.IMMINENT.name
+//        binding.cbHighDiscount.isChecked = selectedFilterName == FilterName.HIGH_DISCOUNT.name
     }
 
     private fun initFragmentResultListener() {
@@ -137,14 +126,14 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun initSearchListener() {
-        binding.etSearch.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-                viewModel.onClickSearchButton()
-                true
-            } else {
-                false
-            }
-        }
+//        binding.etSearch.setOnEditorActionListener { _, actionId, event ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+//                viewModel.onClickSearchButton()
+//                true
+//            } else {
+//                false
+//            }
+//        }
     }
 
     override fun onResume() {
@@ -168,63 +157,68 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
+        binding.composeView.setContent {
+            MaterialTheme {
+                HomeScreen()
+            }
+        }
     }
 
     private fun initAdapter() {
-        offeringAdapter = OfferingAdapter(this)
-        offeringAdapter.addLoadStateListener {
-            if (it.append.endOfPaginationReached) {
-                binding.tvEmptyItem.isVisible = isItemEmpty()
-            } else {
-                binding.tvEmptyItem.isVisible = false
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                offeringAdapter.loadStateFlow.collect { loadState ->
-                    binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
-                }
-            }
-        }
-        binding.rvOfferings.adapter = offeringAdapter
-        binding.rvOfferings.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-            ),
-        )
+//        offeringAdapter = OfferingAdapter(this)
+//        offeringAdapter.addLoadStateListener {
+//            if (it.append.endOfPaginationReached) {
+//                binding.tvEmptyItem.isVisible = isItemEmpty()
+//            } else {
+//                binding.tvEmptyItem.isVisible = false
+//            }
+//        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                offeringAdapter.loadStateFlow.collect { loadState ->
+//                    binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
+//                }
+//            }
+//        }
+//        binding.rvOfferings.adapter = offeringAdapter
+//        binding.rvOfferings.addItemDecoration(
+//            DividerItemDecoration(
+//                requireContext(),
+//                LinearLayoutManager.VERTICAL,
+//            ),
+//        )
     }
 
-    private fun isItemEmpty() = offeringAdapter.itemCount == 0
+//    private fun isItemEmpty() = offeringAdapter.itemCount == 0
 
     private fun setUpOfferingsObserve() {
-        viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
-            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
-        }
-
-        viewModel.offerings.observe(viewLifecycleOwner) {
-            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
-        }
-
-        viewModel.searchEvent.observe(viewLifecycleOwner) {
-            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
-            offeringAdapter.setSearchKeyword(it)
-        }
-
-        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
-            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
-            firebaseAnalyticsManager.logSelectContentEvent(
-                id = "filter_offerings_event",
-                name = "filter_offerings_event",
-                contentType = "checkbox",
-            )
-        }
-
-        viewModel.updatedOffering.observe(viewLifecycleOwner) {
-            offeringAdapter.addUpdatedItem(it.toList())
-        }
-        viewModel.updatedOffering.getValue()?.toList()
-            ?.let { offeringAdapter.addUpdatedItem(it) }
+//        viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
+//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+//        }
+//
+//        viewModel.offerings.observe(viewLifecycleOwner) {
+//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+//        }
+//
+//        viewModel.searchEvent.observe(viewLifecycleOwner) {
+//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+//            offeringAdapter.setSearchKeyword(it)
+//        }
+//
+//        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
+//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+//            firebaseAnalyticsManager.logSelectContentEvent(
+//                id = "filter_offerings_event",
+//                name = "filter_offerings_event",
+//                contentType = "checkbox",
+//            )
+//        }
+//
+//        viewModel.updatedOffering.observe(viewLifecycleOwner) {
+//            offeringAdapter.addUpdatedItem(it.toList())
+//        }
+//        viewModel.updatedOffering.getValue()?.toList()
+//            ?.let { offeringAdapter.addUpdatedItem(it) }
 
         viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {
             LoginActivity.startActivity(requireContext())
@@ -247,9 +241,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun navigateToOfferingWriteFragment() {
-        binding.fabCreateOffering.setDebouncedOnClickListener {
-            findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
-        }
+//        binding.fabCreateOffering.setDebouncedOnClickListener {
+//            findNavController().navigate(R.id.action_home_fragment_to_offering_write_fragment)
+//        }
     }
 
     private fun showToast(
