@@ -317,10 +317,14 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("proposer.nickname").description("공모 작성자 닉네임"),
+                fieldWithPath("proposer.count").description("공모 작성자 참여 개수"),
+                fieldWithPath("proposer.price").description("공모 작성자 지불할 금액"),
                 fieldWithPath("participants[].nickname").description("공모 참여자 닉네임"),
+                fieldWithPath("participants[].count").description("공모 참여자 참여 개수"),
+                fieldWithPath("participants[].price").description("공모 참여자 지불할 금액"),
                 fieldWithPath("count.currentCount").description("공모 참여자 현재원(작성자 + 참여자)"),
                 fieldWithPath("count.totalCount").description("공모 참여자 총원"),
-                fieldWithPath("price").description("공모 참여자 예상 정산 가격")
+                fieldWithPath("price").description("공모 참여자 예상 정산 가격 - 현재는 불필요하지만 이전 버전 앱을 위해 남겨두었습니다.")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여자 목록 조회")
