@@ -131,14 +131,20 @@ public class OfferingService {
     @WriterDatabase
     public Long saveOffering(OfferingSaveRequest request, MemberEntity member) {
         OfferingEntity offering = request.toEntity(member);
-        validateMeetingDate(offering.getMeetingDate());
+        validateOffering(request, offering);
         OfferingEntity saved = offeringRepository.save(offering);
 
-        OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, saved, OfferingMemberRole.PROPOSER);
+        OfferingMemberEntity offeringMember = new OfferingMemberEntity(member, saved, OfferingMemberRole.PROPOSER,
+                request.myCount());
         offeringMemberRepository.save(offeringMember);
 
         eventPublisher.publishEvent(new SaveOfferingEvent(this, saved));
         return saved.getId();
+    }
+
+    private void validateOffering(OfferingSaveRequest request, OfferingEntity offering) {
+        validateMeetingDate(offering.getMeetingDate());
+        validateCount(request.myCount(), request.totalCount());
     }
 
     private void validateMeetingDate(LocalDateTime offeringMeetingDateTime) {
@@ -146,6 +152,12 @@ public class OfferingService {
         LocalDate targetDate = offeringMeetingDateTime.toLocalDate();
         if (targetDate.isBefore(thresholdDate)) {
             throw new MarketException(OfferingErrorCode.CANNOT_MEETING_DATE_BEFORE_THAN_TODAY);
+        }
+    }
+
+    private void validateCount(Integer myCount, Integer totalCount) {
+        if (myCount != null && myCount >= totalCount) {
+            throw new MarketException(OfferingErrorCode.INVALID_MY_COUNT);
         }
     }
 

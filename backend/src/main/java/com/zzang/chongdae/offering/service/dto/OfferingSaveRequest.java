@@ -9,6 +9,7 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public record OfferingSaveRequest(@NotBlank
                                   String title,
@@ -37,14 +38,16 @@ public record OfferingSaveRequest(@NotBlank
                                   LocalDateTime meetingDate,
 
                                   @NotNull
-                                  String description) {
+                                  String description,
+
+                                  Integer myCount) {
 
     public OfferingEntity toEntity(MemberEntity member) {
         OfferingPrice offeringPrice = new OfferingPrice(totalCount, totalPrice, originPrice);
         Double discountRate = offeringPrice.calculateDiscountRate();
 
         return new OfferingEntity(member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
-                meetingAddressDetail, meetingAddressDong, totalCount, 1,
+                meetingAddressDetail, meetingAddressDong, totalCount, Objects.requireNonNullElse(myCount, 1),
                 totalPrice, originPrice, discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
     }
 }
