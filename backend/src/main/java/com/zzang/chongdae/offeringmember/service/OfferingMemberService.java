@@ -35,20 +35,21 @@ public class OfferingMemberService {
     public Long participate(ParticipationRequest request, MemberEntity member) {
         OfferingEntity offering = offeringRepository.findByIdWithLock(request.offeringId())
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        validateParticipate(offering, member);
+        validateParticipate(offering, member, request.participationCount());
 
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
-                member, offering, OfferingMemberRole.PARTICIPANT);
+                member, offering, OfferingMemberRole.PARTICIPANT, request.participationCount());
         OfferingMemberEntity saved = offeringMemberRepository.save(offeringMember);
-        offering.participate();
+        offering.participate(request.participationCount());
 
         eventPublisher.publishEvent(new ParticipateEvent(this, saved));
         return saved.getId();
     }
 
-    private void validateParticipate(OfferingEntity offering, MemberEntity member) {
+    private void validateParticipate(OfferingEntity offering, MemberEntity member, int participationCount) {
         validateClosed(offering);
         validateDuplicate(offering, member);
+        validateParticipationCount(offering, participationCount);
     }
 
     private void validateClosed(OfferingEntity offering) {
@@ -60,6 +61,12 @@ public class OfferingMemberService {
     private void validateDuplicate(OfferingEntity offering, MemberEntity member) {
         if (offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
             throw new MarketException(OfferingMemberErrorCode.DUPLICATED);
+        }
+    }
+
+    private void validateParticipationCount(OfferingEntity offering, int participationCount) {
+        if (offering.getCurrentCount() + participationCount > offering.getTotalCount()) {
+            throw new MarketException(OfferingMemberErrorCode.INVALID_PARTICIPATION_COUNT);
         }
     }
 

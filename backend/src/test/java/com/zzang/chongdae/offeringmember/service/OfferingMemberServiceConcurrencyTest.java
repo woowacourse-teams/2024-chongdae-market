@@ -26,7 +26,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
         offeringMemberFixture.createProposer(proposer, offering);
 
         // when
-        ParticipationRequest request = new ParticipationRequest(offering.getId());
+        ParticipationRequest request = new ParticipationRequest(offering.getId(), 1);
         MemberEntity participant = memberFixture.createMember("whoever");
 
         ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
@@ -47,7 +47,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
         offeringMemberFixture.createProposer(proposer, offering);
 
         // when
-        ParticipationRequest request = new ParticipationRequest(offering.getId());
+        ParticipationRequest request = new ParticipationRequest(offering.getId(), 1);
         MemberEntity participant1 = memberFixture.createMember("ever1");
         MemberEntity participant2 = memberFixture.createMember("ever2");
 

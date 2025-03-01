@@ -18,7 +18,9 @@ public enum OfferingMemberErrorCode implements ErrorResponse {
     PROPOSER_NOT_FOUND(BAD_REQUEST, "총대를 찾을 수 없습니다."),
     NOT_FOUND(BAD_REQUEST, "해당 공모의 총대 혹은 참여자가 아닙니다."),
     CANNOT_CANCEL_PROPOSER(BAD_REQUEST, "총대는 참여를 취소할 수 없습니다."),
-    CANNOT_CANCEL_IN_PROGRESS(BAD_REQUEST, "진행중인 공모는 참여를 취소할 수 없습니다.");
+    CANNOT_CANCEL_IN_PROGRESS(BAD_REQUEST, "진행중인 공모는 참여를 취소할 수 없습니다."),
+    INVALID_PARTICIPATION_COUNT(BAD_REQUEST, "총 수량을 넘어서 참여할 수 없습니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;

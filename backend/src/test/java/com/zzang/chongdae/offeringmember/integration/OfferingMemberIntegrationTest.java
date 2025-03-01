@@ -31,7 +31,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
     class Participate {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("offeringId").description("공모 id (필수)")
+                fieldWithPath("offeringId").description("공모 id (필수)"),
+                fieldWithPath("participationCount").description("구매할 물품 개수 (필수)")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여")
@@ -59,11 +60,12 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             offeringMemberFixture.createProposer(proposer, offering);
         }
 
-        @DisplayName("게시된 공모에 참여할 수 있다")
+        @DisplayName("게시된 공모에 참여할 수 있다 - 물품 한개")
         @Test
         void should_participateSuccess() {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-success", resource(successSnippets)))
@@ -75,11 +77,46 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .statusCode(201);
         }
 
+        @DisplayName("게시된 공모에 참여할 수 있다 - 물품 여러개")
+        @Test
+        void should_participateSuccess_when_givenMoreThanOne() {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId(),
+                    3
+            );
+            RestAssured.given(spec).log().all()
+                    .filter(document("participate-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(201);
+        }
+
+        @DisplayName("총 수량을 넘은 개수만큼 요청한 경우 참여할 수 없다.")
+        @Test
+        void should_throwException_when_givenExceededCount() {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId(),
+                    6
+            );
+            RestAssured.given(spec).log().all()
+                    .filter(document("participate-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
         @DisplayName("공모자는 본인이 만든 공모에 참여할 수 없다")
         @Test
         void should_throwException_when_givenProposerParticipate() {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-my-offering", resource(failSnippets)))
@@ -95,7 +132,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_invalidOffering() {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId() + 100
+                    offering.getId() + 100,
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-invalid-offering", resource(failSnippets)))
@@ -111,7 +149,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_emptyValue() {
             ParticipationRequest request = new ParticipationRequest(
-                    null
+                    null,
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-request-with-null", resource(failSnippets)))
@@ -127,7 +166,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_sameMemberAndSameOffering() throws InterruptedException {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
 
             ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
@@ -150,7 +190,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             offeringMemberFixture.createProposer(proposer, offering);
 
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
             MemberEntity participant1 = memberFixture.createMember("ever1");
             MemberEntity participant2 = memberFixture.createMember("ever2");

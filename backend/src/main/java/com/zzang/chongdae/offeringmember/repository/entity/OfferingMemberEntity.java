@@ -54,6 +54,10 @@ public class OfferingMemberEntity extends BaseTimeEntity {
         this(null, member, offering, role, DEFAULT_PARTICIPATION_COUNT);
     }
 
+    public OfferingMemberEntity(MemberEntity member, OfferingEntity offering, OfferingMemberRole role, Integer count) {
+        this(null, member, offering, role, count);
+    }
+
     public boolean isProposer() {
         return this.role.isProposer();
     }
