@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -27,6 +28,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "offering_member")
 @Entity
 public class OfferingMemberEntity extends BaseTimeEntity {
+
+    private static final int DEFAULT_PARTICIPATION_COUNT = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +46,12 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private OfferingMemberRole role;
 
+    @NotNull
+    @Positive
+    private Integer participationCount;
+
     public OfferingMemberEntity(MemberEntity member, OfferingEntity offering, OfferingMemberRole role) {
-        this(null, member, offering, role);
+        this(null, member, offering, role, DEFAULT_PARTICIPATION_COUNT);
     }
 
     public boolean isProposer() {
