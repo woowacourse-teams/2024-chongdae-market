@@ -80,7 +80,7 @@ public class OfferingMemberService {
         validateCancel(offeringMember);
 
         offeringMemberRepository.delete(offeringMember);
-        offering.leave();
+        offering.leave(offeringMember.getParticipationCount());
 
         eventPublisher.publishEvent(new CancelParticipateEvent(this, offeringMember));
     }

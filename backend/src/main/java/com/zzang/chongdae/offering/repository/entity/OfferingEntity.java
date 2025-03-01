@@ -124,8 +124,8 @@ public class OfferingEntity extends BaseTimeEntity {
         updateOfferingStatus(offeringStatus);
     }
 
-    public void leave() {
-        currentCount--;
+    public void leave(int participationCount) {
+        currentCount -= participationCount;
         OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
         updateOfferingStatus(offeringStatus);
     }
