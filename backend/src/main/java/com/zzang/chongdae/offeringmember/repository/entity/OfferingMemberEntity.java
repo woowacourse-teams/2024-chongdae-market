@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -52,7 +51,7 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     private Integer participationCount = DEFAULT_PARTICIPATION_COUNT;
 
     public OfferingMemberEntity(MemberEntity member, OfferingEntity offering, OfferingMemberRole role, Integer count) {
-        this(null, member, offering, role, Objects.requireNonNullElse(count, DEFAULT_PARTICIPATION_COUNT));
+        this(null, member, offering, role, count);
     }
 
     public boolean isProposer() {

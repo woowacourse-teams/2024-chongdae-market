@@ -50,4 +50,9 @@ public record OfferingSaveRequest(@NotBlank
                 meetingAddressDetail, meetingAddressDong, totalCount, Objects.requireNonNullElse(myCount, 1),
                 totalPrice, originPrice, discountRate, OfferingStatus.AVAILABLE, CommentRoomStatus.GROUPING);
     }
+
+    @Override
+    public Integer myCount() {
+        return Objects.requireNonNullElse(myCount, 1);
+    }
 }

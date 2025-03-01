@@ -1,12 +1,15 @@
 package com.zzang.chongdae.offeringmember.service.dto;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import java.util.Objects;
 
 public record ParticipationRequest(@NotNull
                                    Long offeringId,
 
-                                   @NotNull
-                                   @Positive
                                    Integer participationCount) {
+
+    @Override
+    public Integer participationCount() {
+        return Objects.requireNonNullElse(participationCount, 1);
+    }
 }

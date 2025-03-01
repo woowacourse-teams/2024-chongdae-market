@@ -32,7 +32,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
 
         List<FieldDescriptor> requestDescriptors = List.of(
                 fieldWithPath("offeringId").description("공모 id (필수)"),
-                fieldWithPath("participationCount").description("구매할 물품 개수 (필수)")
+                fieldWithPath("participationCount").description("구매할 물품 개수")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여")
@@ -86,6 +86,22 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(201);
+        }
+
+        @DisplayName("총대 구매 개수를 요청하지 않은 경우 성공적으로 수행한다 - 이전 버전 고려")
+        @Test
+        void should_participateSuccess_when_myCountNull() {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId(),
+                    null
+            );
+            RestAssured.given().log().all()
                     .cookies(cookieProvider.createCookiesWithMember(participant))
                     .contentType(ContentType.JSON)
                     .body(request)
