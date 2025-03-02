@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AuthRepository extends JpaRepository<AuthEntity, Long> {
 
     Optional<AuthEntity> findByMemberIdAndDeviceId(Long memberId, String deviceId);
+
+    boolean existsByMemberIdAndDeviceId(Long memberId, String deviceId);
 }

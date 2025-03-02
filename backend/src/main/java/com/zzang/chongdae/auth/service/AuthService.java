@@ -34,7 +34,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
     private final AuthClient authClient;
-    private final RefreshTokenValidator refreshTokenValidator;
+    private final AuthTokenManager authTokenManager;
 
     @WriterDatabase
     @Transactional
@@ -61,20 +61,13 @@ public class AuthService {
 
     private AuthInfoDto login(MemberEntity member, String fcmToken) {
         AuthMemberDto authMember = new AuthMemberDto(member);
-        String deviceId = UUID.randomUUID().toString();
         Long memberId = member.getId();
-        AuthTokenDto authToken = createAuthToken(memberId, deviceId);
-        AuthEntity auth = new AuthEntity(memberId, deviceId, authToken.refreshToken());
-        authRepository.save(auth);
+        AuthTokenDto authToken = authTokenManager.createToken(memberId);
         checkFcmToken(member, fcmToken);
         eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);
     }
 
-    private AuthTokenDto createAuthToken(Long memberId, String deviceId) {
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
-        return authToken;
-    }
 
     private void checkFcmToken(MemberEntity member, String fcmToken) {
         if (fcmToken == null || fcmToken.isEmpty()) {
@@ -92,14 +85,15 @@ public class AuthService {
     public AuthTokenDto refresh(String refreshToken) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
         String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
+        if (deviceId == null) {
+            return authTokenManager.refreshLegacyToken(memberId, deviceId, refreshToken);
+        }
         AuthEntity authEntity = authRepository.findByMemberIdAndDeviceId(memberId, deviceId)
                 .orElseThrow(() -> new MarketException(AuthErrorCode.EXPIRED_REFRESH_TOKEN));
-        if (!refreshTokenValidator.isValid(authEntity, refreshToken)) {
+        if (!authTokenManager.isValid(authEntity, refreshToken)) {
             throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
         }
-        AuthTokenDto authToken = createAuthToken(memberId, deviceId);
-        authEntity.refresh(authToken.refreshToken());
-        return authToken;
+        return authTokenManager.refresh(authEntity, memberId, deviceId);
     }
 
     public MemberEntity findMemberByAccessToken(String token) {
