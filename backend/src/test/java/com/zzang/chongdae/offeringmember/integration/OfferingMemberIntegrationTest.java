@@ -229,6 +229,37 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
 
             assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
         }
+
+        @DisplayName("두 참여자가 한 공모에 동시에 참여 할 때 총 개수가 넘을 경우 한 참여자만 참여할 수 있다.")
+        @Test
+        void should_preventConcurrentParticipate() throws InterruptedException {
+            ParticipationRequest request1 = new ParticipationRequest(
+                    offering.getId(),
+                    3
+            );
+            ParticipationRequest request2 = new ParticipationRequest(
+                    offering.getId(),
+                    3
+            );
+            MemberEntity participant1 = memberFixture.createMember("whatever");
+            MemberEntity participant2 = memberFixture.createMember("however");
+
+            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
+            List<Integer> statusCodes = concurrencyExecutor.execute(
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant1))
+                            .contentType(ContentType.JSON)
+                            .body(request1)
+                            .when().post("/participations")
+                            .statusCode(),
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant2))
+                            .contentType(ContentType.JSON)
+                            .body(request2)
+                            .when().post("/participations")
+                            .statusCode());
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
+        }
     }
 
     @DisplayName("공모 참여 취소")
