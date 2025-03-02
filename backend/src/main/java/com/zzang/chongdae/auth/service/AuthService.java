@@ -1,5 +1,6 @@
 package com.zzang.chongdae.auth.service;
 
+import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.repository.AuthRepository;
 import com.zzang.chongdae.auth.repository.entity.AuthEntity;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
@@ -33,6 +34,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
     private final AuthClient authClient;
+    private final RefreshTokenValidator refreshTokenValidator;
 
     @WriterDatabase
     @Transactional
@@ -60,12 +62,18 @@ public class AuthService {
     private AuthInfoDto login(MemberEntity member, String fcmToken) {
         AuthMemberDto authMember = new AuthMemberDto(member);
         String deviceId = UUID.randomUUID().toString();
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
-        AuthEntity auth = new AuthEntity(member.getId(), deviceId, authToken.refreshToken());
+        Long memberId = member.getId();
+        AuthTokenDto authToken = createAuthToken(memberId, deviceId);
+        AuthEntity auth = new AuthEntity(memberId, deviceId, authToken.refreshToken());
         authRepository.save(auth);
         checkFcmToken(member, fcmToken);
         eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);
+    }
+
+    private AuthTokenDto createAuthToken(Long memberId, String deviceId) {
+        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
+        return authToken;
     }
 
     private void checkFcmToken(MemberEntity member, String fcmToken) {
@@ -79,19 +87,19 @@ public class AuthService {
         }
     }
 
+    @WriterDatabase
+    @Transactional
     public AuthTokenDto refresh(String refreshToken) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
         String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
-
-        // TODO: check reuse token
-        if (deviceId == null) { // TODO: support legacy request
-            // TODO: save null device for check reuse
-            // TODO: create new device Id
-            deviceId = UUID.randomUUID().toString();
+        AuthEntity authEntity = authRepository.findByMemberIdAndDeviceId(memberId, deviceId)
+                .orElseThrow(() -> new MarketException(AuthErrorCode.EXPIRED_REFRESH_TOKEN));
+        if (!refreshTokenValidator.isValid(authEntity, refreshToken)) {
+            throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
         }
-        AuthTokenDto tokens = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
-
-        return tokens;
+        AuthTokenDto authToken = createAuthToken(memberId, deviceId);
+        authEntity.refresh(authToken.refreshToken());
+        return authToken;
     }
 
     public MemberEntity findMemberByAccessToken(String token) {

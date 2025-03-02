@@ -40,4 +40,8 @@ public class AuthEntity extends BaseTimeEntity {
     public boolean isValid(String refreshToken) {
         return this.refreshToken.equals(refreshToken);
     }
+
+    public void refresh(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
