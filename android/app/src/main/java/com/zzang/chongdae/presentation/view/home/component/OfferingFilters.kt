@@ -37,7 +37,7 @@ import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.FilterType
 
 @Composable
-fun OfferingFilters(
+internal fun OfferingFilters(
     joinableFilter: Filter,
     imminentFilter: Filter,
     highDiscountFilter: Filter,
