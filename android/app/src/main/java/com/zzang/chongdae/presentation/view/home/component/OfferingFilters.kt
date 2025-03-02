@@ -38,27 +38,15 @@ import com.zzang.chongdae.domain.model.FilterType
 
 @Composable
 internal fun OfferingFilters(
-    joinableFilter: Filter,
-    imminentFilter: Filter,
-    highDiscountFilter: Filter,
-    handleCheckBoxSelection: (
-        FilterName,
-        Boolean,
-    ) -> Unit,
+    selectedFilter: Filter?,
+    filters: List<Filter>,
+    onFilterClick: (Filter) -> Unit,
 ) {
-    var selectedFilter by rememberSaveable { mutableStateOf<Filter?>(null) }
-    val onFilterClick: (Filter) -> Unit = {
-        if (selectedFilter != it) selectedFilter = it
-        else selectedFilter = null
-        handleCheckBoxSelection(it.name, selectedFilter == it)
-    }
-
     Row {
-        OfferingFilter(joinableFilter, selectedFilter = selectedFilter, onFilterClick)
-        Spacer(modifier = Modifier.width(10.dp))
-        OfferingFilter(imminentFilter, selectedFilter = selectedFilter, onFilterClick)
-        Spacer(modifier = Modifier.width(10.dp))
-        OfferingFilter(highDiscountFilter, selectedFilter = selectedFilter, onFilterClick)
+        for (filter in filters) {
+            OfferingFilter(filter, selectedFilter, onFilterClick)
+            Spacer(modifier = Modifier.width(10.dp))
+        }
     }
 }
 
@@ -139,9 +127,18 @@ private fun OfferingFilterPreview() {
 @Preview(showSystemUi = true)
 @Composable
 private fun OfferingFiltersPreview() {
-    OfferingFilters(
+    var selectedFilter by rememberSaveable { mutableStateOf<Filter?>(null) }
+    val onFilterClick: (Filter) -> Unit = {
+        if (selectedFilter != it) selectedFilter = it
+        else selectedFilter = null
+    }
+    val filters = listOf(
         Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
         Filter(FilterName.IMMINENT, "마감임박만", FilterType.VISIBLE),
         Filter(FilterName.HIGH_DISCOUNT, "높은할인율순", FilterType.VISIBLE)
-    ) { _, _ -> }
+    )
+    OfferingFilters(
+        selectedFilter = selectedFilter,
+        filters = filters
+    ) { onFilterClick(it) }
 }
