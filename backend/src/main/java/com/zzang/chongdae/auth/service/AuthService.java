@@ -1,5 +1,7 @@
 package com.zzang.chongdae.auth.service;
 
+import com.zzang.chongdae.auth.repository.AuthRepository;
+import com.zzang.chongdae.auth.repository.entity.AuthEntity;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
@@ -26,6 +28,7 @@ public class AuthService {
 
     private final ApplicationEventPublisher eventPublisher;
     private final MemberRepository memberRepository;
+    private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
@@ -58,6 +61,8 @@ public class AuthService {
         AuthMemberDto authMember = new AuthMemberDto(member);
         String deviceId = UUID.randomUUID().toString();
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
+        AuthEntity auth = new AuthEntity(member.getId(), deviceId, authToken.refreshToken());
+        authRepository.save(auth);
         checkFcmToken(member, fcmToken);
         eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);
