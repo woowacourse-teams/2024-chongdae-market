@@ -694,9 +694,9 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .statusCode(400);
         }
 
-        @DisplayName("총대가 가질 개수 필드를 요청하지 않는 경우 정상적으로 수행된다. -- 이전 버전 고려 테스트")
+        @DisplayName("총대가 가질 개수를 명시하지 않은 경우 1개로 설정하여 수행한다.")
         @Test
-        void should_throwException_when_emptyMyCount() {
+        void should_createOffering_when_emptyMyCount() {
             OfferingSaveRequest request = new OfferingSaveRequest(
                     "공모 제목",
                     "www.naver.com",

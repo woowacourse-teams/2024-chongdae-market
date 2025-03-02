@@ -94,7 +94,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .statusCode(201);
         }
 
-        @DisplayName("총대 구매 개수를 요청하지 않은 경우 성공적으로 수행한다 - 이전 버전 고려")
+        @DisplayName("구매 개수를 명시하지 않은 경우 1개로 설정하여 수행한다.")
         @Test
         void should_participateSuccess_when_myCountNull() {
             ParticipationRequest request = new ParticipationRequest(
@@ -118,7 +118,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     6
             );
             RestAssured.given(spec).log().all()
-                    .filter(document("participate-success", resource(successSnippets)))
+                    .filter(document("participate-fail-exceeded-count", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(participant))
                     .contentType(ContentType.JSON)
                     .body(request)
