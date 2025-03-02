@@ -36,14 +36,23 @@ public class JwtTokenProvider {
         this.clock = clock;
     }
 
-    public AuthTokenDto createAuthToken(String payload) {
-        return new AuthTokenDto(createToken(payload, accessSecretKey, accessTokenExpired),
-                createToken(payload, refreshSecretKey, refreshTokenExpired));
+    public AuthTokenDto createAuthToken(String payload, String deviceId) {
+        return new AuthTokenDto(createAccessToken(payload, accessSecretKey, accessTokenExpired),
+                createRefreshToken(payload, refreshSecretKey, refreshTokenExpired, deviceId));
     }
 
-    private String createToken(String payload, String secretKey, Duration expired) {
+    private String createAccessToken(String payload, String secretKey, Duration expired) {
         return Jwts.builder()
                 .setSubject(payload)
+                .setExpiration(calculateExpiredAt(expired))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+
+    private String createRefreshToken(String payload, String secretKey, Duration expired, String deviceId) {
+        return Jwts.builder()
+                .setSubject(payload)
+                .setId(deviceId)
                 .setExpiration(calculateExpiredAt(expired))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
@@ -84,6 +93,10 @@ public class JwtTokenProvider {
     public Long getMemberIdByRefreshToken(String token) {
         String memberId = getClaimsRefreshToken(token, refreshSecretKey).getSubject();
         return Long.valueOf(memberId);
+    }
+
+    public String getDeviceIdByRefreshToken(String token) {
+        return getClaimsRefreshToken(token, refreshSecretKey).getId();
     }
 
     private Claims getClaimsRefreshToken(String token, String refreshSecretKey) {

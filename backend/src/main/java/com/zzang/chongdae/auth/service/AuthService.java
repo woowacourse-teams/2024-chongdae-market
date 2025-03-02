@@ -56,7 +56,8 @@ public class AuthService {
 
     private AuthInfoDto login(MemberEntity member, String fcmToken) {
         AuthMemberDto authMember = new AuthMemberDto(member);
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
+        String deviceId = UUID.randomUUID().toString();
+        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
         checkFcmToken(member, fcmToken);
         eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);
@@ -75,7 +76,17 @@ public class AuthService {
 
     public AuthTokenDto refresh(String refreshToken) {
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
-        return jwtTokenProvider.createAuthToken(memberId.toString());
+        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
+
+        // TODO: check reuse token
+        if (deviceId == null) { // TODO: support legacy request
+            // TODO: save null device for check reuse
+            // TODO: create new device Id
+            deviceId = UUID.randomUUID().toString();
+        }
+        AuthTokenDto tokens = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
+
+        return tokens;
     }
 
     public MemberEntity findMemberByAccessToken(String token) {
