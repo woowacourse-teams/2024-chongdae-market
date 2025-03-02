@@ -50,7 +50,7 @@ public class AuthServiceTest extends ServiceTest {
         // when
         AuthInfoDto authInfoDto = authService.kakaoLogin(request);
         String refreshToken = authInfoDto.authToken().refreshToken();
-        clock.plusDays(1); // after 1 days refresh
+        clock.plusDays(1);
         AuthTokenDto authToken = authService.refresh(refreshToken);
         String newRefreshToken = authToken.refreshToken();
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(newRefreshToken);
@@ -71,7 +71,7 @@ public class AuthServiceTest extends ServiceTest {
         // when
         AuthInfoDto authInfoDto = authService.kakaoLogin(request);
         String refreshToken = authInfoDto.authToken().refreshToken();
-        clock.plusDays(1); // after 1 days refresh
+        clock.plusDays(1);
         authService.refresh(refreshToken);
 
         // then
@@ -87,7 +87,7 @@ public class AuthServiceTest extends ServiceTest {
         // when
         AuthInfoDto authInfoDto = authService.kakaoLogin(request);
         String refreshToken = authInfoDto.authToken().refreshToken();
-        clock.plusDays(1); // after 1 days refresh
+        clock.plusDays(1);
         AuthTokenDto authToken = authService.refresh(refreshToken);
         String newRefreshToken = authToken.refreshToken();
         assertThatExceptionOfType(MarketException.class)
