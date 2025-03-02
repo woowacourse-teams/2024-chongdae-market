@@ -41,7 +41,7 @@ public class AuthServiceTest extends ServiceTest {
         assertThat(actual.size()).isEqualTo(1);
     }
 
-    @DisplayName("재사용 하지 않은 토큰일 경우 토큰 재갱신을 할 수 있다.")
+    @DisplayName("재사용 하지 않은 토큰일 경우 토큰 재갱신 할 수 있다.")
     @Test
     void should_refreshSuccess_whenRefresh() {
         // given
