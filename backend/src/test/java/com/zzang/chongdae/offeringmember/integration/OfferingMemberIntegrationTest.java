@@ -31,7 +31,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
     class Participate {
 
         List<FieldDescriptor> requestDescriptors = List.of(
-                fieldWithPath("offeringId").description("공모 id (필수)")
+                fieldWithPath("offeringId").description("공모 id (필수)"),
+                fieldWithPath("participationCount").description("구매할 물품 개수")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여")
@@ -59,11 +60,12 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             offeringMemberFixture.createProposer(proposer, offering);
         }
 
-        @DisplayName("게시된 공모에 참여할 수 있다")
+        @DisplayName("게시된 공모에 참여할 수 있다 - 물품 한개")
         @Test
         void should_participateSuccess() {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-success", resource(successSnippets)))
@@ -75,11 +77,62 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .statusCode(201);
         }
 
+        @DisplayName("게시된 공모에 참여할 수 있다 - 물품 여러개")
+        @Test
+        void should_participateSuccess_when_givenMoreThanOne() {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId(),
+                    3
+            );
+            RestAssured.given(spec).log().all()
+                    .filter(document("participate-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(201);
+        }
+
+        @DisplayName("구매 개수를 명시하지 않은 경우 1개로 설정하여 수행한다.")
+        @Test
+        void should_participateSuccess_when_myCountNull() {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId(),
+                    null
+            );
+            RestAssured.given().log().all()
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(201);
+        }
+
+        @DisplayName("총 수량을 넘은 개수만큼 요청한 경우 참여할 수 없다.")
+        @Test
+        void should_throwException_when_givenExceededCount() {
+            ParticipationRequest request = new ParticipationRequest(
+                    offering.getId(),
+                    6
+            );
+            RestAssured.given(spec).log().all()
+                    .filter(document("participate-fail-exceeded-count", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/participations")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
         @DisplayName("공모자는 본인이 만든 공모에 참여할 수 없다")
         @Test
         void should_throwException_when_givenProposerParticipate() {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-my-offering", resource(failSnippets)))
@@ -95,7 +148,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_invalidOffering() {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId() + 100
+                    offering.getId() + 100,
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-invalid-offering", resource(failSnippets)))
@@ -111,7 +165,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_emptyValue() {
             ParticipationRequest request = new ParticipationRequest(
-                    null
+                    null,
+                    1
             );
             RestAssured.given(spec).log().all()
                     .filter(document("participate-fail-request-with-null", resource(failSnippets)))
@@ -127,7 +182,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_sameMemberAndSameOffering() throws InterruptedException {
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
 
             ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
@@ -150,7 +206,8 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             offeringMemberFixture.createProposer(proposer, offering);
 
             ParticipationRequest request = new ParticipationRequest(
-                    offering.getId()
+                    offering.getId(),
+                    1
             );
             MemberEntity participant1 = memberFixture.createMember("ever1");
             MemberEntity participant2 = memberFixture.createMember("ever2");
@@ -170,6 +227,37 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                             .when().post("/participations")
                             .statusCode());
 
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
+        }
+
+        @DisplayName("두 참여자가 한 공모에 동시에 참여 할 때 총 개수가 넘을 경우 한 참여자만 참여할 수 있다.")
+        @Test
+        void should_preventConcurrentParticipate() throws InterruptedException {
+            ParticipationRequest request1 = new ParticipationRequest(
+                    offering.getId(),
+                    3
+            );
+            ParticipationRequest request2 = new ParticipationRequest(
+                    offering.getId(),
+                    3
+            );
+            MemberEntity participant1 = memberFixture.createMember("whatever");
+            MemberEntity participant2 = memberFixture.createMember("however");
+
+            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
+            List<Integer> statusCodes = concurrencyExecutor.execute(
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant1))
+                            .contentType(ContentType.JSON)
+                            .body(request1)
+                            .when().post("/participations")
+                            .statusCode(),
+                    () -> RestAssured.given().log().all()
+                            .cookies(cookieProvider.createCookiesWithMember(participant2))
+                            .contentType(ContentType.JSON)
+                            .body(request2)
+                            .when().post("/participations")
+                            .statusCode());
             assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
         }
     }
@@ -276,10 +364,14 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("proposer.nickname").description("공모 작성자 닉네임"),
+                fieldWithPath("proposer.count").description("공모 작성자 참여 개수"),
+                fieldWithPath("proposer.price").description("공모 작성자 지불할 금액"),
                 fieldWithPath("participants[].nickname").description("공모 참여자 닉네임"),
+                fieldWithPath("participants[].count").description("공모 참여자 참여 개수"),
+                fieldWithPath("participants[].price").description("공모 참여자 지불할 금액"),
                 fieldWithPath("count.currentCount").description("공모 참여자 현재원(작성자 + 참여자)"),
                 fieldWithPath("count.totalCount").description("공모 참여자 총원"),
-                fieldWithPath("price").description("공모 참여자 예상 정산 가격")
+                fieldWithPath("price").description("공모 참여자 예상 정산 가격 - 현재는 불필요하지만 이전 버전 앱을 위해 남겨두었습니다.")
         );
         ResourceSnippetParameters successSnippets = ResourceSnippetParameters.builder()
                 .summary("공모 참여자 목록 조회")

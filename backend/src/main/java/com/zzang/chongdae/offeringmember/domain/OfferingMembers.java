@@ -1,7 +1,6 @@
 package com.zzang.chongdae.offeringmember.domain;
 
 import com.zzang.chongdae.global.exception.MarketException;
-import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import java.util.List;
@@ -14,18 +13,16 @@ public class OfferingMembers {
 
     private final List<OfferingMemberEntity> offeringMembers;
 
-    public MemberEntity getProposer() {
+    public OfferingMemberEntity getProposer() {
         return offeringMembers.stream()
                 .filter(OfferingMemberEntity::isProposer)
                 .findFirst()
-                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PROPOSER_NOT_FOUND))
-                .getMember();
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PROPOSER_NOT_FOUND));
     }
 
-    public List<MemberEntity> getParticipants() {
+    public List<OfferingMemberEntity> getParticipants() {
         return offeringMembers.stream()
                 .filter(OfferingMemberEntity::isParticipant)
-                .map(OfferingMemberEntity::getMember)
                 .toList();
     }
 }

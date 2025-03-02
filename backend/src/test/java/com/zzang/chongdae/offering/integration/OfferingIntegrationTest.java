@@ -473,7 +473,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                 fieldWithPath("meetingAddressDetail").description("모집 상세 주소"),
                 fieldWithPath("meetingAddressDong").description("모집 동 주소"),
                 fieldWithPath("meetingDate").description("모집 종료 시간 (필수)"),
-                fieldWithPath("description").description("내용 (필수)")
+                fieldWithPath("description").description("내용 (필수)"),
+                fieldWithPath("myCount").description("총대 구매 개수")
         );
         ResourceSnippetParameters successSnippets = builder()
                 .summary("공모 작성")
@@ -511,7 +512,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "상세주소아파트",
                     "구의동",
                     LocalDateTime.now(clock).plusDays(1),
-                    "내용입니다."
+                    "내용입니다.",
+                    1
             );
 
             given(spec).log().all()
@@ -538,7 +540,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "상세주소아파트",
                     "구의동",
                     LocalDateTime.now(clock).plusDays(1),
-                    "내용입니다."
+                    "내용입니다.",
+                    1
             );
 
             given(spec).log().all()
@@ -555,6 +558,7 @@ public class OfferingIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_emptyValue() {
             OfferingSaveRequest request = new OfferingSaveRequest(
+                    null,
                     null,
                     null,
                     null,
@@ -592,7 +596,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "상세주소아파트",
                     "구의동",
                     LocalDateTime.parse("2024-10-11T10:00:00"),
-                    "내용입니다."
+                    "내용입니다.",
+                    1
             );
 
             given(spec).log().all()
@@ -619,7 +624,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "상세주소아파트",
                     "구의동",
                     LocalDateTime.parse("2024-10-11T10:00:00"),
-                    "내용입니다."
+                    "내용입니다.",
+                    1
             );
 
             given(spec).log().all()
@@ -646,7 +652,8 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     "상세주소아파트",
                     "구의동",
                     LocalDateTime.now(clock).minusDays(1),
-                    "내용입니다."
+                    "내용입니다.",
+                    1
             );
 
             given(spec).log().all()
@@ -657,6 +664,61 @@ public class OfferingIntegrationTest extends IntegrationTest {
                     .when().post("/offerings")
                     .then().log().all()
                     .statusCode(400);
+        }
+
+        @DisplayName("총대가 가질 개수를 총 개수보다 많거나 같게 요청하는 경우 예외가 발생한다.")
+        @Test
+        void should_throwException_when_myCountEqualOrMoreThanTotalCount() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    10,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.now(clock).plusDays(1),
+                    "내용입니다.",
+                    10
+            );
+
+            given(spec).log().all()
+                    .filter(document("create-offering-fail-with-invalid-my-count", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("총대가 가질 개수를 명시하지 않은 경우 1개로 설정하여 수행한다.")
+        @Test
+        void should_createOffering_when_emptyMyCount() {
+            OfferingSaveRequest request = new OfferingSaveRequest(
+                    "공모 제목",
+                    "www.naver.com",
+                    "www.naver.com/favicon.ico",
+                    10,
+                    10000,
+                    2000,
+                    "서울특별시 광진구 구의강변로 3길 11",
+                    "상세주소아파트",
+                    "구의동",
+                    LocalDateTime.now(clock).plusDays(1),
+                    "내용입니다.",
+                    null
+            );
+
+            given().log().all()
+                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/offerings")
+                    .then().log().all()
+                    .statusCode(201);
         }
     }
 

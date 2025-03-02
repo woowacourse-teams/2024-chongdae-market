@@ -118,14 +118,14 @@ public class OfferingEntity extends BaseTimeEntity {
                 originPrice, discountRate, offeringStatus, roomStatus, false);
     }
 
-    public void participate() {
-        currentCount++;
+    public void participate(int participationCount) {
+        currentCount += participationCount;
         OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
         updateOfferingStatus(offeringStatus);
     }
 
-    public void leave() {
-        currentCount--;
+    public void leave(int participationCount) {
+        currentCount -= participationCount;
         OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
         updateOfferingStatus(offeringStatus);
     }
