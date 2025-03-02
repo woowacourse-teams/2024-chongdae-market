@@ -96,4 +96,34 @@ public class AuthServiceTest extends ServiceTest {
         assertThatThrownBy(() -> authService.refresh(newRefreshToken))
                 .isInstanceOf(MarketException.class);
     }
+
+
+    @DisplayName("기존 버전의 refresh token을 재갱신하면 deviceId가 담긴 새 토큰을 확득할 수 있다.")
+    @Test
+    void should_refresh_whenRefreshLegacyToken() {
+        // given
+        String legacyToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxMDA1NjI4MjQwMH0.CQK49O-Z51OKRAyEcwu1A31B4g6cD13HIi35OgB40wM";
+
+        // when
+        AuthTokenDto authToken = authService.refresh(legacyToken);
+        String newRefreshToken = authToken.refreshToken();
+        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(newRefreshToken);
+
+        // then
+        assertThat(deviceId).isNotNull();
+    }
+
+    @DisplayName("기존 버전의 refresh token을 재갱신하고 다시 한번 재갱신하면 예외가 발생한다.")
+    @Test
+    void should_refreshFail_whenRefreshLegacyTokenTwice() {
+        // given
+        String legacyToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxMDA1NjI4MjQwMH0.CQK49O-Z51OKRAyEcwu1A31B4g6cD13HIi35OgB40wM";
+
+        // when
+        authService.refresh(legacyToken);
+
+        // then
+        assertThatThrownBy(() -> authService.refresh(legacyToken))
+                .isInstanceOf(MarketException.class);
+    }
 }
