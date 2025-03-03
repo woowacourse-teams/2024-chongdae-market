@@ -1,8 +1,6 @@
 package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
-import com.zzang.chongdae.auth.repository.RefreshTokenRepository;
-import com.zzang.chongdae.auth.repository.entity.RefreshTokenEntity;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
@@ -29,7 +27,6 @@ public class AuthService {
 
     private final ApplicationEventPublisher eventPublisher;
     private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
@@ -83,17 +80,14 @@ public class AuthService {
     @WriterDatabase
     @Transactional
     public AuthTokenDto refresh(String refreshToken) {
-        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
-        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
-        if (deviceId == null) {
-            return authTokenManager.refreshLegacyToken(memberId, deviceId, refreshToken);
-        }
-        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findByMemberIdAndDeviceId(memberId, deviceId)
-                .orElseThrow(() -> new MarketException(AuthErrorCode.EXPIRED_REFRESH_TOKEN));
-        if (!authTokenManager.isValid(refreshTokenEntity, refreshToken)) {
+        validateRefreshToken(refreshToken);
+        return authTokenManager.refresh(refreshToken);
+    }
+
+    private void validateRefreshToken(String refreshToken) {
+        if (!authTokenManager.isValid(refreshToken)) {
             throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
         }
-        return authTokenManager.refresh(refreshTokenEntity, memberId, deviceId);
     }
 
     public MemberEntity findMemberByAccessToken(String token) {
