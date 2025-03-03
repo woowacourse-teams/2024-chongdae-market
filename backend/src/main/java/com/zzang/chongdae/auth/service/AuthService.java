@@ -9,7 +9,6 @@ import com.zzang.chongdae.event.domain.LoginEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.domain.AuthProvider;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
@@ -28,7 +27,6 @@ public class AuthService {
     private final ApplicationEventPublisher eventPublisher;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
     private final AuthClient authClient;
     private final AuthTokenManager authTokenManager;
@@ -88,11 +86,5 @@ public class AuthService {
         if (!authTokenManager.isValid(refreshToken)) {
             throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
         }
-    }
-
-    public MemberEntity findMemberByAccessToken(String token) {
-        Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
     }
 }

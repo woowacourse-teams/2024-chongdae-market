@@ -6,6 +6,9 @@ import com.zzang.chongdae.auth.repository.entity.RefreshTokenEntity;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
+import com.zzang.chongdae.member.repository.MemberRepository;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthTokenManager {
 
     private final RefreshTokenRepository refreshTokenRepository;
-
+    private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @WriterDatabase
@@ -82,5 +85,11 @@ public class AuthTokenManager {
         RefreshTokenEntity legacyAuth = new RefreshTokenEntity(memberId, deviceId, refreshToken);
         refreshTokenRepository.save(legacyAuth);
         return createToken(memberId);
+    }
+
+    public MemberEntity findMemberByAccessToken(String token) {
+        Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
     }
 }
