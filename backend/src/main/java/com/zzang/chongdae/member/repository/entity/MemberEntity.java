@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -56,7 +55,7 @@ public class MemberEntity extends BaseTimeEntity {
     private String fcmToken;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RefreshTokenEntity> authEntities;
+    private List<RefreshTokenEntity> refreshTokenEntities;
 
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password, String fcmToken) {
         this(null, nickname, provider, loginId, password, fcmToken, new ArrayList<>());
