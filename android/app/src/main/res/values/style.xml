@@ -23,7 +23,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/size_12</item>
         <item name="fontFamily">@font/suit_medium</item>
-        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:textColor">@color/gray_700</item>
     </style>
 
     <style name="Theme.AppCompat.TextView.Bold.MainColor.Size25" parent="@style/Widget.AppCompat.TextView">
