@@ -38,13 +38,11 @@ import com.zzang.chongdae.domain.model.FilterType
 
 @Composable
 internal fun OfferingFilters(
-    selectedFilter: Filter?,
-    filters: List<Filter>,
-    onFilterClick: (Filter) -> Unit,
+    state: OfferingFiltersState,
 ) {
     Row {
-        for (filter in filters) {
-            OfferingFilter(filter, selectedFilter, onFilterClick)
+        for (filter in state.filters) {
+            OfferingFilter(filter, state)
             Spacer(modifier = Modifier.width(10.dp))
         }
     }
@@ -53,8 +51,7 @@ internal fun OfferingFilters(
 @Composable
 private fun OfferingFilter(
     filter: Filter,
-    selectedFilter: Filter?,
-    onFilterClick: (Filter) -> Unit,
+    state: OfferingFiltersState,
 ) {
     val density = LocalDensity.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -64,7 +61,7 @@ private fun OfferingFilter(
             .border(
                 BorderStroke(
                     0.5.dp,
-                    color = if (filter == selectedFilter) {
+                    color = if (state.isSelectedFilter(filter)) {
                         colorResource(id = R.color.main_color)
                     } else colorResource(id = R.color.gray_300),
                 ),
@@ -74,7 +71,7 @@ private fun OfferingFilter(
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
-                onClick = { onFilterClick(filter) }
+                onClick = { state.selectFilter(filter) }
             )
     ) {
         Row(
@@ -85,7 +82,7 @@ private fun OfferingFilter(
                 modifier = Modifier
                     .height(24.dp)
                     .padding(start = 6.dp),
-                painter = if (filter == selectedFilter) {
+                painter = if (state.isSelectedFilter(filter)) {
                     painterResource(id = R.drawable.ic_main_checked_circle)
                 } else painterResource(id = R.drawable.ic_main_unchecked_circle),
                 contentDescription = "check"
@@ -107,38 +104,14 @@ private fun OfferingFilter(
     }
 }
 
-
-@Preview(showSystemUi = true)
-@Composable
-private fun OfferingFilterPreview() {
-    Row {
-        OfferingFilter(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            selectedFilter = null,
-        ) {}
-        Spacer(modifier = Modifier.width(10.dp))
-        OfferingFilter(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-        ) {}
-    }
-}
-
 @Preview(showSystemUi = true)
 @Composable
 private fun OfferingFiltersPreview() {
-    var selectedFilter by rememberSaveable { mutableStateOf<Filter?>(null) }
-    val onFilterClick: (Filter) -> Unit = {
-        if (selectedFilter != it) selectedFilter = it
-        else selectedFilter = null
-    }
     val filters = listOf(
         Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
         Filter(FilterName.IMMINENT, "마감임박만", FilterType.VISIBLE),
         Filter(FilterName.HIGH_DISCOUNT, "높은할인율순", FilterType.VISIBLE)
     )
-    OfferingFilters(
-        selectedFilter = selectedFilter,
-        filters = filters
-    ) { onFilterClick(it) }
+    var state = rememberSavableOfferingFiltersState(filters)
+    OfferingFilters(state)
 }
