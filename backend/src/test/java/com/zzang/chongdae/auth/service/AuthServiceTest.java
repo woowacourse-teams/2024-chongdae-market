@@ -11,6 +11,8 @@ import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.global.service.ServiceTest;
+import com.zzang.chongdae.member.repository.MemberRepository;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,9 @@ public class AuthServiceTest extends ServiceTest {
 
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -102,6 +107,7 @@ public class AuthServiceTest extends ServiceTest {
     @Test
     void should_refresh_whenRefreshLegacyToken() {
         // given
+        memberFixture.createMember("poke");
         String legacyToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxMDA1NjI4MjQwMH0.CQK49O-Z51OKRAyEcwu1A31B4g6cD13HIi35OgB40wM";
 
         // when
@@ -117,6 +123,7 @@ public class AuthServiceTest extends ServiceTest {
     @Test
     void should_refreshFail_whenRefreshLegacyTokenTwice() {
         // given
+        memberFixture.createMember("poke");
         String legacyToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxMDA1NjI4MjQwMH0.CQK49O-Z51OKRAyEcwu1A31B4g6cD13HIi35OgB40wM";
 
         // when
@@ -125,5 +132,23 @@ public class AuthServiceTest extends ServiceTest {
         // then
         assertThatThrownBy(() -> authService.refresh(legacyToken))
                 .isInstanceOf(MarketException.class);
+    }
+
+    @DisplayName("회원이 삭제될 경우 연관된 refresh token들이 제거된다.")
+    @Test
+    void should_deleteCascade_whenDeleteMemberEntity() {
+        // given
+        KakaoLoginRequest request = new KakaoLoginRequest("test", "test");
+
+        // when
+        for (int i = 0; i < 3; i++) {
+            authService.kakaoLogin(request);
+        }
+        MemberEntity member = memberRepository.findById(1L).get();
+        memberRepository.delete(member);
+        List<RefreshTokenEntity> actual = refreshTokenRepository.findAll();
+
+        // then
+        assertThat(actual.size()).isEqualTo(0);
     }
 }

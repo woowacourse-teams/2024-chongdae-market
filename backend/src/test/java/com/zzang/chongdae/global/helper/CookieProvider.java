@@ -1,7 +1,6 @@
 package com.zzang.chongdae.global.helper;
 
 import com.zzang.chongdae.auth.repository.RefreshTokenRepository;
-import com.zzang.chongdae.auth.repository.entity.RefreshTokenEntity;
 import com.zzang.chongdae.auth.service.JwtTokenProvider;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -32,8 +31,6 @@ public class CookieProvider {
 
     public Cookies createCookiesWithMember(MemberEntity member, String deviceId) {
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
-        RefreshTokenEntity auth = new RefreshTokenEntity(member.getId(), deviceId, authToken.refreshToken());
-        refreshTokenRepository.save(auth);
         Cookie accessTokenCookie = new Cookie.Builder(ACCESS_TOKEN_COOKIE_NAME, authToken.accessToken()).build();
         Cookie refreshTokenCookie = new Cookie.Builder(REFRESH_TOKEN_COOKIE_NAME, authToken.refreshToken()).build();
         return new Cookies(accessTokenCookie, refreshTokenCookie);
