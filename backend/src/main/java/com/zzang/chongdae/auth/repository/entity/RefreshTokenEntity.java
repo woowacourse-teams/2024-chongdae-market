@@ -1,10 +1,14 @@
 package com.zzang.chongdae.auth.repository.entity;
 
 import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
+import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -25,16 +29,17 @@ public class RefreshTokenEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private MemberEntity member;
 
     private String deviceId;
 
     @NotNull
     private String refreshToken;
 
-    public RefreshTokenEntity(Long memberId, String deviceId, String refreshToken) {
-        this(null, memberId, deviceId, refreshToken);
+    public RefreshTokenEntity(MemberEntity member, String deviceId, String refreshToken) {
+        this(null, member, deviceId, refreshToken);
     }
 
     public boolean isValid(String refreshToken) {

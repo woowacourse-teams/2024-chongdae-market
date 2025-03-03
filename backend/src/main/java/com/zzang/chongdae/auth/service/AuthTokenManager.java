@@ -25,10 +25,10 @@ public class AuthTokenManager {
 
     @WriterDatabase
     @Transactional
-    public AuthTokenDto createToken(Long memberId) {
+    public AuthTokenDto createToken(MemberEntity member) {
         String deviceId = UUID.randomUUID().toString();
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
-        RefreshTokenEntity auth = new RefreshTokenEntity(memberId, deviceId, authToken.refreshToken());
+        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
+        RefreshTokenEntity auth = new RefreshTokenEntity(member, deviceId, authToken.refreshToken());
         refreshTokenRepository.save(auth);
         return authToken;
     }
@@ -36,7 +36,8 @@ public class AuthTokenManager {
     @WriterDatabase
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean isValid(String refreshToken) {
-        if (isValidLegacy(refreshToken)) {
+        MemberEntity member = findMemberByRefreshToken(refreshToken);
+        if (isValidLegacy(member, refreshToken)) {
             return true;
         }
         RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(refreshToken);
@@ -47,10 +48,15 @@ public class AuthTokenManager {
         return true;
     }
 
-    private boolean isValidLegacy(String refreshToken) {
-        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
+    private MemberEntity findMemberByRefreshToken(String token) {
+        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(token);
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+    }
+
+    private boolean isValidLegacy(MemberEntity member, String refreshToken) {
         String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
-        return deviceId == null && !refreshTokenRepository.existsByMemberIdAndDeviceId(memberId, deviceId);
+        return deviceId == null && !refreshTokenRepository.existsByMemberAndDeviceId(member, deviceId);
     }
 
     private RefreshTokenEntity findRefreshTokenFromRepository(String refreshToken) {
@@ -63,24 +69,24 @@ public class AuthTokenManager {
     @WriterDatabase
     @Transactional
     public AuthTokenDto refresh(String refreshToken) {
-        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
+        MemberEntity member = findMemberByRefreshToken(refreshToken);
         String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
         if (deviceId == null) {
-            return refreshLegacyToken(memberId, deviceId, refreshToken);
+            return refreshLegacyToken(member, deviceId, refreshToken);
         }
         RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(refreshToken);
-        AuthTokenDto authTokenDto = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
+        AuthTokenDto authTokenDto = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
         refreshTokenEntity.refresh(authTokenDto.refreshToken());
         return authTokenDto;
     }
 
-    private AuthTokenDto refreshLegacyToken(Long memberId, String deviceId, String refreshToken) {
-        if (refreshTokenRepository.existsByMemberIdAndDeviceId(memberId, deviceId)) {
+    private AuthTokenDto refreshLegacyToken(MemberEntity member, String deviceId, String refreshToken) {
+        if (refreshTokenRepository.existsByMemberAndDeviceId(member, deviceId)) {
             throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
         }
-        RefreshTokenEntity legacyAuth = new RefreshTokenEntity(memberId, deviceId, refreshToken);
+        RefreshTokenEntity legacyAuth = new RefreshTokenEntity(member, deviceId, refreshToken);
         refreshTokenRepository.save(legacyAuth);
-        return createToken(memberId);
+        return createToken(member);
     }
 
     public MemberEntity findMemberByAccessToken(String token) {

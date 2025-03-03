@@ -56,8 +56,7 @@ public class AuthService {
 
     private AuthInfoDto login(MemberEntity member, String fcmToken) {
         AuthMemberDto authMember = new AuthMemberDto(member);
-        Long memberId = member.getId();
-        AuthTokenDto authToken = authTokenManager.createToken(memberId);
+        AuthTokenDto authToken = authTokenManager.createToken(member);
         checkFcmToken(member, fcmToken);
         eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);

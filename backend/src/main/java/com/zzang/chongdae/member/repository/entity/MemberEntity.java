@@ -1,7 +1,9 @@
 package com.zzang.chongdae.member.repository.entity;
 
+import com.zzang.chongdae.auth.repository.entity.RefreshTokenEntity;
 import com.zzang.chongdae.global.repository.entity.BaseTimeEntity;
 import com.zzang.chongdae.member.domain.AuthProvider;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,8 +11,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,12 +55,15 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(unique = true)
     private String fcmToken;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RefreshTokenEntity> authEntities;
+
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password, String fcmToken) {
-        this(null, nickname, provider, loginId, password, fcmToken);
+        this(null, nickname, provider, loginId, password, fcmToken, new ArrayList<>());
     }
 
     public MemberEntity(String nickname, AuthProvider provider, String loginId, String password) {
-        this(null, nickname, provider, loginId, password, DEFAULT_FCM_TOKEN + UUID.randomUUID());
+        this(null, nickname, provider, loginId, password, DEFAULT_FCM_TOKEN + UUID.randomUUID(), new ArrayList<>());
     }
 
     public boolean isSame(MemberEntity other) {
