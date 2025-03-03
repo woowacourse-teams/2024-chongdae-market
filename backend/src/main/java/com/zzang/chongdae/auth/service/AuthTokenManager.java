@@ -27,14 +27,10 @@ public class AuthTokenManager {
     @Transactional
     public AuthTokenDto createToken(Long memberId) {
         String deviceId = UUID.randomUUID().toString();
-        AuthTokenDto authToken = createAuthToken(memberId, deviceId);
+        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
         RefreshTokenEntity auth = new RefreshTokenEntity(memberId, deviceId, authToken.refreshToken());
         refreshTokenRepository.save(auth);
         return authToken;
-    }
-
-    private AuthTokenDto createAuthToken(Long memberId, String deviceId) {
-        return jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
     }
 
     @WriterDatabase
@@ -73,7 +69,7 @@ public class AuthTokenManager {
             return refreshLegacyToken(memberId, deviceId, refreshToken);
         }
         RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(refreshToken);
-        AuthTokenDto authTokenDto = createAuthToken(memberId, deviceId);
+        AuthTokenDto authTokenDto = jwtTokenProvider.createAuthToken(memberId.toString(), deviceId);
         refreshTokenEntity.refresh(authTokenDto.refreshToken());
         return authTokenDto;
     }
