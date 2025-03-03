@@ -139,6 +139,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    implementation(libs.glide.compose)
     kapt(libs.glide.compiler)
 
     // Retrofit
