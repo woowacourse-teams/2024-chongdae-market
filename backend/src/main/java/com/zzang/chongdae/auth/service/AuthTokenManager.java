@@ -81,10 +81,6 @@ public class AuthTokenManager {
         }
         RefreshTokenEntity legacyAuth = new RefreshTokenEntity(memberId, deviceId, refreshToken);
         refreshTokenRepository.save(legacyAuth);
-        String newDeviceId = UUID.randomUUID().toString();
-        AuthTokenDto authToken = createAuthToken(memberId, newDeviceId);
-        RefreshTokenEntity newAuth = new RefreshTokenEntity(memberId, newDeviceId, authToken.refreshToken());
-        refreshTokenRepository.save(newAuth);
-        return authToken;
+        return createToken(memberId);
     }
 }
