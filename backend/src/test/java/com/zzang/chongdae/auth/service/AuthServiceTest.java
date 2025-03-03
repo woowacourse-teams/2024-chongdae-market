@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.zzang.chongdae.auth.repository.AuthRepository;
-import com.zzang.chongdae.auth.repository.entity.AuthEntity;
+import com.zzang.chongdae.auth.repository.RefreshTokenRepository;
+import com.zzang.chongdae.auth.repository.entity.RefreshTokenEntity;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.auth.service.dto.KakaoLoginRequest;
@@ -22,7 +22,7 @@ public class AuthServiceTest extends ServiceTest {
     AuthService authService;
 
     @Autowired
-    AuthRepository authRepository;
+    RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -35,7 +35,7 @@ public class AuthServiceTest extends ServiceTest {
 
         // when
         authService.kakaoLogin(request);
-        List<AuthEntity> actual = authRepository.findAll();
+        List<RefreshTokenEntity> actual = refreshTokenRepository.findAll();
 
         // then
         assertThat(actual.size()).isEqualTo(1);
@@ -55,7 +55,7 @@ public class AuthServiceTest extends ServiceTest {
         String newRefreshToken = authToken.refreshToken();
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(newRefreshToken);
         String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(newRefreshToken);
-        AuthEntity auth = authRepository.findByMemberIdAndDeviceId(memberId, deviceId).get();
+        RefreshTokenEntity auth = refreshTokenRepository.findByMemberIdAndDeviceId(memberId, deviceId).get();
         boolean actual = auth.isValid(newRefreshToken);
 
         // then

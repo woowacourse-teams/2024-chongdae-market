@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Table(name = "auth")
 @Entity
-public class AuthEntity extends BaseTimeEntity {
+public class RefreshTokenEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class AuthEntity extends BaseTimeEntity {
     @NotNull
     private String refreshToken;
 
-    public AuthEntity(Long memberId, String deviceId, String refreshToken) {
+    public RefreshTokenEntity(Long memberId, String deviceId, String refreshToken) {
         this(null, memberId, deviceId, refreshToken);
     }
 

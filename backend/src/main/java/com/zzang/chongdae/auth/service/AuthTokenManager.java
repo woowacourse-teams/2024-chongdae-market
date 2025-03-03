@@ -1,8 +1,8 @@
 package com.zzang.chongdae.auth.service;
 
 import com.zzang.chongdae.auth.exception.AuthErrorCode;
-import com.zzang.chongdae.auth.repository.AuthRepository;
-import com.zzang.chongdae.auth.repository.entity.AuthEntity;
+import com.zzang.chongdae.auth.repository.RefreshTokenRepository;
+import com.zzang.chongdae.auth.repository.entity.RefreshTokenEntity;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class AuthTokenManager {
 
-    private final AuthRepository authRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -25,8 +25,8 @@ public class AuthTokenManager {
     public AuthTokenDto createToken(Long memberId) {
         String deviceId = UUID.randomUUID().toString();
         AuthTokenDto authToken = createAuthToken(memberId, deviceId);
-        AuthEntity auth = new AuthEntity(memberId, deviceId, authToken.refreshToken());
-        authRepository.save(auth);
+        RefreshTokenEntity auth = new RefreshTokenEntity(memberId, deviceId, authToken.refreshToken());
+        refreshTokenRepository.save(auth);
         return authToken;
     }
 
@@ -36,9 +36,9 @@ public class AuthTokenManager {
 
     @WriterDatabase
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public boolean isValid(AuthEntity authEntity, String refreshToken) {
-        if (!authEntity.isValid(refreshToken)) {
-            authRepository.delete(authEntity);
+    public boolean isValid(RefreshTokenEntity refreshTokenEntity, String refreshToken) {
+        if (!refreshTokenEntity.isValid(refreshToken)) {
+            refreshTokenRepository.delete(refreshTokenEntity);
             return false;
         }
         return true;
@@ -47,23 +47,23 @@ public class AuthTokenManager {
     @WriterDatabase
     @Transactional
     public AuthTokenDto refreshLegacyToken(Long memberId, String deviceId, String refreshToken) {
-        if (authRepository.existsByMemberIdAndDeviceId(memberId, deviceId)) {
+        if (refreshTokenRepository.existsByMemberIdAndDeviceId(memberId, deviceId)) {
             throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
         }
-        AuthEntity legacyAuth = new AuthEntity(memberId, deviceId, refreshToken);
-        authRepository.save(legacyAuth);
+        RefreshTokenEntity legacyAuth = new RefreshTokenEntity(memberId, deviceId, refreshToken);
+        refreshTokenRepository.save(legacyAuth);
         String newDeviceId = UUID.randomUUID().toString();
         AuthTokenDto authToken = createAuthToken(memberId, newDeviceId);
-        AuthEntity newAuth = new AuthEntity(memberId, newDeviceId, authToken.refreshToken());
-        authRepository.save(newAuth);
+        RefreshTokenEntity newAuth = new RefreshTokenEntity(memberId, newDeviceId, authToken.refreshToken());
+        refreshTokenRepository.save(newAuth);
         return authToken;
     }
 
     @WriterDatabase
     @Transactional
-    public AuthTokenDto refresh(AuthEntity authEntity, Long memberId, String deviceId) {
+    public AuthTokenDto refresh(RefreshTokenEntity refreshTokenEntity, Long memberId, String deviceId) {
         AuthTokenDto authTokenDto = createAuthToken(memberId, deviceId);
-        authEntity.refresh(authTokenDto.refreshToken());
+        refreshTokenEntity.refresh(authTokenDto.refreshToken());
         return authTokenDto;
     }
 }
