@@ -29,7 +29,7 @@ public class CookieProvider {
         return this.createCookiesWithMember(member, deviceId);
     }
 
-    public Cookies createCookiesWithMember(MemberEntity member, String deviceId) {
+    private Cookies createCookiesWithMember(MemberEntity member, String deviceId) {
         AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
         Cookie accessTokenCookie = new Cookie.Builder(ACCESS_TOKEN_COOKIE_NAME, authToken.accessToken()).build();
         Cookie refreshTokenCookie = new Cookie.Builder(REFRESH_TOKEN_COOKIE_NAME, authToken.refreshToken()).build();
