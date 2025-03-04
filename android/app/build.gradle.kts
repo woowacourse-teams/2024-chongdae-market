@@ -155,6 +155,7 @@ dependencies {
 
     // Pagination
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.paging.compose)
 
     // WebView
     implementation(libs.androidx.webkit)
