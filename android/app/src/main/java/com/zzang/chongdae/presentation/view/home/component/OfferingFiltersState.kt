@@ -17,8 +17,12 @@ class OfferingFiltersState(
         private set
 
     fun selectFilter(filter: Filter) {
-        if (selectedFilter != filter) selectedFilter = filter
-        else selectedFilter = null
+        selectedFilter =
+            if (selectedFilter != filter) {
+                filter
+            } else {
+                null
+            }
         onFilterClick(filter, isSelectedFilter(filter))
     }
 
@@ -28,18 +32,19 @@ class OfferingFiltersState(
         fun saver(
             filters: List<Filter>,
             onFilterClick: (Filter, Boolean) -> Unit,
-        ): Saver<OfferingFiltersState, *> = Saver(
-            save = {
-                it.selectedFilter?.value
-            },
-            restore = { savedValue ->
-                OfferingFiltersState(
-                    initSelectedFilter = filters.find { it.value == savedValue },
-                    filters = filters,
-                    onFilterClick = onFilterClick
-                )
-            }
-        )
+        ): Saver<OfferingFiltersState, *> =
+            Saver(
+                save = {
+                    it.selectedFilter?.value
+                },
+                restore = { savedValue ->
+                    OfferingFiltersState(
+                        initSelectedFilter = filters.find { it.value == savedValue },
+                        filters = filters,
+                        onFilterClick = onFilterClick,
+                    )
+                },
+            )
     }
 }
 
@@ -50,7 +55,9 @@ fun rememberSavableOfferingFiltersState(
     onFilterClick: (Filter, Boolean) -> Unit,
 ): OfferingFiltersState {
     return rememberSaveable(
-        initSelectedFilter, filters, onFilterClick,
-        saver = OfferingFiltersState.saver(filters, onFilterClick)
+        initSelectedFilter,
+        filters,
+        onFilterClick,
+        saver = OfferingFiltersState.saver(filters, onFilterClick),
     ) { OfferingFiltersState(filters, initSelectedFilter, onFilterClick) }
 }

@@ -57,15 +57,15 @@ internal fun OfferingsList(
                 isRefreshing = isRefreshing,
                 containerColor = Color.White,
                 color = colorResource(R.color.main_color),
-                state = pullToRefreshState
+                state = pullToRefreshState,
             )
-        }
+        },
     ) {
         LazyColumn(
             Modifier
                 .fillMaxSize()
                 .padding(top = 15.dp)
-                .padding(horizontal = 30.dp)
+                .padding(horizontal = 30.dp),
         ) {
             items(count = offerings.itemCount) { index ->
                 val item = offerings[index] ?: return@items
@@ -74,7 +74,7 @@ internal fun OfferingsList(
                     updatedItem,
                     onOfferingClick,
                     searchKeyword ?: "",
-                    R.color.search_keyword
+                    R.color.search_keyword,
                 )
                 if (index != offerings.itemCount - 1) {
                     HorizontalDivider()
@@ -86,13 +86,14 @@ internal fun OfferingsList(
             onClick = { onFloatingClick.onClickFloatingButton() },
             shape = CircleShape,
             containerColor = colorResource(R.color.main_color),
-            modifier = Modifier
-                .padding(end = 20.dp, bottom = 30.dp)
-                .align(Alignment.BottomEnd)
+            modifier =
+                Modifier
+                    .padding(end = 20.dp, bottom = 30.dp)
+                    .align(Alignment.BottomEnd),
         ) {
             Image(
                 painter = painterResource(R.drawable.btn_main_create_offering),
-                contentDescription = "Floating action button."
+                contentDescription = "Floating action button.",
             )
         }
     }

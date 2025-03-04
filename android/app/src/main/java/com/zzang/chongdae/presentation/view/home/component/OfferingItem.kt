@@ -40,7 +40,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.zzang.chongdae.R
@@ -60,26 +59,29 @@ fun OfferingItem(
     val density = LocalDensity.current
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 15.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = { onOfferingClick.onClick(offering.id) },
-            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 15.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = { onOfferingClick.onClick(offering.id) },
+                ),
         shape = RectangleShape,
     ) {
         Row(
-            modifier = Modifier
-                .background(Color.White)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .background(Color.White)
+                    .fillMaxWidth(),
         ) {
             Box {
                 GlideImage(
-                    modifier = Modifier
-                        .size(120.dp)
-                        .clip(RoundedCornerShape(10.dp)),
+                    modifier =
+                        Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(10.dp)),
                     model = offering.thumbnailUrl,
                     contentDescription = "thumbnail",
                     contentScale = ContentScale.Crop,
@@ -94,7 +96,7 @@ fun OfferingItem(
                     density,
                     Modifier
                         .align(Alignment.TopStart)
-                        .offset(x = 6.dp, y = 6.dp)
+                        .offset(x = 6.dp, y = 6.dp),
                 )
             }
 
@@ -105,15 +107,16 @@ fun OfferingItem(
                         text = buildAnnotatedTitle(offering.title, searchKeyword, colorId),
                         fontSize = with(density) { 16.dp.toSp() },
                         lineHeight = with(density) { 16.dp.toSp() },
-                        fontFamily = FontFamily(
-                            Font(
-                                R.font.suit_bold,
-                                weight = FontWeight.Bold,
-                            )
-                        ),
+                        fontFamily =
+                            FontFamily(
+                                Font(
+                                    R.font.suit_bold,
+                                    weight = FontWeight.Bold,
+                                ),
+                            ),
                         color = colorResource(R.color.black_900),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
 
                     Spacer(modifier = Modifier.height(5.dp))
@@ -122,13 +125,14 @@ fun OfferingItem(
                         text = offering.meetingAddressDong,
                         fontSize = with(density) { 12.dp.toSp() },
                         lineHeight = with(density) { 12.dp.toSp() },
-                        fontFamily = FontFamily(
-                            Font(
-                                R.font.suit_medium,
-                                weight = FontWeight.Medium,
-                            )
-                        ),
-                        color = colorResource(R.color.gray_500)
+                        fontFamily =
+                            FontFamily(
+                                Font(
+                                    R.font.suit_medium,
+                                    weight = FontWeight.Medium,
+                                ),
+                            ),
+                        color = colorResource(R.color.gray_500),
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -137,77 +141,90 @@ fun OfferingItem(
                         text = offering.status.toOfferingComment(offering.totalCount - offering.currentCount),
                         fontSize = with(density) { 12.dp.toSp() },
                         lineHeight = with(density) { 12.dp.toSp() },
-                        fontFamily = FontFamily(
-                            Font(
-                                R.font.suit_medium,
-                                weight = FontWeight.Medium,
-                            )
-                        ),
-                        color = colorResource(R.color.gray_700)
+                        fontFamily =
+                            FontFamily(
+                                Font(
+                                    R.font.suit_medium,
+                                    weight = FontWeight.Medium,
+                                ),
+                            ),
+                        color = colorResource(R.color.gray_700),
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        text = if (offering.originPrice != null) {
-                            stringResource(R.string.all_money_amount_text, offering.originPrice)
-                        } else "",
-                        textDecoration = TextDecoration.combine(
-                            listOf(
-                                TextDecoration.LineThrough,
-                            )
-                        ),
+                        text =
+                            if (offering.originPrice != null) {
+                                stringResource(R.string.all_money_amount_text, offering.originPrice)
+                            } else {
+                                ""
+                            },
+                        textDecoration =
+                            TextDecoration.combine(
+                                listOf(
+                                    TextDecoration.LineThrough,
+                                ),
+                            ),
                         fontSize = with(density) { 12.dp.toSp() },
                         lineHeight = with(density) { 12.dp.toSp() },
-                        fontFamily = FontFamily(
-                            Font(
-                                R.font.suit_medium,
-                                weight = FontWeight.Medium,
-                            )
-                        ),
+                        fontFamily =
+                            FontFamily(
+                                Font(
+                                    R.font.suit_medium,
+                                    weight = FontWeight.Medium,
+                                ),
+                            ),
                         color = colorResource(R.color.gray_500),
                         maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
                     horizontalAlignment = Alignment.End,
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 50.dp),
-                        text = if (offering.originPrice != null) {
-                            stringResource(
-                                R.string.home_discount_rate_text,
-                                offering.calculateDiscountRate() ?: 0f
-                            )
-                        } else "",
+                        text =
+                            if (offering.originPrice != null) {
+                                stringResource(
+                                    R.string.home_discount_rate_text,
+                                    offering.calculateDiscountRate() ?: 0f,
+                                )
+                            } else {
+                                ""
+                            },
                         fontSize = with(density) { 13.dp.toSp() },
                         lineHeight = with(density) { 13.dp.toSp() },
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(R.color.main_color)
+                        color = colorResource(R.color.main_color),
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.End),
-                        text = stringResource(
-                            R.string.all_money_amount_text,
-                            offering.dividedPrice
-                        ),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.End),
+                        text =
+                            stringResource(
+                                R.string.all_money_amount_text,
+                                offering.dividedPrice,
+                            ),
                         fontSize = with(density) { 25.dp.toSp() },
                         lineHeight = with(density) { 25.dp.toSp() },
-                        fontFamily = FontFamily(
-                            Font(
-                                R.font.suit_bold,
-                                weight = FontWeight.Bold,
-                            )
-                        ),
+                        fontFamily =
+                            FontFamily(
+                                Font(
+                                    R.font.suit_bold,
+                                    weight = FontWeight.Bold,
+                                ),
+                            ),
                         color = colorResource(R.color.main_color),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -216,7 +233,11 @@ fun OfferingItem(
 }
 
 @Composable
-fun buildAnnotatedTitle(title: String, searchKeyword: String, colorId: Int): AnnotatedString {
+fun buildAnnotatedTitle(
+    title: String,
+    searchKeyword: String,
+    colorId: Int,
+): AnnotatedString {
     if (searchKeyword.isBlank() || !title.contains(searchKeyword)) {
         return AnnotatedString(title)
     }
@@ -228,34 +249,34 @@ fun buildAnnotatedTitle(title: String, searchKeyword: String, colorId: Int): Ann
     annotatedString.addStyle(
         style = SpanStyle(color = colorResource(colorId)),
         start = startIndex,
-        end = endIndex
+        end = endIndex,
     )
 
     return annotatedString.toAnnotatedString()
 }
 
 @Composable
-private fun OfferingCondition.toOfferingComment(
-    remaining: Int,
-): AnnotatedString = when (this) {
-    OfferingCondition.FULL -> AnnotatedString(stringResource(R.string.home_offering_condition_full_comment))
-    OfferingCondition.IMMINENT -> buildAnnotatedString {
-        val text =
-            stringResource(R.string.home_offering_condition_continue_comment).format(remaining)
-        val startIndex = text.indexOf("$remaining")
-        val endIndex = startIndex + "$remaining".length
+private fun OfferingCondition.toOfferingComment(remaining: Int): AnnotatedString =
+    when (this) {
+        OfferingCondition.FULL -> AnnotatedString(stringResource(R.string.home_offering_condition_full_comment))
+        OfferingCondition.IMMINENT ->
+            buildAnnotatedString {
+                val text =
+                    stringResource(R.string.home_offering_condition_continue_comment).format(remaining)
+                val startIndex = text.indexOf("$remaining")
+                val endIndex = startIndex + "$remaining".length
 
-        append(text)
-        addStyle(
-            style = SpanStyle(color = colorResource(R.color.main_color)),
-            start = startIndex,
-            end = endIndex
-        )
+                append(text)
+                addStyle(
+                    style = SpanStyle(color = colorResource(R.color.main_color)),
+                    start = startIndex,
+                    end = endIndex,
+                )
+            }
+
+        OfferingCondition.CONFIRMED -> AnnotatedString("")
+        OfferingCondition.AVAILABLE -> AnnotatedString("")
     }
-
-    OfferingCondition.CONFIRMED -> AnnotatedString("")
-    OfferingCondition.AVAILABLE -> AnnotatedString("")
-}
 
 @Composable
 private fun OfferingStatusText(
@@ -270,9 +291,10 @@ private fun OfferingStatusText(
     Text(
         text = text,
         style = textStyle,
-        modifier = modifier
-            .background(backgroundColor, shape = RoundedCornerShape(10.dp))
-            .padding(horizontal = 6.dp, vertical = 2.dp)
+        modifier =
+            modifier
+                .background(backgroundColor, shape = RoundedCornerShape(10.dp))
+                .padding(horizontal = 6.dp, vertical = 2.dp),
     )
 }
 
@@ -286,7 +308,7 @@ private fun OfferingCondition.toTextStyle(density: Density): TextStyle {
         fontWeight = FontWeight.Bold,
         fontSize = fontSize,
         fontFamily = fontFamily,
-        color = textColor
+        color = textColor,
     )
 }
 
@@ -309,25 +331,29 @@ private fun OfferingCondition.toOfferingConditionText(): String =
         OfferingCondition.AVAILABLE -> stringResource(R.string.home_offering_continue)
     }
 
-
 @Preview(showSystemUi = true)
 @Composable
 fun OfferingItemPreview(modifier: Modifier = Modifier) {
-    val offering = Offering(
-        id = 1,
-        title = "아주긴제에에에에에에에목",
-        meetingAddressDong = "XXX동",
-        thumbnailUrl = "https://cdn.pixabay.com/photo/2023/12/08/05/41/cat-8436848_1280.jpg",
-        totalCount = 3,
-        currentCount = 2,
-        dividedPrice = 2030,
-        originPrice = 6090,
-        status = OfferingCondition.IMMINENT,
-        isOpen = false
+    val offering =
+        Offering(
+            id = 1,
+            title = "아주긴제에에에에에에에목",
+            meetingAddressDong = "XXX동",
+            thumbnailUrl = "https://cdn.pixabay.com/photo/2023/12/08/05/41/cat-8436848_1280.jpg",
+            totalCount = 3,
+            currentCount = 2,
+            dividedPrice = 2030,
+            originPrice = 6090,
+            status = OfferingCondition.IMMINENT,
+            isOpen = false,
+        )
+    OfferingItem(
+        offering,
+        object : OnOfferingClickListener {
+            override fun onClick(offeringId: Long) {
+            }
+        },
+        "",
+        R.color.search_keyword,
     )
-    OfferingItem(offering, object : OnOfferingClickListener {
-        override fun onClick(offeringId: Long) {
-
-        }
-    }, "", R.color.search_keyword)
 }

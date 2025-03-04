@@ -27,31 +27,32 @@ class OfferingSearchState(
         onTextChange(newText)
     }
 
-    private fun isTextLengthExceed(newText: String, maxLength: Int?) =
-        maxLength != null && newText.length > maxLength
+    private fun isTextLengthExceed(
+        newText: String,
+        maxLength: Int?,
+    ) = maxLength != null && newText.length > maxLength
 
     companion object {
-        fun saver(
-            onTextChange: (String) -> Unit = {},
-        ): Saver<OfferingSearchState, *> = Saver(
-            save =
-            {
-                listOf(
-                    it.text,
-                    it.placeholder,
-                    it.maxLength,
-                )
-            },
-            restore =
-            {
-                OfferingSearchState(
-                    initialText = it[0] as String,
-                    placeholder = it[1] as String?,
-                    maxLength = it[2] as Int?,
-                    onTextChange = onTextChange
-                )
-            }
-        )
+        fun saver(onTextChange: (String) -> Unit = {}): Saver<OfferingSearchState, *> =
+            Saver(
+                save =
+                    {
+                        listOf(
+                            it.text,
+                            it.placeholder,
+                            it.maxLength,
+                        )
+                    },
+                restore =
+                    {
+                        OfferingSearchState(
+                            initialText = it[0] as String,
+                            placeholder = it[1] as String?,
+                            maxLength = it[2] as Int?,
+                            onTextChange = onTextChange,
+                        )
+                    },
+            )
     }
 }
 
@@ -64,13 +65,13 @@ fun rememberOfferingSearchState(
 ): OfferingSearchState {
     return rememberSaveable(
         initialText,
-        saver = OfferingSearchState.saver(onTextChange)
+        saver = OfferingSearchState.saver(onTextChange),
     ) {
         OfferingSearchState(
             initialText,
             placeholder,
             maxLength,
-            onTextChange
+            onTextChange,
         )
     }
 }

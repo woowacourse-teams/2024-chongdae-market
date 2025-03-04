@@ -46,90 +46,100 @@ internal fun OfferingSearchBar(
     val density = LocalDensity.current
 
     BasicTextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(Color.White),
         value = state.text,
         onValueChange = { state.updateText(it) },
-        textStyle = TextStyle(
-            fontSize = with(density) { 15.dp.toSp() },
-            fontFamily = FontFamily(
-                Font(
-                    R.font.suit_medium,
-                    weight = FontWeight.Medium,
-                )
-            )
-        ),
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Text,
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                onSearchClick()
-            }
-        ),
+        textStyle =
+            TextStyle(
+                fontSize = with(density) { 15.dp.toSp() },
+                fontFamily =
+                    FontFamily(
+                        Font(
+                            R.font.suit_medium,
+                            weight = FontWeight.Medium,
+                        ),
+                    ),
+            ),
+        keyboardOptions =
+            KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Text,
+            ),
+        keyboardActions =
+            KeyboardActions(
+                onDone = {
+                    onSearchClick()
+                },
+            ),
     ) { innerTextField ->
         Column {
             Row(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .padding(start = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .wrapContentHeight()
+                        .padding(start = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
                 ) {
                     innerTextField()
                     if (state.isPlaceHolderVisible) {
                         Text(
                             text = state.placeholder ?: return@Box,
                             maxLines = 1,
-                            style = TextStyle(
-                                fontSize = with(density) { 15.dp.toSp() },
-                                color = Color.Gray,
-                                fontFamily = FontFamily(
-                                    Font(
-                                        R.font.suit_medium,
-                                        weight = FontWeight.Medium,
-                                    )
-                                )
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = with(density) { 15.dp.toSp() },
+                                    color = Color.Gray,
+                                    fontFamily =
+                                        FontFamily(
+                                            Font(
+                                                R.font.suit_medium,
+                                                weight = FontWeight.Medium,
+                                            ),
+                                        ),
+                                ),
                         )
                     }
                 }
 
                 if (state.text.isNotBlank()) {
                     IconButton(
-                        modifier = Modifier
-                            .size(15.dp),
-                        onClick = onClearClick
+                        modifier =
+                            Modifier
+                                .size(15.dp),
+                        onClick = onClearClick,
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.btn_offering_write_clear),
-                            contentDescription = "Clear Search"
+                            contentDescription = "Clear Search",
                         )
                     }
                     Spacer(modifier = Modifier.width(15.dp))
                 }
                 IconButton(
                     modifier = Modifier.size(25.dp),
-                    onClick = onSearchClick
+                    onClick = onSearchClick,
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_main_search),
-                        contentDescription = "Search"
+                        contentDescription = "Search",
                     )
                 }
             }
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(1.5.dp)
-                    .background(color = colorResource(id = R.color.main_color)),
+                    Modifier
+                        .fillMaxWidth()
+                        .height(1.5.dp)
+                        .background(color = colorResource(id = R.color.main_color)),
             )
         }
     }
@@ -141,7 +151,7 @@ private fun OfferingSearchBarPreview() {
     val state =
         rememberOfferingSearchState(
             initialText = "1",
-            placeholder = stringResource(R.string.home_search_hint_text)
+            placeholder = stringResource(R.string.home_search_hint_text),
         )
     MaterialTheme {
         OfferingSearchBar(state, {}, { state.updateText("") })

@@ -2,11 +2,6 @@ package com.zzang.chongdae.presentation.util
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
-import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +18,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.regex.Pattern
 
 @BindingAdapter("detailProductImageUrl")
 fun ImageView.setImageResource(imageUrl: String?) {
