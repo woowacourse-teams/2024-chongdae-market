@@ -32,7 +32,7 @@ public class AuthServiceTest extends ServiceTest {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    @DisplayName("로그인이 성공하면 member_id, refresh_token, device_id가 저장된다.")
+    @DisplayName("로그인이 성공하면 member, refreshToken, sessionId 정보가 DB애 저장된다.")
     @Test
     void should_saveAuthEntity_whenLoginSuccess() {
         // given
