@@ -11,7 +11,7 @@ import com.zzang.chongdae.domain.model.Filter
 class OfferingFiltersState(
     val filters: List<Filter>,
     initSelectedFilter: Filter? = null,
-    private val onFilterClick: (Filter) -> Unit = {},
+    private val onFilterClick: (Filter, Boolean) -> Unit,
 ) {
     var selectedFilter by mutableStateOf(initSelectedFilter)
         private set
@@ -19,7 +19,7 @@ class OfferingFiltersState(
     fun selectFilter(filter: Filter) {
         if (selectedFilter != filter) selectedFilter = filter
         else selectedFilter = null
-        onFilterClick(filter)
+        onFilterClick(filter, isSelectedFilter(filter))
     }
 
     fun isSelectedFilter(filter: Filter): Boolean = selectedFilter == filter
@@ -27,7 +27,7 @@ class OfferingFiltersState(
     companion object {
         fun saver(
             filters: List<Filter>,
-            onFilterClick: (Filter) -> Unit = {},
+            onFilterClick: (Filter, Boolean) -> Unit,
         ): Saver<OfferingFiltersState, *> = Saver(
             save = {
                 it.selectedFilter?.value
@@ -47,7 +47,7 @@ class OfferingFiltersState(
 fun rememberSavableOfferingFiltersState(
     filters: List<Filter>,
     initSelectedFilter: Filter? = null,
-    onFilterClick: (Filter) -> Unit = {},
+    onFilterClick: (Filter, Boolean) -> Unit,
 ): OfferingFiltersState {
     return rememberSaveable(
         initSelectedFilter, filters, onFilterClick,

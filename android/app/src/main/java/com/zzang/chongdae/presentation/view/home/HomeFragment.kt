@@ -55,7 +55,7 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        initSearchListener()
+//        initSearchListener()
         setUpOfferingsObserve()
         navigateToOfferingWriteFragment()
         initFragmentResultListener()
@@ -71,39 +71,43 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     }
 
     private fun setOnCheckboxListener() {
-//        binding.cbJoinable.setOnClickListener {
-//            handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
-//        }
-//
-//        binding.cbImminent.setOnClickListener {
-//            handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
-//        }
-//
-//        binding.cbHighDiscount.setOnClickListener {
-//            handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
-//        }
-//
-//        viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
-//            updateCheckBoxStates(selectedFilter)
-//        }
+        /*
+                binding.cbJoinable.setOnClickListener {
+                    handleCheckBoxSelection(FilterName.JOINABLE, (it as CheckBox).isChecked)
+                }
+
+                binding.cbImminent.setOnClickListener {
+                    handleCheckBoxSelection(FilterName.IMMINENT, (it as CheckBox).isChecked)
+                }
+
+                binding.cbHighDiscount.setOnClickListener {
+                    handleCheckBoxSelection(FilterName.HIGH_DISCOUNT, (it as CheckBox).isChecked)
+                }
+        */
+
+        /*        viewModel.selectedFilter.observe(viewLifecycleOwner) { selectedFilter ->
+                    updateCheckBoxStates(selectedFilter)
+                }*/
 
         viewModel.error.observe(viewLifecycleOwner) { errMsgId ->
             showToast(errMsgId)
         }
     }
 
-    private fun handleCheckBoxSelection(
-        filterName: FilterName,
-        isChecked: Boolean,
-    ) {
-        viewModel.onClickFilter(filterName, isChecked)
-    }
+//    private fun handleCheckBoxSelection(
+//        filterName: FilterName,
+//        isChecked: Boolean,
+//    ) {
+//        viewModel.onClickFilter(filterName, isChecked)
+//    }
 
-    private fun updateCheckBoxStates(selectedFilterName: String?) {
-//        binding.cbJoinable.isChecked = selectedFilterName == FilterName.JOINABLE.name
-//        binding.cbImminent.isChecked = selectedFilterName == FilterName.IMMINENT.name
-//        binding.cbHighDiscount.isChecked = selectedFilterName == FilterName.HIGH_DISCOUNT.name
-    }
+    /*
+        private fun updateCheckBoxStates(selectedFilterName: String?) {
+            binding.cbJoinable.isChecked = selectedFilterName == FilterName.JOINABLE.name
+            binding.cbImminent.isChecked = selectedFilterName == FilterName.IMMINENT.name
+            binding.cbHighDiscount.isChecked = selectedFilterName == FilterName.HIGH_DISCOUNT.name
+        }
+    */
 
     private fun initFragmentResultListener() {
         setFragmentResultListener(OfferingDetailFragment.OFFERING_DETAIL_BUNDLE_KEY) { _, bundle ->
@@ -125,16 +129,18 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         }
     }
 
-    private fun initSearchListener() {
-//        binding.etSearch.setOnEditorActionListener { _, actionId, event ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-//                viewModel.onClickSearchButton()
-//                true
-//            } else {
-//                false
-//            }
-//        }
-    }
+    /*
+        private fun initSearchListener() {
+            binding.etSearch.setOnEditorActionListener { _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    viewModel.onClickSearchButton()
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+    */
 
     override fun onResume() {
         super.onResume()
@@ -155,14 +161,15 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         container: ViewGroup?,
     ) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.vm = viewModel
+        /*        binding.lifecycleOwner = viewLifecycleOwner
+                binding.vm = viewModel*/
         binding.composeView.setContent {
             MaterialTheme {
-                HomeScreen()
+                HomeScreen(viewModel = viewModel, this)
             }
         }
     }
+
 
     private fun initAdapter() {
 //        offeringAdapter = OfferingAdapter(this)
@@ -180,13 +187,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 //                }
 //            }
 //        }
-//        binding.rvOfferings.adapter = offeringAdapter
-//        binding.rvOfferings.addItemDecoration(
-//            DividerItemDecoration(
-//                requireContext(),
-//                LinearLayoutManager.VERTICAL,
-//            ),
-//        )
+/*        binding.rvOfferings.adapter = offeringAdapter
+        binding.rvOfferings.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+            ),
+        )*/
     }
 
 //    private fun isItemEmpty() = offeringAdapter.itemCount == 0
@@ -196,9 +203,9 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 //            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
 //        }
 //
-//        viewModel.offerings.observe(viewLifecycleOwner) {
-//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
-//        }
+/*        viewModel.offerings.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+        }*/
 //
 //        viewModel.searchEvent.observe(viewLifecycleOwner) {
 //            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())

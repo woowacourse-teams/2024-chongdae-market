@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 
@@ -12,6 +11,7 @@ class OfferingSearchState(
     initialText: String = "",
     val placeholder: String? = null,
     val maxLength: Int? = null,
+    private val onTextChange: (String) -> Unit = {},
 ) {
     var text by mutableStateOf(initialText)
         private set
@@ -24,25 +24,31 @@ class OfferingSearchState(
             return
         }
         text = newText
+        onTextChange(newText)
     }
 
     private fun isTextLengthExceed(newText: String, maxLength: Int?) =
         maxLength != null && newText.length > maxLength
 
     companion object {
-        val Saver: Saver<OfferingSearchState, *> = listSaver(
-            save = {
+        fun saver(
+            onTextChange: (String) -> Unit = {},
+        ): Saver<OfferingSearchState, *> = Saver(
+            save =
+            {
                 listOf(
                     it.text,
                     it.placeholder,
                     it.maxLength,
                 )
             },
-            restore = {
+            restore =
+            {
                 OfferingSearchState(
                     initialText = it[0] as String,
-                    placeholder = it[2] as String?,
-                    maxLength = it[3] as Int?,
+                    placeholder = it[1] as String?,
+                    maxLength = it[2] as Int?,
+                    onTextChange = onTextChange
                 )
             }
         )
@@ -54,8 +60,9 @@ fun rememberOfferingSearchState(
     initialText: String = "",
     placeholder: String? = null,
     maxLength: Int? = null,
+    onTextChange: (String) -> Unit = {},
 ): OfferingSearchState {
-    return rememberSaveable(saver = OfferingSearchState.Saver) {
+    return rememberSaveable(saver = OfferingSearchState.saver(onTextChange)) {
         OfferingSearchState(
             initialText,
             placeholder,

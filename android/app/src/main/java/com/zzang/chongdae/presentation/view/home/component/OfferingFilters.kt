@@ -42,6 +42,7 @@ internal fun OfferingFilters(
 ) {
     Row {
         for (filter in state.filters) {
+            if (filter.type == FilterType.INVISIBLE) continue
             OfferingFilter(filter, state)
             Spacer(modifier = Modifier.width(10.dp))
         }
@@ -112,6 +113,6 @@ private fun OfferingFiltersPreview() {
         Filter(FilterName.IMMINENT, "마감임박만", FilterType.VISIBLE),
         Filter(FilterName.HIGH_DISCOUNT, "높은할인율순", FilterType.VISIBLE)
     )
-    var state = rememberSavableOfferingFiltersState(filters)
+    var state = rememberSavableOfferingFiltersState(filters) { _, _ -> }
     OfferingFilters(state)
 }
