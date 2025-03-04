@@ -93,9 +93,18 @@ internal fun HomeScreen(
             OfferingSearchBar(
                 offeringSearchState,
                 { viewModel.onClickSearchButton() },
-                { viewModel.refreshOfferings(true) })
+                { viewModel.refreshOfferings(true) },
+                Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 28.dp)
+            )
 
-            OfferingFilters(offeringFiltersState)
+            OfferingFilters(
+                offeringFiltersState,
+                Modifier
+                    .padding(start = 25.dp)
+                    .padding(top = 8.dp)
+            )
 
             if (offerings.loadState.refresh == LoadState.Loading) {
                 CircularProgressIndicator(
@@ -151,7 +160,7 @@ internal fun HomeScreen(
                 LazyColumn(
                     Modifier
                         .fillMaxSize()
-                        .padding(top=20.dp)
+                        .padding(top = 15.dp)
                         .padding(horizontal = 30.dp)
                 ) {
                     items(count = offerings.itemCount) { index ->

@@ -41,11 +41,12 @@ internal fun OfferingSearchBar(
     state: OfferingSearchState,
     onSearchClick: () -> Unit,
     onClearClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
 
     BasicTextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.White),
         value = state.text,
