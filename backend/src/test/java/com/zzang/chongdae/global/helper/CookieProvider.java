@@ -1,6 +1,5 @@
 package com.zzang.chongdae.global.helper;
 
-import com.zzang.chongdae.auth.repository.RefreshTokenRepository;
 import com.zzang.chongdae.auth.service.JwtTokenProvider;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -17,11 +16,8 @@ public class CookieProvider {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final RefreshTokenRepository refreshTokenRepository;
-
-    public CookieProvider(JwtTokenProvider jwtTokenProvider, RefreshTokenRepository refreshTokenRepository) {
+    public CookieProvider(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public Cookies createCookiesWithMember(MemberEntity member) {
