@@ -35,10 +35,10 @@ import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
 internal fun OfferingsList(
     viewModel: OfferingViewModel,
     offerings: LazyPagingItems<Offering>,
+    searchKeyword: String?,
     onOfferingClick: OnOfferingClickListener,
     onFloatingClick: OnFloatingClickListener,
 ) {
-    val searchKeyword by viewModel.searchEvent.observeAsState()
     val updatedOfferings by viewModel.updatedOffering.observeAsState(emptyList())
     var isRefreshing by remember { mutableStateOf(false) }
     val pullToRefreshState = rememberPullToRefreshState()
@@ -87,9 +87,9 @@ internal fun OfferingsList(
             shape = CircleShape,
             containerColor = colorResource(R.color.main_color),
             modifier =
-                Modifier
-                    .padding(end = 20.dp, bottom = 30.dp)
-                    .align(Alignment.BottomEnd),
+            Modifier
+                .padding(end = 20.dp, bottom = 30.dp)
+                .align(Alignment.BottomEnd),
         ) {
             Image(
                 painter = painterResource(R.drawable.btn_main_create_offering),

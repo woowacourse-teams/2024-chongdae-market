@@ -178,6 +178,7 @@ class OfferingViewModel
             if (isSuccess) {
                 search.value = null
                 _selectedFilter.value = null
+                _searchEvent.value = null
                 fetchOfferings()
             }
         }
