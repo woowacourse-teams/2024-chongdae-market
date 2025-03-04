@@ -99,6 +99,7 @@ dependencies {
 
     // Test
     implementation(libs.androidx.junit)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.assertj.core)
     testImplementation(libs.kotest.runner.junit5)
