@@ -60,7 +60,8 @@ public class AuthServiceTest extends ServiceTest {
         String newRefreshToken = authToken.refreshToken();
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(newRefreshToken);
         String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(newRefreshToken);
-        RefreshTokenEntity auth = refreshTokenRepository.findByMemberIdAndDeviceId(memberId, deviceId).get();
+        MemberEntity member = memberRepository.findById(memberId).get();
+        RefreshTokenEntity auth = refreshTokenRepository.findByMemberAndDeviceId(member, deviceId).get();
         boolean actual = auth.isValid(newRefreshToken);
 
         // then

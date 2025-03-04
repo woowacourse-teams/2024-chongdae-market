@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, Long> {
 
-    Optional<RefreshTokenEntity> findByMemberIdAndDeviceId(Long memberId, String deviceId);
+    Optional<RefreshTokenEntity> findByMemberAndDeviceId(MemberEntity member, String deviceId);
 
     boolean existsByMemberAndDeviceId(MemberEntity member, String deviceId);
 }

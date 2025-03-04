@@ -37,10 +37,11 @@ public class AuthTokenManager {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean isValid(String refreshToken) {
         MemberEntity member = findMemberByRefreshToken(refreshToken);
+        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
         if (isValidLegacy(member, refreshToken)) {
             return true;
         }
-        RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(refreshToken);
+        RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(member, deviceId);
         if (!refreshTokenEntity.isValid(refreshToken)) {
             refreshTokenRepository.delete(refreshTokenEntity);
             return false;
@@ -59,10 +60,8 @@ public class AuthTokenManager {
         return deviceId == null && !refreshTokenRepository.existsByMemberAndDeviceId(member, deviceId);
     }
 
-    private RefreshTokenEntity findRefreshTokenFromRepository(String refreshToken) {
-        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
-        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(refreshToken);
-        return refreshTokenRepository.findByMemberIdAndDeviceId(memberId, deviceId)
+    private RefreshTokenEntity findRefreshTokenFromRepository(MemberEntity member, String deviceId) {
+        return refreshTokenRepository.findByMemberAndDeviceId(member, deviceId)
                 .orElseThrow(() -> new MarketException(AuthErrorCode.EXPIRED_REFRESH_TOKEN));
     }
 
@@ -74,7 +73,7 @@ public class AuthTokenManager {
         if (deviceId == null) {
             return refreshLegacyToken(member, deviceId, refreshToken);
         }
-        RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(refreshToken);
+        RefreshTokenEntity refreshTokenEntity = findRefreshTokenFromRepository(member, deviceId);
         AuthTokenDto authTokenDto = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
         refreshTokenEntity.refresh(authTokenDto.refreshToken());
         return authTokenDto;
