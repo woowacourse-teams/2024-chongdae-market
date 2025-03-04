@@ -34,13 +34,13 @@ public class RefreshTokenEntity extends BaseTimeEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MemberEntity member;
 
-    private String deviceId;
+    private String sessionId;
 
     @NotNull
     private String refreshToken;
 
-    public RefreshTokenEntity(MemberEntity member, String deviceId, String refreshToken) {
-        this(null, member, deviceId, refreshToken);
+    public RefreshTokenEntity(MemberEntity member, String sessionId, String refreshToken) {
+        this(null, member, sessionId, refreshToken);
     }
 
     public boolean isValid(String refreshToken) {

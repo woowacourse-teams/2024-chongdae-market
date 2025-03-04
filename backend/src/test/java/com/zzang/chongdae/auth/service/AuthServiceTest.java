@@ -59,9 +59,9 @@ public class AuthServiceTest extends ServiceTest {
         AuthTokenDto authToken = authService.refresh(refreshToken);
         String newRefreshToken = authToken.refreshToken();
         Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(newRefreshToken);
-        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(newRefreshToken);
+        String sessionId = jwtTokenProvider.getSessionIdByRefreshToken(newRefreshToken);
         MemberEntity member = memberRepository.findById(memberId).get();
-        RefreshTokenEntity auth = refreshTokenRepository.findByMemberAndDeviceId(member, deviceId).get();
+        RefreshTokenEntity auth = refreshTokenRepository.findByMemberAndSessionId(member, sessionId).get();
         boolean actual = auth.isValid(newRefreshToken);
 
         // then
@@ -104,7 +104,7 @@ public class AuthServiceTest extends ServiceTest {
     }
 
 
-    @DisplayName("기존 버전의 refresh token을 재갱신하면 deviceId가 담긴 새 토큰을 확득할 수 있다.")
+    @DisplayName("기존 버전의 refresh token을 재갱신하면 sessionId가 담긴 새 토큰을 확득할 수 있다.")
     @Test
     void should_refresh_whenRefreshLegacyToken() {
         // given
@@ -114,10 +114,10 @@ public class AuthServiceTest extends ServiceTest {
         // when
         AuthTokenDto authToken = authService.refresh(legacyToken);
         String newRefreshToken = authToken.refreshToken();
-        String deviceId = jwtTokenProvider.getDeviceIdByRefreshToken(newRefreshToken);
+        String sessionId = jwtTokenProvider.getSessionIdByRefreshToken(newRefreshToken);
 
         // then
-        assertThat(deviceId).isNotNull();
+        assertThat(sessionId).isNotNull();
     }
 
     @DisplayName("기존 버전의 refresh token을 재갱신하고 다시 한번 재갱신하면 예외가 발생한다.")

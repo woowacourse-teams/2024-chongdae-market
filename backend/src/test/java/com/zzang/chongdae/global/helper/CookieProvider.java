@@ -21,12 +21,12 @@ public class CookieProvider {
     }
 
     public Cookies createCookiesWithMember(MemberEntity member) {
-        String deviceId = UUID.randomUUID().toString();
-        return this.createCookiesWithMember(member, deviceId);
+        String sessionId = UUID.randomUUID().toString();
+        return this.createCookiesWithMember(member, sessionId);
     }
 
-    private Cookies createCookiesWithMember(MemberEntity member, String deviceId) {
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), deviceId);
+    private Cookies createCookiesWithMember(MemberEntity member, String sessionId) {
+        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString(), sessionId);
         Cookie accessTokenCookie = new Cookie.Builder(ACCESS_TOKEN_COOKIE_NAME, authToken.accessToken()).build();
         Cookie refreshTokenCookie = new Cookie.Builder(REFRESH_TOKEN_COOKIE_NAME, authToken.refreshToken()).build();
         return new Cookies(accessTokenCookie, refreshTokenCookie);
