@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
@@ -18,7 +16,6 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.FilterName
 import com.zzang.chongdae.domain.model.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.usecase.home.FetchFiltersUserCase
@@ -47,7 +44,6 @@ constructor(
     val offerings: StateFlow<PagingData<Offering>> get() = _offerings
 
     val search: MutableLiveData<String?> = MutableLiveData(null)
-    val isSearchKeywordExist = search.map { (it != null) && (it != "") }
 
     private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
     val filters: LiveData<List<Filter>> get() = _filters
@@ -58,15 +54,9 @@ constructor(
     private val _searchEvent: MutableLiveData<String?> = MutableLiveData(null)
     val searchEvent: LiveData<String?> get() = _searchEvent
 
-    private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
-
     private val _updatedOffering: MutableLiveData<MutableList<Offering>> =
         MutableLiveData(mutableListOf())
     val updatedOffering: LiveData<MutableList<Offering>> get() = _updatedOffering
-
-    private val _offeringsRefreshEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-    val offeringsRefreshEvent: SingleLiveData<Unit> get() = _offeringsRefreshEvent
 
     private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
     val error: SingleLiveData<Int> get() = _error
@@ -101,21 +91,6 @@ constructor(
             }
         }
     }
-
-    private fun removeAsterisks(title: String): String {
-        return title.replace("*", "")
-    }
-
-    private fun highlightSearchKeyword(
-        title: String,
-        keyword: String,
-    ): String {
-        return title.replace(keyword, "*$keyword*")
-    }
-
-    private fun isTitleContainSearchKeyword(it: Offering) = (search.value as String) in it.title
-
-    private fun isSearchKeywordExist() = (search.value != null) && (search.value != "")
 
     private fun fetchFilters() {
         viewModelScope.launch {
@@ -160,13 +135,11 @@ constructor(
         } else {
             _selectedFilter.value = null
         }
-
-        _filterOfferingsEvent.setValue(Unit)
         fetchOfferings()
     }
 
     override fun onClickSearchButton() {
-        _searchEvent.setValue(search.value)
+        _searchEvent.value = search.value
         fetchOfferings()
     }
 
@@ -205,13 +178,11 @@ constructor(
         if (isSuccess) {
             search.value = null
             _selectedFilter.value = null
-            _offeringsRefreshEvent.setValue(Unit)
             fetchOfferings()
         }
     }
 
     fun swipeRefresh() {
-        _offeringsRefreshEvent.setValue(Unit)
         fetchOfferings()
     }
 
