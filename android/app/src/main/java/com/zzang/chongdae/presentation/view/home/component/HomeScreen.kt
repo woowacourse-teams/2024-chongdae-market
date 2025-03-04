@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -52,6 +53,8 @@ internal fun HomeScreen(
 ) {
     val density = LocalDensity.current
     val search by viewModel.search.observeAsState()
+    val filters by viewModel.filters.observeAsState(emptyList())
+    val selectedFilter by viewModel.selectedFilter.observeAsState()
 
     val offeringSearchState = rememberOfferingSearchState(
         initialText = search ?: "",
@@ -59,26 +62,16 @@ internal fun HomeScreen(
         onTextChange = { viewModel.updateSearch(it) }
     )
 
-    val filters by viewModel.filters.observeAsState(emptyList())
-    val selectedFilter by viewModel.selectedFilter.observeAsState()
-    val offeringFiltersState =
-        rememberSavableOfferingFiltersState(
-            filters = filters,
-            initSelectedFilter = selectedFilter,
-            onFilterClick = { filter, isChecked ->
-                viewModel.onClickFilter(filter, isChecked)
-            }
-        )
+    val offeringFiltersState = rememberSavableOfferingFiltersState(
+        filters = filters,
+        initSelectedFilter = selectedFilter,
+        onFilterClick = { filter, isChecked -> viewModel.onClickFilter(filter, isChecked) }
+    )
 
     val offerings = viewModel.offerings.collectAsLazyPagingItems()
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.background(Color.White)
-        ) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.background(Color.White)) {
             OfferingSearchBar(
                 offeringSearchState,
                 { viewModel.onClickSearchButton() },
@@ -90,40 +83,50 @@ internal fun HomeScreen(
 
             OfferingFilters(
                 offeringFiltersState,
-                Modifier
-                    .padding(start = 25.dp)
-                    .padding(top = 8.dp)
+                Modifier.padding(start = 25.dp, top = 8.dp)
             )
 
-            if (offerings.loadState.refresh == LoadState.Loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .wrapContentHeight(Alignment.CenterVertically),
-                )
-                return@Surface
-            }
+            when {
+                offerings.loadState.refresh == LoadState.Loading -> {
+                    LoadingIndicator()
+                }
 
-            if (offerings.itemCount == 0) {
-                Text(
-                    text = stringResource(R.string.home_empty_item_comment),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .wrapContentHeight(Alignment.CenterVertically),
-                    fontSize = with(density) { 22.dp.toSp() },
-                    fontFamily = FontFamily(
-                        Font(
-                            R.font.suit_medium,
-                            weight = FontWeight.Medium,
-                        )
-                    )
-                )
-                return@Surface
-            }
+                offerings.itemCount == 0 -> {
+                    EmptyState(density)
+                }
 
-            OfferingsList(viewModel, offerings, onOfferingClick, onFloatingClick)
+                else -> {
+                    OfferingsList(viewModel, offerings, onOfferingClick, onFloatingClick)
+                }
+            }
         }
     }
+}
+
+@Composable
+private fun LoadingIndicator() {
+    CircularProgressIndicator(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .wrapContentHeight(Alignment.CenterVertically)
+    )
+}
+
+@Composable
+private fun EmptyState(density: Density) {
+    Text(
+        text = stringResource(R.string.home_empty_item_comment),
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .wrapContentHeight(Alignment.CenterVertically),
+        fontSize = with(density) { 22.dp.toSp() },
+        fontFamily = FontFamily(
+            Font(
+                R.font.suit_medium,
+                weight = FontWeight.Medium,
+            )
+        )
+    )
 }
