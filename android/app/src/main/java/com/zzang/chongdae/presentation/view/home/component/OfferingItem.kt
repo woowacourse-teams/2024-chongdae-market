@@ -75,7 +75,6 @@ fun OfferingItem(
                 .background(Color.White)
                 .fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.width(20.dp))
             Box {
                 GlideImage(
                     modifier = Modifier
@@ -173,8 +172,7 @@ fun OfferingItem(
                 }
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end=15.dp),
+                        .fillMaxWidth(),
                     horizontalAlignment = Alignment.End,
                 ) {
                     Text(
