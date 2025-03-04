@@ -33,4 +33,5 @@
     <color name="kakao_yellow">#FFFEE500</color>
     <color name="offering_detail_background">#FFFFFFFF</color>
     <color name="default_icon_color">#FF000000</color>
+    <color name="cursor_background_color">#FFB0D3FB</color>
 </resources>
