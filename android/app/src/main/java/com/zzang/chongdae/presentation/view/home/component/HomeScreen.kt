@@ -88,7 +88,7 @@ internal fun HomeScreen(
                         offerings,
                         searchKeyword,
                         onOfferingClick,
-                        onFloatingClick
+                        onFloatingClick,
                     )
                 }
             }
@@ -100,10 +100,10 @@ internal fun HomeScreen(
 private fun LoadingIndicator() {
     CircularProgressIndicator(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .wrapContentHeight(Alignment.CenterVertically),
+            Modifier
+                .fillMaxSize()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .wrapContentHeight(Alignment.CenterVertically),
     )
 }
 
@@ -112,17 +112,17 @@ private fun EmptyState(density: Density) {
     Text(
         text = stringResource(R.string.home_empty_item_comment),
         modifier =
-        Modifier
-            .fillMaxSize()
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .wrapContentHeight(Alignment.CenterVertically),
+            Modifier
+                .fillMaxSize()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .wrapContentHeight(Alignment.CenterVertically),
         fontSize = with(density) { 22.dp.toSp() },
         fontFamily =
-        FontFamily(
-            Font(
-                R.font.suit_medium,
-                weight = FontWeight.Medium,
+            FontFamily(
+                Font(
+                    R.font.suit_medium,
+                    weight = FontWeight.Medium,
+                ),
             ),
-        ),
     )
 }

@@ -87,9 +87,9 @@ internal fun OfferingsList(
             shape = CircleShape,
             containerColor = colorResource(R.color.main_color),
             modifier =
-            Modifier
-                .padding(end = 20.dp, bottom = 30.dp)
-                .align(Alignment.BottomEnd),
+                Modifier
+                    .padding(end = 20.dp, bottom = 30.dp)
+                    .align(Alignment.BottomEnd),
         ) {
             Image(
                 painter = painterResource(R.drawable.btn_main_create_offering),
