@@ -62,11 +62,15 @@ fun rememberOfferingSearchState(
     maxLength: Int? = null,
     onTextChange: (String) -> Unit = {},
 ): OfferingSearchState {
-    return rememberSaveable(saver = OfferingSearchState.saver(onTextChange)) {
+    return rememberSaveable(
+        initialText,
+        saver = OfferingSearchState.saver(onTextChange)
+    ) {
         OfferingSearchState(
             initialText,
             placeholder,
             maxLength,
+            onTextChange
         )
     }
 }

@@ -55,20 +55,20 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-//        initSearchListener()
+        /*initSearchListener()*/
         setUpOfferingsObserve()
         navigateToOfferingWriteFragment()
         initFragmentResultListener()
         setOnCheckboxListener()
-        setOnSwipeRefreshListener()
+        /*setOnSwipeRefreshListener()*/
     }
 
-    private fun setOnSwipeRefreshListener() {
+    /*private fun setOnSwipeRefreshListener() {
         binding.swipeLayout.setOnRefreshListener {
             binding.swipeLayout.isRefreshing = false
             viewModel.swipeRefresh()
         }
-    }
+    }*/
 
     private fun setOnCheckboxListener() {
         /*
@@ -93,13 +93,13 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
             showToast(errMsgId)
         }
     }
-
-//    private fun handleCheckBoxSelection(
-//        filterName: FilterName,
-//        isChecked: Boolean,
-//    ) {
-//        viewModel.onClickFilter(filterName, isChecked)
-//    }
+/*
+    private fun handleCheckBoxSelection(
+        filterName: FilterName,
+        isChecked: Boolean,
+    ) {
+        viewModel.onClickFilter(filterName, isChecked)
+    }*/
 
     /*
         private fun updateCheckBoxStates(selectedFilterName: String?) {
@@ -172,21 +172,22 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
 
 
     private fun initAdapter() {
-//        offeringAdapter = OfferingAdapter(this)
-//        offeringAdapter.addLoadStateListener {
-//            if (it.append.endOfPaginationReached) {
-//                binding.tvEmptyItem.isVisible = isItemEmpty()
-//            } else {
-//                binding.tvEmptyItem.isVisible = false
-//            }
-//        }
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                offeringAdapter.loadStateFlow.collect { loadState ->
-//                    binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
-//                }
-//            }
-//        }
+/*        offeringAdapter = OfferingAdapter(this)
+        offeringAdapter.addLoadStateListener {
+            if (it.append.endOfPaginationReached) {
+                binding.tvEmptyItem.isVisible = isItemEmpty()
+            } else {
+                binding.tvEmptyItem.isVisible = false
+            }
+        }*/
+
+/*        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                offeringAdapter.loadStateFlow.collect { loadState ->
+                    binding.pbLoading.isVisible = loadState.refresh is LoadState.Loading
+                }
+            }
+        }*/
 /*        binding.rvOfferings.adapter = offeringAdapter
         binding.rvOfferings.addItemDecoration(
             DividerItemDecoration(
@@ -196,36 +197,36 @@ class HomeFragment : Fragment(), OnOfferingClickListener {
         )*/
     }
 
-//    private fun isItemEmpty() = offeringAdapter.itemCount == 0
+/*    private fun isItemEmpty() = offeringAdapter.itemCount == 0*/
 
     private fun setUpOfferingsObserve() {
-//        viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
-//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
-//        }
-//
+/*        viewModel.offeringsRefreshEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+        }*/
+
 /*        viewModel.offerings.observe(viewLifecycleOwner) {
             offeringAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }*/
-//
-//        viewModel.searchEvent.observe(viewLifecycleOwner) {
-//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
-//            offeringAdapter.setSearchKeyword(it)
-//        }
-//
-//        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
-//            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
-//            firebaseAnalyticsManager.logSelectContentEvent(
-//                id = "filter_offerings_event",
-//                name = "filter_offerings_event",
-//                contentType = "checkbox",
-//            )
-//        }
-//
-//        viewModel.updatedOffering.observe(viewLifecycleOwner) {
-//            offeringAdapter.addUpdatedItem(it.toList())
-//        }
-//        viewModel.updatedOffering.getValue()?.toList()
-//            ?.let { offeringAdapter.addUpdatedItem(it) }
+
+/*        viewModel.searchEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+            offeringAdapter.setSearchKeyword(it)
+        }*/
+
+/*        viewModel.filterOfferingsEvent.observe(viewLifecycleOwner) {
+            offeringAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = "filter_offerings_event",
+                name = "filter_offerings_event",
+                contentType = "checkbox",
+            )
+        }*/
+
+/*        viewModel.updatedOffering.observe(viewLifecycleOwner) {
+            offeringAdapter.addUpdatedItem(it.toList())
+        }
+        viewModel.updatedOffering.getValue()?.toList()
+            ?.let { offeringAdapter.addUpdatedItem(it) }*/
 
         viewModel.refreshTokenExpiredEvent.observe(viewLifecycleOwner) {
             LoginActivity.startActivity(requireContext())

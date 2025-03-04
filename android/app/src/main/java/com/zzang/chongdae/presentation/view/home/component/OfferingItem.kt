@@ -52,6 +52,8 @@ import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
 fun OfferingItem(
     offering: Offering,
     onOfferingClick: OnOfferingClickListener,
+    searchKeyword: String = "",
+    colorId: Int = R.color.black_900,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val density = LocalDensity.current
@@ -96,7 +98,7 @@ fun OfferingItem(
                     .wrapContentWidth()
             ) {
                 Text(
-                    text = offering.title,
+                    text = buildAnnotatedTitle(offering.title, searchKeyword, colorId),
                     fontSize = with(density) { 16.dp.toSp() },
                     fontFamily = FontFamily(
                         Font(
@@ -193,6 +195,25 @@ fun OfferingItem(
 }
 
 @Composable
+fun buildAnnotatedTitle(title: String, searchKeyword: String, colorId: Int): AnnotatedString {
+    if (searchKeyword.isBlank() || !title.contains(searchKeyword)) {
+        return AnnotatedString(title)
+    }
+
+    val annotatedString = AnnotatedString.Builder(title)
+    val startIndex = title.indexOf(searchKeyword)
+    val endIndex = startIndex + searchKeyword.length
+
+    annotatedString.addStyle(
+        style = SpanStyle(color = colorResource(colorId)),
+        start = startIndex,
+        end = endIndex
+    )
+
+    return annotatedString.toAnnotatedString()
+}
+
+@Composable
 private fun OfferingCondition.toOfferingComment(
     remaining: Int,
 ): AnnotatedString = when (this) {
@@ -283,5 +304,5 @@ fun OfferingItemPreview(modifier: Modifier = Modifier) {
         override fun onClick(offeringId: Long) {
 
         }
-    })
+    }, "", R.color.search_keyword)
 }

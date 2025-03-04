@@ -52,33 +52,18 @@ constructor(
     private val _filters: MutableLiveData<List<Filter>> = MutableLiveData()
     val filters: LiveData<List<Filter>> get() = _filters
 
-    val joinableFilter: LiveData<Filter> =
-        _filters.map {
-            it.first { it.name == FilterName.JOINABLE }
-        }
+    private val _selectedFilter: MutableLiveData<Filter?> = MutableLiveData<Filter?>()
+    val selectedFilter: LiveData<Filter?> get() = _selectedFilter
 
-    val imminentFilter: LiveData<Filter> =
-        _filters.map {
-            it.first { it.name == FilterName.IMMINENT }
-        }
-
-    val highDiscountFilter: LiveData<Filter> =
-        _filters.map {
-            it.first { it.name == FilterName.HIGH_DISCOUNT }
-        }
-
-    private val _selectedFilter: MutableLiveData<String?> = MutableLiveData<String?>()
-    val selectedFilter: LiveData<String?> get() = _selectedFilter
-
-    private val _searchEvent: MutableSingleLiveData<String?> = MutableSingleLiveData(null)
-    val searchEvent: SingleLiveData<String?> get() = _searchEvent
+    private val _searchEvent: MutableLiveData<String?> = MutableLiveData(null)
+    val searchEvent: LiveData<String?> get() = _searchEvent
 
     private val _filterOfferingsEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val filterOfferingsEvent: SingleLiveData<Unit> get() = _filterOfferingsEvent
 
-    private val _updatedOffering: MutableSingleLiveData<MutableList<Offering>> =
-        MutableSingleLiveData(mutableListOf())
-    val updatedOffering: SingleLiveData<MutableList<Offering>> get() = _updatedOffering
+    private val _updatedOffering: MutableLiveData<MutableList<Offering>> =
+        MutableLiveData(mutableListOf())
+    val updatedOffering: LiveData<MutableList<Offering>> get() = _updatedOffering
 
     private val _offeringsRefreshEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
     val offeringsRefreshEvent: SingleLiveData<Unit> get() = _offeringsRefreshEvent
@@ -107,23 +92,12 @@ constructor(
                         fetchOfferingsUseCase,
                         authRepository,
                         search.value,
-                        _selectedFilter.value,
+                        _selectedFilter.value?.name?.toString(),
                     ) { fetchOfferings() }
                 },
             ).flow.cachedIn(viewModelScope).collectLatest { pagingData ->
                 _offerings.value =
-                    pagingData.map {
-                        if (isSearchKeywordExist() && isTitleContainSearchKeyword(it)) {
-                            return@map it.copy(
-                                title =
-                                highlightSearchKeyword(
-                                    it.title,
-                                    search.value!!,
-                                ),
-                            )
-                        }
-                        it.copy(title = removeAsterisks(it.title))
-                    }
+                    pagingData
             }
         }
     }
@@ -178,11 +152,11 @@ constructor(
     }
 
     override fun onClickFilter(
-        filterName: FilterName,
+        filter: Filter,
         isChecked: Boolean,
     ) {
         if (isChecked) {
-            _selectedFilter.value = filterName.toString()
+            _selectedFilter.value = filter
         } else {
             _selectedFilter.value = null
         }
