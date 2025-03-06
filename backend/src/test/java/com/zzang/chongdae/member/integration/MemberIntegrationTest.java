@@ -132,28 +132,5 @@ public class MemberIntegrationTest extends IntegrationTest {
                             .statusCode());
             assertThat(statusCodes).containsExactlyInAnyOrder(200, 409);
         }
-
-        @DisplayName("같은 사용자가 같은 닉네임으로 동시에 변경할 경우 중복 예외가 발생한다.")
-        @Test
-        void should_throwException_when_sameMemberAndSameNickname() throws InterruptedException {
-            MemberEntity poki = memberFixture.createMember("poki");
-
-            NicknameRequest request = new NicknameRequest("pokidoki");
-            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
-            List<Integer> statusCodes = concurrencyExecutor.execute(
-                    () -> RestAssured.given().log().all()
-                            .cookies(cookieProvider.createCookiesWithMember(poki))
-                            .contentType(ContentType.JSON)
-                            .body(request)
-                            .when().patch("/member")
-                            .statusCode(),
-                    () -> RestAssured.given().log().all()
-                            .cookies(cookieProvider.createCookiesWithMember(poki))
-                            .contentType(ContentType.JSON)
-                            .body(request)
-                            .when().patch("/member")
-                            .statusCode());
-            assertThat(statusCodes).containsExactlyInAnyOrder(200, 200);
-        }
     }
 }

@@ -1,7 +1,7 @@
 package com.zzang.chongdae.auth.config;
 
 import com.zzang.chongdae.auth.controller.CookieConsumer;
-import com.zzang.chongdae.auth.service.AuthService;
+import com.zzang.chongdae.auth.service.AuthTokenManager;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @AllArgsConstructor
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthService authService;
+    private final AuthTokenManager authTokenManager;
     private final CookieConsumer cookieConsumer;
 
     @Override
@@ -29,6 +29,6 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
                                         WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String token = cookieConsumer.getAccessToken(request.getCookies());
-        return authService.findMemberByAccessToken(token);
+        return authTokenManager.findMemberByAccessToken(token);
     }
 }

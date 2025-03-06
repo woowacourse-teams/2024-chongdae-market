@@ -1,5 +1,6 @@
 package com.zzang.chongdae.auth.service;
 
+import com.zzang.chongdae.auth.exception.AuthErrorCode;
 import com.zzang.chongdae.auth.service.dto.AuthInfoDto;
 import com.zzang.chongdae.auth.service.dto.AuthMemberDto;
 import com.zzang.chongdae.auth.service.dto.AuthTokenDto;
@@ -8,7 +9,6 @@ import com.zzang.chongdae.event.domain.LoginEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.member.domain.AuthProvider;
-import com.zzang.chongdae.member.exception.MemberErrorCode;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.NicknameGenerator;
@@ -27,9 +27,9 @@ public class AuthService {
     private final ApplicationEventPublisher eventPublisher;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
     private final NicknameGenerator nickNameGenerator;
     private final AuthClient authClient;
+    private final AuthTokenManager authTokenManager;
 
     @WriterDatabase
     @Transactional
@@ -56,11 +56,12 @@ public class AuthService {
 
     private AuthInfoDto login(MemberEntity member, String fcmToken) {
         AuthMemberDto authMember = new AuthMemberDto(member);
-        AuthTokenDto authToken = jwtTokenProvider.createAuthToken(member.getId().toString());
+        AuthTokenDto authToken = authTokenManager.createToken(member);
         checkFcmToken(member, fcmToken);
         eventPublisher.publishEvent(new LoginEvent(this, member));
         return new AuthInfoDto(authMember, authToken);
     }
+
 
     private void checkFcmToken(MemberEntity member, String fcmToken) {
         if (fcmToken == null || fcmToken.isEmpty()) {
@@ -73,14 +74,16 @@ public class AuthService {
         }
     }
 
+    @WriterDatabase
+    @Transactional
     public AuthTokenDto refresh(String refreshToken) {
-        Long memberId = jwtTokenProvider.getMemberIdByRefreshToken(refreshToken);
-        return jwtTokenProvider.createAuthToken(memberId.toString());
+        validateRefreshToken(refreshToken);
+        return authTokenManager.refresh(refreshToken);
     }
 
-    public MemberEntity findMemberByAccessToken(String token) {
-        Long memberId = jwtTokenProvider.getMemberIdByAccessToken(token);
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+    private void validateRefreshToken(String refreshToken) {
+        if (!authTokenManager.isValid(refreshToken)) {
+            throw new MarketException(AuthErrorCode.REFRESH_REUSE_EXCEPTION);
+        }
     }
 }

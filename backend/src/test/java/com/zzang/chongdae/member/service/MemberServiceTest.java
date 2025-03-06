@@ -3,11 +3,9 @@ package com.zzang.chongdae.member.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.zzang.chongdae.auth.config.TestAuthClientConfig;
 import com.zzang.chongdae.global.domain.MemberFixture;
 import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.global.service.ServiceTest;
-import com.zzang.chongdae.member.config.TestNicknameWordPickerConfig;
 import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.member.service.dto.NicknameRequest;
@@ -15,13 +13,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = {TestNicknameWordPickerConfig.class,
-        TestAuthClientConfig.class})
 public class MemberServiceTest extends ServiceTest {
 
     @Autowired

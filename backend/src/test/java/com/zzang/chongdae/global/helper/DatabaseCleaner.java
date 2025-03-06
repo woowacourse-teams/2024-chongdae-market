@@ -18,6 +18,7 @@ public class DatabaseCleaner {
         clearOfferingMember();
         clearOffering();
         clearComment();
+        clearAuth();
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
     }
 
@@ -39,5 +40,10 @@ public class DatabaseCleaner {
     private void clearComment() {
         entityManager.createNativeQuery("DELETE FROM comment").executeUpdate();
         entityManager.createNativeQuery("ALTER TABLE comment ALTER COLUMN id RESTART").executeUpdate();
+    }
+
+    private void clearAuth() {
+        entityManager.createNativeQuery("DELETE FROM auth").executeUpdate();
+        entityManager.createNativeQuery("ALTER TABLE auth ALTER COLUMN id RESTART").executeUpdate();
     }
 }
