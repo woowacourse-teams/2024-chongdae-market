@@ -51,7 +51,7 @@ internal fun OfferingSearchBar(
 
     val textSelectionColors =
         TextSelectionColors(
-            handleColor = Transparent,
+            handleColor = colorResource(R.color.main_color),
             backgroundColor = colorResource(R.color.cursor_background_color),
         )
     CompositionLocalProvider(
