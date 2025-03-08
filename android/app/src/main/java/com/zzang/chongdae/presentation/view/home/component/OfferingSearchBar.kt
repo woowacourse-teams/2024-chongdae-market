@@ -25,7 +25,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -131,7 +130,7 @@ internal fun OfferingSearchBar(
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.btn_offering_write_clear),
-                                contentDescription = "Clear Search",
+                                contentDescription = "Clear Button",
                             )
                         }
                         Spacer(modifier = Modifier.width(15.dp))
@@ -142,7 +141,7 @@ internal fun OfferingSearchBar(
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_main_search),
-                            contentDescription = "Search",
+                            contentDescription = "Search Button",
                         )
                     }
                 }
