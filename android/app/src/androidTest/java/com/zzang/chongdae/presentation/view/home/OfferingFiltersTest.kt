@@ -21,10 +21,11 @@ class OfferingFiltersTest {
     @Test
     fun `OfferingFilters의_인자로_들어간_필터들이_화면에_나온다`() {
         // given
-        val filters = listOf(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            Filter(FilterName.IMMINENT, "마감임박만", FilterType.VISIBLE),
-        )
+        val filters =
+            listOf(
+                Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
+                Filter(FilterName.IMMINENT, "마감임박만", FilterType.VISIBLE),
+            )
         val state = OfferingFiltersState(filters) { _, _ -> }
         composeTestRule.setContent {
             OfferingFilters(state)
@@ -43,10 +44,11 @@ class OfferingFiltersTest {
     @Test
     fun `FilterType이_INVISIBLE인_필터는_화면에_나오지_않는다`() {
         // given
-        val filters = listOf(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
-        )
+        val filters =
+            listOf(
+                Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
+                Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
+            )
         val state = OfferingFiltersState(filters) { _, _ -> }
         composeTestRule.setContent {
             OfferingFilters(state)
@@ -65,15 +67,15 @@ class OfferingFiltersTest {
     @Test
     fun `화면시작_시_아무_필터도_선택되어있지_않다`() {
         // given
-        val filters = listOf(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
-        )
+        val filters =
+            listOf(
+                Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
+                Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
+            )
         val state = OfferingFiltersState(filters) { _, _ -> }
         composeTestRule.setContent {
             OfferingFilters(state)
         }
-
 
         // then
         composeTestRule.waitForIdle()
@@ -83,10 +85,11 @@ class OfferingFiltersTest {
     @Test
     fun `필터를_누르면_해당_필터가_선택된다`() {
         // given
-        val filters = listOf(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
-        )
+        val filters =
+            listOf(
+                Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
+                Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
+            )
         val state = OfferingFiltersState(filters) { _, _ -> }
         composeTestRule.setContent {
             OfferingFilters(state)
@@ -104,10 +107,11 @@ class OfferingFiltersTest {
     @Test
     fun `선택된_필터를_누르면_해당_필터의_선택이_해제된다`() {
         // given
-        val filters = listOf(
-            Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
-            Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
-        )
+        val filters =
+            listOf(
+                Filter(FilterName.JOINABLE, "참여가능만", FilterType.VISIBLE),
+                Filter(FilterName.IMMINENT, "마감임박만", FilterType.INVISIBLE),
+            )
         val state = OfferingFiltersState(filters) { _, _ -> }
         composeTestRule.setContent {
             OfferingFilters(state)

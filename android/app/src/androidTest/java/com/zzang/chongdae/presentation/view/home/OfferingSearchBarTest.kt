@@ -19,10 +19,11 @@ class OfferingSearchBarTest {
     @Test
     fun `입력한_텍스트가_없을_경우_지정한_placeholder를_가진_검색바가_화면에_나온다`() {
         // given
-        val state = OfferingSearchState(
-            initialText = "",
-            placeholder = "Test",
-        )
+        val state =
+            OfferingSearchState(
+                initialText = "",
+                placeholder = "Test",
+            )
         composeTestRule.setContent {
             OfferingSearchBar(state, {}, {})
         }
@@ -35,10 +36,11 @@ class OfferingSearchBarTest {
     @Test
     fun `입력한_텍스트가_있을_경우_지정한_placeholder를_가진_검색바가_화면에_나오지_않는다`() {
         // given
-        val state = OfferingSearchState(
-            initialText = "1",
-            placeholder = "Test",
-        )
+        val state =
+            OfferingSearchState(
+                initialText = "1",
+                placeholder = "Test",
+            )
         composeTestRule.setContent {
             OfferingSearchBar(state, {}, {})
         }
@@ -51,10 +53,11 @@ class OfferingSearchBarTest {
     @Test
     fun `입력한_텍스트가_없을_경우_x버튼이_나오지_않는다`() {
         // given
-        val state = OfferingSearchState(
-            initialText = "",
-            placeholder = "",
-        )
+        val state =
+            OfferingSearchState(
+                initialText = "",
+                placeholder = "",
+            )
         composeTestRule.setContent {
             OfferingSearchBar(state, {}, {})
         }
@@ -67,10 +70,11 @@ class OfferingSearchBarTest {
     @Test
     fun `입력한_텍스트가_있을_경우_x버튼이_나온다`() {
         // given
-        val state = OfferingSearchState(
-            initialText = "1",
-            placeholder = "",
-        )
+        val state =
+            OfferingSearchState(
+                initialText = "1",
+                placeholder = "",
+            )
         composeTestRule.setContent {
             OfferingSearchBar(state, {}, {})
         }
@@ -84,10 +88,11 @@ class OfferingSearchBarTest {
     fun `x버튼을_누를경우_onClearClick이_호출된다`() {
         // given
         var isClicked = false
-        val state = OfferingSearchState(
-            initialText = "1",
-            placeholder = "",
-        )
+        val state =
+            OfferingSearchState(
+                initialText = "1",
+                placeholder = "",
+            )
         composeTestRule.setContent {
             OfferingSearchBar(state, {}, { isClicked = true })
         }
@@ -105,10 +110,11 @@ class OfferingSearchBarTest {
     fun `검색버튼을_누를경우_onSearchClick이_호출된다`() {
         // given
         var isClicked = false
-        val state = OfferingSearchState(
-            initialText = "",
-            placeholder = "",
-        )
+        val state =
+            OfferingSearchState(
+                initialText = "",
+                placeholder = "",
+            )
         composeTestRule.setContent {
             OfferingSearchBar(state, { isClicked = true }, {})
         }

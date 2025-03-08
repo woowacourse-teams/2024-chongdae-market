@@ -32,11 +32,14 @@ class OfferingItemTest {
         // given
         var isClicked = false
         composeTestRule.setContent {
-            OfferingItem(OFFERING, object : OnOfferingClickListener {
-                override fun onClick(offeringId: Long) {
-                    isClicked = true
-                }
-            })
+            OfferingItem(
+                OFFERING,
+                object : OnOfferingClickListener {
+                    override fun onClick(offeringId: Long) {
+                        isClicked = true
+                    }
+                },
+            )
         }
 
         // when
@@ -97,22 +100,24 @@ class OfferingItemTest {
     }
 
     companion object {
-        private val OFFERING = Offering(
-            id = 1,
-            title = "Test",
-            meetingAddressDong = "Test동",
-            thumbnailUrl = "",
-            totalCount = 3,
-            currentCount = 2,
-            dividedPrice = 2030,
-            originPrice = 6090,
-            status = OfferingCondition.IMMINENT,
-            isOpen = false,
-        )
+        private val OFFERING =
+            Offering(
+                id = 1,
+                title = "Test",
+                meetingAddressDong = "Test동",
+                thumbnailUrl = "",
+                totalCount = 3,
+                currentCount = 2,
+                dividedPrice = 2030,
+                originPrice = 6090,
+                status = OfferingCondition.IMMINENT,
+                isOpen = false,
+            )
 
-        private val onOfferingClick = object : OnOfferingClickListener {
-            override fun onClick(offeringId: Long) {
+        private val onOfferingClick =
+            object : OnOfferingClickListener {
+                override fun onClick(offeringId: Long) {
+                }
             }
-        }
     }
 }
