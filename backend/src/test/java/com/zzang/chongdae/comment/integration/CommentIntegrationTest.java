@@ -11,6 +11,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.zzang.chongdae.comment.domain.SearchDirection;
 import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
@@ -337,7 +338,11 @@ public class CommentIntegrationTest extends IntegrationTest {
     class GetAllComment {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
-                parameterWithName("offering-id").description("공모 id (필수)")
+                parameterWithName("offering-id").description("공모 id (필수)"),
+                parameterWithName("direction").description("목록 조회 방향 (기본값: PREVIOUS)"
+                        + getEnumValuesAsString(SearchDirection.class)).optional(),
+                parameterWithName("last-id").description("마지막 댓글 id").optional(),
+                parameterWithName("page-size").description("페이지 크기 (기본값: 10)").optional()
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("comments[].commentId").description("댓글 id"),
@@ -385,13 +390,54 @@ public class CommentIntegrationTest extends IntegrationTest {
             commentFixture.createComment(member5, offering);
         }
 
-        @DisplayName("댓글 목록을 조회할 수 있다")
+        @DisplayName("댓글 목록을 조회할 때 옵션을 지정하지 않으면 최신 댓글 10개를 보여준다.")
         @Test
-        void should_responseAllComment_when_givenOfferingIdAndMemberId() {
+        void should_responseAllComment_when_givenOfferingIdAndMemberIdWithoutParameter() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-all-comment-success", resource(successSnippets)))
+                    .filter(document("get-all-comment-when-without-query-parameter", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member1))
                     .queryParam("offering-id", offering.getId())
+                    .when().get("/comments/messages")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("last-id 기준으로 이전 댓글 목록을 보여준다.")
+        @Test
+        void should_responsePreviousComment_when_givenOfferingIdAndMemberIdAndLastId() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-prev-comment-when-last-id", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member1))
+                    .queryParam("offering-id", offering.getId())
+                    .queryParam("direction", "PREV")
+                    .queryParam("last-id", 3)
+                    .when().get("/comments/messages")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("last-id 기준으로 다음 댓글 목록을 보여준다.")
+        @Test
+        void should_responseNextComment_when_givenOfferingIdAndMemberIdAndLastId() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-all-comment-with-page-size", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member1))
+                    .queryParam("offering-id", offering.getId())
+                    .queryParam("page-size", 1)
+                    .when().get("/comments/messages")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("pageable을 설정하여 가져오는 댓글 수를 조절할 수 있다.")
+        @Test
+        void should_responseAllComment_when_givenOfferingIdAndMemberIdAndPageSize() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-next-comment-when-last-id", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member1))
+                    .queryParam("offering-id", offering.getId())
+                    .queryParam("direction", "NEXT")
+                    .queryParam("last-id", 3)
                     .when().get("/comments/messages")
                     .then().log().all()
                     .statusCode(200);

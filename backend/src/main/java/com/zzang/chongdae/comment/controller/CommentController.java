@@ -9,6 +9,8 @@ import com.zzang.chongdae.comment.service.dto.CommentSaveRequest;
 import com.zzang.chongdae.logging.config.LoggingMasked;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class CommentController {
+
+    private static final int MIN_PAGE_SIZE = 1;
+    private static final int MAX_PAGE_SIZE = 30;
 
     private final CommentService commentService;
 
@@ -60,8 +65,11 @@ public class CommentController {
     @GetMapping("/comments/messages")
     public ResponseEntity<CommentAllResponse> getAllComment(
             @RequestParam(value = "offering-id") Long offeringId,
+            @RequestParam(value = "direction", required = false, defaultValue = "PREVIOUS") String direction,
+            @RequestParam(value = "last-id", required = false) Long lastId,
+            @RequestParam(value = "page-size", defaultValue = "10") @Min(MIN_PAGE_SIZE) @Max(MAX_PAGE_SIZE) Integer pageSize,
             MemberEntity member) {
-        CommentAllResponse response = commentService.getAllComment(offeringId, member);
+        CommentAllResponse response = commentService.getAllComment(offeringId, member, direction, lastId, pageSize);
         return ResponseEntity.ok(response);
     }
 }

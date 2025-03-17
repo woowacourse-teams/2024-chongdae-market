@@ -1,5 +1,6 @@
 package com.zzang.chongdae.comment.service;
 
+import com.zzang.chongdae.comment.domain.SearchDirection;
 import com.zzang.chongdae.comment.exception.CommentErrorCode;
 import com.zzang.chongdae.comment.repository.CommentRepository;
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
@@ -25,10 +26,12 @@ import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.storage.service.StorageService;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,14 +123,33 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public CommentAllResponse getAllComment(Long offeringId, MemberEntity member) {
+    public CommentAllResponse getAllComment(Long offeringId, MemberEntity member, String direction, Long lastId,
+                                            Integer pageSize) {
         OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        List<CommentEntity> comments = commentRepository.findAllWithMemberByOfferingOrderByCreatedAt(offering);
+        if (lastId == null) {
+            lastId = commentRepository
+                    .findTopByOfferingIdOrderByCreatedAtDesc(offeringId)
+                    .map(CommentEntity::getId).orElse(0L) + 1L;
+        }
+        SearchDirection searchDirection = SearchDirection.of(direction);
+        Pageable pageable = Pageable.ofSize(pageSize);
+        List<CommentEntity> comments = getAllCommentWithStrategy(offering, lastId, searchDirection, pageable)
+                .stream().sorted(Comparator.comparing(CommentEntity::getCreatedAt))
+                .toList();
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
         return new CommentAllResponse(responseItems);
+    }
+
+    private List<CommentEntity> getAllCommentWithStrategy(OfferingEntity offering, Long lastId,
+                                                          SearchDirection searchDirection, Pageable pageable) {
+        if (searchDirection == SearchDirection.PREVIOUS) {
+            return commentRepository.findPreviousCommentWithMemberByOfferingOrderByCreatedAt(offering, lastId,
+                    pageable);
+        }
+        return commentRepository.findNextCommentWithMemberByOfferingOrderByCreatedAt(offering, lastId, pageable);
     }
 }
