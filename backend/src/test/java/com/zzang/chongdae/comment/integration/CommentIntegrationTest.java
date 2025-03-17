@@ -409,7 +409,7 @@ public class CommentIntegrationTest extends IntegrationTest {
                     .filter(document("get-prev-comment-when-last-id", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member1))
                     .queryParam("offering-id", offering.getId())
-                    .queryParam("direction", "PREV")
+                    .queryParam("direction", "PREVIOUS")
                     .queryParam("last-id", 3)
                     .when().get("/comments/messages")
                     .then().log().all()
@@ -420,24 +420,24 @@ public class CommentIntegrationTest extends IntegrationTest {
         @Test
         void should_responseNextComment_when_givenOfferingIdAndMemberIdAndLastId() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-all-comment-with-page-size", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithMember(member1))
-                    .queryParam("offering-id", offering.getId())
-                    .queryParam("page-size", 1)
-                    .when().get("/comments/messages")
-                    .then().log().all()
-                    .statusCode(200);
-        }
-
-        @DisplayName("pageable을 설정하여 가져오는 댓글 수를 조절할 수 있다.")
-        @Test
-        void should_responseAllComment_when_givenOfferingIdAndMemberIdAndPageSize() {
-            RestAssured.given(spec).log().all()
                     .filter(document("get-next-comment-when-last-id", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member1))
                     .queryParam("offering-id", offering.getId())
                     .queryParam("direction", "NEXT")
                     .queryParam("last-id", 3)
+                    .when().get("/comments/messages")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("page-size룰 설정하여 가져오는 댓글 수를 조절할 수 있다.")
+        @Test
+        void should_responseAllComment_when_givenOfferingIdAndMemberIdAndPageSize() {
+            RestAssured.given(spec).log().all()
+                    .filter(document("get-all-comment-with-page-size", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(member1))
+                    .queryParam("offering-id", offering.getId())
+                    .queryParam("page-size", 1)
                     .when().get("/comments/messages")
                     .then().log().all()
                     .statusCode(200);
