@@ -128,20 +128,23 @@ public class CommentService {
         OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
-        if (lastId == null) {
-            lastId = commentRepository
-                    .findTopByOfferingIdOrderByCreatedAtDesc(offeringId)
-                    .map(CommentEntity::getId).orElse(0L) + 1L;
-        }
+        lastId = getOrDefaultLastId(offeringId, lastId);
         SearchDirection searchDirection = SearchDirection.of(direction);
         Pageable pageable = Pageable.ofSize(pageSize);
-        List<CommentEntity> comments = getAllCommentWithStrategy(offering, lastId, searchDirection, pageable)
-                .stream().sorted(Comparator.comparing(CommentEntity::getCreatedAt))
-                .toList();
+        List<CommentEntity> comments = getAllCommentWithStrategy(offering, lastId, searchDirection, pageable);
         List<CommentAllResponseItem> responseItems = comments.stream()
+                .sorted(Comparator.comparing(CommentEntity::getCreatedAt))
                 .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
         return new CommentAllResponse(responseItems);
+    }
+
+    private Long getOrDefaultLastId(Long offeringId, Long lastId) {
+        if (lastId == null) {
+            lastId = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(offeringId)
+                    .map(CommentEntity::getId).orElse(0L) + 1L;
+        }
+        return lastId;
     }
 
     private List<CommentEntity> getAllCommentWithStrategy(OfferingEntity offering, Long lastId,
