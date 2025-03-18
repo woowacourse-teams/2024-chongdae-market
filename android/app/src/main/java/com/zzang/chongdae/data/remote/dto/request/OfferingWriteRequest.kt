@@ -9,6 +9,7 @@ data class OfferingWriteRequest(
     @SerialName("productUrl") val productUrl: String?,
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("totalCount") val totalCount: Int,
+    @SerialName("myCount") val myCount: Int,
     @SerialName("totalPrice") val totalPrice: Int,
     @SerialName("originPrice") val originPrice: Int?,
     @SerialName("meetingAddress") val meetingAddress: String,
