@@ -12,8 +12,9 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
 import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
-import com.zzang.chongdae.domain.model.Count
+import com.zzang.chongdae.domain.model.TotalCount
 import com.zzang.chongdae.domain.model.DiscountPrice
+import com.zzang.chongdae.domain.model.MyCount
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.Price
 import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
@@ -205,7 +206,7 @@ constructor(
 
     private fun updateSplitPrice() {
         val totalPrice = Price.fromString(totalPrice.value)
-        val totalCount = Count.fromString(totalCount.value)
+        val totalCount = TotalCount.fromString(totalCount.value)
         _splitPrice.value = totalPrice.amount / totalCount.number
     }
 
@@ -218,30 +219,30 @@ constructor(
     }
 
     fun increaseTotalCount() {
-        val totalCount = Count.fromString(totalCount.value).increase()
+        val totalCount = TotalCount.fromString(totalCount.value).increase()
         this.totalCount.value = totalCount.number.toString()
     }
 
     fun decreaseTotalCount() {
-        if (Count.fromString(totalCount.value).number < 0) {
+        if (TotalCount.fromString(totalCount.value).number < 0) {
             this.totalCount.value = MINIMUM_TOTAL_COUNT.toString()
             return
         }
-        val totalCount = Count.fromString(totalCount.value).decrease()
+        val totalCount = TotalCount.fromString(totalCount.value).decrease()
         this.totalCount.value = totalCount.number.toString()
     }
 
     fun increaseMyCount() {
-        val myCount = Count.fromString(myCount.value).increase()
+        val myCount = MyCount.fromString(myCount.value).increase()
         this.totalCount.value = myCount.number.toString()
     }
 
     fun decreaseMyCount() {
-        if (Count.fromString(myCount.value).number < 0) {
+        if (MyCount.fromString(myCount.value).number < 0) {
             this.myCount.value = MINIMUM_TOTAL_COUNT.toString()
             return
         }
-        val myCount = Count.fromString(myCount.value).decrease()
+        val myCount = MyCount.fromString(myCount.value).decrease()
         this.myCount.value = myCount.number.toString()
     }
 
