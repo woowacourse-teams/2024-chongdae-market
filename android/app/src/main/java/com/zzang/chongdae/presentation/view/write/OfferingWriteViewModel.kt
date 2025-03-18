@@ -12,11 +12,11 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
 import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
-import com.zzang.chongdae.domain.model.TotalCount
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.MyCount
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.Price
+import com.zzang.chongdae.domain.model.TotalCount
 import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
 import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
 import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase
@@ -233,13 +233,31 @@ constructor(
     }
 
     fun increaseMyCount() {
+        if (this.totalCount.value == "" || this.totalCount.value == "0") return
+        val totalCount = this.totalCount.value?.toInt() ?: 0
+        val maxMyCount = totalCount - 1
+        if (MyCount.fromString(myCount.value).number < 0) {
+            this.myCount.value = MINIMUM_MY_COUNT.toString()
+            return
+        }
+        if (MyCount.fromString(myCount.value).number >= maxMyCount) {
+            this.myCount.value = maxMyCount.toString()
+            return
+        }
         val myCount = MyCount.fromString(myCount.value).increase()
         this.myCount.value = myCount.number.toString()
     }
 
     fun decreaseMyCount() {
+        if (this.totalCount.value == "" || this.totalCount.value == "0") return
+        val totalCount = this.totalCount.value?.toInt() ?: 0
+        val maxMyCount = totalCount - 1
         if (MyCount.fromString(myCount.value).number < 0) {
-            this.myCount.value = MINIMUM_TOTAL_COUNT.toString()
+            this.myCount.value = MINIMUM_MY_COUNT.toString()
+            return
+        }
+        if (MyCount.fromString(myCount.value).number > maxMyCount) {
+            this.myCount.value = maxMyCount.toString()
             return
         }
         val myCount = MyCount.fromString(myCount.value).decrease()
