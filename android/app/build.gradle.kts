@@ -10,6 +10,7 @@ plugins {
     kotlin("plugin.serialization") version "2.0.0"
     id("com.google.firebase.crashlytics")
     id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -65,6 +66,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.2"
+    }
+
     kotlinOptions {
         jvmTarget = "17"
     }
@@ -76,6 +81,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     dataBinding {
@@ -93,6 +99,7 @@ dependencies {
 
     // Test
     implementation(libs.androidx.junit)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.assertj.core)
     testImplementation(libs.kotest.runner.junit5)
@@ -133,6 +140,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    implementation(libs.glide.compose)
     kapt(libs.glide.compiler)
 
     // Retrofit
@@ -147,6 +155,7 @@ dependencies {
 
     // Pagination
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.paging.compose)
 
     // WebView
     implementation(libs.androidx.webkit)
@@ -173,6 +182,22 @@ dependencies {
 
     // Skeleton-UI
     implementation(libs.shimmer)
+
+    // compose
+    implementation(libs.androidx.material3)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.ui.tooling)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 kapt {
