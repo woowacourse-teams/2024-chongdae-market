@@ -234,7 +234,7 @@ constructor(
 
     fun increaseMyCount() {
         val myCount = MyCount.fromString(myCount.value).increase()
-        this.totalCount.value = myCount.number.toString()
+        this.myCount.value = myCount.number.toString()
     }
 
     fun decreaseMyCount() {

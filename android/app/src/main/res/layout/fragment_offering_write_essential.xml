@@ -153,7 +153,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/size_20"
                     app:debounceTime="@{0L}"
-                    app:debouncedOnClick="@{() -> vm.decreaseTotalCount()}"
+                    app:debouncedOnClick="@{() -> vm.decreaseMyCount()}"
                     app:layout_constraintStart_toStartOf="@id/tv_my_count"
                     app:layout_constraintTop_toBottomOf="@id/tv_total_personnel" />
 
@@ -169,7 +169,7 @@
                     android:inputType="number"
                     android:maxLength="3"
                     android:maxLines="1"
-                    android:text="@={vm.totalCount}"
+                    android:text="@={vm.myCount}"
                     android:textColor="@color/gray_900"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/btn_minus_my_count"
@@ -188,7 +188,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/size_20"
                     app:debounceTime="@{0L}"
-                    app:debouncedOnClick="@{() -> vm.increaseTotalCount()}"
+                    app:debouncedOnClick="@{() -> vm.increaseMyCount()}"
                     app:layout_constraintStart_toEndOf="@id/et_my_count"
                     app:layout_constraintTop_toTopOf="@id/btn_minus_total_personnel" />
 
