@@ -131,11 +131,14 @@ public class CommentService {
         validateIsJoined(member, offering);
         lastId = getOrDefaultLastId(offeringId, lastId);
         Pageable pageable = Pageable.ofSize(pageSize);
-        List<CommentEntity> comments = getAllCommentWithStrategy(offering, lastId, direction, pageable);
+        List<CommentEntity> comments = commentRepository.findCommentWithMemberByOfferingOrderByCreatedDesc(offering,
+                lastId, pageable, direction);
+
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .sorted(Comparator.comparing(CommentEntity::getCreatedAt))
                 .map(comment -> new CommentAllResponseItem(comment, member))
                 .toList();
+
         return new CommentAllResponse(responseItems);
     }
 
@@ -145,14 +148,5 @@ public class CommentService {
                     .map(CommentEntity::getId).orElse(0L) + 1L;
         }
         return lastId;
-    }
-
-    private List<CommentEntity> getAllCommentWithStrategy(OfferingEntity offering, Long lastId,
-                                                          SearchDirection direction, Pageable pageable) {
-        if (direction == SearchDirection.PREVIOUS) {
-            return commentRepository.findPreviousCommentWithMemberByOfferingOrderByCreatedAt(offering, lastId,
-                    pageable);
-        }
-        return commentRepository.findNextCommentWithMemberByOfferingOrderByCreatedAt(offering, lastId, pageable);
     }
 }
