@@ -123,15 +123,15 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public CommentAllResponse getAllComment(Long offeringId, MemberEntity member, String direction, Long lastId,
+    public CommentAllResponse getAllComment(Long offeringId, MemberEntity member, SearchDirection direction,
+                                            Long lastId,
                                             Integer pageSize) {
         OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateIsJoined(member, offering);
         lastId = getOrDefaultLastId(offeringId, lastId);
-        SearchDirection searchDirection = SearchDirection.of(direction);
         Pageable pageable = Pageable.ofSize(pageSize);
-        List<CommentEntity> comments = getAllCommentWithStrategy(offering, lastId, searchDirection, pageable);
+        List<CommentEntity> comments = getAllCommentWithStrategy(offering, lastId, direction, pageable);
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .sorted(Comparator.comparing(CommentEntity::getCreatedAt))
                 .map(comment -> new CommentAllResponseItem(comment, member))
@@ -141,15 +141,15 @@ public class CommentService {
 
     private Long getOrDefaultLastId(Long offeringId, Long lastId) {
         if (lastId == null) {
-            lastId = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(offeringId)
+            return commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(offeringId)
                     .map(CommentEntity::getId).orElse(0L) + 1L;
         }
         return lastId;
     }
 
     private List<CommentEntity> getAllCommentWithStrategy(OfferingEntity offering, Long lastId,
-                                                          SearchDirection searchDirection, Pageable pageable) {
-        if (searchDirection == SearchDirection.PREVIOUS) {
+                                                          SearchDirection direction, Pageable pageable) {
+        if (direction == SearchDirection.PREVIOUS) {
             return commentRepository.findPreviousCommentWithMemberByOfferingOrderByCreatedAt(offering, lastId,
                     pageable);
         }

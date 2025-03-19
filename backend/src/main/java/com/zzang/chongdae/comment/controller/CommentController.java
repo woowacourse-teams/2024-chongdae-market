@@ -1,5 +1,6 @@
 package com.zzang.chongdae.comment.controller;
 
+import com.zzang.chongdae.comment.domain.SearchDirection;
 import com.zzang.chongdae.comment.service.CommentService;
 import com.zzang.chongdae.comment.service.dto.CommentAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
@@ -65,7 +66,7 @@ public class CommentController {
     @GetMapping("/comments/messages")
     public ResponseEntity<CommentAllResponse> getAllComment(
             @RequestParam(value = "offering-id") Long offeringId,
-            @RequestParam(value = "direction", required = false, defaultValue = "PREVIOUS") String direction,
+            @RequestParam(value = "direction", required = false, defaultValue = "PREVIOUS") SearchDirection direction,
             @RequestParam(value = "last-id", required = false) Long lastId,
             @RequestParam(value = "page-size", defaultValue = "10") @Min(MIN_PAGE_SIZE) @Max(MAX_PAGE_SIZE) Integer pageSize,
             MemberEntity member) {
