@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private static final int MIN_PAGE_SIZE = 1;
-    private static final int MAX_PAGE_SIZE = 30;
+    private static final int MAX_PAGE_SIZE = 100;
 
     private final CommentService commentService;
 
@@ -68,7 +68,7 @@ public class CommentController {
             @RequestParam(value = "offering-id") Long offeringId,
             @RequestParam(value = "direction", required = false, defaultValue = "PREVIOUS") SearchDirection direction,
             @RequestParam(value = "last-id", required = false) Long lastId,
-            @RequestParam(value = "page-size", defaultValue = "10") @Min(MIN_PAGE_SIZE) @Max(MAX_PAGE_SIZE) Integer pageSize,
+            @RequestParam(value = "page-size", defaultValue = "100") @Min(MIN_PAGE_SIZE) @Max(MAX_PAGE_SIZE) Integer pageSize,
             MemberEntity member) {
         CommentAllResponse response = commentService.getAllComment(offeringId, member, direction, lastId, pageSize);
         return ResponseEntity.ok(response);
