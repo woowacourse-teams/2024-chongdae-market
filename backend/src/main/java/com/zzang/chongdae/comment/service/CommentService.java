@@ -131,9 +131,7 @@ public class CommentService {
         validateIsJoined(member, offering);
         lastId = getOrDefaultLastId(offeringId, lastId);
         Pageable pageable = Pageable.ofSize(pageSize);
-        List<CommentEntity> comments = commentRepository.findCommentWithMemberByOfferingOrderByCreatedDesc(offering,
-                lastId, pageable, direction);
-
+        List<CommentEntity> comments = direction.search(commentRepository, offering, lastId, pageable);
         List<CommentAllResponseItem> responseItems = comments.stream()
                 .sorted(Comparator.comparing(CommentEntity::getCreatedAt))
                 .map(comment -> new CommentAllResponseItem(comment, member))
