@@ -339,10 +339,10 @@ public class CommentIntegrationTest extends IntegrationTest {
 
         List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
                 parameterWithName("offering-id").description("공모 id (필수)"),
-                parameterWithName("direction").description("목록 조회 방향 (기본값: PREVIOUS)"
+                parameterWithName("direction").description("last-id 기준으로 조회할 방향. 기본값 : PREVIOUS, 방향 옵션 : "
                         + getEnumValuesAsString(SearchDirection.class)).optional(),
-                parameterWithName("last-id").description("마지막 댓글 id").optional(),
-                parameterWithName("page-size").description("페이지 크기 (기본값: 10)").optional()
+                parameterWithName("last-id").description("마지막 댓글 id, 기본값 : comment 마지막 id + 1").optional(),
+                parameterWithName("page-size").description("페이지 크기 (기본값: 100, 최대: 100, 최소 1)").optional()
         );
         List<FieldDescriptor> successResponseDescriptors = List.of(
                 fieldWithPath("comments[].commentId").description("댓글 id"),
@@ -390,7 +390,7 @@ public class CommentIntegrationTest extends IntegrationTest {
             commentFixture.createComment(member5, offering);
         }
 
-        @DisplayName("댓글 목록을 조회할 때 옵션을 지정하지 않으면 최신 댓글 10개를 보여준다.")
+        @DisplayName("댓글 목록을 조회할 때 옵션을 지정하지 않으면 최신 댓글 100개를 보여준다.")
         @Test
         void should_responseAllComment_when_givenOfferingIdAndMemberIdWithoutParameter() {
             RestAssured.given(spec).log().all()
@@ -406,11 +406,11 @@ public class CommentIntegrationTest extends IntegrationTest {
         @Test
         void should_responsePreviousComment_when_givenOfferingIdAndMemberIdAndLastId() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-prev-comment-when-last-id", resource(successSnippets)))
+                    .filter(document("get-prev-comment-when-direction-previous", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member1))
                     .queryParam("offering-id", offering.getId())
-                    .queryParam("direction", "PREVIOUS")
                     .queryParam("last-id", 3)
+                    .queryParam("direction", "PREVIOUS")
                     .when().get("/comments/messages")
                     .then().log().all()
                     .statusCode(200);
@@ -420,11 +420,11 @@ public class CommentIntegrationTest extends IntegrationTest {
         @Test
         void should_responseNextComment_when_givenOfferingIdAndMemberIdAndLastId() {
             RestAssured.given(spec).log().all()
-                    .filter(document("get-next-comment-when-last-id", resource(successSnippets)))
+                    .filter(document("get-next-comment-when-direction-next", resource(successSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(member1))
                     .queryParam("offering-id", offering.getId())
-                    .queryParam("direction", "NEXT")
                     .queryParam("last-id", 3)
+                    .queryParam("direction", "NEXT")
                     .when().get("/comments/messages")
                     .then().log().all()
                     .statusCode(200);
