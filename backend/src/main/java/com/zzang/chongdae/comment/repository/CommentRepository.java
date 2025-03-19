@@ -14,7 +14,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
             SELECT c
             FROM CommentEntity c
                 JOIN FETCH c.member
-            WHERE c.offering = :offering and c.id < :lastId
+            WHERE c.offering = :offering and c.id > :lastId
             ORDER BY c.createdAt DESC
             """)
     List<CommentEntity> findNextCommentWithMemberByOfferingOrderByCreatedDesc(OfferingEntity offering, Long lastId,
@@ -24,7 +24,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
             SELECT c
             FROM CommentEntity c
                 JOIN FETCH c.member
-            WHERE c.offering = :offering and c.id > :lastId
+            WHERE c.offering = :offering and c.id < :lastId
             ORDER BY c.createdAt DESC
             """)
     List<CommentEntity> findPreviousCommentWithMemberByOfferingOrderByCreatedDesc(OfferingEntity offering, Long lastId,
