@@ -225,12 +225,13 @@
                <!-- offering list -->
            </div>
        </div>
-    <script>
+    <script th:inline="javascript">
+        const resourceHost = [[${resourceHost}]];
         let currentFilter = '';
         let lastId = -1;
         let isLoading = false;
         let search = '';
-        const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
+        const defaultThumbnailUrl = `https://${resourceHost}/images/common/no-image.png`;
 
         async function fetchOfferings(filter = '', lastId = -1, search = '') {
             const response = await fetch(`/read-only/offerings?filter=${filter}${lastId !== -1 ? '&last-id=' + lastId : ''}${search !== '' ? '&search=' + encodeURIComponent(search) : ''}`);

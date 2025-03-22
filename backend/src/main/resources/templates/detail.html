@@ -108,8 +108,9 @@
         </div>
     </div>
 
-    <script>
-        const defaultThumbnailUrl = 'https://d3a5rfnjdz82qu.cloudfront.net/chongdae-market/images/common/no-image.png';
+    <script th:inline="javascript">
+        const resourceHost = [[${resourceHost}]];
+        const defaultThumbnailUrl = `https://${resourceHost}/chongdae-market/images/common/no-image.png`;
         const playStoreUrl = "https://play.google.com/store/apps/details?id=com.zzang.chongdae";
         async function fetchOfferingDetails(offeringId) {
             try {
