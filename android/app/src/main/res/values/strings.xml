@@ -13,6 +13,7 @@
     <string name="all_minus">-</string>
     <string name="all_won">원</string>
     <string name="all_percentage">%</string>
+    <string name="all_number">%d</string>
     <string name="all_percentage_comma">%,d</string>
     <string name="all_place">거래 장소</string>
     <string name="all_am">오전</string>
@@ -77,7 +78,7 @@
     <string name="offering_detail_total_price">(총 가격 %,d원)</string>
     <string name="offering_detail_participant_count">참여하기(%d/%d)</string>
     <string name="offering_detail_participant_full">인원이 다 찼어요!</string>
-    <string name="offering_detail_participation_error">참여할 수 없는 공모입니다.</string>
+    <string name="offering_detail_participation_error">총 수량을 넘어서 참여할 수 없습니다.</string>
     <string name="offering_detail_participant_already">이미 참여중이에요!</string>
     <string name="offering_detail_participant_end">마감되었어요!</string>
     <string name="offering_detail_delete_error">모집 마감 전과 거래 완료 후에만 \n공모글을 삭제할 수 있어요!</string>

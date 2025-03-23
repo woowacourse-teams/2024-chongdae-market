@@ -22,9 +22,12 @@ class OfferingDetailRepositoryImpl
                 it.toDomain()
             }
 
-        override suspend fun saveParticipation(offeringId: Long): Result<Unit, DataError.Network> =
+        override suspend fun saveParticipation(
+            offeringId: Long,
+            participationCount: Int,
+        ): Result<Unit, DataError.Network> =
             offeringDetailDataSource.saveParticipation(
-                participationRequest = ParticipationRequest(offeringId),
+                participationRequest = ParticipationRequest(offeringId, participationCount),
             )
 
         override suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network> {

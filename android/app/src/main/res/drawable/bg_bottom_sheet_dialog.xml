@@ -3,4 +3,5 @@
     <corners
         android:topLeftRadius="@dimen/margin_30"
         android:topRightRadius="@dimen/margin_30" />
+    <solid android:color="@color/offering_detail_background"/>
 </shape>

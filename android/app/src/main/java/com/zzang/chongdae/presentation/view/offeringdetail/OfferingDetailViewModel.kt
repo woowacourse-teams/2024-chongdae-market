@@ -53,6 +53,8 @@ class OfferingDetailViewModel
         private val _currentCount: MutableLiveData<Int> = MutableLiveData()
         val currentCount: LiveData<Int> get() = _currentCount
 
+        val purchaseCount: MutableLiveData<Int> = MutableLiveData(MIN_PURCHASE_COUNT)
+
         private val _offeringCondition: MutableLiveData<OfferingCondition> = MutableLiveData()
         val offeringCondition: LiveData<OfferingCondition> get() = _offeringCondition
 
@@ -97,6 +99,9 @@ class OfferingDetailViewModel
 
         private val _alertCancelEvent = MutableSingleLiveData<Unit>()
         val alertCancelEvent: SingleLiveData<Unit> get() = _alertCancelEvent
+
+        private val _showBottomSheetDialogEvent = MutableSingleLiveData<Unit>()
+        val showBottomSheetDialogEvent: SingleLiveData<Unit> get() = _showBottomSheetDialogEvent
 
         private val _isOfferingDetailLoading: MutableLiveData<Boolean> = MutableLiveData(false)
         val isOfferingDetailLoading: LiveData<Boolean> get() = _isOfferingDetailLoading
@@ -155,7 +160,7 @@ class OfferingDetailViewModel
         override fun participate() {
             viewModelScope.launch {
                 _isParticipationLoading.value = true
-                when (val result = saveParticipationUseCase(offeringId)) {
+                when (val result = saveParticipationUseCase(offeringId, purchaseCount.value ?: 1)) {
                     is Result.Error ->
                         when (result.error) {
                             DataError.Network.UNAUTHORIZED -> {
@@ -249,20 +254,6 @@ class OfferingDetailViewModel
             isParticipated: Boolean,
         ) = !isParticipated && offeringCondition.isAvailable()
 
-        companion object {
-            private const val DEFAULT_TITLE = ""
-
-            @Suppress("UNCHECKED_CAST")
-            fun getFactory(
-                assistedFactory: OfferingDetailAssistedFactory,
-                offeringId: Long,
-            ) = object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return assistedFactory.create(offeringId) as T
-                }
-            }
-        }
-
         fun onParticipateClick() {
             _showAlertEvent.setValue(Unit)
         }
@@ -274,5 +265,38 @@ class OfferingDetailViewModel
 
         override fun onClickCancel() {
             _alertCancelEvent.setValue(Unit)
+        }
+
+        fun showBottomSheetDialog() {
+            _showBottomSheetDialogEvent.setValue(Unit)
+        }
+
+        fun increaseCount() {
+            val totalCount = _offeringDetail.value?.totalCount ?: return
+            val currentCount = _currentCount.value ?: return
+            val purchaseCountValue = purchaseCount.value ?: return
+            if (purchaseCountValue >= (totalCount - currentCount)) return
+            purchaseCount.value = purchaseCountValue + 1
+        }
+
+        fun decreaseCount() {
+            val purchaseCountValue = purchaseCount.value ?: return
+            if (purchaseCountValue <= MIN_PURCHASE_COUNT) return
+            purchaseCount.value = purchaseCountValue - 1
+        }
+
+        companion object {
+            private const val DEFAULT_TITLE = ""
+            private const val MIN_PURCHASE_COUNT = 1
+
+            @Suppress("UNCHECKED_CAST")
+            fun getFactory(
+                assistedFactory: OfferingDetailAssistedFactory,
+                offeringId: Long,
+            ) = object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return assistedFactory.create(offeringId) as T
+                }
+            }
         }
     }
