@@ -176,6 +176,7 @@ class OfferingDetailViewModel
 
                             DataError.Network.BAD_REQUEST -> {
                                 _error.setValue(R.string.offering_detail_participation_error)
+                                loadOffering()
                             }
 
                             else -> {
