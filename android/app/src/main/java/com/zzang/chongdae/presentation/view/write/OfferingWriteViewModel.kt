@@ -12,10 +12,10 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
 import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
+import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.model.DiscountPrice
 import com.zzang.chongdae.domain.model.OfferingWrite
 import com.zzang.chongdae.domain.model.Price
-import com.zzang.chongdae.domain.model.Count
 import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
 import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
 import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase
@@ -373,7 +373,10 @@ class OfferingWriteViewModel
             return totalCountValue
         }
 
-        private fun makeMyCountInvalidEvent(totalCount: String, myCount: String): Int? {
+        private fun makeMyCountInvalidEvent(
+            totalCount: String,
+            myCount: String,
+        ): Int? {
             val totalCountValue = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
             val myCountValue = myCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
             if (myCountValue < MINIMUM_MY_COUNT || myCountValue > totalCountValue) {

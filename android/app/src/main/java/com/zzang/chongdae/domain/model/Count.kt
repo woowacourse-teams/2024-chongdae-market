@@ -14,7 +14,10 @@ value class Count private constructor(val number: Int) {
     companion object {
         private const val ERROR_INTEGER_FORMAT = -1
 
-        fun fromString(value: String?, minimum: Int): Count {
+        fun fromString(
+            value: String?,
+            minimum: Int,
+        ): Count {
             val intValue = value?.toIntOrNull() ?: ERROR_INTEGER_FORMAT
             if (intValue < minimum) {
                 return Count(ERROR_INTEGER_FORMAT)
