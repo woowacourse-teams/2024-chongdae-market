@@ -373,9 +373,10 @@ class OfferingWriteViewModel
             return totalCountValue
         }
 
-        private fun makeMyCountInvalidEvent(myCount: String): Int? {
+        private fun makeMyCountInvalidEvent(totalCount: String, myCount: String): Int? {
+            val totalCountValue = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
             val myCountValue = myCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
-            if (myCountValue < MINIMUM_MY_COUNT || myCountValue > MAXIMUM_MY_COUNT) {
+            if (myCountValue < MINIMUM_MY_COUNT || myCountValue > totalCountValue) {
                 _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_my_count)
                 return null
             }
@@ -419,6 +420,7 @@ class OfferingWriteViewModel
             productUrl.value = ""
             thumbnailUrl.value = ""
             totalCount.value = "$MINIMUM_TOTAL_COUNT"
+            myCount.value = "$MINIMUM_MY_COUNT"
             totalPrice.value = ""
             originPrice.value = ""
             meetingAddress.value = ""
@@ -434,7 +436,6 @@ class OfferingWriteViewModel
             private const val MINIMUM_TOTAL_COUNT = 2
             private const val MINIMUM_MY_COUNT = 1
             private const val MAXIMUM_TOTAL_COUNT = 10_000
-            private const val MAXIMUM_MY_COUNT = 9_999
             private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
             private const val INPUT_DATE_FORMAT = "yyyy년 M월 d일"
             private const val OUTPUT_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
