@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:background="@drawable/bg_bottom_sheet_dialog">
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="60dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_gray300_radius_5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_minus_count"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:background="@drawable/bg_main_color_radius_10dp"
+            android:fontFamily="@font/suit_bold"
+            android:text="@string/all_minus"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_18"
+            app:layout_constraintEnd_toStartOf="@+id/view_line"
+            app:layout_constraintTop_toBottomOf="@+id/view_line" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_35"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/btn_minus_count"
+            app:layout_constraintStart_toEndOf="@id/btn_minus_count"
+            app:layout_constraintTop_toTopOf="@id/btn_minus_count"
+            tools:text="2" />
+
+        <Button
+            android:id="@+id/btn_plus_count"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/size_35"
+            android:background="@drawable/bg_main_color_radius_10dp"
+            android:fontFamily="@font/suit_bold"
+            android:text="@string/all_plus"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_18"
+            app:layout_constraintBottom_toBottomOf="@id/tv_count"
+            app:layout_constraintStart_toEndOf="@+id/tv_count"
+            app:layout_constraintTop_toTopOf="@id/tv_count" />
+
+        <TextView
+            android:id="@+id/tv_max_count_announcement_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/suit_bold"
+            android:textColor="@color/main_color"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_minus_count"
+            tools:text="최대 2개를 구매할 수 있어요!" />
+
+        <TextView
+            android:id="@+id/tv_estimated_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_15"
+            android:fontFamily="@font/suit_semibold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_max_count_announcement_comment"
+            tools:text="최종 예상가격: 5,000원" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="@dimen/size_15"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/bg_main_color_radius_18dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/suit_bold"
+            app:layout_constraintTop_toBottomOf="@id/tv_estimated_price"
+            tools:text="2개 공동구매 참여하기" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
