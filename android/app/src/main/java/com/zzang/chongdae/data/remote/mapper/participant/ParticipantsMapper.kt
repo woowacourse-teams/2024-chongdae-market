@@ -21,12 +21,16 @@ fun ParticipantsResponse.toDomain(): Participants {
 fun RemoteProposer.toDomain(): Proposer {
     return Proposer(
         nickname = this.nickname,
+        count = this.count,
+        price = this.price,
     )
 }
 
 fun RemoteParticipant.toDomain(): Participant {
     return Participant(
         nickname = this.nickname,
+        count = this.count,
+        price = this.price,
     )
 }
 
