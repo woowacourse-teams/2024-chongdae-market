@@ -335,11 +335,33 @@
                 android:text="@{vm.participants.proposer.nickname}"
                 android:textColor="@color/gray_600"
                 android:textSize="@dimen/size_14"
-                app:layout_constraintBottom_toBottomOf="@id/iv_proposer"
                 app:layout_constraintStart_toEndOf="@id/iv_proposer"
                 app:layout_constraintTop_toTopOf="@id/iv_proposer"
                 app:layout_constraintVertical_bias="0.4"
                 tools:text="총대 닉네임" />
+
+            <View
+                android:id="@+id/v_divider"
+                android:layout_width="@dimen/size_1"
+                android:layout_height="@dimen/size_10"
+                android:layout_marginTop="@dimen/size_3"
+                android:background="@color/main_color"
+                app:layout_constraintStart_toStartOf="@id/tv_proposer"
+                app:layout_constraintTop_toBottomOf="@id/tv_proposer" />
+
+            <TextView
+                android:id="@+id/tv_participant_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_3"
+                android:fontFamily="@font/suit_medium"
+                android:text='@{String.format(@string/participant_info, vm.participants.proposer.count, vm.participants.proposer.price)}'
+                android:textColor="@color/gray_600"
+                android:textSize="@dimen/size_10"
+                app:layout_constraintBottom_toBottomOf="@id/v_divider"
+                app:layout_constraintStart_toStartOf="@id/v_divider"
+                app:layout_constraintTop_toTopOf="@id/v_divider"
+                tools:text="1개  50,000원" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_offering_members"
@@ -354,29 +376,6 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_proposer"
                 tools:itemCount="15"
                 tools:listitem="@layout/item_offering_member" />
-
-            <TextView
-                android:id="@+id/tv_comment_detail_expected_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/suit_semibold"
-                android:text="@string/comment_detail_expected_price"
-                android:textColor="@color/gray_500"
-                app:layout_constraintBottom_toTopOf="@id/horizon_line"
-                app:layout_constraintStart_toStartOf="@id/tv_offering_members"
-                app:layout_constraintTop_toBottomOf="@id/rv_offering_members" />
-
-            <TextView
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_20"
-                android:fontFamily="@font/suit_semibold"
-                android:text='@{String.format(@string/all_money_amount_text, vm.participants.price)}'
-                android:textColor="@color/main_color"
-                app:layout_constraintBottom_toTopOf="@id/horizon_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_offering_members" />
 
             <View
                 android:id="@+id/horizon_line"
