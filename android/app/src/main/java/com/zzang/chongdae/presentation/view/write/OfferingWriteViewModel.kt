@@ -46,6 +46,8 @@ class OfferingWriteViewModel
 
         val totalCount: MutableLiveData<String> = MutableLiveData("$MINIMUM_TOTAL_COUNT")
 
+        val myCount: MutableLiveData<String> = MutableLiveData("$MINIMUM_MY_COUNT")
+
         val totalPrice: MutableLiveData<String> = MutableLiveData("")
 
         val originPrice: MutableLiveData<String?> = MutableLiveData("")
@@ -203,7 +205,7 @@ class OfferingWriteViewModel
 
         private fun updateSplitPrice() {
             val totalPrice = Price.fromString(totalPrice.value)
-            val totalCount = Count.fromString(totalCount.value)
+            val totalCount = Count.fromString(totalCount.value, MINIMUM_TOTAL_COUNT)
             _splitPrice.value = totalPrice.amount / totalCount.number
         }
 
@@ -216,17 +218,52 @@ class OfferingWriteViewModel
         }
 
         fun increaseTotalCount() {
-            val totalCount = Count.fromString(totalCount.value).increase()
+            val totalCount = Count.fromString(totalCount.value, MINIMUM_TOTAL_COUNT).increase()
             this.totalCount.value = totalCount.number.toString()
         }
 
         fun decreaseTotalCount() {
-            if (Count.fromString(totalCount.value).number < 0) {
+            val totalCount = Count.fromString(totalCount.value, MINIMUM_TOTAL_COUNT)
+            if (totalCount.number < 0) {
                 this.totalCount.value = MINIMUM_TOTAL_COUNT.toString()
                 return
             }
-            val totalCount = Count.fromString(totalCount.value).decrease()
-            this.totalCount.value = totalCount.number.toString()
+            val count = totalCount.decrease(MINIMUM_TOTAL_COUNT)
+            this.totalCount.value = count.number.toString()
+        }
+
+        fun increaseMyCount() {
+            if (this.totalCount.value == "" || this.totalCount.value == "0") return
+            val totalCount = this.totalCount.value?.toInt() ?: 0
+            val maxMyCount = totalCount - 1
+            val myCount = Count.fromString(myCount.value, MINIMUM_MY_COUNT)
+            if (myCount.number < 0) {
+                this.myCount.value = MINIMUM_MY_COUNT.toString()
+                return
+            }
+            if (myCount.number >= maxMyCount) {
+                this.myCount.value = maxMyCount.toString()
+                return
+            }
+            val increasedMyCount = myCount.increase()
+            this.myCount.value = increasedMyCount.number.toString()
+        }
+
+        fun decreaseMyCount() {
+            if (this.totalCount.value == "" || this.totalCount.value == "0") return
+            val totalCount = this.totalCount.value?.toInt() ?: 0
+            val maxMyCount = totalCount - 1
+            val myCount = Count.fromString(myCount.value, MINIMUM_MY_COUNT)
+            if (myCount.number < 0) {
+                this.myCount.value = MINIMUM_MY_COUNT.toString()
+                return
+            }
+            if (myCount.number > maxMyCount) {
+                this.myCount.value = maxMyCount.toString()
+                return
+            }
+            val decreasedMyCount = myCount.decrease(MINIMUM_MY_COUNT)
+            this.myCount.value = decreasedMyCount.number.toString()
         }
 
         fun makeMeetingDateChoiceEvent() {
@@ -247,6 +284,7 @@ class OfferingWriteViewModel
             _isSubmitLoading.value = true
             val title = title.value ?: return
             val totalCount = totalCount.value ?: return
+            val myCount = myCount.value ?: return
             val totalPrice = totalPrice.value ?: return
             val meetingAddress = meetingAddress.value ?: return
             val meetingAddressDetail = meetingAddressDetail.value ?: return
@@ -254,6 +292,7 @@ class OfferingWriteViewModel
             val description = description.value ?: return
 
             val totalCountConverted = makeTotalCountInvalidEvent(totalCount) ?: return
+            val myCountConverted = makeMyCountInvalidEvent(totalCount, myCount) ?: return
             val totalPriceConverted = makeTotalPriceInvalidEvent(totalPrice) ?: return
             val meetingAddressDong = extractDong(meetingAddress)
 
@@ -275,6 +314,7 @@ class OfferingWriteViewModel
                                 productUrl = productUrlOrNull(),
                                 thumbnailUrl = thumbnailUrl.value,
                                 totalCount = totalCountConverted,
+                                myCount = myCountConverted,
                                 totalPrice = totalPriceConverted,
                                 originPrice = originPriceNotBlank,
                                 meetingAddress = meetingAddress,
@@ -333,6 +373,19 @@ class OfferingWriteViewModel
             return totalCountValue
         }
 
+        private fun makeMyCountInvalidEvent(
+            totalCount: String,
+            myCount: String,
+        ): Int? {
+            val totalCountValue = totalCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
+            val myCountValue = myCount.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
+            if (myCountValue < MINIMUM_MY_COUNT || myCountValue > totalCountValue) {
+                _writeUIState.value = WriteUIState.InvalidInput(R.string.write_invalid_my_count)
+                return null
+            }
+            return myCountValue
+        }
+
         private fun makeTotalPriceInvalidEvent(totalPrice: String): Int? {
             val totalPriceConverted = totalPrice.trim().toIntOrNull() ?: ERROR_INTEGER_FORMAT
             if (totalPriceConverted < 0) {
@@ -370,6 +423,7 @@ class OfferingWriteViewModel
             productUrl.value = ""
             thumbnailUrl.value = ""
             totalCount.value = "$MINIMUM_TOTAL_COUNT"
+            myCount.value = "$MINIMUM_MY_COUNT"
             totalPrice.value = ""
             originPrice.value = ""
             meetingAddress.value = ""
@@ -383,6 +437,7 @@ class OfferingWriteViewModel
             private const val ERROR_INTEGER_FORMAT = -1
             private const val ERROR_FLOAT_FORMAT = -1f
             private const val MINIMUM_TOTAL_COUNT = 2
+            private const val MINIMUM_MY_COUNT = 1
             private const val MAXIMUM_TOTAL_COUNT = 10_000
             private const val INPUT_DATE_TIME_FORMAT = "yyyy년 M월 d일 a h시 m분"
             private const val INPUT_DATE_FORMAT = "yyyy년 M월 d일"

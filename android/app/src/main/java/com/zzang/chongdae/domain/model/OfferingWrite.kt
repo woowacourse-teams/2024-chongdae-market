@@ -5,6 +5,7 @@ data class OfferingWrite(
     val productUrl: String?,
     val thumbnailUrl: String?,
     val totalCount: Int,
+    val myCount: Int,
     val totalPrice: Int,
     val originPrice: Int?,
     val meetingAddress: String,
