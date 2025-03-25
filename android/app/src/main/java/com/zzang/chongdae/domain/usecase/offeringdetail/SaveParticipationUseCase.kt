@@ -9,5 +9,8 @@ class SaveParticipationUseCase
     constructor(
         @OfferingDetailRepositoryQualifier val offeringDetailRepository: OfferingDetailRepository,
     ) {
-        suspend operator fun invoke(offeringId: Long) = offeringDetailRepository.saveParticipation(offeringId)
+        suspend operator fun invoke(
+            offeringId: Long,
+            participationCount: Int,
+        ) = offeringDetailRepository.saveParticipation(offeringId, participationCount)
     }

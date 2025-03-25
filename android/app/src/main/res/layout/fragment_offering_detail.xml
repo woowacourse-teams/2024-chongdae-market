@@ -362,7 +362,7 @@
             android:textColor="@color/white"
             app:condition="@{vm.offeringCondition}"
             app:currentCount="@{vm.currentCount}"
-            app:debouncedOnClick="@{() -> vm.onParticipateClick()}"
+            app:debouncedOnClick="@{() -> vm.showBottomSheetDialog()}"
             app:isVisible="@{!vm.isParticipated &amp;&amp; !vm.isOfferingDetailLoading}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
