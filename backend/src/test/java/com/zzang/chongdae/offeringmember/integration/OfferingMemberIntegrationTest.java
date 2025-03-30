@@ -22,9 +22,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 public class OfferingMemberIntegrationTest extends IntegrationTest {
+
+    @Autowired
+    ConcurrencyExecutor concurrencyExecutor;
 
     @DisplayName("공모 참여")
     @Nested
@@ -186,14 +190,13 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     1
             );
 
-            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
-            List<Integer> statusCodes = concurrencyExecutor.execute(5,
+            List<Integer> statusCodes = concurrencyExecutor.execute(
                     () -> RestAssured.given().log().all()
                             .cookies(cookieProvider.createCookiesWithMember(participant))
                             .contentType(ContentType.JSON)
                             .body(request)
                             .when().post("/participations")
-                            .statusCode());
+                            .statusCode(), 5);
 
             assertThat(statusCodes).containsExactlyInAnyOrder(201, 400, 400, 400, 400);
         }
@@ -212,7 +215,6 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             MemberEntity participant1 = memberFixture.createMember("ever1");
             MemberEntity participant2 = memberFixture.createMember("ever2");
 
-            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
             List<Integer> statusCodes = concurrencyExecutor.execute(
                     () -> RestAssured.given().log().all()
                             .cookies(cookieProvider.createCookiesWithMember(participant1))
@@ -244,7 +246,6 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
             MemberEntity participant1 = memberFixture.createMember("whatever");
             MemberEntity participant2 = memberFixture.createMember("however");
 
-            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
             List<Integer> statusCodes = concurrencyExecutor.execute(
                     () -> RestAssured.given().log().all()
                             .cookies(cookieProvider.createCookiesWithMember(participant1))
