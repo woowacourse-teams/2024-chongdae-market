@@ -184,6 +184,7 @@ class OfferingViewModel
         }
 
         fun swipeRefresh() {
+            _updatedOffering.value = mutableListOf()
             fetchOfferings()
         }
 

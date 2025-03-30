@@ -212,7 +212,7 @@ class OfferingModifyViewModel
 
         private fun updateSplitPrice() {
             val totalPrice = Price.fromString(totalPrice.value)
-            val totalCount = Count.fromString(totalCount.value)
+            val totalCount = Count.fromString(totalCount.value, MINIMUM_TOTAL_COUNT)
             _splitPrice.value = totalPrice.amount / totalCount.number
         }
 
@@ -225,17 +225,18 @@ class OfferingModifyViewModel
         }
 
         fun increaseTotalCount() {
-            val totalCount = Count.fromString(totalCount.value).increase()
+            val totalCount = Count.fromString(totalCount.value, MINIMUM_TOTAL_COUNT).increase()
             this.totalCount.value = totalCount.number.toString()
         }
 
         fun decreaseTotalCount() {
-            if (Count.fromString(totalCount.value).number < 0) {
+            val totalCount = Count.fromString(totalCount.value, MINIMUM_TOTAL_COUNT)
+            if (totalCount.number < 0) {
                 this.totalCount.value = MINIMUM_TOTAL_COUNT.toString()
                 return
             }
-            val totalCount = Count.fromString(totalCount.value).decrease()
-            this.totalCount.value = totalCount.number.toString()
+            val count = totalCount.decrease(MINIMUM_TOTAL_COUNT)
+            this.totalCount.value = count.number.toString()
         }
 
         fun makeMeetingDateChoiceEvent() {
@@ -335,7 +336,8 @@ class OfferingModifyViewModel
 
                     is Result.Error -> {
                         Log.e("error", "postOffering: ${result.error}")
-                        _modifyUIState.value = ModifyUIState.Error(R.string.modify_error_modifing, "${result.error}")
+                        _modifyUIState.value =
+                            ModifyUIState.Error(R.string.modify_error_modifing, "${result.error}")
                     }
                 }
             }

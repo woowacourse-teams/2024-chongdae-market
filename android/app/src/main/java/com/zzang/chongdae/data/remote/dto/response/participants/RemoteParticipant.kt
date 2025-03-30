@@ -7,4 +7,8 @@ import kotlinx.serialization.Serializable
 data class RemoteParticipant(
     @SerialName("nickname")
     val nickname: String,
+    @SerialName("count")
+    val count: Int,
+    @SerialName("price")
+    val price: Int,
 )

@@ -16,4 +16,5 @@ data class OfferingWriteRequest(
     @SerialName("meetingAddressDetail") val meetingAddressDetail: String,
     @SerialName("meetingDate") val meetingDate: String,
     @SerialName("description") val description: String,
+    @SerialName("myCount") val myCount: Int,
 )
