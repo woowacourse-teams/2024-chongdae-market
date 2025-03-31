@@ -196,9 +196,9 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                             .contentType(ContentType.JSON)
                             .body(request)
                             .when().post("/participations")
-                            .statusCode(), 5);
+                            .statusCode(), 2);
 
-            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400, 400, 400, 400);
+            assertThat(statusCodes).containsExactly(201, 409);
         }
 
         @DisplayName("다른 사용자가 같은 공모에 동시에 참여할 경우 예외가 발생한다.")
@@ -229,7 +229,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                             .when().post("/participations")
                             .statusCode());
 
-            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 409);
         }
 
         @DisplayName("두 참여자가 한 공모에 동시에 참여 할 때 총 개수가 넘을 경우 한 참여자만 참여할 수 있다.")
@@ -259,7 +259,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                             .body(request2)
                             .when().post("/participations")
                             .statusCode());
-            assertThat(statusCodes).containsExactlyInAnyOrder(201, 400);
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 409);
         }
     }
 
