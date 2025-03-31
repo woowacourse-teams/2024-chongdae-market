@@ -27,6 +27,13 @@ public class HighDiscountOfferingStrategy extends OfferingFetchStrategy {
 
     private List<OfferingEntity> fetchOfferings(Long lastId, double lastDiscountRate,
                                                 String searchKeyword, Pageable pageable) {
+        if (searchKeyword == null) {
+            return offeringRepository.findHighDiscountOfferingsWithTitleKeyword(
+                    lastDiscountRate,
+                    lastId,
+                    null,
+                    pageable);
+        }
         List<OfferingEntity> offeringsSearchedByTitle = offeringRepository.findHighDiscountOfferingsWithTitleKeyword(
                 lastDiscountRate,
                 lastId,

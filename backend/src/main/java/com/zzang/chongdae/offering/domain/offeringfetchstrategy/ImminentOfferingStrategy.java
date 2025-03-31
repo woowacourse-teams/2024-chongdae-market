@@ -28,6 +28,13 @@ public class ImminentOfferingStrategy extends OfferingFetchStrategy {
 
     private List<OfferingEntity> fetchOfferings(Long lastId, LocalDateTime lastMeetingDate,
                                                 String searchKeyword, Pageable pageable) {
+        if (searchKeyword == null) {
+            return offeringRepository.findImminentOfferingsWithTitleKeyword(
+                    lastMeetingDate,
+                    lastId,
+                    null,
+                    pageable);
+        }
         List<OfferingEntity> offeringsSearchedByTitle = offeringRepository.findImminentOfferingsWithTitleKeyword(
                 lastMeetingDate,
                 lastId,
