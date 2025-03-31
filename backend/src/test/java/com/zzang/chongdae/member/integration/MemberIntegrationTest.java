@@ -19,9 +19,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.payload.FieldDescriptor;
 
 public class MemberIntegrationTest extends IntegrationTest {
+
+    @Autowired
+    ConcurrencyExecutor concurrencyExecutor;
 
     @DisplayName("닉네임 변경")
     @Nested
@@ -116,7 +120,6 @@ public class MemberIntegrationTest extends IntegrationTest {
             MemberEntity doki = memberFixture.createMember("doki");
 
             NicknameRequest request = new NicknameRequest("pokidoki");
-            ConcurrencyExecutor concurrencyExecutor = ConcurrencyExecutor.getInstance();
             List<Integer> statusCodes = concurrencyExecutor.execute(
                     () -> RestAssured.given().log().all()
                             .cookies(cookieProvider.createCookiesWithMember(poki))
