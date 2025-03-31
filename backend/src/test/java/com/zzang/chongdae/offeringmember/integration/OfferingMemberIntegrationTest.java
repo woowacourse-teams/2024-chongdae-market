@@ -198,7 +198,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                             .when().post("/participations")
                             .statusCode(), 2);
 
-            assertThat(statusCodes).containsExactly(201, 409);
+            assertThat(statusCodes).containsExactlyInAnyOrder(201, 409);
         }
 
         @DisplayName("다른 사용자가 같은 공모에 동시에 참여할 경우 예외가 발생한다.")
