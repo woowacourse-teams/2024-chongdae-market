@@ -259,6 +259,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                             .body(request2)
                             .when().post("/participations")
                             .statusCode());
+
             assertThat(statusCodes).containsOnlyOnce(201);
         }
     }
