@@ -8,7 +8,7 @@ on:
       - ".github/workflows/backend-dev-ci-cd.yml"
       - "Dockerfile"
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "chongdae" ]
     paths:
       - "backend/**"
       - ".github/workflows/backend-dev-ci-cd.yml"
