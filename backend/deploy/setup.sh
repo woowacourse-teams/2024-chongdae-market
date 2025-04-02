@@ -13,7 +13,7 @@ if [ -z "$GITHUB_SHA" ] || [ -z "$PROFILE_ACTIVE" ] || [ -z "$DOCKERHUB_USER_NAM
 fi
 
 # intialize blue & gren
-INITIAL_INSTANCE_NAME="chongdae_backend_green"
+CONTAINER_NAME="chongdae_backend"
 INITIAL_BLUE_GREEN_NETWORK_NAME="blue_green_network"
 NGINX_NEW_CONF_PATH="new-default.conf"
 
@@ -24,13 +24,10 @@ if ! docker network ls | grep -q ${INITIAL_BLUE_GREEN_NETWORK_NAME}; then
 fi
 
 # 2. RUN INITIAL_CONTAINER
-echo "[+] stop and remove intial container"
-docker rm -f ${INITIAL_INSTANCE_NAME} >/dev/null 2>&1
-
 echo "[+] add chongdae_backend container"
 docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
-       	--name ${INITIAL_INSTANCE_NAME} \
+       	--name ${CONTAINER_NAME} \
 	-v /logs:/logs \
 	-v /uploads:/uploads \
 	-e SPRING_PROFILES_ACTIVE=${PROFILE_ACTIVE} \
@@ -40,14 +37,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-# 3. CHANGE INITIAL UP STREAM SERVER
-cp ${NGINX_DEFAULT_CONF_NAME} ${NGINX_NEW_CONF_PATH}
-
-if grep -q "server chongdae_backend:" "${NGINX_NEW_CONF_PATH}"; then
-	sed -i "s/server chongdae_backend:/server ${INITIAL_INSTANCE_NAME}:/" "${NGINX_NEW_CONF_PATH}"
-fi
-
-# 4. RUN DOCKER NGINX
+# 3. RUN DOCKER NGINX
 echo "[+] RUN nginx server"
 docker run -d \
 	--network ${INITIAL_BLUE_GREEN_NETWORK_NAME} \
@@ -56,10 +46,10 @@ docker run -d \
   -v /uploads:/uploads \
 	nginx:latest
 
-# 5. setup proxy in nginx container
+# 4. setup proxy in nginx container
 docker cp ${NGINX_NEW_CONF_PATH} nginx:/etc/nginx/conf.d/${NGINX_NEW_CONF_PATH}
 docker exec nginx mv /etc/nginx/conf.d/${NGINX_NEW_CONF_PATH} /etc/nginx/conf.d/default.conf
 docker exec nginx nginx -s reload
 
-# 6. clean up
+# 5. clean up
 rm -rf ${NGINX_NEW_CONF_PATH}
