@@ -1,66 +1,62 @@
 #!/bin/bash
-NGINX_DEFAULT_CONF=$1
-
-# parameter check
-if [ -z "$NGINX_DEFAULT_CONF" ]; then
-  echo "사용법: $0 <default.conf 이름>"
-  exit 1
-fi
-
-
 NGINX_CONTAINER_NAME="nginx"
-BLUE_CONTAINER="chongdae_backend_blue"
-GREEN_CONTAINER="chongdae_backend_green"
-NGINX_CHANGED_DEFAULT_CONF="new-default.conf"
-
-get_active_container() {
-  local active_container_name=$(docker exec nginx cat /etc/nginx/conf.d/default.conf | \
-    grep -P '^\s*server\s+\S+:' | \
-    grep -oP '(?<=server\s)[^:;]+' | \
-    sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-
-  echo "$active_container_name"
-}
-
-get_next_container() {
-  local active_container=$1 
-  if [[ "$active_container" == "$GREEN_CONTAINER" ]]; then
-    echo "$BLUE_CONTAINER"
-    return 0
-  fi
-
-  if [[ "$active_container" == "$BLUE_CONTAINER" ]]; then
-    echo "$GREEN_CONTAINER"
-    return 0
-  fi
-
-  return 1
-}
+BLUE_CONTAINER="chongdae_backend"
+GREEN_CONTAINER="chongdae_backend_new"
 
 change_blue_green_container() {
-	local next_container=$1
-	cp ${NGINX_DEFAULT_CONF} ${NGINX_CHANGED_DEFAULT_CONF}
+  local current_container=$1
+	local next_container=$2
+	local old_container="$1_old"
+	echo "[+] change container name $next_container"
+	docker rename $current_container $old_container
+	docker rename $next_container $current_container
 
-	if grep -q "server chongdae_backend:" "${NGINX_CHANGED_DEFAULT_CONF}"; then
-		sed -i "s/server chongdae_backend:/server ${next_container}:/" "${NGINX_CHANGED_DEFAULT_CONF}"
-	fi
-	echo "[+] change container $next_container"
-	docker cp ./${NGINX_CHANGED_DEFAULT_CONF} ${NGINX_CONTAINER_NAME}:/etc/nginx/conf.d/${NGINX_CHANGED_DEFAULT_CONF}
-	docker exec ${NGINX_CONTAINER_NAME} cp /etc/nginx/conf.d/${NGINX_CHANGED_DEFAULT_CONF} /etc/nginx/conf.d/default.conf
-	docker exec ${NGINX_CONTAINER_NAME} rm -rf /etc/nginx/conf.d/${NGINX_CHANGED_DEFAULT_CONF}
-	docker exec ${NGINX_CONTAINER_NAME} nginx -s reload
-	
-	# clean up
-	rm -rf ${NGINX_CHANGED_DEFAULT_CONF}
+  echo "$old_container"
 }
 
+finish_check() {
+  local container="$1"
+  local interface="eth0"
+  local interval="3"      # 기본 3초
+  local max_retry="10"   # 기본 100회
 
-health_check() {
-	local status=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost/health-check)
-	if [[ "$status" -eq "200" ]]; then
-		return 0
-	fi	
-	return 1	
+  echo "finish check $container for idle network activity..."
+
+  get_eth_stat() {
+    docker exec "$container" cat /proc/net/dev 2>/dev/null | grep "$interface" | awk '{print $2, $10}'
+  }
+
+
+  if ! docker inspect "$container" &>/dev/null; then
+    echo "$container container not found"
+    return 1
+  fi
+
+  local prev_stat
+  prev_stat=$(get_eth_stat)
+
+  if [[ -z "$prev_stat" ]]; then
+    echo "interface '$interface' not found"
+    return 1
+  fi
+
+  for ((i=1; i<=max_retry; i++)); do
+    sleep "$interval"
+    local curr_stat
+    curr_stat=$(get_eth_stat)
+
+    echo "[INFO] Attempt $i: $curr_stat"
+
+    if [[ "$curr_stat" == "$prev_stat" ]]; then
+      echo "[INFO] network traffic finished!!! $curr_stat)"
+      return 0
+    fi
+
+    prev_stat="$curr_stat"
+  done
+
+  echo "[ERROR] All $max_tries health check attempts failed for $container. Exiting..."
+  return 1
 }
 
 remove_container() {
@@ -74,17 +70,11 @@ remove_container() {
 	return 1
 }
 
-ACTIVE_CONTAINER=$(get_active_container)
-NEXT_CONTAINER=$(get_next_container $ACTIVE_CONTAINER)
+OLD_CONTAINER=change_blue_green_container "$BLUE_CONTAINER" "$GREEN_CONTAINER"
+finish_check $OLD_CONTAINER
 
 if [ $? -eq 0 ]; then
-   change_blue_green_container $NEXT_CONTAINER
-fi
-
-health_check
-
-if [ $? -eq 0 ]; then
-   remove_container $ACTIVE_CONTAINER
+   remove_container $OLD_CONTAINER
 else
    echo "[-] health check fail"
    exit 1
