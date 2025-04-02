@@ -7,7 +7,6 @@ change_blue_green_container() {
   local current_container=$1
 	local next_container=$2
 	local old_container="$1_old"
-	echo "[+] change container name $next_container"
 	docker rename $current_container $old_container
 	docker rename $next_container $current_container
 
@@ -70,6 +69,8 @@ remove_container() {
 	return 1
 }
 
+
+echo "[+] change blue green container"
 OLD_CONTAINER=$(change_blue_green_container "$BLUE_CONTAINER" "$GREEN_CONTAINER")
 finish_check $OLD_CONTAINER
 
