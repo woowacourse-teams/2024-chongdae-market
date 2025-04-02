@@ -7,8 +7,8 @@ NGINX_DEFAULT_CONF_NAME=$5
 
 
 # parameter check
-if [ -z "$GITHUB_SHA" ] || [ -z "$PROFILE_ACTIVE" ] || [ -z "$DOCKERHUB_USER_NAME" ] || [ -z "$DOCKER_IMAGE_NAME" ]; then
-  echo "사용법: $0 <GITHUB_SHA> <PROFILE_ACTIVE> <DOCKERHUB_USER_NAME> <DOCKER_IMAGE_NAME>"
+if [ -z "$GITHUB_SHA" ] || [ -z "$PROFILE_ACTIVE" ] || [ -z "$DOCKERHUB_USER_NAME" ] || [ -z "$DOCKER_IMAGE_NAME" ] || [ -z "$NGINX_DEFAULT_CONF_NAME" ]; then
+  echo "사용법: $0 <GITHUB_SHA> <PROFILE_ACTIVE> <DOCKERHUB_USER_NAME> <DOCKER_IMAGE_NAME> <NGINX_DEFAULT_CONF_NAME>"
   exit 1
 fi
 
@@ -47,6 +47,7 @@ docker run -d \
 	nginx:latest
 
 # 4. setup proxy in nginx container
+cp ${NGINX_DEFAULT_CONF_NAME} ${NGINX_NEW_CONF_PATH}
 docker cp ${NGINX_NEW_CONF_PATH} nginx:/etc/nginx/conf.d/${NGINX_NEW_CONF_PATH}
 docker exec nginx mv /etc/nginx/conf.d/${NGINX_NEW_CONF_PATH} /etc/nginx/conf.d/default.conf
 docker exec nginx nginx -s reload
