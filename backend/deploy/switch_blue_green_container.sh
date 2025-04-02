@@ -70,7 +70,7 @@ remove_container() {
 	return 1
 }
 
-OLD_CONTAINER=change_blue_green_container "$BLUE_CONTAINER" "$GREEN_CONTAINER"
+OLD_CONTAINER=$(change_blue_green_container "$BLUE_CONTAINER" "$GREEN_CONTAINER")
 finish_check $OLD_CONTAINER
 
 if [ $? -eq 0 ]; then
