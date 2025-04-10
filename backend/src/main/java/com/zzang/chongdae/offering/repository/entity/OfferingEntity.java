@@ -24,7 +24,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +33,6 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
 @SQLDelete(sql = "UPDATE offering SET is_deleted = true, version = version + 1 WHERE id = ? AND version = ?")
 @SQLRestriction("is_deleted = false")
@@ -113,13 +111,26 @@ public class OfferingEntity extends BaseTimeEntity {
 
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime meetingDate, String meetingAddress, String meetingAddressDetail,
-                          String meetingAddressDong,
-                          Integer totalCount, Integer currentCount, Integer totalPrice,
-                          Integer originPrice, Double discountRate,
-                          OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
-        this(null, member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
-                meetingAddressDetail, meetingAddressDong, totalCount, currentCount, totalPrice,
-                originPrice, discountRate, offeringStatus, roomStatus, false, null);
+                          String meetingAddressDong, Integer totalCount, Integer currentCount, Integer totalPrice,
+                          Integer originPrice, Double discountRate, OfferingStatus offeringStatus,
+                          CommentRoomStatus roomStatus) {
+        this.member = member;
+        this.title = title;
+        this.description = description;
+        this.thumbnailUrl = thumbnailUrl;
+        this.productUrl = productUrl;
+        this.meetingDate = meetingDate;
+        this.meetingAddress = meetingAddress;
+        this.meetingAddressDetail = meetingAddressDetail;
+        this.meetingAddressDong = meetingAddressDong;
+        this.totalCount = totalCount;
+        this.currentCount = currentCount;
+        this.totalPrice = totalPrice;
+        this.originPrice = originPrice;
+        this.discountRate = discountRate;
+        this.offeringStatus = offeringStatus;
+        this.roomStatus = roomStatus;
+        this.isDeleted = false;
     }
 
     public void participate(int participationCount) {
