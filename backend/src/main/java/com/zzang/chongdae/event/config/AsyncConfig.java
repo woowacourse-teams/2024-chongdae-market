@@ -16,15 +16,15 @@ public class AsyncConfig implements AsyncConfigurer {
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-//        int processors = Runtime.getRuntime().availableProcessors();
-        executor.setCorePoolSize(1);
-        executor.setQueueCapacity(3);
-        executor.setMaxPoolSize(2);
+        int processors = Runtime.getRuntime().availableProcessors();
+        executor.setCorePoolSize(processors);
+        executor.setQueueCapacity(100);
+        executor.setMaxPoolSize(processors * 2);
         executor.setThreadNamePrefix("AsyncExecutor-");
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
-    } // TODO 10초 타임아웃 설정하기
+    }
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
