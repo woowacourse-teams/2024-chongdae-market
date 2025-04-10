@@ -2,7 +2,7 @@
 
 더 저렴하게, 원하는 만큼만, 내가 직접 만드는 공동구매
 
-<img width="1000" alt="image" src="https://github.com/user-attachments/assets/c764d653-fb57-4840-9571-6324d6fb4c25">
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/2b795599-57c7-4fc6-8000-7d2789f84e49">
 
 ### 팀블로그 🖌️
 

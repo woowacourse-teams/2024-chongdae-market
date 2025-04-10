@@ -23,7 +23,8 @@ public class OfferingMemberFixture {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member,
                 offering,
-                OfferingMemberRole.PROPOSER
+                OfferingMemberRole.PROPOSER,
+                1
         );
         return offeringMemberRepository.save(offeringMember);
     }
@@ -33,11 +34,12 @@ public class OfferingMemberFixture {
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member,
                 offering,
-                OfferingMemberRole.PARTICIPANT
+                OfferingMemberRole.PARTICIPANT,
+                1
         );
         OfferingMemberEntity result = offeringMemberRepository.save(offeringMember);
         offering = offeringRepository.findById(offering.getId()).orElseThrow();
-        offering.participate();
+        offering.participate(1);
         return result;
     }
 }

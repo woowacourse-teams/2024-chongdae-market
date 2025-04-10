@@ -13,8 +13,7 @@ import org.springframework.http.HttpStatus;
 public enum CommentErrorCode implements ErrorResponse {
 
     NOT_FOUND(BAD_REQUEST, "해당 댓글이 존재하지 않습니다."),
-    NOT_PROPOSER(BAD_REQUEST, "해당 권한은 총대에게만 부여됩니다."),
-    ;
+    NOT_PROPOSER(BAD_REQUEST, "해당 권한은 총대에게만 부여됩니다.");
 
     private final HttpStatus status;
     private final String message;

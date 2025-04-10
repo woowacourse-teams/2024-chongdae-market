@@ -11,9 +11,10 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
@@ -24,6 +25,7 @@ import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.home.HomeFragment
 import com.zzang.chongdae.presentation.view.login.LoginActivity
 import com.zzang.chongdae.presentation.view.main.MainActivity
+import com.zzang.chongdae.presentation.view.offeringdetail.bottomsheet.OfferingDetailBottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,7 +42,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     @Inject
     lateinit var offeringDetailAssistedFactory: OfferingDetailViewModel.OfferingDetailAssistedFactory
 
-    private val viewModel: OfferingDetailViewModel by viewModels {
+    private val viewModel: OfferingDetailViewModel by activityViewModels {
         OfferingDetailViewModel.getFactory(
             assistedFactory = offeringDetailAssistedFactory,
             offeringId = offeringId,
@@ -131,6 +133,24 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
         viewModel.isOfferingDetailLoading.observe(viewLifecycleOwner) {
             startShimmer(it)
         }
+
+        viewModel.showBottomSheetDialogEvent.observe(viewLifecycleOwner) {
+            showBottomSheetDialog()
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val offeringDetailBottomSheetDialog =
+            OfferingDetailBottomSheetDialog(offeringId).apply {
+                setStyle(
+                    BottomSheetDialogFragment.STYLE_NORMAL,
+                    R.style.BottomSheetDialogTheme,
+                )
+            }
+        offeringDetailBottomSheetDialog.show(
+            childFragmentManager,
+            offeringDetailBottomSheetDialog.tag,
+        )
     }
 
     override fun onClickConfirm() {

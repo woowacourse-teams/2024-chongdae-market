@@ -1,107 +1,44 @@
 package com.zzang.chongdae.global.helper;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.Supplier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConcurrencyExecutor {
 
-    private static ConcurrencyExecutor INSTANCE;
-
-    public static ConcurrencyExecutor getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ConcurrencyExecutor();
-        }
-        return INSTANCE;
-    }
-
-    public void executeWithoutResult(Runnable... tasks) throws InterruptedException {
-        int executeCount = tasks.length;
-        ExecutorService executorService = Executors.newFixedThreadPool(executeCount);
-        CountDownLatch countDownLatch = new CountDownLatch(executeCount);
-
-        for (Runnable task : tasks) {
-            executorService.submit(() -> {
-                try {
-                    task.run();
-                } finally {
-                    countDownLatch.countDown();
-                }
-            });
-        }
-
-        countDownLatch.await();
+    public <T> void executeWithoutResult(Callable<T>... tasks) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(tasks.length);
+        executorService.invokeAll(Arrays.asList(tasks));
         executorService.shutdown();
     }
 
-    public void executeWithoutResult(int repeatCount, Runnable task) throws InterruptedException {
+    public <T> void executeWithoutResult(Callable<T> task, int repeatCount) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(repeatCount);
-        CountDownLatch countDownLatch = new CountDownLatch(repeatCount);
-
-        for (int i = 0; i < repeatCount; i++) {
-            executorService.submit(() -> {
-                try {
-                    task.run();
-                } finally {
-                    countDownLatch.countDown();
-                }
-            });
-        }
-
-        countDownLatch.await();
+        executorService.invokeAll(Collections.nCopies(repeatCount, task));
         executorService.shutdown();
     }
 
-    public final <T> List<T> execute(Supplier<T>... tasks) throws InterruptedException {
-        int executeCount = tasks.length;
-        ExecutorService executorService = Executors.newFixedThreadPool(executeCount);
-        CountDownLatch countDownLatch = new CountDownLatch(executeCount);
-
-        List<Future<T>> result = new ArrayList<>();
-        for (Supplier<T> task : tasks) {
-            Future<T> future = executorService.submit(() -> {
-                try {
-                    return task.get();
-                } finally {
-                    countDownLatch.countDown();
-                }
-            });
-            result.add(future);
-        }
-
-        countDownLatch.await();
+    public final <T> List<T> execute(Callable<T>... tasks) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(tasks.length);
+        List<Future<T>> results = executorService.invokeAll(Arrays.asList(tasks));
         executorService.shutdown();
-
-        return result.stream()
+        return results.stream()
                 .map(this::getWithoutException)
                 .toList();
     }
 
-    public <T> List<T> execute(int repeatCount, Supplier<T> task) throws InterruptedException {
+    public <T> List<T> execute(Callable<T> task, int repeatCount) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(repeatCount);
-        CountDownLatch countDownLatch = new CountDownLatch(repeatCount);
-
-        List<Future<T>> result = new ArrayList<>();
-        for (int i = 0; i < repeatCount; i++) {
-            Future<T> future = executorService.submit(() -> {
-                try {
-                    return task.get();
-                } finally {
-                    countDownLatch.countDown();
-                }
-            });
-            result.add(future);
-        }
-
-        countDownLatch.await();
+        List<Future<T>> results = executorService.invokeAll(Collections.nCopies(repeatCount, task));
         executorService.shutdown();
-
-        return result.stream()
+        return results.stream()
                 .map(this::getWithoutException)
                 .toList();
     }

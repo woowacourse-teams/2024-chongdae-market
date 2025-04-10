@@ -9,6 +9,7 @@ fun OfferingWrite.toRequest(): OfferingWriteRequest {
         productUrl = this.productUrl,
         thumbnailUrl = this.thumbnailUrl,
         totalCount = this.totalCount,
+        myCount = this.myCount,
         totalPrice = this.totalPrice,
         originPrice = this.originPrice,
         meetingAddress = this.meetingAddress,

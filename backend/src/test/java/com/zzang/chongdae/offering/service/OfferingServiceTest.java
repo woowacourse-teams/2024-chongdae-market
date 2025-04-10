@@ -461,7 +461,8 @@ public class OfferingServiceTest extends ServiceTest {
                     "상세주소아파트",
                     "구의동",
                     LocalDateTime.now(clock).plusDays(1),
-                    "내용입니다."
+                    "내용입니다.",
+                    1
             );
             Long expected = 1L;
 

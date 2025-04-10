@@ -18,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -35,7 +36,7 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@SQLDelete(sql = "UPDATE offering SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE offering SET is_deleted = true, version = version + 1 WHERE id = ? AND version = ?")
 @SQLRestriction("is_deleted = false")
 @Table(name = "offering")
 @Entity
@@ -107,6 +108,9 @@ public class OfferingEntity extends BaseTimeEntity {
     @ColumnDefault("false")
     private Boolean isDeleted;
 
+    @Version
+    private Long version;
+
     public OfferingEntity(MemberEntity member, String title, String description, String thumbnailUrl, String productUrl,
                           LocalDateTime meetingDate, String meetingAddress, String meetingAddressDetail,
                           String meetingAddressDong,
@@ -115,17 +119,17 @@ public class OfferingEntity extends BaseTimeEntity {
                           OfferingStatus offeringStatus, CommentRoomStatus roomStatus) {
         this(null, member, title, description, thumbnailUrl, productUrl, meetingDate, meetingAddress,
                 meetingAddressDetail, meetingAddressDong, totalCount, currentCount, totalPrice,
-                originPrice, discountRate, offeringStatus, roomStatus, false);
+                originPrice, discountRate, offeringStatus, roomStatus, false, null);
     }
 
-    public void participate() {
-        currentCount++;
+    public void participate(int participationCount) {
+        currentCount += participationCount;
         OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
         updateOfferingStatus(offeringStatus);
     }
 
-    public void leave() {
-        currentCount--;
+    public void leave(int participationCount) {
+        currentCount -= participationCount;
         OfferingStatus offeringStatus = toOfferingJoinedCount().decideOfferingStatus();
         updateOfferingStatus(offeringStatus);
     }

@@ -18,6 +18,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.http.ContentType;
+import io.restassured.http.Cookies;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
@@ -129,6 +130,8 @@ class AuthIntegrationTest extends IntegrationTest {
         @BeforeEach
         void setUp() {
             member = memberFixture.createMember("dora");
+            BDDMockito.given(authClient.getUserInfo(any()))
+                    .willReturn(member.getLoginId());
             now = Date.from(clock.instant());
         }
 
@@ -164,10 +167,20 @@ class AuthIntegrationTest extends IntegrationTest {
         @DisplayName("refreshToken으로 accessToken과 refreshToken을 재발급 한다.")
         @Test
         void should_refreshSuccess_when_givenRefreshToken() {
+            KakaoLoginRequest request = new KakaoLoginRequest(
+                    "whateverAccessToken",
+                    "whateverFcmToken"
+            );
+
+            Cookies cookies = given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/auth/login/kakao")
+                    .getDetailedCookies();
 
             given(spec).log().all()
                     .filter(document("refresh-success", resource(successSnippets)))
-                    .cookies(cookieProvider.createCookiesWithMember(member))
+                    .cookies(cookies)
                     .when().post("/auth/refresh")
                     .then().log().all()
                     .statusCode(200);

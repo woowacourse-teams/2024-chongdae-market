@@ -1,10 +1,10 @@
 package com.zzang.chongdae.presentation.view.home
 
-import com.zzang.chongdae.domain.model.FilterName
+import com.zzang.chongdae.domain.model.Filter
 
 interface OnFilterClickListener {
     fun onClickFilter(
-        filterName: FilterName,
+        filter: Filter,
         isChecked: Boolean,
     )
 }
