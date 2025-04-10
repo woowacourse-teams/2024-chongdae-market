@@ -17,11 +17,11 @@ public class AsyncConfig implements AsyncConfigurer {
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         int processors = Runtime.getRuntime().availableProcessors();
-        executor.setCorePoolSize(processors);
+        executor.setCorePoolSize(10);
         executor.setQueueCapacity(100);
-        executor.setMaxPoolSize(processors * 2);
+        executor.setMaxPoolSize(50);
         executor.setThreadNamePrefix("AsyncExecutor-");
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
         executor.initialize();
         return executor;
     }
