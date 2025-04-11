@@ -3,6 +3,7 @@ package com.zzang.chongdae.global.exception;
 import com.zzang.chongdae.logging.config.CachedHttpServletResponseWrapper;
 import com.zzang.chongdae.logging.domain.MemberIdentifier;
 import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
@@ -58,7 +59,9 @@ public class GlobalExceptionHandler {
                 .body(errorMessage);
     }
 
-    @ExceptionHandler({DataIntegrityViolationException.class, ObjectOptimisticLockingFailureException.class})
+    @ExceptionHandler({DataIntegrityViolationException.class,
+            ObjectOptimisticLockingFailureException.class,
+            OptimisticLockException.class})
     public ResponseEntity<ErrorMessage> handle(Exception e) {
         ErrorMessage errorMessage = new ErrorMessage("잠시후 다시 요청해주세요.");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
