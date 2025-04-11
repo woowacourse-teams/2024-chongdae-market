@@ -16,6 +16,7 @@ import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,6 +30,7 @@ public class OfferingMemberService {
     private final OfferingMemberRepository offeringMemberRepository;
     private final OfferingRepository offeringRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final EntityManager entityManager;
 
     @WriterDatabase
     @Transactional
@@ -37,10 +39,12 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         validateParticipate(offering, member, request.participationCount());
 
+        offering.participate(request.participationCount());
+        entityManager.flush();
+
         OfferingMemberEntity offeringMember = new OfferingMemberEntity(
                 member, offering, OfferingMemberRole.PARTICIPANT, request.participationCount());
         OfferingMemberEntity saved = offeringMemberRepository.save(offeringMember);
-        offering.participate(request.participationCount());
 
         eventPublisher.publishEvent(new ParticipateEvent(this, saved));
         return saved.getId();

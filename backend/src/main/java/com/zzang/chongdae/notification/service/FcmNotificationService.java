@@ -16,8 +16,10 @@ import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FcmNotificationService {
@@ -30,10 +32,13 @@ public class FcmNotificationService {
     private final RoomStatusMessageManager roomStatusMessageManager; // TODO: 의존성 리팩터링
 
     public void participate(OfferingMemberEntity offeringMember, FcmToken token) {
+        long start = System.currentTimeMillis();
         FcmTopic topic = FcmTopic.participantTopic(offeringMember.getOffering());
         notificationSubscriber.subscribe(offeringMember.getMember(), topic);
         Message message = participationMessageManager.messageWhenParticipate(offeringMember, token);
         notificationSender.send(message);
+        long end = System.currentTimeMillis();
+        log.info("참여하기 푸시알림 관련 처리 시간: {}ms", end - start);
     }
 
     public void cancelParticipation(OfferingMemberEntity offeringMember, MemberEntity participant, FcmToken token) {

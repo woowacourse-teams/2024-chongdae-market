@@ -51,7 +51,7 @@ security:
     token:
       access-secret-key: testAccessSecretKeytestAccessSecretKeytestAccessSecretKeytestAccessSecretKeytest
       refresh-secret-key: testRefreshSecretKeytestRefreshSecretKeytestRefreshSecretKeytestRefreshSecretKeytest
-      access-token-expired: 30m
+      access-token-expired: 30d
       refresh-token-expired: 14d
 
 components:
