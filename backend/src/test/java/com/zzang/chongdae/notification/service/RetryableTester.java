@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Retryable(
         retryFor = NotificationRetryableException.class,
-        backoff = @Backoff(delay = 1000, multiplier = 2, random = true)
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 100, multiplier = 2, random = true)
 )
 @Component
 public class RetryableTester {
