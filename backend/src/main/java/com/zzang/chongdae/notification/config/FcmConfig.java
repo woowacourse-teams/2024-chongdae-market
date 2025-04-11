@@ -16,6 +16,9 @@ import org.springframework.retry.annotation.EnableRetry;
 @Configuration
 public class FcmConfig {
 
+    private static final int FCM_CONNECTION_TIMEOUT = 10_000;
+    private static final int FCM_READ_TIMEOUT = 10_000;
+
     @Value("${fcm.secret-key.path}")
     private String secretKeyPath;
 
@@ -38,6 +41,8 @@ public class FcmConfig {
     private FirebaseOptions fcmOptions(InputStream secretKey) throws IOException {
         return FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(secretKey))
+                .setConnectTimeout(FCM_CONNECTION_TIMEOUT)
+                .setReadTimeout(FCM_READ_TIMEOUT)
                 .build();
     }
 }
