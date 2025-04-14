@@ -11,7 +11,10 @@ class FakeOfferingDetailRepository() : OfferingDetailRepository {
         return Result.Success(TestFixture.OFFERING_DETAIL_STUB)
     }
 
-    override suspend fun saveParticipation(offeringId: Long): Result<Unit, DataError.Network> {
+    override suspend fun saveParticipation(
+        offeringId: Long,
+        participationCount: Int,
+    ): Result<Unit, DataError.Network> {
         return Result.Success(Unit)
     }
 
