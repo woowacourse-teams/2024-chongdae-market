@@ -91,10 +91,10 @@ object TestFixture {
 
     val participants: Participants =
         Participants(
-            proposer = Proposer(nickname = "proposer nickname"),
+            proposer = Proposer(nickname = "proposer nickname", count = 1, price = 1000),
             participants =
                 listOf(
-                    Participant(nickname = "participant nickname"),
+                    Participant(nickname = "participant nickname", count = 1, price = 1000),
                 ),
             participantCount = ParticipantCount(currentCount = 1, totalCount = 4),
             price = 1000,
