@@ -2,6 +2,7 @@ package com.zzang.chongdae.event.config;
 
 import com.zzang.chongdae.event.exception.AsyncEventExceptionHandler;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -14,12 +15,12 @@ public class AsyncConfig implements AsyncConfigurer {
 
     @Override
     public Executor getAsyncExecutor() {
-        int processors = Runtime.getRuntime().availableProcessors();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(processors);
-        executor.setMaxPoolSize(processors * 2);
-        executor.setQueueCapacity(50);
+        executor.setCorePoolSize(20);
+        executor.setMaxPoolSize(40);
+        executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("AsyncExecutor-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
     }
