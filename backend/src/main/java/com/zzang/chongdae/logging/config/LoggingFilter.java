@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 @Component
 public class LoggingFilter implements Filter {
@@ -16,7 +18,11 @@ public class LoggingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (((HttpServletRequest) request).getRequestURI().startsWith("/h2-console/")) {
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
+        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(
+                (HttpServletResponse) response);
+
+        if (wrappedRequest.getRequestURI().startsWith("/h2-console/")) {
             chain.doFilter(request, response);
             return;
         }
@@ -24,10 +30,6 @@ public class LoggingFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        HttpServletRequest wrappedRequest
-                = new CachedHttpServletRequestWrapper((HttpServletRequest) request);
-        CachedHttpServletResponseWrapper wrappedResponse
-                = new CachedHttpServletResponseWrapper((HttpServletResponse) response);
         chain.doFilter(wrappedRequest, wrappedResponse);
         wrappedResponse.copyBodyToResponse();
     }

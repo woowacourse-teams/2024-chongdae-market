@@ -54,9 +54,9 @@ public class LoggingInterceptor implements HandlerInterceptor {
         String uri = parseUri(request.getRequestURI(), request.getQueryString());
         String requestBody = new String(request.getInputStream().readAllBytes());
 
-        CachedHttpServletResponseWrapper cachedResponse = (CachedHttpServletResponseWrapper) response;
+        HttpServletResponse cachedResponse = response;
         String statusCode = String.valueOf(cachedResponse.getStatus());
-        String responseBody = new String(cachedResponse.getCachedBody());
+        String responseBody = new String(cachedResponse.getOutputStream().toString());
 
         HttpStatusCategory statusCategory = HttpStatusCategory.fromStatusCode(cachedResponse.getStatus());
         if (statusCategory == HttpStatusCategory.INFO_SUCCESS) {

@@ -1,6 +1,5 @@
 package com.zzang.chongdae.global.exception;
 
-import com.zzang.chongdae.logging.config.CachedHttpServletResponseWrapper;
 import com.zzang.chongdae.logging.domain.MemberIdentifier;
 import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
 import jakarta.persistence.OptimisticLockException;
@@ -119,8 +118,7 @@ public class GlobalExceptionHandler {
         e.printStackTrace(pw);
         String stackTrace = sw.toString();
 
-        CachedHttpServletResponseWrapper cachedResponse = (CachedHttpServletResponseWrapper) response;
-        String responseBody = new String(cachedResponse.getCachedBody());
+        String responseBody = new String(response.getOutputStream().toString());
 
         long startTime = Long.parseLong(request.getAttribute("startTime").toString());
         long endTime = System.currentTimeMillis();
