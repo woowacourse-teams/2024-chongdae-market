@@ -1,5 +1,6 @@
 package com.zzang.chongdae.logging.support;
 
+import com.zzang.chongdae.logging.config.LoggingMasked;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ public class LoggingTestController {
         return ResponseEntity.ok().build();
     }
 
+    @LoggingMasked
     @PostMapping("/auth/test/secret")
     ResponseEntity<Void> authSecret(@RequestBody SecretRequest request) {
         return ResponseEntity.ok().build();

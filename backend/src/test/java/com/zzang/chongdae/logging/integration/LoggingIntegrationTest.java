@@ -85,7 +85,7 @@ public class LoggingIntegrationTest extends IntegrationTest {
                 .then().log().all()
                 .statusCode(200);
         boolean actual = appender.getLogs().stream()
-                .anyMatch(e -> e.getLevel() == Level.INFO && e.getMessage().contains("[MASKED INFORMATION]"));
+                .anyMatch(e -> e.getLevel() == Level.INFO && e.getMessage().contains("[MASKED_INFORMATION]"));
         assertThat(actual).isTrue();
     }
 }

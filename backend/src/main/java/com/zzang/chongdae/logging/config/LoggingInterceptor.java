@@ -15,10 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 @Slf4j
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
+
+    private final String MASKED_INFORMATION = "[MASKED_INFORMATION]";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -31,32 +35,33 @@ public class LoggingInterceptor implements HandlerInterceptor {
                                 HttpServletResponse response,
                                 Object handler,
                                 Exception ex) throws IOException {
+        long startTime = Long.parseLong(request.getAttribute("startTime").toString());
+        long endTime = System.currentTimeMillis();
+        String latency = endTime - startTime + "ms";
+
+        String identifier = UUID.randomUUID().toString();
+        //ContentCachingRequestWrapper
+        //ContentCachingResponseWrapper로 래핑하기
+        ContentCachingRequestWrapper cachedRequest = (ContentCachingRequestWrapper) request;
+        MemberIdentifier memberIdentifier = new MemberIdentifier(cachedRequest.getCookies());
+        String httpMethod = cachedRequest.getMethod();
+        String uri = parseUri(cachedRequest.getRequestURI(), cachedRequest.getQueryString());
+        String requestBody = new String(cachedRequest.getContentAsString());
+        ContentCachingResponseWrapper cachedResponse = (ContentCachingResponseWrapper) response;
+        String statusCode = String.valueOf(cachedResponse.getStatus());
+        String responseBody = new String(cachedResponse.getOutputStream().toString());
 
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return;
         }
         Method method = handlerMethod.getMethod();
         if (method.isAnnotationPresent(LoggingMasked.class)) {
-            return;
+            requestBody = MASKED_INFORMATION;
         }
 
         if (isMultipart(request)) {
             return;
         }
-
-        long startTime = Long.parseLong(request.getAttribute("startTime").toString());
-        long endTime = System.currentTimeMillis();
-        String latency = endTime - startTime + "ms";
-
-        String identifier = UUID.randomUUID().toString();
-        MemberIdentifier memberIdentifier = new MemberIdentifier(request.getCookies());
-        String httpMethod = request.getMethod();
-        String uri = parseUri(request.getRequestURI(), request.getQueryString());
-        String requestBody = new String(request.getInputStream().readAllBytes());
-
-        HttpServletResponse cachedResponse = response;
-        String statusCode = String.valueOf(cachedResponse.getStatus());
-        String responseBody = new String(cachedResponse.getOutputStream().toString());
 
         HttpStatusCategory statusCategory = HttpStatusCategory.fromStatusCode(cachedResponse.getStatus());
         if (statusCategory == HttpStatusCategory.INFO_SUCCESS) {
