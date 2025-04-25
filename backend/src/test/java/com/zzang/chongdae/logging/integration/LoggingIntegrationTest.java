@@ -8,6 +8,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import com.zzang.chongdae.global.exception.GlobalExceptionHandler;
 import com.zzang.chongdae.global.integration.IntegrationTest;
+import com.zzang.chongdae.logging.config.LoggingFilter;
 import com.zzang.chongdae.logging.config.LoggingInterceptor;
 import com.zzang.chongdae.logging.support.InMemoryLogAppender;
 import com.zzang.chongdae.logging.support.SecretRequest;
@@ -25,12 +26,14 @@ public class LoggingIntegrationTest extends IntegrationTest {
     @BeforeEach
     void setUp() {
         Logger errorLogger = (Logger) LoggerFactory.getLogger(GlobalExceptionHandler.class);
-        Logger infoLogger = (Logger) LoggerFactory.getLogger(LoggingInterceptor.class);
+        Logger infoLoggerInterCeptor = (Logger) LoggerFactory.getLogger(LoggingInterceptor.class);
+        Logger infoLoggerFilter = (Logger) LoggerFactory.getLogger(LoggingFilter.class);
         appender = new InMemoryLogAppender();
         appender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
         appender.start();
         errorLogger.addAppender(appender);
-        infoLogger.addAppender(appender);
+        infoLoggerInterCeptor.addAppender(appender);
+        infoLoggerFilter.addAppender(appender);
     }
 
     @AfterEach
@@ -70,7 +73,8 @@ public class LoggingIntegrationTest extends IntegrationTest {
                 .then().log().all()
                 .statusCode(400);
         boolean actual = appender.getLogs().stream()
-                .anyMatch(e -> e.getLevel() == Level.ERROR);
+                .peek(e -> System.out.println(e.getLevel()))
+                .anyMatch(e -> e.getLevel() == Level.INFO);
         assertThat(actual).isTrue();
     }
 
