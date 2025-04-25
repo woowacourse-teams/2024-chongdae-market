@@ -49,7 +49,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
         String requestBody = new String(cachedRequest.getContentAsString());
         ContentCachingResponseWrapper cachedResponse = (ContentCachingResponseWrapper) response;
         String statusCode = String.valueOf(cachedResponse.getStatus());
-        String responseBody = new String(cachedResponse.getOutputStream().toString());
+        String responseBody = new String(cachedResponse.getContentAsByteArray());
 
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return;

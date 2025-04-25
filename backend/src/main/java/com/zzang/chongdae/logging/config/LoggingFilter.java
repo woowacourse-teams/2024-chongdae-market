@@ -48,7 +48,7 @@ public class LoggingFilter implements Filter {
         String uri = parseUri(wrappedRequest.getRequestURI(), wrappedRequest.getQueryString());
         String requestBody = new String(wrappedRequest.getContentAsString());
         String statusCode = String.valueOf(wrappedResponse.getStatus());
-        String responseBody = new String(wrappedResponse.getOutputStream().toString());
+        String responseBody = new String(wrappedResponse.getContentAsByteArray());
 
         if (isMultipart(request)) {
             return;
