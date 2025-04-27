@@ -13,8 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
 
-    private final String MASKED_INFORMATION = "[MASKED_INFORMATION]";
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         return true;
