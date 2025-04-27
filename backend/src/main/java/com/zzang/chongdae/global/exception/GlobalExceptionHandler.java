@@ -1,17 +1,13 @@
 package com.zzang.chongdae.global.exception;
 
-import com.zzang.chongdae.logging.domain.MemberIdentifier;
-import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -103,39 +99,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response) {
         ErrorMessage errorMessage = new ErrorMessage("서버 관리자에게 문의하세요");
-
-        String identifier = UUID.randomUUID().toString();
-        MemberIdentifier memberIdentifier = new MemberIdentifier(request.getCookies());
-        String httpMethod = request.getMethod();
-        String uri = request.getRequestURI();
-        String requestBody = new String(request.getInputStream().readAllBytes());
-
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
         String stackTrace = sw.toString();
-
-        String responseBody = new String(response.getOutputStream().toString());
-
-        long startTime = Long.parseLong(request.getAttribute("startTime").toString());
-        long endTime = System.currentTimeMillis();
-        String latency = endTime - startTime + "ms";
-
-        LoggingErrorResponse logResponse = new LoggingErrorResponse(
-                identifier,
-                memberIdentifier.getIdInfo(),
-                httpMethod,
-                uri,
-                requestBody,
-                "500",
-                responseBody,
-                latency,
-                stackTrace);
-        log.error(logResponse.toString());
-
+        request.setAttribute("stackTrace", stackTrace);
         return ResponseEntity
                 .internalServerError()
                 .body(errorMessage);
