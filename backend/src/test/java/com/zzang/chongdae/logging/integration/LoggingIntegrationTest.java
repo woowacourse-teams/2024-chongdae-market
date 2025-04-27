@@ -25,12 +25,12 @@ public class LoggingIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        Logger errorLogger = (Logger) LoggerFactory.getLogger(GlobalExceptionHandler.class);
-        Logger infoLoggerInterceptor = (Logger) LoggerFactory.getLogger(LoggingInterceptor.class);
-        Logger infoLoggerFilter = (Logger) LoggerFactory.getLogger(LoggingFilter.class);
         appender = new InMemoryLogAppender();
         appender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
         appender.start();
+        Logger errorLogger = (Logger) LoggerFactory.getLogger(GlobalExceptionHandler.class);
+        Logger infoLoggerInterceptor = (Logger) LoggerFactory.getLogger(LoggingInterceptor.class);
+        Logger infoLoggerFilter = (Logger) LoggerFactory.getLogger(LoggingFilter.class);
         errorLogger.addAppender(appender);
         infoLoggerInterceptor.addAppender(appender);
         infoLoggerFilter.addAppender(appender);
