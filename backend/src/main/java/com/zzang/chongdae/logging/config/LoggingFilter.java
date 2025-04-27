@@ -2,10 +2,7 @@ package com.zzang.chongdae.logging.config;
 
 import com.zzang.chongdae.logging.domain.HttpStatusCategory;
 import com.zzang.chongdae.logging.domain.MemberIdentifier;
-import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
-import com.zzang.chongdae.logging.dto.LoggingInfoFailResponse;
-import com.zzang.chongdae.logging.dto.LoggingInfoSuccessResponse;
-import com.zzang.chongdae.logging.dto.LoggingWarnResponse;
+import com.zzang.chongdae.logging.dto.LogContext;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +21,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 @Component
 public class LoggingFilter implements Filter {
 
+    private static final int MAX_LOGGABLE_BODY_LENGTH = 2048;
     private final String MASKED_INFORMATION = "[MASKED_INFORMATION]";
 
     @Override
@@ -39,72 +37,42 @@ public class LoggingFilter implements Filter {
         long startTime = Long.parseLong(request.getAttribute("startTime").toString());
         long endTime = System.currentTimeMillis();
         String latency = endTime - startTime + "ms";
+        String uri = parseUri(wrappedRequest.getRequestURI(), wrappedRequest.getQueryString());
+        String requestBody = parseRequestBody(wrappedRequest);
         String identifier = UUID.randomUUID().toString();
         MemberIdentifier memberIdentifier = new MemberIdentifier(wrappedRequest.getCookies());
         String httpMethod = wrappedRequest.getMethod();
-        String uri = parseUri(wrappedRequest.getRequestURI(), wrappedRequest.getQueryString());
-        String requestBody = new String(wrappedRequest.getContentAsString());
         String statusCode = String.valueOf(wrappedResponse.getStatus());
         HttpStatusCategory statusCategory = HttpStatusCategory.fromStatusCode(wrappedResponse.getStatus());
-        String responseBody = new String(wrappedResponse.getContentAsByteArray());
-        boolean isMasked = (boolean) wrappedRequest.getAttribute("loggingMasked");
-        if (isMasked) {
-            requestBody = MASKED_INFORMATION;
-        }
-        if (isMultipart(wrappedRequest)) {
-            wrappedResponse.copyBodyToResponse();
-            return;
-        }
-        if (statusCategory == HttpStatusCategory.INFO_SUCCESS) {
-            LoggingInfoSuccessResponse logResponse = new LoggingInfoSuccessResponse(
-                    identifier,
-                    memberIdentifier.getIdInfo(),
-                    httpMethod,
-                    uri,
-                    requestBody,
-                    statusCode,
-                    latency);
-            log.info(logResponse.toString());
-        }
-        if (statusCategory == HttpStatusCategory.INFO_FAIL) {
-            LoggingInfoFailResponse logResponse = new LoggingInfoFailResponse(
-                    identifier,
-                    memberIdentifier.getIdInfo(),
-                    httpMethod,
-                    uri,
-                    requestBody,
-                    statusCode,
-                    responseBody,
-                    latency);
-            log.info(logResponse.toString());
-        }
-        if (statusCategory == HttpStatusCategory.WARN) {
-            LoggingWarnResponse logResponse = new LoggingWarnResponse(
-                    identifier,
-                    memberIdentifier.getIdInfo(),
-                    httpMethod,
-                    uri,
-                    requestBody,
-                    statusCode,
-                    responseBody,
-                    latency);
-            log.warn(logResponse.toString());
-        }
+        String responseBody = parseResponseBody(wrappedResponse);
         String stackTrace = (String) request.getAttribute("stackTrace");
-        if (request.getAttribute("stackTrace") != null) {
-            LoggingErrorResponse logResponse = new LoggingErrorResponse(
-                    identifier,
-                    memberIdentifier.getIdInfo(),
-                    httpMethod,
-                    uri,
-                    requestBody,
-                    "500",
-                    responseBody,
-                    latency,
-                    stackTrace);
-            log.error(logResponse.toString());
-        }
+        statusCategory.log(log,
+                new LogContext(identifier, memberIdentifier, latency, httpMethod, uri, requestBody, statusCode,
+                        responseBody, stackTrace));
         wrappedResponse.copyBodyToResponse();
+    }
+
+    private String parseResponseBody(ContentCachingResponseWrapper response) {
+        try {
+            String bodyString = new String(response.getContentAsByteArray());
+            if (bodyString.length() > MAX_LOGGABLE_BODY_LENGTH) {
+                return bodyString.substring(0, MAX_LOGGABLE_BODY_LENGTH) + " ... (truncated)";
+            }
+            return bodyString;
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private String parseRequestBody(ContentCachingRequestWrapper request) {
+        if (isMultipart(request)) {
+            return "";
+        }
+        boolean isMasked = (boolean) request.getAttribute("loggingMasked");
+        if (isMasked) {
+            return MASKED_INFORMATION;
+        }
+        return request.getContentAsString();
     }
 
     private boolean isMultipart(HttpServletRequest request) {
@@ -119,5 +87,3 @@ public class LoggingFilter implements Filter {
         return requestUri + "?" + queryString;
     }
 }
-
-

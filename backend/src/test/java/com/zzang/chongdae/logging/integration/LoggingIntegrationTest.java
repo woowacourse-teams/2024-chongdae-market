@@ -61,7 +61,7 @@ public class LoggingIntegrationTest extends IntegrationTest {
                 .then().log().all()
                 .statusCode(401);
         boolean actual = appender.getLogs().stream()
-                .anyMatch(e -> e.getLevel() == Level.INFO);
+                .anyMatch(e -> e.getLevel() == Level.WARN);
         assertThat(actual).isTrue();
     }
 
