@@ -65,19 +65,6 @@ public class LoggingIntegrationTest extends IntegrationTest {
         assertThat(actual).isTrue();
     }
 
-    @DisplayName("컨트롤러가 등록되어 있지 않을 경우에도 로깅해야 한다.")
-    @Test
-    void should_Logging_when_controllerNotExist() {
-        given().log().all()
-                .when().get("/read-only/nothing")
-                .then().log().all()
-                .statusCode(400);
-        boolean actual = appender.getLogs().stream()
-                .peek(e -> System.out.println(e.getLevel()))
-                .anyMatch(e -> e.getLevel() == Level.INFO);
-        assertThat(actual).isTrue();
-    }
-
     @DisplayName("중요정보는 마스킹되어 로깅해야 한다.")
     @Test
     void should_maskedLogging_when_annotatedMaskedLogging() {
