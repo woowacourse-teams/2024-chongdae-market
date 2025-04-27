@@ -79,4 +79,18 @@ public class LoggingIntegrationTest extends IntegrationTest {
                 .anyMatch(e -> e.getLevel() == Level.INFO && e.getMessage().contains("[MASKED_INFORMATION]"));
         assertThat(actual).isTrue();
     }
+
+    @DisplayName("multipart 요청 시 requestBody는 로깅되지 않아야 한다.")
+    @Test
+    void should_not_log_requestBody_when_multipartRequest() {
+        given().log().all()
+                .multiPart("file", "testfile.txt", "dummy content".getBytes())
+                .when()
+                .post("/test-upload");
+
+        boolean bodyLogged = appender.getLogs().stream()
+                .anyMatch(e -> e.getMessage().contains("dummy content"));
+
+        assertThat(bodyLogged).isFalse();
+    }
 }
