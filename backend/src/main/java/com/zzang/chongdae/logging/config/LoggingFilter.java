@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -23,6 +24,7 @@ public class LoggingFilter implements Filter {
 
     private static final int MAX_LOGGABLE_BODY_LENGTH = 2048;
     private final String MASKED_INFORMATION = "[MASKED_INFORMATION]";
+    private final String LOG_KEY_NAME = "log_id";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -31,6 +33,8 @@ public class LoggingFilter implements Filter {
                 (HttpServletRequest) request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(
                 (HttpServletResponse) response);
+        String identifier = UUID.randomUUID().toString();
+        MDC.put(LOG_KEY_NAME, identifier);
         wrappedRequest.setAttribute("startTime", System.currentTimeMillis());
         wrappedRequest.setAttribute("loggingMasked", false);
         chain.doFilter(wrappedRequest, wrappedResponse);
@@ -39,7 +43,7 @@ public class LoggingFilter implements Filter {
         String latency = endTime - startTime + "ms";
         String uri = parseUri(wrappedRequest.getRequestURI(), wrappedRequest.getQueryString());
         String requestBody = parseRequestBody(wrappedRequest);
-        String identifier = UUID.randomUUID().toString();
+
         MemberIdentifier memberIdentifier = new MemberIdentifier(wrappedRequest.getCookies());
         String httpMethod = wrappedRequest.getMethod();
         String statusCode = String.valueOf(wrappedResponse.getStatus());
@@ -50,6 +54,7 @@ public class LoggingFilter implements Filter {
                 new LogContext(identifier, memberIdentifier, latency, httpMethod, uri, requestBody, statusCode,
                         responseBody, stackTrace));
         wrappedResponse.copyBodyToResponse();
+        MDC.clear();
     }
 
     private String parseResponseBody(ContentCachingResponseWrapper response) {

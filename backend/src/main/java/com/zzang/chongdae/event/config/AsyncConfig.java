@@ -1,6 +1,7 @@
 package com.zzang.chongdae.event.config;
 
 import com.zzang.chongdae.event.exception.AsyncEventExceptionHandler;
+import com.zzang.chongdae.logging.support.MdcTaskDecorator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -21,6 +22,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("AsyncExecutor-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setTaskDecorator(new MdcTaskDecorator());
         executor.initialize();
         return executor;
     }
