@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -23,8 +24,10 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 public class LoggingFilter implements Filter {
 
     private static final int MAX_LOGGABLE_BODY_LENGTH = 2048;
-    private final String MASKED_INFORMATION = "[MASKED_INFORMATION]";
-    private final String LOG_KEY_NAME = "log_id";
+    private static final String MASKED_INFORMATION = "[MASKED_INFORMATION]";
+
+    @Value("${logging.mdc.key-name}")
+    private String LOG_KEY_NAME;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

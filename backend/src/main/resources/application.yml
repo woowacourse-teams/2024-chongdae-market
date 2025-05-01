@@ -73,6 +73,8 @@ logging:
       file-name-pattern: /logs/backend.%d{yyyy-MM-dd}.%i.log
       max-file-size: 100MB
       max-history: 14
+  mdc:
+    key-name: "trackId"
 
 auth:
   connect-timeout-length: 3s
