@@ -67,14 +67,12 @@ logging:
   file:
     name: /logs/backend.log
   pattern:
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [trackId=%X{trackId}] %-5level %logger{36} - %msg%n"
   logback:
     rollingpolicy:
       file-name-pattern: /logs/backend.%d{yyyy-MM-dd}.%i.log
       max-file-size: 100MB
       max-history: 14
-  mdc:
-    key-name: "trackId"
 
 auth:
   connect-timeout-length: 3s
