@@ -106,17 +106,18 @@ class CommentDetailViewModel
             _isPollingActive.value = false
         }
 
-    private fun handleNetworkError(
-        error: DataError.Network,
-        retryAction: suspend () -> Unit = {}
-    ) {
-        val message = when (error) {
-            DataError.Network.UNAUTHORIZED -> "로그아웃 후 다시 진행해주세요."
-            DataError.Network.CONNECTION_ERROR -> "네트워크 연결을 확인해주세요."
-            else -> error.name
+        private fun handleNetworkError(
+            error: DataError.Network,
+            retryAction: suspend () -> Unit = {},
+        ) {
+            val message =
+                when (error) {
+                    DataError.Network.UNAUTHORIZED -> "로그아웃 후 다시 진행해주세요."
+                    DataError.Network.CONNECTION_ERROR -> "네트워크 연결을 확인해주세요."
+                    else -> error.name
+                }
+            _event.value = Event(CommentDetailEvent.ShowError(message))
         }
-        _event.value = Event(CommentDetailEvent.ShowError(message))
-    }
 
         private fun updateCommentInfo() {
             viewModelScope.launch {
