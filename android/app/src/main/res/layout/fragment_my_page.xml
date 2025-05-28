@@ -105,10 +105,23 @@
             layout="@layout/item_notification_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:isVisible="@{vm.areNotificationsEnabled}"
+            app:isVisibleOrInvisible="@{vm.areNotificationsEnabled}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_divider"
             app:vm="@{vm}" />
+
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_page_notification_block_description"
+            android:gravity="center"
+            app:isVisible="@{!vm.areNotificationsEnabled}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/switch_notification"
+            app:layout_constraintTop_toBottomOf="@id/view_divider" />
+
 
         <ImageView
             android:id="@+id/iv_nickname_modification"

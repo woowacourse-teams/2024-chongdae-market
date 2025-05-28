@@ -62,6 +62,11 @@ fun View.setIsVisible(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 
+@BindingAdapter("isVisibleOrInvisible")
+fun View.setIsVisibleOrInvisible(isVisible: Boolean) {
+    visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+}
+
 @BindingAdapter("formattedDate")
 fun TextView.bindFormattedDate(datetime: LocalDateTime?) {
     this.text =
