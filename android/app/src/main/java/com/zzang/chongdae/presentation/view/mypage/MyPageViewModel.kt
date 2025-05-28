@@ -59,11 +59,11 @@ class MyPageViewModel
             }
         }
 
-    private suspend fun initNotificationSwitches() {
-        isNotificationActivate.value = getNotificationActivateUseCase()
-        isNotificationImportanceHigh.value =
-            getNotificationImportanceUseCase() == NotificationManager.IMPORTANCE_HIGH
-    }
+        private suspend fun initNotificationSwitches() {
+            isNotificationActivate.value = getNotificationActivateUseCase()
+            isNotificationImportanceHigh.value =
+                getNotificationImportanceUseCase() == NotificationManager.IMPORTANCE_HIGH
+        }
 
         fun onClickTermsOfUse() {
             _openUrlInBrowserEvent.setValue(termsOfUseUrl)
