@@ -35,7 +35,7 @@ public class AnalyticIntegrationTest extends IntegrationTest {
                 .build();
         ResourceSnippetParameters failSnippets = builder()
                 .summary("AB 테스트 그룹 조회")
-                .description("로그인 하지 않을 경우, AB 테스트 그룹을 반환하지않습니다.")
+                .description("현재 로그인 한 사용자의 AB 테스트 그룹을 조회합니다.")
                 .responseFields(failResponseDescriptors)
                 .responseSchema(schema("VariantFailResponse"))
                 .build();
@@ -51,7 +51,7 @@ public class AnalyticIntegrationTest extends IntegrationTest {
         @Test
         void should_responseVariantType_when_getVariant() {
             given(spec).log().all()
-                    .filter(document("gat-variant-success", resource(successSnippets)))
+                    .filter(document("get-variant-success", resource(successSnippets)))
                     .contentType(ContentType.JSON)
                     .cookies(cookieProvider.createCookiesWithMember(member))
                     .when().get("/analytics/variant")
@@ -63,7 +63,7 @@ public class AnalyticIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_getVariantWithoutLogin() {
             given(spec).log().all()
-                    .filter(document("gat-variant-fail", resource(failSnippets)))
+                    .filter(document("get-variant-fail", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .when().get("/analytics/variant")
                     .then().log().all()
