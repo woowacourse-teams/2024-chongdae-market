@@ -6,21 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
-import com.zzang.chongdae.auth.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.di.annotations.CommentDetailRepositoryQualifier
-import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
-import com.zzang.chongdae.di.annotations.ParticipantRepositoryQualifier
 import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.repository.CommentDetailRepository
-import com.zzang.chongdae.domain.repository.OfferingRepository
-import com.zzang.chongdae.domain.repository.ParticipantRepository
+import com.zzang.chongdae.domain.usecase.commentdetail.DeleteParticipationsUseCase
+import com.zzang.chongdae.domain.usecase.commentdetail.FetchCommentOfferingInfoUseCase
+import com.zzang.chongdae.domain.usecase.commentdetail.FetchCommentsUseCase
+import com.zzang.chongdae.domain.usecase.commentdetail.FetchMeetingsUseCase
+import com.zzang.chongdae.domain.usecase.commentdetail.FetchParticipantsUseCase
+import com.zzang.chongdae.domain.usecase.commentdetail.SaveCommentUseCase
+import com.zzang.chongdae.domain.usecase.commentdetail.UpdateOfferingStatusUseCase
 import com.zzang.chongdae.presentation.util.Event
 import com.zzang.chongdae.presentation.view.commentdetail.event.CommentDetailEvent
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
-import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModelListWithSeparators
 import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.information.CommentOfferingInfoUiModel.Companion.toUiModel
@@ -41,12 +39,14 @@ class CommentDetailViewModel
     @AssistedInject
     constructor(
         @Assisted private val offeringId: Long,
-        @AuthRepositoryQualifier private val authRepository: AuthRepository,
-        @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
-        @ParticipantRepositoryQualifier private val participantRepository: ParticipantRepository,
-        @CommentDetailRepositoryQualifier private val commentDetailRepository: CommentDetailRepository,
-    ) : ViewModel(),
-        OnAlertClickListener {
+        private val fetchCommentsUseCase: FetchCommentsUseCase,
+        private val saveCommentUseCase: SaveCommentUseCase,
+        private val fetchCommentOfferingInfoUseCase: FetchCommentOfferingInfoUseCase,
+        private val updateOfferingStatusUseCase: UpdateOfferingStatusUseCase,
+        private val fetchParticipantsUseCase: FetchParticipantsUseCase,
+        private val deleteParticipationsUseCase: DeleteParticipationsUseCase,
+        private val fetchMeetingsUseCase: FetchMeetingsUseCase,
+    ) : ViewModel(), OnAlertClickListener {
         @AssistedFactory
         interface CommentDetailAssistedFactory {
             fun create(offeringId: Long): CommentDetailViewModel
@@ -101,34 +101,30 @@ class CommentDetailViewModel
                 }
         }
 
-        private fun handleNetworkError(
-            error: DataError.Network,
-            retryAction: suspend () -> Unit,
-        ) {
-            when (error) {
-                DataError.Network.UNAUTHORIZED -> {
-                    viewModelScope.launch {
-                        when (authRepository.saveRefresh()) {
-                            is Result.Success -> retryAction()
-                            is Result.Error ->
-                                _event.value =
-                                    Event(CommentDetailEvent.ShowError("로그아웃 후 다시 진행해주세요."))
-                        }
-                    }
-                }
-
-                else -> _event.value = Event(CommentDetailEvent.ShowError(error.name))
-            }
+        private fun stopPolling() {
+            pollJob?.cancel()
+            _isPollingActive.value = false
         }
+
+    private fun handleNetworkError(
+        error: DataError.Network,
+        retryAction: suspend () -> Unit = {}
+    ) {
+        val message = when (error) {
+            DataError.Network.UNAUTHORIZED -> "로그아웃 후 다시 진행해주세요."
+            DataError.Network.CONNECTION_ERROR -> "네트워크 연결을 확인해주세요."
+            else -> error.name
+        }
+        _event.value = Event(CommentDetailEvent.ShowError(message))
+    }
 
         private fun updateCommentInfo() {
             viewModelScope.launch {
-                when (val result = commentDetailRepository.fetchCommentOfferingInfo(offeringId)) {
+                when (val result = fetchCommentOfferingInfoUseCase(offeringId)) {
                     is Result.Success -> _commentOfferingInfo.value = result.data.toUiModel()
-                    is Result.Error ->
-                        handleNetworkError(result.error) {
-                            updateCommentInfo()
-                        }
+                    is Result.Error -> {
+                        handleNetworkError(result.error) { updateCommentInfo() }
+                    }
                 }
             }
         }
@@ -139,19 +135,16 @@ class CommentDetailViewModel
 
         fun updateOfferingStatus() {
             viewModelScope.launch {
-                when (val result = commentDetailRepository.updateOfferingStatus(offeringId)) {
+                when (val result = updateOfferingStatusUseCase(offeringId)) {
                     is Result.Success -> updateCommentInfo()
-                    is Result.Error ->
-                        handleNetworkError(result.error) {
-                            updateOfferingStatus()
-                        }
+                    is Result.Error -> handleNetworkError(result.error) { updateOfferingStatus() }
                 }
             }
         }
 
         fun loadComments() {
             viewModelScope.launch {
-                when (val result = commentDetailRepository.fetchComments(offeringId)) {
+                when (val result = fetchCommentsUseCase(offeringId)) {
                     is Result.Success -> {
                         val newComments = result.data
                         if (cachedComments != newComments) {
@@ -169,12 +162,9 @@ class CommentDetailViewModel
             if (content.isNullOrEmpty()) return
 
             viewModelScope.launch {
-                when (val result = commentDetailRepository.saveComment(offeringId, content)) {
+                when (val result = saveCommentUseCase(offeringId, content)) {
                     is Result.Success -> commentContent.value = ""
-                    is Result.Error ->
-                        handleNetworkError(result.error) {
-                            postComment()
-                        }
+                    is Result.Error -> handleNetworkError(result.error) { postComment() }
                 }
             }
         }
@@ -188,24 +178,18 @@ class CommentDetailViewModel
 
         private fun loadParticipants() {
             viewModelScope.launch {
-                when (val result = participantRepository.fetchParticipants(offeringId)) {
+                when (val result = fetchParticipantsUseCase(offeringId)) {
                     is Result.Success -> _participants.value = result.data.toUiModel()
-                    is Result.Error ->
-                        handleNetworkError(result.error) {
-                            loadParticipants()
-                        }
+                    is Result.Error -> handleNetworkError(result.error) { loadParticipants() }
                 }
             }
         }
 
         private fun loadMeetings() {
             viewModelScope.launch {
-                when (val result = offeringRepository.fetchMeetings(offeringId)) {
+                when (val result = fetchMeetingsUseCase(offeringId)) {
                     is Result.Success -> _meetings.value = result.data.toUiModel()
-                    is Result.Error ->
-                        handleNetworkError(result.error) {
-                            loadMeetings()
-                        }
+                    is Result.Error -> handleNetworkError(result.error) { loadMeetings() }
                 }
             }
         }
@@ -217,7 +201,14 @@ class CommentDetailViewModel
         private fun exitOffering() {
             _exitLoading.value = true
             viewModelScope.launch {
-                when (val result = participantRepository.deleteParticipations(offeringId)) {
+                val isProposer = _commentOfferingInfo.value?.isProposer ?: false
+                if (isProposer) {
+                    _event.value = Event(CommentDetailEvent.ShowError("총대는 채팅방을 나갈 수 없습니다."))
+                    _exitLoading.value = false
+                    return@launch
+                }
+
+                when (val result = deleteParticipationsUseCase(offeringId)) {
                     is Result.Success -> {
                         _event.value = Event(CommentDetailEvent.ExitOffering)
                         stopPolling()
@@ -229,20 +220,8 @@ class CommentDetailViewModel
                                 _event.value = Event(CommentDetailEvent.ExitOffering)
                                 stopPolling()
                             }
-
-                            DataError.Network.UNAUTHORIZED -> {
-                                when (authRepository.saveRefresh()) {
-                                    is Result.Success -> exitOffering()
-                                    is Result.Error ->
-                                        _event.value =
-                                            Event(CommentDetailEvent.ShowError("로그아웃 후 다시 진행해주세요."))
-                                }
-                            }
-
-                            DataError.Network.CONNECTION_ERROR -> {}
-
                             else -> {
-                                return@launch
+                                handleNetworkError(result.error) { exitOffering() }
                             }
                         }
                 }
@@ -265,11 +244,6 @@ class CommentDetailViewModel
 
         override fun onClickCancel() {
             _event.value = Event(CommentDetailEvent.AlertCancelled)
-        }
-
-        private fun stopPolling() {
-            pollJob?.cancel()
-            _isPollingActive.value = false
         }
 
         override fun onCleared() {
