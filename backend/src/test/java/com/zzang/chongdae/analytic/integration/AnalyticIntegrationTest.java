@@ -63,7 +63,7 @@ public class AnalyticIntegrationTest extends IntegrationTest {
         @Test
         void should_throwException_when_getVariantWithoutLogin() {
             given(spec).log().all()
-                    .filter(document("get-variant-fail", resource(failSnippets)))
+                    .filter(document("get-variant-fail-when-no-login", resource(failSnippets)))
                     .contentType(ContentType.JSON)
                     .when().get("/analytics/variant")
                     .then().log().all()
