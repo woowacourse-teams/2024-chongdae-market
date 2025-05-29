@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.zzang.chongdae.presentation.view.mypage.MyPageViewModel" />
+
+        <variable
+            name="label"
+            type="String" />
+
+        <variable
+            name="checked"
+            type="Boolean" />
+
+        <variable
+            name="onCheckedChanged"
+            type="android.widget.CompoundButton.OnCheckedChangeListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/switch_notification_activate"
+            layout="@layout/item_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:checked="@={vm.isNotificationActivate}"
+            app:label="@{@string/my_page_notification_available_text}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationActivateSwitchChanged(isChecked)}"
+            app:vm="@{vm}" />
+
+        <include
+            android:id="@+id/switch_notification_popup"
+            layout="@layout/item_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:checked="@={vm.isNotificationImportanceHigh}"
+            app:isVisible="@{vm.isNotificationActivate}"
+            app:label="@{@string/my_page_notification_setting_text}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/switch_notification_activate"
+            app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationImportanceSwitchChanged(isChecked)}"
+            app:vm="@{vm}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

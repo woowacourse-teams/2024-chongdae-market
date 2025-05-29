@@ -101,29 +101,27 @@
             app:layout_constraintTop_toBottomOf="@id/tv_nickname_title" />
 
         <include
-            android:id="@+id/switch_notification_activate"
-            layout="@layout/item_switch"
+            android:id="@+id/switch_notification"
+            layout="@layout/item_notification_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:checked="@={vm.isNotificationActivate}"
-            app:label="@{@string/my_page_notification_available_text}"
+            app:isVisibleOrInvisible="@{vm.areNotificationsEnabled}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_divider"
-            app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationActivateSwitchChanged(isChecked)}"
             app:vm="@{vm}" />
 
-        <include
-            android:id="@+id/switch_notification_popup"
-            layout="@layout/item_switch"
-            android:layout_width="match_parent"
+        <TextView
+            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size15"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:checked="@={vm.isNotificationImportanceHigh}"
-            app:isVisible="@{vm.isNotificationActivate}"
-            app:label="@{@string/my_page_notification_setting_text}"
+            android:text="@string/my_page_notification_block_description"
+            android:gravity="center"
+            app:isVisible="@{!vm.areNotificationsEnabled}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/switch_notification_activate"
-            app:onCheckedChanged="@{(button, isChecked) -> vm.onNotificationImportanceSwitchChanged(isChecked)}"
-            app:vm="@{vm}" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/switch_notification"
+            app:layout_constraintTop_toBottomOf="@id/view_divider" />
+
 
         <ImageView
             android:id="@+id/iv_nickname_modification"
@@ -135,25 +133,6 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_nickname"
             app:layout_constraintStart_toEndOf="@id/tv_nickname_title"
             app:layout_constraintTop_toTopOf="@id/tv_nickname" />
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/iv_my_offerings"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="42dp"-->
-        <!--            android:layout_marginTop="55dp"-->
-        <!--            android:src="@drawable/ic_my_page_my_offerings"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/iv_profile" />-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/tv_my_offerings"-->
-        <!--            style="@style/Theme.AppCompat.TextView.Bold.Black1000.Size14"-->
-        <!--            android:layout_marginStart="12dp"-->
-        <!--            android:text="@string/my_page_offerings_text"-->
-        <!--            app:layout_constraintBottom_toBottomOf="@id/iv_my_offerings"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/iv_my_offerings"-->
-        <!--            app:layout_constraintTop_toTopOf="@id/iv_my_offerings" />-->
 
         <ImageView
             android:id="@+id/iv_terms_of_use"
@@ -174,7 +153,7 @@
             app:debouncedOnClick="@{() -> vm.onClickTermsOfUse()}"
             app:layout_constraintBottom_toBottomOf="@id/iv_terms_of_use"
             app:layout_constraintStart_toEndOf="@id/iv_terms_of_use"
-            app:layout_constraintTop_toBottomOf="@id/switch_notification_popup" />
+            app:layout_constraintTop_toBottomOf="@id/switch_notification" />
 
         <ImageView
             android:id="@+id/iv_privacy"

@@ -67,6 +67,7 @@
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
     <string name="my_page_logout_dialog_description">로그아웃 하시겠습니까?</string>
+    <string name="my_page_notification_block_description">현재 스마트폰 설정에서 총대마켓의 푸시알림이\n차단되어 있습니다. 알림을 허용해주세요.</string>
 
     <!--    offering_detail-->
     <string name="offering_detail_product_url_title">물품 링크:&#160;</string>

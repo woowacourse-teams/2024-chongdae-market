@@ -53,6 +53,9 @@ class MyPageViewModel
         val isNotificationActivate = MutableLiveData(true)
         val isNotificationImportanceHigh = MutableLiveData(true)
 
+        private val _areNotificationsEnabled = MutableLiveData<Boolean>()
+        val areNotificationsEnabled: LiveData<Boolean> get() = _areNotificationsEnabled
+
         init {
             viewModelScope.launch {
                 initNotificationSwitches()
@@ -110,5 +113,9 @@ class MyPageViewModel
                     }
                 setNotificationImportanceUseCase(importance)
             }
+        }
+
+        fun updateNotificationStatus(enabled: Boolean) {
+            _areNotificationsEnabled.value = enabled
         }
     }
