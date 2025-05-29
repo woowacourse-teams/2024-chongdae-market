@@ -9,7 +9,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
@@ -259,11 +258,12 @@ fun EditText.setUserTypeHint(userType: UserTypeUiModel?) {
 @BindingAdapter("userTypeProductLinkColor")
 fun TextView.setUserTypedProductLinkColor(userType: UserType?) {
     userType?.let {
-        val colorRes = if (it.typeName == "A") {
-            R.color.gray_900
-        } else {
-            R.color.main_color
-        }
+        val colorRes =
+            if (it.typeName == "A") {
+                R.color.gray_900
+            } else {
+                R.color.main_color
+            }
         val colorInt = context.getColor(colorRes)
         setTextColor(colorInt)
     }
