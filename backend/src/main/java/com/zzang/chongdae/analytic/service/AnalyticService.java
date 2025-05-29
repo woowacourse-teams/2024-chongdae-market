@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class AnalyticService {
 
     public VariantResponse getAssignedVariant(MemberEntity member) {
-        VariantType type = VariantType.calculateByMember(member);
+        VariantType type = VariantType.calculateByMemberId(member.getId());
         return new VariantResponse(type);
     }
 }
