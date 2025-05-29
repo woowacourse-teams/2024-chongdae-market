@@ -34,4 +34,5 @@
     <color name="offering_detail_background">#FFFFFFFF</color>
     <color name="default_icon_color">#FF000000</color>
     <color name="cursor_background_color">#FFB0D3FB</color>
+    <color name="offering_home_background">#FFFFFFFF</color>
 </resources>

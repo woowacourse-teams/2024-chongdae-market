@@ -60,7 +60,7 @@ internal fun OfferingSearchBar(
             modifier =
                 modifier
                     .fillMaxWidth()
-                    .background(Color.White),
+                    .background(colorResource(R.color.offering_home_background)),
             value = state.text,
             onValueChange = { state.updateText(it) },
             textStyle =

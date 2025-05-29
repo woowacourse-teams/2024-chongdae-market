@@ -256,6 +256,7 @@ class OfferingDetailViewModel
         ) = !isParticipated && offeringCondition.isAvailable()
 
         fun onParticipateClick() {
+            Log.e("seogi", "click participate")
             _showAlertEvent.setValue(Unit)
         }
 

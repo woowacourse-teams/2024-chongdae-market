@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,8 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -42,7 +43,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     @Inject
     lateinit var offeringDetailAssistedFactory: OfferingDetailViewModel.OfferingDetailAssistedFactory
 
-    private val viewModel: OfferingDetailViewModel by activityViewModels {
+    private val viewModel: OfferingDetailViewModel by viewModels {
         OfferingDetailViewModel.getFactory(
             assistedFactory = offeringDetailAssistedFactory,
             offeringId = offeringId,
@@ -117,6 +118,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
         }
 
         viewModel.showAlertEvent.observe(viewLifecycleOwner) {
+            Log.e("seogi", "show alert dialog")
             val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
             alertBinding.tvDialogMessage.text =
                 getString(R.string.offering_detail_participate_alert)
@@ -141,7 +143,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
 
     private fun showBottomSheetDialog() {
         val offeringDetailBottomSheetDialog =
-            OfferingDetailBottomSheetDialog(offeringId).apply {
+            OfferingDetailBottomSheetDialog().apply {
                 setStyle(
                     BottomSheetDialogFragment.STYLE_NORMAL,
                     R.style.BottomSheetDialogTheme,
