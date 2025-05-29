@@ -8,7 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.domain.model.Comment
+import com.zzang.chongdae.domain.model.comment.Comment
+import com.zzang.chongdae.domain.usecase.analytics.FetchUserTypeUseCase
 import com.zzang.chongdae.domain.usecase.commentdetail.DeleteParticipationsUseCase
 import com.zzang.chongdae.domain.usecase.commentdetail.FetchCommentOfferingInfoUseCase
 import com.zzang.chongdae.domain.usecase.commentdetail.FetchCommentsUseCase
@@ -26,6 +27,7 @@ import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.Meetings
 import com.zzang.chongdae.presentation.view.commentdetail.model.meeting.MeetingsUiModel.Companion.toUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.participants.ParticipantsUiModel.Companion.toUiModel
+import com.zzang.chongdae.presentation.view.commentdetail.model.usertype.UserTypeUiModel
 import com.zzang.chongdae.presentation.view.common.OnAlertClickListener
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -46,6 +48,7 @@ class CommentDetailViewModel
         private val fetchParticipantsUseCase: FetchParticipantsUseCase,
         private val deleteParticipationsUseCase: DeleteParticipationsUseCase,
         private val fetchMeetingsUseCase: FetchMeetingsUseCase,
+        private val fetchUserTypeUseCase: FetchUserTypeUseCase,
     ) : ViewModel(), OnAlertClickListener {
         @AssistedFactory
         interface CommentDetailAssistedFactory {
@@ -81,11 +84,24 @@ class CommentDetailViewModel
         private val _exitLoading: MutableLiveData<Boolean> = MutableLiveData(false)
         val exitLoading: LiveData<Boolean> get() = _exitLoading
 
+        private val _userType = MutableLiveData<UserTypeUiModel>()
+        val userType: LiveData<UserTypeUiModel> get() = _userType
+
         init {
+            fetchUserType()
             startPolling()
             updateCommentInfo()
             loadMeetings()
             loadParticipants()
+        }
+
+        private fun fetchUserType() {
+            viewModelScope.launch {
+                when (val result = fetchUserTypeUseCase()) {
+                    is Result.Success -> _userType.value = UserTypeUiModel.from(result.data)
+                    is Result.Error -> _userType.value = UserTypeUiModel.A
+                }
+            }
         }
 
         private fun startPolling() {
@@ -117,6 +133,7 @@ class CommentDetailViewModel
                     else -> error.name
                 }
             _event.value = Event(CommentDetailEvent.ShowError(message))
+            stopPolling()
         }
 
         private fun updateCommentInfo() {
@@ -153,6 +170,7 @@ class CommentDetailViewModel
                             cachedComments = newComments
                         }
                     }
+
                     is Result.Error -> handleNetworkError(result.error) { loadComments() }
                 }
             }
@@ -221,6 +239,7 @@ class CommentDetailViewModel
                                 _event.value = Event(CommentDetailEvent.ExitOffering)
                                 stopPolling()
                             }
+
                             else -> {
                                 handleNetworkError(result.error) { exitOffering() }
                             }
