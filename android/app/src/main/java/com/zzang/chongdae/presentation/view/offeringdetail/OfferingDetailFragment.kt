@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -143,12 +142,13 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
     }
 
     private fun showBottomSheetDialog() {
-        val offeringDetailBottomSheetDialog = OfferingDetailBottomSheetDialog().apply {
-            setStyle(
-                BottomSheetDialogFragment.STYLE_NORMAL,
-                R.style.BottomSheetDialogTheme,
-            )
-        }
+        val offeringDetailBottomSheetDialog =
+            OfferingDetailBottomSheetDialog().apply {
+                setStyle(
+                    BottomSheetDialogFragment.STYLE_NORMAL,
+                    R.style.BottomSheetDialogTheme,
+                )
+            }
         offeringDetailBottomSheetDialog.show(
             childFragmentManager,
             offeringDetailBottomSheetDialog.tag,
