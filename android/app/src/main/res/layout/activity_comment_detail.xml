@@ -68,6 +68,7 @@
                 android:layout_marginEnd="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
                 android:paddingStart="@dimen/size_5"
+                app:debouncedOnClick="@{() -> vm.onMoreOptionsClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/tv_title_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_title_text"
@@ -273,10 +274,10 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/size_15"
-                app:userTypeHint="@{vm.userType}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:userTypeHint="@{vm.userType}" />
 
             <ImageView
                 android:id="@+id/iv_send_comment"

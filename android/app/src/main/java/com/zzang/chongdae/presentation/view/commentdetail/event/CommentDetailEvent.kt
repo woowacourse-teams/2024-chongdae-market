@@ -14,4 +14,8 @@ sealed class CommentDetailEvent {
     data object ShowAlert : CommentDetailEvent()
 
     data object AlertCancelled : CommentDetailEvent()
+
+    data class LogAnalytics(val eventId: String) : CommentDetailEvent()
+
+    data object OpenDrawer : CommentDetailEvent()
 }

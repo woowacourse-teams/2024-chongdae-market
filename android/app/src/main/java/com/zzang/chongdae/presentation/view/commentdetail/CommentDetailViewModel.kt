@@ -180,6 +180,15 @@ class CommentDetailViewModel
             val content = commentContent.value?.trim()
             if (content.isNullOrEmpty()) return
 
+            val type = userType.value ?: UserTypeUiModel.A
+            val logEventId =
+                when (type) {
+                    UserTypeUiModel.A -> "post_comment_a"
+                    UserTypeUiModel.B -> "post_comment_b"
+                }
+
+            _event.value = Event(CommentDetailEvent.LogAnalytics(logEventId))
+
             viewModelScope.launch {
                 when (val result = saveCommentUseCase(offeringId, content)) {
                     is Result.Success -> commentContent.value = ""
@@ -247,6 +256,17 @@ class CommentDetailViewModel
                 }
                 _exitLoading.value = false
             }
+        }
+
+        fun onMoreOptionsClick() {
+            val type = userType.value ?: UserTypeUiModel.A
+            val id =
+                when (type) {
+                    UserTypeUiModel.A -> "more_comment_detail_options_event_a"
+                    UserTypeUiModel.B -> "more_comment_detail_options_event_b"
+                }
+            _event.value = Event(CommentDetailEvent.LogAnalytics(id))
+            _event.value = Event(CommentDetailEvent.OpenDrawer)
         }
 
         fun onBackClick() {
