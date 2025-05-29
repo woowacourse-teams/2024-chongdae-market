@@ -9,10 +9,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.analytics.UserType
 import com.zzang.chongdae.presentation.view.commentdetail.model.usertype.UserTypeUiModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -252,4 +254,17 @@ fun EditText.setUserTypeHint(userType: UserTypeUiModel?) {
             else -> R.string.comment_detail_message_hint
         }
     setHint(hintRes)
+}
+
+@BindingAdapter("userTypeProductLinkColor")
+fun TextView.setUserTypedProductLinkColor(userType: UserType?) {
+    userType?.let {
+        val colorRes = if (it.typeName == "A") {
+            R.color.gray_900
+        } else {
+            R.color.main_color
+        }
+        val colorInt = context.getColor(colorRes)
+        setTextColor(colorInt)
+    }
 }
