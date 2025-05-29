@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -58,7 +59,7 @@ internal fun HomeScreen(
     val offerings = viewModel.offerings.collectAsLazyPagingItems()
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.background(Color.White)) {
+        Column(modifier = Modifier.background(colorResource(R.color.white))) {
             OfferingSearchBar(
                 offeringSearchState,
                 { viewModel.onClickSearchButton() },
