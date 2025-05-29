@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class VariantTypeTest {
 
-    @DisplayName("맴버 아이디가 홀수 이면 B 그룹을 반환한다.")
+    @DisplayName("멤버 아이디가 홀수 이면 B 그룹을 반환한다.")
     @Test
     void should_returnBGroup_when_givenMemberIdOdd() {
         Long memberId = 1L;
@@ -18,7 +18,7 @@ class VariantTypeTest {
         assertEquals(actual, expected);
     }
 
-    @DisplayName("맴버 아이디가 짝수 이면 A 그룹을 반환한다.")
+    @DisplayName("멤버 아이디가 짝수 이면 A 그룹을 반환한다.")
     @Test
     void should_returnAGroup_when_givenMemberIdEven() {
         Long memberId = 2L;
