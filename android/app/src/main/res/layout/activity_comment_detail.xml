@@ -68,10 +68,10 @@
                 android:layout_marginEnd="@dimen/margin_20"
                 android:contentDescription="@string/comment_detail"
                 android:paddingStart="@dimen/size_5"
-                android:src="@drawable/btn_more"
                 app:layout_constraintBottom_toBottomOf="@id/tv_title_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_title_text" />
+                app:layout_constraintTop_toTopOf="@id/tv_title_text"
+                app:userTypeIcon="@{vm.userType}" />
 
             <View
                 android:id="@+id/view_white_round"
@@ -263,7 +263,6 @@
                 android:layout_marginBottom="@dimen/margin_30"
                 android:background="@drawable/bg_gray100_radius_16dp"
                 android:fontFamily="@font/suit_medium"
-                android:hint="@string/comment_detail_message_hint"
                 android:maxLength="80"
                 android:maxLines="5"
                 android:paddingStart="@dimen/size_14"
@@ -274,6 +273,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_500"
                 android:textSize="@dimen/size_15"
+                app:userTypeHint="@{vm.userType}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

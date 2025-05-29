@@ -13,6 +13,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
 import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.presentation.view.commentdetail.model.usertype.UserTypeUiModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -229,4 +230,26 @@ fun View.setDebouncedOnClick(
     setDebouncedOnClickListener(safeDebounceTime) {
         clickListener?.onClick(this)
     }
+}
+
+@BindingAdapter("userTypeIcon")
+fun ImageView.setUserTypeIcon(userType: UserTypeUiModel?) {
+    val iconRes =
+        when (userType) {
+            UserTypeUiModel.A -> R.drawable.btn_more_a
+            UserTypeUiModel.B -> R.drawable.btn_more_b
+            else -> R.drawable.btn_more
+        }
+    setImageResource(iconRes)
+}
+
+@BindingAdapter("userTypeHint")
+fun EditText.setUserTypeHint(userType: UserTypeUiModel?) {
+    val hintRes =
+        when (userType) {
+            UserTypeUiModel.A -> R.string.comment_detail_message_hint_a
+            UserTypeUiModel.B -> R.string.comment_detail_message_hint_b
+            else -> R.string.comment_detail_message_hint
+        }
+    setHint(hintRes)
 }
