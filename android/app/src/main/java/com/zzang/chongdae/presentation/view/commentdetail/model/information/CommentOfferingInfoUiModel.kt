@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.commentdetail.model.information
 
-import com.zzang.chongdae.domain.model.CommentOfferingInfo
+import com.zzang.chongdae.domain.model.comment.CommentOfferingInfo
 
 class CommentOfferingInfoUiModel(
     val status: String,

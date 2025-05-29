@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.auth.api.AuthApiService
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.remote.api.AnalyticsApiService
 import com.zzang.chongdae.data.remote.api.CommentApiService
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.api.ParticipationApiService
@@ -70,4 +71,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideCommentApiService(retrofit: Retrofit): CommentApiService = retrofit.create(CommentApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAnalyticsApiService(retrofit: Retrofit): AnalyticsApiService = retrofit.create(AnalyticsApiService::class.java)
 }

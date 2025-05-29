@@ -2,8 +2,8 @@ package com.zzang.chongdae.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.CommentOfferingInfo
+import com.zzang.chongdae.domain.model.comment.Comment
+import com.zzang.chongdae.domain.model.comment.CommentOfferingInfo
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.util.TestFixture
 

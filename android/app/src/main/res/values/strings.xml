@@ -95,13 +95,14 @@
     <string name="comment_text">채팅</string>
     <string name="amPmTime">"a hh:mm"</string>
 
-    <!--    offering_status-->
+    <!--    comment_detail-->
     <string name="comment_detail">comment_detail</string>
     <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
     <string name="comment_detail_message_hint">메시지를 입력하세요.</string>
+    <string name="comment_detail_message_hint_a">메시지를 입력하세요.</string>
+    <string name="comment_detail_message_hint_b">총대에게 궁금한 점을 물어보세요.</string>
     <string name="detail_meeting_date_comment_text">거래 날짜</string>
 
-    <!--    comment_detail-->
     <string name="recruiting">모집중</string>
     <string name="scheduling">일정조정중</string>
     <string name="purchasing">구매중</string>
