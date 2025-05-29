@@ -15,6 +15,8 @@ import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import com.zzang.chongdae.domain.model.OfferingCondition
 import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
 import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.model.analytics.UserType
+import com.zzang.chongdae.domain.usecase.analytics.FetchUserTypeUseCase
 import com.zzang.chongdae.domain.usecase.offeringdetail.DeleteOfferingUseCase
 import com.zzang.chongdae.domain.usecase.offeringdetail.FetchOfferingDetailUseCase
 import com.zzang.chongdae.domain.usecase.offeringdetail.SaveParticipationUseCase
@@ -35,6 +37,7 @@ class OfferingDetailViewModel
         private val deleteOfferingUseCase: DeleteOfferingUseCase,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
         private val userPreferencesDataStore: UserPreferencesDataStore,
+        private val fetchUserTypeUseCase: FetchUserTypeUseCase,
     ) : ViewModel(),
         OnParticipationClickListener,
         OnOfferingReportClickListener,
@@ -79,6 +82,9 @@ class OfferingDetailViewModel
         private val _productLinkRedirectEvent: MutableSingleLiveData<String> = MutableSingleLiveData()
         val productLinkRedirectEvent: SingleLiveData<String> get() = _productLinkRedirectEvent
 
+        private val _productLinkClickEventLogId: MutableSingleLiveData<String> = MutableSingleLiveData()
+        val productLinkClickEventLogId: SingleLiveData<String> get() = _productLinkClickEventLogId
+
         private val _error: MutableSingleLiveData<Int> = MutableSingleLiveData()
         val error: SingleLiveData<Int> get() = _error
 
@@ -109,7 +115,11 @@ class OfferingDetailViewModel
         private val _isParticipationLoading: MutableLiveData<Boolean> = MutableLiveData(false)
         val isParticipationLoading: LiveData<Boolean> get() = _isParticipationLoading
 
+        private val _userType = MutableLiveData<UserType>()
+        val userType: LiveData<UserType> get() = _userType
+
         init {
+            fetchUserType()
             loadOffering()
         }
 
@@ -153,6 +163,15 @@ class OfferingDetailViewModel
                             isParticipationEnabled(result.data.condition, result.data.isParticipated)
                         _isRepresentative.value = result.data.isProposer
                     }
+                }
+            }
+        }
+
+        private fun fetchUserType() {
+            viewModelScope.launch {
+                when (val result = fetchUserTypeUseCase()) {
+                    is Result.Success -> _userType.value = result.data
+                    is Result.Error -> Log.e("error", "fetchUserType Error: ${result.error.name}")
                 }
             }
         }
@@ -204,6 +223,9 @@ class OfferingDetailViewModel
 
         override fun onClickProductRedirectText(productUrl: String) {
             _productLinkRedirectEvent.setValue(productUrl)
+            val userTypeValue = userType.value ?: return
+            var eventId = if (userTypeValue.typeName == "A") "click_product_link_a" else "click_product_link_b"
+            _productLinkClickEventLogId.setValue(eventId)
         }
 
         override fun onClickOfferingModify() {
@@ -256,7 +278,6 @@ class OfferingDetailViewModel
         ) = !isParticipated && offeringCondition.isAvailable()
 
         fun onParticipateClick() {
-            Log.e("seogi", "click participate")
             _showAlertEvent.setValue(Unit)
         }
 

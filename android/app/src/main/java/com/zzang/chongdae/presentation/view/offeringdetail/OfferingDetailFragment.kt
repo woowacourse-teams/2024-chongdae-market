@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,6 +98,14 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             openUrlInBrowser(productURL)
         }
 
+        viewModel.productLinkClickEventLogId.observe(viewLifecycleOwner) { eventId ->
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = eventId,
+                name = eventId,
+                contentType = "button",
+            )
+        }
+
         viewModel.modifyOfferingEvent.observe(viewLifecycleOwner) {
             findNavController().navigate(
                 R.id.action_offering_detail_fragment_to_offering_modify_essential_fragment,
@@ -118,7 +125,6 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
         }
 
         viewModel.showAlertEvent.observe(viewLifecycleOwner) {
-            Log.e("seogi", "show alert dialog")
             val alertBinding = DialogAlertBinding.inflate(layoutInflater, null, false)
             alertBinding.tvDialogMessage.text =
                 getString(R.string.offering_detail_participate_alert)
