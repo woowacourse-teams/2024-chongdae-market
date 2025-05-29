@@ -1,7 +1,7 @@
-package com.zzang.chongdae.data.remote.mapper
+package com.zzang.chongdae.data.remote.mapper.comment
 
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentResponse
-import com.zzang.chongdae.domain.model.Comment
+import com.zzang.chongdae.domain.model.comment.Comment
 
 fun CommentResponse.toDomain(): Comment {
     return Comment(

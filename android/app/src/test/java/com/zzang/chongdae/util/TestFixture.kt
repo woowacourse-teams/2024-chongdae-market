@@ -3,9 +3,9 @@ package com.zzang.chongdae.util
 import com.zzang.chongdae.data.remote.mapper.toLocalDate
 import com.zzang.chongdae.data.remote.mapper.toLocalDateTime
 import com.zzang.chongdae.data.remote.mapper.toLocalTime
-import com.zzang.chongdae.domain.model.Comment
-import com.zzang.chongdae.domain.model.CommentCreatedAt
-import com.zzang.chongdae.domain.model.CommentOfferingInfo
+import com.zzang.chongdae.domain.model.comment.Comment
+import com.zzang.chongdae.domain.model.comment.CommentCreatedAt
+import com.zzang.chongdae.domain.model.comment.CommentOfferingInfo
 import com.zzang.chongdae.domain.model.CommentRoom
 import com.zzang.chongdae.domain.model.CurrentCount
 import com.zzang.chongdae.domain.model.Filter

@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.comment
 
 import java.time.LocalDate
 import java.time.LocalTime
