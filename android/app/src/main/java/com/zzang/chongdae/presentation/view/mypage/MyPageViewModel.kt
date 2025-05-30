@@ -6,12 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.zzang.chongdae.domain.usecase.mypage.GetNickNameUseCase
 import com.zzang.chongdae.domain.usecase.mypage.GetNotificationActivateUseCase
 import com.zzang.chongdae.domain.usecase.mypage.GetNotificationImportanceUseCase
 import com.zzang.chongdae.domain.usecase.mypage.LogoutUseCase
 import com.zzang.chongdae.domain.usecase.mypage.SetNotificationActivateUseCase
 import com.zzang.chongdae.domain.usecase.mypage.SetNotificationImportanceUseCase
+import com.zzang.chongdae.domain.usecase.nickname.GetNickNameUseCase
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import com.zzang.chongdae.presentation.view.common.OnAlertClickListener
@@ -31,6 +31,9 @@ class MyPageViewModel
         private val logoutUseCase: LogoutUseCase,
     ) : ViewModel(), OnAlertClickListener {
         val nickName: LiveData<String?> = getNickNameUseCase().asLiveData()
+
+        private val _editNicknameEvent = MutableSingleLiveData<Unit>()
+        val editNicknameEvent: SingleLiveData<Unit> get() = _editNicknameEvent
 
         private val _openUrlInBrowserEvent = MutableSingleLiveData<String>()
         val openUrlInBrowserEvent: SingleLiveData<String> get() = _openUrlInBrowserEvent
@@ -66,6 +69,10 @@ class MyPageViewModel
             isNotificationActivate.value = getNotificationActivateUseCase()
             isNotificationImportanceHigh.value =
                 getNotificationImportanceUseCase() == NotificationManager.IMPORTANCE_HIGH
+        }
+
+        fun onClickEditNickName() {
+            _editNicknameEvent.setValue(Unit)
         }
 
         fun onClickTermsOfUse() {

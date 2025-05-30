@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
@@ -80,6 +81,9 @@ class MyPageFragment : Fragment() {
         }
         viewModel.logoutEvent.observe(viewLifecycleOwner) {
             clearDataAndLogout()
+        }
+        viewModel.editNicknameEvent.observe(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_myPageFragment_to_editNicknameFragment)
         }
     }
 
