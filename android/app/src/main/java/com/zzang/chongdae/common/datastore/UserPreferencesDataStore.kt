@@ -52,6 +52,12 @@ class UserPreferencesDataStore
                 preferences[NOTIFICATION_IMPORTANCE_KEY] ?: DEFAULT_NOTIFICATION_IMPORTANCE
             }
 
+        suspend fun saveNickname(nickname: String) {
+            dataStore.edit { preferences ->
+                preferences[NICKNAME_KEY] = nickname
+            }
+        }
+
         suspend fun saveMember(
             memberId: Long,
             nickName: String,

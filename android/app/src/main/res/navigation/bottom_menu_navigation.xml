@@ -17,16 +17,29 @@
             android:id="@+id/action_home_fragment_to_offering_detail_fragment"
             app:destination="@id/offering_detail_fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/comment_room_fragment"
         android:name="com.zzang.chongdae.presentation.view.comment.CommentRoomsFragment"
         android:label="fragment_comment_room"
         tools:layout="@layout/fragment_comment_rooms" />
+
     <fragment
         android:id="@+id/my_page_fragment"
         android:name="com.zzang.chongdae.presentation.view.mypage.MyPageFragment"
         android:label="fragment_my_page"
-        tools:layout="@layout/fragment_my_page" />
+        tools:layout="@layout/fragment_my_page">
+        <action
+            android:id="@+id/action_myPageFragment_to_editNicknameFragment"
+            app:destination="@id/editNicknameFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editNicknameFragment"
+        android:name="com.zzang.chongdae.presentation.view.nickname.EditNicknameFragment"
+        android:label="Edit Nickname">
+    </fragment>
+
     <fragment
         android:id="@+id/offering_write_essential_fragment"
         android:name="com.zzang.chongdae.presentation.view.write.OfferingWriteEssentialFragment"
