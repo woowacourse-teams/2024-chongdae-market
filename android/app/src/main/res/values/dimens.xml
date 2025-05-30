@@ -15,6 +15,7 @@
     <dimen name="icon_size_30">30dp</dimen>
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="comment_radius">16dp</dimen>
 
