@@ -1,12 +1,14 @@
-package com.zzang.chongdae.domain.usecase.mypage
+package com.zzang.chongdae.domain.usecase.nickname
 
 import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import javax.inject.Inject
 
-class GetNickNameUseCase
+class SaveNicknameUseCase
     @Inject
     constructor(
         private val userPreferencesDataStore: UserPreferencesDataStore,
     ) {
-        operator fun invoke() = userPreferencesDataStore.nickNameFlow
+        suspend operator fun invoke(nickname: String) {
+            userPreferencesDataStore.saveNickname(nickname)
+        }
     }
