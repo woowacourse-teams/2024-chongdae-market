@@ -17,7 +17,6 @@ class OfferingDetailBottomSheetDialog() : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: OfferingDetailViewModel by viewModels({ requireParentFragment() })
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
