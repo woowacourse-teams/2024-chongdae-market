@@ -14,4 +14,8 @@ class FakeParticipantRepository : ParticipantRepository {
     override suspend fun deleteParticipations(offeringId: Long): Result<Unit, DataError.Network> {
         return Result.Success(Unit)
     }
+
+    override suspend fun patchNickname(nickname: String): Result<Unit, DataError.Network> {
+        TODO("Not yet implemented")
+    }
 }

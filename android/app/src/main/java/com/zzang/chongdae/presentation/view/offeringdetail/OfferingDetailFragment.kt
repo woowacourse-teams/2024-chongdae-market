@@ -98,6 +98,14 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
             openUrlInBrowser(productURL)
         }
 
+        viewModel.productLinkClickEventLogId.observe(viewLifecycleOwner) { eventId ->
+            firebaseAnalyticsManager.logSelectContentEvent(
+                id = eventId,
+                name = eventId,
+                contentType = "button",
+            )
+        }
+
         viewModel.modifyOfferingEvent.observe(viewLifecycleOwner) {
             findNavController().navigate(
                 R.id.action_offering_detail_fragment_to_offering_modify_essential_fragment,
@@ -141,7 +149,7 @@ class OfferingDetailFragment : Fragment(), OnOfferingDeleteAlertClickListener {
 
     private fun showBottomSheetDialog() {
         val offeringDetailBottomSheetDialog =
-            OfferingDetailBottomSheetDialog(offeringId).apply {
+            OfferingDetailBottomSheetDialog().apply {
                 setStyle(
                     BottomSheetDialogFragment.STYLE_NORMAL,
                     R.style.BottomSheetDialogTheme,

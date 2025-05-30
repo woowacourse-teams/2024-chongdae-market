@@ -67,6 +67,8 @@
     <string name="my_page_title_text">마이페이지</string>
     <string name="my_page_offerings_text">내가 올린 공구</string>
     <string name="my_page_logout_dialog_description">로그아웃 하시겠습니까?</string>
+    <string name="my_page_notification_block_description">현재 스마트폰 설정에서 총대마켓의 푸시알림이\n차단되어 있습니다. 알림을 허용해주세요.</string>
+    <string name="my_page_edit_nickname">닉네임 변경</string>
 
     <!--    offering_detail-->
     <string name="offering_detail_product_url_title">물품 링크:&#160;</string>
@@ -94,13 +96,14 @@
     <string name="comment_text">채팅</string>
     <string name="amPmTime">"a hh:mm"</string>
 
-    <!--    offering_status-->
+    <!--    comment_detail-->
     <string name="comment_detail">comment_detail</string>
     <string name="comment_detail_place_time_title">약속 장소 및 시간 확인</string>
     <string name="comment_detail_message_hint">메시지를 입력하세요.</string>
+    <string name="comment_detail_message_hint_a">메시지를 입력하세요.</string>
+    <string name="comment_detail_message_hint_b">총대에게 궁금한 점을 물어보세요.</string>
     <string name="detail_meeting_date_comment_text">거래 날짜</string>
 
-    <!--    comment_detail-->
     <string name="recruiting">모집중</string>
     <string name="scheduling">일정조정중</string>
     <string name="purchasing">구매중</string>
@@ -168,4 +171,10 @@
     <string name="modify_success_modifing">공모가 수정되었어요!</string>
     <string name="modify_error_modifing">공모 수정에 실패했어요🥲</string>
     <string name="error_modify_invalid">모집 마감 이후에는 공모글을 수정할 수\n없어요!</string>
+
+    <!--    nickname-->
+    <string name="edit_nickname_contents">닉네임을 입력하세요. (10자 이내)</string>
+    <string name="edit_nickname_button_text">변경하기</string>
+    <string name="edit_nickname_invalid">닉네임은 10자 이내로 입력해주세요.</string>
+    <string name="edit_nickname_input_text">변경할 닉네임 입력</string>
 </resources>

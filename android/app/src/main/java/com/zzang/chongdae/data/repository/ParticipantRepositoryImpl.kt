@@ -2,6 +2,7 @@ package com.zzang.chongdae.data.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.remote.dto.request.NicknameRequest
 import com.zzang.chongdae.data.remote.mapper.participant.toDomain
 import com.zzang.chongdae.data.source.ParticipantRemoteDataSource
 import com.zzang.chongdae.di.annotations.ParticipantDataSourceQualifier
@@ -23,4 +24,10 @@ class ParticipantRepositoryImpl
 
         override suspend fun deleteParticipations(offeringId: Long): Result<Unit, DataError.Network> =
             participantRemoteDataSource.deleteParticipations(offeringId)
+
+        override suspend fun patchNickname(nickname: String): Result<Unit, DataError.Network> {
+            return participantRemoteDataSource.patchNickname(
+                NicknameRequest(nickname),
+            ).map { Unit }
+        }
     }

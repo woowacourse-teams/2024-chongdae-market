@@ -2,6 +2,7 @@ package com.zzang.chongdae.presentation.view.commentdetail
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,7 +22,6 @@ import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.ActivityCommentDetailBinding
 import com.zzang.chongdae.databinding.DialogAlertBinding
 import com.zzang.chongdae.databinding.DialogUpdateStatusBinding
-import com.zzang.chongdae.presentation.util.setDebouncedOnClickListener
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.participant.ParticipantAdapter
 import com.zzang.chongdae.presentation.view.commentdetail.event.CommentDetailEvent
@@ -65,7 +65,6 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding()
-        setupDrawerToggle()
         initAdapter()
         setUpObserve()
     }
@@ -74,21 +73,6 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_comment_detail)
         binding.vm = viewModel
         binding.lifecycleOwner = this
-    }
-
-    private fun setupDrawerToggle() {
-        binding.ivMoreOptions.setDebouncedOnClickListener {
-            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                binding.drawerLayout.closeDrawer(GravityCompat.END)
-                return@setDebouncedOnClickListener
-            }
-            binding.drawerLayout.openDrawer(GravityCompat.END)
-            firebaseAnalyticsManager.logSelectContentEvent(
-                id = "more_comment_detail_options_event",
-                name = "more_comment_detail_options_event",
-                contentType = "button",
-            )
-        }
     }
 
     private fun initAdapter() {
@@ -140,6 +124,19 @@ class CommentDetailActivity : AppCompatActivity(), OnUpdateStatusClickListener {
             is CommentDetailEvent.ShowAlert -> showExitDialog()
             is CommentDetailEvent.ExitOffering -> exitOfferingEvent()
             is CommentDetailEvent.AlertCancelled -> cancelDialog()
+            is CommentDetailEvent.LogAnalytics ->
+                firebaseAnalyticsManager.logSelectContentEvent(
+                    id = event.eventId,
+                    name = event.eventId,
+                    contentType = "button",
+                )
+            is CommentDetailEvent.OpenDrawer -> {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+                } else {
+                    binding.drawerLayout.openDrawer(GravityCompat.END)
+                }
+            }
         }
     }
 

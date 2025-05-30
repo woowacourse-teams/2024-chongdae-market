@@ -1,17 +1,13 @@
 package com.zzang.chongdae.global.exception;
 
-import com.zzang.chongdae.logging.config.CachedHttpServletResponseWrapper;
-import com.zzang.chongdae.logging.domain.MemberIdentifier;
-import com.zzang.chongdae.logging.dto.LoggingErrorResponse;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -58,7 +54,9 @@ public class GlobalExceptionHandler {
                 .body(errorMessage);
     }
 
-    @ExceptionHandler({DataIntegrityViolationException.class, ObjectOptimisticLockingFailureException.class})
+    @ExceptionHandler({DataIntegrityViolationException.class,
+            ObjectOptimisticLockingFailureException.class,
+            OptimisticLockException.class})
     public ResponseEntity<ErrorMessage> handle(Exception e) {
         ErrorMessage errorMessage = new ErrorMessage("잠시후 다시 요청해주세요.");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
@@ -101,40 +99,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    public ResponseEntity<ErrorMessage> handle(Exception e, HttpServletRequest request, HttpServletResponse response) {
         ErrorMessage errorMessage = new ErrorMessage("서버 관리자에게 문의하세요");
-
-        String identifier = UUID.randomUUID().toString();
-        MemberIdentifier memberIdentifier = new MemberIdentifier(request.getCookies());
-        String httpMethod = request.getMethod();
-        String uri = request.getRequestURI();
-        String requestBody = new String(request.getInputStream().readAllBytes());
-
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
         String stackTrace = sw.toString();
-
-        CachedHttpServletResponseWrapper cachedResponse = (CachedHttpServletResponseWrapper) response;
-        String responseBody = new String(cachedResponse.getCachedBody());
-
-        long startTime = Long.parseLong(request.getAttribute("startTime").toString());
-        long endTime = System.currentTimeMillis();
-        String latency = endTime - startTime + "ms";
-
-        LoggingErrorResponse logResponse = new LoggingErrorResponse(
-                identifier,
-                memberIdentifier.getIdInfo(),
-                httpMethod,
-                uri,
-                requestBody,
-                "500",
-                responseBody,
-                latency,
-                stackTrace);
-        log.error(logResponse.toString());
-
+        request.setAttribute("stackTrace", stackTrace);
         return ResponseEntity
                 .internalServerError()
                 .body(errorMessage);

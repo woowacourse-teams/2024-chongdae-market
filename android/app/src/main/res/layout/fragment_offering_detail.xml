@@ -24,7 +24,7 @@
             android:overScrollMode="never"
             android:scrollbars="none"
             app:isVisible="@{!vm.isOfferingDetailLoading}"
-            app:layout_constraintBottom_toTopOf="@id/btn_participate"
+            app:layout_constraintBottom_toTopOf="@id/barrier_buttons"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -170,6 +170,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
                         android:text="@string/offering_detail_product_url_text"
+                        app:userTypeProductLinkColor="@{vm.userType}"
                         android:textColor="@color/main_color"
                         android:textSize="16sp"
                         app:debouncedOnClick="@{() -> vm.onClickProductRedirectText(vm.offeringDetail.productUrl)}"
@@ -349,6 +350,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="btn_participate,btn_move_comment_detail" />
 
         <Button
             android:id="@+id/btn_participate"

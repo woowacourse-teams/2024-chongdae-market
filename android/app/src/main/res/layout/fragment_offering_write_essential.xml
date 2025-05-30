@@ -95,7 +95,7 @@
 
                 <EditText
                     android:id="@+id/et_total_personnel"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="34dp"
                     android:layout_marginStart="@dimen/size_7"
                     android:layout_marginTop="-1dp"
@@ -160,7 +160,7 @@
 
                 <EditText
                     android:id="@+id/et_my_count"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="34dp"
                     android:layout_marginStart="@dimen/size_7"
                     android:layout_marginTop="-1dp"

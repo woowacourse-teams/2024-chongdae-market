@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
@@ -80,6 +82,9 @@ class MyPageFragment : Fragment() {
         viewModel.logoutEvent.observe(viewLifecycleOwner) {
             clearDataAndLogout()
         }
+        viewModel.editNicknameEvent.observe(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_myPageFragment_to_editNicknameFragment)
+        }
     }
 
     private fun clearDataAndLogout() {
@@ -100,5 +105,12 @@ class MyPageFragment : Fragment() {
             screenName = "MyPageFragment",
             screenClass = this::class.java.simpleName,
         )
+        updateNoficationStatus()
+    }
+
+    private fun updateNoficationStatus() {
+        val areNotificationEnabled =
+            NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
+        viewModel.updateNotificationStatus(areNotificationEnabled)
     }
 }
