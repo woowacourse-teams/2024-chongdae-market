@@ -73,7 +73,7 @@ class OfferingMemberServiceTest extends ServiceTest {
         assertThat(response.participants()).hasSize(1);
     }
 
-    @DisplayName("참여자 나가기 테스트")
+    @DisplayName("채팅방 나가기 테스트")
     @Nested
     class CancelParticipateWithParticipant {
 
@@ -119,7 +119,7 @@ class OfferingMemberServiceTest extends ServiceTest {
                     .doesNotThrowAnyException();
         }
 
-        @DisplayName("삭제된 공모일 경우 총대는 나갈 수 있다.")
+        @DisplayName("삭제된 공모일 경우 참여자는 나갈 수 있다.")
         @Test
         void should_participantCancelParticipate_when_offeringIsDeleted() {
             // given
