@@ -10,6 +10,7 @@ import com.zzang.chongdae.global.helper.ConcurrencyExecutor;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offering.service.OfferingService;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +25,9 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    OfferingService offeringService;
 
     @Autowired
     ConcurrencyExecutor concurrencyExecutor;
@@ -115,6 +119,26 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
                     .doesNotThrowAnyException();
         }
 
+        @DisplayName("삭제된 공모일 경우 총대는 나갈 수 있다.")
+        @Test
+        void should_participantCancelParticipate_when_offeringIsDeleted() throws InterruptedException {
+            // given
+            MemberEntity proposer = memberFixture.createMember("poke");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            // when
+            ParticipationRequest request = new ParticipationRequest(offering.getId(), 1);
+            MemberEntity participant = memberFixture.createMember("강서총각");
+
+            offeringMemberService.participate(request, participant);
+            offeringService.deleteOffering(offering.getId(), proposer);
+
+            // then
+            assertThatCode(() -> offeringMemberService.cancelParticipate(offering.getId(), participant))
+                    .doesNotThrowAnyException();
+        }
+
         @DisplayName("모집중에 총대는 나갈 수 없다.")
         @Test
         void should_proposerFailCancelParticipate_when_offeringIsNotGrouping() throws InterruptedException {
@@ -153,6 +177,26 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
             // then
             assertThatCode(() -> offeringMemberService.cancelParticipate(offering.getId(), participant))
+                    .doesNotThrowAnyException();
+        }
+
+        @DisplayName("삭제된 공모일 경우 총대는 나갈 수 있다.")
+        @Test
+        void should_proposerCancelParticipate_when_offeringIsDeleted() throws InterruptedException {
+            // given
+            MemberEntity proposer = memberFixture.createMember("poke");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            // when
+            ParticipationRequest request = new ParticipationRequest(offering.getId(), 1);
+            MemberEntity participant = memberFixture.createMember("강서총각");
+
+            offeringMemberService.participate(request, participant);
+            offeringService.deleteOffering(offering.getId(), proposer);
+
+            // then
+            assertThatCode(() -> offeringMemberService.cancelParticipate(offering.getId(), proposer))
                     .doesNotThrowAnyException();
         }
     }

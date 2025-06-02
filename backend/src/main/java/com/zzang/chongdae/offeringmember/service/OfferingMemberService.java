@@ -77,11 +77,16 @@ public class OfferingMemberService {
     @WriterDatabase
     @Transactional
     public void cancelParticipate(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingAndMember(offering, member)
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
-        validateCancel(offeringMember);
+
+        // TODO: 삭제된 공모 상태 변경(DELETED) 하기
+        if (offeringRepository.existsById(offeringId)) {
+            validateCancel(offeringMember);
+
+        }
 
         offeringMemberRepository.delete(offeringMember);
         offering.leave(offeringMember.getParticipationCount());
