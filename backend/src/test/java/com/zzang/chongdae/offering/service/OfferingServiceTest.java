@@ -9,6 +9,7 @@ import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.domain.OfferingStatus;
+import com.zzang.chongdae.offering.repository.OfferingRepository;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponse;
 import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
@@ -27,6 +28,9 @@ public class OfferingServiceTest extends ServiceTest {
 
     @Autowired
     OfferingService offeringService;
+
+    @Autowired
+    OfferingRepository offeringRepository;
 
     @DisplayName("공모 상세 조회")
     @Nested
@@ -592,6 +596,22 @@ public class OfferingServiceTest extends ServiceTest {
 
             // then
             assertThat(offeringFixture.countOffering()).isEqualTo(0);
+        }
+
+        @DisplayName("삭제된 공모의 채팅방 상태는 DELETED 이다.")
+        @Test
+        void should_commentStatusIsDeleted_when_deleteOffering() {
+            // given
+            OfferingEntity offering = offeringFixture.createOffering(proposer, CommentRoomStatus.DONE);
+            CommentRoomStatus expected = CommentRoomStatus.DELETED;
+
+            // when
+            offeringService.deleteOffering(offering.getId(), proposer);
+            OfferingEntity deletedOffering = offeringRepository.findByIdWithDeleted(offering.getId()).get();
+            CommentRoomStatus actual = deletedOffering.getRoomStatus();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }
