@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class OfferingMemberServiceConcurrencyTest extends ServiceTest {
+class OfferingMemberServiceTest extends ServiceTest {
 
     @Autowired
     OfferingMemberService offeringMemberService;
@@ -79,7 +79,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
         @DisplayName("진행중인 공모 중에 참여자는 나갈 수 없다.")
         @Test
-        void should_participantFailCancelParticipate_when_offeringIsNotGrouping() throws InterruptedException {
+        void should_participantFailCancelParticipate_when_offeringIsNotGrouping() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
@@ -99,7 +99,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
         @DisplayName("거래가 완료된 공모일 경우 참여자는 나갈 수 있다.")
         @Test
-        void should_participantCancelParticipate_when_offeringIsDone() throws InterruptedException {
+        void should_participantCancelParticipate_when_offeringIsDone() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
@@ -121,7 +121,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
         @DisplayName("삭제된 공모일 경우 총대는 나갈 수 있다.")
         @Test
-        void should_participantCancelParticipate_when_offeringIsDeleted() throws InterruptedException {
+        void should_participantCancelParticipate_when_offeringIsDeleted() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
@@ -141,7 +141,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
         @DisplayName("모집중에 총대는 나갈 수 없다.")
         @Test
-        void should_proposerFailCancelParticipate_when_offeringIsNotGrouping() throws InterruptedException {
+        void should_proposerFailCancelParticipate_when_offeringIsNotGrouping() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
@@ -160,7 +160,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
         @DisplayName("거래가 완료된 공모일 경우 총대는 나갈 수 있다.")
         @Test
-        void should_proposerCancelParticipate_when_offeringIsDone() throws InterruptedException {
+        void should_proposerCancelParticipate_when_offeringIsDone() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
@@ -182,7 +182,7 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
 
         @DisplayName("삭제된 공모일 경우 총대는 나갈 수 있다.")
         @Test
-        void should_proposerCancelParticipate_when_offeringIsDeleted() throws InterruptedException {
+        void should_proposerCancelParticipate_when_offeringIsDeleted() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
