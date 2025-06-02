@@ -69,13 +69,13 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
         assertThat(response.participants()).hasSize(1);
     }
 
-    @DisplayName("참여자 채팅방 나가기 테스트")
+    @DisplayName("참여자 나가기 테스트")
     @Nested
     class CancelParticipateWithParticipant {
 
-        @DisplayName("진행중인 공모 중에 나갈 수 없다.")
+        @DisplayName("진행중인 공모 중에 참여자는 나갈 수 없다.")
         @Test
-        void should_failCancelParticipate_when_offeringIsNotGrouping() throws InterruptedException {
+        void should_participantFailCancelParticipate_when_offeringIsNotGrouping() throws InterruptedException {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);
@@ -93,9 +93,50 @@ class OfferingMemberServiceConcurrencyTest extends ServiceTest {
                     .isInstanceOf(MarketException.class);
         }
 
-        @DisplayName("거래가 완료된 공모일 경우 나갈 수 있다.")
+        @DisplayName("거래가 완료된 공모일 경우 참여자는 나갈 수 있다.")
         @Test
-        void should_cancelParticipate_when_offeringIsDone() throws InterruptedException {
+        void should_participantCancelParticipate_when_offeringIsDone() throws InterruptedException {
+            // given
+            MemberEntity proposer = memberFixture.createMember("poke");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            // when
+            ParticipationRequest request = new ParticipationRequest(offering.getId(), 1);
+            MemberEntity participant = memberFixture.createMember("강서총각");
+
+            offeringMemberService.participate(request, participant);
+            commentService.updateCommentRoomStatus(offering.getId(), proposer); // Buying
+            commentService.updateCommentRoomStatus(offering.getId(), proposer); // Trading
+            commentService.updateCommentRoomStatus(offering.getId(), proposer); // Done
+
+            // then
+            assertThatCode(() -> offeringMemberService.cancelParticipate(offering.getId(), participant))
+                    .doesNotThrowAnyException();
+        }
+
+        @DisplayName("모집중에 총대는 나갈 수 없다.")
+        @Test
+        void should_proposerFailCancelParticipate_when_offeringIsNotGrouping() throws InterruptedException {
+            // given
+            MemberEntity proposer = memberFixture.createMember("poke");
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            // when
+            ParticipationRequest request = new ParticipationRequest(offering.getId(), 1);
+            MemberEntity participant = memberFixture.createMember("강서총각");
+
+            offeringMemberService.participate(request, participant);
+
+            // then
+            assertThatThrownBy(() -> offeringMemberService.cancelParticipate(offering.getId(), proposer))
+                    .isInstanceOf(MarketException.class);
+        }
+
+        @DisplayName("거래가 완료된 공모일 경우 총대는 나갈 수 있다.")
+        @Test
+        void should_proposerCancelParticipate_when_offeringIsDone() throws InterruptedException {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
             OfferingEntity offering = offeringFixture.createOffering(proposer);

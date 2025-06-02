@@ -95,7 +95,9 @@ public class OfferingMemberService {
     }
 
     private void validateIsProposer(OfferingMemberEntity offeringMember) {
-        if (offeringMember.isProposer()) {
+        OfferingEntity offering = offeringMember.getOffering();
+        CommentRoomStatus roomStatus = offering.getRoomStatus();
+        if (offeringMember.isProposer() && (roomStatus.isInProgress() || roomStatus.isGrouping())) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_PROPOSER);
         }
     }
