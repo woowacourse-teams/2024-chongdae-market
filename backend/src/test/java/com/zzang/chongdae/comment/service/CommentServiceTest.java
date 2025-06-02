@@ -56,7 +56,7 @@ public class CommentServiceTest extends ServiceTest {
             assertEquals(response.offerings().size(), 4);
         }
 
-        @DisplayName("최근 댓글이 작성된 순으로 정렬해 댓글방 목록을 조회할 수 있다")
+        @DisplayName("최근 댓글이 작성된 순으로 (댓글이 없으면 최근 참여 날짜로) 정렬해 댓글방 목록을 조회할 수 있다")
         @Test
         void should_getAllCommentRoomWithOrder_when_givenLoginMember() {
             // when
@@ -65,7 +65,7 @@ public class CommentServiceTest extends ServiceTest {
             // then
             assertThat(response.offerings())
                     .extracting(CommentRoomAllResponseItem::offeringId)
-                    .containsExactly(2L, 1L, 3L, 4L);
+                    .containsExactly(2L, 1L, 4L, 3L);
         }
 
         @DisplayName("댓글방 목록 조회 시 삭제된 공모에 대한 댓글방은 제목에 삭제되었다고 명시되어 있다")
