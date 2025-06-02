@@ -103,14 +103,14 @@ public class CustomizedOfferingRepositoryImpl implements CustomizedOfferingRepos
         if (keyword == null) {
             return null;
         }
-        return offeringEntity.title.like(keyword + '%');
+        return offeringEntity.title.like('%' + keyword + '%');
     }
 
     private BooleanExpression likeMeetingAddress(String keyword) {
         if (keyword == null) {
             return null;
         }
-        return offeringEntity.meetingAddress.like(keyword + '%');
+        return offeringEntity.meetingAddress.like('%' + keyword + '%');
     }
 
     private BooleanExpression inOfferingStatus(OfferingStatus... offeringStatus) {
