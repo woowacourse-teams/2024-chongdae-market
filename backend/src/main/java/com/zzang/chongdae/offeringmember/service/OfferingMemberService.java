@@ -77,12 +77,11 @@ public class OfferingMemberService {
     @WriterDatabase
     @Transactional
     public void cancelParticipate(Long offeringId, MemberEntity member) {
-        OfferingEntity offering = offeringRepository.findById(offeringId)
+        OfferingEntity offering = offeringRepository.findByIdWithDeleted(offeringId)
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
-        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingAndMember(offering, member)
+        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
         validateCancel(offeringMember);
-
         offeringMemberRepository.delete(offeringMember);
         offering.leave(offeringMember.getParticipationCount());
 
@@ -95,7 +94,9 @@ public class OfferingMemberService {
     }
 
     private void validateIsProposer(OfferingMemberEntity offeringMember) {
-        if (offeringMember.isProposer()) {
+        OfferingEntity offering = offeringMember.getOffering();
+        CommentRoomStatus roomStatus = offering.getRoomStatus();
+        if (offeringMember.isProposer() && (roomStatus.isInProgress() || roomStatus.isGrouping())) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_PROPOSER);
         }
     }
@@ -103,7 +104,7 @@ public class OfferingMemberService {
     private void validateInProgress(OfferingMemberEntity offeringMember) {
         OfferingEntity offering = offeringMember.getOffering();
         CommentRoomStatus roomStatus = offering.getRoomStatus();
-        if (roomStatus.isGrouped()) {
+        if (roomStatus.isInProgress()) {
             throw new MarketException(OfferingMemberErrorCode.CANNOT_CANCEL_IN_PROGRESS);
         }
     }
