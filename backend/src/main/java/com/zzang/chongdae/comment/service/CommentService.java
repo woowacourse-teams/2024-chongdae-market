@@ -78,17 +78,18 @@ public class CommentService {
     private CommentRoomAllResponseItem getCommentRoom(Long offeringId, MemberEntity member) {
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
-        CommentLatestResponse latestComment = getLatestComment(offeringId);
+        CommentLatestResponse latestComment = getLatestComment(offeringMember);
         if (offeringRepository.existsById(offeringId)) {
             return new CommentRoomAllResponseItem(offeringMember.getOffering(), offeringMember, latestComment);
         }
         return new CommentRoomAllResponseItem(offeringId, offeringMember, latestComment);
     }
 
-    private CommentLatestResponse getLatestComment(Long offeringId) {
-        Optional<CommentEntity> comment = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(offeringId);
+    private CommentLatestResponse getLatestComment(OfferingMemberEntity offeringMember) {
+        Optional<CommentEntity> comment = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(
+                offeringMember.getId());
         return comment.map(CommentLatestResponse::new)
-                .orElseGet(() -> new CommentLatestResponse(null, null));
+                .orElseGet(() -> new CommentLatestResponse(null, offeringMember.getCreatedAt()));
     }
 
     @Transactional(readOnly = true)

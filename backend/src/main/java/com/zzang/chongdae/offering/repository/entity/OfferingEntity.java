@@ -34,7 +34,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id", callSuper = false)
-@SQLDelete(sql = "UPDATE offering SET is_deleted = true, version = version + 1 WHERE id = ? AND version = ?")
+@SQLDelete(sql = "UPDATE offering SET is_deleted = true, version = version + 1, room_status = 'DELETED' WHERE id = ? AND version = ?")
 @SQLRestriction("is_deleted = false")
 @Table(name = "offering")
 @Entity

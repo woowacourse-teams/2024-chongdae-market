@@ -74,7 +74,6 @@ fun OfferingItem(
             modifier =
                 Modifier
                     .background(colorResource(R.color.offering_home_background))
-
                     .fillMaxWidth(),
         ) {
             Box {
