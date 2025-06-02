@@ -81,13 +81,7 @@ public class OfferingMemberService {
                 .orElseThrow(() -> new MarketException(OfferingErrorCode.NOT_FOUND));
         OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND));
-
-        // TODO: 삭제된 공모 상태 변경(DELETED) 하기
-        if (offeringRepository.existsById(offeringId)) {
-            validateCancel(offeringMember);
-
-        }
-
+        validateCancel(offeringMember);
         offeringMemberRepository.delete(offeringMember);
         offering.leave(offeringMember.getParticipationCount());
 
