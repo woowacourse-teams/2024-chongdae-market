@@ -4,11 +4,13 @@ import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 
 public record ParticipantResponseItem(String nickname,
                                       Integer count,
-                                      Integer price) {
+                                      Integer price,
+                                      Boolean isSettled) {
 
     public ParticipantResponseItem(OfferingMemberEntity offeringMember, int pricePerOne) {
         this(offeringMember.getMember().getNickname(),
                 offeringMember.getParticipationCount(),
-                offeringMember.getParticipationCount() * pricePerOne);
+                offeringMember.getParticipationCount() * pricePerOne,
+                offeringMember.getIsSettled());
     }
 }
