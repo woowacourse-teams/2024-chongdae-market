@@ -2,8 +2,10 @@ package com.zzang.chongdae.offeringmember.integration;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.parameterWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.epages.restdocs.apispec.ResourceSnippetParameters.builder;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.Schema.schema;
+import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
@@ -14,6 +16,7 @@ import com.zzang.chongdae.global.integration.IntegrationTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offeringmember.service.dto.ChangeSettleRequest;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -368,6 +371,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                 fieldWithPath("proposer.nickname").description("공모 작성자 닉네임"),
                 fieldWithPath("proposer.count").description("공모 작성자 참여 개수"),
                 fieldWithPath("proposer.price").description("공모 작성자 지불할 금액"),
+                fieldWithPath("participants[].id").description("공모 참여자 회원 id"),
                 fieldWithPath("participants[].nickname").description("공모 참여자 닉네임"),
                 fieldWithPath("participants[].count").description("공모 참여자 참여 개수"),
                 fieldWithPath("participants[].price").description("공모 참여자 지불할 금액"),
@@ -436,6 +440,108 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                     .filter(document("participants-fail-request-with-null", resource(failSnippets)))
                     .cookies(cookieProvider.createCookiesWithMember(proposer))
                     .when().get("/participants?offering-id=")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+    }
+
+    @DisplayName("공모 참여자 상태 변경")
+    @Nested
+    class ChangeParticipantStatus {
+        List<FieldDescriptor> requestDescriptors = List.of(
+                fieldWithPath("offeringId").description("공모 id"),
+                fieldWithPath("memberId").description("회원 id")
+        );
+
+        List<FieldDescriptor> successResponseDescriptors = List.of(
+                fieldWithPath("offeringId").description("공모 id"),
+                fieldWithPath("memberId").description("회원 id"),
+                fieldWithPath("isSettled").description("정산 여부")
+        );
+        ResourceSnippetParameters successSnippets = builder()
+                .summary("공모 참여자 상태 변경")
+                .description("공모 참여자의 정산 상태를 변경합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(successResponseDescriptors)
+                .requestSchema(schema("ChangeSettleRequest"))
+                .responseSchema(schema("ChangeSettleSuccessResponse"))
+                .build();
+        ResourceSnippetParameters failSnippets = builder()
+                .summary("공모 참여자 상태 변경")
+                .description("공모 참여자의 정산 상태를 변경합니다.")
+                .requestFields(requestDescriptors)
+                .responseFields(failResponseDescriptors)
+                .requestSchema(schema("OfferingCreateRequest"))
+                .responseSchema(schema("ChangeSettleFailResponse"))
+                .build();
+
+        List<ParameterDescriptorWithType> queryParameterDescriptors = List.of(
+                parameterWithName("offering-id").description("공모 id (필수)")
+        );
+        MemberEntity proposer;
+        MemberEntity participant;
+        OfferingEntity offering;
+
+        @BeforeEach
+        void setUp() {
+            proposer = memberFixture.createMember("dora");
+            participant = memberFixture.createMember("poke");
+            offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+            offeringMemberFixture.createParticipant(participant, offering);
+        }
+
+        @DisplayName("참여자의 정산 상태를 변경할 수 있다.")
+        @Test
+        void should_changeSettleSuccess() {
+            ChangeSettleRequest request = new ChangeSettleRequest(
+                    offering.getId(),
+                    participant.getId()
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-participant-success", resource(successSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/participants")
+                    .then().log().all()
+                    .statusCode(200);
+        }
+
+        @DisplayName("총대가 아닌 사용자는 참여자의 정산 상태를 변경할 수 없다.")
+        @Test
+        void should_changeSettleFail_when_notProposer() {
+            ChangeSettleRequest request = new ChangeSettleRequest(
+                    offering.getId(),
+                    participant.getId()
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-participants-fail-when-not-proposer", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(participant))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/participants")
+                    .then().log().all()
+                    .statusCode(400);
+        }
+
+        @DisplayName("참여하지 않은 공모의 참여자는 정산 상태를 변경할 수 없다.")
+        @Test
+        void should_changeSettleFail_when_notParticipatedOffering() {
+            OfferingEntity offering = offeringFixture.createOffering(participant);
+            ChangeSettleRequest request = new ChangeSettleRequest(
+                    offering.getId(),
+                    participant.getId()
+            );
+
+            given(spec).log().all()
+                    .filter(document("patch-participants-fail-when-not-participated-offering", resource(failSnippets)))
+                    .cookies(cookieProvider.createCookiesWithMember(proposer))
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().patch("/participants")
                     .then().log().all()
                     .statusCode(400);
         }

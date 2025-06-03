@@ -66,4 +66,8 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     public boolean isParticipant() {
         return this.role.isParticipant();
     }
+
+    public void changeSettle() {
+        this.isSettled = !(this.isSettled);
+    }
 }
