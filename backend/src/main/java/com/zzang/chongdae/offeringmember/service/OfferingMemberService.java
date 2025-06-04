@@ -134,17 +134,26 @@ public class OfferingMemberService {
     @Transactional
     public ChangeSettleResponse changeSettleStatus(ChangeSettleRequest request, MemberEntity member) {
         Long offeringId = request.offeringId();
-        Long targetMemberId = request.memberId();
+        Long memberId = request.memberId();
+        MemberEntity participantMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+        validateIsProposerOfOffering(offeringId, member);
+        OfferingMemberEntity participant = changeParticipantSettleStatus(offeringId, participantMember);
+        return new ChangeSettleResponse(participant);
+    }
+
+    private void validateIsProposerOfOffering(Long offeringId, MemberEntity member) {
         OfferingMemberEntity proposer = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
-        if (proposer.getRole() != OfferingMemberRole.PROPOSER) {
+        if (proposer.isProposer()) {
             throw new MarketException(OfferingMemberErrorCode.NOT_FOUND);
         }
-        MemberEntity targetMember = memberRepository.findById(targetMemberId)
-                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
-        OfferingMemberEntity offeringMember = offeringMemberRepository.findByOfferingIdAndMember(offeringId,
-                targetMember).orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
-        offeringMember.changeSettle();
-        return new ChangeSettleResponse(offeringMember);
+    }
+
+    private OfferingMemberEntity changeParticipantSettleStatus(Long offeringId, MemberEntity participantMember) {
+        OfferingMemberEntity participant = offeringMemberRepository.findByOfferingIdAndMember(offeringId,
+                participantMember).orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        participant.changeSettle();
+        return participant;
     }
 }
