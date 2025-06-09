@@ -4,6 +4,8 @@ import com.zzang.chongdae.event.domain.CancelParticipateEvent;
 import com.zzang.chongdae.event.domain.ParticipateEvent;
 import com.zzang.chongdae.global.config.WriterDatabase;
 import com.zzang.chongdae.global.exception.MarketException;
+import com.zzang.chongdae.member.exception.MemberErrorCode;
+import com.zzang.chongdae.member.repository.MemberRepository;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.exception.OfferingErrorCode;
@@ -14,6 +16,8 @@ import com.zzang.chongdae.offeringmember.domain.OfferingMembers;
 import com.zzang.chongdae.offeringmember.exception.OfferingMemberErrorCode;
 import com.zzang.chongdae.offeringmember.repository.OfferingMemberRepository;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import com.zzang.chongdae.offeringmember.service.dto.ChangeSettleRequest;
+import com.zzang.chongdae.offeringmember.service.dto.ChangeSettleResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import jakarta.persistence.EntityManager;
@@ -28,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OfferingMemberService {
 
     private final OfferingMemberRepository offeringMemberRepository;
+    private final MemberRepository memberRepository;
     private final OfferingRepository offeringRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final EntityManager entityManager;
@@ -123,5 +128,32 @@ public class OfferingMemberService {
         if (!offeringMemberRepository.existsByOfferingAndMember(offering, member)) {
             throw new MarketException(OfferingMemberErrorCode.PARTICIPANT_NOT_FOUND);
         }
+    }
+
+    @WriterDatabase
+    @Transactional
+    public ChangeSettleResponse changeSettleStatus(ChangeSettleRequest request, MemberEntity member) {
+        Long offeringId = request.offeringId();
+        Long memberId = request.memberId();
+        MemberEntity requestedMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
+        validateIsProposerOfOffering(offeringId, member);
+        OfferingMemberEntity participant = changeParticipantSettleStatus(offeringId, requestedMember);
+        return new ChangeSettleResponse(participant);
+    }
+
+    private void validateIsProposerOfOffering(Long offeringId, MemberEntity member) {
+        OfferingMemberEntity proposer = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
+                .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        if (proposer.isProposer()) {
+            throw new MarketException(OfferingMemberErrorCode.NOT_FOUND);
+        }
+    }
+
+    private OfferingMemberEntity changeParticipantSettleStatus(Long offeringId, MemberEntity participantMember) {
+        OfferingMemberEntity participant = offeringMemberRepository.findByOfferingIdAndMember(offeringId,
+                participantMember).orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
+        participant.changeSettle();
+        return participant;
     }
 }
