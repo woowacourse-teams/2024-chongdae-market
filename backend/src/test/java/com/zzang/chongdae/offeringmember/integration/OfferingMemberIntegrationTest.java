@@ -371,7 +371,7 @@ public class OfferingMemberIntegrationTest extends IntegrationTest {
                 fieldWithPath("proposer.nickname").description("공모 작성자 닉네임"),
                 fieldWithPath("proposer.count").description("공모 작성자 참여 개수"),
                 fieldWithPath("proposer.price").description("공모 작성자 지불할 금액"),
-                fieldWithPath("participants[].id").description("공모 참여자 회원 id"),
+                fieldWithPath("participants[].memberId").description("공모 참여자 회원 id"),
                 fieldWithPath("participants[].nickname").description("공모 참여자 닉네임"),
                 fieldWithPath("participants[].count").description("공모 참여자 참여 개수"),
                 fieldWithPath("participants[].price").description("공모 참여자 지불할 금액"),
