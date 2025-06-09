@@ -145,7 +145,7 @@ public class OfferingMemberService {
     private void validateIsProposerOfOffering(Long offeringId, MemberEntity member) {
         OfferingMemberEntity proposer = offeringMemberRepository.findByOfferingIdAndMember(offeringId, member)
                 .orElseThrow(() -> new MarketException(OfferingMemberErrorCode.NOT_FOUND));
-        if (proposer.isProposer()) {
+        if (!proposer.isProposer()) {
             throw new MarketException(OfferingMemberErrorCode.NOT_FOUND);
         }
     }
