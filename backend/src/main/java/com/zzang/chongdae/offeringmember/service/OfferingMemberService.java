@@ -135,10 +135,10 @@ public class OfferingMemberService {
     public ChangeSettleResponse changeSettleStatus(ChangeSettleRequest request, MemberEntity member) {
         Long offeringId = request.offeringId();
         Long memberId = request.memberId();
-        MemberEntity participantMember = memberRepository.findById(memberId)
+        MemberEntity requestedMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MarketException(MemberErrorCode.NOT_FOUND));
         validateIsProposerOfOffering(offeringId, member);
-        OfferingMemberEntity participant = changeParticipantSettleStatus(offeringId, participantMember);
+        OfferingMemberEntity participant = changeParticipantSettleStatus(offeringId, requestedMember);
         return new ChangeSettleResponse(participant);
     }
 
