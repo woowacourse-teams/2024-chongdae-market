@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.zzang.chongdae.domain.model.Filter
+import com.zzang.chongdae.domain.model.offering.Filter
 
 class OfferingFiltersState(
     val filters: List<Filter>,

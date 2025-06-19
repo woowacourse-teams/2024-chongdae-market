@@ -2,13 +2,13 @@ package com.zzang.chongdae.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.Meetings
-import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingCondition
-import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
-import com.zzang.chongdae.domain.model.OfferingWrite
-import com.zzang.chongdae.domain.model.ProductUrl
+import com.zzang.chongdae.domain.model.offering.Filter
+import com.zzang.chongdae.domain.model.comment.Meetings
+import com.zzang.chongdae.domain.model.offering.Offering
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.TestFixture.OFFERINGS_STUB

@@ -2,8 +2,8 @@ package com.zzang.chongdae.data.remote.mapper
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingModifyResponse
-import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
-import com.zzang.chongdae.domain.model.OfferingModifyDomainResponse
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainResponse
 
 fun OfferingModifyDomainRequest.toRequest(): OfferingModifyRequest {
     return OfferingModifyRequest(

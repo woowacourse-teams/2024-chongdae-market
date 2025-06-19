@@ -5,9 +5,9 @@ package com.zzang.chongdae.data.remote.mapper
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteFilter
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteFilterName
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteFilterType
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.domain.model.FilterType
+import com.zzang.chongdae.domain.model.offering.Filter
+import com.zzang.chongdae.domain.model.offering.FilterName
+import com.zzang.chongdae.domain.model.offering.FilterType
 
 fun RemoteFilter.toDomain() =
     Filter(

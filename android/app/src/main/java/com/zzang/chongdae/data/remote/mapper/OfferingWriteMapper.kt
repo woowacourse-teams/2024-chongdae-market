@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.mapper
 
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
-import com.zzang.chongdae.domain.model.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
 
 fun OfferingWrite.toRequest(): OfferingWriteRequest {
     return OfferingWriteRequest(

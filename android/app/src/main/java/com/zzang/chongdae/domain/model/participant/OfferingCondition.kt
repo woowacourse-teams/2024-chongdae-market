@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.participant
 
 enum class OfferingCondition {
     FULL,

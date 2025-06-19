@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.zzang.chongdae.databinding.ItemCommentRoomParticipantBinding
 import com.zzang.chongdae.databinding.ItemCommentRoomProposerBinding
-import com.zzang.chongdae.domain.model.CommentRoom
+import com.zzang.chongdae.domain.model.commentroom.CommentRoom
 
 sealed class CommentRoomViewHolder(
     view: View,

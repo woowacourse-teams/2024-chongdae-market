@@ -5,9 +5,9 @@ import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.domain.model.FilterType
+import com.zzang.chongdae.domain.model.offering.Filter
+import com.zzang.chongdae.domain.model.offering.FilterName
+import com.zzang.chongdae.domain.model.offering.FilterType
 import com.zzang.chongdae.presentation.view.home.component.OfferingFilters
 import com.zzang.chongdae.presentation.view.home.component.OfferingFiltersState
 import org.assertj.core.api.Assertions.assertThat

@@ -43,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.zzang.chongdae.R
-import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.offering.Offering
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
 import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener
 
 @OptIn(ExperimentalGlideComposeApi::class)

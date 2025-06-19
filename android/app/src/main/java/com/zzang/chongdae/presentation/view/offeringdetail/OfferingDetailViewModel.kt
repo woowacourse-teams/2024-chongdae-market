@@ -12,9 +12,9 @@ import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.domain.model.OfferingCondition
-import com.zzang.chongdae.domain.model.OfferingCondition.Companion.isAvailable
-import com.zzang.chongdae.domain.model.OfferingDetail
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
+import com.zzang.chongdae.domain.model.participant.OfferingCondition.Companion.isAvailable
+import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.model.analytics.UserType
 import com.zzang.chongdae.domain.usecase.analytics.FetchUserTypeUseCase
 import com.zzang.chongdae.domain.usecase.offeringdetail.DeleteOfferingUseCase

@@ -12,7 +12,7 @@ import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.zzang.chongdae.R
-import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
 import com.zzang.chongdae.domain.model.analytics.UserType
 import com.zzang.chongdae.presentation.view.commentdetail.model.usertype.UserTypeUiModel
 import java.time.LocalDate

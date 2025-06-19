@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.offeringwrite
 
 @JvmInline
 value class Count private constructor(val number: Int) {

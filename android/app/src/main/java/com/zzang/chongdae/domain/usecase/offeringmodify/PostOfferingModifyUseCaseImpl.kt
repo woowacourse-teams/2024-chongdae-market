@@ -5,7 +5,7 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
-import com.zzang.chongdae.domain.model.OfferingModifyDomainRequest
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import javax.inject.Inject
 

@@ -1,5 +1,7 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.offeringwrite
 
+import com.zzang.chongdae.domain.model.participant.CurrentCount
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
 import java.time.LocalDateTime
 
 data class OfferingModifyDomainResponse(

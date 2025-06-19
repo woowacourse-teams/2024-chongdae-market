@@ -1,4 +1,6 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.offering
+
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
 
 data class Offering(
     val id: Long,

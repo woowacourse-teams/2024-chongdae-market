@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.commentroom
 
 enum class CommentRoomType(val separator: Int) {
     PROPOSER(1),

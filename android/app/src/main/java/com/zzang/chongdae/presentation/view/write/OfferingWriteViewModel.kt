@@ -12,10 +12,10 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
 import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
-import com.zzang.chongdae.domain.model.Count
-import com.zzang.chongdae.domain.model.DiscountPrice
-import com.zzang.chongdae.domain.model.OfferingWrite
-import com.zzang.chongdae.domain.model.Price
+import com.zzang.chongdae.domain.model.offeringwrite.Count
+import com.zzang.chongdae.domain.model.offeringwrite.DiscountPrice
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.Price
 import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
 import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
 import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase

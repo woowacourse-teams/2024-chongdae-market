@@ -8,7 +8,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.UpdateCommentRoomsUseCaseQualifier
-import com.zzang.chongdae.domain.model.CommentRoom
+import com.zzang.chongdae.domain.model.commentroom.CommentRoom
 import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

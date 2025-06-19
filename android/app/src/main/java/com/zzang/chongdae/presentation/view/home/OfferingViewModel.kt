@@ -15,8 +15,8 @@ import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.offering.Filter
+import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.usecase.home.FetchFiltersUserCase
 import com.zzang.chongdae.domain.usecase.home.FetchOfferingUseCase

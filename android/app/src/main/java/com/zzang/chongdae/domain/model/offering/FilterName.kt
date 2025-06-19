@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.offering
 
 enum class FilterName {
     JOINABLE,

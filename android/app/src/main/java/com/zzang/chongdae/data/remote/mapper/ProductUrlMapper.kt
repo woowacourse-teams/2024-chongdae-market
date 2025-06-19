@@ -2,7 +2,7 @@ package com.zzang.chongdae.data.remote.mapper
 
 import com.zzang.chongdae.data.remote.dto.request.ProductUrlRequest
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
-import com.zzang.chongdae.domain.model.ProductUrl
+import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
 
 fun ProductUrlResponse.toDomain(): ProductUrl {
     return ProductUrl(

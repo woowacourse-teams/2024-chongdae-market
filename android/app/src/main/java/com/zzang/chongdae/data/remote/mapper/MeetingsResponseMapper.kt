@@ -1,7 +1,7 @@
 package com.zzang.chongdae.data.remote.mapper
 
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
-import com.zzang.chongdae.domain.model.Meetings
+import com.zzang.chongdae.domain.model.comment.Meetings
 
 fun MeetingsResponse.toDomain() =
     Meetings(

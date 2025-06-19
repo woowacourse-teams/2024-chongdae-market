@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.offeringwrite
 
 data class Price(val amount: Int) {
     init {

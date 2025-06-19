@@ -1,4 +1,4 @@
-package com.zzang.chongdae.domain.model
+package com.zzang.chongdae.domain.model.offeringwrite
 
 @JvmInline
 value class DiscountPrice private constructor(val amount: Float) {
