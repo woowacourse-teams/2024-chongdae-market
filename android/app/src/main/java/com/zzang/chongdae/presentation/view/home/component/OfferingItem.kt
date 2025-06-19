@@ -154,12 +154,9 @@ fun OfferingItem(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        text =
-                            if (offering.originPrice != null) {
-                                stringResource(R.string.all_money_amount_text, offering.originPrice)
-                            } else {
-                                ""
-                            },
+                        text = offering.originPrice?.let {
+                            stringResource(R.string.all_money_amount_text, it)
+                        } ?: "",
                         textDecoration =
                             TextDecoration.combine(
                                 listOf(
