@@ -26,7 +26,7 @@ class TokenAuthenticator
             val newToken =
                 runBlocking {
                     when (val result = refreshTokenUseCase.get()()) {
-                        is Result.Success -> result.data
+                        is com.zzang.chongdae.common.handler.Result.Success -> result.data
                         else -> null
                     }
                 } ?: return null

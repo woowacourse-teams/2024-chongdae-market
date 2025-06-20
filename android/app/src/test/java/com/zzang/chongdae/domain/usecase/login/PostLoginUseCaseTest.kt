@@ -31,6 +31,6 @@ class PostLoginUseCaseTest {
             val result = postLoginUseCase("FakeAccessToken", "FakeRefreshToken")
 
             // then
-            assertThat(result).isInstanceOf(Result.Success::class.java)
+            assertThat(result).isInstanceOf(com.zzang.chongdae.common.handler.Result.Success::class.java)
         }
 }

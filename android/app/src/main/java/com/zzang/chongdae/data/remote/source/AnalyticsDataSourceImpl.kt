@@ -13,7 +13,7 @@ class AnalyticsDataSourceImpl
     constructor(
         private val analyticsApiService: AnalyticsApiService,
     ) : AnalyticsDataSource {
-        override suspend fun fetchUserType(): Result<UserTypeResponse, DataError.Network> {
+        override suspend fun fetchUserType(): com.zzang.chongdae.common.handler.Result<UserTypeResponse, com.zzang.chongdae.common.handler.DataError.Network> {
             return safeApiCall { analyticsApiService.getUserType() }
         }
     }

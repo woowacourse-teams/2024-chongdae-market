@@ -15,7 +15,7 @@ class AnalyticsRepositoryImpl
         @AnalyticsDataSourceQualifier
         private val analyticsDataSource: AnalyticsDataSource,
     ) : AnalyticsRepository {
-        override suspend fun fetchUserType(): Result<UserType, DataError.Network> {
+        override suspend fun fetchUserType(): com.zzang.chongdae.common.handler.Result<UserType, com.zzang.chongdae.common.handler.DataError.Network> {
             return analyticsDataSource.fetchUserType()
                 .map { it.toDomain() }
         }

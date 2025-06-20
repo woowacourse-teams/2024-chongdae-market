@@ -154,9 +154,10 @@ fun OfferingItem(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        text = offering.originPrice?.let {
-                            stringResource(R.string.all_money_amount_text, it)
-                        } ?: "",
+                        text =
+                            offering.originPrice?.let {
+                                stringResource(R.string.all_money_amount_text, it)
+                            } ?: "",
                         textDecoration =
                             TextDecoration.combine(
                                 listOf(

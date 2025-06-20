@@ -13,9 +13,9 @@ import com.zzang.chongdae.di.annotations.FetchOfferingDetailUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostOfferingModifyUseCaseQualifier
 import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
 import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
+import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.model.offeringwrite.Count
 import com.zzang.chongdae.domain.model.offeringwrite.DiscountPrice
-import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.offeringwrite.Price
 import com.zzang.chongdae.domain.usecase.offeringmodify.FetchOfferingDetailUseCase

@@ -16,15 +16,17 @@ class UploadImageFileUseCaseImpl
         @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
     ) : UploadImageFileUseCase {
-        override suspend fun invoke(multipartBody: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
+        override suspend fun invoke(
+            multipartBody: MultipartBody.Part,
+        ): com.zzang.chongdae.common.handler.Result<ProductUrl, com.zzang.chongdae.common.handler.DataError.Network> {
             return when (val result = offeringRepository.saveProductImageS3(multipartBody)) {
-                is Result.Success -> Result.Success(result.data)
-                is Result.Error -> {
+                is com.zzang.chongdae.common.handler.Result.Success -> com.zzang.chongdae.common.handler.Result.Success(result.data)
+                is com.zzang.chongdae.common.handler.Result.Error -> {
                     when (result.error) {
-                        DataError.Network.UNAUTHORIZED -> {
+                        com.zzang.chongdae.common.handler.DataError.Network.UNAUTHORIZED -> {
                             when (authRepository.saveRefresh()) {
-                                is Result.Success -> invoke(multipartBody)
-                                is Result.Error -> result
+                                is com.zzang.chongdae.common.handler.Result.Success -> invoke(multipartBody)
+                                is com.zzang.chongdae.common.handler.Result.Error -> result
                             }
                         }
 

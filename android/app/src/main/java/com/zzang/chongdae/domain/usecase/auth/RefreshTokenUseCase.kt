@@ -11,7 +11,7 @@ class RefreshTokenUseCase
     constructor(
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
     ) {
-        suspend operator fun invoke(): Result<Unit, DataError.Network> {
+        suspend operator fun invoke(): com.zzang.chongdae.common.handler.Result<Unit, com.zzang.chongdae.common.handler.DataError.Network> {
             return authRepository.saveRefresh()
         }
     }

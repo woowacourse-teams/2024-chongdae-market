@@ -17,11 +17,17 @@ inline fun <T> safeApiCall(call: () -> Response<T>): Result<T, DataError.Network
             Result.Error(response.message(), handleHttpError(response.code()))
         }
     } catch (e: IOException) {
-        Result.Error(e.message ?: "Unknown IO error", DataError.Network.CONNECTION_ERROR)
+        Result.Error(
+            e.message ?: "Unknown IO error",
+            DataError.Network.CONNECTION_ERROR,
+        )
     } catch (e: HttpException) {
         Result.Error(e.message ?: "Unknown HTTP error", handleHttpError(e.code()))
     } catch (e: Exception) {
-        Result.Error(e.message ?: "Unknown error", DataError.Network.UNKNOWN)
+        Result.Error(
+            e.message ?: "Unknown error",
+            DataError.Network.UNKNOWN,
+        )
     }
 }
 

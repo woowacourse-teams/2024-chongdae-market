@@ -32,7 +32,7 @@ class UpdateCommentRoomsUseCaseTest {
             val result = updateCommentRoomsUseCase()
 
             // then
-            assertThat(result).isInstanceOf(Result.Success::class.java)
+            assertThat(result).isInstanceOf(com.zzang.chongdae.common.handler.Result.Success::class.java)
         }
 
     @Test
@@ -45,6 +45,6 @@ class UpdateCommentRoomsUseCaseTest {
             val result = updateCommentRoomsUseCase()
 
             // then
-            assertThat(result).isInstanceOf(Result.Success::class.java)
+            assertThat(result).isInstanceOf(com.zzang.chongdae.common.handler.Result.Success::class.java)
         }
 }

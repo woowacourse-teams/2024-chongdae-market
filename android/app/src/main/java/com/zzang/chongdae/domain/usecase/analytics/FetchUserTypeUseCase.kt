@@ -12,7 +12,7 @@ class FetchUserTypeUseCase
     constructor(
         @AnalyticsRepositoryQualifier private val analyticsRepository: AnalyticsRepository,
     ) {
-        suspend operator fun invoke(): Result<UserType, DataError.Network> {
+        suspend operator fun invoke(): com.zzang.chongdae.common.handler.Result<UserType, com.zzang.chongdae.common.handler.DataError.Network> {
             return analyticsRepository.fetchUserType()
         }
     }

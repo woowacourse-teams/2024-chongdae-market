@@ -14,7 +14,10 @@ class FakeCommentRoomsRepository : CommentRoomsRepository {
             true -> Result.Success(TestFixture.COMMENT_ROOMS_STUB)
             false -> {
                 isAccessTokenValid = true
-                Result.Error("AccessToken 만료됨", DataError.Network.UNAUTHORIZED)
+                Result.Error(
+                    "AccessToken 만료됨",
+                    DataError.Network.UNAUTHORIZED,
+                )
             }
         }
     }

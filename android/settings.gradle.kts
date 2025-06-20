@@ -23,3 +23,6 @@ dependencyResolutionManagement {
 rootProject.name = "chongdae"
 include(":app")
 include(":domain")
+include(":core:common")
+
+project(":core:common").projectDir = file("core/common")

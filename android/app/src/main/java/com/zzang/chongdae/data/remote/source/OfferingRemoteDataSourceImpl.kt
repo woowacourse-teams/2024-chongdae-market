@@ -29,7 +29,10 @@ class OfferingRemoteDataSourceImpl
             search: String?,
             lastOfferingId: Long?,
             pageSize: Int?,
-        ): Result<OfferingsResponse, DataError.Network> = safeApiCall { service.getOfferings(filter, search, lastOfferingId, pageSize) }
+        ): Result<OfferingsResponse, DataError.Network> =
+            safeApiCall {
+                service.getOfferings(filter, search, lastOfferingId, pageSize)
+            }
 
         override suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit, DataError.Network> =
             safeApiCall { service.postOfferingWrite((offeringWriteRequest)) }
@@ -40,7 +43,10 @@ class OfferingRemoteDataSourceImpl
         override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse, DataError.Network> =
             safeApiCall { service.postProductImageS3(image) }
 
-        override suspend fun fetchFilters(): Result<FiltersResponse, DataError.Network> = safeApiCall { service.getFilters() }
+        override suspend fun fetchFilters(): Result<FiltersResponse, DataError.Network> =
+            safeApiCall {
+                service.getFilters()
+            }
 
         override suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse, DataError.Network> =
             safeApiCall { service.getMeetings(offeringId) }
