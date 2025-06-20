@@ -15,17 +15,15 @@ class PostProductImageOgUseCaseImpl
         @OfferingRepositoryQualifier private val offeringRepository: OfferingRepository,
         @AuthRepositoryQualifier private val authRepository: AuthRepository,
     ) : PostProductImageOgUseCase {
-        override suspend fun invoke(
-            productUrl: String,
-        ): com.zzang.chongdae.common.handler.Result<ProductUrl, com.zzang.chongdae.common.handler.DataError.Network> {
+        override suspend fun invoke(productUrl: String): Result<ProductUrl, DataError.Network> {
             return when (val result = offeringRepository.saveProductImageOg(productUrl)) {
-                is com.zzang.chongdae.common.handler.Result.Success -> com.zzang.chongdae.common.handler.Result.Success(result.data)
-                is com.zzang.chongdae.common.handler.Result.Error -> {
+                is Result.Success -> Result.Success(result.data)
+                is Result.Error -> {
                     when (result.error) {
-                        com.zzang.chongdae.common.handler.DataError.Network.UNAUTHORIZED -> {
+                        DataError.Network.UNAUTHORIZED -> {
                             when (authRepository.saveRefresh()) {
-                                is com.zzang.chongdae.common.handler.Result.Success -> invoke(productUrl)
-                                is com.zzang.chongdae.common.handler.Result.Error -> result
+                                is Result.Success -> invoke(productUrl)
+                                is Result.Error -> result
                             }
                         }
 

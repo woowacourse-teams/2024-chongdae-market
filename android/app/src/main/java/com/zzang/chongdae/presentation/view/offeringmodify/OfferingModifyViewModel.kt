@@ -18,6 +18,7 @@ import com.zzang.chongdae.domain.model.offeringwrite.Count
 import com.zzang.chongdae.domain.model.offeringwrite.DiscountPrice
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.offeringwrite.Price
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import com.zzang.chongdae.domain.usecase.offeringmodify.FetchOfferingDetailUseCase
 import com.zzang.chongdae.domain.usecase.offeringmodify.PostOfferingModifyUseCase
 import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
@@ -26,7 +27,6 @@ import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -150,17 +150,15 @@ class OfferingModifyViewModel
             _imageUploadEvent.value = Unit
         }
 
-        fun uploadImageFile(multipartBody: MultipartBody.Part) {
+        fun uploadImageFile(image: ProductImage) {
             viewModelScope.launch {
                 _modifyUIState.value = ModifyUIState.Loading
-                when (val result = uploadImageFileUseCase.invoke(multipartBody)) {
+                when (val result = uploadImageFileUseCase.invoke(image)) {
                     is Result.Success -> {
                         _modifyUIState.value = ModifyUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = result.data.imageUrl
                     }
-
                     is Result.Error -> {
-                        Log.e("error", "uploadImageFile: ${result.error}")
                         _modifyUIState.value =
                             ModifyUIState.Error(R.string.all_error_image_upload, "${result.error}")
                     }

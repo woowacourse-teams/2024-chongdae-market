@@ -7,8 +7,8 @@ import com.zzang.chongdae.domain.model.offering.Filter
 import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
-import okhttp3.MultipartBody
 
 interface OfferingRepository {
     suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network>
@@ -24,7 +24,7 @@ interface OfferingRepository {
 
     suspend fun saveProductImageOg(productUrl: String): Result<ProductUrl, DataError.Network>
 
-    suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network>
+    suspend fun saveProductImageS3(image: ProductImage): Result<ProductUrl, DataError.Network>
 
     suspend fun fetchFilters(): Result<List<Filter>, DataError.Network>
 

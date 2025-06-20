@@ -4,6 +4,7 @@ import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.remote.mapper.toRequest
+import com.zzang.chongdae.data.remote.util.toMultipartPart
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.di.annotations.OfferingLocalDataSourceQualifier
@@ -13,9 +14,9 @@ import com.zzang.chongdae.domain.model.offering.Filter
 import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
 import com.zzang.chongdae.domain.repository.OfferingRepository
-import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class OfferingRepositoryImpl
@@ -53,8 +54,9 @@ class OfferingRepositoryImpl
             }
         }
 
-        override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
-            return offeringRemoteDataSource.saveProductImageS3(image).map {
+        override suspend fun saveProductImageS3(image: ProductImage): Result<ProductUrl, DataError.Network> {
+            val multipart = image.toMultipartPart()
+            return offeringRemoteDataSource.saveProductImageS3(multipart).map {
                 it.toDomain()
             }
         }
@@ -79,6 +81,6 @@ class OfferingRepositoryImpl
                 offeringId,
                 offeringModifyDomainRequest.toRequest(),
             ).map {
-                it // .toDomain()
+                it
             }
     }
