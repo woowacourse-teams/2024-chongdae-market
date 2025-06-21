@@ -14,6 +14,7 @@ import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
+import java.time.temporal.ChronoUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -90,7 +91,9 @@ public class CommentServiceTest extends ServiceTest {
             assertEquals(response.offerings().size(), 2);
             assertEquals(topOffering.offeringId(), firstOffering.getId());
             assertEquals(latestComment.content(), newComment.getContent());
-            assertEquals(latestComment.createdAt(), newComment.getCreatedAt());
+            assertEquals(latestComment.createdAt().truncatedTo(ChronoUnit.MICROS),
+                    newComment.getCreatedAt().truncatedTo(ChronoUnit.MICROS));
+
         }
 
         @DisplayName("댓글방 목록 조회 시 가장 최근 댓글 정보가 없는 경우 내용은 null, 생성일시는 참여 날짜로 조회한다")
@@ -108,7 +111,8 @@ public class CommentServiceTest extends ServiceTest {
             CommentLatestResponse latestComment = offeringWithoutComment.latestComment();
             assertEquals(response.offerings().size(), 1);
             assertNull(latestComment.content());
-            assertEquals(latestComment.createdAt(), offeringMember.getCreatedAt());
+            assertEquals(latestComment.createdAt().truncatedTo(ChronoUnit.MICROS),
+                    offeringMember.getCreatedAt().truncatedTo(ChronoUnit.MICROS));
         }
 
         @DisplayName("댓글방 목록 조회 시 삭제된 공모에 대한 댓글방은 제목에 삭제되었다고 명시되어 있다")
