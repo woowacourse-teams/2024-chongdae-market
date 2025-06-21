@@ -5,7 +5,6 @@ on:
     branches: [ "chongdae" ]
     paths:
       - "backend/**"
-      - ".github/workflows/backend-dev-ci.yml"
 
 jobs:
 
@@ -44,5 +43,5 @@ jobs:
         working-directory: ./backend
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew clean build --stacktrace --info
+        run: ./gradlew clean build
         working-directory: ./backend
