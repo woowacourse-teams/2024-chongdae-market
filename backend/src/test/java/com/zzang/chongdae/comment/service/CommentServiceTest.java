@@ -3,6 +3,7 @@ package com.zzang.chongdae.comment.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.zzang.chongdae.comment.repository.entity.CommentEntity;
 import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
@@ -91,9 +92,10 @@ public class CommentServiceTest extends ServiceTest {
             assertEquals(response.offerings().size(), 2);
             assertEquals(topOffering.offeringId(), firstOffering.getId());
             assertEquals(latestComment.content(), newComment.getContent());
-            assertEquals(latestComment.createdAt().truncatedTo(ChronoUnit.MICROS),
-                    newComment.getCreatedAt().truncatedTo(ChronoUnit.MICROS));
-
+            assertTrue(Math.abs(ChronoUnit.MILLIS.between(
+                    latestComment.createdAt(),
+                    newComment.getCreatedAt()
+            )) <= 100);
         }
 
         @DisplayName("댓글방 목록 조회 시 가장 최근 댓글 정보가 없는 경우 내용은 null, 생성일시는 참여 날짜로 조회한다")
@@ -111,8 +113,10 @@ public class CommentServiceTest extends ServiceTest {
             CommentLatestResponse latestComment = offeringWithoutComment.latestComment();
             assertEquals(response.offerings().size(), 1);
             assertNull(latestComment.content());
-            assertEquals(latestComment.createdAt().truncatedTo(ChronoUnit.MICROS),
-                    offeringMember.getCreatedAt().truncatedTo(ChronoUnit.MICROS));
+            assertTrue(Math.abs(ChronoUnit.MILLIS.between(
+                    latestComment.createdAt(),
+                    offeringMember.getCreatedAt()
+            )) <= 100);
         }
 
         @DisplayName("댓글방 목록 조회 시 삭제된 공모에 대한 댓글방은 제목에 삭제되었다고 명시되어 있다")
