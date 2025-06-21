@@ -2,7 +2,10 @@ package com.zzang.chongdae.comment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.zzang.chongdae.comment.repository.entity.CommentEntity;
+import com.zzang.chongdae.comment.service.dto.CommentLatestResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponse;
 import com.zzang.chongdae.comment.service.dto.CommentRoomAllResponseItem;
 import com.zzang.chongdae.comment.service.dto.CommentRoomInfoResponse;
@@ -10,6 +13,7 @@ import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
 import com.zzang.chongdae.offering.domain.CommentRoomStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
+import com.zzang.chongdae.offeringmember.repository.entity.OfferingMemberEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -66,6 +70,45 @@ public class CommentServiceTest extends ServiceTest {
             assertThat(response.offerings())
                     .extracting(CommentRoomAllResponseItem::offeringId)
                     .containsExactly(2L, 1L, 4L, 3L);
+        }
+
+        @DisplayName("댓글방 목록 조회 시 가장 최근 댓글 정보를 함께 조회한다")
+        @Test
+        void should_getAllCommentRoomWithLatestComment() {
+            // given
+            MemberEntity participant = memberFixture.createMember("ever");
+            offeringMemberFixture.createParticipant(participant, firstOffering);
+            offeringMemberFixture.createParticipant(participant, secondOffering);
+            CommentEntity newComment = commentFixture.createComment(participant, firstOffering);
+
+            // when
+            CommentRoomAllResponse response = commentService.getAllCommentRoom(participant);
+
+            // then
+            CommentRoomAllResponseItem topOffering = response.offerings().get(0);
+            CommentLatestResponse latestComment = topOffering.latestComment();
+            assertEquals(response.offerings().size(), 2);
+            assertEquals(topOffering.offeringId(), firstOffering.getId());
+            assertEquals(latestComment.content(), newComment.getContent());
+            assertEquals(latestComment.createdAt(), newComment.getCreatedAt());
+        }
+
+        @DisplayName("댓글방 목록 조회 시 가장 최근 댓글 정보가 없는 경우 내용은 null, 생성일시는 참여 날짜로 조회한다")
+        @Test
+        void should_getAllCommentRoomWithLatestComment_when_noComment() {
+            // given
+            MemberEntity participant = memberFixture.createMember("ever");
+            OfferingMemberEntity offeringMember = offeringMemberFixture.createParticipant(participant, thirdOffering);
+
+            // when
+            CommentRoomAllResponse response = commentService.getAllCommentRoom(participant);
+
+            // then
+            CommentRoomAllResponseItem offeringWithoutComment = response.offerings().get(0);
+            CommentLatestResponse latestComment = offeringWithoutComment.latestComment();
+            assertEquals(response.offerings().size(), 1);
+            assertNull(latestComment.content());
+            assertEquals(latestComment.createdAt(), offeringMember.getCreatedAt());
         }
 
         @DisplayName("댓글방 목록 조회 시 삭제된 공모에 대한 댓글방은 제목에 삭제되었다고 명시되어 있다")
