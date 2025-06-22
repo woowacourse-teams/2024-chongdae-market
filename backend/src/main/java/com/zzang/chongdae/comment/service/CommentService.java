@@ -87,7 +87,8 @@ public class CommentService {
 
     private CommentLatestResponse getLatestComment(OfferingMemberEntity offeringMember) {
         Optional<CommentEntity> comment = commentRepository.findTopByOfferingIdOrderByCreatedAtDesc(
-                offeringMember.getId());
+                offeringMember.getOffering().getId());
+
         return comment.map(CommentLatestResponse::new)
                 .orElseGet(() -> new CommentLatestResponse(null, offeringMember.getCreatedAt()));
     }

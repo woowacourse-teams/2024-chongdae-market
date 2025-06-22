@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,8 +51,12 @@ public class OfferingMemberEntity extends BaseTimeEntity {
     @Positive
     private Integer participationCount = DEFAULT_PARTICIPATION_COUNT;
 
+    @NotNull
+    @ColumnDefault("false")
+    private Boolean isSettled;
+
     public OfferingMemberEntity(MemberEntity member, OfferingEntity offering, OfferingMemberRole role, Integer count) {
-        this(null, member, offering, role, count);
+        this(null, member, offering, role, count, false);
     }
 
     public boolean isProposer() {
@@ -60,5 +65,9 @@ public class OfferingMemberEntity extends BaseTimeEntity {
 
     public boolean isParticipant() {
         return this.role.isParticipant();
+    }
+
+    public void changeSettle() {
+        this.isSettled = !(this.isSettled);
     }
 }
