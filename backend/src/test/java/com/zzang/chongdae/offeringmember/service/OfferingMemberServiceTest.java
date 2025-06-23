@@ -204,7 +204,7 @@ class OfferingMemberServiceTest extends ServiceTest {
 
         @DisplayName("거래가 완료된 공모에 참여자가 나갈 경우 공모의 상태는 변경되지 않는다.")
         @Test
-        void should_offeringStatusNotChange_when_offeringIsDone() {
+        void should_offeringStatusNotChange_when_offeringIsConfirmed() {
             // given
             MemberEntity proposer = memberFixture.createMember("poke");
 
