@@ -15,7 +15,7 @@ public enum OfferingFilter {
 
     JOINABLE("참여가능만", VISIBLE),
     IMMINENT("마감임박만", VISIBLE),
-    HIGH_DISCOUNT("높은할인율순", VISIBLE),
+    HIGH_DISCOUNT("높은할인율", VISIBLE),
     RECENT("최신순", INVISIBLE);
 
     private final String value;
