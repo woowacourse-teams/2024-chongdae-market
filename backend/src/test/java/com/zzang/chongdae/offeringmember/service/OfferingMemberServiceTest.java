@@ -9,8 +9,10 @@ import com.zzang.chongdae.global.exception.MarketException;
 import com.zzang.chongdae.global.helper.ConcurrencyExecutor;
 import com.zzang.chongdae.global.service.ServiceTest;
 import com.zzang.chongdae.member.repository.entity.MemberEntity;
+import com.zzang.chongdae.offering.domain.OfferingStatus;
 import com.zzang.chongdae.offering.repository.entity.OfferingEntity;
 import com.zzang.chongdae.offering.service.OfferingService;
+import com.zzang.chongdae.offering.service.dto.OfferingAllResponseItem;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipantResponse;
 import com.zzang.chongdae.offeringmember.service.dto.ParticipationRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -198,6 +200,39 @@ class OfferingMemberServiceTest extends ServiceTest {
             // then
             assertThatCode(() -> offeringMemberService.cancelParticipate(offering.getId(), proposer))
                     .doesNotThrowAnyException();
+        }
+
+        @DisplayName("거래가 완료된 공모에 참여자가 나갈 경우 공모의 상태는 변경되지 않는다.")
+        @Test
+        void should_offeringStatusNotChange_when_offeringIsDone() {
+            // given
+            MemberEntity proposer = memberFixture.createMember("poke");
+
+            // 생성된 공모의 총 개수는 5개 입니다.
+            OfferingEntity offering = offeringFixture.createOffering(proposer);
+            offeringMemberFixture.createProposer(proposer, offering);
+
+            ParticipationRequest request1 = new ParticipationRequest(offering.getId(), 3);
+            MemberEntity participant1 = memberFixture.createMember("pokemon");
+            ParticipationRequest request2 = new ParticipationRequest(offering.getId(), 1);
+            MemberEntity participant2 = memberFixture.createMember("pokemon2");
+
+            OfferingStatus expected = OfferingStatus.CONFIRMED;
+
+            // when
+            offeringMemberService.participate(request1, participant1);
+            offeringMemberService.participate(request2, participant2);
+
+            commentService.updateCommentRoomStatus(offering.getId(), proposer); // Buying
+            commentService.updateCommentRoomStatus(offering.getId(), proposer); // Trading
+            commentService.updateCommentRoomStatus(offering.getId(), proposer); // Done
+
+            offeringMemberService.cancelParticipate(offering.getId(), participant2);
+            OfferingAllResponseItem result = offeringService.getOffering(offering.getId());
+            OfferingStatus actual = result.status();
+
+            // then
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }

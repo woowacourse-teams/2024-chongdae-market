@@ -24,4 +24,8 @@ public enum OfferingStatus {
     public boolean isClosed() {
         return this == CONFIRMED || this == FULL;
     }
+
+    public boolean isGrouping() {
+        return this != CONFIRMED;
+    }
 }
