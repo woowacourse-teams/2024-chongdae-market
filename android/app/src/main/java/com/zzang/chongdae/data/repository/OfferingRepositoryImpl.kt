@@ -2,9 +2,9 @@ package com.zzang.chongdae.data.repository
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.network.toMultipartPart
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.remote.mapper.toRequest
-import com.zzang.chongdae.data.remote.util.toMultipartPart
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import com.zzang.chongdae.di.annotations.OfferingLocalDataSourceQualifier

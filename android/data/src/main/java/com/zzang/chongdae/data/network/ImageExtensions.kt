@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.remote.util
+package com.zzang.chongdae.data.network
 
 import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

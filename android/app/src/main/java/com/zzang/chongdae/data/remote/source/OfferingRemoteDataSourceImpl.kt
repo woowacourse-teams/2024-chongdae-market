@@ -2,6 +2,7 @@ package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.network.safeApiCall
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
@@ -11,7 +12,6 @@ import com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse
 import com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering
 import com.zzang.chongdae.data.remote.mapper.toProductUrlRequest
-import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -55,7 +55,12 @@ class OfferingRemoteDataSourceImpl
             offeringId: Long,
             offeringModifyRequest: OfferingModifyRequest,
         ): Result<Unit, DataError.Network> {
-            return safeApiCall { service.patchOffering(offeringId, offeringModifyRequest) }
+            return safeApiCall {
+                service.patchOffering(
+                    offeringId,
+                    offeringModifyRequest,
+                )
+            }
         }
 
         companion object {

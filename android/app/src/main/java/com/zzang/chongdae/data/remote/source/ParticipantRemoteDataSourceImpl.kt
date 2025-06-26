@@ -2,10 +2,10 @@ package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.network.safeApiCall
 import com.zzang.chongdae.data.remote.api.ParticipationApiService
 import com.zzang.chongdae.data.remote.dto.request.NicknameRequest
 import com.zzang.chongdae.data.remote.dto.response.participants.ParticipantsResponse
-import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.ParticipantRemoteDataSource
 import javax.inject.Inject
 

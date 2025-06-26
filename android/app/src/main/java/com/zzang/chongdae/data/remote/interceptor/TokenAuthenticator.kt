@@ -1,7 +1,6 @@
 package com.zzang.chongdae.data.remote.interceptor
 
-import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.domain.usecase.auth.RefreshTokenUseCase
+import com.zzang.chongdae.auth.domain.usecase.RefreshTokenUseCase
 import dagger.Lazy
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator

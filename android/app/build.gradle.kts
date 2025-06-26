@@ -135,7 +135,7 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-    // json
+    // json - data layer
     implementation(libs.kotlinx.serialization.json)
 
     // Glide
@@ -143,7 +143,7 @@ dependencies {
     implementation(libs.glide.compose)
     kapt(libs.glide.compiler)
 
-    // Retrofit
+    // Retrofit - data layer
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.kotlinx.serialization)
@@ -201,6 +201,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(project(":core:common"))
 }
 

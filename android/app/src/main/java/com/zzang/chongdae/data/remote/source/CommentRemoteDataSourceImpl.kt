@@ -2,12 +2,12 @@ package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.network.safeApiCall
 import com.zzang.chongdae.data.remote.api.CommentApiService
 import com.zzang.chongdae.data.remote.dto.request.CommentRequest
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse
 import com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse
-import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.comment.CommentRemoteDataSource
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.zzang.chongdae.data.remote.util
+package com.zzang.chongdae.data.network
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result

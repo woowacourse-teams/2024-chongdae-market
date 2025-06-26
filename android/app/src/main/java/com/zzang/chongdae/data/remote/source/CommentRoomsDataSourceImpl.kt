@@ -2,9 +2,9 @@ package com.zzang.chongdae.data.remote.source
 
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.network.safeApiCall
 import com.zzang.chongdae.data.remote.api.CommentApiService
 import com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomsResponse
-import com.zzang.chongdae.data.remote.util.safeApiCall
 import com.zzang.chongdae.data.source.CommentRoomsDataSource
 import javax.inject.Inject
 
