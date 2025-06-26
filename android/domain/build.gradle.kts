@@ -14,4 +14,6 @@ kotlin {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation("javax.inject:javax.inject:1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 }
