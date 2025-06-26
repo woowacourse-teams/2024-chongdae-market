@@ -9,10 +9,6 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.FetchOfferingDetailUseCaseQualifier
-import com.zzang.chongdae.di.annotations.PostOfferingModifyUseCaseQualifier
-import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
-import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
 import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.model.offeringwrite.Count
 import com.zzang.chongdae.domain.model.offeringwrite.DiscountPrice
@@ -37,10 +33,10 @@ import javax.inject.Inject
 class OfferingModifyViewModel
     @Inject
     constructor(
-        @UploadImageFileUseCaseQualifier private val uploadImageFileUseCase: UploadImageFileUseCase,
-        @PostProductImageOgUseCaseQualifier private val postProductImageOgUseCase: PostProductImageOgUseCase,
-        @FetchOfferingDetailUseCaseQualifier private val fetchOfferingDetailUseCase: FetchOfferingDetailUseCase,
-        @PostOfferingModifyUseCaseQualifier private val postOfferingModifyUseCase: PostOfferingModifyUseCase,
+        private val uploadImageFileUseCase: UploadImageFileUseCase,
+        private val postProductImageOgUseCase: PostProductImageOgUseCase,
+        private val fetchOfferingDetailUseCase: FetchOfferingDetailUseCase,
+        private val postOfferingModifyUseCase: PostOfferingModifyUseCase,
     ) : ViewModel() {
         private var offeringId: Long = DEFAULT_OFFERING_ID
 
@@ -311,21 +307,20 @@ class OfferingModifyViewModel
                 when (
                     val result =
                         postOfferingModifyUseCase(
-                            offeringId = offeringId,
-                            offeringModifyDomainRequest =
-                                OfferingModifyDomainRequest(
-                                    title = title,
-                                    productUrl = productUrlOrNull(),
-                                    thumbnailUrl = thumbnailUrl.value,
-                                    totalCount = totalCountConverted,
-                                    totalPrice = totalPriceConverted,
-                                    originPrice = originPriceNotBlank,
-                                    meetingAddress = meetingAddress,
-                                    meetingAddressDong = meetingAddressDong,
-                                    meetingAddressDetail = meetingAddressDetail,
-                                    meetingDate = meetingDate,
-                                    description = description,
-                                ),
+                            offeringId,
+                            OfferingModifyDomainRequest(
+                                title = title,
+                                productUrl = productUrlOrNull(),
+                                thumbnailUrl = thumbnailUrl.value,
+                                totalCount = totalCountConverted,
+                                totalPrice = totalPriceConverted,
+                                originPrice = originPriceNotBlank,
+                                meetingAddress = meetingAddress,
+                                meetingAddressDong = meetingAddressDong,
+                                meetingAddressDetail = meetingAddressDetail,
+                                meetingDate = meetingDate,
+                                description = description,
+                            )
                         )
                 ) {
                     is Result.Success -> {

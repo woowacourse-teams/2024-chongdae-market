@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.zzang.chongdae.R
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity
 import com.zzang.chongdae.presentation.view.commentdetail.CommentDetailActivity.Companion.EXTRA_OFFERING_ID_KEY
 import com.zzang.chongdae.presentation.view.main.MainActivity

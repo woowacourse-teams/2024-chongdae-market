@@ -12,16 +12,18 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class CommentDetailDependencyModule {
     @Binds
     @Singleton
-    @CommentDetailRepositoryQualifier
-    abstract fun provideCommentDetailRepository(impl: CommentDetailRepositoryImpl): CommentDetailRepository
+    abstract fun bindCommentDetailRepository(
+        impl: CommentDetailRepositoryImpl
+    ): CommentDetailRepository
 
     @Binds
     @Singleton
-    @CommentDetailDataSourceQualifier
-    abstract fun provideCommentDetailDataSource(impl: CommentRemoteDataSourceImpl): CommentRemoteDataSource
+    abstract fun bindCommentRemoteDataSource(
+        impl: CommentRemoteDataSourceImpl
+    ): CommentRemoteDataSource
 }

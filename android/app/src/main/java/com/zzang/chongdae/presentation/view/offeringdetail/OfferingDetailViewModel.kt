@@ -7,11 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import com.zzang.chongdae.domain.model.analytics.UserType
 import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.model.participant.OfferingCondition
@@ -35,7 +34,7 @@ class OfferingDetailViewModel
         private val fetchOfferingDetailUseCase: FetchOfferingDetailUseCase,
         private val saveParticipationUseCase: SaveParticipationUseCase,
         private val deleteOfferingUseCase: DeleteOfferingUseCase,
-        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        private val authRepository: AuthRepository,
         private val userPreferencesDataStore: UserPreferencesDataStore,
         private val fetchUserTypeUseCase: FetchUserTypeUseCase,
     ) : ViewModel(),

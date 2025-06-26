@@ -1,11 +1,11 @@
-package com.zzang.chongdae.auth.source
+package com.zzang.chongdae.auth.data.source
 
-import com.zzang.chongdae.auth.api.AuthApiService
-import com.zzang.chongdae.auth.dto.request.TokensRequest
-import com.zzang.chongdae.auth.dto.response.MemberResponse
+import com.zzang.chongdae.auth.data.api.AuthApiService
+import com.zzang.chongdae.auth.data.dto.request.TokensRequest
+import com.zzang.chongdae.auth.data.dto.response.MemberResponse
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.data.remote.util.safeApiCall
+import com.zzang.chongdae.data.network.safeApiCall
 import javax.inject.Inject
 
 class AuthRemoteDataSourceImpl

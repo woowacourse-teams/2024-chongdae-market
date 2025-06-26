@@ -1,18 +1,18 @@
-package com.zzang.chongdae.auth.repository
+package com.zzang.chongdae.auth.data.repository
 
-import com.zzang.chongdae.auth.dto.request.TokensRequest
-import com.zzang.chongdae.auth.mapper.toDomain
-import com.zzang.chongdae.auth.model.Member
-import com.zzang.chongdae.auth.source.AuthRemoteDataSource
+import com.zzang.chongdae.auth.data.dto.request.TokensRequest
+import com.zzang.chongdae.auth.data.mapper.toDomain
+import com.zzang.chongdae.auth.data.source.AuthRemoteDataSource
+import com.zzang.chongdae.auth.domain.model.Member
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthDataSourceQualifier
 import javax.inject.Inject
 
 class AuthRepositoryImpl
     @Inject
     constructor(
-        @AuthDataSourceQualifier private val authRemoteDataSource: AuthRemoteDataSource,
+        private val authRemoteDataSource: AuthRemoteDataSource,
     ) : AuthRepository {
         override suspend fun postLogin(
             accessToken: String,

@@ -100,6 +100,8 @@ dependencies {
     // Test
     implementation(libs.androidx.junit)
     implementation(libs.androidx.runtime.livedata)
+    implementation(project(":auth:data"))
+    implementation(project(":auth:domain"))
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.assertj.core)
     testImplementation(libs.kotest.runner.junit5)
@@ -203,6 +205,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core:common"))
+    implementation(project(":auth:data"))
 }
 
 kapt {

@@ -1,7 +1,7 @@
-package com.zzang.chongdae.auth.api
+package com.zzang.chongdae.auth.data.api
 
-import com.zzang.chongdae.auth.dto.request.TokensRequest
-import com.zzang.chongdae.auth.dto.response.MemberResponse
+import com.zzang.chongdae.auth.data.dto.request.TokensRequest
+import com.zzang.chongdae.auth.data.dto.response.MemberResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

@@ -24,6 +24,10 @@ rootProject.name = "chongdae"
 include(":app")
 include(":domain")
 include(":core:common")
+include(":auth:domain")
+include(":auth:data")
+include(":auth:presentation")
+include(":auth:test")
 
 project(":core:common").projectDir = file("core/common")
 include(":data")

@@ -1,6 +1,5 @@
 package com.zzang.chongdae.presentation.view.comment
 
-import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCaseImpl
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeCommentRoomsRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension

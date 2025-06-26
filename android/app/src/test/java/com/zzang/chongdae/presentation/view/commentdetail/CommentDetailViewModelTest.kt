@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.commentdetail
 
-import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.auth.data.repository.AuthRepository
 import com.zzang.chongdae.domain.repository.CommentDetailRepository
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.repository.ParticipantRepository
@@ -19,7 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CommentDetailViewModelTest {
     private lateinit var viewModel: CommentDetailViewModel
-    private lateinit var authRepository: AuthRepository
+    private lateinit var authRepository: com.zzang.chongdae.auth.data.repository.AuthRepository
     private lateinit var offeringRepository: OfferingRepository
     private lateinit var participantRepository: ParticipantRepository
     private lateinit var commentDetailRepository: CommentDetailRepository

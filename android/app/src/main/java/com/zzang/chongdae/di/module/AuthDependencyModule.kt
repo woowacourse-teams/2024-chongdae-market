@@ -1,9 +1,9 @@
 package com.zzang.chongdae.di.module
 
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.auth.repository.AuthRepositoryImpl
-import com.zzang.chongdae.auth.source.AuthRemoteDataSource
-import com.zzang.chongdae.auth.source.AuthRemoteDataSourceImpl
+import com.zzang.chongdae.auth.data.repository.AuthRepositoryImpl
+import com.zzang.chongdae.auth.data.source.AuthRemoteDataSource
+import com.zzang.chongdae.auth.data.source.AuthRemoteDataSourceImpl
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
 import com.zzang.chongdae.di.annotations.AuthDataSourceQualifier
 import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import dagger.Binds

@@ -10,14 +10,13 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.zzang.chongdae.R
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
+import com.zzang.chongdae.data.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.model.offering.Filter
 import com.zzang.chongdae.domain.model.offering.Offering
-import com.zzang.chongdae.domain.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.usecase.home.FetchFiltersUserCase
 import com.zzang.chongdae.domain.usecase.home.FetchOfferingUseCase
 import com.zzang.chongdae.domain.usecase.home.FetchOfferingsUseCase
@@ -34,7 +33,7 @@ import javax.inject.Inject
 class OfferingViewModel
     @Inject
     constructor(
-        @AuthRepositoryQualifier private val authRepository: AuthRepository,
+        private val authRepository: AuthRepository,
         private val fetchOfferingsUseCase: FetchOfferingsUseCase,
         private val fetchFiltersUserCase: FetchFiltersUserCase,
         private val fetchOfferingUseCase: FetchOfferingUseCase,

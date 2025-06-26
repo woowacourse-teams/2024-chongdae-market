@@ -9,9 +9,6 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
-import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
-import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
 import com.zzang.chongdae.domain.model.offeringwrite.Count
 import com.zzang.chongdae.domain.model.offeringwrite.DiscountPrice
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
@@ -32,9 +29,9 @@ import javax.inject.Inject
 class OfferingWriteViewModel
     @Inject
     constructor(
-        @PostOfferingUseCaseQualifier private val postOfferingUseCase: PostOfferingUseCase,
-        @UploadImageFileUseCaseQualifier val uploadImageFileUseCase: UploadImageFileUseCase,
-        @PostProductImageOgUseCaseQualifier private val postProductImageOgUseCase: PostProductImageOgUseCase,
+        private val postOfferingUseCase: PostOfferingUseCase,
+        private val uploadImageFileUseCase: UploadImageFileUseCase,
+        private val postProductImageOgUseCase: PostProductImageOgUseCase,
     ) : ViewModel() {
         val title: MutableLiveData<String> = MutableLiveData("")
 

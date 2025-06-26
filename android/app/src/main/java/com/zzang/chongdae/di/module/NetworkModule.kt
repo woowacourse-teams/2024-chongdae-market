@@ -2,14 +2,15 @@ package com.zzang.chongdae.di.module
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.zzang.chongdae.BuildConfig
-import com.zzang.chongdae.auth.api.AuthApiService
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.auth.data.api.AuthApiService
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.network.TokensCookieJar
 import com.zzang.chongdae.data.remote.api.AnalyticsApiService
 import com.zzang.chongdae.data.remote.api.CommentApiService
 import com.zzang.chongdae.data.remote.api.OfferingApiService
 import com.zzang.chongdae.data.remote.api.ParticipationApiService
 import com.zzang.chongdae.data.remote.interceptor.TokenAuthenticator
-import com.zzang.chongdae.data.remote.util.TokensCookieJar
+import com.zzang.chongdae.domain.repository.UserPreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,11 +19,16 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+    @Provides
+    @Named("BaseUrl")
+    fun provideBaseUrl(): String = BuildConfig.BASE_URL
+
     @Provides
     @Singleton
     fun provideJson(): Json =
@@ -34,11 +40,12 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        userPreferencesDataStore: UserPreferencesDataStore,
+        userPreferencesRepository: UserPreferencesRepository,
         tokenAuthenticator: TokenAuthenticator,
+        @Named("BaseUrl") baseUrl: String
     ): OkHttpClient =
         OkHttpClient.Builder()
-            .cookieJar(TokensCookieJar(userPreferencesDataStore))
+            .cookieJar(TokensCookieJar(userPreferencesRepository, baseUrl))
             .authenticator(tokenAuthenticator)
             .build()
 

@@ -1,6 +1,6 @@
 package com.zzang.chongdae.domain.usecase.comment
 
-import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.auth.data.repository.AuthRepository
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.domain.repository.CommentRoomsRepository
 import com.zzang.chongdae.repository.FakeAuthRepository
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class UpdateCommentRoomsUseCaseTest {
-    private lateinit var authRepository: AuthRepository
+    private lateinit var authRepository: com.zzang.chongdae.auth.data.repository.AuthRepository
     private lateinit var commentRoomsRepository: CommentRoomsRepository
     private lateinit var updateCommentRoomsUseCase: UpdateCommentRoomsUseCase
 
