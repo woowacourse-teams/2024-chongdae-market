@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":auth:data"))
+    implementation(project(":auth:domain"))
 
     // Hilt
     implementation(libs.hilt.android)
@@ -38,6 +39,11 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.okhttp)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)

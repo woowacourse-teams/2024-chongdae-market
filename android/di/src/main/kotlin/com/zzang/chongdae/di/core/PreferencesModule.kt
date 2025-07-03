@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.core
 
 import com.zzang.chongdae.data.local.repository.UserPreferencesRepositoryImpl
 import com.zzang.chongdae.domain.repository.UserPreferencesRepository
