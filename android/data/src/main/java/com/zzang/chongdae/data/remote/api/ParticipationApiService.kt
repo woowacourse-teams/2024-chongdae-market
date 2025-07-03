@@ -14,7 +14,7 @@ import retrofit2.http.Query
 interface ParticipationApiService {
     @POST("/participations")
     suspend fun postParticipations(
-        @Body participationRequest:ParticipationRequest,
+        @Body participationRequest: ParticipationRequest,
     ): Response<Unit>
 
     @GET("/participants")

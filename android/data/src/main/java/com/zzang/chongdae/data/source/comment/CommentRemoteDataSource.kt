@@ -10,9 +10,15 @@ import com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse
 interface CommentRemoteDataSource {
     suspend fun saveComment(commentRequest: com.zzang.chongdae.data.remote.dto.request.CommentRequest): Result<Unit, DataError.Network>
 
-    suspend fun fetchComments(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse, DataError.Network>
+    suspend fun fetchComments(
+        offeringId: Long,
+    ): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse, DataError.Network>
 
-    suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse, DataError.Network>
+    suspend fun fetchCommentOfferingInfo(
+        offeringId: Long,
+    ): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse, DataError.Network>
 
-    suspend fun updateOfferingStatus(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse, DataError.Network>
+    suspend fun updateOfferingStatus(
+        offeringId: Long,
+    ): Result<com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse, DataError.Network>
 }

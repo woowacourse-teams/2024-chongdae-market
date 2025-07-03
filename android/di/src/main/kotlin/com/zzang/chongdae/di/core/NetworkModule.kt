@@ -36,7 +36,7 @@ object NetworkModule {
     fun provideOkHttpClient(
         userPreferencesRepository: UserPreferencesRepository,
         tokenAuthenticator: TokenAuthenticator,
-        @Named("BaseUrl") baseUrl: String
+        @Named("BaseUrl") baseUrl: String,
     ): OkHttpClient =
         OkHttpClient.Builder()
             .cookieJar(TokensCookieJar(userPreferencesRepository, baseUrl))
@@ -48,7 +48,7 @@ object NetworkModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         json: Json,
-        @Named("BaseUrl") baseUrl: String
+        @Named("BaseUrl") baseUrl: String,
     ): Retrofit {
         val contentType = "application/json".toMediaType()
         return Retrofit.Builder()

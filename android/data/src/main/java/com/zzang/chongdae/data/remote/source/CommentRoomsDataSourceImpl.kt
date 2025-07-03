@@ -11,9 +11,9 @@ import javax.inject.Inject
 class CommentRoomsDataSourceImpl
     @Inject
     constructor(
-        private val commentApiService: com.zzang.chongdae.data.remote.api.CommentApiService,
+        private val commentApiService: CommentApiService,
     ) : CommentRoomsDataSource {
-        override suspend fun fetchCommentRooms(): Result<com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomsResponse, DataError.Network> {
+        override suspend fun fetchCommentRooms(): Result<CommentRoomsResponse, DataError.Network> {
             return safeApiCall { commentApiService.getCommentRooms() }
         }
     }

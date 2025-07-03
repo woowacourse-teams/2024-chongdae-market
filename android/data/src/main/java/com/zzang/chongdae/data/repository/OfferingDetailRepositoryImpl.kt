@@ -26,10 +26,11 @@ class OfferingDetailRepositoryImpl
             participationCount: Int,
         ): Result<Unit, DataError.Network> =
             offeringDetailDataSource.saveParticipation(
-                participationRequest = com.zzang.chongdae.data.remote.dto.request.ParticipationRequest(
-                    offeringId,
-                    participationCount
-                ),
+                participationRequest =
+                    com.zzang.chongdae.data.remote.dto.request.ParticipationRequest(
+                        offeringId,
+                        participationCount,
+                    ),
             )
 
         override suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network> {

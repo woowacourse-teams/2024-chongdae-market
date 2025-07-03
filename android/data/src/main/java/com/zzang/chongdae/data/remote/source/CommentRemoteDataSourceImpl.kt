@@ -16,22 +16,30 @@ class CommentRemoteDataSourceImpl
     constructor(
         private val service: com.zzang.chongdae.data.remote.api.CommentApiService,
     ) : CommentRemoteDataSource {
-        override suspend fun saveComment(commentRequest: com.zzang.chongdae.data.remote.dto.request.CommentRequest): Result<Unit, DataError.Network> =
+        override suspend fun saveComment(
+            commentRequest: com.zzang.chongdae.data.remote.dto.request.CommentRequest,
+        ): Result<Unit, DataError.Network> =
             safeApiCall {
                 service.postComment(commentRequest)
             }
 
-        override suspend fun fetchComments(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse, DataError.Network> =
+        override suspend fun fetchComments(
+            offeringId: Long,
+        ): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentsResponse, DataError.Network> =
             safeApiCall {
                 service.getComments(offeringId)
             }
 
-        override suspend fun fetchCommentOfferingInfo(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse, DataError.Network> =
+        override suspend fun fetchCommentOfferingInfo(
+            offeringId: Long,
+        ): Result<com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse, DataError.Network> =
             safeApiCall {
                 service.getCommentOfferingInfo(offeringId)
             }
 
-        override suspend fun updateOfferingStatus(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse, DataError.Network> =
+        override suspend fun updateOfferingStatus(
+            offeringId: Long,
+        ): Result<com.zzang.chongdae.data.remote.dto.response.comment.UpdatedStatusResponse, DataError.Network> =
             safeApiCall {
                 service.patchOfferingStatus(offeringId)
             }

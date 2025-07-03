@@ -15,13 +15,9 @@ import javax.inject.Singleton
 abstract class CommentDetailDependencyModule {
     @Binds
     @Singleton
-    abstract fun bindCommentDetailRepository(
-        impl: CommentDetailRepositoryImpl
-    ): CommentDetailRepository
+    abstract fun bindCommentDetailRepository(impl: CommentDetailRepositoryImpl): CommentDetailRepository
 
     @Binds
     @Singleton
-    abstract fun bindCommentRemoteDataSource(
-        impl: CommentRemoteDataSourceImpl
-    ): CommentRemoteDataSource
+    abstract fun bindCommentRemoteDataSource(impl: CommentRemoteDataSourceImpl): CommentRemoteDataSource
 }

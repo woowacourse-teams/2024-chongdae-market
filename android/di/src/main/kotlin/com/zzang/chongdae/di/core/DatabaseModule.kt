@@ -18,20 +18,19 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(
-        @ApplicationContext context: Context
-    ): AppDatabase = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java,
-        "chongdae_database"
-    ).build()
+        @ApplicationContext context: Context,
+    ): AppDatabase =
+        Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "chongdae_database",
+        ).build()
 
     @Provides
     @Singleton
-    fun provideOfferingDao(database: AppDatabase): OfferingDao =
-        database.offeringDao()
+    fun provideOfferingDao(database: AppDatabase): OfferingDao = database.offeringDao()
 
     @Provides
     @Singleton
-    fun provideCommentDao(database: AppDatabase): CommentDao =
-        database.commentDao()
+    fun provideCommentDao(database: AppDatabase): CommentDao = database.commentDao()
 }

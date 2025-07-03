@@ -13,7 +13,5 @@ import javax.inject.Singleton
 abstract class PreferencesModule {
     @Binds
     @Singleton
-    abstract fun bindUserPreferencesRepository(
-        impl: UserPreferencesRepositoryImpl
-    ): UserPreferencesRepository
+    abstract fun bindUserPreferencesRepository(impl: UserPreferencesRepositoryImpl): UserPreferencesRepository
 }

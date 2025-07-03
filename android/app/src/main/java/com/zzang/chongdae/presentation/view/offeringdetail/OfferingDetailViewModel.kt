@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.domain.repository.AuthRepository
-import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.model.analytics.UserType
 import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.model.participant.OfferingCondition

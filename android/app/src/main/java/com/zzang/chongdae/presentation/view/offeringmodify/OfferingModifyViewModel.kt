@@ -320,7 +320,7 @@ class OfferingModifyViewModel
                                 meetingAddressDetail = meetingAddressDetail,
                                 meetingDate = meetingDate,
                                 description = description,
-                            )
+                            ),
                         )
                 ) {
                     is Result.Success -> {
