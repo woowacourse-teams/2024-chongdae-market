@@ -2,15 +2,12 @@ package com.zzang.chongdae.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.zzang.chongdae.auth.domain.repository.AuthRepository
-import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.domain.usecase.home.FetchOfferingsUseCase
 
 class OfferingPagingSource(
     private val fetchOfferingsUseCase: FetchOfferingsUseCase,
-    private val authRepository: AuthRepository,
     private val search: String?,
     private val filter: String?,
     private val retry: () -> Unit,
@@ -28,23 +25,13 @@ class OfferingPagingSource(
 
             when (offerings) {
                 is Result.Error -> {
-                    when (offerings.error) {
-                        DataError.Network.UNAUTHORIZED -> {
-                            authRepository.saveRefresh()
-                            retry()
-                            load(params)
-                        }
-
-                        else -> {
-                            val prevKey: Long? = null
-                            val nextKey: Long? = null
-                            LoadResult.Page(
-                                data = emptyList<Offering>(),
-                                prevKey = prevKey,
-                                nextKey = nextKey,
-                            )
-                        }
-                    }
+                    val prevKey: Long? = null
+                    val nextKey: Long? = null
+                    LoadResult.Page(
+                        data = emptyList<Offering>(),
+                        prevKey = prevKey,
+                        nextKey = nextKey,
+                    )
                 }
 
                 is Result.Success -> {
