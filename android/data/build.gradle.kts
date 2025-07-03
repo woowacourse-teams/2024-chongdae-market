@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -39,6 +40,18 @@ dependencies {
     // DI
     implementation("javax.inject:javax.inject:1")
 
+    // Room
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // Pagination
+    implementation(libs.androidx.paging.runtime)
+
+    // Dagger Hilt
+    implementation(libs.hilt.android)
+
     implementation(project(":domain"))
     implementation(project(":core:common"))
+    implementation(project(":auth:domain"))
 }
