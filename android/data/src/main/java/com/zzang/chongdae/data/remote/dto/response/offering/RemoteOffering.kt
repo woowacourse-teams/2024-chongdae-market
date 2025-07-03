@@ -14,6 +14,6 @@ data class RemoteOffering(
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("originPrice") val originPrice: Int?,
     @SerialName("discountRate") val discountRate: Float?,
-    @SerialName("status") val status: RemoteOfferingStatus,
+    @SerialName("status") val status: com.zzang.chongdae.data.remote.dto.response.offering.RemoteOfferingStatus,
     @SerialName("isOpen") val isOpen: Boolean,
 )

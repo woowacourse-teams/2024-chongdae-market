@@ -17,6 +17,6 @@ data class OfferingModifyResponse(
     @SerialName("thumbnailUrl") val thumbnailUrl: String?,
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
-    @SerialName("status") val condition: RemoteOfferingStatus,
+    @SerialName("status") val condition: com.zzang.chongdae.data.remote.dto.response.offering.RemoteOfferingStatus,
     @SerialName("nickname") val nickname: String,
 )

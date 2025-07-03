@@ -18,7 +18,7 @@ data class OfferingDetailResponse(
     @SerialName("dividedPrice") val dividedPrice: Int,
     @SerialName("totalPrice") val totalPrice: Int,
     @SerialName("originPrice") val originPrice: Int?,
-    @SerialName("status") val condition: RemoteOfferingStatus,
+    @SerialName("status") val condition: com.zzang.chongdae.data.remote.dto.response.offering.RemoteOfferingStatus,
     @SerialName("isProposer") val isProposer: Boolean,
     @SerialName("nickname") val nickname: String,
     @SerialName("isParticipated") val isParticipated: Boolean,

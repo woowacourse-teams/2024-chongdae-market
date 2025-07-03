@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 data class CommentRoomResponse(
     @SerialName("offeringId") val offeringId: Long,
     @SerialName("offeringTitle") val offeringTitle: String,
-    @SerialName("latestComment") val latestComment: LatestCommentResponse,
+    @SerialName("latestComment") val latestComment: com.zzang.chongdae.data.remote.dto.response.commentroom.LatestCommentResponse,
     @SerialName("isProposer") val isProposer: Boolean,
 )
