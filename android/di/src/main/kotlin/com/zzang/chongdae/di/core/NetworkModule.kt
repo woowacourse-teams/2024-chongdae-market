@@ -1,9 +1,7 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.core
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.zzang.chongdae.BuildConfig
 import com.zzang.chongdae.auth.data.api.AuthApiService
-import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.data.network.TokensCookieJar
 import com.zzang.chongdae.data.remote.api.AnalyticsApiService
 import com.zzang.chongdae.data.remote.api.CommentApiService
@@ -25,10 +23,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    @Provides
-    @Named("BaseUrl")
-    fun provideBaseUrl(): String = BuildConfig.BASE_URL
-
     @Provides
     @Singleton
     fun provideJson(): Json =
@@ -54,10 +48,11 @@ object NetworkModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         json: Json,
+        @Named("BaseUrl") baseUrl: String
     ): Retrofit {
         val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(json.asConverterFactory(contentType))
             .client(okHttpClient)
             .build()
