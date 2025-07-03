@@ -3,7 +3,7 @@ package com.zzang.chongdae.data.remote.mapper
 import com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse
 import com.zzang.chongdae.domain.model.offering.OfferingDetail
 
-fun OfferingDetailResponse.toDomain() =
+fun com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse.toDomain() =
     OfferingDetail(
         id = this.id,
         title = this.title,

@@ -3,7 +3,7 @@ package com.zzang.chongdae.data.remote.mapper.comment
 import com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse
 import com.zzang.chongdae.domain.model.comment.CommentOfferingInfo
 
-fun CommentOfferingInfoResponse.toDomain() =
+fun com.zzang.chongdae.data.remote.dto.response.comment.CommentOfferingInfoResponse.toDomain() =
     CommentOfferingInfo(
         status = this.status,
         imageUrl = this.imageUrl,

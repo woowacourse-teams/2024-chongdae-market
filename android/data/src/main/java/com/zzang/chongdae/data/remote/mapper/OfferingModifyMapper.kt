@@ -5,8 +5,8 @@ import com.zzang.chongdae.data.remote.dto.response.offering.OfferingModifyRespon
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainResponse
 
-fun OfferingModifyDomainRequest.toRequest(): OfferingModifyRequest {
-    return OfferingModifyRequest(
+fun OfferingModifyDomainRequest.toRequest(): com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest {
+    return com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest(
         title = this.title,
         productUrl = this.productUrl,
         thumbnailUrl = this.thumbnailUrl,
@@ -21,7 +21,7 @@ fun OfferingModifyDomainRequest.toRequest(): OfferingModifyRequest {
     )
 }
 
-fun OfferingModifyResponse.toDomain(): OfferingModifyDomainResponse {
+fun com.zzang.chongdae.data.remote.dto.response.offering.OfferingModifyResponse.toDomain(): OfferingModifyDomainResponse {
     return OfferingModifyDomainResponse(
         id = this.id,
         title = this.title,

@@ -3,7 +3,7 @@ package com.zzang.chongdae.data.remote.mapper
 import com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse
 import com.zzang.chongdae.domain.model.comment.Meetings
 
-fun MeetingsResponse.toDomain() =
+fun com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse.toDomain() =
     Meetings(
         meetingDate = this.meetingDate.toLocalDateTime(),
         meetingAddress = this.meetingAddress,

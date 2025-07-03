@@ -3,8 +3,8 @@ package com.zzang.chongdae.data.remote.mapper
 import com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
 
-fun OfferingWrite.toRequest(): OfferingWriteRequest {
-    return OfferingWriteRequest(
+fun OfferingWrite.toRequest(): com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest {
+    return com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest(
         title = this.title,
         productUrl = this.productUrl,
         thumbnailUrl = this.thumbnailUrl,

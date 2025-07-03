@@ -3,7 +3,7 @@ package com.zzang.chongdae.data.remote.mapper
 import com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomResponse
 import com.zzang.chongdae.domain.model.commentroom.CommentRoom
 
-fun CommentRoomResponse.toDomain(): CommentRoom {
+fun com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomResponse.toDomain(): CommentRoom {
     return CommentRoom(
         id = this.offeringId,
         title = this.offeringTitle,
