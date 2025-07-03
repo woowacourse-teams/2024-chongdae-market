@@ -1,6 +1,7 @@
 package com.zzang.chongdae.data.remote.interceptor
 
 import com.zzang.chongdae.auth.domain.usecase.RefreshTokenUseCase
+import com.zzang.chongdae.common.handler.Result
 import dagger.Lazy
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -25,7 +26,7 @@ class TokenAuthenticator
             val newToken =
                 runBlocking {
                     when (val result = refreshTokenUseCase.get()()) {
-                        is com.zzang.chongdae.common.handler.Result.Success -> result.data
+                        is Result.Success -> result.data
                         else -> null
                     }
                 } ?: return null
