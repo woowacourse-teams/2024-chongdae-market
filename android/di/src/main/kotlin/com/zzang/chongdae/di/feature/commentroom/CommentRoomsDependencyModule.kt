@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.feature.commentroom
 
 import com.zzang.chongdae.data.remote.source.CommentRoomsDataSourceImpl
 import com.zzang.chongdae.data.repository.CommentRoomsRepositoryImpl

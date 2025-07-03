@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.feature.auth
 
 import com.zzang.chongdae.auth.data.repository.AuthRepositoryImpl
 import com.zzang.chongdae.auth.data.source.AuthRemoteDataSource

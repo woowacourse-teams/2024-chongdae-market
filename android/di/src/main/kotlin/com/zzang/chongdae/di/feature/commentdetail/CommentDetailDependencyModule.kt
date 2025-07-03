@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.feature.commentdetail
 
 import com.zzang.chongdae.data.remote.source.CommentRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.CommentDetailRepositoryImpl

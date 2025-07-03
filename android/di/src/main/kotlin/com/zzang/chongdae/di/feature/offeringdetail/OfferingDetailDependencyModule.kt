@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.feature.offeringdetail
 
 import com.zzang.chongdae.data.remote.source.OfferingDetailDataSourceImpl
 import com.zzang.chongdae.data.repository.OfferingDetailRepositoryImpl

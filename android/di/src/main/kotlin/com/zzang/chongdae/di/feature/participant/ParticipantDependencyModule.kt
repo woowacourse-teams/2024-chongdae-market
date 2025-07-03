@@ -1,4 +1,4 @@
-package com.zzang.chongdae.di.module
+package com.zzang.chongdae.di.feature.participant
 
 import com.zzang.chongdae.data.remote.source.ParticipantRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.ParticipantRepositoryImpl
