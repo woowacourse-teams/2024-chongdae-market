@@ -20,7 +20,7 @@ class CommentDetailRepositoryImpl
             comment: String,
         ): Result<Unit, DataError.Network> {
             return commentRemoteDataSource.saveComment(
-                CommentRequest(offeringId, comment),
+                com.zzang.chongdae.data.remote.dto.request.CommentRequest(offeringId, comment),
             ).map { Unit }
         }
 

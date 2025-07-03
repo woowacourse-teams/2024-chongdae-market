@@ -5,7 +5,6 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.request.ParticipationRequest
 import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.source.OfferingDetailDataSource
-import com.zzang.chongdae.di.annotations.OfferingDetailDataSourceQualifier
 import com.zzang.chongdae.domain.model.offering.OfferingDetail
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import javax.inject.Inject
@@ -13,7 +12,7 @@ import javax.inject.Inject
 class OfferingDetailRepositoryImpl
     @Inject
     constructor(
-        @OfferingDetailDataSourceQualifier private val offeringDetailDataSource: OfferingDetailDataSource,
+        private val offeringDetailDataSource: OfferingDetailDataSource,
     ) : OfferingDetailRepository {
         override suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetail, DataError.Network> =
             offeringDetailDataSource.fetchOfferingDetail(
@@ -27,7 +26,10 @@ class OfferingDetailRepositoryImpl
             participationCount: Int,
         ): Result<Unit, DataError.Network> =
             offeringDetailDataSource.saveParticipation(
-                participationRequest = ParticipationRequest(offeringId, participationCount),
+                participationRequest = com.zzang.chongdae.data.remote.dto.request.ParticipationRequest(
+                    offeringId,
+                    participationCount
+                ),
             )
 
         override suspend fun deleteOffering(offeringId: Long): Result<Unit, DataError.Network> {

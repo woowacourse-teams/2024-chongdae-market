@@ -7,8 +7,6 @@ import com.zzang.chongdae.data.remote.mapper.toDomain
 import com.zzang.chongdae.data.remote.mapper.toRequest
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
-import com.zzang.chongdae.di.annotations.OfferingLocalDataSourceQualifier
-import com.zzang.chongdae.di.annotations.OfferingRemoteDataSourceQualifier
 import com.zzang.chongdae.domain.model.comment.Meetings
 import com.zzang.chongdae.domain.model.offering.Filter
 import com.zzang.chongdae.domain.model.offering.Offering
@@ -22,8 +20,8 @@ import javax.inject.Inject
 class OfferingRepositoryImpl
     @Inject
     constructor(
-        @OfferingLocalDataSourceQualifier private val offeringLocalDataSource: OfferingLocalDataSource,
-        @OfferingRemoteDataSourceQualifier private val offeringRemoteDataSource: OfferingRemoteDataSource,
+        private val offeringLocalDataSource: OfferingLocalDataSource,
+        private val offeringRemoteDataSource: OfferingRemoteDataSource,
     ) : OfferingRepository {
         override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> =
             offeringRemoteDataSource.fetchOffering(offeringId = offeringId).map {
