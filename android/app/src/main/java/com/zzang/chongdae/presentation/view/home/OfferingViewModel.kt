@@ -11,9 +11,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.zzang.chongdae.R
 import com.zzang.chongdae.auth.domain.repository.AuthRepository
-import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.data.paging.OfferingPagingSource
 import com.zzang.chongdae.domain.model.offering.Filter
 import com.zzang.chongdae.domain.model.offering.Offering
@@ -79,7 +79,6 @@ class OfferingViewModel
                     pagingSourceFactory = {
                         OfferingPagingSource(
                             fetchOfferingsUseCase,
-                            authRepository,
                             search.value,
                             _selectedFilter.value?.name?.toString(),
                         ) { fetchOfferings() }

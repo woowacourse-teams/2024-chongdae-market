@@ -7,10 +7,6 @@ import com.zzang.chongdae.data.remote.source.OfferingRemoteDataSourceImpl
 import com.zzang.chongdae.data.repository.OfferingRepositoryImpl
 import com.zzang.chongdae.data.source.offering.OfferingLocalDataSource
 import com.zzang.chongdae.data.source.offering.OfferingRemoteDataSource
-import com.zzang.chongdae.di.annotations.OfferingDaoQualifier
-import com.zzang.chongdae.di.annotations.OfferingLocalDataSourceQualifier
-import com.zzang.chongdae.di.annotations.OfferingRemoteDataSourceQualifier
-import com.zzang.chongdae.di.annotations.OfferingRepositoryQualifier
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import dagger.Binds
 import dagger.Module
@@ -24,23 +20,19 @@ import javax.inject.Singleton
 abstract class OfferingDependencyModule {
     @Binds
     @Singleton
-    @OfferingRepositoryQualifier
     abstract fun provideOfferingRepository(impl: OfferingRepositoryImpl): OfferingRepository
 
     @Binds
     @Singleton
-    @OfferingRemoteDataSourceQualifier
     abstract fun provideOfferingRemoteDataSource(impl: OfferingRemoteDataSourceImpl): OfferingRemoteDataSource
 
     @Binds
     @Singleton
-    @OfferingLocalDataSourceQualifier
     abstract fun provideOfferingLocalDataSource(impl: OfferingLocalDataSourceImpl): OfferingLocalDataSource
 
     companion object {
         @Provides
         @Singleton
-        @OfferingDaoQualifier
         fun provideOfferingDao(): OfferingDao {
             return ChongdaeApp.offeringDao
         }

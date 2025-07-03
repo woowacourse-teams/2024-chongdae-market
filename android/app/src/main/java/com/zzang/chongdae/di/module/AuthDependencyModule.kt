@@ -4,8 +4,6 @@ import com.zzang.chongdae.auth.data.repository.AuthRepositoryImpl
 import com.zzang.chongdae.auth.data.source.AuthRemoteDataSource
 import com.zzang.chongdae.auth.data.source.AuthRemoteDataSourceImpl
 import com.zzang.chongdae.auth.domain.repository.AuthRepository
-import com.zzang.chongdae.di.annotations.AuthDataSourceQualifier
-import com.zzang.chongdae.di.annotations.AuthRepositoryQualifier
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,11 +15,9 @@ import javax.inject.Singleton
 abstract class AuthDependencyModule {
     @Binds
     @Singleton
-    @AuthRepositoryQualifier
     abstract fun provideAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    @AuthDataSourceQualifier
     abstract fun provideAuthDataSource(impl: AuthRemoteDataSourceImpl): AuthRemoteDataSource
 }
