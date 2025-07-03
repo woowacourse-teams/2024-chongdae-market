@@ -11,9 +11,9 @@ import javax.inject.Inject
 class AnalyticsDataSourceImpl
     @Inject
     constructor(
-        private val analyticsApiService: AnalyticsApiService,
+        private val analyticsApiService: com.zzang.chongdae.data.remote.api.AnalyticsApiService,
     ) : AnalyticsDataSource {
-        override suspend fun fetchUserType(): Result<UserTypeResponse, DataError.Network> {
+        override suspend fun fetchUserType(): Result<com.zzang.chongdae.data.remote.dto.response.analytics.UserTypeResponse, DataError.Network> {
             return safeApiCall { analyticsApiService.getUserType() }
         }
     }

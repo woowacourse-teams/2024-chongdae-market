@@ -19,9 +19,9 @@ import javax.inject.Inject
 class OfferingRemoteDataSourceImpl
     @Inject
     constructor(
-        private val service: OfferingApiService,
+        private val service: com.zzang.chongdae.data.remote.api.OfferingApiService,
     ) : OfferingRemoteDataSource {
-        override suspend fun fetchOffering(offeringId: Long): Result<RemoteOffering, DataError.Network> =
+        override suspend fun fetchOffering(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.offering.RemoteOffering, DataError.Network> =
             safeApiCall { service.getOffering(offeringId) }
 
         override suspend fun fetchOfferings(
@@ -29,31 +29,31 @@ class OfferingRemoteDataSourceImpl
             search: String?,
             lastOfferingId: Long?,
             pageSize: Int?,
-        ): Result<OfferingsResponse, DataError.Network> =
+        ): Result<com.zzang.chongdae.data.remote.dto.response.offering.OfferingsResponse, DataError.Network> =
             safeApiCall {
                 service.getOfferings(filter, search, lastOfferingId, pageSize)
             }
 
-        override suspend fun saveOffering(offeringWriteRequest: OfferingWriteRequest): Result<Unit, DataError.Network> =
+        override suspend fun saveOffering(offeringWriteRequest: com.zzang.chongdae.data.remote.dto.request.OfferingWriteRequest): Result<Unit, DataError.Network> =
             safeApiCall { service.postOfferingWrite((offeringWriteRequest)) }
 
-        override suspend fun saveProductImageOg(productUrl: String): Result<ProductUrlResponse, DataError.Network> =
+        override suspend fun saveProductImageOg(productUrl: String): Result<com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse, DataError.Network> =
             safeApiCall { service.postProductImageOg((productUrl.toProductUrlRequest())) }
 
-        override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrlResponse, DataError.Network> =
+        override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<com.zzang.chongdae.data.remote.dto.response.offering.ProductUrlResponse, DataError.Network> =
             safeApiCall { service.postProductImageS3(image) }
 
-        override suspend fun fetchFilters(): Result<FiltersResponse, DataError.Network> =
+        override suspend fun fetchFilters(): Result<com.zzang.chongdae.data.remote.dto.response.offering.FiltersResponse, DataError.Network> =
             safeApiCall {
                 service.getFilters()
             }
 
-        override suspend fun fetchMeetings(offeringId: Long): Result<MeetingsResponse, DataError.Network> =
+        override suspend fun fetchMeetings(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.offering.MeetingsResponse, DataError.Network> =
             safeApiCall { service.getMeetings(offeringId) }
 
         override suspend fun patchOffering(
             offeringId: Long,
-            offeringModifyRequest: OfferingModifyRequest,
+            offeringModifyRequest: com.zzang.chongdae.data.remote.dto.request.OfferingModifyRequest,
         ): Result<Unit, DataError.Network> {
             return safeApiCall {
                 service.patchOffering(

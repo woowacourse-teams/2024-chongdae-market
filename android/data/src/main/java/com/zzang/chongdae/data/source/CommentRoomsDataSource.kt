@@ -5,5 +5,5 @@ import com.zzang.chongdae.common.handler.Result
 import com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomsResponse
 
 interface CommentRoomsDataSource {
-    suspend fun fetchCommentRooms(): Result<CommentRoomsResponse, DataError.Network>
+    suspend fun fetchCommentRooms(): Result<com.zzang.chongdae.data.remote.dto.response.commentroom.CommentRoomsResponse, DataError.Network>
 }

@@ -12,9 +12,9 @@ import javax.inject.Inject
 class ParticipantRemoteDataSourceImpl
     @Inject
     constructor(
-        private val service: ParticipationApiService,
+        private val service: com.zzang.chongdae.data.remote.api.ParticipationApiService,
     ) : ParticipantRemoteDataSource {
-        override suspend fun fetchParticipants(offeringId: Long): Result<ParticipantsResponse, DataError.Network> =
+        override suspend fun fetchParticipants(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.participants.ParticipantsResponse, DataError.Network> =
             safeApiCall {
                 service.getParticipants(offeringId)
             }
@@ -24,7 +24,7 @@ class ParticipantRemoteDataSourceImpl
                 service.deleteParticipations(offeringId)
             }
 
-        override suspend fun patchNickname(nicknameRequest: NicknameRequest): Result<Unit, DataError.Network> =
+        override suspend fun patchNickname(nicknameRequest: com.zzang.chongdae.data.remote.dto.request.NicknameRequest): Result<Unit, DataError.Network> =
             safeApiCall {
                 service.patchNickname(nicknameRequest)
             }

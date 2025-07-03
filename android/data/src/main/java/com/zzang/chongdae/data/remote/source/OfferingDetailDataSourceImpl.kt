@@ -13,17 +13,17 @@ import javax.inject.Inject
 class OfferingDetailDataSourceImpl
     @Inject
     constructor(
-        private val offeringApiService: OfferingApiService,
-        private val participationApiService: ParticipationApiService,
+        private val offeringApiService: com.zzang.chongdae.data.remote.api.OfferingApiService,
+        private val participationApiService: com.zzang.chongdae.data.remote.api.ParticipationApiService,
     ) : OfferingDetailDataSource {
-        override suspend fun fetchOfferingDetail(offeringId: Long): Result<OfferingDetailResponse, DataError.Network> =
+        override suspend fun fetchOfferingDetail(offeringId: Long): Result<com.zzang.chongdae.data.remote.dto.response.offering.OfferingDetailResponse, DataError.Network> =
             safeApiCall {
                 offeringApiService.getOfferingDetail(
                     offeringId,
                 )
             }
 
-        override suspend fun saveParticipation(participationRequest: ParticipationRequest): Result<Unit, DataError.Network> =
+        override suspend fun saveParticipation(participationRequest: com.zzang.chongdae.data.remote.dto.request.ParticipationRequest): Result<Unit, DataError.Network> =
             safeApiCall {
                 participationApiService.postParticipations(
                     participationRequest,
