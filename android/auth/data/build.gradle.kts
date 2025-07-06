@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -34,8 +35,6 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
-
-    implementation(libs.kotlinx.serialization.json)
 
     // DI
     implementation("javax.inject:javax.inject:1")

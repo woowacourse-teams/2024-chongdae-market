@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.kapt")
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
