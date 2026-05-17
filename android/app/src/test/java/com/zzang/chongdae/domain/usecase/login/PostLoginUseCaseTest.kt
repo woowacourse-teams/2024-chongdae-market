@@ -1,7 +1,9 @@
 package com.zzang.chongdae.domain.usecase.login
 
-import com.zzang.chongdae.auth.data.repository.AuthRepository
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
+import com.zzang.chongdae.auth.domain.usecase.PostLoginUseCase
 import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.local.repository.UserPreferencesRepositoryImpl
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeDataStore
 import kotlinx.coroutines.test.runTest
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class PostLoginUseCaseTest {
-    private lateinit var authRepository: com.zzang.chongdae.auth.data.repository.AuthRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var userPreferenceDataStore: UserPreferencesDataStore
     private lateinit var postLoginUseCase: PostLoginUseCase
 
@@ -18,7 +20,7 @@ class PostLoginUseCaseTest {
     fun setUp() {
         authRepository = FakeAuthRepository()
         userPreferenceDataStore = UserPreferencesDataStore(FakeDataStore())
-        postLoginUseCase = PostLoginUseCaseImpl(authRepository, userPreferenceDataStore)
+        postLoginUseCase = PostLoginUseCase(authRepository, UserPreferencesRepositoryImpl(userPreferenceDataStore))
     }
 
     @Test

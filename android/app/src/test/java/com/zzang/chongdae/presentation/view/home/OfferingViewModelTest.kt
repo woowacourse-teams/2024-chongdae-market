@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
-import com.zzang.chongdae.auth.data.repository.AuthRepository
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
 import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.usecase.home.FetchFiltersUserCase
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class OfferingViewModelTest {
     private lateinit var viewModel: OfferingViewModel
     private lateinit var offeringRepository: OfferingRepository
-    private lateinit var authRepository: com.zzang.chongdae.auth.data.repository.AuthRepository
+    private lateinit var authRepository: AuthRepository
     private lateinit var fetchOfferingsUseCase: FetchOfferingsUseCase
     private lateinit var fetchFiltersUserCase: FetchFiltersUserCase
     private lateinit var fetchOfferingUseCase: FetchOfferingUseCase
