@@ -13,6 +13,7 @@ import com.zzang.chongdae.domain.model.offering.FilterName
 import com.zzang.chongdae.domain.model.offering.FilterType
 import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.domain.model.offering.OfferingDetail
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
 import com.zzang.chongdae.domain.model.participant.CurrentCount
 import com.zzang.chongdae.domain.model.participant.OfferingCondition
@@ -23,7 +24,6 @@ import com.zzang.chongdae.domain.model.participant.Proposer
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentViewType
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModelListWithSeparators
-import okhttp3.MultipartBody
 import java.time.LocalDateTime
 
 object TestFixture {
@@ -137,7 +137,7 @@ object TestFixture {
 
     val productUrl: ProductUrl = ProductUrl("url")
 
-    val martiPartBody = MultipartBody.Part.createFormData("image", "image")
+    val martiPartBody = ProductImage("image", "image/jpeg", byteArrayOf())
 
     val OFFERING_DETAIL_STUB =
         OfferingDetail(

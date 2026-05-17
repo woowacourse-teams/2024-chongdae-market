@@ -7,12 +7,12 @@ import com.zzang.chongdae.domain.model.offering.Filter
 import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingModifyDomainRequest
 import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
 import com.zzang.chongdae.domain.model.participant.OfferingCondition
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.util.TestFixture
 import com.zzang.chongdae.util.TestFixture.OFFERINGS_STUB
-import okhttp3.MultipartBody
 
 class FakeOfferingRepository : OfferingRepository {
     override suspend fun fetchOffering(offeringId: Long): Result<Offering, DataError.Network> {
@@ -51,7 +51,7 @@ class FakeOfferingRepository : OfferingRepository {
         return Result.Success(TestFixture.productUrl)
     }
 
-    override suspend fun saveProductImageS3(image: MultipartBody.Part): Result<ProductUrl, DataError.Network> {
+    override suspend fun saveProductImageS3(image: ProductImage): Result<ProductUrl, DataError.Network> {
         return Result.Success(TestFixture.productUrl)
     }
 
