@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.comment
 
-import com.zzang.chongdae.repository.FakeAuthRepository
+import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCase
 import com.zzang.chongdae.repository.FakeCommentRoomsRepository
 import com.zzang.chongdae.util.CoroutinesTestExtension
 import com.zzang.chongdae.util.InstantTaskExecutorExtension
@@ -21,10 +21,9 @@ class CommentRoomsViewModelTest {
 
     @BeforeEach
     fun setUp() {
-        val fakeAuthRepository = FakeAuthRepository()
         val fakeCommentRoomsRepository = FakeCommentRoomsRepository()
 
-        val updateCommentRoomsUseCase = UpdateCommentRoomsUseCaseImpl(fakeAuthRepository, fakeCommentRoomsRepository)
+        val updateCommentRoomsUseCase = UpdateCommentRoomsUseCase(fakeCommentRoomsRepository)
 
         viewModel = CommentRoomsViewModel(updateCommentRoomsUseCase)
     }
