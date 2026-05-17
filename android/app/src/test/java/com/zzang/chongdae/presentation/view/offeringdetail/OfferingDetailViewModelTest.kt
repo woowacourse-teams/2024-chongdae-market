@@ -2,8 +2,8 @@ package com.zzang.chongdae.presentation.view.offeringdetail
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.usecase.offeringdetail.DeleteOfferingUseCase
 import com.zzang.chongdae.domain.usecase.offeringdetail.FetchOfferingDetailUseCase

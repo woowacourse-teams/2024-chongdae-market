@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.zzang.chongdae.R
-import com.zzang.chongdae.domain.model.Offering
+import com.zzang.chongdae.domain.model.offering.Offering
 import com.zzang.chongdae.presentation.view.home.OfferingViewModel
 import com.zzang.chongdae.presentation.view.home.OnFloatingClickListener
 import com.zzang.chongdae.presentation.view.home.OnOfferingClickListener

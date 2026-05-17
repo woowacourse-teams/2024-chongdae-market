@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.UpdateCommentRoomsUseCaseQualifier
-import com.zzang.chongdae.domain.model.CommentRoom
+import com.zzang.chongdae.domain.model.commentroom.CommentRoom
 import com.zzang.chongdae.domain.usecase.comment.UpdateCommentRoomsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +17,7 @@ import javax.inject.Inject
 class CommentRoomsViewModel
     @Inject
     constructor(
-        @UpdateCommentRoomsUseCaseQualifier private val updateCommentRoomsUseCase: UpdateCommentRoomsUseCase,
+        private val updateCommentRoomsUseCase: UpdateCommentRoomsUseCase,
     ) : ViewModel() {
         private val _commentRooms: MutableLiveData<List<CommentRoom>> = MutableLiveData()
         val commentRooms: LiveData<List<CommentRoom>> get() = _commentRooms

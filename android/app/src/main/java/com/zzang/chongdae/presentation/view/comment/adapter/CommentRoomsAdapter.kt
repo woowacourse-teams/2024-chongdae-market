@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.zzang.chongdae.databinding.ItemCommentRoomParticipantBinding
 import com.zzang.chongdae.databinding.ItemCommentRoomProposerBinding
-import com.zzang.chongdae.domain.model.CommentRoom
-import com.zzang.chongdae.domain.model.CommentRoomType
+import com.zzang.chongdae.domain.model.commentroom.CommentRoom
+import com.zzang.chongdae.domain.model.commentroom.CommentRoomType
 
 class CommentRoomsAdapter(
     private val onClickListener: OnCommentRoomClickListener,

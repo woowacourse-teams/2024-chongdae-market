@@ -9,13 +9,11 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.handler.Result
-import com.zzang.chongdae.di.annotations.PostOfferingUseCaseQualifier
-import com.zzang.chongdae.di.annotations.PostProductImageOgUseCaseQualifier
-import com.zzang.chongdae.di.annotations.UploadImageFileUseCaseQualifier
-import com.zzang.chongdae.domain.model.Count
-import com.zzang.chongdae.domain.model.DiscountPrice
-import com.zzang.chongdae.domain.model.OfferingWrite
-import com.zzang.chongdae.domain.model.Price
+import com.zzang.chongdae.domain.model.offeringwrite.Count
+import com.zzang.chongdae.domain.model.offeringwrite.DiscountPrice
+import com.zzang.chongdae.domain.model.offeringwrite.OfferingWrite
+import com.zzang.chongdae.domain.model.offeringwrite.Price
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
 import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCase
 import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCase
 import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCase
@@ -23,7 +21,6 @@ import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -32,9 +29,9 @@ import javax.inject.Inject
 class OfferingWriteViewModel
     @Inject
     constructor(
-        @PostOfferingUseCaseQualifier private val postOfferingUseCase: PostOfferingUseCase,
-        @UploadImageFileUseCaseQualifier val uploadImageFileUseCase: UploadImageFileUseCase,
-        @PostProductImageOgUseCaseQualifier private val postProductImageOgUseCase: PostProductImageOgUseCase,
+        private val postOfferingUseCase: PostOfferingUseCase,
+        private val uploadImageFileUseCase: UploadImageFileUseCase,
+        private val postProductImageOgUseCase: PostProductImageOgUseCase,
     ) : ViewModel() {
         val title: MutableLiveData<String> = MutableLiveData("")
 
@@ -143,17 +140,15 @@ class OfferingWriteViewModel
             _imageUploadEvent.value = Unit
         }
 
-        fun uploadImageFile(multipartBody: MultipartBody.Part) {
+        fun uploadImageFile(image: ProductImage) {
             viewModelScope.launch {
                 _writeUIState.value = WriteUIState.Loading
-                when (val result = uploadImageFileUseCase.invoke(multipartBody)) {
+                when (val result = uploadImageFileUseCase.invoke(image)) {
                     is Result.Success -> {
                         _writeUIState.value = WriteUIState.Success(result.data.imageUrl)
                         thumbnailUrl.value = result.data.imageUrl
                     }
-
                     is Result.Error -> {
-                        Log.e("error", "uploadImageFile: ${result.error}")
                         _writeUIState.value =
                             WriteUIState.Error(R.string.all_error_image_upload, "${result.error}")
                     }

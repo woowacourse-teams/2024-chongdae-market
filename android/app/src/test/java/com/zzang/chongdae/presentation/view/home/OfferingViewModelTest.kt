@@ -1,7 +1,7 @@
 package com.zzang.chongdae.presentation.view.home
 
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.OfferingRepository
 import com.zzang.chongdae.domain.usecase.home.FetchFiltersUserCase
 import com.zzang.chongdae.domain.usecase.home.FetchOfferingUseCase

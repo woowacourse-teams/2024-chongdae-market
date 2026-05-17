@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.commentdetail.model.meeting
 
-import com.zzang.chongdae.domain.model.Meetings
+import com.zzang.chongdae.domain.model.comment.Meetings
 import java.time.LocalDateTime
 
 class MeetingsUiModel(

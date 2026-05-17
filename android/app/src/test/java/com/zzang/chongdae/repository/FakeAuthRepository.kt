@@ -1,7 +1,7 @@
 package com.zzang.chongdae.repository
 
-import com.zzang.chongdae.auth.model.Member
-import com.zzang.chongdae.auth.repository.AuthRepository
+import com.zzang.chongdae.auth.domain.model.Member
+import com.zzang.chongdae.auth.domain.repository.AuthRepository
 import com.zzang.chongdae.common.handler.DataError
 import com.zzang.chongdae.common.handler.Result
 

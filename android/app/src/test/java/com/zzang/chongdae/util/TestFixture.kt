@@ -3,19 +3,20 @@ package com.zzang.chongdae.util
 import com.zzang.chongdae.data.remote.mapper.toLocalDate
 import com.zzang.chongdae.data.remote.mapper.toLocalDateTime
 import com.zzang.chongdae.data.remote.mapper.toLocalTime
-import com.zzang.chongdae.domain.model.CommentRoom
-import com.zzang.chongdae.domain.model.CurrentCount
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.domain.model.FilterType
-import com.zzang.chongdae.domain.model.Meetings
-import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingCondition
-import com.zzang.chongdae.domain.model.OfferingDetail
-import com.zzang.chongdae.domain.model.ProductUrl
 import com.zzang.chongdae.domain.model.comment.Comment
 import com.zzang.chongdae.domain.model.comment.CommentCreatedAt
 import com.zzang.chongdae.domain.model.comment.CommentOfferingInfo
+import com.zzang.chongdae.domain.model.comment.Meetings
+import com.zzang.chongdae.domain.model.commentroom.CommentRoom
+import com.zzang.chongdae.domain.model.offering.Filter
+import com.zzang.chongdae.domain.model.offering.FilterName
+import com.zzang.chongdae.domain.model.offering.FilterType
+import com.zzang.chongdae.domain.model.offering.Offering
+import com.zzang.chongdae.domain.model.offering.OfferingDetail
+import com.zzang.chongdae.domain.model.offeringwrite.ProductImage
+import com.zzang.chongdae.domain.model.offeringwrite.ProductUrl
+import com.zzang.chongdae.domain.model.participant.CurrentCount
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
 import com.zzang.chongdae.domain.model.participant.Participant
 import com.zzang.chongdae.domain.model.participant.ParticipantCount
 import com.zzang.chongdae.domain.model.participant.Participants
@@ -23,7 +24,6 @@ import com.zzang.chongdae.domain.model.participant.Proposer
 import com.zzang.chongdae.presentation.view.commentdetail.adapter.comment.CommentViewType
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel
 import com.zzang.chongdae.presentation.view.commentdetail.model.comment.CommentUiModel.Companion.toUiModelListWithSeparators
-import okhttp3.MultipartBody
 import java.time.LocalDateTime
 
 object TestFixture {
@@ -137,7 +137,7 @@ object TestFixture {
 
     val productUrl: ProductUrl = ProductUrl("url")
 
-    val martiPartBody = MultipartBody.Part.createFormData("image", "image")
+    val martiPartBody = ProductImage("image", "image/jpeg", byteArrayOf())
 
     val OFFERING_DETAIL_STUB =
         OfferingDetail(

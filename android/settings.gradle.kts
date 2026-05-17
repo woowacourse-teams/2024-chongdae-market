@@ -22,3 +22,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "chongdae"
 include(":app")
+include(":domain")
+include(":core:common")
+include(":auth:domain")
+include(":auth:data")
+include(":auth:presentation")
+include(":auth:test")
+include(":data")
+include(":di")
+
+project(":core:common").projectDir = file("core/common")
