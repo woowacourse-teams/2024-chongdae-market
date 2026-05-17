@@ -15,7 +15,7 @@ plugins {
 
 android {
     namespace = "com.zzang.chongdae"
-    compileSdk = 34
+    compileSdk = 35
 
     val properties =
         Properties().apply {
@@ -29,7 +29,7 @@ android {
     defaultConfig {
         applicationId = "com.zzang.chongdae"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 11
         versionName = "1.5.0"
 
