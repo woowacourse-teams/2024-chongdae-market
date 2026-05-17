@@ -4,8 +4,8 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.zzang.chongdae.domain.model.Offering
-import com.zzang.chongdae.domain.model.OfferingCondition
+import com.zzang.chongdae.domain.model.offering.Offering
+import com.zzang.chongdae.domain.model.participant.OfferingCondition
 import com.zzang.chongdae.presentation.view.home.component.OfferingItem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule

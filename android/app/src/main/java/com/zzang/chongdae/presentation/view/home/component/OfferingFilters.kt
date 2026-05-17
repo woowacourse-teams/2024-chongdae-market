@@ -28,9 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zzang.chongdae.R
-import com.zzang.chongdae.domain.model.Filter
-import com.zzang.chongdae.domain.model.FilterName
-import com.zzang.chongdae.domain.model.FilterType
+import com.zzang.chongdae.domain.model.offering.Filter
+import com.zzang.chongdae.domain.model.offering.FilterName
+import com.zzang.chongdae.domain.model.offering.FilterType
 
 @Composable
 internal fun OfferingFilters(

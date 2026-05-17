@@ -47,13 +47,19 @@ class EditNicknameViewModel
                 }
 
                 when (val result = patchNicknameUseCase(nickname)) {
-                    is Result.Error ->
+                    is com.zzang.chongdae.common.handler.Result.Error ->
                         when (result.error) {
-                            DataError.Network.BAD_REQUEST -> _event.emit(NicknameEvent.ShowToast("닉네임은 10자 이하로 입력해주세요."))
-                            DataError.Network.CONFLICT -> _event.emit(NicknameEvent.ShowToast("이미 사용중인 닉네임입니다."))
+                            com.zzang.chongdae.common.handler.DataError.Network.BAD_REQUEST ->
+                                _event.emit(
+                                    NicknameEvent.ShowToast("닉네임은 10자 이하로 입력해주세요."),
+                                )
+                            com.zzang.chongdae.common.handler.DataError.Network.CONFLICT ->
+                                _event.emit(
+                                    NicknameEvent.ShowToast("이미 사용중인 닉네임입니다."),
+                                )
                             else -> _event.emit(NicknameEvent.ShowToast("닉네임 변경에 실패했습니다."))
                         }
-                    is Result.Success -> {
+                    is com.zzang.chongdae.common.handler.Result.Success -> {
                         saveNicknameUseCase(nickname)
                         _event.emit(NicknameEvent.NicknameChanged)
                     }

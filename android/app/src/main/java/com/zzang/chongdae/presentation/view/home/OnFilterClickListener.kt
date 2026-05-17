@@ -1,6 +1,6 @@
 package com.zzang.chongdae.presentation.view.home
 
-import com.zzang.chongdae.domain.model.Filter
+import com.zzang.chongdae.domain.model.offering.Filter
 
 interface OnFilterClickListener {
     fun onClickFilter(

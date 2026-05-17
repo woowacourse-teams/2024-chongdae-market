@@ -2,8 +2,8 @@ package com.zzang.chongdae.presentation.view.offeringdetail
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.zzang.chongdae.auth.repository.AuthRepository
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.auth.data.repository.AuthRepository
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.domain.repository.OfferingDetailRepository
 import com.zzang.chongdae.domain.usecase.offeringdetail.DeleteOfferingUseCase
 import com.zzang.chongdae.domain.usecase.offeringdetail.FetchOfferingDetailUseCase
@@ -27,7 +27,7 @@ class OfferingDetailViewModelTest {
     private lateinit var fetchOfferingDetailUseCase: FetchOfferingDetailUseCase
     private lateinit var saveParticipationUseCase: SaveParticipationUseCase
     private lateinit var deleteOfferingUseCase: DeleteOfferingUseCase
-    private lateinit var authRepository: AuthRepository
+    private lateinit var authRepository: com.zzang.chongdae.auth.data.repository.AuthRepository
     private val offeringId = 1L
     private lateinit var userPreferencesDataStore: UserPreferencesDataStore
 

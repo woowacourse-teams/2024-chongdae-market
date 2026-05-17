@@ -1,0 +1,23 @@
+package com.zzang.chongdae.di.feature.participant
+
+import com.zzang.chongdae.data.remote.source.ParticipantRemoteDataSourceImpl
+import com.zzang.chongdae.data.repository.ParticipantRepositoryImpl
+import com.zzang.chongdae.data.source.ParticipantRemoteDataSource
+import com.zzang.chongdae.domain.repository.ParticipantRepository
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@InstallIn(SingletonComponent::class)
+@Module
+abstract class ParticipantDependencyModule {
+    @Binds
+    @Singleton
+    abstract fun provideParticipantRepository(impl: ParticipantRepositoryImpl): ParticipantRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideParticipantDataSource(impl: ParticipantRemoteDataSourceImpl): ParticipantRemoteDataSource
+}

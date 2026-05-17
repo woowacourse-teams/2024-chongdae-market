@@ -1,8 +1,5 @@
 package com.zzang.chongdae.presentation.view.write
 
-import com.zzang.chongdae.domain.usecase.write.PostOfferingUseCaseImpl
-import com.zzang.chongdae.domain.usecase.write.PostProductImageOgUseCaseImpl
-import com.zzang.chongdae.domain.usecase.write.UploadImageFileUseCaseImpl
 import com.zzang.chongdae.presentation.view.write.OfferingWriteViewModel.Companion.HTTPS
 import com.zzang.chongdae.repository.FakeAuthRepository
 import com.zzang.chongdae.repository.FakeOfferingRepository

@@ -41,11 +41,9 @@ android {
         }
 
         val baseUrl = properties.getProperty("base_url")
-        val token = properties.getProperty("token")
         val nativeAppKey = properties.getProperty("native_app_key")
 
         buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
-        buildConfigField("String", "TOKEN", "\"$token\"")
         buildConfigField("String", "NATIVE_APP_KEY", "\"$nativeAppKey\"")
         manifestPlaceholders["native_app_key"] = nativeAppKey
     }
@@ -100,6 +98,8 @@ dependencies {
     // Test
     implementation(libs.androidx.junit)
     implementation(libs.androidx.runtime.livedata)
+    implementation(project(":auth:data"))
+    implementation(project(":auth:domain"))
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.assertj.core)
     testImplementation(libs.kotest.runner.junit5)
@@ -135,7 +135,7 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-    // json
+    // json - data layer
     implementation(libs.kotlinx.serialization.json)
 
     // Glide
@@ -143,7 +143,7 @@ dependencies {
     implementation(libs.glide.compose)
     kapt(libs.glide.compiler)
 
-    // Retrofit
+    // Retrofit - data layer
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.kotlinx.serialization)
@@ -199,6 +199,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":core:common"))
+    implementation(project(":auth:data"))
+    implementation(project(":di"))
 }
 
 kapt {

@@ -19,8 +19,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.zzang.chongdae.R
 import com.zzang.chongdae.common.firebase.FirebaseAnalyticsManager
 import com.zzang.chongdae.databinding.FragmentOfferingModifyOptionalBinding
-import com.zzang.chongdae.presentation.util.FileUtils
 import com.zzang.chongdae.presentation.util.PermissionManager
+import com.zzang.chongdae.presentation.util.uriToProductImage
 
 class OfferingModifyOptionalFragment : Fragment() {
     private var _fragmentBinding: FragmentOfferingModifyOptionalBinding? = null
@@ -122,14 +122,10 @@ class OfferingModifyOptionalFragment : Fragment() {
     }
 
     private fun handleMediaResult(uri: Uri?) {
-        if (uri != null) {
-            val multipartBodyPart = FileUtils.getMultipartBodyPart(requireContext(), uri, "image")
-            if (multipartBodyPart != null) {
-                viewModel.uploadImageFile(multipartBodyPart)
-            } else {
-                showToast(R.string.all_error_file_conversion)
-            }
-        }
+        if (uri == null) return
+
+        val productImage = requireContext().uriToProductImage(uri)
+        viewModel.uploadImageFile(productImage)
     }
 
     private fun setUpPermissionManager() {

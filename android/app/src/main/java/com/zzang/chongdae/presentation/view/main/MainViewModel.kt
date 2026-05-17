@@ -2,7 +2,7 @@ package com.zzang.chongdae.presentation.view.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zzang.chongdae.common.datastore.UserPreferencesDataStore
+import com.zzang.chongdae.data.local.datastore.UserPreferencesDataStore
 import com.zzang.chongdae.presentation.util.MutableSingleLiveData
 import com.zzang.chongdae.presentation.util.SingleLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
